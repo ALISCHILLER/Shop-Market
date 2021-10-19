@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_default">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+
+                    <ImageView
+                        android:id="@+id/date_image_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/padding_default"
+                        android:src="@drawable/ic_calendar_black_24dp" />
+                </RelativeLayout>
+
+                <com.varanegar.framework.util.component.PairedItems
+                    android:id="@+id/date_paired_items"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    app:title="@string/date" />
+            </LinearLayout>
+
+            <Switch
+                android:layout_margin="@dimen/padding_default"
+                android:id="@+id/last_position_switch"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:switchPadding="@dimen/padding_default"
+                android:text="@string/last_position" />
+
+            <Switch
+                android:layout_margin="@dimen/padding_default"
+                android:id="@+id/last_event_switch"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:switchPadding="@dimen/padding_default"
+                android:text="@string/last_event" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

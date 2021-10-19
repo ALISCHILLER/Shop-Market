@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/product_image_view"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/padding_default"
+                android:src="@drawable/product_no_image" />
+
+            <com.varanegar.framework.util.component.PairedItems
+                android:id="@+id/price_paired_items"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="@string/price_label" />
+
+            <com.varanegar.framework.util.component.PairedItems
+                android:id="@+id/total_price_paired_items"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="@string/total_price" />
+
+            <com.varanegar.framework.util.component.PairedItems
+                android:id="@+id/user_price_paired_items"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="@string/user_price_label" />
+
+
+            <com.varanegar.framework.util.component.PairedItems
+                android:id="@+id/stock_level_paired_items"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="@string/store_inventory_label" />
+
+            <com.varanegar.framework.util.component.PairedItems
+                android:id="@+id/customer_inventory_paired_items"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="@string/customer_inventory_label" />
+
+            <com.varanegar.framework.util.component.PairedItems
+                android:id="@+id/total_ordered_qty_paired_items"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="@string/total_ordered_qty_label" />
+
+            <com.varanegar.framework.util.component.PairedItems
+                android:id="@+id/average_paired_items"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="@string/average_old_factor_label" />
+
+            <com.varanegar.framework.util.component.PairedItems
+                android:id="@+id/invoice_count_items"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:title="@string/invoice_count"/>
+
+            <com.varanegar.framework.util.component.PairedItems
+                android:id="@+id/total_request_qty_paired_items"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="@string/total_request_qty" />
+
+            <com.varanegar.framework.util.component.PairedItems
+                android:id="@+id/product_type_paired_items"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="@string/product_type_label" />
+
+            <com.varanegar.framework.util.component.PairedItems
+                android:id="@+id/prize_paired_items"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:title="@string/discounts_and_awards" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/batch_numbers"
+                android:textColor="?attr/colorPrimary"
+                android:padding="@dimen/padding_default"/>
+
+            <com.varanegar.framework.util.recycler.BaseRecyclerView
+                android:id="@+id/batch_list_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/item_pair_end_background" >
+
+            </com.varanegar.framework.util.recycler.BaseRecyclerView>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

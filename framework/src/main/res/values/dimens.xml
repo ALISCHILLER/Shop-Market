@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="padding_linear_layout_divider">1dp</dimen>
+    <dimen name="padding_left_right_small">2dp</dimen>
+    <dimen name="padding_left_right_default">5dp</dimen>
+    <dimen name="padding_left_right_large">8dp</dimen>
+    <dimen name="padding_left_right_xlarge">10dp</dimen>
+    <dimen name="padding_left_right_xxlarge">15dp</dimen>
+    <dimen name="padding_left_right_xxxlarge">20dp</dimen>
+    <dimen name="margin_text_view">5dp</dimen>
+    <dimen name="toolbarSize">56dp</dimen>
+    <dimen name="bottom_toolbar_size">65dp</dimen>
+    <dimen name="padding_image_button_default">10dp</dimen>
+    <dimen name="padding_xxsmall">1dp</dimen>
+    <dimen name="padding_xsmall">3dp</dimen>
+    <dimen name="padding_small">5dp</dimen>
+    <dimen name="padding_default">10dp</dimen>
+    <dimen name="padding_large">15dp</dimen>
+    <dimen name="padding_xlarge">20dp</dimen>
+    <dimen name="padding_xxlarge">30dp</dimen>
+    <dimen name="padding_xxxlarge">40dp</dimen>
+    <dimen name="elevation_default">5dp</dimen>
+</resources>

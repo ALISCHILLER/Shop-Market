@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="7"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_default">
+
+        <com.varanegar.framework.util.component.PairedItemsEditable
+            android:id="@+id/ref_number_paired_items_editable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            app:singleLine="true"
+            app:title="@string/ref_number" />
+
+        <com.varanegar.framework.util.component.PairedItemsEditable
+            android:id="@+id/amount_paired_items_editable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:isCommaSeparated="true"
+            app:singleLine="true"
+            app:title="@string/amount" />
+
+        <com.varanegar.framework.util.component.PairedItems
+            android:id="@+id/date_paired_items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="@string/date" />
+
+        <LinearLayout
+            android:id="@+id/card_reader_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_small"
+            android:background="@drawable/selected_option_item_background"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/add_card_reader_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_pos_white_36dp" />
+
+                <ImageView
+                    android:id="@+id/cancel_card_reader_image_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_cancel_white_36dp"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:padding="@dimen/padding_small"
+                android:text="@string/card_reader"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <com.varanegar.vaslibrary.ui.fragment.settlement.invoiceinfo.InvoicePaymentInfoLayout
+        android:id="@+id/invoices_info_layout"
+        android:layout_width="250dp"
+        android:layout_height="300dp" />
+</LinearLayout>

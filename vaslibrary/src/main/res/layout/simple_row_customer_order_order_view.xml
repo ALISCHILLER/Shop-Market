@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/padding_small"
+    app:cardCornerRadius="@dimen/padding_xsmall"
+    app:cardElevation="@dimen/cardview_default_elevation">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ripple"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/row_text_view"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingLeft="@dimen/padding_small"
+            android:paddingRight="@dimen/padding_small"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/product_code_text_view"
+            style="@android:style/TextAppearance.DeviceDefault.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:paddingLeft="@dimen/padding_default"
+            android:paddingRight="@dimen/padding_default"
+            android:textAlignment="center"
+            android:textColor="@color/black"/>
+
+
+        <TextView
+            android:id="@+id/product_name_text_view"
+            style="@android:style/TextAppearance.DeviceDefault.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/padding_small"
+            android:paddingRight="@dimen/padding_small"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/price_text_view"
+            style="@android:style/TextAppearance.DeviceDefault.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/padding_small"
+            android:paddingRight="@dimen/padding_small"
+            android:textAlignment="center"
+            android:textColor="@color/black"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3">
+
+            <LinearLayout
+                android:id="@+id/large_unit_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_xsmall"
+                android:layout_marginRight="@dimen/padding_xsmall"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/plus_image_view_large"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/transparent"
+                    android:paddingLeft="@dimen/padding_xsmall"
+                    android:paddingRight="@dimen/padding_xsmall"
+                    android:src="@drawable/ic_plus_square_green_24dp"
+                    android:tint="@color/green" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:layoutDirection="ltr"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/qty_text_view_large"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:background="@drawable/calculator_left_green_corner"
+                        android:gravity="center"
+                        android:minWidth="20dp"
+                        android:paddingLeft="@dimen/padding_xxsmall"
+                        android:paddingRight="@dimen/padding_xxsmall"
+                        android:textAlignment="center"
+                        android:textColor="@color/green"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/unit_text_view_large"
+                        android:layout_width="36dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/calculator_right_green_corner"
+                        android:gravity="center"
+                        android:lines="1"
+                        android:paddingLeft="@dimen/padding_xxsmall"
+                        android:paddingRight="@dimen/padding_xxsmall"
+                        android:singleLine="true"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/calculator_text_size_small" />
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/minus_image_view_large"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/transparent"
+                    android:paddingLeft="@dimen/padding_xsmall"
+                    android:paddingRight="@dimen/padding_xsmall"
+                    android:src="@drawable/ic_minus_square_red_24dp"
+                    android:tint="@color/red" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/small_unit_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_xsmall"
+                android:layout_marginRight="@dimen/padding_xsmall"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/plus_image_view_small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/transparent"
+                    android:paddingLeft="@dimen/padding_xsmall"
+                    android:paddingRight="@dimen/padding_xsmall"
+                    android:src="@drawable/ic_plus_square_green_24dp"
+                    android:tint="@color/green" />
+
+                <LinearLayout
+                    android:id="@+id/unit_linear_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:layoutDirection="ltr"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/qty_text_view_small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:background="@drawable/calculator_left_green_corner"
+                        android:gravity="center"
+                        android:minWidth="20dp"
+                        android:paddingLeft="@dimen/padding_xxsmall"
+                        android:paddingRight="@dimen/padding_xxsmall"
+                        android:textAlignment="center"
+                        android:textColor="@color/green"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/unit_text_view_small"
+                        android:layout_width="36dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/calculator_right_green_corner"
+                        android:gravity="center"
+                        android:lines="1"
+                        android:paddingLeft="@dimen/padding_xxsmall"
+                        android:paddingRight="@dimen/padding_xxsmall"
+                        android:singleLine="true"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/calculator_text_size_small" />
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/minus_image_view_small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/transparent"
+                    android:paddingLeft="@dimen/padding_xsmall"
+                    android:paddingRight="@dimen/padding_xsmall"
+                    android:src="@drawable/ic_minus_square_red_24dp"
+                    android:tint="@color/red" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/equals_text_view"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:paddingLeft="@dimen/padding_xxsmall"
+                android:paddingRight="@dimen/padding_xxsmall"
+                android:text="=" />
+
+            <TextView
+                android:id="@+id/total_order_qty_text_view"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:paddingLeft="@dimen/padding_xxsmall"
+                android:paddingRight="@dimen/padding_xxsmall"
+                android:textColor="@color/black"/>
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/order_value_text_view"
+            style="@android:style/TextAppearance.DeviceDefault.Small"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:paddingLeft="@dimen/padding_xxsmall"
+            android:paddingRight="@dimen/padding_xxsmall"
+            android:textAlignment="center"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:id="@+id/icon_image_view"
+            android:layout_width="24dp"
+            android:layout_height="24dp" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
+

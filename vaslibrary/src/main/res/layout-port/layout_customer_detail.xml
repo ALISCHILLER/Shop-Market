@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.varanegar.framework.util.component.ProgressView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.varanegar.framework.util.component.SimpleToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbarSize"
+            android:elevation="@dimen/elevation_default"
+            tools:targetApi="lollipop" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/actions_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@color/grey_light_light"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/actions_recycler_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:elevation="@dimen/elevation_default"
+                    tools:targetApi="lollipop" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/colorPrimary">
+
+                    <ImageView
+                        android:id="@+id/actions_expand_image_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:padding="@dimen/padding_small"
+                        android:src="@drawable/ic_expand_white_24dp" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:id="@+id/refresh_customer_actions"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/refresh_customer_location" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp">
+
+                            <com.google.android.gms.maps.MapView
+                                android:id="@+id/map_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="@dimen/padding_small">
+
+                                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                                    android:id="@+id/google_map_fab"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="@dimen/padding_small"
+                                    android:src="@mipmap/ic_navigate"
+                                    app:fabSize="mini" />
+
+                                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                                    android:id="@+id/waze_fab"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="@dimen/padding_small"
+                                    android:src="@mipmap/ic_waze"
+                                    app:fabSize="mini" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/location_text_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@color/white4"
+                                android:gravity="center"
+                                android:padding="@dimen/padding_large"
+                                android:text="@string/customer_position_is_not_avalable" />
+
+
+                        </RelativeLayout>
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/customer_time_paired_item"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:textStyle="bold"
+                            app:singleLine="true"
+                            app:title="@string/visit_time" />
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/customer_name_paired_item"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:title="@string/customer_name" />
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/customer_code_paired_item"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:title="@string/customer_code" />
+
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/customer_tel_paired_item"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:title="@string/customer_tel" />
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/customer_store_name_paired_item"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:title="@string/customer_store_name" />
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/customer_national_code_paired_item"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:title="@string/customer_national_code" />
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/customer_mobile_paired_item"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:title="@string/customer_mobile" />
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/customer_address_paired_item"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:title="@string/customer_address" />
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/customer_level_paired_item"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:title="@string/customer_level" />
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/customer_activity_paired_item"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:title="@string/customer_activity" />
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/customer_category_paired_item"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:title="@string/customer_category" />
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/customer_last_invoice_date_paired_item"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:title="@string/customer_last_invoice_date" />
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/customer_last_invoice_days_paired_item"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:title="@string/customer_last_invoice_days"/>
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/customer_status_paired_item"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:title="@string/customer_status" />
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/spd_paired_item"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="@string/spd" />
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/customer_total_order_paired_item"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:title="@string/customer_total_order" />
+
+
+                    </LinearLayout>
+                </ScrollView>
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/other_information_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_margin="@dimen/padding_xxlarge"
+                    android:background="?attr/colorPrimary"
+                    android:padding="@dimen/padding_small"
+                    android:src="@drawable/ic_customer_status_24dp"
+                    app:borderWidth="0dp"
+                    app:elevation="@dimen/elevation_default"
+                    app:fabSize="mini"
+                    app:rippleColor="?attr/colorPrimaryDark" />
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+</com.varanegar.framework.util.component.ProgressView>

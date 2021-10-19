@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbarSize"
+        android:background="?attr/colorPrimary"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/padding_default"
+        android:paddingRight="@dimen/padding_default">
+
+        <ImageView
+            android:id="@+id/back_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_default"
+            android:src="@drawable/back_icon"
+            android:tint="@color/white" />
+
+        <TextView
+            android:id="@+id/title_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_default"
+            android:text="@string/stock_level"
+            android:textColor="@color/white" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/warehouse_report_print"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_default"
+            android:src="@drawable/ic_print_black_24dp"
+            android:tint="@color/white"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/menu_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_default"
+            android:src="@drawable/ic_menu_white_24dp"
+            android:tint="@color/white" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/product_name_filter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_small"
+        android:background="@android:drawable/editbox_background_normal"
+        android:hint="@string/filter_by_name"
+        android:imeOptions="actionDone"
+        android:inputType="text"
+        android:lines="1"
+        android:padding="@dimen/padding_default"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+    <LinearLayout
+        android:id="@+id/warehouse_checkbox_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_small">
+
+        <CheckBox
+            android:id="@+id/warehouse_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_small" />
+
+        <TextView
+            android:id="@+id/without_onhand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/padding_default"
+            android:paddingTop="@dimen/padding_default"
+            android:text="@string/show_all_onhand_products" />
+    </LinearLayout>
+
+    <com.varanegar.framework.util.report.ReportView
+        android:id="@+id/warehouse_qty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

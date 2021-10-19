@@ -1,0 +1,98 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="300dp"
+    android:padding="@dimen/padding_default">
+
+    <ImageView
+        android:id="@+id/icon_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:elevation="@dimen/elevation_default"
+        android:padding="@dimen/padding_default"
+        tools:targetApi="lollipop" />
+
+    <LinearLayout
+        android:id="@+id/content_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:background="@drawable/white_background"
+        android:orientation="vertical"
+        android:paddingTop="40dp">
+
+
+        <TextView
+            android:id="@+id/title_text_view"
+            style="@style/Base.TextAppearance.AppCompat.Title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="@dimen/padding_default"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/message_text_view"
+            style="@style/Base.TextAppearance.AppCompat.Body1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/padding_xxxlarge"
+            android:paddingTop="@dimen/padding_default"
+            android:maxLines="10"
+            android:paddingRight="@dimen/padding_xxxlarge"
+            android:paddingBottom="@dimen/padding_default"
+            android:scrollbars="vertical" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_default"
+            android:divider="@drawable/vertical_devider"
+            android:dividerPadding="10dp"
+            android:orientation="horizontal"
+            android:showDividers="middle">
+
+            <TextView
+                android:id="@+id/negative_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_small"
+                android:layout_marginRight="@dimen/padding_small"
+                android:layout_weight="1"
+                android:background="@drawable/selected_option_item_background"
+                android:gravity="center"
+                android:padding="@dimen/padding_small"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/neutral_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_small"
+                android:layout_marginRight="@dimen/padding_small"
+                android:layout_weight="1"
+                android:background="@drawable/selected_option_item_background"
+                android:gravity="center"
+                android:padding="@dimen/padding_small"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/positive_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_small"
+                android:layout_marginRight="@dimen/padding_small"
+                android:layout_weight="1"
+                android:background="@drawable/selected_option_item_background"
+                android:gravity="center"
+                android:padding="@dimen/padding_small"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+</RelativeLayout>

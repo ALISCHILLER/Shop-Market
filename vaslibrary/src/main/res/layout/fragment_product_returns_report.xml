@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.varanegar.framework.util.component.SimpleToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        local:title="@string/return_report" >
+
+        <ImageView
+            android:id="@+id/return_report_print"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_default"
+            android:src="@drawable/ic_print_black_24dp"
+            android:tint="@color/white"
+            android:visibility="visible" />
+
+    </com.varanegar.framework.util.component.SimpleToolbar>
+
+    <com.varanegar.framework.util.report.ReportView
+        android:id="@+id/product_sales_report"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

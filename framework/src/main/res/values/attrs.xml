@@ -1,0 +1,73 @@
+<resources>
+    <attr name="singleLine" format="boolean" />
+    <attr name="title" format="string" />
+    <attr name="message" format="string" />
+    <attr name="icon" format="reference" />
+    <attr name="headerBackgroundColor" format="color" />
+    <attr name="headerTextColor" format="color" />
+    <attr name="colorPrimaryLight" format="color" />
+    <attr name="colorDivider" format="color" />
+    <attr name="colorIcons" format="color" />
+    <attr name="value" format="string" />
+    <attr name="tinyIcon" format="reference" />
+    <attr name="is_dialog" format="boolean" />
+    <attr name="textPadding" format="dimension" />
+    <attr name="textSize" format="dimension" />
+
+    <declare-styleable name="CuteButton">
+        <attr name="title" />
+        <attr name="icon" />
+        <attr name="tinyIcon" />
+    </declare-styleable>
+    <declare-styleable name="SimpleToolbar">
+        <attr name="title" />
+        <attr name="backgroundColor" format="color"/>
+    </declare-styleable>
+    <declare-styleable name="DrawerItem">
+        <attr name="title" />
+        <attr name="icon" />
+    </declare-styleable>
+    <declare-styleable name="ExpandableRecyclerView">
+        <attr name="headerBackgroundColor" />
+        <attr name="collapseIcon" format="reference" />
+        <attr name="expandIcon" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="PairedItems">
+        <attr name="title" />
+        <attr name="value" />
+        <attr name="android:textStyle" />
+        <attr name="android:orientation" />
+        <attr name="singleLine" />
+        <attr name="textPadding" />
+        <attr name="textSize" />
+    </declare-styleable>
+    <declare-styleable name="ProgressView">
+        <attr name="is_dialog" />
+        <attr name="title" />
+        <attr name="message" />
+    </declare-styleable>
+    <declare-styleable name="PairedItemsEditable">
+        <attr name="title" />
+        <attr name="value" />
+        <attr name="singleLine" />
+        <attr name="android:orientation" />
+        <attr name="android:maxLength" />
+        <attr name="android:inputType" />
+        <attr name="isCommaSeparated" format="boolean" />
+        <attr name="isPhone" format="boolean" />
+        <attr name="textPadding" />
+        <attr name="textSize" />
+    </declare-styleable>
+    <declare-styleable name="PairedItemsSpinner">
+        <attr name="title" />
+        <attr name="icon" />
+        <attr name="singleLine" />
+        <attr name="android:orientation" />
+        <attr name="textPadding" />
+        <attr name="textSize" />
+    </declare-styleable>
+    <declare-styleable name="CuteCheckBox">
+        <attr name="text" format="string" />
+        <attr name="isChecked" format="boolean" />
+    </declare-styleable>
+</resources>

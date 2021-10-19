@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="3dp"
+    android:background="@color/white"
+    android:orientation="vertical"
+    app:cardCornerRadius="@dimen/padding_xsmall"
+    app:cardElevation="@dimen/cardview_default_elevation">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/padding_xxsmall">
+
+            <TextView
+                android:id="@+id/txtv_row_number"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="@dimen/padding_small"
+                android:textColor="?attr/colorPrimary" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:padding="@dimen/padding_small">
+
+                <ImageView
+                    android:id="@+id/icon_image_view"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="@dimen/padding_default"
+                    android:layout_marginRight="@dimen/padding_default"
+                    android:gravity="center"
+                    android:padding="0dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <include layout="@layout/horizontal_line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/padding_xxsmall">
+
+            <TextView
+                style="@android:style/TextAppearance.DeviceDefault.Small"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="@dimen/padding_small"
+                android:text="@string/product_code"
+                android:textColor="?attr/colorPrimary" />
+
+            <include layout="@layout/vertical_line" />
+
+            <TextView
+                android:id="@+id/txtv_product_code"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="@dimen/padding_small" />
+        </LinearLayout>
+
+        <include layout="@layout/horizontal_line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/padding_xxsmall">
+
+            <TextView
+                style="@android:style/TextAppearance.DeviceDefault.Small"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="@dimen/padding_small"
+                android:text="@string/product_name"
+                android:textColor="?attr/colorPrimary" />
+
+            <include layout="@layout/vertical_line" />
+
+            <TextView
+                android:id="@+id/txtv_product_name"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="@dimen/padding_small" />
+        </LinearLayout>
+
+        <include layout="@layout/horizontal_line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/padding_xxsmall">
+
+            <TextView
+                style="@android:style/TextAppearance.DeviceDefault.Small"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="@dimen/padding_small"
+                android:text="@string/unit_price"
+                android:textColor="?attr/colorPrimary" />
+
+            <include layout="@layout/vertical_line" />
+
+            <TextView
+                android:id="@+id/txtv_unit_price"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="@dimen/padding_small" />
+        </LinearLayout>
+
+        <include layout="@layout/horizontal_line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/padding_xxsmall">
+
+            <TextView
+                style="@android:style/TextAppearance.DeviceDefault.Small"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="@dimen/padding_small"
+                android:text="@string/order_qty"
+                android:textColor="?attr/colorPrimary" />
+
+            <include layout="@layout/vertical_line" />
+
+            <LinearLayout
+                android:id="@+id/lly_order_qty"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:orientation="horizontal" />
+
+        </LinearLayout>
+
+        <include layout="@layout/horizontal_line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/padding_xxsmall">
+
+            <TextView
+                style="@android:style/TextAppearance.DeviceDefault.Small"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="@dimen/padding_small"
+                android:text="@string/total_order_qty"
+                android:textColor="?attr/colorPrimary" />
+
+            <include layout="@layout/vertical_line" />
+
+            <TextView
+                android:id="@+id/txtv_total_qty"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="@dimen/padding_small" />
+        </LinearLayout>
+
+        <include layout="@layout/horizontal_line" />
+
+        <LinearLayout
+            android:id="@+id/main_row_order_line_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_xxsmall">
+
+                <TextView
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="@dimen/padding_small"
+                    android:text="@string/value"
+                    android:textColor="?attr/colorPrimary" />
+
+                <include layout="@layout/vertical_line" />
+
+                <TextView
+                    android:id="@+id/order_value_text_view"
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="@dimen/padding_small" />
+            </LinearLayout>
+
+            <include layout="@layout/horizontal_line" />
+
+            <LinearLayout
+                android:id="@+id/editional_value_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/padding_xxsmall">
+
+                    <TextView
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:padding="@dimen/padding_small"
+                        android:text="@string/gross_amount"
+                        android:textColor="?attr/colorPrimary" />
+
+                    <include layout="@layout/vertical_line" />
+
+                    <TextView
+                        android:id="@+id/gross_amount_value_text_view"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:padding="@dimen/padding_small" />
+                </LinearLayout>
+
+                <include layout="@layout/horizontal_line" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/padding_xxsmall">
+
+                    <TextView
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:padding="@dimen/padding_small"
+                        android:text="@string/discount"
+                        android:textColor="?attr/colorPrimary" />
+
+                    <include layout="@layout/vertical_line" />
+
+                    <TextView
+                        android:id="@+id/discount_value_text_view"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:padding="@dimen/padding_small" />
+                </LinearLayout>
+
+                <include layout="@layout/horizontal_line" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/padding_xxsmall">
+
+                    <TextView
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:padding="@dimen/padding_small"
+                        android:text="@string/adds"
+                        android:textColor="?attr/colorPrimary" />
+
+                    <include layout="@layout/vertical_line" />
+
+                    <TextView
+                        android:id="@+id/add_value_text_view"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:padding="@dimen/padding_small" />
+                </LinearLayout>
+
+                <include layout="@layout/horizontal_line" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/adjustment_price_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_xxsmall">
+
+                <TextView
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="@dimen/padding_small"
+                    android:text="@string/final_price"
+                    android:textColor="?attr/colorPrimary" />
+
+                <include layout="@layout/vertical_line" />
+
+                <TextView
+                    android:id="@+id/adjustment_price_value_text_view"
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="@dimen/padding_small" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/third_party_row_order_line_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/third_party_gross_amount_value_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/padding_xxsmall">
+
+                    <TextView
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:padding="@dimen/padding_small"
+                        android:text="@string/total_amount_label"
+                        android:textColor="?attr/colorPrimary" />
+
+                    <include layout="@layout/vertical_line" />
+
+                    <TextView
+                        android:id="@+id/third_party_gross_amount_value_text_view"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:padding="@dimen/padding_small" />
+
+                </LinearLayout>
+
+                <include layout="@layout/horizontal_line" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_xxsmall">
+
+                <TextView
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="@dimen/padding_small"
+                    android:text="@string/discount"
+                    android:textColor="?attr/colorPrimary" />
+
+                <include layout="@layout/vertical_line" />
+
+                <TextView
+                    android:id="@+id/third_party_discount_value_text_view"
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="@dimen/padding_small" />
+            </LinearLayout>
+
+            <include layout="@layout/horizontal_line" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_xxsmall">
+
+                <TextView
+                    android:id="@+id/third_party_order_value_text_view_label"
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="@dimen/padding_small"
+                    android:textColor="?attr/colorPrimary" />
+
+                <include layout="@layout/vertical_line" />
+
+                <TextView
+                    android:id="@+id/third_party_order_value_text_view"
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:padding="@dimen/padding_small" />
+            </LinearLayout>
+
+            <include layout="@layout/horizontal_line" />
+
+            <LinearLayout
+                android:id="@+id/third_party_add_value_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/padding_xxsmall">
+
+                    <TextView
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:padding="@dimen/padding_small"
+                        android:text="@string/adds"
+                        android:textColor="?attr/colorPrimary" />
+
+                    <include layout="@layout/vertical_line" />
+
+                    <TextView
+                        android:id="@+id/third_party_add_value_text_view"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:padding="@dimen/padding_small" />
+
+                </LinearLayout>
+
+                <include layout="@layout/horizontal_line" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/third_party_net_amount_value_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/padding_xxsmall">
+
+                    <TextView
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:padding="@dimen/padding_small"
+                        android:text="@string/payable_amount"
+                        android:textColor="?attr/colorPrimary" />
+
+                    <include layout="@layout/vertical_line" />
+
+                    <TextView
+                        android:id="@+id/third_party_net_amount_value_text_view"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:padding="@dimen/padding_small" />
+
+                </LinearLayout>
+
+                <include layout="@layout/horizontal_line" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <include layout="@layout/horizontal_line" />
+</androidx.cardview.widget.CardView>

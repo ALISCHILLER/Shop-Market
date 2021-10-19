@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="@dimen/elevation_default"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_collapseMode="pin"
+        tools:targetApi="lollipop">
+
+        <ImageView
+            android:id="@+id/back_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/padding_default"
+            android:layout_marginRight="@dimen/padding_default"
+            android:padding="@dimen/padding_default"
+            android:src="@drawable/back_icon" />
+
+        <TextView
+            android:id="@+id/title_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/padding_default"
+            android:layout_weight="1"
+            android:padding="@dimen/padding_left_right_small"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <com.varanegar.framework.util.component.toolbar.CuteToolbar
+            android:id="@+id/options_toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:elevation="@dimen/elevation_default"
+            android:minWidth="@dimen/toolbarSize"
+            android:visibility="gone"
+            tools:targetApi="lollipop" />
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/grey_light_light_light">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_scrollFlags="scroll|enterAlways">
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/debit_balance_paired_items"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        app:title="@string/balance_of_debit" />
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/credit_balance_paired_items"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        app:title="@string/balance_of_credit" />
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/payment_type_name_paired_items"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        app:title="@string/payment_type" />
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/order_type_name_paired_items"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        app:title="@string/order_type" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_scrollFlags="scroll|enterAlways">
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/order_cost_paired_items"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        app:title="@string/net_amount" />
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/discount_amount_paired_items"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        app:title="@string/discount_amount" />
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/add_amount_paired_items"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        app:title="@string/add_amount" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/usance_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_scrollFlags="scroll|enterAlways">
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/usance_day_paired_items"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        app:title="@string/usance_day" />
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/usance_ref_paired_items"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        app:title="@string/usance_ref" />
+                </LinearLayout>
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <com.varanegar.framework.util.recycler.BaseRecyclerView
+                android:id="@+id/recycler_order_line_preview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </LinearLayout>
+</LinearLayout>

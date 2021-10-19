@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.varanegar.framework.util.component.PairedItemsEditable
+                android:id="@+id/person_name_paired_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:singleLine="true"
+                app:title="@string/person_name_label" />
+
+            <com.varanegar.framework.util.component.PairedItemsEditable
+                android:id="@+id/tablo_name_paired_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:singleLine="true"
+                app:title="@string/tablo_name_label" />
+
+            <com.varanegar.framework.util.component.PairedItemsEditable
+                android:id="@+id/address_paired_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textImeMultiLine"
+                android:orientation="vertical"
+                app:title="@string/address_label" />
+
+            <com.varanegar.framework.util.component.PairedItemsEditable
+                android:id="@+id/street2_paired_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textImeMultiLine"
+                android:orientation="vertical"
+                app:title="@string/street2_label" />
+
+            <com.varanegar.framework.util.component.PairedItemsEditable
+                android:id="@+id/street3_paired_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textImeMultiLine"
+                android:orientation="vertical"
+                app:title="@string/street3_label" />
+
+            <com.varanegar.framework.util.component.PairedItemsEditable
+                android:id="@+id/street4_paired_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textImeMultiLine"
+                android:orientation="vertical"
+                app:title="@string/street4_label" />
+
+            <com.varanegar.framework.util.component.PairedItemsEditable
+                android:id="@+id/street5_paired_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textImeMultiLine"
+                android:orientation="vertical"
+                app:title="@string/street5_label" />
+
+
+            <com.varanegar.framework.util.component.PairedItemsEditable
+                android:id="@+id/postal_code_paired_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:orientation="horizontal"
+                app:singleLine="true"
+                app:title="@string/postal_code_label" />
+
+
+            <com.varanegar.framework.util.component.PairedItemsEditable
+                android:id="@+id/city_name_paired_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:orientation="horizontal"
+                app:singleLine="true"
+                app:title="@string/city_name" />
+
+            <com.varanegar.framework.util.component.PairedItemsSpinner
+                android:id="@+id/degree_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                app:singleLine="true"
+                app:title="@string/customer_degree" />
+
+            <com.varanegar.framework.util.component.PairedItemsSpinner
+                android:id="@+id/delivery_zone_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                app:singleLine="true"
+                app:title="@string/delivery_zone" />
+
+
+            <com.varanegar.framework.util.component.PairedItemsEditable
+                android:id="@+id/tel_paired_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                app:singleLine="true"
+                app:title="@string/customer_tel_label" />
+
+            <com.varanegar.framework.util.component.PairedItemsEditable
+                android:id="@+id/mobile_paired_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                app:singleLine="true"
+                app:title="@string/mobile_label" />
+
+            <com.varanegar.framework.util.component.PairedItems
+                android:id="@+id/economic_code_paired_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                app:singleLine="true"
+                app:title="@string/customer_economic_code" />
+
+            <com.varanegar.framework.util.component.PairedItems
+                android:id="@+id/national_code_paired_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                app:singleLine="true"
+                app:title="@string/customer_national_code_labl" />
+
+            <com.varanegar.framework.util.component.PairedItemsSpinner
+                android:id="@+id/sale_zones_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                app:singleLine="true"
+                app:title="@string/sale_zones" />
+
+            <com.varanegar.framework.util.component.PairedItemsSpinner
+                android:id="@+id/customer_group1_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                app:singleLine="true"
+                app:title="@string/customer_group_1" />
+
+            <com.varanegar.framework.util.component.PairedItemsSpinner
+                android:id="@+id/customer_group2_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                app:singleLine="true"
+                app:title="@string/customer_group_2" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>

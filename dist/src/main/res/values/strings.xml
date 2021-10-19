@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">توزیع</string>
+    <string name="dist_count">تعداد توزیع</string>
+    <string name="distribution_tour">اطلاعات توزیع</string>
+    <string name="dist_onhandqty">موجودی ماشین</string>
+    <string name="delivered_report">گزارش تحویل</string>
+    <string name="retuned_from_dist">برگشت از توزیع</string>
+    <string name="well_returned">برگشتی سالم</string>
+    <string name="waste_returned">برگشتی ضایعاتی</string>
+</resources>

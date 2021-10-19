@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <CheckBox
+        android:id="@+id/ready_to_send"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ready_to_send"/>
+
+    <CheckBox
+        android:id="@+id/sent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sent"/>
+
+    <CheckBox
+        android:id="@+id/receiving_information"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/receiving_information"/>
+
+    <CheckBox
+        android:id="@+id/received"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/received"/>
+
+    <CheckBox
+        android:id="@+id/ended"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ended"/>
+
+    <CheckBox
+        android:id="@+id/refused"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/refused"/>
+
+    <CheckBox
+        android:id="@+id/disabled"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/disabled" />
+
+</LinearLayout>

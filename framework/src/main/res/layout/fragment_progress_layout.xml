@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.varanegar.framework.util.component.ProgressView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:is_dialog="true">
+
+    <androidx.appcompat.widget.ContentFrameLayout
+        android:id="@+id/progress_content_frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</com.varanegar.framework.util.component.ProgressView>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <com.varanegar.framework.util.component.SimpleToolbar
+        android:id="@+id/simple_toolbar"
+        app:title="@string/orders_list"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbarSize" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimaryLight"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/padding_default"
+            android:gravity="center"
+            android:text="@string/row_number" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:padding="@dimen/padding_default"
+            android:text="@string/ref_number" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="@dimen/padding_default"
+            android:text="@string/total_amount" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="@dimen/padding_default"
+            android:text="@string/total_qty" />
+
+        <TextView
+            android:visibility="invisible"
+            android:layout_width="40dp"
+            android:layout_height="0dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:padding="@dimen/padding_default"
+            android:text="@string/total_qty" />
+
+    </LinearLayout>
+
+    <com.varanegar.framework.util.recycler.BaseRecyclerView
+        android:id="@+id/orders_base_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/new_btn"
+            style="@style/PrimaryButton"
+            android:text="@string/new_request"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/print_btn"
+            style="@style/PrimaryButton"
+            android:text="@string/print"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

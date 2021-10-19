@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">discountcalculatorlib</string>
+    <string name="init_vdm_failed">مقداردهی اولیه تخفیفات و جوایز با خطا مواجه شد!</string>
+    <string name="opening_vdm_file_tamplate_failed">فایل ساختار تخفیفات و جوایز یافت نشد</string>
+    <string name="opening_vdm_data_failed">فایل داده تخفیفات و جوایز یافت نشد!</string>
+    <string name="vdm_service_is_not_available">سرویس تخفیفات و جوایز در دسترس نیست</string>
+    <string name="error_saving_vdm_file">خطا در ذخیره سازی فایل تخفیفات و جوایز</string>
+    <string name="attaching_vdm_file_failed">پیوست فایل در ماژول تخفیفات و جوایز خطا داد!</string>
+    <string name="init_vdm_failed_data_is_not_compatible">خطا در مقداردهی اولیه تخفیفات و جوایز. داده ها همخوانی ندارند!</string>
+    <string name="error_calculating_discount">خطا در محاسبه تخفیفات و جوایز</string>
+    <string name="it_seems_vdm_is_not_initialized">احتمالا تخفیفات و جوایز مقداردهی اولیه نشده است!</string>
+    <string name="connection_to_discount_module_failed">ارتباط با ماژول تخفیفات و جوایز برقرار نشد!</string>
+    <string name="error_in_discount_module">خطا در ماژول تخفیفات و جوایز</string>
+    <string name="discount_module_initialized">ماژول تخفیفات و جوایز مقداردهی شد</string>
+    <string name="vdm_apk_is_not_installed">برنامه تخفیفات و جوایز نصب نشده است</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+</resources>

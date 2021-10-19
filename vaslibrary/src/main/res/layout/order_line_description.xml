@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="@dimen/padding_xxsmall">
+
+    <TextView
+        style="@android:style/TextAppearance.DeviceDefault"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@drawable/item_pair_start_background"
+        android:gravity="center_vertical"
+        android:padding="@dimen/padding_default"
+        android:text="@string/order_description"
+        android:textColor="?attr/colorPrimary" />
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/item_pair_end_background">
+
+        <EditText
+            android:id="@+id/edit_text"
+            style="@android:style/TextAppearance.DeviceDefault"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            android:tag="7cc7c054-f0b6-41ef-a97c-d843e672d16b" />
+    </RelativeLayout>
+
+    <ImageButton
+        android:id="@+id/save_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/transparent"
+        android:padding="@dimen/padding_small"
+        android:src="@drawable/ic_done_green_700_36dp" />
+
+</LinearLayout>

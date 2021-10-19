@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:padding="@dimen/padding_small">
+
+
+        <TextView
+            android:id="@+id/qty_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/calculator_left_green_corner"
+            android:gravity="center"
+            android:paddingLeft="@dimen/padding_small"
+            android:paddingRight="@dimen/padding_small"
+            android:textColor="@color/green"
+            android:textSize="@dimen/calculator_text_size_small" />
+
+        <TextView
+            android:id="@+id/unit_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/calculator_right_green_corner"
+            android:gravity="center"
+            android:paddingLeft="@dimen/padding_small"
+            android:paddingRight="@dimen/padding_small"
+            android:textColor="@color/white"
+            android:textSize="@dimen/calculator_text_size_small" />
+</LinearLayout>

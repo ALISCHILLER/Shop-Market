@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.varanegar.framework.util.component.PairedItemsEditable
+            android:id="@+id/amount_paired_items_editable"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:isCommaSeparated="true"
+            app:title="@string/settlement_discount_amount" />
+
+        <com.varanegar.framework.util.component.PairedItems
+            android:id="@+id/remaining_amount_paired_items"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:title="@string/remaining_amount" />
+    </LinearLayout>
+
+    <com.varanegar.framework.util.component.PairedItems
+        android:id="@+id/max_discount_amount_paired_items"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:title="@string/max_eligible_discount_amount" />
+
+
+</LinearLayout>

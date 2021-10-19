@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.varanegar.framework.util.component.ProgressView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/progress_view_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/customer_summary_tab_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/toolbarSize"
+                app:tabGravity="center"
+                app:tabMinWidth="120dp"
+                app:tabMode="scrollable"
+                app:tabPadding="@dimen/padding_small" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@color/red"
+                android:visibility="gone">
+
+                <ImageButton
+                    android:id="@+id/cancel_btn"
+                    style="?android:buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_power_settings_new_red_a700_36dp"
+                    android:tint="@color/white" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="?attr/colorPrimaryDark"
+                android:visibility="gone">
+
+                <ImageButton
+                    android:id="@+id/send_btn"
+                    style="?android:buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_send_request_black_36dp"
+                    android:tint="@color/white" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?attr/colorPrimary" />
+
+        <com.varanegar.vaslibrary.ui.report.review.CustomViewPager
+            android:id="@+id/tabs_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+</com.varanegar.framework.util.component.ProgressView>

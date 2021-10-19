@@ -1,0 +1,30 @@
+package com.varanegar.vaslibrary.manager.locationmanager;
+
+public enum LogType {
+    WIFI_ON,
+    WIFI_OFF,
+    GPS_ON,
+    GPS_OFF,
+    SUBMIT_POINT,
+    APP_OPEN,
+    LICENSE,
+    BATTERY,
+    ORDER_EVENT,
+    START_WAIT,
+    END_WAIT,
+    MOCK_PROVIDER,
+    INACCURATE_POINT,
+    TRANSITION,
+    POINT,
+    PROVIDER,
+    LOCATION_SETTINGS,
+    DATA_OFF,
+    DATA_ON,
+    CONFIG,
+    ACTIVITY,
+    POINT_TIME,
+    LICENSE_FILE,
+    UPDATE_POINT,
+    EVENT,
+    INVALID_TIME
+}

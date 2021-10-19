@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:background="@color/white4">
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/pie_chart"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_centerInParent="true"
+            android:layout_margin="@dimen/padding_default" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/tour_info_layout"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_default">
+
+        <com.varanegar.framework.util.component.PairedItems
+            android:id="@+id/customers_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:title="@string/customers_count" />
+
+        <com.varanegar.framework.util.component.PairedItems
+            android:id="@+id/visited_customer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:title="@string/visited" />
+
+        <com.varanegar.framework.util.component.PairedItems
+            android:id="@+id/ordered_customer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:title="@string/ordered" />
+
+        <com.varanegar.framework.util.component.PairedItems
+            android:id="@+id/sum_of_ordered"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:title="@string/sum_of_day_ordered" />
+
+        <com.varanegar.framework.util.component.PairedItems
+            android:id="@+id/canceled_customer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:title="@string/canceled" />
+
+        <com.varanegar.framework.util.component.PairedItems
+            android:id="@+id/visit_to_customer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:title="@string/visit_to_customer" />
+
+        <com.varanegar.framework.util.component.PairedItems
+            android:id="@+id/spd_paired_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:title="@string/spd" />
+
+        <com.varanegar.framework.util.component.PairedItems
+            android:id="@+id/total_visit_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:title="@string/total_visit_time" />
+
+        <com.varanegar.framework.util.component.PairedItems
+            android:id="@+id/tour_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:title="@string/total_tour_time" />
+
+    </LinearLayout>
+
+</LinearLayout>

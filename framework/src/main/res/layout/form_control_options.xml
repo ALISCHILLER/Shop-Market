@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:orientation="vertical">
+
+    <TextView
+        android:visibility="gone"
+        android:elevation="@dimen/elevation_default"
+        android:id="@+id/error_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_default"
+        android:background="@drawable/error_message_background"
+        android:padding="@dimen/padding_default"
+        android:textColor="@color/white"
+        tools:targetApi="lollipop" />
+
+    <com.varanegar.framework.util.recycler.BaseRecyclerView
+        android:id="@+id/options_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_default"
+        android:padding="@dimen/padding_default" />
+
+    <include layout="@layout/horizontal_line" />
+</LinearLayout>

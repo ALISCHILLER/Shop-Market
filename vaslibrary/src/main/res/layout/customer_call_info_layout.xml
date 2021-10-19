@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.varanegar.framework.util.component.PairedItems
+            android:id="@+id/tour_no_paired_items"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            app:title="@string/tour_no" />
+
+        <com.varanegar.framework.util.component.PairedItems
+            android:id="@+id/visitor_name_paired_items"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            app:title="@string/agent_name" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.varanegar.framework.util.component.PairedItems
+            android:id="@+id/customer_code_paired_items"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            app:title="@string/customer_code" />
+
+        <com.varanegar.framework.util.component.PairedItems
+            android:id="@+id/customer_name_paired_items"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            app:title="@string/customer_name" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.varanegar.framework.util.component.PairedItems
+            android:id="@+id/visit_status_paired_items"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            app:title="@string/visit_status" />
+
+        <com.varanegar.framework.util.component.PairedItems
+            android:id="@+id/call_status_paired_items"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            app:title="@string/call_status" />
+    </LinearLayout>
+
+    <com.varanegar.framework.util.component.PairedItems
+        android:id="@+id/address_paired_items"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:title="@string/address" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.varanegar.framework.util.component.PairedItems
+            android:id="@+id/start_time_paired_items"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            app:title="@string/start_time" />
+
+        <com.varanegar.framework.util.component.PairedItems
+            android:id="@+id/end_time_paired_items"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            app:title="@string/end_time" />
+
+        <com.varanegar.framework.util.component.PairedItems
+            android:id="@+id/visit_duration_paired_items"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            app:title="@string/visit_duration" />
+    </LinearLayout>
+
+    <com.varanegar.framework.util.component.PairedItems
+        android:id="@+id/description_paired_items"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:title="@string/description" />
+</LinearLayout>

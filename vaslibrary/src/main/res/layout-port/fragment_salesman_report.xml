@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <com.varanegar.framework.util.component.SimpleToolbar
+        android:id="@+id/toolbar"
+        local:title=""
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <com.varanegar.framework.util.report.ReportView
+        local:title="@string/salesman_report"
+        android:id="@+id/salesman_report"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.varanegar.framework.util.report.ReportHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="start">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="start">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/cash_sum"
+                        android:layout_weight="0.2"
+
+
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/zero"
+                        android:layout_marginLeft="20dp"
+                        android:id="@+id/rep_cash_sum"
+                        android:layout_weight="0.2"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/sale_sum"
+                        android:layout_weight="0.2"
+
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/zero"
+                        android:layout_marginLeft="20dp"
+                        android:id="@+id/rep_sale_sum"
+                        android:layout_weight="0.2"
+                        />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="start">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/payment_cheque_sum"
+                        android:layout_weight="0.2"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/zero"
+                        android:id="@+id/rep_cheque_sum"
+                        android:layout_marginLeft="20dp"
+                        android:layout_weight="0.2"
+
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/cheque_count_sum"
+                        android:layout_weight="0.2"
+
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/zero"
+                        android:layout_marginLeft="20dp"
+                        android:id="@+id/rep_cheque_count_sum"
+                        android:layout_weight="0.2"
+                        />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="start">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/peyment_sum"
+                        android:id="@+id/textView"
+                        android:layout_weight="0.2"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/zero"
+                        android:id="@+id/rep_payment_sum"
+                        android:layout_marginLeft="20dp"
+                        android:layout_weight="0.2"
+
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/receipt_sum"
+                        android:layout_weight="0.2"
+
+
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/zero"
+                        android:id="@+id/rep_reciept_sum"
+                        android:layout_marginLeft="20dp"
+                        android:layout_weight="0.2"
+                        />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="5dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/cash_discount_sum"
+                        android:layout_weight="0.2"
+
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/zero"
+                        android:layout_marginLeft="20dp"
+                        android:id="@+id/rep_cash_discount_sum"
+                        android:layout_weight="0.2"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/pos_sum"
+                        android:layout_weight="0.2"
+
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/zero"
+                        android:id="@+id/rep_pos_sum"
+                        android:layout_marginLeft="20dp"
+                        android:layout_weight="0.2"
+                        />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/return_sum"
+                        android:layout_weight="0.0033"
+                        android:layout_gravity="start" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/zero"
+                        android:id="@+id/rep_return_sum"
+                        android:layout_marginLeft="20dp"
+                        android:layout_weight="0.02" />
+
+                </TableRow>
+
+            </TableLayout>
+
+        </com.varanegar.framework.util.report.ReportHeader>
+    </com.varanegar.framework.util.report.ReportView>
+</LinearLayout>

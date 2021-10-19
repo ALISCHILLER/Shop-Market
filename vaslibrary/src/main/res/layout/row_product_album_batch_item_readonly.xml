@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="80dp"
+    android:layout_height="80dp"
+    android:layout_margin="5dp"
+    android:background="@color/white4"
+    android:elevation="@dimen/elevation_default"
+    android:orientation="vertical"
+    tools:targetApi="lollipop">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_light_light" />
+
+    <TextView
+        style="@style/TextAppearance.AppCompat.Caption"
+        android:id="@id/product_code_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dp"
+        android:maxLines="1"
+        android:padding="@dimen/padding_small"
+        android:shadowColor="@color/grey"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="2"
+        android:singleLine="true"
+        android:textColor="@color/black" />
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/grey_light_light" />
+
+</LinearLayout>

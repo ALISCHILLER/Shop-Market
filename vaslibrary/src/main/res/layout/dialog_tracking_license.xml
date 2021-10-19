@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <com.varanegar.framework.util.component.SimpleToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbarSize"
+        app:title="@string/tracking_license" />
+
+    <TextView
+        android:id="@+id/no_tracking_text_view"
+        android:visibility="gone"
+        android:elevation="@dimen/elevation_default"
+        android:padding="@dimen/padding_default"
+        android:background="@color/red"
+        android:textColor="@color/white"
+        android:text="@string/there_is_no_tracking_license"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:targetApi="lollipop" />
+    <LinearLayout
+        android:id="@+id/license_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <com.varanegar.framework.util.component.PairedItems
+            app:title="@string/device_model"
+            android:id="@+id/device_model_paired_items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.varanegar.framework.util.component.PairedItems
+            app:title="@string/user_name"
+            android:id="@+id/user_name_paired_items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.varanegar.framework.util.component.PairedItems
+            app:title="@string/expire_date"
+            android:id="@+id/expire_date_paired_items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.varanegar.framework.util.component.PairedItems
+                app:title="@string/device_id"
+                android:id="@+id/device_id_paired_items"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <ImageButton
+                android:id="@+id/copy_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_copy_black"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/item_pair_end_background"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="1dp"
+                android:scaleType="fitXY"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/download_license_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_file_download_black_48dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/padding_small"
+                android:text="@string/downloading_license_file" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/save_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_file_upload_black_48dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/padding_small"
+                android:text="@string/save_device_id" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+</LinearLayout>

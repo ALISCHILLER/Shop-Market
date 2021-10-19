@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">VasLibrary</string>
+    <string name="ip">ip</string>
+    <string name="dmc">dmc</string>
+    <string name="id">id</string>
+    <string name="invoice_products">Invoice products</string>
+</resources>

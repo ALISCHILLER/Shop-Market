@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name" translatable="false">Tracking viewer</string>
+    <string name="show_tracking_points">نمایش پوینت های مسیریابی</string>
+    <string name="show_sent_points">نمایش پوینت های ارسال شده</string>
+    <string name="show_events_path">نمایش رویدادها</string>
+    <string name="latitude">عرض جغرافیایی</string>
+    <string name="longitude">طول جغرافیایی</string>
+    <string name="accuracy">دقت</string>
+    <string name="tracking">ردیابی</string>
+    <string name="all_points_in_database">همه پوینت های دیتابیس</string>
+    <string name="event_type">رویداد</string>
+    <string name="is_important">تاکید شده</string>
+    <string name="activity_type">فعالیت</string>
+    <string name="show_still_points">نمایش پوینت های ضمن توقف</string>
+    <string name="points">پوینت ها</string>
+    <string name="log">لاگ</string>
+    <string name="time">زمان</string>
+    <string name="run_filter">اعمال فیلتر</string>
+</resources>

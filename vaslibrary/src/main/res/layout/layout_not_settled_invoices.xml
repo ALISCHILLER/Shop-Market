@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <CheckBox
+        android:id="@+id/select_all_check_box"
+        android:text="@string/select_all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <com.varanegar.framework.util.report.ReportView
+        android:id="@+id/invoices_report_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbarSize"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_default">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:padding="@dimen/padding_small"
+            android:text="@string/total_amount_of_selected_invoices" />
+
+        <TextView
+            android:id="@+id/total_amount_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:padding="@dimen/padding_small" />
+    </LinearLayout>
+</LinearLayout>

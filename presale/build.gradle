@@ -1,0 +1,146 @@
+plugins {
+    id 'com.android.application'
+}
+
+ext.versionVariant = null // for example : nestle
+// VersionReplaceStartTag
+ext.versionMajor = 3
+ext.versionMinor = 1
+ext.versionPatch = 1
+ext.versionBuild = 109
+// VersionReplaceEndTag
+ext.versionType = null // stable(null), beta, snapshot, ...
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        applicationId "com.varanegar.presale"
+        minSdkVersion 16
+        targetSdkVersion 30
+        versionCode generateVersionCode()
+        versionName generateVersionName()
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+
+    signingConfigs {
+        release {
+            keyAlias 'presale'
+            keyPassword 'hmmAd+V3KMFq@y65'
+            storeFile file('./keystore.jks')
+            storePassword 'y69+z6E%KXS@6Pcz'
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            lintOptions {
+                disable 'MissingTranslation'
+                abortOnError false
+            }
+        }
+    }
+
+    applicationVariants.all { variant ->
+        if (variant.buildType.name == "release") {
+            variant.outputs.each { output ->
+                // For each separate APK per architecture, set a unique version code as described here:
+                // https://developer.android.com/studio/build/configure-apk-splits.html
+
+                def formattedDate = new Date().format('yyMMdd')
+                def fileName = defaultConfig.applicationId.replaceAll('com.', '') + "_V" + defaultConfig.versionName + "_" + formattedDate + ".apk"
+                println '*******************'
+                println 'Apk file name :'
+                println fileName
+                output.outputFileName = fileName
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.3.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation project(path: ':vaslibrary')
+    implementation project(path: ':framework')
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name == 'assembleRelease') {
+        task.doLast {
+            commitRelease()
+        }
+    }
+}
+
+
+private Integer generateVersionCode() {
+    return ext.versionMajor * 10000000 + ext.versionMinor * 100000 + ext.versionPatch * 1000 + ext.versionBuild
+}
+
+private String generateVersionName() {
+    String versionName = "${ext.versionMajor}.${ext.versionMinor}.${ext.versionPatch}.${ext.versionBuild}"
+    if (ext.versionType != null && ext.versionType != "") {
+        versionName += "-" + ext.versionType
+    }
+    if (ext.versionVariant != null) {
+        versionName += "-" + ext.versionVariant
+    }
+    return versionName;
+}
+
+//committagreplace1
+private void commitRelease() {
+    println("assmble relase finished. we check version type. if version type was empty or null then we commit.")
+    if (ext.versionType == null || ext.versionType.isEmpty()) {
+        def version = "release/Presale-" + generateVersionName()
+        if(ext.versionVariant != null)
+             version = "-" + ext.versionVariant
+        try {
+            try {
+                runCommands("git", "add", ".")
+                runCommands("git", "commit", "-m", version)
+                runCommands("git", "tag", "-a", "Presale-" + generateVersionName(), "-m", "${version}")
+                runCommands("git", "push", "origin", "--tags")
+                runCommands("git", "push", "origin")
+            } catch (Exception e) {
+                println(e.message)
+            }
+            runCommands("git", "tag", "-a", "Presale-" + generateVersionName(), "-m", "${version}")
+            runCommands("git", "push", "origin", "--tags")
+            runCommands("git", "push", "origin")
+        } catch (Exception e) {
+            println(e.message)
+        }
+        runCommands("git", "status")
+    }
+}
+//committagreplace2
+
+private static String runCommands(String... commands) {
+    def process = new ProcessBuilder(commands).redirectErrorStream(true).start()
+    process.waitFor()
+    def result = ''
+    process.inputStream.eachLine { result += it + '\n' }
+    def errorResult = process.exitValue() == 0
+    if (!errorResult) {
+        throw new IllegalStateException(result)
+    }
+    return result
+}

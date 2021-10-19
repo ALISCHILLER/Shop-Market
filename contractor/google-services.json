@@ -1,0 +1,106 @@
+{
+  "project_info": {
+    "project_number": "559235839122",
+    "firebase_url": "https://presale-8b79c.firebaseio.com",
+    "project_id": "presale-8b79c",
+    "storage_bucket": "presale-8b79c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:559235839122:android:c4d1b37acb0c3341",
+        "android_client_info": {
+          "package_name": "com.varanegar.contractor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "559235839122-g9agge4aisncjhplrhc7kl7gbps0577s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4issf0nuuL9kPKLNFLnpv31f29yYNgwE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "559235839122-g9agge4aisncjhplrhc7kl7gbps0577s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:559235839122:android:fc9d94108c6f59cc",
+        "android_client_info": {
+          "package_name": "com.varanegar.hotsales"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "559235839122-g9agge4aisncjhplrhc7kl7gbps0577s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4issf0nuuL9kPKLNFLnpv31f29yYNgwE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "559235839122-g9agge4aisncjhplrhc7kl7gbps0577s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:559235839122:android:c211f0df5d6b1150",
+        "android_client_info": {
+          "package_name": "com.varanegar.presale"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "559235839122-o92m2jgc1ieddv1dq4fp7agasi49a3pa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.varanegar.presale",
+            "certificate_hash": "d4877ad4c241e0dc04ee0e476e697ee7b659ad44"
+          }
+        },
+        {
+          "client_id": "559235839122-g9agge4aisncjhplrhc7kl7gbps0577s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4issf0nuuL9kPKLNFLnpv31f29yYNgwE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "559235839122-g9agge4aisncjhplrhc7kl7gbps0577s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

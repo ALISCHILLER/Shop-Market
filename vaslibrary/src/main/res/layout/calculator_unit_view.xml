@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layoutDirection="ltr"
+    android:orientation="horizontal"
+    android:padding="@dimen/padding_default"
+    tools:targetApi="jelly_bean_mr1">
+
+    <LinearLayout
+        android:id="@+id/value_linear_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/padding_default">
+
+            <TextView
+                android:id="@+id/value_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_left_right_small"
+                android:textSize="@dimen/calculator_text_size_default" />
+
+            <TextView
+                android:id="@+id/title_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_left_right_small"
+                android:textSize="@dimen/calculator_text_size_small" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/unit_linear_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="26dp"
+            android:layout_gravity="right"
+            android:layoutDirection="ltr"
+            tools:targetApi="jelly_bean_mr1">
+
+            <TextView
+                android:id="@+id/convert_factor_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="@drawable/calculator_left_green_corner"
+                android:gravity="center"
+                android:paddingLeft="@dimen/padding_default"
+                android:paddingRight="@dimen/padding_default"
+                android:textColor="@color/green"
+                android:textSize="@dimen/calculator_text_size_medium" />
+
+            <LinearLayout
+                android:id="@+id/icon_linear_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/calculator_right_green_corner">
+
+                <ImageView
+                    android:id="@+id/icon_image_view"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_clear_white_24dp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/operator_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/padding_default"
+        android:padding="@dimen/padding_default"
+        android:text="+" />
+
+
+</LinearLayout>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_background">
+
+    <View
+        android:background="@color/black_transparent2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <LinearLayout
+        android:layout_centerInParent="true"
+        android:layout_width="450dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/shadow"
+        android:elevation="@dimen/elevation_default"
+        android:gravity="center"
+        android:orientation="vertical"
+        tools:targetApi="lollipop">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbarSize"
+            android:background="@color/black_transparent1">
+
+            <ImageButton
+                android:src="@mipmap/ic_launcher"
+                android:id="@+id/logo_image_view"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="@dimen/padding_default"
+                android:background="@color/transparent"
+                android:scaleType="fitXY" />
+
+            <TextView
+                android:id="@+id/version_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:text="@string/app_name"
+                android:gravity="center"
+                android:textColor="@color/white" />
+
+            <ImageView
+                android:id="@+id/settings_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="@dimen/padding_default"
+                android:src="@drawable/ic_settings_white_36dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:background="@color/black_transparent2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_small">
+
+            <include layout="@layout/fragment_login_user_name_layout" />
+
+            <EditText
+                android:id="@+id/password_edit_text"
+                style="@style/EditText.Inverse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:hint="@string/password"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:maxLines="1" />
+
+            <com.dd.processbutton.iml.ActionProcessButton
+                android:id="@+id/ok_button"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/padding_default"
+                android:layout_marginTop="@dimen/padding_default"
+                android:text="@string/login"
+                android:textColor="@color/white"
+                custom:pb_colorNormal="@color/transparent"
+                custom:pb_colorError="@color/red"
+                custom:pb_colorProgress="?attr/colorPrimary"
+                custom:pb_textProgress="@string/please_wait" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/language_text_view"
+        android:layout_margin="@dimen/padding_default"
+        android:padding="@dimen/padding_large"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:textColor="@color/white"
+        android:shadowRadius="1"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowColor="@color/black"
+        android:text="@string/app_language"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.varanegar.framework.util.component.SimpleToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbarSize"
+        app:title="@string/preview" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <com.varanegar.framework.util.component.toolbar.CuteToolbar
+            android:id="@+id/options_toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:elevation="@dimen/elevation_default"
+            android:minWidth="@dimen/toolbarSize"
+            android:visibility="gone"
+            tools:targetApi="lollipop" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/app_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/grey_light_light_light">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_scrollFlags="scroll|enterAlways">
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/debit_balance_paired_items"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        app:title="@string/balance_of_debit" />
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/credit_balance_paired_items"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        app:title="@string/balance_of_credit" />
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/usance_day_paired_items"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        app:title="@string/usance_day" />
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/usance_ref_paired_items"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        app:title="@string/usance_ref" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_scrollFlags="scroll|enterAlways">
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/order_cost_paired_items"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        app:title="@string/net_amount" />
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/discount_amount_paired_items"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        app:title="@string/discount_amount" />
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/add_amount_paired_items"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        app:title="@string/add_amount" />
+                </LinearLayout>
+
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <com.varanegar.framework.util.report.ReportHorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/half_padding">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/header_linear_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_margin="3dp"
+                        android:background="?attr/colorPrimaryLight"
+                        android:divider="@drawable/linear_layout_divider"
+                        android:dividerPadding="@dimen/padding_linear_layout_divider"
+                        android:orientation="horizontal"
+                        android:showDividers="middle">
+
+                        <TextView
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:padding="@dimen/padding_small"
+                            android:text="@string/row_number"
+                            android:textColor="@color/white" />
+
+                        <TextView
+                            android:layout_width="@dimen/width_small"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:padding="@dimen/padding_small"
+                            android:text="@string/product_code"
+                            android:textColor="@color/white" />
+
+                        <TextView
+                            android:layout_width="@dimen/width_medium"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:padding="@dimen/padding_small"
+                            android:text="@string/product_name"
+                            android:textColor="@color/white" />
+
+                        <TextView
+                            android:layout_width="@dimen/width_small"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:padding="@dimen/padding_small"
+                            android:text="@string/unit_price"
+                            android:textColor="@color/white" />
+
+                        <TextView
+                            android:layout_width="@dimen/width_medium"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:padding="@dimen/padding_small"
+                            android:text="@string/order_qty"
+                            android:textColor="@color/white" />
+
+                        <TextView
+                            android:layout_width="@dimen/width_small"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:padding="@dimen/padding_small"
+                            android:text="@string/total_order_qty"
+                            android:textColor="@color/white" />
+
+                        <LinearLayout
+                            android:id="@+id/main_report_recycler_header"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="?attr/colorPrimaryLight"
+                            android:divider="@drawable/linear_layout_divider"
+                            android:dividerPadding="@dimen/padding_linear_layout_divider"
+                            android:orientation="horizontal"
+                            android:showDividers="middle"
+                            android:visibility="gone">
+
+
+                            <TextView
+                                android:layout_width="@dimen/width_small"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:padding="@dimen/padding_default"
+                                android:text="@string/value"
+                                android:textColor="@color/white" />
+
+                            <TextView
+                                android:id="@+id/gross_amount_text_view"
+                                android:layout_width="@dimen/width_small"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:padding="@dimen/padding_small"
+                                android:text="@string/gross_amount"
+                                android:textColor="@color/white"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:id="@+id/discount_text_view"
+                                android:layout_width="@dimen/width_small"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:padding="@dimen/padding_small"
+                                android:text="@string/discount"
+                                android:textColor="@color/white"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:id="@+id/adds_text_view"
+                                android:layout_width="@dimen/width_small"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:padding="@dimen/padding_small"
+                                android:text="@string/adds"
+                                android:textColor="@color/white"
+                                android:visibility="gone" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/third_party_report_recycler_header"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="?attr/colorPrimaryLight"
+                            android:divider="@drawable/linear_layout_divider"
+                            android:dividerPadding="@dimen/padding_linear_layout_divider"
+                            android:orientation="horizontal"
+                            android:showDividers="middle"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@+id/third_party_gross_amount_text_view"
+                                android:layout_width="@dimen/width_small"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:padding="@dimen/padding_small"
+                                android:text="@string/total_amount_label"
+                                android:textColor="@color/white"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:id="@+id/third_party_discount_text_view"
+                                android:layout_width="@dimen/width_small"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:padding="@dimen/padding_small"
+                                android:text="@string/discount"
+                                android:textColor="@color/white" />
+
+                            <TextView
+                                android:id="@+id/third_party_value_text_view"
+                                android:layout_width="@dimen/width_medium"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:padding="@dimen/padding_small"
+                                android:textColor="@color/white" />
+
+                            <TextView
+                                android:id="@+id/third_party_adds_text_view"
+                                android:layout_width="@dimen/width_small"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:padding="@dimen/padding_small"
+                                android:text="@string/adds"
+                                android:textColor="@color/white"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:id="@+id/third_party_net_amount_text_view"
+                                android:layout_width="@dimen/width_small"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:padding="@dimen/padding_small"
+                                android:text="@string/payable_amount"
+                                android:textColor="@color/white"
+                                android:visibility="gone" />
+
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/padding_default"
+                            android:layout_marginRight="@dimen/padding_default"
+                            android:gravity="center"
+                            android:padding="0dp" />
+                    </LinearLayout>
+
+                    <com.varanegar.framework.util.recycler.BaseRecyclerView
+                        android:id="@+id/recycler_order_line_preview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+                </LinearLayout>
+            </com.varanegar.framework.util.report.ReportHorizontalScrollView>
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

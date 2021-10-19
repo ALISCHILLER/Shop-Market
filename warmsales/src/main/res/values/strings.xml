@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">فروش ولرم</string>
+    <string name="car_onhandqty">موجودی ماشین</string>
+    <string name="distribution_data">اطلاعات توزیع</string>
+</resources>

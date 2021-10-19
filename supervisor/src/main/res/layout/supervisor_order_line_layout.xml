@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/padding_small"
+    android:background="@color/cardview_dark_background"
+    app:cardCornerRadius="@dimen/padding_xsmall"
+    app:cardElevation="@dimen/cardview_default_elevation">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/padding_small"
+                android:paddingRight="@dimen/padding_small">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/product_code_label" />
+
+                <TextView
+                    android:id="@+id/product_code_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/product_name_label" />
+
+                <TextView
+                    android:id="@+id/product_name_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+
+                <TextView
+                    android:id="@+id/row_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/padding_xsmall"
+                    android:layout_marginRight="@dimen/padding_xsmall"
+                    android:gravity="center"
+                    android:padding="@dimen/padding_small"
+                    android:textSize="11sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/large_unit_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_xxsmall"
+                android:layout_marginRight="@dimen/padding_xxsmall"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <ImageButton
+                    android:id="@+id/plus_image_view_large"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/transparent"
+                    android:paddingLeft="@dimen/padding_xxsmall"
+                    android:paddingRight="@dimen/padding_xxsmall"
+                    android:src="@drawable/ic_plus_square_green_24dp"
+                    android:tint="@color/green" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:layoutDirection="ltr"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/qty_text_view_large"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:background="@drawable/calculator_left_green_corner"
+                        android:gravity="center"
+                        android:minWidth="25dp"
+                        android:paddingLeft="@dimen/padding_xxsmall"
+                        android:paddingRight="@dimen/padding_xxsmall"
+                        android:textAlignment="center"
+                        android:textColor="@color/green"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/unit_text_view_large"
+                        android:layout_width="35dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/calculator_right_green_corner"
+                        android:gravity="center"
+                        android:lines="1"
+                        android:paddingLeft="@dimen/padding_xxsmall"
+                        android:paddingRight="@dimen/padding_xxsmall"
+                        android:singleLine="true"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/calculator_text_size_small" />
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/minus_image_view_large"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/transparent"
+                    android:paddingLeft="@dimen/padding_xxsmall"
+                    android:paddingRight="@dimen/padding_xxsmall"
+                    android:src="@drawable/ic_minus_square_red_24dp"
+                    android:tint="@color/red" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/middle_unit_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_xxsmall"
+                android:layout_marginRight="@dimen/padding_xxsmall"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <ImageButton
+                    android:id="@+id/plus_image_view_middle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/transparent"
+                    android:paddingLeft="@dimen/padding_xxsmall"
+                    android:paddingRight="@dimen/padding_xxsmall"
+                    android:src="@drawable/ic_plus_square_green_24dp"
+                    android:tint="@color/green" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:layoutDirection="ltr"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/qty_text_view_middle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:background="@drawable/calculator_left_green_corner"
+                        android:gravity="center"
+                        android:minWidth="25dp"
+                        android:paddingLeft="@dimen/padding_xxsmall"
+                        android:paddingRight="@dimen/padding_xxsmall"
+                        android:textAlignment="center"
+                        android:textColor="@color/green"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/unit_text_view_middle"
+                        android:layout_width="35dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/calculator_right_green_corner"
+                        android:gravity="center"
+                        android:lines="1"
+                        android:paddingLeft="@dimen/padding_xxsmall"
+                        android:paddingRight="@dimen/padding_xxsmall"
+                        android:singleLine="true"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/calculator_text_size_small" />
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/minus_image_view_middle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/transparent"
+                    android:paddingLeft="@dimen/padding_xxsmall"
+                    android:paddingRight="@dimen/padding_xxsmall"
+                    android:src="@drawable/ic_minus_square_red_24dp"
+                    android:tint="@color/red" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/small_unit_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/padding_small"
+                android:layout_marginRight="@dimen/padding_small"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/plus_image_view_small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/transparent"
+                    android:paddingLeft="@dimen/padding_xxsmall"
+                    android:paddingRight="@dimen/padding_xxsmall"
+                    android:src="@drawable/ic_plus_square_green_24dp"
+                    android:tint="@color/green" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="24dp"
+                    android:layoutDirection="ltr"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/qty_text_view_small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:background="@drawable/calculator_left_green_corner"
+                        android:gravity="center"
+                        android:minWidth="25dp"
+                        android:paddingLeft="@dimen/padding_xxsmall"
+                        android:paddingRight="@dimen/padding_xxsmall"
+                        android:textAlignment="center"
+                        android:textColor="@color/green"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/unit_text_view_small"
+                        android:layout_width="35dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/calculator_right_green_corner"
+                        android:gravity="center"
+                        android:lines="1"
+                        android:paddingLeft="@dimen/padding_xxsmall"
+                        android:paddingRight="@dimen/padding_xxsmall"
+                        android:singleLine="true"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/calculator_text_size_small" />
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/minus_image_view_small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/transparent"
+                    android:paddingLeft="@dimen/padding_xxsmall"
+                    android:paddingRight="@dimen/padding_xxsmall"
+                    android:src="@drawable/ic_minus_square_red_24dp"
+                    android:tint="@color/red" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_xxsmall">
+
+                <TextView
+                    android:id="@+id/total_order_qty_text_view"
+                    style="@style/TextAppearance.AppCompat.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_xxsmall"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/total_qty_label_text_view"
+                    style="@style/TextAppearance.AppCompat.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_xxsmall"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

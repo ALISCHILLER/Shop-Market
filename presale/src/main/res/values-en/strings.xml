@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Pre sale</string>
+    <string name="product_unit_name">Measuring unit</string>
+    <string name="save_order_request">Submit a sales application :</string>
+    <string name="save_return_request">Submit a return request</string>
+    <string name="add_product_by_code">Product Code</string>
+    <string name="add_product_by_catalog">Album of goods</string>
+    <string name="add_product_by_list">Product list</string>
+    <string name="quick_search">Quick Search</string>
+    <string name="preview">Preview</string>
+    <string name="enter_product_name_or_code">Enter the name or product code</string>
+    <string name="remove">Delete</string>
+    <string name="order_is_finished_do_you_reset">Order is definitive Is it reset?</string>
+    <string name="order_is_finished_do_you_edit">Your request has been confirmed. Would you like to re-edit?</string>
+    <string name="please_download_catalog">Please download the product album</string>
+    <string name="all_items">all items</string>
+    <string name="free_items">Free goods</string>
+    <string name="emphatic_items">Emphasis</string>
+    <string name="order_request">Sales Request</string>
+    <string name="return_request">Request a refund</string>
+    <string name="calculating_prices_for_customer">Calculating price for customer</string>
+    <string name="visit_to_customer">visit to customer ratio</string>
+    <string name="sent_tour_msg">اطلاعات تور ارسال شده</string>
+</resources>

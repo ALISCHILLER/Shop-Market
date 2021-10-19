@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="3dp"
+    android:background="@color/white"
+    android:orientation="vertical"
+    app:cardCornerRadius="@dimen/padding_xsmall"
+    app:cardElevation="@dimen/cardview_default_elevation">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/padding_default"
+        android:paddingBottom="@dimen/padding_default">
+
+        <TextView
+            android:id="@+id/txtv_row_number"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="@dimen/padding_small" />
+
+        <TextView
+            android:id="@+id/txtv_product_code"
+            android:layout_width="@dimen/width_small"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="@dimen/padding_small" />
+
+        <TextView
+            android:id="@+id/txtv_product_name"
+            android:layout_width="@dimen/width_medium"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="@dimen/padding_small" />
+
+        <TextView
+            android:id="@+id/txtv_unit_price"
+            android:layout_width="@dimen/width_small"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="@dimen/padding_small" />
+
+        <LinearLayout
+            android:id="@+id/lly_order_qty"
+            android:layout_width="@dimen/width_medium"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="@dimen/padding_small" />
+
+        <TextView
+            android:id="@+id/txtv_total_qty"
+            android:layout_width="@dimen/width_small"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="@dimen/padding_small" />
+
+        <LinearLayout
+            android:id="@+id/main_row_order_line_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/order_value_text_view"
+                android:layout_width="@dimen/width_small"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="@dimen/padding_default" />
+
+            <LinearLayout
+                android:id="@+id/editional_value_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/gross_amount_value_text_view"
+                    android:layout_width="@dimen/width_small"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:padding="@dimen/padding_default" />
+
+
+                    <TextView
+                        android:id="@+id/discount_value_text_view"
+                        android:layout_width="@dimen/width_small"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:padding="@dimen/padding_default" />
+
+
+                <TextView
+                    android:id="@+id/add_value_text_view"
+                    android:layout_width="@dimen/width_small"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:padding="@dimen/padding_default" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/adjustment_price_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/adjustment_price_value_text_view"
+                    android:layout_width="@dimen/width_small"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:padding="@dimen/padding_default" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/third_party_row_order_line_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/third_party_gross_amount_value_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/third_party_gross_amount_value_text_view"
+                    android:layout_width="@dimen/width_small"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:padding="@dimen/padding_default" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/third_party_discount_value_text_view"
+                android:layout_width="@dimen/width_small"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="@dimen/padding_default" />
+
+            <TextView
+                android:id="@+id/third_party_order_value_text_view"
+                android:layout_width="@dimen/width_medium"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="@dimen/padding_default" />
+
+            <LinearLayout
+                android:id="@+id/third_party_add_value_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/third_party_add_value_text_view"
+                    android:layout_width="@dimen/width_small"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:padding="@dimen/padding_default" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/third_party_net_amount_value_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/third_party_net_amount_value_text_view"
+                    android:layout_width="@dimen/width_small"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:padding="@dimen/padding_default" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/icon_image_view"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/padding_default"
+            android:layout_marginRight="@dimen/padding_default"
+            android:gravity="center"
+            android:padding="0dp" />
+
+    </LinearLayout>
+
+    <include layout="@layout/horizontal_line" />
+</androidx.cardview.widget.CardView>

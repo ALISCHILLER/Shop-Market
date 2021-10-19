@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#0288D1</color>
+    <color name="colorPrimaryDark">#01579B</color>
+    <color name="colorPrimaryLight">#4FC3F7</color>
+    <color name="colorAccent">#1E88E5</color>
+    <color name="colorPrimaryText">#606060</color>
+    <color name="colorSecondaryText">#7c7c7c</color>
+    <color name="colorIcons">#FFFFFF</color>
+    <color name="colorDivider">#BDBDBD</color>
+    <!--datePicker-->
+    <color name="mdtp_accent_color">#448AFF</color>
+    <color name="mdtp_accent_color_dark">#3F51B5</color>
+</resources>

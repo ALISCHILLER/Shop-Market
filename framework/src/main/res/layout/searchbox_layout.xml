@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white4"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/search_edit_text"
+        style="@android:style/TextAppearance.DeviceDefault"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_small"
+        android:background="@android:drawable/edit_text"
+        android:hint="@string/search"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_default" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/result_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+    <LinearLayout
+        android:id="@+id/footer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_default"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/cancel_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="@dimen/padding_default"
+            android:text="@string/cancel"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/ok_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="@dimen/padding_default"
+            android:text="@string/ok"
+            android:textColor="@color/white" />
+    </LinearLayout>
+</LinearLayout>

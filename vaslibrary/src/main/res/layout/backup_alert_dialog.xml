@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/padding_small"
+        android:paddingLeft="@dimen/padding_large"
+        android:paddingRight="@dimen/padding_large"
+        android:paddingTop="@dimen/padding_large"
+        android:text="@string/select_if_you_want_to_include_these_pictures" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/padding_large"
+        android:paddingLeft="@dimen/padding_large"
+        android:paddingRight="@dimen/padding_large"
+        android:paddingTop="@dimen/padding_small"
+        android:text="@string/picture_backup_warning" />
+
+    <CheckBox
+        android:id="@+id/customer_picture_check_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_small"
+        android:padding="@dimen/padding_small"
+        android:text="@string/customer_picture" />
+
+    <CheckBox
+        android:id="@+id/questionaire_attachment_check_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_small"
+        android:padding="@dimen/padding_small"
+        android:text="@string/questionaire_attachement" />
+
+    <CheckBox
+        android:id="@+id/product_and_catalogue_check_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_small"
+        android:padding="@dimen/padding_small"
+        android:text="@string/product_and_catalogue" />
+</LinearLayout>

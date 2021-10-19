@@ -1,0 +1,547 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.varanegar.framework.util.component.ProgressView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/login_background"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+
+            <LinearLayout
+                android:id="@+id/report_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:visibility="invisible">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:background="@color/white4">
+
+                    <TextView
+                        android:id="@+id/profile_sent_tour_msg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/pie_chart"
+                        android:gravity="center"
+                        android:padding="5dp"
+                        android:textSize="@dimen/default_text_size"
+                        android:textStyle="bold"
+                        android:visibility="visible" />
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/pie_chart"
+                        android:layout_width="250dp"
+                        android:layout_height="250dp"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="@dimen/padding_default"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:id="@+id/print_btn_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/pie_chart"
+                        android:layout_centerInParent="true"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:padding="@dimen/padding_default"
+                            android:src="@drawable/ic_print_black_36dp"
+                            android:tint="?attr/colorPrimary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:padding="@dimen/padding_default"
+                            android:text="@string/sent_tour_info" />
+
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <ScrollView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <LinearLayout
+                        android:id="@+id/tour_info_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/padding_default">
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/tour_no_paired_items"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="@string/tour_no" />
+
+                        <!--dist-->
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/dist_no_paired_items"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="@string/dist_no_label" />
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/total_deliveries_customer_paired_items"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="@string/delivered" />
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/total_partial_deliveries_customer_paired_items"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="@string/delivered_partially" />
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/total_lack_of_deliveries_customer_paired_items"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="@string/lack_of_delivery_count" />
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/total_lack_of_visits_customer_paired_items"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="@string/lack_of_visit_count" />
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/total_return_customer_paired_items"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="@string/return_count" />
+                        <!--end dist-->
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/today_customers_count_paired_items"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="@string/today_customers_count" />
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/total_customers_count_paired_items"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="@string/total_customers_count" />
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/today_sum_of_ordered_paired_items"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="@string/today_sum_of_ordered" />
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/total_sum_of_ordered_paired_items"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="@string/total_sum_of_ordered" />
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/today_visited_customer_paired_items"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="@string/today_visited" />
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/total_visited_customer_paired_items"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="@string/total_visited" />
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/today_ordered_customer_paired_items"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="@string/today_ordered" />
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/total_ordered_customer_paired_items"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="@string/total_ordered" />
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/lack_of_visit_customer_paired_items"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="@string/today_lack_of_visit" />
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/today_lack_of_order_customer_paired_items"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="@string/today_lack_of_order" />
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/total_lack_of_order_customer_paired_items"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="@string/total_lack_of_order" />
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/visit_to_customer_paired_items"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="@string/visit_to_customer" />
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/spd_paired_items"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="@string/spd" />
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/total_visit_time_paired_items"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="@string/total_visit_time" />
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/tour_time_paired_items"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="@string/total_tour_time" />
+                    </LinearLayout>
+                </ScrollView>
+            </LinearLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/tour_progress_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="invisible">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/logs_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="3dp" />
+
+                <ProgressBar
+                    android:id="@+id/total_progress_bar"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_gravity="center_vertical"
+                    android:progress="0" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/msg_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@drawable/white_background2"
+                android:elevation="@dimen/elevation_default"
+                android:padding="@dimen/padding_large"
+                android:shadowColor="@color/black"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="2"
+                android:textColor="@color/white"
+                android:visibility="gone"
+                tools:targetApi="lollipop" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white2"
+            android:elevation="@dimen/elevation_default"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_large"
+            tools:targetApi="lollipop">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/padding_small"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_xsmall">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/app_name" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" : " />
+
+                    <TextView
+                        android:id="@+id/version_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_xsmall">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/user_name" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" : " />
+
+                    <TextView
+                        android:id="@+id/user_name_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_xsmall">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/local_server_ip" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" : " />
+
+                    <TextView
+                        android:id="@+id/local_ip_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_xsmall">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/internet_ip" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" : " />
+
+                    <TextView
+                        android:id="@+id/ip_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <include layout="@layout/horizontal_line" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/padding_small"
+                android:gravity="center_horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/log_out_image_view"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/btn_background"
+                        android:src="@drawable/ic_exit_white_76dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="@string/exit_app" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="24dp"
+                    android:layout_height="24dp" />
+
+                <LinearLayout
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/get_tour_image_view"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/btn_background"
+                        android:padding="@dimen/padding_default"
+                        android:src="@drawable/ic_download_white_76dp" />
+
+                    <com.emrekose.recordbutton.RecordButton
+                        android:id="@+id/stop_btn"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/btn_background"
+                        android:visibility="gone"
+                        app:buttonGap="10dp"
+                        app:buttonRadius="20dp"
+                        app:maxMilisecond="1500"
+                        app:progressColor="@color/orange"
+                        app:progressStroke="5"
+                        app:recordIcon="@drawable/ic_cancel_white_24dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="@string/get_tour" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="24dp"
+                    android:layout_height="24dp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/tracking_license_image_view"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/btn_background"
+                        android:padding="@dimen/padding_default"
+                        android:src="@drawable/ic_tracking_white_76dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="@string/tracking_license" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="24dp"
+                    android:layout_height="24dp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/backup_image_view"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/btn_background"
+                        android:padding="@dimen/padding_default"
+                        android:src="@drawable/ic_backup_white_76dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="@string/backup" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</com.varanegar.framework.util.component.ProgressView>

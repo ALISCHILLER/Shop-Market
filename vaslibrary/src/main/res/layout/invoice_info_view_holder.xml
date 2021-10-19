@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/padding_xsmall"
+        android:paddingTop="@dimen/padding_xxsmall"
+        android:paddingRight="@dimen/padding_xsmall"
+        android:paddingBottom="@dimen/padding_xxsmall">
+
+        <TextView
+            android:id="@+id/label_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/invoice_no_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/padding_xsmall"
+            android:paddingRight="@dimen/padding_xsmall" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/padding_xsmall"
+        android:paddingTop="@dimen/padding_xxsmall"
+        android:paddingRight="@dimen/padding_xsmall"
+        android:paddingBottom="@dimen/padding_xxsmall">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/date" />
+
+        <TextView
+            android:id="@+id/date_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/padding_xsmall"
+            android:paddingRight="@dimen/padding_xsmall" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/padding_xsmall"
+        android:paddingTop="@dimen/padding_xxsmall"
+        android:paddingRight="@dimen/padding_xsmall"
+        android:paddingBottom="@dimen/padding_xxsmall">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/remaining" />
+
+        <TextView
+            android:id="@+id/invoice_rem_amount_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/settlement" />
+
+        <TextView
+            android:id="@+id/settlement_amount_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/calculator_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:padding="@dimen/padding_xsmall"
+            android:src="@drawable/ic_calculator_black_36dp"
+            android:tint="?attr/colorPrimaryDark" />
+
+        <SeekBar
+            android:id="@+id/amount_seek_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_xsmall"
+            android:progressTint="?attr/colorPrimary"
+            android:secondaryProgressTint="?attr/colorPrimaryLight"
+            tools:targetApi="lollipop" />
+    </LinearLayout>
+
+    <include layout="@layout/horizontal_line" />
+</LinearLayout>

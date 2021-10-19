@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/padding_default">
+
+    <LinearLayout
+        android:id="@+id/settings_linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_xxsmall">
+
+            <TextView
+                style="@android:style/TextAppearance.DeviceDefault.Small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/item_pair_top_background"
+                android:padding="@dimen/padding_default"
+                android:text="@string/external_ip"
+                android:textColor="?attr/colorPrimary" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/item_pair_bottom_background"
+                android:layoutDirection="ltr"
+                android:orientation="horizontal"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
+                tools:targetApi="jelly_bean_mr1">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <Spinner
+                        android:id="@+id/first_external_spinner"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textAlignment="center" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/white" />
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:layoutDirection="ltr">
+
+                    <EditText
+                        android:id="@+id/first_external_ip_edit_text"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_toLeftOf="@+id/add_external_ip"
+                        android:imeOptions="actionNext"
+                        android:lines="1"
+                        android:longClickable="false"
+                        android:padding="@dimen/padding_default"
+                        android:singleLine="true"
+                        android:textColor="@color/black" />
+
+                    <ImageView
+                        android:id="@+id/add_external_ip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_add"
+                        android:tint="?attr/colorPrimaryDark" />
+                </RelativeLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/second_external_ip_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_xxsmall"
+            android:visibility="gone">
+
+            <TextView
+                style="@android:style/TextAppearance.DeviceDefault.Small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/item_pair_top_background"
+                android:padding="@dimen/padding_default"
+                android:text="@string/second_external_ip"
+                android:textColor="?attr/colorPrimary" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/item_pair_bottom_background"
+                android:layoutDirection="ltr"
+                android:orientation="horizontal"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
+                tools:targetApi="jelly_bean_mr1">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <Spinner
+                        android:id="@+id/second_external_spinner"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textAlignment="center" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/white" />
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3">
+
+                    <EditText
+                        android:id="@+id/second_external_ip_edit_text"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:padding="@dimen/padding_default"
+                        android:textColor="@color/black" />
+
+                </RelativeLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_xxsmall">
+
+            <TextView
+                style="@android:style/TextAppearance.DeviceDefault.Small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/item_pair_top_background"
+                android:padding="@dimen/padding_default"
+                android:text="@string/local_server_ip"
+                android:textColor="?attr/colorPrimary" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/item_pair_bottom_background"
+                android:layoutDirection="ltr"
+                android:orientation="horizontal"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
+                tools:targetApi="jelly_bean_mr1">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <Spinner
+                        android:id="@+id/local_spinner"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textAlignment="center" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/white" />
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3">
+
+                    <EditText
+                        android:id="@+id/local_ip_edit_text"
+                        style="@android:style/TextAppearance.DeviceDefault.Small"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:imeOptions="actionNext"
+                        android:lines="1"
+                        android:longClickable="false"
+                        android:padding="@dimen/padding_default"
+                        android:singleLine="true"
+                        android:textColor="@color/black" />
+                </RelativeLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <com.varanegar.framework.util.component.PairedItemsEditable
+            android:id="@+id/idEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:lines="1"
+            android:maxLines="1"
+            android:orientation="vertical"
+            android:singleLine="true"
+            custom:title="@string/config_number" />
+
+        <com.dd.processbutton.iml.ActionProcessButton
+            android:id="@+id/getSettingsButton"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/padding_default"
+            android:layout_marginBottom="@dimen/padding_default"
+            android:gravity="center"
+            android:text="@string/get_settings"
+            android:textColor="@color/white"
+            custom:pb_colorComplete="@color/green"
+            custom:pb_colorError="@color/red"
+            custom:pb_colorNormal="?attr/colorPrimaryDark"
+            custom:pb_colorPressed="?attr/colorAccent"
+            custom:pb_colorProgress="?attr/colorPrimaryDark"
+            custom:pb_textComplete="@string/settings_downloaded"
+            custom:pb_textProgress="@string/please_wait" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/centers_linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimaryLight"
+            android:gravity="center"
+            android:padding="@dimen/padding_default"
+            android:text="@string/select_center" />
+
+        <com.varanegar.framework.util.recycler.BaseRecyclerView
+            android:id="@+id/center_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</LinearLayout>

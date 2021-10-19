@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/choice_prize_recycler"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:elevation="@dimen/elevation_default"
+        android:id="@+id/buttons"
+        android:layoutDirection="ltr"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbarSize"
+        android:layout_marginTop="@dimen/padding_default">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="13dp"
+            android:layout_gravity="center"
+            android:layout_weight="0.1" />
+
+        <TextView
+            android:id="@+id/cancel_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.45"
+            android:gravity="center"
+            android:padding="@dimen/padding_default"
+            android:text="@string/cancel"
+            android:textColor="?attr/colorPrimaryDark" />
+
+        <TextView
+            android:id="@+id/divide_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.45"
+            android:gravity="center"
+            android:padding="@dimen/padding_default"
+            android:text="@string/divide"
+            android:textColor="?attr/colorPrimaryDark" />
+
+        <TextView
+            android:id="@+id/ok_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.45"
+            android:gravity="center"
+            android:padding="@dimen/padding_default"
+            android:text="@string/ok"
+            android:textColor="?attr/colorPrimaryDark" />
+
+    </LinearLayout>
+
+</LinearLayout>

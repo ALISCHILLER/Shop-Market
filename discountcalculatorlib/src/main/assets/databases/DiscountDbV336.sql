@@ -1,0 +1,1 @@
+ALTER TABLE DiscountDisSaleSDS ADD COLUMN CPriceRef INTEGER;

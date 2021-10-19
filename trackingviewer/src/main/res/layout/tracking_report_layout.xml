@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/map_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="70dp"
+        android:background="@color/white4"
+        android:elevation="@dimen/elevation_default"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/padding_small"
+        tools:targetApi="lollipop">
+
+        <ImageView
+            android:id="@+id/drawer_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/padding_small"
+            android:elevation="@dimen/elevation_default"
+            android:padding="@dimen/padding_default"
+            android:src="@drawable/ic_menu_white_24dp"
+            android:tint="?attr/colorPrimary"
+            tools:targetApi="lollipop" />
+
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/report_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/padding_default"
+        android:background="?attr/colorPrimaryDark"
+        android:src="@drawable/ic_list_white_24dp"
+        app:layout_anchorGravity="bottom|right|end" />
+</RelativeLayout>

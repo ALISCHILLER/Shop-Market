@@ -1,0 +1,1 @@
+alter table Product add column ReturnStockUniqueId text;

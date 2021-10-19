@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">تبلت پیمانکاران</string>
+    <string name="error_deleting_order">خطا در حذف سفارش</string>
+</resources>

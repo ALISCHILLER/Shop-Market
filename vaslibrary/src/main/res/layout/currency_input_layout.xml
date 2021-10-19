@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_margin="1dp"
+        android:gravity="center_vertical"
+        android:layoutDirection="ltr"
+        android:padding="@dimen/padding_default"
+        tools:targetApi="jelly_bean_mr1">
+
+        <TextView
+            android:textStyle="bold"
+            android:textSize="@dimen/default_text_size"
+            android:id="@+id/amount_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/back_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_default"
+            android:src="@drawable/ic_backspace_black_24dp"
+            android:tint="?attr/colorPrimaryLight" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/numbers"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@color/numpad_back_color"
+        android:orientation="vertical">
+
+        <LinearLayout
+            style="?android:buttonBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layoutDirection="ltr"
+            android:orientation="horizontal"
+            tools:targetApi="jelly_bean_mr1">
+
+            <Button
+                android:id="@+id/button1"
+                style="?android:buttonBarButtonStyle"
+                android:layout_width="100dp"
+                android:layout_height="80dp"
+                android:text="@string/_1"
+                android:textColor="@color/white"
+                android:textSize="@dimen/default_text_size"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/button2"
+                style="?android:buttonBarButtonStyle"
+                android:layout_width="100dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:text="@string/_2"
+                android:textColor="@color/white"
+                android:textSize="@dimen/default_text_size"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/button3"
+                style="?android:buttonBarButtonStyle"
+                android:layout_width="100dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:text="@string/_3"
+                android:textColor="@color/white"
+                android:textSize="@dimen/default_text_size"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="?android:buttonBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layoutDirection="ltr"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button4"
+                style="?android:buttonBarButtonStyle"
+                android:layout_width="100dp"
+                android:layout_height="80dp"
+                android:text="@string/_4"
+                android:textColor="@color/white"
+                android:textSize="@dimen/default_text_size"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/button5"
+                style="?android:buttonBarButtonStyle"
+                android:layout_width="100dp"
+                android:layout_height="80dp"
+                android:text="@string/_5"
+                android:textColor="@color/white"
+                android:textSize="@dimen/default_text_size"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/button6"
+                style="?android:buttonBarButtonStyle"
+                android:layout_width="100dp"
+                android:layout_height="80dp"
+                android:text="@string/_6"
+                android:textColor="@color/white"
+                android:textSize="@dimen/default_text_size"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            style="?android:buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layoutDirection="ltr"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button7"
+                style="?android:buttonBarButtonStyle"
+                android:layout_width="100dp"
+                android:layout_height="80dp"
+                android:text="@string/_7"
+                android:textColor="@color/white"
+                android:textSize="@dimen/default_text_size"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/button8"
+                style="?android:buttonBarButtonStyle"
+                android:layout_width="100dp"
+                android:layout_height="80dp"
+                android:text="@string/_8"
+                android:textColor="@color/white"
+                android:textSize="@dimen/default_text_size"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/button9"
+                style="?android:buttonBarButtonStyle"
+                android:layout_width="100dp"
+                android:layout_height="80dp"
+                android:text="@string/_9"
+                android:textColor="@color/white"
+                android:textSize="@dimen/default_text_size"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layoutDirection="ltr"
+        android:orientation="horizontal"
+        tools:targetApi="jelly_bean_mr1">
+
+
+        <ImageButton
+            android:id="@+id/cancel_btn"
+            style="?android:buttonBarButtonStyle"
+            android:layout_width="100dp"
+            android:layout_height="65dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:background="@color/red_error"
+            android:src="@drawable/ic_clear_white_36dp"
+            android:text="@string/_0"
+            android:textColor="@color/white"
+            android:textSize="@dimen/default_text_size"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/button0"
+            style="?android:buttonBarButtonStyle"
+            android:layout_width="100dp"
+            android:layout_height="65dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:background="@color/numpad_back_color"
+            android:text="@string/_0"
+            android:textColor="@color/white"
+            android:textSize="@dimen/default_text_size"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/ok_btn"
+            style="?android:buttonBarButtonStyle"
+            android:layout_width="100dp"
+            android:layout_height="65dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:background="@color/green"
+            android:src="@drawable/ic_done_white_36dp"
+            android:text="@string/_0"
+            android:textColor="@color/white"
+            android:textSize="@dimen/default_text_size"
+            android:textStyle="bold" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.varanegar.framework.util.component.PairedItemsEditable
+        android:id="@+id/pin_paired_items"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="@string/pin_code">
+    </com.varanegar.framework.util.component.PairedItemsEditable>
+
+    <LinearLayout
+        android:elevation="@dimen/elevation_default"
+        android:id="@+id/buttons"
+        android:layoutDirection="ltr"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbarSize"
+        android:layout_marginTop="@dimen/padding_default">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="13dp"
+            android:layout_gravity="center"
+            android:layout_weight="0.1" />
+
+        <TextView
+            android:id="@+id/cancel_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.30"
+            android:gravity="center"
+            android:padding="@dimen/padding_default"
+            android:text="@string/cancel"
+            android:textColor="?attr/colorPrimaryDark" />
+
+        <TextView
+            android:id="@+id/ok_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.30"
+            android:gravity="center"
+            android:padding="@dimen/padding_default"
+            android:text="@string/ok"
+            android:textColor="?attr/colorPrimaryDark" />
+
+    </LinearLayout>
+
+</LinearLayout>

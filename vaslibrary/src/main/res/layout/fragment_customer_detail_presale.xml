@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="5dp"
+                android:id="@+id/dayInfoCustomerInfo"
+                android:background="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_margin="5dp"
+                    android:weightSum="22"
+                    android:background="@color/white">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:text="@string/customer_code_label"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:id="@+id/dayInfoCustomerCode"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        style="?android:listSeparatorTextViewStyle" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:text="@string/customer_name_label"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:id="@+id/dayInfoCustomerName"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        style="?android:listSeparatorTextViewStyle" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_margin="5dp"
+                    android:weightSum="22"
+                    android:background="@color/white">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:text="@string/store_name_label"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        style="?android:listSeparatorTextViewStyle"
+                        android:id="@+id/dayInfoStoreName" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:text="@string/telephone_label"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:id="@+id/dayInfoTellNumber"
+                        style="?android:listSeparatorTextViewStyle" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_margin="5dp"
+                    android:weightSum="22"
+                    android:textAlignment="center"
+                    android:background="@color/white">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:text="@string/mobile_label"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:id="@+id/dayInfoMobileNumber"
+                        style="?android:listSeparatorTextViewStyle" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:text="@string/national_id_label"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:id="@+id/dayInfoNationalCode"
+                        style="?android:listSeparatorTextViewStyle"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_margin="5dp"
+                    android:weightSum="22"
+                    android:background="@color/white">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:text="@string/adress_label"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="16"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:id="@+id/dayInfoAddress"
+                        style="?android:listSeparatorTextViewStyle" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_margin="5dp"
+                    android:weightSum="22"
+                    android:background="@color/white">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:text="@string/status_label" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:id="@+id/dayInfoCustomerStatus"
+                        style="?android:listSeparatorTextViewStyle" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:text="@string/order_sum_label"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:id="@+id/dayInfoCustomerCurrentOrder"
+                        style="?android:listSeparatorTextViewStyle"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

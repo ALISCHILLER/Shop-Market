@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <com.varanegar.framework.util.component.PairedItems
+        android:orientation="horizontal"
+        android:id="@+id/customers_count"
+        app:title="@string/customers_count"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.varanegar.framework.util.component.PairedItems
+        android:orientation="horizontal"
+        android:id="@+id/dist_count"
+        app:title="@string/dist_count"
+        app:value="text value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <com.varanegar.framework.util.component.PairedItems
+        android:orientation="horizontal"
+        app:title="@string/sum_dist_rials_label"
+        android:id="@+id/sum_dist_rials"
+        app:value="text value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <com.varanegar.framework.util.component.PairedItems
+        android:orientation="horizontal"
+        android:id="@+id/sum_deliverd"
+        app:title="@string/sum_deliverd_label"
+        app:value="text value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <com.varanegar.framework.util.component.PairedItems
+        android:orientation="horizontal"
+        app:title="@string/sum_complete_returns_label"
+        app:value="text value"
+        android:id="@+id/sum_complete_returns"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <com.varanegar.framework.util.component.PairedItems
+        android:orientation="horizontal"
+        app:title="@string/sum_delivered_rials_label"
+        app:value="text value"
+        android:id="@+id/sum_delivered_rials"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>

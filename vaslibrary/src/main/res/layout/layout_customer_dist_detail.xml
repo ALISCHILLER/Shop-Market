@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:weightSum="22">
+
+                    <TextView
+                        android:id="@+id/visitor_name_label_tv"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:text="@string/visitor_name_label"
+                        android:elevation="1dp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        style="?android:listSeparatorTextViewStyle"/>
+
+                    <TextView
+                        android:id="@+id/day_sum_order_label_tv"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:text="@string/day_sum_order_label"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        style="?android:listSeparatorTextViewStyle"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:weightSum="22">
+
+                    <TextView
+                        android:id="@+id/line_customers_label_tv"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:text="@string/line_customers_label" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        style="?android:listSeparatorTextViewStyle" />
+
+                    <TextView
+                        android:id="@+id/line_visited_customers_label_tv"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:text="@string/line_visited_customers_label"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        style="?android:listSeparatorTextViewStyle" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:weightSum="22">
+
+                    <TextView
+                        android:id="@+id/refused_label_tv"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:text="@string/refused_label"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        style="?android:listSeparatorTextViewStyle" />
+
+                    <TextView
+                        android:id="@+id/order_taked_label_tv"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:text="@string/order_taked_label"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        style="?android:listSeparatorTextViewStyle" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_margin="5dp"
+                android:background="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:weightSum="22"
+                    android:background="@color/white">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:text="@string/customer_code_label"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        style="?android:listSeparatorTextViewStyle" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:text="@string/customer_name_label"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        style="?android:listSeparatorTextViewStyle" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:weightSum="22"
+                    android:background="@color/white">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:text="@string/store_name_label"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        style="?android:listSeparatorTextViewStyle"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:text="@string/telephone_label"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        style="?android:listSeparatorTextViewStyle" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:weightSum="22"
+                    android:textAlignment="center"
+                    android:background="@color/white">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:text="@string/mobile_label"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        style="?android:listSeparatorTextViewStyle" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:text="@string/national_id_label"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        style="?android:listSeparatorTextViewStyle"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:weightSum="22"
+                    android:background="@color/white">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:text="@string/adress_label"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="16"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        style="?android:listSeparatorTextViewStyle" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:weightSum="22"
+                    android:background="@color/white">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:text="@string/status_label" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        style="?android:listSeparatorTextViewStyle" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="5"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        android:text="@string/order_sum_label"/>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="6"
+                        android:textSize="@dimen/default_text_size"
+                        android:textAlignment="center"
+                        style="?android:listSeparatorTextViewStyle"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

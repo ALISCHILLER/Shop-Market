@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_default">
+
+        <RadioButton
+            android:id="@+id/with_reference"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/with_reference"
+            android:textColor="@color/black"
+            android:visibility="gone" />
+
+        <RadioButton
+            android:id="@+id/without_reference"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/without_reference"
+            android:textColor="@color/black"
+            android:visibility="gone" />
+
+        <RadioButton
+            android:id="@+id/with_reference_replacement_registration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/with_ref_replacement_registration"
+            android:textColor="@color/black"
+            android:visibility="gone" />
+
+        <RadioButton
+            android:id="@+id/without_reference_replacement_registration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/without_ref_replacement_registration"
+            android:textColor="@color/black"
+            android:visibility="gone" />
+
+        <RadioButton
+            android:id="@+id/with_reference_from_request"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/with_reference_from_request"
+            android:textColor="@color/black"
+            android:visibility="gone" />
+
+        <RadioButton
+            android:id="@+id/without_reference_from_request"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/without_reference_from_request"
+            android:textColor="@color/black"
+            android:visibility="gone" />
+    </RadioGroup>
+
+</LinearLayout>

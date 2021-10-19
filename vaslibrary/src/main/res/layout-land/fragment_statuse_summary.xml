@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/coordinator"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <com.varanegar.framework.util.component.SimpleToolbar
+        android:id="@+id/toolbar"
+        app:title=""
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_weight="1"
+            android:id="@+id/scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/customr_remain"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:title="@string/customer_remain"
+                        android:orientation="horizontal"/>
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/customr_order_sum_amount"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:title="@string/customer_order_sum_amount"
+                        android:orientation="horizontal"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/customr_first_credit"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:title="@string/customer_first_credit"
+                        android:orientation="horizontal"/>
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/customr_firt_debit"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:title="@string/customer_first_debit"
+                        android:orientation="horizontal"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/customr_open_invoices_qty"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:title="@string/customer_open_invoices_qty"
+                        android:orientation="horizontal"/>
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/customr_open_invoices_amount"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:title="@string/customer_open_invoices_amount"
+                        android:orientation="horizontal"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/customr_open_cheque_qty"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:title="@string/customer_open_cheque_qty"
+                        android:orientation="horizontal"/>
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/customr_open_cheque_amount"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:title="@string/customer_open_cheque_amount"
+                        android:orientation="horizontal"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/customr_returned_cheque_qty"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:title="@string/customer_returned_cheque_qty"
+                        android:orientation="horizontal"/>
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/customr_returned_cheque_amount"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:title="@string/customer_returned_cheque_amount"
+                        android:orientation="horizontal"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/customr_returned_remain_credit"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:title="@string/customer_remain_credit"
+                        android:orientation="horizontal"/>
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/customr_returned_remain_debit"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:title="@string/customer_remain_debit"
+                        android:orientation="horizontal"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/customr_visit_statuse"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:title="@string/customer_visit_statuse"
+                        android:orientation="horizontal"/>
+
+                    <!--<com.varanegar.framework.util.component.PairedItems-->
+                        <!--android:id="@+id/customr_payment_type"-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_weight="1"-->
+                        <!--app:title="@string/customer_payment_type"-->
+                        <!--android:orientation="horizontal"/>-->
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/update_customer_credit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_default"
+            android:src="@drawable/ic_autorenew_white_24dp"
+            android:layout_gravity="bottom|center_horizontal"
+            app:layout_anchor="@id/scroll_view" />
+
+    </FrameLayout>
+
+</LinearLayout>
