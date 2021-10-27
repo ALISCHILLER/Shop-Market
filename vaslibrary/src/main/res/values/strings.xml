@@ -768,6 +768,7 @@
     <string name="the_customer_payment_will_be_unconfirmed_do_you_continue">اطلاعات پرداخت مشتری غیر قطعی خواهد شد آیا ادامه می دهید؟</string>
     <string name="edit_settlement">ویرایش تسویه</string>
     <string name="payment_control_error">خطا در کنترل تسویه</string>
+    <string name="DeliveryReasons">خطا پین را درست وارد کنید</string>
     <string name="return_request">درخواست برگشتی</string>
     <string name="bluetooth_is_not_available">بلوتوث دستگاه در دسترس نمی باشد</string>
     <string name="bluetooth_is_not_enabled">بلوتوث دستگاه روشن نیست!</string>

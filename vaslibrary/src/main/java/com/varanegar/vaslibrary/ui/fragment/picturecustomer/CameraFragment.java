@@ -8,11 +8,14 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.otaliastudios.cameraview.CameraListener;
 import com.otaliastudios.cameraview.CameraOptions;
@@ -41,6 +44,7 @@ import com.varanegar.vaslibrary.model.picturesubject.PictureDemandType;
 import com.varanegar.vaslibrary.ui.fragment.ImageGalleryFragment;
 import com.varanegar.vaslibrary.ui.fragment.VisitFragment;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.UUID;
 
@@ -56,6 +60,7 @@ public class CameraFragment extends VisitFragment {
     private UUID customerId;
     private PictureCustomerViewModel selectedSubject;
     private View takePicture;
+    private     int notimagecheack ;
     BaseSelectionRecyclerAdapter<PictureCustomerViewModel> adapter;
     private CameraView cameraView;
     Bitmap mBitmap;
@@ -144,8 +149,22 @@ public class CameraFragment extends VisitFragment {
             view.findViewById(R.id.done_image_view).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    view.findViewById(R.id.take_picture).setVisibility(View.VISIBLE);
-                    save();
+
+                    ///Get file size image
+                    Bitmap bitmap = mBitmap;
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    byte[] imageInByte = stream.toByteArray();
+                    long lengthbmp = imageInByte.length;
+                    Log.e("image size","::"+lengthbmp);
+
+                    if (lengthbmp>0) {
+                        //save image to file
+                        save();
+                        view.findViewById(R.id.take_picture).setVisibility(View.VISIBLE);
+                    }else {
+                        Toast.makeText(getContext(),"حجم عکس درست نیست",Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
 
@@ -211,6 +230,7 @@ public class CameraFragment extends VisitFragment {
         loadingLayout.setVisibility(View.VISIBLE);
     }
 
+    // save image camera to file manger
     private void save() {
         imagePreviewLayout.setVisibility(View.GONE);
         final ProgressDialog progressDialog = new ProgressDialog(getContext());
@@ -327,6 +347,7 @@ public class CameraFragment extends VisitFragment {
         });
     }
 
+
     private void saveCameraCallAndExit() {
         // if any picture has been taken save camera call
         if (hasTakenPhoto()) {
@@ -349,6 +370,7 @@ public class CameraFragment extends VisitFragment {
         addArgument("97a0e5da-48c8-44de-8aed-7fb2be8678aa", selectedId.toString());
     }
 
+    //Drawer layout id a.sol-zar
     private class PictureSubjectViewHolder extends BaseViewHolder<PictureCustomerViewModel> {
         private final TextView subjectTextView;
         private final ImageView pinImageView;
@@ -383,21 +405,28 @@ public class CameraFragment extends VisitFragment {
                 }
             });
             if (pictureCustomerViewModel.FileCount == 0) {
+
+                //image Drawer a.sol-zar
                 imageGalleryImageView.setImageResource(R.drawable.ic_no_image_grey_24dp);
                 imageGalleryImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        NoPictureReasonDialog dialog = new NoPictureReasonDialog();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("cc550edb-f5e1-45d8-8010-1eef6f9a9bfc", pictureCustomerViewModel.UniqueId.toString());
-                        dialog.setArguments(bundle);
-                        dialog.onReasonSelected = new NoPictureReasonDialog.OnReasonSelected() {
-                            @Override
-                            public void onDone() {
-                                adapter.refreshAsync();
-                            }
-                        };
-                        dialog.show(getChildFragmentManager(), "7b0b529b-3f9b-4399-a2c7-2a85bcf57c1c");
+
+                        notimagecheack++;
+                        if (notimagecheack == 5) {
+                            NoPictureReasonDialog dialog = new NoPictureReasonDialog();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("cc550edb-f5e1-45d8-8010-1eef6f9a9bfc", pictureCustomerViewModel.UniqueId.toString());
+                            dialog.setArguments(bundle);
+                            dialog.onReasonSelected = new NoPictureReasonDialog.OnReasonSelected() {
+                                @Override
+                                public void onDone() {
+                                    adapter.refreshAsync();
+                                }
+                            };
+                            dialog.show(getChildFragmentManager(), "7b0b529b-3f9b-4399-a2c7-2a85bcf57c1c");
+                            notimagecheack=0;
+                        }
                     }
                 });
             } else {

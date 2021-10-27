@@ -6,6 +6,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -91,6 +92,7 @@ public class DbHandler extends SQLiteOpenHelper {
                     public int compare(DbUpgrade o1, DbUpgrade o2) {
                         int o1Version = o1.getVersion();
                         int o2Version = o2.getVersion();
+                       // Log.e("version db",String.valueOf(o1Version));
                         if (o1Version == o2Version)
                             return 0;
                         else
@@ -99,6 +101,7 @@ public class DbHandler extends SQLiteOpenHelper {
                 });
                 for (DbUpgrade dbUpgrade :
                         dbUpgrades) {
+                    Log.e("version db ", String.valueOf(dbUpgrade.getVersion()));
                     Timber.d("Executing Script " + dbUpgrade.getVersion());
                     dbUpgrade.onUpgrade(sqLiteDatabase);
                     Timber.d("script " + dbUpgrade.getVersion() + " executed successfully");
@@ -125,6 +128,7 @@ public class DbHandler extends SQLiteOpenHelper {
                     public int compare(DbUpgrade o1, DbUpgrade o2) {
                         int o1Version = o1.getVersion();
                         int o2Version = o2.getVersion();
+                      //  Log.e("version db",String.valueOf(o1Version));
                         if (o1Version == o2Version)
                             return 0;
                         else
@@ -790,6 +794,9 @@ public class DbHandler extends SQLiteOpenHelper {
 
     private static void executeScriptFile(Context context, SQLiteDatabase db, String filename) throws IOException, InvalidFormatException {
         List<String> script = readScriptFile(context, filename);
+        if(filename.equals("162"))
+            Log.e("message:","script = "+script);
+
         Timber.d("Script " + filename + " was read successfully.");
         for (String sql :
                 script) {

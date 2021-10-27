@@ -1,5 +1,7 @@
 package com.varanegar.vaslibrary.model.call;
 
+import androidx.annotation.Nullable;
+
 import com.google.gson.annotations.SerializedName;
 import com.varanegar.framework.database.model.BaseModel;
 import com.varanegar.framework.validation.annotations.NotNull;
@@ -138,4 +140,6 @@ public class OrderBaseModel extends BaseModel {
     public String PinCode;
     @Column
     public String PinCode2;
+    @Column
+    public String PinCode3;
 }
