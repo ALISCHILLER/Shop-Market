@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.varanegar.framework.base.MainVaranegarActivity;
+import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.base.questionnaire.FormAdapter;
 import com.varanegar.framework.base.questionnaire.FormView;
 import com.varanegar.framework.base.questionnaire.controls.FormControl;
@@ -114,7 +115,9 @@ public class QuestionnaireFormFragment extends VisitFragment {
     private void saveCallAndExit() {
         CustomerCallManager callManager = new CustomerCallManager(getContext());
         try {
-            callManager.saveQuestionnaireCall(customerId);
+            if (!VaranegarApplication.is(VaranegarApplication.AppId.Supervisor)) {
+                callManager.saveQuestionnaireCall(customerId);
+            }
             CuteMessageDialog dialog = new CuteMessageDialog(getContext());
             dialog.setIcon(Icon.Success);
             dialog.setMessage(R.string.all_questionnaires_finished);

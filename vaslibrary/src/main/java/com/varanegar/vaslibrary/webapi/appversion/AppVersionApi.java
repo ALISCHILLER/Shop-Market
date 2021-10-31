@@ -1,5 +1,7 @@
 package com.varanegar.vaslibrary.webapi.appversion;
 
+import static android.content.Context.NOTIFICATION_SERVICE;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -8,6 +10,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.FileProvider;
@@ -35,8 +38,6 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import timber.log.Timber;
-
-import static android.content.Context.NOTIFICATION_SERVICE;
 
 /**
  * Created by A.Torabi on 2/10/2018.
@@ -180,7 +181,7 @@ public class AppVersionApi extends BaseApi implements IAppVersionApi {
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
                         intent.setDataAndType(Uri.fromFile(new File(apkPath)), "application/vnd.android.package-archive");
                     else
-                        intent.setDataAndType(FileProvider.getUriForFile(getContext(), getContext().getPackageName() + ".provider", new File(apkPath)),"application/vnd.android.package-archive");
+                        intent.setDataAndType(FileProvider.getUriForFile(getContext(), getContext().getPackageName() + ".provider", new File(apkPath)), "application/vnd.android.package-archive");
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     PendingIntent pIntent = PendingIntent.getActivity(getContext(), (int) System.currentTimeMillis(), intent, 0);
                     NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), JobSchedulerService.ChannelId)
@@ -223,9 +224,20 @@ public class AppVersionApi extends BaseApi implements IAppVersionApi {
     private String saveToDownloadFolder(ResponseBody body, String fileName) throws IOException {
         byte[] buffer = new byte[4096];
         InputStream inputStream = body.byteStream();
-        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
-        path = path + "/" + fileName;
-        OutputStream outputStream = new FileOutputStream(path);
+        String path1 = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+        String path2 = getContext().getExternalFilesDir("apk").getAbsolutePath();
+        path1 = path1 + "/" + fileName;
+        path2 = path2 + "/" + fileName;
+        OutputStream outputStream;
+        String path;
+        try {
+            outputStream = new FileOutputStream(path1);
+            path = path1;
+        } catch (Exception ex) {
+            removeOldApks();
+            outputStream = new FileOutputStream(path2);
+            path = path2;
+        }
         while (true) {
             int read = inputStream.read(buffer);
             if (read == -1) {
@@ -235,5 +247,15 @@ public class AppVersionApi extends BaseApi implements IAppVersionApi {
         }
         outputStream.flush();
         return path;
+    }
+
+    private void removeOldApks() {
+        try {
+            new File(getContext().getExternalFilesDir("apk").getAbsolutePath()).delete();
+        } catch (Error ignored) {
+
+        } finally {
+            getContext().getExternalFilesDir("apk").mkdir();
+        }
     }
 }

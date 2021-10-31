@@ -25,6 +25,8 @@ public class CustomerCallOrderOrderViewModel extends BaseModel {
     @Column
     public Currency UnitPrice;
     @Column
+    public Currency PromotionUnitPrice;
+    @Column
     public Currency UserPrice;
     @Column
     public UUID ProductId;

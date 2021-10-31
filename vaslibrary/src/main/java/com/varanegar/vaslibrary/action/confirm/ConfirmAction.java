@@ -85,7 +85,7 @@ public class ConfirmAction extends CheckPathAction {
     }
 
     private boolean isConfirmed() {
-        return getCallManager().isConfirmed(getCalls());
+        return getCallManager().isConfirmed(Linq.remove(getCalls(), it -> it.CallType == CustomerCallType.SendData));
     }
 
     @Override
@@ -485,11 +485,12 @@ public class ConfirmAction extends CheckPathAction {
                         customerCallManager.confirmAll(getSelectedId());
                         if (location != null)
                             locationManager.tryToSendItem(location);
-                        setRunning(false);
                         backup();
                         runActionCallBack();
                         if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales) && checkCloudConfig(ConfigKey.AutoSynch, true))
                             sendCustomerCalls();
+                        else
+                            setRunning(false);
                     } catch (Exception ex) {
                         showErrorMessage(R.string.error);
                         setRunning(false);
@@ -554,6 +555,7 @@ public class ConfirmAction extends CheckPathAction {
         if (!Connectivity.isConnected(getActivity())) {
             ConnectionSettingDialog connectionSettingDialog = new ConnectionSettingDialog();
             connectionSettingDialog.show(getActivity().getSupportFragmentManager(), "ConnectionSettingDialog");
+            setRunning(false);
             return;
         }
 

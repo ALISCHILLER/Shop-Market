@@ -88,6 +88,8 @@ public class InvoicePrintHelper extends BasePrintHelper {
     private UUID customerId;
     private OrderPrintType type;
     private ConfigMap configs;
+    SysConfigManager sysConfigManager = new SysConfigManager(getActivity());
+    OwnerKeysWrapper ownerKeys = sysConfigManager.readOwnerKeys();
 
     public InvoicePrintHelper(@NonNull AppCompatActivity activity, UUID customerId, OrderPrintType type) {
         super(activity);
@@ -141,9 +143,6 @@ public class InvoicePrintHelper extends BasePrintHelper {
     private void runOldPrint() {
         PrintData printData = fillPrintData();
 
-        SysConfigManager sysConfigManager = new SysConfigManager(getActivity());
-        OwnerKeysWrapper ownerKeys = sysConfigManager.readOwnerKeys();
-
         // print logo
         Bitmap logoBitmap = new LogoManager(getActivity()).getLogoBitmap();
         if (logoBitmap != null)
@@ -175,7 +174,7 @@ public class InvoicePrintHelper extends BasePrintHelper {
         // region print header
 
         BoxColumn headerColumn = new BoxColumn();
-        if (ownerKeys.DataOwnerKey.equalsIgnoreCase("8638C58A-F145-467D-960E-817EA44EBF45")) {//mihan kish
+        if (ownerKeys.isMihanKish()) {
             addRowItem(headerColumn, R.string.date, DateHelper.toString(new Date(), DateFormat.Date, VasHelperMethods.getSysConfigLocale(getActivity())), true, PrintSize.medium);
         }
         if (configs.compare(ConfigKey.PrintCustomerName, true)) {
@@ -192,10 +191,14 @@ public class InvoicePrintHelper extends BasePrintHelper {
             addRowItem(headerColumn, R.string.print_storename, printData.StoreName, true, PrintSize.medium);
         }
         if (configs.compare(ConfigKey.PrintCustomerRemain, true)) {
-            addRowItem(headerColumn, R.string.print_customer_remain, HelperMethods.currencyToString(printData.CustomerRemain), true, PrintSize.medium);
+            if (ownerKeys.isMihanKish()) {
+                addRowItem(headerColumn, R.string.print_customer_prior_remain, HelperMethods.convertCurrencyToStringEnglishNumbers(printData.CustomerRemain), true, PrintSize.medium);
+            } else {
+                addRowItem(headerColumn, R.string.print_customer_remain, HelperMethods.convertCurrencyToStringEnglishNumbers(printData.CustomerRemain), true, PrintSize.medium);
+            }
         }
         if (configs.compare(ConfigKey.PrintFinalCustomerRemain, true)) {
-            addRowItem(headerColumn, R.string.print_finalcustomerremain, HelperMethods.currencyToString(printData.CustomerRemainAll), true, PrintSize.medium);
+            addRowItem(headerColumn, R.string.print_finalcustomerremain, HelperMethods.convertCurrencyToStringEnglishNumbers(printData.CustomerRemainAll), true, PrintSize.medium);
         }
         addRowItem(headerColumn, R.string.print_customeraddress, printData.CustomerAddress);
 
@@ -240,7 +243,7 @@ public class InvoicePrintHelper extends BasePrintHelper {
             }
             headerProductRow.addColumn(new BoxColumn(2).setBackgroundColor(Color.BLACK).setText(getActivity().getString(R.string.price)).setTextSize(PrintSize.smaller).setMargin(PrintSize.xxxSmall).setTextAlign(Paint.Align.CENTER).setTextColor(Color.WHITE));
             headerProductRow.addColumn(new BoxColumn(configs.compare(ConfigKey.DisplayunitbyBasedOn, UUID.fromString("FBC0CA9F-2739-452A-A09D-5626F17DF26C")) ? 2 : 1).setBackgroundColor(Color.BLACK).setText(getActivity().getString(R.string.count)).setTextSize(PrintSize.smaller).setMargin(PrintSize.xxxSmall).setTextAlign(Paint.Align.CENTER).setTextColor(Color.WHITE));
-            if (ownerKeys.DataOwnerKey.equalsIgnoreCase("e00f3940-e47a-4c49-83a4-352c4a260aed")) {// ofogh roudehen
+            if (ownerKeys.DataOwnerKey.equalsIgnoreCase("e00f3940-e47a-4c49-83a4-352c4a260aed") || ownerKeys.DataOwnerKey.equalsIgnoreCase("a41c6536-b3a6-4230-b9bf-0af389786514")) {// ofogh roudehen,bastani mihan
                 headerProductRow.addColumn(new BoxColumn(5).setBackgroundColor(Color.BLACK).setText(getActivity().getString(R.string.product_name)).setTextSize(PrintSize.smaller).setMargin(PrintSize.xxxSmall).setTextAlign(Paint.Align.CENTER).setTextColor(Color.WHITE));
             } else {
                 headerProductRow.addColumn(new BoxColumn(4).setBackgroundColor(Color.BLACK).setText(getActivity().getString(R.string.product_name)).setTextSize(PrintSize.smaller).setMargin(PrintSize.xxxSmall).setTextAlign(Paint.Align.CENTER).setTextColor(Color.WHITE));
@@ -272,13 +275,13 @@ public class InvoicePrintHelper extends BasePrintHelper {
                     if (configs.compare(ConfigKey.PrintaddtaxforeEachinvoiceitem, true)) {
                         row.addColumn(new BoxColumn(2).setBorderWidth(0).addRows(
                                 new BoxRow().setBorderWidth(0).addColumn(
-                                        new BoxColumn().setText(HelperMethods.currencyToString(line.NetAmount)).setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.small).setMargin(PrintSize.xxxSmall).setBorderWidth(0))
+                                        new BoxColumn().setText(HelperMethods.convertCurrencyToStringEnglishNumbers(line.NetAmount)).setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.small).setMargin(PrintSize.xxxSmall).setBorderWidth(0))
                                 , new BoxRow().setBorderWidth(0).addColumn(
-                                        new BoxColumn().setText(HelperMethods.currencyToString(line.AddAmount) + " + ").setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.small).setMargin(PrintSize.xxxSmall).setBorderWidth(0))
+                                        new BoxColumn().setText(HelperMethods.convertCurrencyToStringEnglishNumbers(line.AddAmount) + " + ").setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.small).setMargin(PrintSize.xxxSmall).setBorderWidth(0))
                                 )
                         );
                     } else
-                        row.addColumn(new BoxColumn(2).setText(HelperMethods.currencyToString(line.NetAmount)).setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.small).setMargin(PrintSize.xxxSmall));
+                        row.addColumn(new BoxColumn(2).setText(HelperMethods.convertCurrencyToStringEnglishNumbers(line.NetAmount)).setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.small).setMargin(PrintSize.xxxSmall));
 
                     if (configs.compare(ConfigKey.DisplayunitbyBasedOn, UUID.fromString("FBC0CA9F-2739-452A-A09D-5626F17DF26C"))) {
                         String qty = VasHelperMethods.chopTotalQtyToString(line.TotalQty, line.UnitName, line.ConvertFactor, null, null);
@@ -315,7 +318,7 @@ public class InvoicePrintHelper extends BasePrintHelper {
                     if (configs.compare(ConfigKey.PrintProductPrice, true)) {
                         row.addColumn(new BoxColumn(4).setBorderWidth(0).addRows(
                                 new BoxRow().setBorderWidth(0).addColumn(
-                                        new BoxColumn().setText(getActivity().getString(R.string.unit_price) + ": " + HelperMethods.currencyToString(line.UnitPrice)).setTextAlign(Paint.Align.RIGHT).setTextSize(PrintSize.small)
+                                        new BoxColumn().setText(getActivity().getString(R.string.unit_price) + ": " + HelperMethods.convertCurrencyToStringEnglishNumbers(line.UnitPrice)).setTextAlign(Paint.Align.RIGHT).setTextSize(PrintSize.small)
                                 ))
                         );
                     } else {
@@ -334,29 +337,31 @@ public class InvoicePrintHelper extends BasePrintHelper {
                     if (ownerKeys.DataOwnerKey.equalsIgnoreCase("21818fe1-1e63-4d64-89c9-989bc9ee3e58")) {
                         row.addColumn(new BoxColumn(3).setBorderWidth(0).addRows(
                                 new BoxRow().setBorderWidth(0).addColumn(
-                                        new BoxColumn().setText(getActivity().getString(R.string.gross) + HelperMethods.currencyToString(line.RequestAmount)).setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.smaller).setMargin(PrintSize.xxxSmall).setBorderWidth(0))
+                                        new BoxColumn().setText(getActivity().getString(R.string.gross) + HelperMethods.convertCurrencyToStringEnglishNumbers(line.RequestAmount)).setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.smaller).setMargin(PrintSize.xxxSmall).setBorderWidth(0))
                                 , new BoxRow().setBorderWidth(0).addColumn(
-                                        new BoxColumn().setText(HelperMethods.currencyToString(line.NetAmount)).setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.small).setMargin(PrintSize.xxxSmall).setBorderWidth(0))
+                                        new BoxColumn().setText(HelperMethods.convertCurrencyToStringEnglishNumbers(line.NetAmount)).setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.small).setMargin(PrintSize.xxxSmall).setBorderWidth(0))
                                 )
                         );
                     } else {
                         if (configs.compare(ConfigKey.PrintaddtaxforeEachinvoiceitem, true)) {
                             row.addColumn(new BoxColumn(2).setBorderWidth(0).addRows(
                                     new BoxRow().setBorderWidth(0).addColumn(
-                                            new BoxColumn().setText(HelperMethods.currencyToString(line.NetAmount)).setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.small).setMargin(PrintSize.xxxSmall).setBorderWidth(0))
+                                            new BoxColumn().setText(HelperMethods.convertCurrencyToStringEnglishNumbers(line.NetAmount)).setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.small).setMargin(PrintSize.xxxSmall).setBorderWidth(0))
                                     , new BoxRow().setBorderWidth(0).addColumn(
-                                            new BoxColumn().setText(HelperMethods.currencyToString(line.AddAmount) + " + ").setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.small).setMargin(PrintSize.xxxSmall).setBorderWidth(0))
+                                            new BoxColumn().setText(HelperMethods.convertCurrencyToStringEnglishNumbers(line.AddAmount) + " + ").setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.small).setMargin(PrintSize.xxxSmall).setBorderWidth(0))
                                     )
                             );
                         } else
-                            row.addColumn(new BoxColumn(2).setText(HelperMethods.currencyToString(line.NetAmount)).setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.small).setMargin(PrintSize.xxxSmall));
+                            row.addColumn(new BoxColumn(2).setText(HelperMethods.convertCurrencyToStringEnglishNumbers(line.NetAmount)).setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.small).setMargin(PrintSize.xxxSmall));
                     }
 
                     if (configs.compare(ConfigKey.DisplayunitbyBasedOn, UUID.fromString("FBC0CA9F-2739-452A-A09D-5626F17DF26C"))) {
                         String qty = VasHelperMethods.chopTotalQtyToString(line.TotalQty, line.UnitName, line.ConvertFactor, null, null);
                         row.addColumn(new BoxColumn(2).setText(qty).setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.smaller).setMargin(PrintSize.xxxSmall));
                         String[] unitValues = qty.split(":");
-                        if (unitValues.length == 1) {
+                        if (unitValues.length == 1 && (new BigDecimal(line.ConvertFactor).compareTo(BigDecimal.ONE) > 0)) {
+                            largeUnitsQtyForPrint.add(new BigDecimal(unitValues[0]));
+                        } else if (unitValues.length == 1) {
                             smallUnitsQtyForPrint.add(new BigDecimal(unitValues[0]));
                         } else if (unitValues.length == 2) {
                             largeUnitsQtyForPrint.add(new BigDecimal(unitValues[0]));
@@ -384,15 +389,15 @@ public class InvoicePrintHelper extends BasePrintHelper {
                     } else
                         row.addColumn(new BoxColumn(1).setText(HelperMethods.bigDecimalToString(line.TotalQty)).setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.smaller).setMargin(PrintSize.xxxSmall));
                     if (configs.compare(ConfigKey.PrintProductPrice, true)) {
-                        if (ownerKeys.DataOwnerKey.equalsIgnoreCase("e00f3940-e47a-4c49-83a4-352c4a260aed")) {// ofogh roudehen
-                            row.addColumn(new BoxColumn(6).setBorderWidth(0).addRows(
+                        if (ownerKeys.DataOwnerKey.equalsIgnoreCase("e00f3940-e47a-4c49-83a4-352c4a260aed") || ownerKeys.DataOwnerKey.equalsIgnoreCase("a41c6536-b3a6-4230-b9bf-0af389786514")) {// ofogh roudehen,bastani mihan
+                            row.addColumn(new BoxColumn(5).setBorderWidth(0).addRows(
                                     new BoxRow().setBorderWidth(0).addColumn(
                                             new BoxColumn().setText(line.ProductName).setTextAlign(Paint.Align.RIGHT).setTextSize(PrintSize.smaller)
                                     ),
                                     new BoxRow().setBorderWidth(0).addColumns(
                                             new BoxColumn().setBorderWidth(0).addRow(
                                                     new BoxRow().setBorderWidth(0).addColumns(
-                                                            new BoxColumn(2).setText(HelperMethods.currencyToString(line.UnitPrice)).setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.small).setBorderWidth(0),
+                                                            new BoxColumn(2).setText(HelperMethods.convertCurrencyToStringEnglishNumbers(line.UnitPrice)).setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.small).setBorderWidth(0),
                                                             new BoxColumn(1).setText(getActivity().getString(R.string.unit_price)).setTextAlign(Paint.Align.RIGHT).setTextSize(PrintSize.smaller).setBorderWidth(0)
                                                     ))
                                     ))
@@ -405,15 +410,15 @@ public class InvoicePrintHelper extends BasePrintHelper {
                                     new BoxRow().setBorderWidth(0).addColumns(
                                             new BoxColumn().setBorderWidth(0).addRow(
                                                     new BoxRow().setBorderWidth(0).addColumns(
-                                                            new BoxColumn(2).setText(HelperMethods.currencyToString(line.UnitPrice)).setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.small).setBorderWidth(0),
+                                                            new BoxColumn(2).setText(HelperMethods.convertCurrencyToStringEnglishNumbers(line.UnitPrice)).setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.small).setBorderWidth(0),
                                                             new BoxColumn(1).setText(getActivity().getString(R.string.unit_price)).setTextAlign(Paint.Align.RIGHT).setTextSize(PrintSize.smaller).setBorderWidth(0)
                                                     ))
                                     ))
                             );
                         }
                     } else {
-                        if (ownerKeys.DataOwnerKey.equalsIgnoreCase("e00f3940-e47a-4c49-83a4-352c4a260aed")) {// ofogh roudehen
-                            row.addColumn(new BoxColumn(6).setBorderWidth(0).addRows(
+                        if (ownerKeys.DataOwnerKey.equalsIgnoreCase("e00f3940-e47a-4c49-83a4-352c4a260aed") || ownerKeys.DataOwnerKey.equalsIgnoreCase("a41c6536-b3a6-4230-b9bf-0af389786514")) {// ofogh roudehen,bastani mihan
+                            row.addColumn(new BoxColumn(5).setBorderWidth(0).addRows(
                                     new BoxRow().setBorderWidth(0).addColumn(
                                             new BoxColumn().setText(line.ProductName).setTextAlign(Paint.Align.RIGHT).setTextSize(PrintSize.smaller)
                                     ))
@@ -491,26 +496,26 @@ public class InvoicePrintHelper extends BasePrintHelper {
                 hasInvoiceFooterColumn = true;
             }
             if (configs.compare(ConfigKey.PrintTotalPurchaseAmount, true)) {
-                addRowItem(invoiceFooterColumn, R.string.gross_amount, HelperMethods.currencyToString(orderPrintData.TotalAmount), true, PrintSize.medium);
+                addRowItem(invoiceFooterColumn, R.string.gross_amount, HelperMethods.convertCurrencyToStringEnglishNumbers(orderPrintData.TotalAmount), true, PrintSize.medium);
                 hasInvoiceFooterColumn = true;
             }
             if (/*!VaranegarApplication.is(VaranegarApplication.AppId.PreSales) && */configs.compare(ConfigKey.PrintTotalDiscounts, true) && orderPrintData.DiscountAmount.compareTo(Currency.ZERO) == 1) {
                 if (ownerKeys.DataOwnerKey.equalsIgnoreCase("CAF5A390-CBE1-435B-BDDE-1F682E004693") || ownerKeys.DataOwnerKey.equalsIgnoreCase("146A800D-EA09-4454-B943-9BAF33DBBB16")) {
-                    addRowItem(invoiceFooterColumn, R.string.print_totalpromotion, HelperMethods.currencyToString(orderPrintData.Dis2), true, PrintSize.medium);
-                    addRowItem(invoiceFooterColumn, R.string.print_discount, HelperMethods.currencyToString(orderPrintData.Dis1), true, PrintSize.medium);
+                    addRowItem(invoiceFooterColumn, R.string.print_totalpromotion, HelperMethods.convertCurrencyToStringEnglishNumbers(orderPrintData.Dis2), true, PrintSize.medium);
+                    addRowItem(invoiceFooterColumn, R.string.print_discount, HelperMethods.convertCurrencyToStringEnglishNumbers(orderPrintData.Dis1), true, PrintSize.medium);
                 }
                 if (ownerKeys.DataOwnerKey.equalsIgnoreCase("146A800D-EA09-4454-B943-9BAF33DBBB16"))
-                    addRowItem(invoiceFooterColumn, R.string.branding_discount, HelperMethods.currencyToString(orderPrintData.Dis3), true, PrintSize.medium);
+                    addRowItem(invoiceFooterColumn, R.string.branding_discount, HelperMethods.convertCurrencyToStringEnglishNumbers(orderPrintData.Dis3), true, PrintSize.medium);
 
-                addRowItem(invoiceFooterColumn, R.string.print_totaldiscounts, HelperMethods.currencyToString(orderPrintData.DiscountAmount), true, PrintSize.medium);
+                addRowItem(invoiceFooterColumn, R.string.print_totaldiscounts, HelperMethods.convertCurrencyToStringEnglishNumbers(orderPrintData.DiscountAmount), true, PrintSize.medium);
                 hasInvoiceFooterColumn = true;
             }
             if (/*!VaranegarApplication.is(VaranegarApplication.AppId.PreSales) && */configs.compare(ConfigKey.PrintSumOfComplications, true) && orderPrintData.AddAmount.compareTo(Currency.ZERO) == 1) {
-                addRowItem(invoiceFooterColumn, R.string.print_sumofcomplications, HelperMethods.currencyToString(orderPrintData.AddAmount), true, PrintSize.medium);
+                addRowItem(invoiceFooterColumn, R.string.print_sumofcomplications, HelperMethods.convertCurrencyToStringEnglishNumbers(orderPrintData.AddAmount), true, PrintSize.medium);
                 hasInvoiceFooterColumn = true;
             }
             if ((!VaranegarApplication.is(VaranegarApplication.AppId.PreSales) && configs.compare(ConfigKey.PrintGrossPurchases, true)) || (!VaranegarApplication.is(VaranegarApplication.AppId.PreSales) && configs.compare(ConfigKey.PrintGrossPurchases, true) && orderPrintData.NetAmount.compareTo(Currency.ZERO) == 1)) {
-                addRowItem(invoiceFooterColumn, R.string.print_net_amount, HelperMethods.currencyToString(orderPrintData.NetAmount), true, PrintSize.medium);
+                addRowItem(invoiceFooterColumn, R.string.print_net_amount, HelperMethods.convertCurrencyToStringEnglishNumbers(orderPrintData.NetAmount), true, PrintSize.medium);
                 hasInvoiceFooterColumn = true;
             }
 
@@ -532,8 +537,7 @@ public class InvoicePrintHelper extends BasePrintHelper {
             } else {
                 rowName = getActivity().getString(R.string.code);
             }
-
-            if (ownerKeys.DataOwnerKey.equalsIgnoreCase("e00f3940-e47a-4c49-83a4-352c4a260aed")) {// ofogh roudehen
+            if (ownerKeys.DataOwnerKey.equalsIgnoreCase("e00f3940-e47a-4c49-83a4-352c4a260aed") || ownerKeys.DataOwnerKey.equalsIgnoreCase("a41c6536-b3a6-4230-b9bf-0af389786514")) {// ofogh roudehen,bastani mihan
                 PrintHelper.getInstance().addBox(new Box().addColumns(
                         new BoxColumn(2).setBackgroundColor(Color.BLACK).setText(getActivity().getString(R.string.price)).setTextSize(PrintSize.smaller).setMargin(PrintSize.xxxSmall).setTextAlign(Paint.Align.CENTER).setTextColor(Color.WHITE),
                         new BoxColumn(1).setBackgroundColor(Color.BLACK).setText(getActivity().getString(R.string.count)).setTextSize(PrintSize.smaller).setMargin(PrintSize.xxxSmall).setTextAlign(Paint.Align.CENTER).setTextColor(Color.WHITE),
@@ -544,7 +548,7 @@ public class InvoicePrintHelper extends BasePrintHelper {
                 PrintHelper.getInstance().addBox(new Box().addColumns(
                         new BoxColumn(2).setBackgroundColor(Color.BLACK).setText(getActivity().getString(R.string.price)).setTextSize(PrintSize.smaller).setMargin(PrintSize.xxxSmall).setTextAlign(Paint.Align.CENTER).setTextColor(Color.WHITE),
                         new BoxColumn(1).setBackgroundColor(Color.BLACK).setText(getActivity().getString(R.string.count)).setTextSize(PrintSize.smaller).setMargin(PrintSize.xxxSmall).setTextAlign(Paint.Align.CENTER).setTextColor(Color.WHITE),
-                        new BoxColumn(3).setBackgroundColor(Color.BLACK).setText(getActivity().getString(R.string.product_name)).setTextSize(PrintSize.smaller).setMargin(PrintSize.xxxSmall).setTextAlign(Paint.Align.CENTER).setTextColor(Color.WHITE),
+                        new BoxColumn(4).setBackgroundColor(Color.BLACK).setText(getActivity().getString(R.string.product_name)).setTextSize(PrintSize.smaller).setMargin(PrintSize.xxxSmall).setTextAlign(Paint.Align.CENTER).setTextColor(Color.WHITE),
                         new BoxColumn(1).setBackgroundColor(Color.BLACK).setText(rowName).setTextSize(PrintSize.smaller).setMargin(PrintSize.xxxSmall).setTextAlign(Paint.Align.CENTER).setTextColor(Color.WHITE)
                 ));
             }
@@ -566,14 +570,14 @@ public class InvoicePrintHelper extends BasePrintHelper {
 
                     BoxRow row = new BoxRow();
                     row.addColumns(
-                            new BoxColumn(2).setText(HelperMethods.currencyToString(line.NetAmount)).setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.small).setMargin(PrintSize.xxxSmall),
+                            new BoxColumn(2).setText(HelperMethods.convertCurrencyToStringEnglishNumbers(line.NetAmount)).setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.small).setMargin(PrintSize.xxxSmall),
                             new BoxColumn(1).setText(HelperMethods.bigDecimalToString(line.TotalQty)).setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.small).setMargin(PrintSize.xxxSmall)
                     );
 
                     if (configs.compare(ConfigKey.PrintProductPrice, true)) {
                         row.addColumn(new BoxColumn(4).setBorderWidth(0).addRows(
                                 new BoxRow().setBorderWidth(0).addColumn(
-                                        new BoxColumn().setText(getActivity().getString(R.string.unit_price) + ": " + HelperMethods.currencyToString(line.UnitPrice)).setTextAlign(Paint.Align.RIGHT).setTextSize(PrintSize.small)
+                                        new BoxColumn().setText(getActivity().getString(R.string.unit_price) + ": " + HelperMethods.convertCurrencyToStringEnglishNumbers(line.UnitPrice)).setTextAlign(Paint.Align.RIGHT).setTextSize(PrintSize.small)
                                 ))
                         );
                     } else {
@@ -589,20 +593,20 @@ public class InvoicePrintHelper extends BasePrintHelper {
                 for (OrderLinePrintData line : printData.returnPrintData.Lines) {
                     BoxRow row = new BoxRow();
                     row.addColumns(
-                            new BoxColumn(2).setText(HelperMethods.currencyToString(line.NetAmount)).setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.smaller).setMargin(PrintSize.xxxSmall),
+                            new BoxColumn(2).setText(HelperMethods.convertCurrencyToStringEnglishNumbers(line.NetAmount)).setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.smaller).setMargin(PrintSize.xxxSmall),
                             new BoxColumn(1).setText(HelperMethods.bigDecimalToString(line.TotalQty)).setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.smaller).setMargin(PrintSize.xxxSmall)
                     );
 
                     if (configs.compare(ConfigKey.PrintProductPrice, true)) {
-                        if (ownerKeys.DataOwnerKey.equalsIgnoreCase("e00f3940-e47a-4c49-83a4-352c4a260aed")) {// ofogh roudehen
-                            row.addColumn(new BoxColumn(6).setBorderWidth(0).addRows(
+                        if (ownerKeys.DataOwnerKey.equalsIgnoreCase("e00f3940-e47a-4c49-83a4-352c4a260aed") || ownerKeys.DataOwnerKey.equalsIgnoreCase("a41c6536-b3a6-4230-b9bf-0af389786514")) {// ofogh roudehen,bastani mihan
+                            row.addColumn(new BoxColumn(5).setBorderWidth(0).addRows(
                                     new BoxRow().setBorderWidth(0).addColumn(
                                             new BoxColumn().setText(line.ProductName).setTextAlign(Paint.Align.RIGHT).setTextSize(PrintSize.smaller)
                                     ),
                                     new BoxRow().setBorderWidth(0).addColumns(
                                             new BoxColumn().setBorderWidth(0).addRow(
                                                     new BoxRow().setBorderWidth(0).addColumns(
-                                                            new BoxColumn(2).setText(HelperMethods.currencyToString(line.UnitPrice)).setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.smaller).setBorderWidth(0),
+                                                            new BoxColumn(2).setText(HelperMethods.convertCurrencyToStringEnglishNumbers(line.UnitPrice)).setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.smaller).setBorderWidth(0),
                                                             new BoxColumn(1).setText(getActivity().getString(R.string.unit_price)).setTextAlign(Paint.Align.RIGHT).setTextSize(PrintSize.smaller).setBorderWidth(0)
                                                     ))
                                     ))
@@ -615,15 +619,15 @@ public class InvoicePrintHelper extends BasePrintHelper {
                                     new BoxRow().setBorderWidth(0).addColumns(
                                             new BoxColumn().setBorderWidth(0).addRow(
                                                     new BoxRow().setBorderWidth(0).addColumns(
-                                                            new BoxColumn(2).setText(HelperMethods.currencyToString(line.UnitPrice)).setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.smaller).setBorderWidth(0),
+                                                            new BoxColumn(2).setText(HelperMethods.convertCurrencyToStringEnglishNumbers(line.UnitPrice)).setTextAlign(Paint.Align.CENTER).setTextSize(PrintSize.smaller).setBorderWidth(0),
                                                             new BoxColumn(1).setText(getActivity().getString(R.string.unit_price)).setTextAlign(Paint.Align.RIGHT).setTextSize(PrintSize.smaller).setBorderWidth(0)
                                                     ))
                                     ))
                             );
                         }
                     } else {
-                        if (ownerKeys.DataOwnerKey.equalsIgnoreCase("e00f3940-e47a-4c49-83a4-352c4a260aed")) {// ofogh roudehen
-                            row.addColumn(new BoxColumn(6).setBorderWidth(0).addRows(
+                        if (ownerKeys.DataOwnerKey.equalsIgnoreCase("e00f3940-e47a-4c49-83a4-352c4a260aed") || ownerKeys.DataOwnerKey.equalsIgnoreCase("a41c6536-b3a6-4230-b9bf-0af389786514")) {// ofogh roudehen,bastani mihan
+                            row.addColumn(new BoxColumn(5).setBorderWidth(0).addRows(
                                     new BoxRow().setBorderWidth(0).addColumn(
                                             new BoxColumn().setText(line.ProductName).setTextAlign(Paint.Align.RIGHT).setTextSize(PrintSize.smaller)
                                     ))
@@ -651,7 +655,7 @@ public class InvoicePrintHelper extends BasePrintHelper {
                 addRowItem(returnFooterColumn, R.string.print_itemscount, HelperMethods.bigDecimalToString(printData.returnPrintData.TotalQty), true, PrintSize.medium);
             }
             if (configs.compare(ConfigKey.PrintTotalPurchaseAmount, true)) {
-                addRowItem(returnFooterColumn, R.string.print_total_return_amount, HelperMethods.currencyToString(printData.ReturnNetAmount), true, PrintSize.medium);
+                addRowItem(returnFooterColumn, R.string.print_total_return_amount, HelperMethods.convertCurrencyToStringEnglishNumbers(printData.ReturnNetAmount), true, PrintSize.medium);
             }
 //            if (configs.compare(ConfigKey.PrintTotalDiscounts, true)) {
 //                addRowItem(returnFooterColumn, R.string.print_totaldiscounts, HelperMethods.currencyToString(printData.returnPrintData.DiscountAmount), true);
@@ -675,37 +679,37 @@ public class InvoicePrintHelper extends BasePrintHelper {
             BoxColumn totalColumn = new BoxColumn();
             if (printData.OpenInvoiceAmount.compareTo(Currency.ZERO) != 0 || printData.ReturnNetAmount.compareTo(Currency.ZERO) != 0) {
                 if (configs.compare(ConfigKey.PrintReturn, true)) {
-                    addRowItem(totalColumn, R.string.sell_return_net_amount, HelperMethods.currencyToString(printData.ReturnNetAmount), true, PrintSize.medium);
+                    addRowItem(totalColumn, R.string.sell_return_net_amount, HelperMethods.convertCurrencyToStringEnglishNumbers(printData.ReturnNetAmount), true, PrintSize.medium);
                 }
                 if (!VaranegarApplication.is(VaranegarApplication.AppId.Contractor))
-                    addRowItem(totalColumn, R.string.old_invoice_debt, HelperMethods.currencyToString(printData.OpenInvoiceAmount), true, PrintSize.medium);
-                addRowItem(totalColumn, R.string.total_orders_net_amount, HelperMethods.currencyToString(printData.TotalNetAmount), true, PrintSize.medium);
+                    addRowItem(totalColumn, R.string.old_invoice_debt, HelperMethods.convertCurrencyToStringEnglishNumbers(printData.OpenInvoiceAmount), true, PrintSize.medium);
+                addRowItem(totalColumn, R.string.total_orders_net_amount, HelperMethods.convertCurrencyToStringEnglishNumbers(printData.TotalNetAmount), true, PrintSize.medium);
             }
             if (VaranegarApplication.is(VaranegarApplication.AppId.Contractor)) {
-                addRowItem(totalColumn, R.string.discount, HelperMethods.currencyToString(printData.DiscountPayment), true, PrintSize.medium);
-                addRowItem(totalColumn, R.string.net_amount, HelperMethods.currencyToString(printData.TotalNetAmount.subtract(printData.DiscountPayment)), true, PrintSize.medium);
+                addRowItem(totalColumn, R.string.discount, HelperMethods.convertCurrencyToStringEnglishNumbers(printData.DiscountPayment), true, PrintSize.medium);
+                addRowItem(totalColumn, R.string.net_amount, HelperMethods.convertCurrencyToStringEnglishNumbers(printData.TotalNetAmount.subtract(printData.DiscountPayment)), true, PrintSize.medium);
             } else
-                addRowItem(totalColumn, R.string.net_amount, HelperMethods.currencyToString(printData.TotalNetAmount.add(printData.OpenInvoiceAmount).subtract(printData.ReturnNetAmount)), true, PrintSize.medium);
+                addRowItem(totalColumn, R.string.net_amount, HelperMethods.convertCurrencyToStringEnglishNumbers(printData.TotalNetAmount.add(printData.OpenInvoiceAmount).subtract(printData.ReturnNetAmount)), true, PrintSize.medium);
             if (configs.compare(ConfigKey.PrintCustomerRemainWithThisInvoice, true)) {
-                addRowItem(totalColumn, R.string.all_net_amount, HelperMethods.currencyToString((printData.TotalNetAmount.subtract(printData.ReturnNetAmount).add(printData.CustomerRemain))), true, PrintSize.medium);
+                addRowItem(totalColumn, R.string.all_net_amount, HelperMethods.convertCurrencyToStringEnglishNumbers((printData.TotalNetAmount.subtract(printData.ReturnNetAmount).add(printData.CustomerRemain))), true, PrintSize.medium);
             }
             PrintHelper.getInstance().addBox(new Box().addColumn(totalColumn));
             if (!VaranegarApplication.is(VaranegarApplication.AppId.Contractor)) {
                 PrintHelper.getInstance().feedLine(PrintSize.large);
                 BoxColumn paymentsColumn = new BoxColumn();
                 if (printData.CashPayment.compareTo(Currency.ZERO) > 0)
-                    addRowItem(paymentsColumn, R.string.cach_total_payment, HelperMethods.currencyToString(printData.CashPayment), true, PrintSize.medium);
+                    addRowItem(paymentsColumn, R.string.cach_total_payment, HelperMethods.convertCurrencyToStringEnglishNumbers(printData.CashPayment), true, PrintSize.medium);
                 if (printData.CardPayment.compareTo(Currency.ZERO) > 0)
-                    addRowItem(paymentsColumn, R.string.card_total_payment, HelperMethods.currencyToString(printData.CardPayment), true, PrintSize.medium);
+                    addRowItem(paymentsColumn, R.string.card_total_payment, HelperMethods.convertCurrencyToStringEnglishNumbers(printData.CardPayment), true, PrintSize.medium);
                 if (printData.CheckPayment.compareTo(Currency.ZERO) > 0)
-                    addRowItem(paymentsColumn, R.string.check_total_payment, HelperMethods.currencyToString(printData.CheckPayment), true, PrintSize.medium);
-                addRowItem(paymentsColumn, R.string.total_customer_payment, HelperMethods.currencyToString(printData.TotalPayment.subtract(printData.DiscountPayment)), true, PrintSize.medium);
+                    addRowItem(paymentsColumn, R.string.check_total_payment, HelperMethods.convertCurrencyToStringEnglishNumbers(printData.CheckPayment), true, PrintSize.medium);
+                addRowItem(paymentsColumn, R.string.total_customer_payment, HelperMethods.convertCurrencyToStringEnglishNumbers(printData.TotalPayment.subtract(printData.DiscountPayment)), true, PrintSize.medium);
                 if (configs.compare(ConfigKey.PrintTotalDiscountAmount, true)) {
-                    addRowItem(paymentsColumn, R.string.print_totaldiscountamount, HelperMethods.currencyToString(printData.DiscountPayment), true, PrintSize.medium);
+                    addRowItem(paymentsColumn, R.string.print_totaldiscountamount, HelperMethods.convertCurrencyToStringEnglishNumbers(printData.DiscountPayment), true, PrintSize.medium);
                 }
-                addRowItem(paymentsColumn, R.string.receipt_sum, HelperMethods.currencyToString(printData.TotalNetAmount.add(printData.OpenInvoiceAmount).subtract(printData.ReturnNetAmount).subtract(printData.TotalPayment)), true, PrintSize.large);
+                addRowItem(paymentsColumn, R.string.receipt_sum, HelperMethods.convertCurrencyToStringEnglishNumbers(printData.TotalNetAmount.add(printData.OpenInvoiceAmount).subtract(printData.ReturnNetAmount).subtract(printData.TotalPayment)), true, PrintSize.large);
                 if (configs.compare(ConfigKey.PrintCustomerbalances, true)) {
-                    addRowItem(paymentsColumn, R.string.account_balance, HelperMethods.currencyToString((printData.TotalNetAmount.subtract(printData.ReturnNetAmount).add(printData.CustomerRemain)).subtract(printData.TotalPayment.subtract(printData.CreditPayment))), true, PrintSize.larger);
+                    addRowItem(paymentsColumn, R.string.account_balance, HelperMethods.convertCurrencyToStringEnglishNumbers((printData.TotalNetAmount.subtract(printData.ReturnNetAmount).add(printData.CustomerRemain)).subtract(printData.TotalPayment.subtract(printData.CreditPayment))), true, PrintSize.larger);
                 }
                 PrintHelper.getInstance().addBox(new Box().addColumn(paymentsColumn));
             }
@@ -765,7 +769,7 @@ public class InvoicePrintHelper extends BasePrintHelper {
             PrintHelper.getInstance().addBox(new Box().addColumn(printFooterColumn));
         }
 
-        if (ownerKeys.DataOwnerKey.equalsIgnoreCase("8638C58A-F145-467D-960E-817EA44EBF45")) {//mihan kish
+        if (ownerKeys.isMihanKish()) {
             PrintHelper.getInstance().feedLine(new PrintSize(30.0F));
             PrintHelper.getInstance().addParagraph(PrintSize.medium, getActivity().getString(R.string.print_sign) + ":", Paint.Align.RIGHT);
         }
@@ -784,7 +788,7 @@ public class InvoicePrintHelper extends BasePrintHelper {
     private void runCustomizedPrint(String fortmat) throws Exception {
         RootLayout rootLayout = new RootLayout();
         Typeface customFont;
-        if (Build.MODEL.equalsIgnoreCase("Sepehr A1"))
+        if (Build.MODEL.equalsIgnoreCase("Sepehr A1") || ownerKeys.isMihanKish())
             customFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Iran Sans Bold.ttf");
         else
             customFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/anatoli.ttf");

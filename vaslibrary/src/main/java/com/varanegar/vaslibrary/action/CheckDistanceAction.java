@@ -13,6 +13,8 @@ import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.base.VasActivity;
 import com.varanegar.vaslibrary.manager.locationmanager.LocationManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
+import com.varanegar.vaslibrary.manager.sysconfigmanager.OwnerKeysWrapper;
+import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.model.location.LocationModel;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 
@@ -27,6 +29,8 @@ import timber.log.Timber;
  */
 
 public abstract class CheckDistanceAction extends CheckBarcodeAction {
+    SysConfigManager sysConfigManager = new SysConfigManager(getActivity());
+    OwnerKeysWrapper ownerKeys = sysConfigManager.readOwnerKeys();
 
     public CheckDistanceAction(MainVaranegarActivity activity, ActionsAdapter adapter, UUID selectedId) {
         super(activity, adapter, selectedId);
@@ -108,12 +112,22 @@ public abstract class CheckDistanceAction extends CheckBarcodeAction {
             return getActivity().getString(R.string.your_location_is_not_available);
         }
         float distance = new LocationManager(getActivity()).distance(lastLocation, customerLocation);
-        if (distance > maxDistance) {
-            UUID taskId = getTaskUniqueId() == null ? UUID.randomUUID() : getTaskUniqueId();
-            if (taskId.equals(UUID.fromString("c81c3571-6f8f-4a53-bb64-4742fbf64f3a")))
-                Timber.e("Distance is larger than limit for customerId " + getCustomer().UniqueId + ": last location is: (" + LocationManager.getLocationInfo(lastLocation) + " Accuracy: " + lastLocation.getAccuracy() + ") and customer location is: Latitude: (" + customerLocation.Latitude + " Longitude: " + customerLocation.Longitude + "), distance is " + distance + " and maxDistance is " + maxDistance);
-            return getActivity().getString(R.string.distance_is_larger_than_limit);
-        } else
-            return null;
+        if (ownerKeys.isPoober()) {
+            if (distance > maxDistance && ((VasActionsAdapter) getAdapter()).isCustomerIsInVisitDayPath()) {
+                UUID taskId = getTaskUniqueId() == null ? UUID.randomUUID() : getTaskUniqueId();
+                if (taskId.equals(UUID.fromString("c81c3571-6f8f-4a53-bb64-4742fbf64f3a")))
+                    Timber.e("Distance is larger than limit for customerId " + getCustomer().UniqueId + ": last location is: (" + LocationManager.getLocationInfo(lastLocation) + " Accuracy: " + lastLocation.getAccuracy() + ") and customer location is: Latitude: (" + customerLocation.Latitude + " Longitude: " + customerLocation.Longitude + "), distance is " + distance + " and maxDistance is " + maxDistance);
+                return getActivity().getString(R.string.distance_is_larger_than_limit);
+            } else
+                return null;
+        } else {
+            if (distance > maxDistance) {
+                UUID taskId = getTaskUniqueId() == null ? UUID.randomUUID() : getTaskUniqueId();
+                if (taskId.equals(UUID.fromString("c81c3571-6f8f-4a53-bb64-4742fbf64f3a")))
+                    Timber.e("Distance is larger than limit for customerId " + getCustomer().UniqueId + ": last location is: (" + LocationManager.getLocationInfo(lastLocation) + " Accuracy: " + lastLocation.getAccuracy() + ") and customer location is: Latitude: (" + customerLocation.Latitude + " Longitude: " + customerLocation.Longitude + "), distance is " + distance + " and maxDistance is " + maxDistance);
+                return getActivity().getString(R.string.distance_is_larger_than_limit);
+            } else
+                return null;
+        }
     }
 }

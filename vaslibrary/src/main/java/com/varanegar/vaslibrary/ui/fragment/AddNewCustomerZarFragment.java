@@ -349,32 +349,38 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
                     protected void onSuccess() {
                         final CustomerManager customerManager = new CustomerManager(getActivity());
                         List<CustomerModel> customerModels = customerManager.getAll();
+                        boolean customerAddedToDb = false;
                         for (final CustomerModel customerModel : customerModels) {
                             if (customerModel.UniqueId.equals(result.UniqueId)) {
                                 customerModel.IsNewCustomer = true;
+                                customerAddedToDb = true;
                                 try {
                                     customerManager.update(customerModel);
                                 } catch (Exception e) {
                                     Timber.e(e);
-                                } finally {
-                                    final MainVaranegarActivity activity = getVaranegarActvity();
-                                    if (activity != null && !activity.isFinishing()) {
-                                        stopProgressDialog();
-                                        CuteMessageDialog dialog = new CuteMessageDialog(activity);
-                                        dialog.setMessage(R.string.registering_customer_completed);
-                                        dialog.setTitle(R.string.done);
-                                        dialog.setIcon(Icon.Success);
-                                        dialog.setPositiveButton(R.string.ok, new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                activity.popFragment();
-                                            }
-                                        });
-                                        dialog.show();
-                                    }
                                 }
                                 break;
                             }
+                        }
+                        int messageRes;
+                        if (customerAddedToDb)
+                            messageRes = R.string.registering_customer_completed;
+                        else
+                            messageRes = R.string.registering_customer_completed_but_not_inserted_in_db;
+                        final MainVaranegarActivity activity = getVaranegarActvity();
+                        if (activity != null && !activity.isFinishing()) {
+                            stopProgressDialog();
+                            CuteMessageDialog dialog = new CuteMessageDialog(activity);
+                            dialog.setMessage(messageRes);
+                            dialog.setTitle(R.string.done);
+                            dialog.setIcon(Icon.Success);
+                            dialog.setPositiveButton(R.string.ok, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    activity.popFragment();
+                                }
+                            });
+                            dialog.show();
                         }
                     }
 

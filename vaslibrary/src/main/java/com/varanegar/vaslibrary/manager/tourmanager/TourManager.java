@@ -1693,6 +1693,7 @@ public class TourManager {
         syncGetCustomerCallViewModel.VisitDuration = CustomerActionTimeManager.getCustomerCallTime(context, customerModel.UniqueId) * 1000;
 
         boolean isLackOfVisit = callManager.isLackOfVisit(calls);
+        boolean isDataSent = callManager.isDataSent(calls, null);
         boolean isLackOfOrder = false;
         if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist))
             isLackOfOrder = callManager.isLackOfOrder(calls);
@@ -1700,16 +1701,16 @@ public class TourManager {
         if (!isLackOfOrder && !isLackOfVisit)
             syncGetCustomerCallViewModel.CustomerCallOrders = populateCustomerCallOrders(customerModel.UniqueId);
         // populate call returns
-        if (!isLackOfVisit)
+        if (!isLackOfVisit && !isDataSent)
             syncGetCustomerCallViewModel.CustomerCallReturns = populateCustomerCallReturns(customerModel.UniqueId);
         // populate call payments
-        if (!isLackOfVisit)
+        if (!isLackOfVisit && !isDataSent)
             syncGetCustomerCallViewModel.CustomerCallPayments = populateCustomerPayments(customerModel.UniqueId);
         // populate customer questionnaires
-        if (!isLackOfVisit)
+        if (!isLackOfVisit && !isDataSent)
             syncGetCustomerCallViewModel.CustomerCallQuestionnaires = populateCustomerQuestionnaires(customerModel.UniqueId);
         // populate customer pictures
-        if (!isLackOfVisit)
+        if (!isLackOfVisit && !isDataSent)
             syncGetCustomerCallViewModel.CustomerCallPictures = populateCustomerPictures(customerModel.UniqueId, isLackOfOrder);
         // populate customer stock level (Customer inventory)
         SysConfigManager sysConfigManager = new SysConfigManager(context);
@@ -2129,7 +2130,7 @@ public class TourManager {
 
                     List<SyncGetCustomerCallOrderLineBatchQtyDetailViewModel> syncGetCustomerCallOrderLineBatchQtyDetailViewModels = new ArrayList<>();
                     CallOrderLineBatchQtyDetailManager callOrderLineBatchQtyDetailManager = new CallOrderLineBatchQtyDetailManager(context);
-                    List<CallOrderLineBatchQtyDetailModel> callOrderLineBatchQtyDetailModels = callOrderLineBatchQtyDetailManager.getLineBatchQtyDetails(callInvoiceModel.UniqueId);
+                    List<CallOrderLineBatchQtyDetailModel> callOrderLineBatchQtyDetailModels = callOrderLineBatchQtyDetailManager.getLineBatchQtyDetails(callInvoiceLineModel.UniqueId);
                     for (CallOrderLineBatchQtyDetailModel callOrderLineBatchQtyDetailModel : callOrderLineBatchQtyDetailModels) {
                         SyncGetCustomerCallOrderLineBatchQtyDetailViewModel syncGetCustomerCallOrderLineBatchQtyDetailViewModel = new SyncGetCustomerCallOrderLineBatchQtyDetailViewModel();
                         syncGetCustomerCallOrderLineBatchQtyDetailViewModel.UniqueId = callOrderLineBatchQtyDetailModel.UniqueId;
@@ -2144,7 +2145,7 @@ public class TourManager {
 
                     List<SyncGetCustomerCallOrderLineBatchQtyDetailViewModel> syncGetCustomerCallInvoiceLineBatchQtyDetailViewModels = new ArrayList<>();
                     CallInvoiceLineBatchQtyDetailManager callInvoiceLineBatchQtyDetailManager = new CallInvoiceLineBatchQtyDetailManager(context);
-                    List<CallInvoiceLineBatchQtyDetailModel> callInvoiceLineBatchQtyDetailModels = callInvoiceLineBatchQtyDetailManager.getLineBatchQtyDetails(callInvoiceModel.UniqueId);
+                    List<CallInvoiceLineBatchQtyDetailModel> callInvoiceLineBatchQtyDetailModels = callInvoiceLineBatchQtyDetailManager.getLineBatchQtyDetails(callInvoiceLineModel.UniqueId);
                     for (CallInvoiceLineBatchQtyDetailModel callInvoiceLineBatchQtyDetailModel : callInvoiceLineBatchQtyDetailModels) {
                         SyncGetCustomerCallOrderLineBatchQtyDetailViewModel syncGetCustomerCallInvoiceLineBatchQtyDetailViewModel = new SyncGetCustomerCallOrderLineBatchQtyDetailViewModel();
                         syncGetCustomerCallInvoiceLineBatchQtyDetailViewModel.UniqueId = callInvoiceLineBatchQtyDetailModel.UniqueId;

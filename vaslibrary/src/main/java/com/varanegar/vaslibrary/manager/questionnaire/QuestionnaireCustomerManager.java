@@ -1,6 +1,7 @@
 package com.varanegar.vaslibrary.manager.questionnaire;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import com.varanegar.framework.database.BaseManager;
@@ -9,6 +10,9 @@ import com.varanegar.framework.database.querybuilder.Query;
 import com.varanegar.framework.database.querybuilder.criteria.Criteria;
 import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.validation.ValidationException;
+import com.varanegar.vaslibrary.manager.CustomerPathViewManager;
+import com.varanegar.vaslibrary.manager.sysconfigmanager.OwnerKeysWrapper;
+import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.model.questionnaire.QuestionnaireCustomer;
 import com.varanegar.vaslibrary.model.questionnaire.QuestionnaireCustomerModel;
 import com.varanegar.vaslibrary.model.questionnaire.QuestionnaireCustomerModelRepository;
@@ -54,15 +58,22 @@ public class QuestionnaireCustomerManager extends BaseManager<QuestionnaireCusto
                 questionnaireCustomerModel.QuestionnaireId = p.UniqueId;
             }
             questionnaireCustomerModel.DemandTypeId = p.DemandTypeUniqueId;
-            if (p.DemandTypeUniqueId.equals(QuestionnaireDemandTypeId.Mandatory) || p.DemandTypeUniqueId.equals(QuestionnaireDemandTypeId.JustOnce))
-                questionnaireCustomerModel.DemandType = QuestionnaireDemandType.Mandatory;
-            else
+            if (p.DemandTypeUniqueId.equals(QuestionnaireDemandTypeId.Mandatory) || p.DemandTypeUniqueId.equals(QuestionnaireDemandTypeId.JustOnce)) {
+                SysConfigManager configManager = new SysConfigManager(getContext());
+                OwnerKeysWrapper wrapper = configManager.readOwnerKeys();
+                CustomerPathViewManager pathViewManager = new CustomerPathViewManager(getContext());
+                if (wrapper.isPoober() && pathViewManager.isInVisitDayPath(customerId)) {
+                    questionnaireCustomerModel.DemandType = QuestionnaireDemandType.Mandatory;
+                } else if (!wrapper.isPoober())
+                    questionnaireCustomerModel.DemandType = QuestionnaireDemandType.Mandatory;
+            } else
                 questionnaireCustomerModel.DemandType = QuestionnaireDemandType.Optional;
             // insert or update item
             insertOrUpdate(questionnaireCustomerModel);
         }
 
     }
+
 
     public List<QuestionnaireCustomerModel> getCustomerQuestionnaires(UUID customerId) {
         Query query = new Query()

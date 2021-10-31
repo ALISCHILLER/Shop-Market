@@ -8,17 +8,17 @@ import android.net.Uri;
 import android.os.Build;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.varanegar.framework.base.VaranegarApplication;
-import com.varanegar.framework.database.querybuilder.Query;
 import com.varanegar.framework.util.HelperMethods;
 import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.util.recycler.BaseRecyclerAdapter;
 import com.varanegar.framework.util.recycler.BaseViewHolder;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.manager.customercallmanager.CustomerCallManager;
-import com.varanegar.vaslibrary.model.customercall.CustomerCall;
+import com.varanegar.vaslibrary.manager.sysconfigmanager.BackOfficeType;
 import com.varanegar.vaslibrary.model.customercall.CustomerCallModel;
 import com.varanegar.vaslibrary.model.customerpathview.CustomerPathViewModel;
 
@@ -38,9 +38,12 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
     private TextView customerNameTextView;
     private TextView customerAddressTextView;
     private TextView customerStatusTextView;
+    private LinearLayout descriptionLayout;
+    private TextView descriptionTextView;
+    private BackOfficeType backOfficeType;
     //private ImageView customerImageView;
 
-    public CustomerSummaryMultipanViewHolder(View itemView, BaseRecyclerAdapter<CustomerPathViewModel> recyclerAdapter) {
+    public CustomerSummaryMultipanViewHolder(View itemView, BaseRecyclerAdapter<CustomerPathViewModel> recyclerAdapter, BackOfficeType backOfficeType) {
         super(itemView, recyclerAdapter, recyclerAdapter.getActivity());
         customerNameTextView = (TextView) itemView.findViewById(R.id.customer_name_text_view);
         customerAddressTextView = (TextView) itemView.findViewById(R.id.customer_address_text_view);
@@ -52,6 +55,9 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
         customerTelTextView = (TextView) itemView.findViewById(R.id.customer_tel_text_view);
         customerMobileTextView = (TextView) itemView.findViewById(R.id.customer_mobile_text_view);
         totalTextView = (TextView) itemView.findViewById(R.id.customer_total_order_text_view);
+        descriptionLayout = itemView.findViewById(R.id.description_layout);
+        descriptionTextView = itemView.findViewById(R.id.order_description_text_view);
+        this.backOfficeType = backOfficeType;
     }
 
     @Override
@@ -71,6 +77,14 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
         });
 
         setStatus(customerCalls);
+        if (descriptionLayout != null) {
+            if (backOfficeType == BackOfficeType.ThirdParty && customerModel.Comments != null && !customerModel.Comments.isEmpty()) {
+                descriptionLayout.setVisibility(View.VISIBLE);
+                descriptionTextView.setText(customerModel.Comments);
+            } else {
+                descriptionLayout.setVisibility(View.GONE);
+            }
+        }
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

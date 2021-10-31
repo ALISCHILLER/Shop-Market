@@ -1061,8 +1061,8 @@ public class CustomerSaveReturnFragment extends VisitFragment {
                     ReturnLinesModel returnLinesModel = returnLinesManager.getItem(returnLine.UniqueId);
                     if (returnLinesModel != null) {
                         ProductModel productModel = productManager.getItem(returnLine.ProductUniqueId);
-                        returnLinesModel.TotalRequestAdd1Amount = (productModel.TaxPercent == null ? Currency.ZERO : new Currency(productModel.TaxPercent)).multiply(returnLine.TotalRequestAmount).divide(Currency.valueOf(100));
-                        returnLinesModel.TotalRequestAdd2Amount = (productModel.ChargePercent == null ? Currency.ZERO : new Currency(productModel.ChargePercent)).multiply(returnLine.TotalRequestAmount).divide(Currency.valueOf(100));
+                        returnLinesModel.TotalRequestAdd1Amount = (productModel.TaxPercent == null ? Currency.ZERO : new Currency(productModel.TaxPercent)).multiply(returnLine.TotalRequestAmount).divide(Currency.valueOf(100)).setScale(0, BigDecimal.ROUND_HALF_EVEN);
+                        returnLinesModel.TotalRequestAdd2Amount = (productModel.ChargePercent == null ? Currency.ZERO : new Currency(productModel.ChargePercent)).multiply(returnLine.TotalRequestAmount).divide(Currency.valueOf(100)).setScale(0, BigDecimal.ROUND_HALF_EVEN);
                         returnLinesModel.TotalRequestNetAmount = returnLine.TotalRequestAmount.add(returnLinesModel.TotalRequestAdd1Amount.add(returnLinesModel.TotalRequestAdd2Amount));
                         returnLinesManager.update(returnLinesModel);
                     }

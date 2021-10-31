@@ -122,7 +122,11 @@ public class QuestionnaireManager {
     public void calculateCustomerQuestionnaire(final UUID customerId) throws DbException, ValidationException {
         // step 1: extract valid templates for the customer
         QuestionnaireHeaderManager headerManager = new QuestionnaireHeaderManager(context);
-        List<QuestionnaireHeaderModel> headers = headerManager.getValidTemplatesForCustomer(customerId);
+        List<QuestionnaireHeaderModel> headers;
+        if (VaranegarApplication.is(VaranegarApplication.AppId.Supervisor))
+            headers = headerManager.getValidTemplatesForSupervisorCustomer(customerId);
+        else
+            headers = headerManager.getValidTemplatesForCustomer(customerId);
         if (headers.size() == 0) {
             Timber.i("No Questionnaire template has been calculated for customer id = " + customerId.toString());
             return;

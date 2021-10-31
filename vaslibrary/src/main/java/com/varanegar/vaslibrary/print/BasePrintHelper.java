@@ -23,6 +23,8 @@ import com.varanegar.printlib.driver.ConnectionCallback;
 import com.varanegar.printlib.driver.PrintCallback;
 import com.varanegar.printlib.driver.PrinterDriver;
 import com.varanegar.vaslibrary.R;
+import com.varanegar.vaslibrary.manager.sysconfigmanager.OwnerKeysWrapper;
+import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 
 import java.util.Locale;
 
@@ -33,6 +35,8 @@ import timber.log.Timber;
  */
 
 public abstract class BasePrintHelper {
+    SysConfigManager sysConfigManager = new SysConfigManager(getActivity());
+    OwnerKeysWrapper ownerKeys = sysConfigManager.readOwnerKeys();
     public AppCompatActivity getActivity() {
         return activity;
     }
@@ -76,7 +80,7 @@ public abstract class BasePrintHelper {
                         Timber.d("connected to driver " + driver.name());
                         PrintHelper.init(driver);
                         Typeface customFont;
-                        if (Build.MODEL.equalsIgnoreCase("Sepehr A1"))
+                        if (Build.MODEL.equalsIgnoreCase("Sepehr A1")||ownerKeys.isMihanKish())
                             customFont = Typeface.createFromAsset(activity.getAssets(), "fonts/Iran Sans Bold.ttf");
                         else
                             customFont = Typeface.createFromAsset(activity.getAssets(), "fonts/anatoli.ttf");

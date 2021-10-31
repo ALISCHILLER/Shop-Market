@@ -132,6 +132,8 @@ public class SimpleCustomerOrderLineViewHolder extends BaseViewHolder<CustomerCa
 
         if (product.IsRequestFreeItem)
             priceTextView.setText(product.FreeReasonName);
+        else if (VaranegarApplication.is(VaranegarApplication.AppId.Dist) && product.IsPromoLine)
+            priceTextView.setText(HelperMethods.currencyToString(product.PromotionUnitPrice));
         else
             priceTextView.setText(HelperMethods.currencyToString(product.UnitPrice));
         totalOrderQtyTextView.setText(HelperMethods.bigDecimalToString(product.TotalQty));

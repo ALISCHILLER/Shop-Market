@@ -32,4 +32,6 @@ public class CustomerPathViewModel extends CustomerModel
     public String CallType;
     @Column
     public String CustomerCategoryName;
+    @Column
+    public String Comments;
 }

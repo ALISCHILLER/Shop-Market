@@ -297,6 +297,8 @@ public class OrderAdapter extends BaseRecyclerAdapter<CustomerCallOrderOrderView
             return 1;
 
         ProductUnitViewManager.ProductUnits pu = productUnits.get(line.ProductId);
+        if (pu == null)
+            return 1;
         return line.ExpDate == null && !pu.hasThirdUnit() && !pu.isBulk() ? 0 : 1;
     }
 }

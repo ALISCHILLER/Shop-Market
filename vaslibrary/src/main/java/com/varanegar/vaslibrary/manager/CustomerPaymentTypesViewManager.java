@@ -59,7 +59,7 @@ public class CustomerPaymentTypesViewManager extends BaseManager<CustomerPayment
                     "pto.PaymentTypeOrderGroupUniqueId AS PaymentTypeOrderGroupUniqueId,\n" +
                     "pto.PaymentTypeOrderGroupName AS PaymentTypeOrderGroupName\n" +
                     "FROM Customer c JOIN PaymentTypeOrder pto ON c.UniqueId = '" + customerUniqueId.toString() + "'\n";
-                    if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales))
+                    if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist))
                         sql = sql + "JOIN DealerPaymentType ON  PaymentTypeOrderUniqueId = pto.UniqueId \n";
                     sql = sql + "WHERE (CASE WHEN (c.PayableTypes & pto.Code = pto.Code) THEN 1 ELSE 0 END) = 1 \n";
 //            if (sysConfigModel != null)

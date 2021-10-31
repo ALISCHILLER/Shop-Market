@@ -3,7 +3,7 @@ package com.varanegar.supervisor.webapi;
 import androidx.annotation.Nullable;
 
 import com.varanegar.supervisor.model.ProductModel;
-import com.varanegar.supervisor.model.SupervisorCustomerModel;
+import com.varanegar.vaslibrary.model.customer.SupervisorCustomerModel;
 import com.varanegar.supervisor.model.VisitorModel;
 import com.varanegar.supervisor.status.OrderSummaryRequestViewModel;
 import com.varanegar.supervisor.status.OrderSummaryResultViewModel;

@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.os.Message;
 import androidx.annotation.NonNull;
 
+import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.util.Linq;
 import com.varanegar.vaslibrary.manager.tourmanager.TourManager;
 import com.varanegar.vaslibrary.model.tour.TourModel;
@@ -179,7 +180,8 @@ public class UpdateQueue {
                         final TourUpdateLogManager tourUpdateLogManager = new TourUpdateLogManager(context);
                         String group = context.getString(tourAsyncTask.group());
                         try {
-                            tourUpdateLogManager.save(tour, tourAsyncTask.name(), group);
+                            if (!VaranegarApplication.is(VaranegarApplication.AppId.Supervisor))
+                                tourUpdateLogManager.save(tour, tourAsyncTask.name(), group);
                             tourAsyncTask.run(new UpdateCall() {
                                 @Override
                                 protected void onFinish() {
@@ -203,6 +205,7 @@ public class UpdateQueue {
                                 protected void onSuccess() {
                                     Timber.v("Queue " + queueNumber + " task " + tourAsyncTask.name() + " succeeded.");
                                     String group = context.getString(tourAsyncTask.group());
+                                    if (!VaranegarApplication.is(VaranegarApplication.AppId.Supervisor))
                                     tourUpdateLogManager.saveSuccess(tour, tourAsyncTask.name(), group);
                                     Message msg = handler.obtainMessage(SUCCESS);
                                     Bundle bundle = new Bundle();

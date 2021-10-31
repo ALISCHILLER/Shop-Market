@@ -180,9 +180,20 @@ public class CustomerCallManager extends BaseManager<CustomerCallModel> {
         final List<CustomerCallModel> calls = loadCalls(customerId);
         for (final CustomerCallModel call :
                 calls) {
-            call.ConfirmStatus = true;
-            call.UpdatedTime = new Date();
-            update(call);
+            if (call.CallType == CustomerCallType.SendData) {
+                CustomerCallOrderManager callOrderManager = new CustomerCallOrderManager(getContext());
+                List<CustomerCallOrderModel> orders = callOrderManager.getCustomerCallOrders(customerId);
+                boolean notAllSent = Linq.exists(orders, order -> !order.IsSent);
+                if (!notAllSent) {
+                    call.ConfirmStatus = true;
+                    call.UpdatedTime = new Date();
+                    update(call);
+                }
+            } else {
+                call.ConfirmStatus = true;
+                call.UpdatedTime = new Date();
+                update(call);
+            }
         }
     }
 

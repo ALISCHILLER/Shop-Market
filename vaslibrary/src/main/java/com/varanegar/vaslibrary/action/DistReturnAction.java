@@ -1,7 +1,6 @@
 package com.varanegar.vaslibrary.action;
 
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
@@ -12,30 +11,23 @@ import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.util.component.CuteAlertDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
-import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.framework.util.fragment.extendedlist.ActionsAdapter;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.manager.NoSaleReasonManager;
-import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallInvoiceManager;
-import com.varanegar.vaslibrary.manager.customercallmanager.CustomerCallManager;
 import com.varanegar.vaslibrary.model.call.CustomerCallInvoiceModel;
-import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.model.noSaleReason.NoSaleReasonModel;
 import com.varanegar.vaslibrary.ui.dialog.CompleteReturnActionDialog;
-import com.varanegar.vaslibrary.ui.dialog.InsertPinDialog;
 
 import java.util.List;
 import java.util.UUID;
-
-import timber.log.Timber;
 
 /**
  * Created by A.Jafarzadeh on 6/25/2017.
  */
 
 public class DistReturnAction extends CheckDistanceAction {
-    private CustomerModel customer;
+
 
     @Nullable
     @Override
@@ -104,9 +96,6 @@ public class DistReturnAction extends CheckDistanceAction {
     @Override
     public void run() {
         setRunning(true);
-
-
-
         if (getCallManager().hasDeliveryOrReturnCall(getCalls())) {
             CuteMessageDialog builder = new CuteMessageDialog(getActivity());
             builder.setTitle(getActivity().getString(R.string.alert));
@@ -114,11 +103,7 @@ public class DistReturnAction extends CheckDistanceAction {
             builder.setPositiveButton(R.string.yes, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                   // showNonDeliveryReasons(getSelectedId());
-                    CustomerManager customerManager = new CustomerManager(getActivity());
-                    customer = customerManager.getItem(getSelectedId());
-
-                    dialogpincode(customer.g);
+                    showNonDeliveryReasons(getSelectedId());
                 }
             });
             builder.setNegativeButton(R.string.no, new View.OnClickListener() {
@@ -135,49 +120,9 @@ public class DistReturnAction extends CheckDistanceAction {
             });
             builder.show();
         } else {
-
-
-
+            showNonDeliveryReasons(getSelectedId());
         }
 
-    }
-
-    private void dialogpincode(){
-        InsertPinDialog dialog = new InsertPinDialog();
-        dialog.setCancelable(false);
-        dialog.setClosable(false);
-        dialog.setValues("");
-        dialog.setOnResult(new InsertPinDialog.OnResult() {
-            @Override
-            public void done() {
-//                    changePaymentType(paymentType, print);
-                showNonDeliveryReasons(getSelectedId());
-            }
-
-            @Override
-            public void failed(String error) {
-                Timber.e(error);
-                setRunning(false);
-                if (error.equals("پین کد وارد شده صحیح نیست")) {
-                    printFailed(getActivity(), error);
-                } else {
-                    //saveSettlementFailed(getContext(), error);
-                }
-            }
-        });
-        dialog.show(getActivity().getSupportFragmentManager(), "InsertPinDialog");
-    }
-    private void printFailed(Context context, String error) {
-        try {
-            CuteMessageDialog dialog = new CuteMessageDialog(context);
-            dialog.setIcon(Icon.Warning);
-            dialog.setTitle(R.string.DeliveryReasons);
-            dialog.setMessage(error);
-            dialog.setPositiveButton(R.string.ok, null);
-            dialog.show();
-        } catch (Exception e1) {
-            Timber.e(e1);
-        }
     }
 
     private void showNonDeliveryReasons(UUID selectedItem) {

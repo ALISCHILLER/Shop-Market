@@ -13,12 +13,14 @@ import com.varanegar.vaslibrary.manager.customercall.CallInvoiceLineManager;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallInvoiceManager;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallReturnRequestManager;
 import com.varanegar.vaslibrary.manager.customercall.ReturnLinesRequestManager;
+import com.varanegar.vaslibrary.manager.customerpromotionpricemanager.CustomerPromotionPriceManager;
 import com.varanegar.vaslibrary.manager.tourmanager.TourManager;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateCall;
 import com.varanegar.vaslibrary.model.CallInvoiceLineBatchQtyDetailModel;
 import com.varanegar.vaslibrary.model.call.CallInvoiceLineModel;
 import com.varanegar.vaslibrary.model.call.CustomerCallInvoiceModel;
 import com.varanegar.vaslibrary.model.call.CustomerCallReturnRequestModel;
+import com.varanegar.vaslibrary.model.customerpromotionprice.CustomerPromotionPriceModel;
 import com.varanegar.vaslibrary.model.distribution.DistributionCustomerCallModel;
 import com.varanegar.vaslibrary.model.distribution.DistributionCustomerPriceModel;
 import com.varanegar.vaslibrary.model.onhandqty.OnHandQtyModel;
@@ -91,6 +93,9 @@ public class DistributionManager {
                     DistributionCustomerPriceManager customerPriceManager = new DistributionCustomerPriceManager(context);
                     customerPriceManager.deleteAll();
 
+                    CustomerPromotionPriceManager customerPromotionPriceManager = new CustomerPromotionPriceManager(context);
+                    customerPromotionPriceManager.deleteAll();
+
                     InvoiceLineQtyManager invoiceLineQtyManager = new InvoiceLineQtyManager(context);
                     invoiceLineQtyManager.deleteAll();
 
@@ -120,23 +125,40 @@ public class DistributionManager {
                                 callInvoiceLineManager.insert(result.DistributionCustomerCallOrderLines);
 
                                 List<DistributionCustomerPriceModel> priceModels = new ArrayList<>();
+                                List<CustomerPromotionPriceModel> promotionPriceModels = new ArrayList<>();
                                 Set<String> priceModelSet = new HashSet<>();
+                                Set<String> promotionPriceModelSet = new HashSet<>();
                                 for (final CallInvoiceLineModel line :
                                         result.DistributionCustomerCallOrderLines) {
                                     if (line.UnitPrice != null && line.UnitPrice.compareTo(Currency.ZERO) > 0) {
                                         CustomerCallInvoiceModel invoiceModel = Linq.findFirst(result.DistributionCustomerCallOrders, item -> item.UniqueId.equals(line.OrderUniqueId));
                                         String key = line.ProductUniqueId + "|" + invoiceModel.CustomerUniqueId + "|" + invoiceModel.UniqueId;
-                                        if (!priceModelSet.contains(key)) {
-                                            DistributionCustomerPriceModel customerPriceModel = new DistributionCustomerPriceModel();
-                                            customerPriceModel.PriceId = line.CPriceUniqueId;
-                                            customerPriceModel.UniqueId = UUID.randomUUID();
-                                            customerPriceModel.Price = line.UnitPrice;
-                                            customerPriceModel.ProductUniqueId = line.ProductUniqueId;
-                                            customerPriceModel.UserPrice = line.UserPrice;
-                                            customerPriceModel.CustomerUniqueId = invoiceModel.CustomerUniqueId;
-                                            customerPriceModel.CallOrderId = invoiceModel.UniqueId;
-                                            priceModelSet.add(key);
-                                            priceModels.add(customerPriceModel);
+                                        if (!line.IsPromoLine) {
+                                            if (!priceModelSet.contains(key)) {
+                                                DistributionCustomerPriceModel customerPriceModel = new DistributionCustomerPriceModel();
+                                                customerPriceModel.PriceId = line.CPriceUniqueId;
+                                                customerPriceModel.UniqueId = UUID.randomUUID();
+                                                customerPriceModel.Price = line.UnitPrice;
+                                                customerPriceModel.ProductUniqueId = line.ProductUniqueId;
+                                                customerPriceModel.UserPrice = line.UserPrice;
+                                                customerPriceModel.CustomerUniqueId = invoiceModel.CustomerUniqueId;
+                                                customerPriceModel.CallOrderId = invoiceModel.UniqueId;
+                                                priceModelSet.add(key);
+                                                priceModels.add(customerPriceModel);
+                                            }
+                                        } else {
+                                            if (!promotionPriceModelSet.contains(key)) {
+                                                CustomerPromotionPriceModel customerPromotionPriceModel = new CustomerPromotionPriceModel();
+                                                customerPromotionPriceModel.PriceId = line.CPriceUniqueId;
+                                                customerPromotionPriceModel.UniqueId = UUID.randomUUID();
+                                                customerPromotionPriceModel.Price = line.UnitPrice;
+                                                customerPromotionPriceModel.ProductUniqueId = line.ProductUniqueId;
+                                                customerPromotionPriceModel.UserPrice = line.UserPrice;
+                                                customerPromotionPriceModel.CustomerUniqueId = invoiceModel.CustomerUniqueId;
+                                                customerPromotionPriceModel.CallOrderId = invoiceModel.UniqueId;
+                                                promotionPriceModelSet.add(key);
+                                                promotionPriceModels.add(customerPromotionPriceModel);
+                                            }
                                         }
                                     }
                                     if (line.IsRequestFreeItem) {
@@ -150,6 +172,9 @@ public class DistributionManager {
 
                                 if (priceModels.size() > 0)
                                     customerPriceManager.insert(priceModels);
+
+                                if (promotionPriceModels.size() > 0)
+                                    customerPromotionPriceManager.insert(promotionPriceModels);
 
                                 if (result.DistributionCustomerCallOrderLineOrderQtyDetails != null && result.DistributionCustomerCallOrderLineOrderQtyDetails.size() > 0) {
                                     invoiceLineQtyManager.insert(result.DistributionCustomerCallOrderLineOrderQtyDetails);

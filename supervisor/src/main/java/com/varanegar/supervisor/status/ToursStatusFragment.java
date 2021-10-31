@@ -216,20 +216,20 @@ public class ToursStatusFragment extends IMainPageFragment {
                                             bindRowNumber(columns);
                                             columns.add(bind(entity, CustomerCallView.CustomerCode, getString(R.string.customer_code_label)).setFrizzed());
                                             columns.add(bind(entity, CustomerCallView.CustomerName, getString(R.string.customer_name_label)).setFrizzed());
-                                            columns.add(bind(entity, CustomerCallView.StoreName, getString(R.string.store_name_label)).setFrizzed());
-                                            columns.add(bind(entity, CustomerCallView.CallStatusName, getString(R.string.call_status)).setFrizzed());
-                                            columns.add(bind(entity, CustomerCallView.TotalRequestAmount, getString(R.string.total_amount)).setFrizzed());
+                                            columns.add(bind(entity, CustomerCallView.StoreName, getString(R.string.store_name_label)));
+                                            columns.add(bind(entity, CustomerCallView.CallStatusName, getString(R.string.call_status)));
+                                            columns.add(bind(entity, CustomerCallView.TotalRequestAmount, getString(R.string.total_amount)));
 
-                                            columns.add(bind(entity, CustomerCallView.LocalPaperNoCollection, getString(R.string.ref_number)).setFrizzed().sendToDetail());
-                                            columns.add(bind(entity, CustomerCallView.TourNo, getString(R.string.tour_no)).setFrizzed().sendToDetail());
-                                            columns.add(bind(entity, CustomerCallView.DealerName, getString(R.string.dealer_name_label)).setFrizzed().sendToDetail());
-                                            columns.add(bind(entity, CustomerCallView.OrderPaymentTypeName, getString(R.string.payment_type)).setFrizzed().sendToDetail());
-                                            columns.add(bind(entity, CustomerCallView.Address, getString(R.string.address_label)).setFrizzed().sendToDetail());
-                                            columns.add(bind(entity, CustomerCallView.Phone, getString(R.string.phone_number)).setFrizzed().sendToDetail());
-                                            columns.add(bind(entity, CustomerCallView.StartPTime, getString(R.string.start_time)).setFrizzed().sendToDetail());
-                                            columns.add(bind(entity, CustomerCallView.EndPTime, getString(R.string.end_time)).setFrizzed().sendToDetail());
-                                            columns.add(bind(entity, CustomerCallView.VisitDurationStr, getString(R.string.visit_duration)).setFrizzed().sendToDetail());
-                                            columns.add(bind(entity, CustomerCallView.BackOfficeReturnOrderNoCollection, getString(R.string.return_ref)).setFrizzed().sendToDetail());
+                                            columns.add(bind(entity, CustomerCallView.LocalPaperNoCollection, getString(R.string.ref_number)).sendToDetail());
+                                            columns.add(bind(entity, CustomerCallView.TourNo, getString(R.string.tour_no)).sendToDetail());
+                                            columns.add(bind(entity, CustomerCallView.DealerName, getString(R.string.dealer_name_label)).sendToDetail());
+                                            columns.add(bind(entity, CustomerCallView.OrderPaymentTypeName, getString(R.string.payment_type)).sendToDetail());
+                                            columns.add(bind(entity, CustomerCallView.Address, getString(R.string.address_label)).sendToDetail());
+                                            columns.add(bind(entity, CustomerCallView.Phone, getString(R.string.phone_number)).sendToDetail());
+                                            columns.add(bind(entity, CustomerCallView.StartPTime, getString(R.string.start_time)).sendToDetail());
+                                            columns.add(bind(entity, CustomerCallView.EndPTime, getString(R.string.end_time)).sendToDetail());
+                                            columns.add(bind(entity, CustomerCallView.VisitDurationStr, getString(R.string.visit_duration)).sendToDetail());
+                                            columns.add(bind(entity, CustomerCallView.BackOfficeReturnOrderNoCollection, getString(R.string.return_ref)).sendToDetail());
 
                                         }
 

@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ExifInterface;
 import android.os.SystemClock;
+import android.util.Base64;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -178,7 +180,15 @@ public class ImageManager extends BaseManager<ImageModel> {
 
         FileOutputStream out = new FileOutputStream(path);
         bitmap.compress(Bitmap.CompressFormat.JPEG, quality, out);
-        insertOrUpdate(imageModel);
+        if (getFileSize(path) <= 0) {
+            Timber.e(encodeToBase64(bitmap, quality));
+            File f = new File(path);
+            if (f.exists())
+                f.delete();
+            throw new IOException(getContext().getString(R.string.error_in_saving_picture) + "\n" + getContext().getString(R.string.image_size_is_zero) + getContext().getString(R.string.please_try_again));
+        } else {
+            insertOrUpdate(imageModel);
+        }
         return path;
     }
 
@@ -516,5 +526,13 @@ public class ImageManager extends BaseManager<ImageModel> {
     public void cancelSync() {
         if (call != null && !call.isCanceled() && call.isExecuted())
             call.cancel();
+    }
+
+    public static String encodeToBase64(Bitmap bitmap, int quality ) {
+        Bitmap image = bitmap;
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, quality, out);
+        byte[] b = out.toByteArray();
+        return Base64.encodeToString(b, Base64.DEFAULT);
     }
 }

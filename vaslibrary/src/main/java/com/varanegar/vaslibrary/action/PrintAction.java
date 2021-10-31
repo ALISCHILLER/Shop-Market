@@ -19,6 +19,7 @@ import com.varanegar.printlib.layout.RootLayout;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.manager.customercall.CustomerPrintCountManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
+import com.varanegar.vaslibrary.manager.sysconfigmanager.OwnerKeysWrapper;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.print.BasePrintHelper;
@@ -36,6 +37,8 @@ import timber.log.Timber;
  */
 
 public class PrintAction extends CheckPathAction {
+    SysConfigManager sysConfigManager = new SysConfigManager(getActivity());
+    OwnerKeysWrapper ownerKeys = sysConfigManager.readOwnerKeys();
     public PrintAction(MainVaranegarActivity activity, ActionsAdapter adapter, UUID selectedId) {
         super(activity, adapter, selectedId);
         icon = R.drawable.ic_print_black_24dp;
@@ -132,7 +135,7 @@ public class PrintAction extends CheckPathAction {
                     try {
                         RootLayout rootLayout = new RootLayout();
                         Typeface customFont;
-                        if (Build.MODEL.equalsIgnoreCase("Sepehr A1"))
+                        if (Build.MODEL.equalsIgnoreCase("Sepehr A1")|| ownerKeys.isMihanKish())
                             customFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Iran Sans Bold.ttf");
                         else
                             customFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/anatoli.ttf");

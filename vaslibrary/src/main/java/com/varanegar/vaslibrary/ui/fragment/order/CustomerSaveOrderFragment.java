@@ -550,6 +550,10 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
             public void onSuccess() {
                 try {
                     loadCalls();
+                    for (CustomerPaymentTypesViewModel customerPaymentTypesViewModel : customerPaymentTypes) {
+                        if (customerPaymentTypesViewModel.UniqueId != null && customerPaymentTypesViewModel.UniqueId.equals(customerCallOrderModel.OrderPaymentTypeUniqueId))
+                            selectedPaymentType = customerPaymentTypesViewModel;
+                    }
                     refresh(false, true, false);
 
                     if (VaranegarApplication.is(VaranegarApplication.AppId.Contractor)) {

@@ -49,9 +49,11 @@ import com.varanegar.vaslibrary.manager.customercardex.CustomerCardexTempManager
 import com.varanegar.vaslibrary.manager.oldinvoicemanager.CustomerOldInvoiceDetailTempManager;
 import com.varanegar.vaslibrary.manager.oldinvoicemanager.CustomerOldInvoiceHeaderTempManager;
 import com.varanegar.vaslibrary.manager.oldinvoicemanager.OldInvoiceManager;
+import com.varanegar.vaslibrary.manager.sysconfigmanager.BackOfficeType;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.OwnerKeysWrapper;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
+import com.varanegar.vaslibrary.manager.sysconfigmanager.UnknownBackOfficeException;
 import com.varanegar.vaslibrary.manager.tourmanager.TourManager;
 import com.varanegar.vaslibrary.manager.updatemanager.CustomersUpdateFlow;
 import com.varanegar.vaslibrary.manager.updatemanager.PriceUpdateFlow;
@@ -88,6 +90,7 @@ public abstract class CustomersFragment extends DbListFragment<CustomerPathViewM
 
     private String barcode;
     private boolean multipan;
+    BackOfficeType backOfficeType;
 
     @Override
     public void onDestroy() {
@@ -215,6 +218,11 @@ public abstract class CustomersFragment extends DbListFragment<CustomerPathViewM
 
         if (!isLowMemory())
             wipeOldPriceData();
+        try {
+            backOfficeType = new SysConfigManager(getContext()).getBackOfficeType();
+        } catch (UnknownBackOfficeException e) {
+            Timber.e(e);
+        }
     }
 
     private Boolean isLowMemory() {
@@ -305,10 +313,10 @@ public abstract class CustomersFragment extends DbListFragment<CustomerPathViewM
     public BaseViewHolder<CustomerPathViewModel> createListItemViewHolder(ViewGroup parent, int viewType) {
         if (multipan) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_customer_multipan, parent, false);
-            return new CustomerSummaryMultipanViewHolder(view, getAdapter());
+            return new CustomerSummaryMultipanViewHolder(view, getAdapter(), backOfficeType);
         } else {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_customer, parent, false);
-            return new CustomerSummaryViewHolder(view, getAdapter());
+            return new CustomerSummaryViewHolder(view, getAdapter(), backOfficeType);
         }
     }
 

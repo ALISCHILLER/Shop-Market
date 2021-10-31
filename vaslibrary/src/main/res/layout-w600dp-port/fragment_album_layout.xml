@@ -144,6 +144,17 @@
                 android:src="@drawable/ic_categories_white_24dp"
                 app:layout_anchor="@id/main_layout"
                 app:layout_anchorGravity="bottom|right|end" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/more_info_bt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_default"
+                android:background="?attr/colorPrimaryDark"
+                android:src="@drawable/ic_info_outline_white_24dp"
+                app:layout_anchor="@id/main_layout"
+                app:layout_anchorGravity="bottom|right|end" />
+
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

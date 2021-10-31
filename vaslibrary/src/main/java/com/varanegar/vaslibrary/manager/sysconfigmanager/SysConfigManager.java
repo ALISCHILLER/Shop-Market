@@ -572,11 +572,9 @@ public class SysConfigManager extends BaseManager<SysConfigModel> {
     }
 
     public static boolean isMultipleSendActive(Context context) {
-        // TODO: 8/10/21 remove this comment later
-        return false;
-//        SysConfigManager manager = new SysConfigManager(context);
-//        SysConfigModel sysConfigModel = manager.read(ConfigKey.CheckSingleSendOperation, cloud);
-//        return !SysConfigManager.compare(sysConfigModel, true);
+        SysConfigManager manager = new SysConfigManager(context);
+        SysConfigModel sysConfigModel = manager.read(ConfigKey.CheckSingleSendOperation, cloud);
+        return SysConfigManager.compare(sysConfigModel, true);
     }
 
     public void setOwnerKeys(CenterSysConfigModel centerSysConfigModel) throws ValidationException, DbException {

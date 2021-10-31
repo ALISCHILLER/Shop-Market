@@ -2,19 +2,25 @@ package com.varanegar.vaslibrary.ui.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.varanegar.framework.base.MainVaranegarActivity;
+import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.database.DbException;
 import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.util.component.SimpleToolbar;
+import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
+import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.framework.util.recycler.BaseRecyclerAdapter;
 import com.varanegar.framework.util.recycler.BaseRecyclerView;
 import com.varanegar.framework.util.recycler.BaseViewHolder;
@@ -61,9 +67,18 @@ public class QuestionnaireFragment extends VisitFragment {
         BaseRecyclerView formsRecyclerView = (BaseRecyclerView) view.findViewById(R.id.forms_recycler_view);
         customerId = UUID.fromString(getArguments().getString("f8c2abc4-c401-4f16-8f7d-1019e80574af"));
         final CustomerCallManager callManager = new CustomerCallManager(getContext());
+        Button sendButton = view.findViewById(R.id.send_questionnaire_btn);
         try {
-            callManager.unConfirmAllCalls(customerId);
-            callManager.removeCall(CustomerCallType.LackOfVisit, customerId);
+            if (VaranegarApplication.is(VaranegarApplication.AppId.Supervisor)) {
+                sendButton.setVisibility(View.VISIBLE);
+                sendButton.setOnClickListener(view1 -> {
+
+                });
+            } else {
+                sendButton.setVisibility(View.GONE);
+                callManager.unConfirmAllCalls(customerId);
+                callManager.removeCall(CustomerCallType.LackOfVisit, customerId);
+            }
             QuestionnaireCustomerViewManager manager = new QuestionnaireCustomerViewManager(getContext());
             List<QuestionnaireCustomerViewModel> questionnaires = manager.getQuestionnaires(customerId);
             final BaseRecyclerAdapter<QuestionnaireCustomerViewModel> adapter = new BaseRecyclerAdapter<QuestionnaireCustomerViewModel>(getVaranegarActvity(), questionnaires) {
@@ -141,9 +156,17 @@ public class QuestionnaireFragment extends VisitFragment {
                             fragment.setArguments(q.CustomerId, q.QuestionnaireId);
                             getVaranegarActvity().pushFragment(fragment);
                         } else {
-                            EPollFragment fragment = new EPollFragment();
-                            fragment.setArguments(q.CustomerId, q.QuestionnaireId ,epoll.UniqueId );
-                            getVaranegarActvity().pushFragment(fragment);
+                            if (VaranegarApplication.is(VaranegarApplication.AppId.Supervisor)) {
+                                CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+                                dialog.setIcon(Icon.Info);
+                                dialog.setMessage(R.string.questionnaire_not_supported_in_supervisor);
+                                dialog.setPositiveButton(R.string.ok, null);
+                                dialog.show();
+                            } else {
+                                EPollFragment fragment = new EPollFragment();
+                                fragment.setArguments(q.CustomerId, q.QuestionnaireId, epoll.UniqueId);
+                                getVaranegarActvity().pushFragment(fragment);
+                            }
                         }
                     } catch (Exception ex) {
                         Timber.e(ex);
@@ -167,20 +190,22 @@ public class QuestionnaireFragment extends VisitFragment {
                                 q.NoAnswerReason = updatedModel.NoAnswerReason;
                                 q.HasAnswer = updatedModel.HasAnswer;
                                 recyclerAdapter.notifyDataSetChanged();
-                                List<QuestionnaireCustomerViewModel> models = manager.getQuestionnaires(q.CustomerId, false);
-                                if (models.size() == 0) {
-                                    saveCall(q.CustomerId);
-                                } else {
-                                    boolean exist = Linq.exists(models, new Linq.Criteria<QuestionnaireCustomerViewModel>() {
-                                        @Override
-                                        public boolean run(QuestionnaireCustomerViewModel item) {
-                                            return item.DemandType == QuestionnaireDemandType.Mandatory && item.NoAnswerReason == null;
-                                        }
-                                    });
-                                    if (exist) {
-                                        removeCall(q.CustomerId);
-                                    } else {
+                                if (!VaranegarApplication.is(VaranegarApplication.AppId.Supervisor)) {
+                                    List<QuestionnaireCustomerViewModel> models = manager.getQuestionnaires(q.CustomerId, false);
+                                    if (models.size() == 0) {
                                         saveCall(q.CustomerId);
+                                    } else {
+                                        boolean exist = Linq.exists(models, new Linq.Criteria<QuestionnaireCustomerViewModel>() {
+                                            @Override
+                                            public boolean run(QuestionnaireCustomerViewModel item) {
+                                                return item.DemandType == QuestionnaireDemandType.Mandatory && item.NoAnswerReason == null;
+                                            }
+                                        });
+                                        if (exist) {
+                                            removeCall(q.CustomerId);
+                                        } else {
+                                            saveCall(q.CustomerId);
+                                        }
                                     }
                                 }
                             } catch (Exception ex) {

@@ -269,7 +269,7 @@ public class CustomerPathViewManager extends BaseManager<CustomerPathViewModel> 
         if (checkConfirmStatus != null && checkConfirmStatus) {
             query.orderByDescending(CustomerPathView.OPathId);
             query.orderByAscending(CustomerPathView.PathRowId);
-        }else {
+        } else {
             query.orderByDescending(UnConfirmedCustomerPathView.OPathId);
             query.orderByAscending(UnConfirmedCustomerPathView.PathRowId);
         }
@@ -400,6 +400,14 @@ public class CustomerPathViewManager extends BaseManager<CustomerPathViewModel> 
 
     public List<CustomerPathViewModel> getVisitedPathCustomers(UUID visitPathId, boolean checkActive) {
         return getItems(hasOperationCustomers(visitPathId, checkActive, true));
+    }
+
+    public boolean isInVisitDayPath(UUID customerId) {
+        TourModel tourModel = new TourManager(getContext()).loadTour();
+        Query query = new Query().from(CustomerPathView.CustomerPathViewTbl).whereAnd(Criteria.equals(CustomerPathView.UniqueId, customerId)
+                .and(Criteria.equals(CustomerPathView.VisitTemplatePathId, tourModel.DayVisitPathId)));
+        CustomerPathViewModel customerPathViewModel = getItem(query);
+        return customerPathViewModel != null;
     }
 
     public boolean isAllCustomersOfPathVisited() {

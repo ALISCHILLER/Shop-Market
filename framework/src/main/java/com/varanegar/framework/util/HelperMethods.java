@@ -26,8 +26,10 @@ import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import timber.log.Timber;
@@ -178,7 +180,8 @@ public class HelperMethods {
     }
 
     public static String doubleToString(double value) {
-        DecimalFormat df = new DecimalFormat("#.###");
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
+        DecimalFormat df = new DecimalFormat("#.###",symbols);
         return df.format(value);
     }
 
@@ -189,7 +192,8 @@ public class HelperMethods {
 
     @NonNull
     public static String bigDecimalToString(@Nullable BigDecimal value) {
-        DecimalFormat df = new DecimalFormat("#.###");
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
+        DecimalFormat df = new DecimalFormat("#.###", symbols);
         return value == null ? "0" : df.format(value);
     }
 
@@ -218,7 +222,9 @@ public class HelperMethods {
     public static String currencyToStringWithoutCommas(@Nullable Currency value) {
         return value == null ? "0" : value.bigDecimalValue().toString();
     }
-
+    public static String convertCurrencyToStringEnglishNumbers(@Nullable Currency value) {
+       return convertToEnglishNumbers (currencyToString(value));
+    }
     public static String doubleToStringWithCommas(double value) {
         DecimalFormat df = new DecimalFormat("#,###.###");
         return df.format(value);

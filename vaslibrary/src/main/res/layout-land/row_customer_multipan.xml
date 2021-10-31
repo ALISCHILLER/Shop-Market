@@ -201,6 +201,31 @@
                 android:src="@drawable/ic_call_green_900_24dp" />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/description_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@android:style/TextAppearance.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_marginLeft="@dimen/padding_xsmall"
+                android:layout_marginRight="@dimen/padding_xsmall"
+                android:gravity="center_vertical"
+                android:padding="@dimen/padding_left_right_small"
+                android:text="@string/order_description"
+                android:textColor="?attr/colorPrimary" />
+
+            <TextView
+                android:id="@+id/order_description_text_view"
+                style="@android:style/TextAppearance.DeviceDefault"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:padding="@dimen/padding_left_right_small" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

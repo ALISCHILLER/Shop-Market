@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.database.DbException;
 import com.varanegar.framework.network.Connectivity;
+import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.framework.util.fragment.extendedlist.ActionsAdapter;
@@ -77,7 +78,7 @@ public class SendCustomerActionsAction extends CheckBarcodeAction {
 
     private boolean isConfirmed() {
         CustomerCallManager callManager = new CustomerCallManager(getActivity());
-        return callManager.isConfirmed(getCalls());
+        return callManager.isConfirmed(Linq.remove(getCalls(), it -> it.CallType == CustomerCallType.SendData));
     }
 
     @Override

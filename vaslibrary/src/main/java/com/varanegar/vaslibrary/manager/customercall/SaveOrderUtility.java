@@ -439,8 +439,26 @@ public class SaveOrderUtility {
                             if (callOrderModel == null || data == null || data.OrderPaymentTypeId == null)
                                 runCallBackError(R.string.error_on_usance_day);
                             else {
-                                callOrderModel.OrderPaymentTypeUniqueId = data.OrderPaymentTypeId;
-                                finalSave();
+                                try {
+                                    callOrderModel.OrderPaymentTypeUniqueId = data.OrderPaymentTypeId;
+                                    long affectedRows = new CustomerCallOrderManager(context).update(callOrderModel);
+                                    Timber.e("update OrderPaymentTypeUniqueId in customer call order ", affectedRows);
+                                    extractAndCalcCustomerPrice(new PriceCalcCallback() {
+                                        @Override
+                                        public void onSucceeded() {
+                                            runCallBackProcess(R.string.please_wait);
+                                            finalSave();
+                                        }
+
+                                        @Override
+                                        public void onFailed(String error) {
+                                            runCallBackError(error);
+                                        }
+                                    });
+                                } catch (Exception ex) {
+                                    Timber.e(ex, "Error on update customer call order");
+                                    runCallBackError(ex.getMessage());
+                                }
                             }
                         } else {
                             editor.putBoolean(callOrderId.toString() + customer.BackOfficeId + "CheckBoxChecked", false);

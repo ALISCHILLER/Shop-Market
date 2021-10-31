@@ -75,7 +75,6 @@ public class CustomerCallInvoiceModel extends OrderBaseModel {
         customerCallOrderModel.CheckDuration = CheckDuration;
         customerCallOrderModel.PinCode = PinCode;
         customerCallOrderModel.PinCode2 = PinCode2;
-        customerCallOrderModel.PinCode3 = PinCode3;
         return customerCallOrderModel;
     }
 }

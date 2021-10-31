@@ -157,116 +157,87 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
             ((TextView) view.findViewById(R.id.local_ip_text_view)).setText(localServerAddressConfig.Value);
 
 
-        backupImageView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
+        backupImageView.setOnLongClickListener(view -> {
 
-                if (BackupManager.getList(getContext(), BackupManager.BackupType.Partial).size() > 0) {
-                    ImportDialogFragment importDialog = new ImportDialogFragment();
-                    importDialog.setBackupType(BackupManager.BackupType.Partial);
-                    importDialog.show(getChildFragmentManager(), "ImportDialogFragment");
-                } else {
-                    CuteMessageDialog dialog = new CuteMessageDialog(getContext());
-                    dialog.setTitle(R.string.error);
-                    dialog.setMessage(R.string.there_is_no_backup_file);
-                    dialog.setIcon(Icon.Alert);
-                    dialog.setPositiveButton(R.string.ok, null);
-                    dialog.show();
-                }
-
-                return true;
+            if (BackupManager.getList(getContext(), BackupManager.BackupType.Partial).size() > 0) {
+                ImportDialogFragment importDialog = new ImportDialogFragment();
+                importDialog.setBackupType(BackupManager.BackupType.Partial);
+                importDialog.show(getChildFragmentManager(), "ImportDialogFragment");
+            } else {
+                CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+                dialog.setTitle(R.string.error);
+                dialog.setMessage(R.string.there_is_no_backup_file);
+                dialog.setIcon(Icon.Alert);
+                dialog.setPositiveButton(R.string.ok, null);
+                dialog.show();
             }
+
+            return true;
         });
-        backupImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final BackupConfigAlertDialog alertDialog = new BackupConfigAlertDialog();
-                alertDialog.onBackupConfig = new BackupConfigAlertDialog.OnBackupConfig() {
-                    @Override
-                    public void done(List<ImageType> imageTypes) {
-                        alertDialog.dismiss();
-                        runBackup(imageTypes);
-                    }
-                };
-                alertDialog.show(getChildFragmentManager(), "BackupConfigAlertDialog");
-            }
+        backupImageView.setOnClickListener(v -> {
+            final BackupConfigAlertDialog alertDialog = new BackupConfigAlertDialog();
+            alertDialog.onBackupConfig = new BackupConfigAlertDialog.OnBackupConfig() {
+                @Override
+                public void done(List<ImageType> imageTypes) {
+                    alertDialog.dismiss();
+                    runBackup(imageTypes);
+                }
+            };
+            alertDialog.show(getChildFragmentManager(), "BackupConfigAlertDialog");
         });
 
 
-        logoutImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!tourManager.isTourAvailable()) {
-                    CuteMessageDialog dialog = new CuteMessageDialog(getContext());
-                    dialog.setIcon(Icon.Alert);
-                    dialog.setNegativeButton(com.varanegar.vaslibrary.R.string.no, null);
-                    dialog.setPositiveButton(com.varanegar.vaslibrary.R.string.yes, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            UserManager.logout(getVaranegarActvity());
-                            tourManager.deleteTourInfoFile();
-                        }
-                    });
-                    dialog.setTitle(com.varanegar.vaslibrary.R.string.are_you_sure);
-                    dialog.show();
-                } else {
-                    CuteMessageDialog dialog = new CuteMessageDialog(getContext());
-                    dialog.setTitle(R.string.there_is_a_tour_already);
-                    dialog.setMessage(R.string.please_send_tour_or_cancel_it);
-                    dialog.setPositiveButton(R.string.ok, null);
-                    dialog.setIcon(Icon.Alert);
-                    dialog.show();
-                }
+        logoutImageView.setOnClickListener(view -> {
+            if (!tourManager.isTourAvailable()) {
+                CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+                dialog.setIcon(Icon.Alert);
+                dialog.setNegativeButton(R.string.no, null);
+                dialog.setPositiveButton(R.string.yes, v -> {
+                    UserManager.logout(getVaranegarActvity());
+                    tourManager.deleteTourInfoFile();
+                });
+                dialog.setTitle(R.string.are_you_sure);
+                dialog.show();
+            } else {
+                CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+                dialog.setTitle(R.string.there_is_a_tour_already);
+                dialog.setMessage(R.string.please_send_tour_or_cancel_it);
+                dialog.setPositiveButton(R.string.ok, null);
+                dialog.setIcon(Icon.Alert);
+                dialog.show();
             }
         });
 
 
-        trackingLicenseImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainVaranegarActivity activity = getVaranegarActvity();
-                if (activity != null && !activity.isFinishing() && isResumed()) {
-                    TrackingLicenseFragment fragment = new TrackingLicenseFragment();
-                    activity.pushFragment(fragment);
-                }
+        trackingLicenseImageView.setOnClickListener(v -> {
+            MainVaranegarActivity activity = getVaranegarActvity();
+            if (activity != null && !activity.isFinishing() && isResumed()) {
+                TrackingLicenseFragment fragment = new TrackingLicenseFragment();
+                activity.pushFragment(fragment);
             }
         });
 
         final long[] then = {0};
 
-        getTourImageView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                    then[0] = System.currentTimeMillis();
-                } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    if((System.currentTimeMillis() - then[0]) > 4444){
-                        VirtualTourDialog dialog = new VirtualTourDialog();
-                        dialog.setTargetFragment(TourReportFragment.this, 0);
-                        dialog.show(getActivity().getSupportFragmentManager(), "VirtualTourDialog");
-                        return true;
-                    }
+        getTourImageView.setOnTouchListener((view, motionEvent) -> {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                then[0] = System.currentTimeMillis();
+            } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                if((System.currentTimeMillis() - then[0]) > 4444){
+                    VirtualTourDialog dialog = new VirtualTourDialog();
+                    dialog.setTargetFragment(TourReportFragment.this, 0);
+                    dialog.show(getActivity().getSupportFragmentManager(), "VirtualTourDialog");
+                    return true;
                 }
-                return false;
             }
+            return false;
         });
 
-//        getTourImageView.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//
-//                return false;
-//            }
-//        });
-
-        getTourImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                SharedPreferences.Editor editor = getContext().getSharedPreferences(IS_VIRTUAL, MODE_PRIVATE).edit();
-                editor.putBoolean(IS_VIRTUAL_BOOLEAN, false);
-                editor.apply();
-                getTour(null);
-            }
+        getTourImageView.setOnClickListener(view -> {
+            SharedPreferences.Editor editor = getContext().getSharedPreferences(IS_VIRTUAL, MODE_PRIVATE).edit();
+            editor.putBoolean(IS_VIRTUAL_BOOLEAN, false);
+            editor.apply();
+            getTour(null);
         });
 
         cancelTourRecordBtn.setRecordListener(new OnRecordListener() {
@@ -332,18 +303,8 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
                 final CuteMessageDialog dialog = new CuteMessageDialog(getContext());
                 dialog.setIcon(Icon.Alert);
                 dialog.setMessage(R.string.do_you_update_old_invoices_in_last);
-                dialog.setPositiveButton(R.string.yes, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        saveGetOldInvoiceType("True", tourNo);
-                    }
-                });
-                dialog.setNegativeButton(R.string.no, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        saveGetOldInvoiceType("False", tourNo);
-                    }
-                });
+                dialog.setPositiveButton(R.string.yes, view -> saveGetOldInvoiceType("True", tourNo));
+                dialog.setNegativeButton(R.string.no, view -> saveGetOldInvoiceType("False", tourNo));
                 dialog.show();
                 getTourImageView.setEnabled(false);
             }
@@ -422,59 +383,47 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
                                         dialog.setCancelable(false);
                                         dialog.setTitle(R.string.new_version_exist);
                                         dialog.setMessage(R.string.please_download_the_newest_version);
-                                        dialog.setPositiveButton(R.string.download, new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-                                                getTourImageView.setEnabled(true);
-                                                startProgress(R.string.please_wait, R.string.downloading_apk);
-                                                appVersionApi.downloadAndSave(versionInfo.FileName, new ApkDownloadCallBack() {
-                                                    @Override
-                                                    public void onSuccess(String apkPath) {
-                                                        finishProgress();
-                                                        MainVaranegarActivity activity = getVaranegarActvity();
-                                                        if (activity != null && !activity.isFinishing()) {
-                                                            Intent intent = new Intent(Intent.ACTION_VIEW);
-                                                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                                                                intent.setDataAndType(Uri.fromFile(new File(apkPath)), "application/vnd.android.package-archive");
-                                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                            } else {
-                                                                Uri fileUri = FileProvider.getUriForFile(getContext(), getContext().getPackageName() + ".provider", new File(apkPath));
-                                                                intent.setDataAndType(fileUri, "application/vnd.android.package-archive");
-                                                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                                                            }
-                                                            startActivity(intent);
+                                        dialog.setPositiveButton(R.string.download, view -> {
+                                            getTourImageView.setEnabled(true);
+                                            startProgress(R.string.please_wait, R.string.downloading_apk);
+                                            appVersionApi.downloadAndSave(versionInfo.FileName, new ApkDownloadCallBack() {
+                                                @Override
+                                                public void onSuccess(String apkPath) {
+                                                    finishProgress();
+                                                    MainVaranegarActivity activity1 = getVaranegarActvity();
+                                                    if (activity1 != null && !activity1.isFinishing()) {
+                                                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                                                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                                                            intent.setDataAndType(Uri.fromFile(new File(apkPath)), "application/vnd.android.package-archive");
+                                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                        } else {
+                                                            Uri fileUri = FileProvider.getUriForFile(getContext(), getContext().getPackageName() + ".provider", new File(apkPath));
+                                                            intent.setDataAndType(fileUri, "application/vnd.android.package-archive");
+                                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
                                                         }
+                                                        startActivity(intent);
                                                     }
+                                                }
 
-                                                    @Override
-                                                    public void onFailure(String err) {
-                                                        finishProgress();
-                                                        MainVaranegarActivity activity = getVaranegarActvity();
-                                                        if (activity != null && !activity.isFinishing()) {
-                                                            CuteMessageDialog dialog = new CuteMessageDialog(activity);
-                                                            dialog.setIcon(Icon.Error);
-                                                            dialog.setTitle(R.string.error);
-                                                            dialog.setMessage(R.string.error_downloading_apk);
-                                                            dialog.setPositiveButton(R.string.ok, null);
-                                                            dialog.show();
-                                                        }
+                                                @Override
+                                                public void onFailure(String err) {
+                                                    finishProgress();
+                                                    MainVaranegarActivity activity1 = getVaranegarActvity();
+                                                    if (activity1 != null && !activity1.isFinishing()) {
+                                                        CuteMessageDialog dialog1 = new CuteMessageDialog(activity1);
+                                                        dialog1.setIcon(Icon.Error);
+                                                        dialog1.setTitle(R.string.error);
+                                                        dialog1.setMessage(R.string.error_downloading_apk);
+                                                        dialog1.setPositiveButton(R.string.ok, null);
+                                                        dialog1.show();
                                                     }
+                                                }
 
-                                                });
-                                            }
+                                            });
                                         });
-                                        dialog.setNegativeButton(R.string.cancel, new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-                                                finishProgress();
-                                                getTourImageView.setEnabled(true);
-                                            }
-                                        });
-                                        dialog.setNeutralButton(R.string.cancel_and_get_tour, new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-                                                startTourDownload();
-                                            }
+                                        dialog.setNegativeButton(R.string.cancel, view -> {
+                                            finishProgress();
+                                            getTourImageView.setEnabled(true);
                                         });
                                         dialog.show();
                                     } else
@@ -524,67 +473,48 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
     private void runBackup(final List<ImageType> imageTypes) {
         startProgress(R.string.please_wait, R.string.backing_up_database);
         final Handler handler = new Handler();
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    BackupManager.exportData(getContext(), true, imageTypes);
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            MainVaranegarActivity activity = getVaranegarActvity();
-                            if (activity != null && !activity.isFinishing()) {
-                                CuteMessageDialog dialog = new CuteMessageDialog(getContext());
-                                dialog.setMessage(R.string.backup_finished_successfully);
-                                dialog.setTitle(R.string.export_data);
-                                dialog.setIcon(Icon.Success);
-                                dialog.setPositiveButton(R.string.send_backup, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        BackupManager.uploadBackup(getContext(), new BackupManager.IUploadCallBack() {
-                                            @Override
-                                            public void onSuccess() {
-                                                if (isResumed())
-                                                    getVaranegarActvity().showSnackBar(R.string.backup_sent_successfully, MainVaranegarActivity.Duration.Short);
-                                            }
+        Thread thread = new Thread(() -> {
+            try {
+                BackupManager.exportData(getContext(), true, imageTypes);
+                handler.post(() -> {
+                    MainVaranegarActivity activity = getVaranegarActvity();
+                    if (activity != null && !activity.isFinishing()) {
+                        CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+                        dialog.setMessage(R.string.backup_finished_successfully);
+                        dialog.setTitle(R.string.export_data);
+                        dialog.setIcon(Icon.Success);
+                        dialog.setPositiveButton(R.string.send_backup, view -> BackupManager.uploadBackup(getContext(), new BackupManager.IUploadCallBack() {
+                            @Override
+                            public void onSuccess() {
+                                if (isResumed())
+                                    getVaranegarActvity().showSnackBar(R.string.backup_sent_successfully, MainVaranegarActivity.Duration.Short);
+                            }
 
-                                            @Override
-                                            public void onFailure(String error) {
-                                                if (isResumed())
-                                                    getVaranegarActvity().showSnackBar(R.string.sending_backup_failed, MainVaranegarActivity.Duration.Short);
-                                            }
-                                        });
-                                    }
-                                });
-                                dialog.setNeutralButton(R.string.close, null);
-                                dialog.show();
+                            @Override
+                            public void onFailure(String error) {
+                                if (isResumed())
+                                    getVaranegarActvity().showSnackBar(R.string.sending_backup_failed, MainVaranegarActivity.Duration.Short);
                             }
-                        }
-                    });
-                } catch (Exception e) {
-                    Timber.e(e);
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            MainVaranegarActivity activity = getVaranegarActvity();
-                            if (activity != null && !activity.isFinishing()) {
-                                CuteMessageDialog dialog = new CuteMessageDialog(getContext());
-                                dialog.setMessage(R.string.backup_failed);
-                                dialog.setTitle(R.string.export_data);
-                                dialog.setIcon(Icon.Error);
-                                dialog.setPositiveButton(R.string.ok, null);
-                                dialog.show();
-                            }
-                        }
-                    });
-                } finally {
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            finishProgress();
-                        }
-                    });
-                }
+                        }));
+                        dialog.setNeutralButton(R.string.close, null);
+                        dialog.show();
+                    }
+                });
+            } catch (Exception e) {
+                Timber.e(e);
+                handler.post(() -> {
+                    MainVaranegarActivity activity = getVaranegarActvity();
+                    if (activity != null && !activity.isFinishing()) {
+                        CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+                        dialog.setMessage(R.string.backup_failed);
+                        dialog.setTitle(R.string.export_data);
+                        dialog.setIcon(Icon.Error);
+                        dialog.setPositiveButton(R.string.ok, null);
+                        dialog.show();
+                    }
+                });
+            } finally {
+                handler.post(this::finishProgress);
             }
         });
         thread.start();
@@ -689,38 +619,29 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
             refreshUiTask = new RefreshUiTask();
             refreshUiTask.execute();
         } else if (tourManager.isTourAvailable()) {
-            timerThread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    long totalVisitTime = CustomerActionTimeManager.getCustomerCallTimes(getContext());
-                    final String totalVisitTimeStr = DateHelper.getTimeSpanString(totalVisitTime);
+            timerThread = new Thread(() -> {
+                long totalVisitTime = CustomerActionTimeManager.getCustomerCallTimes(getContext());
+                final String totalVisitTimeStr = DateHelper.getTimeSpanString(totalVisitTime);
+                if (isVisible() && view != null) {
+                    getActivity().runOnUiThread(() -> {
+                        PairedItems visitTimePairedItems = (PairedItems) view.findViewById(R.id.total_visit_time_paired_items);
+                        if (visitTimePairedItems != null)
+                            visitTimePairedItems.setValue(totalVisitTimeStr);
+                    });
+                }
+                UpdateManager updateManager = new UpdateManager(getContext());
+                final Date date = updateManager.getLog(UpdateKey.TourStartTime);
+                updateManager = null;
+                while (!Thread.interrupted()) {
                     if (isVisible() && view != null) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                PairedItems visitTimePairedItems = (PairedItems) view.findViewById(R.id.total_visit_time_paired_items);
-                                if (visitTimePairedItems != null)
-                                    visitTimePairedItems.setValue(totalVisitTimeStr);
-                            }
+                        getActivity().runOnUiThread(() -> {
+                            long t = new Date().getTime() - date.getTime();
+                            ((PairedItems) view.findViewById(R.id.tour_time_paired_items)).setValue(DateHelper.getTimeSpanString(t / 1000));
                         });
                     }
-                    UpdateManager updateManager = new UpdateManager(getContext());
-                    final Date date = updateManager.getLog(UpdateKey.TourStartTime);
-                    updateManager = null;
-                    while (!Thread.interrupted()) {
-                        if (isVisible() && view != null) {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    long t = new Date().getTime() - date.getTime();
-                                    ((PairedItems) view.findViewById(R.id.tour_time_paired_items)).setValue(DateHelper.getTimeSpanString(t / 1000));
-                                }
-                            });
-                        }
-                        SystemClock.sleep(1000);
-                    }
-
+                    SystemClock.sleep(1000);
                 }
+
             });
             timerThread.start();
         } else if (tourManager.isTourSending()) {
@@ -747,12 +668,7 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
                                     dialog.setIcon(Icon.Success);
                                     dialog.setTitle(R.string.tour_sent);
                                     dialog.setMessage(R.string.tour_is_sent);
-                                    dialog.setPositiveButton(R.string.ok, new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            activity.finish();
-                                        }
-                                    });
+                                    dialog.setPositiveButton(R.string.ok, view -> activity.finish());
                                     dialog.show();
                                 }
 
@@ -783,21 +699,16 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
         String tourMsg;
 
         if (tourManager.isTourAvailable()) {
-            //startProgress(R.string.please_wait, R.string.populating_tour_info);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     final TourInfo tourInfo = tourManager.createTourInfo();
                     MainVaranegarActivity activity = getVaranegarActvity();
                     if (activity != null && !activity.isFinishing() && isResumed()) {
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                //                  finishProgress();
-                                if (tourInfo != null) {
-                                    presentTourData(tourInfo);
-                                    setPieCharts(tourInfo);
-                                }
+                        activity.runOnUiThread(() -> {
+                            if (tourInfo != null) {
+                                presentTourData(tourInfo);
+                                setPieCharts(tourInfo);
                             }
                         });
                     }
@@ -822,13 +733,10 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
                     printBtn.setVisibility(View.VISIBLE);
                 else
                     printBtn.setVisibility(View.GONE);
-                printBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        SentTourInfoPrintHelper print = new SentTourInfoPrintHelper(getVaranegarActvity());
-                        print.start(null);
+                printBtn.setOnClickListener(view -> {
+                    SentTourInfoPrintHelper print = new SentTourInfoPrintHelper(getVaranegarActvity());
+                    print.start(null);
 
-                    }
                 });
             } else {
                 tourInfoView.setVisibility(View.GONE);
@@ -1024,12 +932,7 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
                 List<TourUpdateLogModel> logs = values[0];
                 for (final TourUpdateLogModel callLogModel :
                         logs) {
-                    TourUpdateLogGroup group = Linq.findFirst(logGroups, new Linq.Criteria<TourUpdateLogGroup>() {
-                        @Override
-                        public boolean run(TourUpdateLogGroup item) {
-                            return item.name.equals(callLogModel.GroupName);
-                        }
-                    });
+                    TourUpdateLogGroup group = Linq.findFirst(logGroups, item -> item.name.equals(callLogModel.GroupName));
                     if (group != null) {
                         if (callLogModel.FinishDate != null) {
                             if (callLogModel.Error == null)

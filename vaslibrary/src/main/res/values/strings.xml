@@ -768,7 +768,6 @@
     <string name="the_customer_payment_will_be_unconfirmed_do_you_continue">اطلاعات پرداخت مشتری غیر قطعی خواهد شد آیا ادامه می دهید؟</string>
     <string name="edit_settlement">ویرایش تسویه</string>
     <string name="payment_control_error">خطا در کنترل تسویه</string>
-    <string name="DeliveryReasons">خطا پین را درست وارد کنید</string>
     <string name="return_request">درخواست برگشتی</string>
     <string name="bluetooth_is_not_available">بلوتوث دستگاه در دسترس نمی باشد</string>
     <string name="bluetooth_is_not_enabled">بلوتوث دستگاه روشن نیست!</string>
@@ -802,6 +801,7 @@
     <string name="print_vehicle_Name">وسیله توزیع</string>
     <string name="print_counts">تعداد دفعات چاپ از حد مجاز بیشتر است</string>
     <string name="print_customer_remain">مانده مشتری</string>
+    <string name="print_customer_prior_remain">مانده مشتری از قبل</string>
     <string name="print_dealer_mobile">شماره همراه فروشنده</string>
     <string name="print_followupno">شماره پیگیری</string>
     <string name="print_totaldiscountamount">تخفیف تسویه</string>
@@ -1470,4 +1470,12 @@
     <string name="show_customers_order">نمایش ترتیب ویزیت مشتریان</string>
     <string name="optimizing_today_customers">بهینه سازی مشتریان روز</string>
     <string name="editing_customer_is_mandatory">ویرایش مشتری الزامی است</string>
+    <string name="registering_customer_completed_but_not_inserted_in_db">مشتری جدید با موفقیت ثبت شد اما به تور اضافه نشد</string>
+    <string name="product_is_not_for_sale">کالا قابل فروش نیست</string>
+    <string name="error_in_saving_picture">خطا در ذخیره سازی عکس</string>
+    <string name="please_try_again">لطفا مجددا تلاش کنید.</string>
+    <string name="image_size_is_zero">حجم عکس صفر می باشد.</string>
+    <string name="updating_questionnaire">در حال بروزرسانی اطلاعات پرسشنامه</string>
+    <string name="updating_questionnaire_completed">بروزرسانی اطلاعات پرسشنامه با موفقیت انجام شد.</string>
+    <string name="questionnaire_not_supported_in_supervisor">این پرسشنامه در تبلت سرپرست پشتیبانی نمی شود</string>
 </resources>

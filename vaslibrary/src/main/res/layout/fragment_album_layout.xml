@@ -66,6 +66,16 @@
                     android:background="?attr/colorPrimaryDark"
                     android:src="@drawable/ic_categories_white_24dp"
                     app:fabSize="mini" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/more_info_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/padding_xsmall"
+                    android:background="?attr/colorPrimaryDark"
+                    android:src="@drawable/ic_info_outline_white_24dp"
+                    app:fabSize="mini" />
+
             </LinearLayout>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

@@ -215,7 +215,6 @@ public class CheckDialog extends PaymentDialog {
             }
         });
         checkDatePairedItems = view.findViewById(R.id.check_date_paired_items);
-
         view.findViewById(R.id.date_picker_image_view).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

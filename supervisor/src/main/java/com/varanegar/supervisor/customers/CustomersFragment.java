@@ -33,14 +33,20 @@ import com.varanegar.framework.util.report.SimpleReportAdapter;
 import com.varanegar.supervisor.IMainPageFragment;
 import com.varanegar.supervisor.R;
 import com.varanegar.supervisor.VisitorFilter;
-import com.varanegar.supervisor.model.SupervisorCustomer;
-import com.varanegar.supervisor.model.SupervisorCustomerModel;
-import com.varanegar.supervisor.model.SupervisorCustomerModelRepository;
+import com.varanegar.vaslibrary.manager.questionnaire.QuestionnaireCustomerViewManager;
+import com.varanegar.vaslibrary.manager.questionnaire.QuestionnaireManager;
+import com.varanegar.vaslibrary.model.customer.SupervisorCustomer;
+import com.varanegar.vaslibrary.model.customer.SupervisorCustomerModel;
 import com.varanegar.supervisor.model.VisitorManager;
 import com.varanegar.supervisor.model.VisitorModel;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
+import com.varanegar.vaslibrary.model.customer.SupervisorCustomerModelRepository;
+import com.varanegar.vaslibrary.model.questionnaire.QuestionnaireCustomerViewModel;
+import com.varanegar.vaslibrary.ui.fragment.QuestionnaireFragment;
 
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * Created by A.Torabi on 7/8/2018.
@@ -193,6 +199,28 @@ public class CustomersFragment extends IMainPageFragment {
                             }
                         });
 
+                        view.findViewById(R.id.Questionnaire_image_view).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                QuestionnaireManager questionnaireManager = new QuestionnaireManager(getContext());
+                                try {
+                                    questionnaireManager.calculateCustomerQuestionnaire(entity.UniqueId);
+                                    QuestionnaireCustomerViewManager questionnaireCustomerViewManager = new QuestionnaireCustomerViewManager(getContext());
+                                    List<QuestionnaireCustomerViewModel> questionnaireCustomerViewModels = questionnaireCustomerViewManager.getQuestionnaires(entity.UniqueId);
+                                    if (questionnaireCustomerViewModels.size() == 0) {
+                                        getVaranegarActvity().showSnackBar(com.varanegar.vaslibrary.R.string.no_questionnaire_for_this_customer, MainVaranegarActivity.Duration.Short);
+                                    } else {
+                                        QuestionnaireFragment fragment = new QuestionnaireFragment();
+                                        fragment.setCustomerId(entity.UniqueId);
+                                        getVaranegarActvity().pushFragment(fragment);
+                                    }
+                                } catch (Exception e) {
+                                    Timber.e(e);
+                                    getVaranegarActvity().showSnackBar(com.varanegar.vaslibrary.R.string.calculating_questionnaire_failed, MainVaranegarActivity.Duration.Short);
+                                }
+                            }
+                        });
+
                     }
 
                     @Override
@@ -211,7 +239,7 @@ public class CustomersFragment extends IMainPageFragment {
                     columns.add(bind(entity, SupervisorCustomer.CustomerName, getString(R.string.customer_name)));
                     columns.add(bind(entity, SupervisorCustomer.StoreName, getString(R.string.store_name)));
                     if (isLandscape()) {
-                        columns.add(bind(entity, SupervisorCustomer.Phone, "").setCustomViewHolder(new PhoneCustomerViewHoder()));
+                        columns.add(bind(entity, SupervisorCustomer.Phone, "").setCustomViewHolder(new PhoneCustomerViewHoder()).setWeight(1.7f));
                     }
                     columns.add(bind(entity, SupervisorCustomer.Phone, getString(R.string.phone_number)));
                     columns.add(bind(entity, SupervisorCustomer.Mobile, getString(R.string.mobile_label)));

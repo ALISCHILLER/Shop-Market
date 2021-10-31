@@ -611,7 +611,7 @@ public class PaymentManager extends BaseManager<PaymentModel> {
         }
 
         Currency minCheckPay = validCashCheck.Check.subtract(payedCashCheck.Cash.subtract(validCashCheck.Cash));
-        if (payedCashCheck.Check.compareTo(minCheckPay) == -1) {
+        if (payedCashCheck.Check.compareTo(minCheckPay) <0) {
             return (getString(R.string.min_valid_check_and_cash) + " " + validCashCheck.Cash.add(validCashCheck.Check) + "\n" +
                     getString(R.string.cash_check_payed) + " " + payedCashCheck.Cash.add(payedCashCheck.Check) + "\n" +
                     getString(R.string.remain_cash_and_check) + " " + minCheckPay);

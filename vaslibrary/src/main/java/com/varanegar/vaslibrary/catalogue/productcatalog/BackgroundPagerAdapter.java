@@ -1,7 +1,6 @@
 package com.varanegar.vaslibrary.catalogue.productcatalog;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -50,15 +50,15 @@ public class BackgroundPagerAdapter extends PagerAdapter {
     }
 
 
-    public Context getContext() {
-        return context;
+    public AppCompatActivity getActivity() {
+        return activity;
     }
 
-    private Context context;
+    private AppCompatActivity activity;
     private List<CatalogModel> catalogsList;
 
-    public BackgroundPagerAdapter(ViewPager viewPager, Context context, List<CatalogModel> catalogsList, PagerAdapterInfoMap pagerAdapterInfoMap) {
-        this.context = context;
+    public BackgroundPagerAdapter(ViewPager viewPager, AppCompatActivity activity, List<CatalogModel> catalogsList, PagerAdapterInfoMap pagerAdapterInfoMap) {
+        this.activity = activity;
         this.catalogsList = catalogsList;
         this.viewPager = viewPager;
         this.pagerAdapterInfoMap = pagerAdapterInfoMap;
@@ -68,15 +68,15 @@ public class BackgroundPagerAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        View view = LayoutInflater.from(context).inflate(R.layout.album_background_layout, container, false);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.album_background_layout, container, false);
         View linearLayout = view.findViewById(R.id.linear_layout);
         ImageView imageCover = (ImageView) view.findViewById(R.id.image_cover);
         linearLayout.setBackgroundResource(0);
         UUID productId = getProductId(position);
-        ImageManager imageManager = new ImageManager(context);
+        ImageManager imageManager = new ImageManager(getActivity());
         String path = imageManager.getImagePath(productId, ImageType.Product);
         if (path != null)
-            Picasso.with(context)
+            Picasso.with(getActivity())
                     .load(new File(path))
                     .memoryPolicy(MemoryPolicy.NO_CACHE)
                     .into(imageCover);
@@ -85,36 +85,47 @@ public class BackgroundPagerAdapter extends PagerAdapter {
         PagerAdapterInfo pagerAdapterInfo = pagerAdapterInfoMap.get(productId);
         ProductModel product = pagerAdapterInfo.productModel;
         ((TextView) view.findViewById(R.id.product_name_text_view)).setText(product.ProductName);
+        UUID customerId = pagerAdapterInfoMap.getCustomerId();
+        UUID callOrderId = pagerAdapterInfoMap.getCallOrderId();
+        if (customerId != null && callOrderId != null && pagerAdapterInfo.productOrderViewModel != null) {
+            ProductOrderViewModel productOrderViewModel = pagerAdapterInfo.productOrderViewModel;
+            if (productOrderViewModel.PrizeComment == null || productOrderViewModel.PrizeComment.isEmpty())
+                view.findViewById(R.id.prize_comment_icon).setVisibility(View.GONE);
+            else
+                view.findViewById(R.id.prize_comment_icon).setVisibility(View.VISIBLE);
+        } else
+            view.findViewById(R.id.prize_comment_icon).setVisibility(View.GONE);
+
         ((TextView) view.findViewById(R.id.code_text_view)).setText(product.ProductCode);
         if (pagerAdapterInfo.ProductUnits != null) {
             ProductUnitViewModel smallUnit = pagerAdapterInfo.ProductUnits.SmallUnit;
             ProductUnitViewModel largeUnit = pagerAdapterInfo.ProductUnits.LargeUnit;
             if (largeUnit == null)
-                ((TextView) view.findViewById(R.id.unit_text_view)).setText(context.getString(R.string.product_unit_name) + " : " + smallUnit.UnitName);
+                ((TextView) view.findViewById(R.id.unit_text_view)).setText(getActivity().getString(R.string.product_unit_name) + " : " + smallUnit.UnitName);
             else
-                ((TextView) view.findViewById(R.id.unit_text_view)).setText(context.getString(R.string.small_unit) + " : " + smallUnit.UnitName + "     " + context.getString(R.string.large_unit) + " : " + largeUnit.UnitName);
+                ((TextView) view.findViewById(R.id.unit_text_view)).setText(getActivity().getString(R.string.small_unit) + " : " + smallUnit.UnitName + "     " + getActivity().getString(R.string.large_unit) + " : " + largeUnit.UnitName);
         }
 
 
         if (pagerAdapterInfoMap.isOrder()) {
             ProductOrderViewModel productOrderViewModel = pagerAdapterInfo.productOrderViewModel;
-            SysConfigManager sysConfigManager = new SysConfigManager(getContext());
+            SysConfigManager sysConfigManager = new SysConfigManager(getActivity());
             SysConfigModel showStockLevel = sysConfigManager.read(ConfigKey.ShowStockLevel, SysConfigManager.cloud);
             SysConfigModel orderPointCheckType = sysConfigManager.read(ConfigKey.OrderPointCheckType, SysConfigManager.cloud);
             TextView stockLevelTextView = (TextView) view.findViewById(R.id.stock_level_text_view);
             if (productOrderViewModel != null) {
-                ((TextView) view.findViewById(R.id.price_text_view)).setTextColor(HelperMethods.getColor(getContext(), R.color.green_complete));
+                ((TextView) view.findViewById(R.id.price_text_view)).setTextColor(HelperMethods.getColor(getActivity(), R.color.green_complete));
                 ((TextView) view.findViewById(R.id.price_text_view)).setText(productOrderViewModel.Price.toString());
                 ((TextView) view.findViewById(R.id.qty_text_view)).setText(productOrderViewModel.Qty);
                 if (pagerAdapterInfo.productOrderViewModel.Price != null && pagerAdapterInfo.ProductUnits != null && pagerAdapterInfo.ProductUnits.LargeUnit != null) {
-                    ((TextView) view.findViewById(R.id.large_unit_price_label)).setText(getContext().getString(R.string.total_price_lablel) + " " + pagerAdapterInfo.ProductUnits.LargeUnit.UnitName);
+                    ((TextView) view.findViewById(R.id.large_unit_price_label)).setText(getActivity().getString(R.string.total_price_lablel) + " " + pagerAdapterInfo.ProductUnits.LargeUnit.UnitName);
                     ((TextView) view.findViewById(R.id.large_unit_price)).setText(HelperMethods.currencyToString(pagerAdapterInfo.productOrderViewModel.Price.multiply(new Currency(pagerAdapterInfo.ProductUnits.LargeUnit.ConvertFactor))));
-                    ((TextView) view.findViewById(R.id.large_unit_price)).setTextColor(HelperMethods.getColor(getContext(), R.color.green_complete));
+                    ((TextView) view.findViewById(R.id.large_unit_price)).setTextColor(HelperMethods.getColor(getActivity(), R.color.green_complete));
                 }
                 if (productOrderViewModel.UserPrice != null) {
-                    ((TextView) view.findViewById(R.id.user_price_label)).setText(getContext().getString(R.string.user_price_label));
+                    ((TextView) view.findViewById(R.id.user_price_label)).setText(getActivity().getString(R.string.user_price_label));
                     ((TextView) view.findViewById(R.id.user_price)).setText(productOrderViewModel.UserPrice.toString());
-                    ((TextView) view.findViewById(R.id.user_price)).setTextColor(HelperMethods.getColor(getContext(), R.color.green_complete));
+                    ((TextView) view.findViewById(R.id.user_price)).setTextColor(HelperMethods.getColor(getActivity(), R.color.green_complete));
                 }
 
                 if (productOrderViewModel.OnHandQty == null)
@@ -130,15 +141,15 @@ public class BackgroundPagerAdapter extends PagerAdapter {
                     view.findViewById(R.id.stock_level_layout).setVisibility(View.VISIBLE);
                     if (SysConfigManager.compare(orderPointCheckType, OnHandQtyManager.OrderPointCheckType.ShowQty)) {
                         if (productOrderViewModel.OnHandQty.compareTo(productOrderViewModel.OrderPoint) <= 0) {
-                            stockLevelTextView.setTextColor(getContext().getResources().getColor(R.color.red));
+                            stockLevelTextView.setTextColor(getActivity().getResources().getColor(R.color.red));
                             stockLevelTextView.setText(R.string.multiplication_sign);
                         } else {
                             if (remained.compareTo(productOrderViewModel.OrderPoint) >= 0) {
-                                stockLevelTextView.setTextColor(getContext().getResources().getColor(R.color.green));
+                                stockLevelTextView.setTextColor(getActivity().getResources().getColor(R.color.green));
                             } else {
-                                stockLevelTextView.setTextColor(getContext().getResources().getColor(R.color.orange));
+                                stockLevelTextView.setTextColor(getActivity().getResources().getColor(R.color.orange));
                             }
-                            ProductUnitsViewManager productUnitsViewManager = new ProductUnitsViewManager(getContext());
+                            ProductUnitsViewManager productUnitsViewManager = new ProductUnitsViewManager(getActivity());
                             ProductUnitsViewModel productUnitsViewModel = productUnitsViewManager.getItem(productOrderViewModel.UniqueId);
                             String txt = VasHelperMethods.chopTotalQtyToString(productOrderViewModel.OnHandQty, productUnitsViewModel.UnitName, productUnitsViewModel.ConvertFactor, ":", ":");
                             stockLevelTextView.setText(txt);
@@ -146,14 +157,14 @@ public class BackgroundPagerAdapter extends PagerAdapter {
                         }
                     } else {
                         if (productOrderViewModel.OnHandQty.compareTo(productOrderViewModel.OrderPoint) <= 0) {
-                            stockLevelTextView.setTextColor(getContext().getResources().getColor(R.color.red));
+                            stockLevelTextView.setTextColor(getActivity().getResources().getColor(R.color.red));
                             stockLevelTextView.setText(R.string.multiplication_sign);
                         } else {
                             if (remained.compareTo(productOrderViewModel.OrderPoint) >= 0) {
-                                stockLevelTextView.setTextColor(getContext().getResources().getColor(R.color.green));
+                                stockLevelTextView.setTextColor(getActivity().getResources().getColor(R.color.green));
                                 stockLevelTextView.setText(R.string.check_sign);
                             } else {
-                                stockLevelTextView.setTextColor(getContext().getResources().getColor(R.color.orange));
+                                stockLevelTextView.setTextColor(getActivity().getResources().getColor(R.color.orange));
                                 stockLevelTextView.setText(R.string.multiplication_sign);
                             }
                         }
@@ -162,7 +173,7 @@ public class BackgroundPagerAdapter extends PagerAdapter {
                     view.findViewById(R.id.stock_level_layout).setVisibility(View.GONE);
                 }
             } else {
-                ((TextView) view.findViewById(R.id.price_text_view)).setTextColor(HelperMethods.getColor(getContext(), R.color.red_error));
+                ((TextView) view.findViewById(R.id.price_text_view)).setTextColor(HelperMethods.getColor(getActivity(), R.color.red_error));
                 ((TextView) view.findViewById(R.id.price_text_view)).setText(R.string.no_price);
                 ((TextView) view.findViewById(R.id.qty_text_view)).setText("0");
             }
