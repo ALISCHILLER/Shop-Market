@@ -3,6 +3,7 @@ package com.varanegar.vaslibrary.manager.questionnaire;
 import android.content.Context;
 import androidx.annotation.NonNull;
 
+import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.database.DbException;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;

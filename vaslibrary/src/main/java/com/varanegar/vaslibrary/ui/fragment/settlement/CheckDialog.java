@@ -6,9 +6,14 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.varanegar.framework.base.VaranegarFragment;
 import com.varanegar.framework.util.HelperMethods;
 import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.util.component.PairedItems;
@@ -77,6 +82,8 @@ public class CheckDialog extends PaymentDialog {
     public PairedItemsEditable branchNamePairedItemsEditable;
     private PairedItemsEditable accountNamePairedItemsEditable;
 
+    SayadNumberCheckerViewModel viewModel;
+    
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,11 +105,6 @@ public class CheckDialog extends PaymentDialog {
 
         citySpinner = view.findViewById(R.id.city_spinner);
         banksSpinner = view.findViewById(R.id.bank_spinner);
-        if (backOfficeType != BackOfficeType.ThirdParty) {
-            validator.addField(citySpinner, getString(R.string.city_name), new NotEmptyChecker());
-            validator.addField(banksSpinner, getString(R.string.bank_name), new NotEmptyChecker());
-        } else
-            citySpinner.setVisibility(View.GONE);
 
         accountNumberPairedItems = view.findViewById(R.id.account_number_paired_items_editable);
         validator.addField(accountNumberPairedItems, getString(R.string.check_account_number), new LengthChecker(2, 24, true));
@@ -238,7 +240,7 @@ public class CheckDialog extends PaymentDialog {
                                 deadLineTime.set(Calendar.SECOND, 59);
                                 deadLineTime.set(Calendar.MILLISECOND, 999);
                                 deadLineTime.add(Calendar.DAY_OF_YEAR, maxPaymentDeadLine);
-                                if (calendar.getTime().after(deadLineTime.getTime()) && maxPaymentDeadLine!=0) {
+                                if (calendar.getTime().after(deadLineTime.getTime()) && maxPaymentDeadLine != 0) {
                                     CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
                                     dialog.setMessage(getResources().getString(R.string.max_date_for_cheque) + " " + DateHelper.toString(deadLineTime.getTime(), DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext())) + " " + getResources().getString(R.string.is));
                                     dialog.setTitle(R.string.error);
@@ -301,8 +303,45 @@ public class CheckDialog extends PaymentDialog {
                 accountNamePairedItemsEditable.setValue(paymentModel.ChqAccountName);
             }
         }
+        ImageView checkSayadNumber = view.findViewById(R.id.sayad_number_checked_button);
+        if (backOfficeType == BackOfficeType.ThirdParty) {
+            viewModel = new ViewModelProvider(requireActivity(), new ViewModelProvider.AndroidViewModelFactory(requireActivity().getApplication())).get(SayadNumberCheckerViewModel.class);
+            validator.addField(citySpinner, getString(R.string.city_name), new NotEmptyChecker());
+            validator.addField(banksSpinner, getString(R.string.bank_name), new NotEmptyChecker());
+            checkSayadNumber.setVisibility(View.VISIBLE);
+            checkSayadNumber.setOnClickListener(view1 -> {
+                SayadNumberCheckerFragment fragment = new SayadNumberCheckerFragment();
+                fragment.show(requireFragmentManager(), "SayadNumberCheckerFragment");
+            });
+            viewModel.getSayadNumberCheckerLiveData().observe(getViewLifecycleOwner(), aBoolean -> {
+                if (aBoolean == null) {
+                    checkSayadNumber.setImageDrawable(getResources().getDrawable(R.drawable.ic_help_black_24dp));
+                } else if (aBoolean) {
+                    checkSayadNumber.setImageDrawable(getResources().getDrawable(R.drawable.ic_check_black_24dp));
+                } else {
+                    checkSayadNumber.setImageDrawable(getResources().getDrawable(R.drawable.ic_error_black_24dp));
+                }
+            });
+            sayadNumberPairedItems.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+                }
 
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    viewModel.setSayadNumberCheckerLiveData(null);
+                }
+            });
+        } else {
+            citySpinner.setVisibility(View.GONE);
+            checkSayadNumber.setVisibility(View.GONE);
+        }
     }
 
     void refreshInvoicePaymentInfoLayout() {

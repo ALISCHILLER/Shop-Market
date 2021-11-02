@@ -23,7 +23,8 @@ public abstract class CuteDialog extends DialogFragment {
     public enum SizingPolicy {
         WrapContent,
         Medium,
-        Maximum
+        Maximum,
+        MatchParent
     }
 
     public MainVaranegarActivity getVaranegarActvity() {
@@ -63,6 +64,8 @@ public abstract class CuteDialog extends DialogFragment {
                 window.setLayout((int) (width * 0.8), WindowManager.LayoutParams.WRAP_CONTENT);
         } else if (sizePolicy == SizingPolicy.Maximum) {
             window.setLayout((int) (width * 0.9), WindowManager.LayoutParams.WRAP_CONTENT);
+        } else if (sizePolicy == SizingPolicy.MatchParent) {
+            window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         }
         window.setGravity(Gravity.CENTER);
 
