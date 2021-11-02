@@ -475,7 +475,7 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
         final Handler handler = new Handler();
         Thread thread = new Thread(() -> {
             try {
-                BackupManager.exportData(getContext(), true, imageTypes);
+                BackupManager.exportData(getContext(), BackupManager.BackupType.Full, imageTypes);
                 handler.post(() -> {
                     MainVaranegarActivity activity = getVaranegarActvity();
                     if (activity != null && !activity.isFinishing()) {
@@ -852,7 +852,7 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
             TourModel tourModel = tourManager.loadTour();
             TourUpdateLogManager tourUpdateLogManager = new TourUpdateLogManager(getContext());
             while (tourManager.isTourDownloading()
-                    ) {
+            ) {
                 if (isCancelled())
                     break;
                 SystemClock.sleep(1000);

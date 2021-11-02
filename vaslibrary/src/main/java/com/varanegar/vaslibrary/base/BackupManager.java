@@ -64,26 +64,26 @@ import timber.log.Timber;
  */
 
 public class BackupManager {
-    public static final java.lang.String SEND_TOUR_BACKUP = "last";
 
-    public synchronized static void exportData(final Context context, boolean full, ImageType... imageTypes) throws Exception {
-        exportData(context, full, null, imageTypes);
+    public synchronized static void exportData(final Context context, BackupType backupType, ImageType... imageTypes) throws Exception {
+        exportData(context, backupType, null, imageTypes);
     }
 
-    public synchronized static void exportData(final Context context, boolean full, String prefix, ImageType... imageTypes) throws Exception {
+    public synchronized static void exportData(final Context context, BackupType backupType, String prefix, ImageType... imageTypes) throws Exception {
         List<ImageType> imageTypesList = new ArrayList<>();
         Collections.addAll(imageTypesList, imageTypes);
-        exportData(context, full, prefix, imageTypesList);
+        exportData(context, backupType, prefix, imageTypesList);
     }
 
-    public synchronized static void exportData(final Context context, boolean full, List<ImageType> imageTypes) throws Exception {
-        exportData(context, full, null, imageTypes);
+    public synchronized static void exportData(final Context context, BackupType backupType, List<ImageType> imageTypes) throws Exception {
+        exportData(context, backupType, null, imageTypes);
     }
 
-    public synchronized static void exportData(final Context context, boolean full, String prefix, List<ImageType> imageTypes) throws Exception {
+    public synchronized static void exportData(final Context context, BackupType backupType, String prefix, List<ImageType> imageTypes) throws Exception {
         Timber.d("Exporting data started.");
 
         String databaseFileName = null;
+        boolean full = (backupType == BackupType.Full || backupType == BackupType.Last);
         if (full)
             databaseFileName = VaranegarApplication.getInstance().getDbHandler().exportDb(context.getFilesDir(), null);
         else {
@@ -163,7 +163,9 @@ public class BackupManager {
         String zipFilename;
 
         zipFilename = date + "_f.backup";
-        if (!full)
+        if (backupType == BackupType.Last)
+            zipFilename = date + "_l.backup";
+        if (backupType == BackupType.Partial)
             zipFilename = date + "_p.backup";
 
         if (prefix != null)
@@ -298,7 +300,7 @@ public class BackupManager {
         File[] files = directory.listFiles(new FileFilter() {
             @Override
             public boolean accept(File pathname) {
-                return pathname.getName().endsWith(".backup") && pathname.getName().startsWith(SEND_TOUR_BACKUP);
+                return pathname.getName().endsWith("l.backup");
             }
         });
         return files;
@@ -310,7 +312,7 @@ public class BackupManager {
         File[] files = directory.listFiles(new FileFilter() {
             @Override
             public boolean accept(File pathname) {
-                return pathname.getName().endsWith(".backup") && !(pathname.getName().startsWith(SEND_TOUR_BACKUP));
+                return pathname.getName().endsWith(".backup") && !(pathname.getName().endsWith("l.backup"));
             }
         });
         return files;
@@ -328,6 +330,8 @@ public class BackupManager {
                         return pathname.getName().endsWith(".backup");
                     else if (backupType == BackupType.Full)
                         return pathname.getName().endsWith("_f.backup");
+                    else if (backupType == BackupType.Last)
+                        return pathname.getName().endsWith("_l.backup");
                     else
                         return pathname.getName().endsWith("_p.backup");
                 }
@@ -349,7 +353,7 @@ public class BackupManager {
             File[] files = directory.listFiles(new FileFilter() {
                 @Override
                 public boolean accept(File pathname) {
-                    return pathname.getName().endsWith(".backup") && !(pathname.getName().startsWith(SEND_TOUR_BACKUP));
+                    return pathname.getName().endsWith(".backup") && !pathname.getName().endsWith("l.backup");
                 }
             });
             if (files == null || files.length == 0)
@@ -512,12 +516,12 @@ public class BackupManager {
         file.delete();
     }
 
-    public static void exportDataAsync(final Context context, final boolean full) {
+    public static void exportDataAsync(final Context context, final BackupType backupType) {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    BackupManager.exportData(context, full);
+                    BackupManager.exportData(context, backupType);
                 } catch (Exception e) {
                     Timber.e(e);
                 }
@@ -528,7 +532,8 @@ public class BackupManager {
 
     public enum BackupType {
         Full,
-        Partial
+        Partial,
+        Last
     }
 
     private static List<String> listRecursive(File fileOrDirectory) {

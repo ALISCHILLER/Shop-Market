@@ -102,4 +102,15 @@
         android:text="@string/app_language"
         android:textColor="@color/white" />
 
+    <TextView
+        android:id="@+id/restore_last_backup_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="@dimen/padding_default"
+        android:padding="@dimen/padding_large"
+        android:text="@string/restore"
+        android:textColor="@color/white" />
+
 </RelativeLayout>

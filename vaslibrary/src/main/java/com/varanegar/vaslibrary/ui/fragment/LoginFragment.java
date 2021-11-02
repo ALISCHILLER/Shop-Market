@@ -63,6 +63,8 @@ import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
 import com.varanegar.vaslibrary.ui.dialog.ImportDialogFragment;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
 
+import java.io.File;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -145,6 +147,23 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
                     }
                 };
                 dialog.show(getChildFragmentManager(), "SelectLanguageDialog");
+            }
+        });
+        view.findViewById(R.id.restore_last_backup_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (BackupManager.getList(getContext(), BackupManager.BackupType.Last).size() > 0) {
+                    ImportDialogFragment importDialog = new ImportDialogFragment();
+                    importDialog.setBackupType(BackupManager.BackupType.Last);
+                    importDialog.show(getChildFragmentManager(), "ImportDialogFragment");
+                } else {
+                    CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+                    dialog.setTitle(R.string.error);
+                    dialog.setMessage(R.string.there_is_no_backup_file);
+                    dialog.setIcon(Icon.Alert);
+                    dialog.setPositiveButton(R.string.ok, null);
+                    dialog.show();
+                }
             }
         });
 
@@ -306,7 +325,7 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
                                 @Override
                                 public void run(Token token) {
                                     try {
-                                        BackupManager.exportData(getContext(), true);
+                                        BackupManager.exportData(getContext(), BackupManager.BackupType.Full);
                                         AccountManager accountManager = new AccountManager();
                                         accountManager.writeToFile(token, getContext(), "user.token");
                                         user.LoginDate = new Date();

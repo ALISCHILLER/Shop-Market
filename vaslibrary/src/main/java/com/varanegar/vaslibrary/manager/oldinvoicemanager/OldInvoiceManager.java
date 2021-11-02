@@ -2,6 +2,7 @@ package com.varanegar.vaslibrary.manager.oldinvoicemanager;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteException;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -154,26 +155,26 @@ public class OldInvoiceManager {
                                             .addColumn("DisPrice", DiscountSDS.DisPrice)
                                             .addColumn("GoodsRef", DiscountSDS.GoodsRef)
                                             .addColumn("DCRef", DiscountSDS.DCRef)
-    //                                        .addColumn("CustActRef", DiscountSDS.CustActRef)
-    //                                        .addColumn("CustCtgrRef", DiscountSDS.CustCtgrRef)
-    //                                        .addColumn("StateRef", DiscountSDS.StateRef)
-    //                                        .addColumn("AreaRef", DiscountSDS.AreaRef)
+                                            //                                        .addColumn("CustActRef", DiscountSDS.CustActRef)
+                                            //                                        .addColumn("CustCtgrRef", DiscountSDS.CustCtgrRef)
+                                            //                                        .addColumn("StateRef", DiscountSDS.StateRef)
+                                            //                                        .addColumn("AreaRef", DiscountSDS.AreaRef)
                                             .addColumn("GoodsCtgrRef", DiscountSDS.GoodsCtgrRef)
-    //                                        .addColumn("CustRef", DiscountSDS.CustRef)
+                                            //                                        .addColumn("CustRef", DiscountSDS.CustRef)
                                             .addColumn("DisAccRef", DiscountSDS.DisAccRef)
-    //                                        .addColumn("PayType", DiscountSDS.PayType)
-    //                                        .addColumn("OrderType", DiscountSDS.OrderType)
+                                            //                                        .addColumn("PayType", DiscountSDS.PayType)
+                                            //                                        .addColumn("OrderType", DiscountSDS.OrderType)
                                             .addColumn("SupPerc", DiscountSDS.SupPerc)
                                             .addColumn("AddPerc", DiscountSDS.AddPerc)
-    //                                        .addColumn("SaleOfficeRef", DiscountSDS.SaleOfficeRef)
+                                            //                                        .addColumn("SaleOfficeRef", DiscountSDS.SaleOfficeRef)
                                             .addColumn("Comment", DiscountSDS.Comment)
                                             .addColumn("ApplyInGroup", DiscountSDS.ApplyInGroup)
                                             .addColumn("CalcPriority", DiscountSDS.CalcPriority)
                                             .addColumn("CalcMethod", DiscountSDS.CalcMethod)
-    //                                        .addColumn("CustLevelRef", DiscountSDS.CustLevelRef)
+                                            //                                        .addColumn("CustLevelRef", DiscountSDS.CustLevelRef)
                                             .addColumn("GoodsGroupRef", DiscountSDS.GoodsGroupRef)
                                             .addColumn("ManufacturerRef", DiscountSDS.ManufacturerRef)
-    //                                        .addColumn("SaleZoneRef", DiscountSDS.SaleZoneRef)
+                                            //                                        .addColumn("SaleZoneRef", DiscountSDS.SaleZoneRef)
                                             .addColumn("MainTypeRef", DiscountSDS.MainTypeRef)
                                             .addColumn("SubTypeRef", DiscountSDS.SubTypeRef)
                                             .addColumn("BrandRef", DiscountSDS.BrandRef)
@@ -191,17 +192,17 @@ public class OldInvoiceManager {
                                             .addColumn("MaxCustRemAmount", DiscountSDS.MaxCustRemAmount)
                                             .addColumn("MaxRowsCount", DiscountSDS.MaxRowsCount)
                                             .addColumn("IsActive", DiscountSDS.IsActive)
-    //                                        .addColumn("OrderNo", DiscountSDS.OrderNo)
+                                            //                                        .addColumn("OrderNo", DiscountSDS.OrderNo)
                                             .addColumn("PrizeStepType", DiscountSDS.PrizeStepType)
-    //                                        .addColumn("IsPrize", DiscountSDS.IsPrize)
+                                            //                                        .addColumn("IsPrize", DiscountSDS.IsPrize)
                                             .addColumn("SqlCondition", DiscountSDS.SqlCondition)
                                             .addColumn("PrizePackageRef", DiscountSDS.PrizePackageRef)
-    //                                        .addColumn("DetailIsActive", DiscountSDS.DetailIsActive)
-    //                                        .addColumn("DetailPriority", DiscountSDS.DetailPriority)
-    //                                        .addColumn("PromotionDetailCustomerGroupId", DiscountSDS.PromotionDetailCustomerGroupId)
-    //                                        .addColumn("PromotionDetailId", DiscountSDS.PromotionDetailId)
-    //                                        .addColumn("PromotionDetailCustomerId", DiscountSDS.PromotionDetailCustomerId)
-    //                                        .addColumn("ReduceOfQty", DiscountSDS.ReduceOfQty)
+                                            //                                        .addColumn("DetailIsActive", DiscountSDS.DetailIsActive)
+                                            //                                        .addColumn("DetailPriority", DiscountSDS.DetailPriority)
+                                            //                                        .addColumn("PromotionDetailCustomerGroupId", DiscountSDS.PromotionDetailCustomerGroupId)
+                                            //                                        .addColumn("PromotionDetailId", DiscountSDS.PromotionDetailId)
+                                            //                                        .addColumn("PromotionDetailCustomerId", DiscountSDS.PromotionDetailCustomerId)
+                                            //                                        .addColumn("ReduceOfQty", DiscountSDS.ReduceOfQty)
                                             .addColumn("HasAdvanceCondition", DiscountSDS.HasAdvanceCondition)
                                             .addColumn("BackOfficeId", DiscountSDS.BackOfficeId)
                                             .addColumn("TotalMinAmount", DiscountSDS.TotalMinAmount)
@@ -230,7 +231,7 @@ public class OldInvoiceManager {
                                             .addColumn("DiscountStateRefList", DiscountSDS.DiscountStateRefList)
                                             .addColumn("DiscountSubCustTypeRefList", DiscountSDS.DiscountSubCustTypeRefList)
                                             .addColumn("IsComplexCondition", DiscountSDS.IsComplexCondition)
-    //                                        .addColumn("PrizeSelectionList", DiscountSDS.PrizeSelectionList)
+                                            //                                        .addColumn("PrizeSelectionList", DiscountSDS.PrizeSelectionList)
                                             .addColumn("IsSelfPrize", DiscountSDS.IsSelfPrize)
                                             .addColumn("DiscountPreventSaveOrder", DiscountSDS.DiscountPreventSaveOrder)
                                             .addColumn("DiscountPreventSaveSale", DiscountSDS.DiscountPreventSaveSale)
@@ -333,7 +334,7 @@ public class OldInvoiceManager {
                                     VaranegarApplication.getInstance().getDbHandler().attach(attachment, false);
                                     Timber.i("old invoice database attached and inserted successfully");
                                 }
-                                BackupManager.exportData(context, true);
+                                BackupManager.exportData(context, BackupManager.BackupType.Full);
                                 updateManager.addLog(UpdateKey.CustomerOldInvoice);
                                 String filename = getResponse().headers().get("Content-Disposition");
                                 if (filename == null) {

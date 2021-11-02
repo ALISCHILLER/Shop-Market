@@ -85,7 +85,7 @@ public class SettingsSlidingDialog extends SlidingDialog {
                     @Override
                     public void run() {
                         try {
-                            BackupManager.exportData(getContext(), true);
+                            BackupManager.exportData(getContext(), BackupManager.BackupType.Full);
                             if (isResumed()) {
                                 getVaranegarActvity().runOnUiThread(new Runnable() {
                                     @Override
