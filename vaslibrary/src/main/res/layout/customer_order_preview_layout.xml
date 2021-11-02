@@ -94,7 +94,6 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical"
                         app:title="@string/order_type" />
                 </LinearLayout>
 
@@ -108,7 +107,6 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical"
                         app:title="@string/net_amount" />
 
                     <com.varanegar.framework.util.component.PairedItems
@@ -116,7 +114,6 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical"
                         app:title="@string/discount_amount" />
 
                     <com.varanegar.framework.util.component.PairedItems
@@ -124,34 +121,48 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical"
                         app:title="@string/add_amount" />
 
-                    <LinearLayout
-                        android:id="@+id/usance_layout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:orientation="horizontal">
-
-                        <com.varanegar.framework.util.component.PairedItems
-                            android:id="@+id/usance_day_paired_items"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            app:title="@string/usance_day" />
-
-                        <com.varanegar.framework.util.component.PairedItems
-                            android:id="@+id/usance_ref_paired_items"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            app:title="@string/usance_ref" />
-                    </LinearLayout>
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/third_party_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_scrollFlags="scroll|enterAlways">
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/paybale_cash_paired_items"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        app:title="@string/paybale_cash" />
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/paybale_recipt_paired_items"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        app:title="@string/paybale_recipt" />
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/usance_day_paired_items"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        app:title="@string/usance_day" />
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/usance_ref_paired_items"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        app:title="@string/usance_ref" />
+                </LinearLayout>
 
             </com.google.android.material.appbar.AppBarLayout>
 
@@ -313,7 +324,7 @@
                                 android:gravity="center"
                                 android:padding="@dimen/padding_small"
                                 android:text="@string/discount"
-                                android:textColor="@color/white"/>
+                                android:textColor="@color/white" />
 
                             <TextView
                                 android:id="@+id/third_party_value_text_view"

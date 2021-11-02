@@ -1479,4 +1479,6 @@
     <string name="updating_questionnaire_completed">بروزرسانی اطلاعات پرسشنامه با موفقیت انجام شد.</string>
     <string name="questionnaire_not_supported_in_supervisor">این پرسشنامه در تبلت سرپرست پشتیبانی نمی شود</string>
     <string name="enter_sayad_number">شماره صیاد را وارد نمایید.</string>
+    <string name="paybale_cash">مبلغ قابل پرداخت نقدی</string>
+    <string name="paybale_recipt">مبلغ قابل پرداخت عرفی</string>
 </resources>

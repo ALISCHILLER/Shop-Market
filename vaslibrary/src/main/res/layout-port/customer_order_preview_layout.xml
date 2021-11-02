@@ -131,11 +131,27 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/usance_layout"
+                    android:id="@+id/third_party_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
                     app:layout_scrollFlags="scroll|enterAlways">
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/paybale_cash_paired_items"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        app:title="@string/paybale_cash" />
+
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/paybale_recipt_paired_items"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        app:title="@string/paybale_recipt" />
 
                     <com.varanegar.framework.util.component.PairedItems
                         android:id="@+id/usance_day_paired_items"
