@@ -3,6 +3,7 @@ package com.varanegar.presale.fragment;
 import androidx.annotation.NonNull;
 
 import com.varanegar.framework.util.fragment.extendedlist.Action;
+import com.varanegar.vaslibrary.action.SendCustomerActionsAction;
 import com.varanegar.vaslibrary.ui.fragment.CustomersContentFragment;
 
 import java.util.List;

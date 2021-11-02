@@ -1,4 +1,4 @@
-package com.varanegar.presale.fragment;
+package com.varanegar.vaslibrary.action;
 
 import android.app.ProgressDialog;
 import android.view.View;
