@@ -110,6 +110,7 @@
         android:layout_alignParentLeft="true"
         android:layout_margin="@dimen/padding_default"
         android:padding="@dimen/padding_large"
+        android:visibility="gone"
         android:text="@string/restore"
         android:textColor="@color/white" />
 

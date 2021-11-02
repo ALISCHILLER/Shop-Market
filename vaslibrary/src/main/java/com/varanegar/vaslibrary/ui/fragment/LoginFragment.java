@@ -63,6 +63,8 @@ import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
 import com.varanegar.vaslibrary.ui.dialog.ImportDialogFragment;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
 
+import org.w3c.dom.Text;
+
 import java.io.File;
 import java.util.Collections;
 import java.util.Date;
@@ -149,9 +151,10 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
                 dialog.show(getChildFragmentManager(), "SelectLanguageDialog");
             }
         });
-        view.findViewById(R.id.restore_last_backup_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        TextView restoreBackups = view.findViewById(R.id.restore_last_backup_btn);
+        if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
+            restoreBackups.setVisibility(View.VISIBLE);
+            restoreBackups.setOnClickListener(view13 -> {
                 if (BackupManager.getList(getContext(), BackupManager.BackupType.Last).size() > 0) {
                     ImportDialogFragment importDialog = new ImportDialogFragment();
                     importDialog.setBackupType(BackupManager.BackupType.Last);
@@ -164,8 +167,9 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
                     dialog.setPositiveButton(R.string.ok, null);
                     dialog.show();
                 }
-            }
-        });
+            });
+        } else
+            restoreBackups.setVisibility(View.GONE);
 
         try {
             String packageName = getContext().getApplicationInfo().packageName;
