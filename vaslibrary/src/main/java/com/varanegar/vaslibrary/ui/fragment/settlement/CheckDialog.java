@@ -310,8 +310,15 @@ public class CheckDialog extends PaymentDialog {
             validator.addField(banksSpinner, getString(R.string.bank_name), new NotEmptyChecker());
             checkSayadNumber.setVisibility(View.VISIBLE);
             checkSayadNumber.setOnClickListener(view1 -> {
-                SayadNumberCheckerFragment fragment = new SayadNumberCheckerFragment();
-                fragment.show(requireFragmentManager(), "SayadNumberCheckerFragment");
+                if (sayadNumberPairedItems != null) {
+                    if (sayadNumberPairedItems.getValue() != null && !sayadNumberPairedItems.getValue().isEmpty()) {
+                        SayadNumberCheckerFragment fragment = new SayadNumberCheckerFragment();
+                        fragment.setArguments(sayadNumberPairedItems.getValue());
+                        fragment.show(requireFragmentManager(), "SayadNumberCheckerFragment");
+                    }
+                    else
+                        sayadNumberPairedItems.setError(getString(R.string.enter_sayad_number));
+                }
             });
             viewModel.getSayadNumberCheckerLiveData().observe(getViewLifecycleOwner(), aBoolean -> {
                 if (aBoolean == null) {
