@@ -36,7 +36,7 @@ public class CustomerOrderLineViewHolder extends BaseViewHolder<CustomerCallOrde
     private final LinearLayout linear_order;
     private final TextView totalOrderQtyTextView;
     TextView productNameTextView;
-
+//jughuh
     public CustomerOrderLineViewHolder(View itemView, BaseRecyclerAdapter<CustomerCallOrderOrderViewModel> recyclerAdapter, Context context) {
         super(itemView, recyclerAdapter, context);
         productNameTextView = (TextView) itemView.findViewById(com.varanegar.vaslibrary.R.id.product_name_text_view);
