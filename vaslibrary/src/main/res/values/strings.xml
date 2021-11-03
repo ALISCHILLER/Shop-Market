@@ -1080,6 +1080,7 @@
     <string name="delivery_of_draft">تحویل حواله</string>
     <string name="dealer_name">نام فروشنده</string>
     <string name="dealer_name_label">نام فروشنده :</string>
+    <string name="dealer_mobile_label">شماره تماس فروشنده :</string>
     <string name="draft_no">شماره حواله</string>
     <string name="no_label">شماره :</string>
     <string name="customer_has_undeciced_order">مشتری سفارش بلاتکلیف دارد!</string>

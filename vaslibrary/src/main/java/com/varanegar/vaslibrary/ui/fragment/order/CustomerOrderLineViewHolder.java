@@ -1,5 +1,6 @@
 package com.varanegar.vaslibrary.ui.fragment.order;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.view.View;
@@ -32,6 +33,7 @@ public class CustomerOrderLineViewHolder extends BaseViewHolder<CustomerCallOrde
     private final TextView productCodeTextView;
     private final TextView priceTextView;
     private final LinearLayout orderQtyLinearLayout;
+    private final LinearLayout linear_order;
     private final TextView totalOrderQtyTextView;
     TextView productNameTextView;
 
@@ -41,6 +43,7 @@ public class CustomerOrderLineViewHolder extends BaseViewHolder<CustomerCallOrde
         productCodeTextView = (TextView) itemView.findViewById(com.varanegar.vaslibrary.R.id.product_code_text_view);
         priceTextView = (TextView) itemView.findViewById(com.varanegar.vaslibrary.R.id.price_text_view);
         orderQtyLinearLayout = (LinearLayout) itemView.findViewById(com.varanegar.vaslibrary.R.id.order_qty_linear_layout);
+        linear_order = (LinearLayout) itemView.findViewById(com.varanegar.vaslibrary.R.id.linear_order);
         totalOrderQtyTextView = (TextView) itemView.findViewById(com.varanegar.vaslibrary.R.id.total_order_qty_text_view);
         rowTextView = (TextView) itemView.findViewById(com.varanegar.vaslibrary.R.id.row_text_view);
         iconImageView = (ImageView) itemView.findViewById(com.varanegar.vaslibrary.R.id.icon_image_view);
@@ -48,6 +51,7 @@ public class CustomerOrderLineViewHolder extends BaseViewHolder<CustomerCallOrde
 
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public void bindView(final int position) {
         final CustomerCallOrderOrderViewModel product = recyclerAdapter.get(position);
@@ -112,6 +116,9 @@ public class CustomerOrderLineViewHolder extends BaseViewHolder<CustomerCallOrde
                 double totalQty = product.TotalQty == null ? 0 : product.TotalQty.doubleValue();
                 double originalQty = product.OriginalTotalQty == null ? 0 : product.OriginalTotalQty.doubleValue();
                 valueTextView.setText(HelperMethods.doubleToString(originalQty - totalQty));
+                if (totalQty == 0) {
+                    linear_order.setBackgroundColor(com.varanegar.vaslibrary.R.color.red);
+                }
             }
         } else {
             if (product.IsPromoLine) {
@@ -151,6 +158,7 @@ public class CustomerOrderLineViewHolder extends BaseViewHolder<CustomerCallOrde
             BigDecimal remained = product.OnHandQty.subtract(product.ProductTotalOrderedQty);
             if (product.OnHandQty.compareTo(product.OrderPoint) <= 0)
                 qtyView.setColor(QtyView.Color.Red);
+
             else if (remained.compareTo(product.OrderPoint) < 0)
                 qtyView.setColor(QtyView.Color.Orange);
             else

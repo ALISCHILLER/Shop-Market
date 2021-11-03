@@ -325,6 +325,15 @@ public abstract class CustomersContentFragment extends VaranegarFragment {
         }
         View view = inflater.inflate(R.layout.layout_customer_detail, viewGroup, false);
 
+        if (customer.Description != null && !customer.Description.isEmpty()) {
+            CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
+            dialog.setTitle(getString(R.string.description));
+            dialog.setMessage(customer.Description);
+            dialog.setIcon(Icon.Info);
+            dialog.setPositiveButton(R.string.ok, null);
+            dialog.show();
+        }
+
         SysConfigManager sysConfigManager = new SysConfigManager(getContext());
         refreshButton = view.findViewById(R.id.refresh_customer_actions);
         SysConfigModel checkDistanceConfig = sysConfigManager.read(ConfigKey.CheckDistance, SysConfigManager.cloud);

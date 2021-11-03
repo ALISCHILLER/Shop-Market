@@ -207,6 +207,9 @@ import static varanegar.com.discountcalculatorlib.Global.orderPrize;
  * Created by A.Torabi on 1/14/2018.
  */
 
+
+/** تحویل سفارش موزع
+*/
 public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePrizesDialog.choicePrizeDialogListener {
     private OnItemQtyChangedHandler onItemQtyChangedHandler;
     private HashMap<UUID, ProductUnitsViewModel> productUnitsHashMap;
@@ -722,9 +725,11 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
         discountTextView = (TextView) view.findViewById(R.id.discount_text_view);
         addAmountTextView = (TextView) view.findViewById(R.id.add_amount_text_view);
         TextView dealerNameTextView = view.findViewById(R.id.dealer_name_text_view);
-        if (VaranegarApplication.is(VaranegarApplication.AppId.Dist))
+        TextView dealerMobileTextView = view.findViewById(R.id.dealer_mobile_text_view);
+        if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
             view.findViewById(R.id.dealer_name_layout).setVisibility(View.VISIBLE);
-
+            view.findViewById(R.id.dealer_mobile_layout).setVisibility(View.VISIBLE);
+        }
         commentImageView = view.findViewById(R.id.comment_image_view);
         commentImageView.setOnClickListener(view14 -> {
             if (view14 != null) {
@@ -773,6 +778,7 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
         setupToolbarButtons(view);
 
         dealerNameTextView.setText(customerCallOrderModel.DealerName);
+        dealerMobileTextView.setText(customerCallOrderModel.DealerMobile);
         TextView localPaperNo = view.findViewById(R.id.local_paper_no);
         View localPaperNoLayout = view.findViewById(R.id.local_paper_no_layout);
 

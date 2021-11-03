@@ -166,6 +166,32 @@
                                 android:textSize="12sp" />
                         </LinearLayout>
 
+                        <LinearLayout
+                            android:id="@+id/dealer_mobile_layout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <TextView
+                                style="@android:style/TextAppearance.DeviceDefault"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:padding="@dimen/padding_small"
+                                android:text="@string/dealer_mobile_label"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/dealer_mobile_text_view"
+                                style="@android:style/TextAppearance.DeviceDefault"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:padding="@dimen/padding_small"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
                         <TextView
                             style="@android:style/TextAppearance.DeviceDefault"
                             android:layout_width="wrap_content"

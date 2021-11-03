@@ -190,6 +190,8 @@ public class CustomerModel extends BaseModel {
     public Integer ParentCustomerId;
     @Column
     public int OPathId;
+    @Column
+    public String Description;
 
     @Nullable
     public LocationModel getLocation() {
