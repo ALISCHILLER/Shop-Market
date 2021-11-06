@@ -88,6 +88,7 @@ import com.varanegar.vaslibrary.manager.customeractiontimemanager.CustomerAction
 import com.varanegar.vaslibrary.manager.customeractiontimemanager.CustomerActions;
 import com.varanegar.vaslibrary.manager.customercall.CallOrderLineManager;
 import com.varanegar.vaslibrary.manager.customercall.CallOrderLinesTempManager;
+import com.varanegar.vaslibrary.manager.customercall.CustomerCallInvoiceManager;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallInvoicePreviewManager;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallOrderManager;
 import com.varanegar.vaslibrary.manager.customercall.DistOrderStatus;
@@ -127,6 +128,7 @@ import com.varanegar.vaslibrary.manager.updatemanager.UpdateCall;
 import com.varanegar.vaslibrary.model.CustomerOrderType.CustomerOrderTypeModel;
 import com.varanegar.vaslibrary.model.CustomerPaymentTypesView.CustomerPaymentTypesViewModel;
 import com.varanegar.vaslibrary.model.call.CallOrderLineModel;
+import com.varanegar.vaslibrary.model.call.CustomerCallInvoiceModel;
 import com.varanegar.vaslibrary.model.call.CustomerCallInvoicePreviewModel;
 import com.varanegar.vaslibrary.model.call.CustomerCallOrderModel;
 import com.varanegar.vaslibrary.model.call.temporder.CallOrderLinesTemp;
@@ -167,6 +169,7 @@ import com.varanegar.vaslibrary.ui.calculator.DiscreteUnit;
 import com.varanegar.vaslibrary.ui.calculator.ordercalculator.BatchQty;
 import com.varanegar.vaslibrary.ui.calculator.ordercalculator.CalculatorBatchUnits;
 import com.varanegar.vaslibrary.ui.calculator.ordercalculator.OrderCalculatorForm;
+import com.varanegar.vaslibrary.ui.dialog.InsertPinDialog;
 import com.varanegar.vaslibrary.ui.dialog.MultiInvoiceVectorDialog;
 import com.varanegar.vaslibrary.ui.dialog.ValueEditorDialog;
 import com.varanegar.vaslibrary.ui.dialog.choiceprize.ChoicePrizesDialog;
@@ -224,7 +227,7 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
     private TextView usanceDayTextView;
     private TextView usanceTextView;
     private View usanceDayLayout;
-
+    private List<CustomerCallInvoiceModel> customerCallOrderModels;
 
     private UUID customerId;
     private TextView netAmountTextView;
@@ -603,13 +606,7 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
                 } else if (type == SaveOrderUtility.SaveOrderCallbackType.SelectPrize) {
                     showPrizeDialog();
                 } else if (type == SaveOrderUtility.SaveOrderCallbackType.SelectReturnReason) {
-                    OrderReturnReasonDialog orderReturnReasonDialog = new OrderReturnReasonDialog();
-                    orderReturnReasonDialog.onItemSelected = reasonUniqueId -> {
-                        saveOrderUtility.setReturnReasonUniqueId(reasonUniqueId);
-                        if (callBack != null)
-                            callBack.onContinue();
-                    };
-                    orderReturnReasonDialog.show(getChildFragmentManager(), "OrderReturnReasonDialog");
+                    showPinCodeDialogInSaveMode(callBack);
                 } else {
                     cuteMessageDialog.setPositiveButton(R.string.ok, view -> callBack.onContinue());
                     cuteMessageDialog.setNegativeButton(R.string.cancel, view -> callBack.cancel());
@@ -1568,7 +1565,7 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
 
         } else {
             CuteButton returnBtn = new CuteButton();
-            returnBtn.setOnClickListener(this::saveDistReturn);
+            returnBtn.setOnClickListener(this::showPinCodeDialogInCompeleteReturnMode);
             returnBtn.setEnabled(() -> {
                 if (customerCallOrderModel == null)
                     return false;
@@ -2409,8 +2406,7 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
     @SubsystemType(id = SubsystemTypeId.Dist)
     private void saveDistReturnPartially() {
         try {
-            SysConfigManager sysConfigManager = new SysConfigManager(context);
-            BackOfficeType backOfficeType = sysConfigManager.getBackOfficeType();
+            SysConfigManager sysConfigManager = new SysConfigManager(context);BackOfficeType backOfficeType = sysConfigManager.getBackOfficeType();
             if (backOfficeType != BackOfficeType.ThirdParty) {
                 OrderReturnReasonDialog returnReasonDialog = new OrderReturnReasonDialog();
                 returnReasonDialog.onItemSelected = reasonUniqueId -> {
@@ -2472,6 +2468,80 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
             }
         };
         returnReasonDialog.show(getActivity().getSupportFragmentManager(), "NonOrderActionDialog");
+    }
+
+    private void showPinCodeDialogInCompeleteReturnMode(){
+        CustomerCallInvoiceManager customerCallOrderManager = new CustomerCallInvoiceManager(getActivity());
+        customerCallOrderModels = customerCallOrderManager.getCustomerCallInvoices(customerId);
+
+        InsertPinDialog dialog = new InsertPinDialog();
+        dialog.setCancelable(false);
+        dialog.setClosable(false);
+        dialog.setValues(customerCallOrderModels.get(0).PinCode);
+        dialog.setOnResult(new InsertPinDialog.OnResult() {
+            @Override
+            public void done() {
+                saveDistReturn();
+            }
+
+            @Override
+            public void failed(String error) {
+                Timber.e(error);
+                if (error.equals(getActivity().getString(R.string.pin_code_in_not_correct))) {
+                    printFailed(getActivity(), error);
+                } else {
+
+                }
+            }
+        });
+        dialog.show(getActivity().getSupportFragmentManager(), "InsertPinDialog");
+    }
+
+    private void showPinCodeDialogInSaveMode(@Nullable SaveOrderUtility.IWarningCallBack callBack) {
+        CustomerCallInvoiceManager customerCallOrderManager = new CustomerCallInvoiceManager(getActivity());
+        customerCallOrderModels = customerCallOrderManager.getCustomerCallInvoices(customerId);
+
+        InsertPinDialog dialog = new InsertPinDialog();
+        dialog.setCancelable(false);
+        dialog.setClosable(false);
+        dialog.setValues(customerCallOrderModels.get(0).PinCode);
+        dialog.setOnResult(new InsertPinDialog.OnResult() {
+            @Override
+            public void done() {
+                OrderReturnReasonDialog orderReturnReasonDialog = new OrderReturnReasonDialog();
+                orderReturnReasonDialog.onItemSelected = reasonUniqueId -> {
+                    saveOrderUtility.setReturnReasonUniqueId(reasonUniqueId);
+                    if (callBack != null)
+                        callBack.onContinue();
+                };
+                orderReturnReasonDialog.show(getChildFragmentManager(), "OrderReturnReasonDialog");
+            }
+
+            @Override
+            public void failed(String error) {
+                callBack.cancel();
+                Timber.e(error);
+                if (error.equals(getActivity().getString(R.string.pin_code_in_not_correct))) {
+                    printFailed(getActivity(), error);
+                } else {
+
+                }
+            }
+        });
+        dialog.show(getActivity().getSupportFragmentManager(), "InsertPinDialog");
+    }
+
+    private void printFailed(Context context, String error) {
+        try {
+            CuteMessageDialog dialog = new CuteMessageDialog(context);
+            dialog.setIcon(Icon.Warning);
+            dialog.setTitle(R.string.DeliveryReasons);
+            dialog.setMessage(error);
+            dialog.setPositiveButton(R.string.ok, null);
+            dialog.show();
+        } catch (Exception e1) {
+            Timber.e(e1);
+        }
     }
 
     @SubsystemType(id = SubsystemTypeId.Dist)

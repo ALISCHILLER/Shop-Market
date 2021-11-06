@@ -90,6 +90,11 @@ public class DiscountCallOrderLineData {
     public UUID returnReasonId;
     public String orderDate;
 
+    public BigDecimal amountCash;
+    public BigDecimal amountCheque;
+    public BigDecimal amountNutCash;
+    public BigDecimal amountNutCheque;
+
     public DiscountCallOrderLineData() {
     }
 
@@ -377,6 +382,11 @@ public class DiscountCallOrderLineData {
         this.invoiceDisOther = onlinedata.evcItemDisOther != null ? onlinedata.evcItemDisOther : BigDecimal.ZERO;
         this.totalInvoiceAddOther = onlinedata.evcItemAddOther != null ? onlinedata.evcItemAddOther : BigDecimal.ZERO;
         this.adjustmentPrice = onlinedata.adjustmentPrice;
+
+        this.amountCash = onlinedata.amountCash;
+        this.amountCheque = onlinedata.amountCheque;
+        this.amountNutCash = onlinedata.amountNutCash;
+        this.amountNutCheque = onlinedata.amountNutCheque;
 
     }
 

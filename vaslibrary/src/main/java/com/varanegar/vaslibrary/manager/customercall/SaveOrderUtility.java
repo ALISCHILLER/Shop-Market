@@ -16,6 +16,8 @@ import com.varanegar.framework.database.querybuilder.Query;
 import com.varanegar.framework.database.querybuilder.criteria.Criteria;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
+import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
+import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.framework.util.datetime.DateFormat;
 import com.varanegar.framework.util.datetime.DateHelper;
 import com.varanegar.framework.validation.ValidationException;
@@ -50,6 +52,7 @@ import com.varanegar.vaslibrary.model.CustomerOrderType.CustomerOrderTypeModel;
 import com.varanegar.vaslibrary.model.CustomerPaymentTypesView.CustomerPaymentTypesViewModel;
 import com.varanegar.vaslibrary.model.RequestReportView.RequestReportViewModel;
 import com.varanegar.vaslibrary.model.call.CallOrderLineModel;
+import com.varanegar.vaslibrary.model.call.CustomerCallInvoiceModel;
 import com.varanegar.vaslibrary.model.call.CustomerCallOrderModel;
 import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.model.customerCallOrderOrderView.CustomerCallOrderOrderViewModel;
@@ -70,6 +73,7 @@ import com.varanegar.vaslibrary.promotion.CalcPromotion;
 import com.varanegar.vaslibrary.promotion.CustomerCallOrderLinePromotion;
 import com.varanegar.vaslibrary.promotion.CustomerCallOrderPromotion;
 import com.varanegar.vaslibrary.promotion.PromotionCallback;
+import com.varanegar.vaslibrary.ui.dialog.InsertPinDialog;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
 import com.varanegar.vaslibrary.webapi.returncontrol.ReturnControlApi;
@@ -814,6 +818,9 @@ public class SaveOrderUtility {
             }
         }
     }
+
+
+
 
     @SubsystemType(id = SubsystemTypeId.Dist)
     private void saveDistReturn() {

@@ -119,6 +119,8 @@ public class CustomerCallOrderPromotion {
     public Currency TotalPrice;
     public Currency TotalPriceWithPromo;
     public OrderTypeEnum DocumentType;
+    public Currency TotalAmountNutCash;
+    public Currency TotalAmountNutCheque;
 
     public String PaymentUsanceRef;
     public int UsanceDay;
@@ -251,6 +253,8 @@ public class CustomerCallOrderPromotion {
         this.TotalInvoiceTax = Currency.ZERO;
         this.TotalInvoiceCharge = Currency.ZERO;
         this.TotalPriceWithPromo = Currency.ZERO;
+        this.TotalAmountNutCash = Currency.ZERO;
+        this.TotalAmountNutCheque = Currency.ZERO;
 
         if (dis.callLineItemDataWithPromo == null)
             dis.callLineItemDataWithPromo = new ArrayList<>();
@@ -273,6 +277,8 @@ public class CustomerCallOrderPromotion {
                 this.TotalInvoiceAdd1 = this.TotalInvoiceAdd1.add((calitem.InvoiceAdd1).multiply(calitem.TotalRequestQty));
             } else {
                 this.TotalInvoiceAdd1 = this.TotalInvoiceAdd1.add(calitem.InvoiceAdd1);
+                this.TotalAmountNutCash = this.TotalAmountNutCash.add(calitem.AmountNutCash);
+                this.TotalAmountNutCheque = this.TotalAmountNutCheque.add(calitem.AmountNutCheque);
             }
             this.TotalInvoiceAdd2 = this.TotalInvoiceAdd2.add(calitem.InvoiceAdd2);
             this.TotalInvoiceAddOther = this.TotalInvoiceAddOther.add(calitem.InvoiceAddOther);

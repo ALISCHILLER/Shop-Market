@@ -138,4 +138,10 @@ public class OrderBaseModel extends BaseModel {
     public String PinCode;
     @Column
     public String PinCode2;
+
+    @Column
+    public String PinCode3;
+    @Column
+    public String PinCode4;
+
 }

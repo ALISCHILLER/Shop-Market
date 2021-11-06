@@ -1482,4 +1482,7 @@
     <string name="enter_sayad_number">شماره صیاد را وارد نمایید.</string>
     <string name="paybale_cash">مبلغ قابل پرداخت نقدی</string>
     <string name="paybale_recipt">مبلغ قابل پرداخت عرفی</string>
+
+
+    <string name="DeliveryReasons">خطا پین را درست وارد کنید</string>
 </resources>

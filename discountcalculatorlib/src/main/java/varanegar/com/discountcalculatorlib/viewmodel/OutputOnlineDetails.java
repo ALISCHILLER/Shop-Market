@@ -47,4 +47,8 @@ public class OutputOnlineDetails {
     public UUID returnReasonId;
     public UUID orderId;
     public UUID orderLineId;
+    public BigDecimal amountCash;
+    public BigDecimal amountCheque;
+    public BigDecimal amountNutCash;
+    public BigDecimal amountNutCheque;
 }

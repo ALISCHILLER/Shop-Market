@@ -98,6 +98,11 @@ public class CustomerCallOrderLinePromotion extends BaseModel {
     public UUID ReturnReasonId;
     public Date OrderDate;
 
+    public Currency AmountCash;
+    public Currency AmountCheque;
+    public Currency AmountNutCash;
+    public Currency AmountNutCheque;
+
     public CustomerCallOrderLinePromotion() {
 
     }
@@ -127,6 +132,12 @@ public class CustomerCallOrderLinePromotion extends BaseModel {
         this.InvoiceAddOther = new Currency(
                 lineData.totalInvoiceAddOther == null ? BigDecimal.ZERO : lineData.totalInvoiceAddOther);
         this.AdjustmentPrice = lineData.adjustmentPrice == null ? null : new Currency(lineData.adjustmentPrice);
+
+        this.AmountCash = new Currency(lineData.amountCash == null ? BigDecimal.ZERO : lineData.amountCash);
+        this.AmountCheque = new Currency(lineData.amountCheque == null ? BigDecimal.ZERO : lineData.amountCheque);
+        this.AmountNutCash = new Currency(lineData.amountNutCash == null ? BigDecimal.ZERO : lineData.amountNutCash);
+        this.AmountNutCheque = new Currency(lineData.amountNutCheque == null ? BigDecimal.ZERO : lineData.amountNutCheque);
+
         try {
             if (sysConfigManager.getBackOfficeType().equals(BackOfficeType.Varanegar)) {
                 this.InvoiceCharge = Currency.ZERO;

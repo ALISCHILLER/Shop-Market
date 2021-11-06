@@ -82,6 +82,8 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
     private PairedItems orderCostPairedItems;
     private PairedItems discountAmountPairedItems;
     private PairedItems addAmountPairedItems;
+    private PairedItems payableCashPairedItems;
+    private PairedItems payableChequePairedItems;
     private BaseRecyclerView recyclerView;
     private UUID customerId;
     private UUID callOrderId;
@@ -139,6 +141,9 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
             TextView thirdPartyValue = view.findViewById(R.id.third_party_value_text_view);
             TextView thirdPartyAdds = view.findViewById(R.id.third_party_adds_text_view);
             TextView thirdPartythirdPartyNetAmountLayout = view.findViewById(R.id.third_party_net_amount_text_view);
+
+            payableCashPairedItems = view.findViewById(R.id.payable_cash_paired_items);
+            payableChequePairedItems = view.findViewById(R.id.payable_cheque_paired_items);
 
             SysConfigManager sysConfigManager = new SysConfigManager(getActivity());
             BackOfficeType backOfficeType = sysConfigManager.getBackOfficeType();

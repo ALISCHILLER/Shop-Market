@@ -132,7 +132,7 @@
                     app:layout_scrollFlags="scroll|enterAlways">
 
                     <com.varanegar.framework.util.component.PairedItems
-                        android:id="@+id/paybale_cash_paired_items"
+                        android:id="@+id/payable_cash_paired_items"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -140,7 +140,7 @@
                         app:title="@string/paybale_cash" />
 
                     <com.varanegar.framework.util.component.PairedItems
-                        android:id="@+id/paybale_recipt_paired_items"
+                        android:id="@+id/payable_cheque_paired_items"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
