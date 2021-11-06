@@ -111,6 +111,9 @@ import varanegar.com.discountcalculatorlib.utility.JalaliCalendar;
  * Created by atp on 5/2/2017.
  */
 
+/**
+ * صفحه جز
+ */
 public abstract class CustomersContentFragment extends VaranegarFragment {
 
     CustomerModel customer;

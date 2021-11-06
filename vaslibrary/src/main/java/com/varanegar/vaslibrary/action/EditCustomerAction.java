@@ -1,20 +1,29 @@
 package com.varanegar.vaslibrary.action;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.util.Linq;
+import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
+import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.framework.util.fragment.extendedlist.ActionsAdapter;
 import com.varanegar.vaslibrary.R;
+import com.varanegar.vaslibrary.manager.customercall.CustomerCallInvoiceManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.OwnerKeysWrapper;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
+import com.varanegar.vaslibrary.model.call.CustomerCallInvoiceModel;
 import com.varanegar.vaslibrary.ui.dialog.EditCustomerFragmentDialog;
 import com.varanegar.vaslibrary.ui.dialog.EditCustomerZarFragmentDialog;
+import com.varanegar.vaslibrary.ui.dialog.InsertPinDialog;
 
+import java.util.List;
 import java.util.UUID;
+
+import timber.log.Timber;
 
 /**
  * Created by A.Jafarzadeh on 01/21/2017.
@@ -72,17 +81,40 @@ public class EditCustomerAction extends CheckBarcodeAction {
     }
 
 
+    /**
+     * pincode4 Edit User
+     * ویرایش مشتری
+     */
     @Override
     public void run() {
         SysConfigManager sysConfigManager = new SysConfigManager(getActivity());
         OwnerKeysWrapper ownerKeysWrapper = sysConfigManager.readOwnerKeys();
         if (ownerKeysWrapper.isZarMakaron()) {
-            EditCustomerZarFragmentDialog editCustomerFragmentDialog = new EditCustomerZarFragmentDialog();
-            editCustomerFragmentDialog.onCustomerEditedCallBack = this::runActionCallBack;
-            Bundle bundle = new Bundle();
-            bundle.putString("68565e5e-d407-4858-bc5f-fd52b9318734", getSelectedId().toString());
-            editCustomerFragmentDialog.setArguments(bundle);
-            editCustomerFragmentDialog.show(getActivity().getSupportFragmentManager(), "EditCustomerFragmentDialog");
+            CustomerCallInvoiceManager customerCallOrderManager = new CustomerCallInvoiceManager(getActivity());
+            List<CustomerCallInvoiceModel> customerCallOrderModels = customerCallOrderManager.getCustomerCallInvoices(getSelectedId());
+
+            InsertPinDialog dialog = new InsertPinDialog();
+            dialog.setCancelable(false);
+            dialog.setClosable(false);
+            dialog.setValues(customerCallOrderModels.get(0).PinCode4);
+            dialog.setOnResult(new InsertPinDialog.OnResult() {
+                @Override
+                public void done() {
+                    showEditDialog();
+                }
+
+                @Override
+                public void failed(String error) {
+                    Timber.e(error);
+                    setRunning(false);
+                    if (error.equals(getActivity().getString(R.string.pin_code_in_not_correct))) {
+                        printFailed(getActivity(), error);
+                    } else {
+                        //saveSettlementFailed(getContext(), error);
+                    }
+                }
+            });
+            dialog.show(getActivity().getSupportFragmentManager(), "InsertPinDialog");
         } else {
             EditCustomerFragmentDialog editCustomerFragmentDialog = new EditCustomerFragmentDialog();
             editCustomerFragmentDialog.onCustomerEditedCallBack = this::runActionCallBack;
@@ -92,4 +124,28 @@ public class EditCustomerAction extends CheckBarcodeAction {
             editCustomerFragmentDialog.show(getActivity().getSupportFragmentManager(), "EditCustomerFragmentDialog");
         }
     }
+
+    private void showEditDialog(){
+        EditCustomerZarFragmentDialog editCustomerFragmentDialog = new EditCustomerZarFragmentDialog();
+        editCustomerFragmentDialog.onCustomerEditedCallBack = this::runActionCallBack;
+        Bundle bundle = new Bundle();
+        bundle.putString("68565e5e-d407-4858-bc5f-fd52b9318734", getSelectedId().toString());
+        editCustomerFragmentDialog.setArguments(bundle);
+        editCustomerFragmentDialog.show(getActivity().getSupportFragmentManager(), "EditCustomerFragmentDialog");
+    }
+
+    private void printFailed(Context context, String error) {
+        try {
+            CuteMessageDialog dialog = new CuteMessageDialog(context);
+            dialog.setIcon(Icon.Warning);
+            dialog.setTitle(R.string.DeliveryReasons);
+            dialog.setMessage(error);
+            dialog.setPositiveButton(R.string.ok, null);
+            dialog.show();
+        } catch (Exception e1) {
+            Timber.e(e1);
+        }
+    }
+
+
 }

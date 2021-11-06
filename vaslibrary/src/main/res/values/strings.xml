@@ -1485,4 +1485,6 @@
 
 
     <string name="DeliveryReasons">خطا پین را درست وارد کنید</string>
+    <string name="cash_discount_amount">تخفیف نقدی</string>
+    <string name="cheque_discount">تخفیف حجمی</string>
 </resources>

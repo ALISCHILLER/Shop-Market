@@ -69,6 +69,9 @@ public class DiscountCallOrderLineData {
     public BigDecimal totalInvoiceAddOther;
     public BigDecimal adjustmentPrice;
 
+    public BigDecimal cashDiscount;
+    public BigDecimal chequeDiscount;
+
     public int volume;
     public int freeReasonId;
     public int unitCapacity;
@@ -336,6 +339,10 @@ public class DiscountCallOrderLineData {
                 break;
             }
         }
+        /**
+         * ThirdParty or zar
+         * ThirdParty محصوص زر ماکارون
+         */
         if (GlobalVariables.getIsThirdParty() && VaranegarApplication.is(VaranegarApplication.AppId.Dist) && (onlinedata.disRef == null || onlinedata.disRef == 0) && baseData != null) {
             this.unitPrice = baseData.unitPrice;
             this.totalInvoiceAmount = unitPrice.multiply(invoiceTotalQty);
@@ -387,6 +394,8 @@ public class DiscountCallOrderLineData {
         this.amountCheque = onlinedata.amountCheque;
         this.amountNutCash = onlinedata.amountNutCash;
         this.amountNutCheque = onlinedata.amountNutCheque;
+        this.chequeDiscount =onlinedata.chequeDiscount;
+        this.cashDiscount=onlinedata.cashDiscount;
 
     }
 

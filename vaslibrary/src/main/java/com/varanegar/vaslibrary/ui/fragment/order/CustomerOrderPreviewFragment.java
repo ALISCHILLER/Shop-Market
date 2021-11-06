@@ -70,7 +70,9 @@ import static varanegar.com.discountcalculatorlib.Global.orderPrize;
 /**
  * Created by A.Jafarzadeh on 6/28/2017.
  */
-
+/**
+ *  صفحه پیش نمایش
+ */
 public class CustomerOrderPreviewFragment extends VisitFragment implements ChoicePrizesDialog.choicePrizeDialogListener {
     List<DiscountItemCountModel> allDiscountItemCounts;
     CustomerCallOrderPromotion customerCallOrderPromotion;
@@ -167,6 +169,16 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                         thirdPartyAdds.setVisibility(View.GONE);
                         thirdPartythirdPartyNetAmountLayout.setVisibility(View.GONE);
                     }
+                    if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
+                        payableCashPairedItems.setVisibility(View.VISIBLE);
+                        payableChequePairedItems.setVisibility(View.VISIBLE);
+                        orderCostPairedItems.setTitle(getString(R.string.cash_discount_amount));
+                        discountAmountPairedItems.setTitle(getString(R.string.cheque_discount));
+                    } else {
+                        payableCashPairedItems.setVisibility(View.GONE);
+                        payableChequePairedItems.setVisibility(View.GONE);
+
+                    }
                 }
                 thirdPartyLayout.setVisibility(View.VISIBLE);
             } else {
@@ -218,8 +230,24 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                 customerCallOrderPromotion = data;
                 titleTextView.setText(getString(R.string.order_preview) + " : " +
                         customerCallOrderPromotion.CustomerName + " (" + customerCallOrderPromotion.CustomerCode + ")");
-                for (CustomerCallOrderLinePromotion lines :
-                        customerCallOrderPromotion.LinesWithPromo) {
+                Currency totalPayableCash = Currency.ZERO;
+                Currency totalPayableCheque = Currency.ZERO;
+                Currency totalCashDiscount =Currency.ZERO;
+
+                if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
+                    for (CustomerCallOrderLinePromotion line:
+                         customerCallOrderPromotion.LinesWithPromo) {
+                        totalPayableCash = totalPayableCash.add(line.AmountNutCash);
+                        totalPayableCheque = totalPayableCheque.add(line.AmountNutCheque);
+                        totalCashDiscount =totalCashDiscount.add(line.CashDiscount);
+
+                    }
+                    payableCashPairedItems.setValue(totalPayableCash.toString());
+                    payableChequePairedItems.setValue(totalPayableCheque.toString());
+                    orderCostPairedItems.setValue(totalCashDiscount.toString());
+                }
+
+                for (CustomerCallOrderLinePromotion lines : customerCallOrderPromotion.LinesWithPromo) {
                     if (lines.AdjustmentPrice != null) {
                         hasAdjustmentPrice = true;
                         break;
@@ -720,6 +748,11 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
         loopCount++;
     }
 
+    /**
+     *
+     Discount = sum(Line.Dis1);
+     dis1 for zar
+     */
     // todo
     // NGT-4226 - refresh discount after choice prize (we may choice a prize a with different price. it is not a good solution and it should be changed later)
     public void refresh() {
@@ -784,8 +817,10 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                 }
                 customerCallOrderPromotion.TotalInvoiceDiscount = totalInvoiceDiscount;
                 customerCallOrderPromotion.TotalPriceWithPromo = totalPriceWithPromo;
-                orderCostPairedItems.setValue(HelperMethods.currencyToString(customerCallOrderPromotion.TotalPriceWithPromo.add(customerCallOrderPromotion.TotalInvoiceAdd).subtract(customerCallOrderPromotion.TotalInvoiceDiscount)));
                 discountAmountPairedItems.setValue(HelperMethods.currencyToString(customerCallOrderPromotion.TotalInvoiceDiscount));
+
+                // change value of this pairedItem with chequeDiscount
+//                orderCostPairedItems.setValue(HelperMethods.currencyToString(customerCallOrderPromotion.TotalPriceWithPromo.add(customerCallOrderPromotion.TotalInvoiceAdd).subtract(customerCallOrderPromotion.TotalInvoiceDiscount)));
             }
 
             addAmountPairedItems.setValue(HelperMethods.currencyToString(customerCallOrderPromotion.TotalInvoiceAdd));

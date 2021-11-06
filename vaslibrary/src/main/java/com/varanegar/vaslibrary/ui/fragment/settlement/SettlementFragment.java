@@ -76,6 +76,9 @@ import timber.log.Timber;
  * Created by A.Torabi on 11/28/2017.
  */
 
+/**
+ *  صفحه تسویه حساب
+ */
 public class SettlementFragment extends VisitFragment {
 
     private UUID customerId;
@@ -180,7 +183,7 @@ public class SettlementFragment extends VisitFragment {
             loadCustomerCalls();
             setupPaymentButtons(view);
             setupPaymentsList(view);
-            ((TextView) view.findViewById(R.id.title_text_view)).setText(customer.CustomerName);
+            ((TextView) view.findViewById(R.id.title_text_view)).setText(customer.CustomerName+" "+customer.CustomerCode);
             View printImageBtn = view.findViewById(R.id.print_image_button);
             printImageBtn.setVisibility(View.VISIBLE);
             printImageBtn.setOnClickListener(view1 -> {

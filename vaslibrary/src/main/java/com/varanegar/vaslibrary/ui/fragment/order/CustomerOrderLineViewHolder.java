@@ -2,6 +2,7 @@ package com.varanegar.vaslibrary.ui.fragment.order;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
@@ -117,7 +118,9 @@ public class CustomerOrderLineViewHolder extends BaseViewHolder<CustomerCallOrde
                 double originalQty = product.OriginalTotalQty == null ? 0 : product.OriginalTotalQty.doubleValue();
                 valueTextView.setText(HelperMethods.doubleToString(originalQty - totalQty));
                 if (totalQty == 0) {
-                    linear_order.setBackgroundColor(com.varanegar.vaslibrary.R.color.red);
+                    linear_order.setBackgroundColor(Color.parseColor("#F40000"));
+                }else {
+                    linear_order.setBackgroundColor(Color.parseColor("#FFFFFF"));
                 }
             }
         } else {

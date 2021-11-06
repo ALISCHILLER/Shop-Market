@@ -159,6 +159,15 @@ public class PromotionHandlerV3 {
 
     }
 
+    /**
+     * Api تخفیف جوایز
+     * برای برنامه توزیه یا موزع
+     * @param orderPrizeList
+     * @param discountCallOrderData
+     * @param context
+     * @return
+     * @throws InterruptedException
+     */
     public static DiscountCallOrderData distCalcPromotionOnlineSDS(final List<DiscountOrderPrizeViewModel> orderPrizeList, final DiscountCallOrderData discountCallOrderData, final Context context) throws InterruptedException {
         final String[] errorMessage = {null};
         final Thread thread = new Thread(new Runnable() {

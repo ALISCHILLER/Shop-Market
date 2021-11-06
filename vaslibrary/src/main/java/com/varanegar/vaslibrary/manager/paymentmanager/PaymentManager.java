@@ -73,6 +73,11 @@ import timber.log.Timber;
  * Created by A.Torabi on 12/9/2017.
  */
 
+/**
+ * محاسبه عملیات پرداخت
+ * settlement Fragment
+ * confirmAction
+ */
 public class PaymentManager extends BaseManager<PaymentModel> {
     public PaymentManager(@NonNull Context context) {
         super(context, new PaymentModelRepository());
@@ -565,7 +570,7 @@ public class PaymentManager extends BaseManager<PaymentModel> {
                 } else if (finalUsanceDay <= getUsanceRef(customerCallOrderModels)) {
                     if (!paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PTCH.toString())) {
                         if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PTCA.toString()))
-                            throw new ThirdPartyControlPaymentChangedException(getString(R.string.payment_type_changed), ThirdPartyPaymentTypes.PTCH, customerCall.PinCode);
+                            throw new ThirdPartyControlPaymentChangedException(getString(R.string.payment_type_changed), ThirdPartyPaymentTypes.PTCH, customerCall.PinCode2);
                         else
                             throw new ThirdPartyControlPaymentChangedException(getString(R.string.payment_type_changed), ThirdPartyPaymentTypes.PTCH, null);
                     }
@@ -574,7 +579,7 @@ public class PaymentManager extends BaseManager<PaymentModel> {
                         if (paymentModels.size() > 0)
                             throw new ThirdPartyControlPaymentChangedException(getString(R.string.payment_usance_can_not_more_than) + getUsanceRef(customerCallOrderModels) + " " + getString(R.string.be), null, null);
                         else
-                            throw new ThirdPartyControlPaymentChangedException(getString(R.string.payment_type_changed), ThirdPartyPaymentTypes.PT02, customerCall.PinCode2);
+                            throw new ThirdPartyControlPaymentChangedException(getString(R.string.payment_type_changed), ThirdPartyPaymentTypes.PT02, customerCall.PinCode);
                     }
                 }
             }

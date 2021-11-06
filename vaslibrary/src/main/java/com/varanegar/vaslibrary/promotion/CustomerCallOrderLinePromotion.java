@@ -102,7 +102,8 @@ public class CustomerCallOrderLinePromotion extends BaseModel {
     public Currency AmountCheque;
     public Currency AmountNutCash;
     public Currency AmountNutCheque;
-
+    public Currency CashDiscount;
+    public Currency ChequeDiscount;
     public CustomerCallOrderLinePromotion() {
 
     }
@@ -137,6 +138,8 @@ public class CustomerCallOrderLinePromotion extends BaseModel {
         this.AmountCheque = new Currency(lineData.amountCheque == null ? BigDecimal.ZERO : lineData.amountCheque);
         this.AmountNutCash = new Currency(lineData.amountNutCash == null ? BigDecimal.ZERO : lineData.amountNutCash);
         this.AmountNutCheque = new Currency(lineData.amountNutCheque == null ? BigDecimal.ZERO : lineData.amountNutCheque);
+        this.ChequeDiscount =new Currency(lineData.chequeDiscount==null?BigDecimal.ZERO:lineData.chequeDiscount);
+        this.CashDiscount =new Currency(lineData.cashDiscount==null?BigDecimal.ZERO:lineData.cashDiscount);
 
         try {
             if (sysConfigManager.getBackOfficeType().equals(BackOfficeType.Varanegar)) {

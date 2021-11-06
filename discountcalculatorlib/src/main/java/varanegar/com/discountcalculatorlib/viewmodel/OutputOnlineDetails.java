@@ -51,4 +51,6 @@ public class OutputOnlineDetails {
     public BigDecimal amountCheque;
     public BigDecimal amountNutCash;
     public BigDecimal amountNutCheque;
+    public BigDecimal cashDiscount;
+    public BigDecimal chequeDiscount;
 }

@@ -211,7 +211,8 @@ import static varanegar.com.discountcalculatorlib.Global.orderPrize;
  */
 
 
-/** تحویل سفارش موزع
+/**
+ * صفحه تحویل سفارش   **
 */
 public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePrizesDialog.choicePrizeDialogListener {
     private OnItemQtyChangedHandler onItemQtyChangedHandler;
@@ -2477,7 +2478,7 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
         InsertPinDialog dialog = new InsertPinDialog();
         dialog.setCancelable(false);
         dialog.setClosable(false);
-        dialog.setValues(customerCallOrderModels.get(0).PinCode);
+        dialog.setValues(customerCallOrderModels.get(0).PinCode3);
         dialog.setOnResult(new InsertPinDialog.OnResult() {
             @Override
             public void done() {
@@ -2504,7 +2505,7 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
         InsertPinDialog dialog = new InsertPinDialog();
         dialog.setCancelable(false);
         dialog.setClosable(false);
-        dialog.setValues(customerCallOrderModels.get(0).PinCode);
+        dialog.setValues(customerCallOrderModels.get(0).PinCode3);
         dialog.setOnResult(new InsertPinDialog.OnResult() {
             @Override
             public void done() {

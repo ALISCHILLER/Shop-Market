@@ -396,6 +396,14 @@ public class DiscountCallOrderData {
         return onlineData;
     }
 
+    /**
+     * convert data online for discoundCallorder
+     * مبدل دیتای انلاین به مدل داخلی
+     * پیش نمایش تخفیف جوایز
+     * @param onlineDatas
+     * @param baseDatas
+     */
+
     public void SetFromOnline(DiscountOutputOnline onlineDatas, ArrayList<DiscountCallOrderLineData> baseDatas) {
         this.callLineItemDataWithPromo = new ArrayList<>();
         HashMap<Integer, UUID> orderLinesId = new HashMap<>();

@@ -84,6 +84,9 @@ import static varanegar.com.discountcalculatorlib.Global.salesError;
 import static varanegar.com.discountcalculatorlib.Global.totallyError;
 
 
+/**
+ * محاسبات تخفیف جوایز
+ */
 public class CalcPromotion {
 
     public static void calcReturnPromotion(final Context context, @NonNull final UUID customerUniqueId, boolean withRef, boolean isFromRequest, final PromotionCallback callback) {
@@ -327,6 +330,17 @@ public class CalcPromotion {
     private static boolean last = false;
     private static List<DiscountPrizeViewModel> discountPrizeViewModels = new ArrayList<>();
 
+    /**
+     * تخفیف جوایز توزیع
+     * @param orderPrizeList
+     * @param context
+     * @param callData
+     * @param disCallData
+     * @param evcType
+     * @param orderProduct
+     * @throws DiscountException
+     * @throws InterruptedException
+     */
     private static void distDiscountCalc(List<DiscountOrderPrizeViewModel> orderPrizeList, Context context, CustomerCallOrderPromotion callData, DiscountCallOrderData disCallData, EVCType evcType, ArrayList<DiscountCallOrderLineData> orderProduct) throws DiscountException, InterruptedException {
         //                                                if (true) {
         try {

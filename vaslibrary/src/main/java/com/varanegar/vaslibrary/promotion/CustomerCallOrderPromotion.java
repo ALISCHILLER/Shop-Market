@@ -229,6 +229,14 @@ public class CustomerCallOrderPromotion {
         return dis;
     }
 
+    /**
+     * canver data online for
+     * پیش نمایش
+     * ثبت سفارش مشتری
+     *WithPromo برای تخفیف و جوایز که شامل لاین های اصلی سفارش و جوایز
+     * @param context
+     * @param dis
+     */
     public void setFromDiscount(Context context, DiscountCallOrderData dis){
 
         //this.distId = dis.distId;
