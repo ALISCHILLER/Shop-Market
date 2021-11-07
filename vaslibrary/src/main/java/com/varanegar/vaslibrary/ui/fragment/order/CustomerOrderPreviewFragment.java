@@ -124,7 +124,7 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
             addAmountPairedItems = (PairedItems) view.findViewById(R.id.add_amount_paired_items);
             usanceDayPairedItems = view.findViewById(R.id.usance_day_paired_items);
             usanceRefPairedItems = view.findViewById(R.id.usance_ref_paired_items);
-            View thirdPartyLayout = view.findViewById(R.id.third_party_layout);
+            View usanceLayout = view.findViewById(R.id.usance_layout);
             TextView grossAmountTextView = view.findViewById(R.id.gross_amount_text_view);
             TextView discountTextView = view.findViewById(R.id.discount_text_view);
             TextView addsTextView = view.findViewById(R.id.adds_text_view);
@@ -163,7 +163,7 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                         thirdPartythirdPartyNetAmountLayout.setVisibility(View.GONE);
                     }
                 }
-                thirdPartyLayout.setVisibility(View.VISIBLE);
+                usanceLayout.setVisibility(View.VISIBLE);
             } else {
                 if (mainHeaderLayout != null)
                     mainHeaderLayout.setVisibility(View.VISIBLE);
@@ -177,7 +177,7 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                     if (addsTextView != null)
                         addsTextView.setVisibility(View.VISIBLE);
                 }
-                thirdPartyLayout.setVisibility(View.GONE);
+                usanceLayout.setVisibility(View.GONE);
             }
 
             if (!VaranegarApplication.is(VaranegarApplication.AppId.PreSales))

@@ -149,7 +149,7 @@ public abstract class VasActivity extends MainVaranegarActivity implements EasyH
                         try {
                             File file = BackupManager.getLast(VasActivity.this);
                             if (file == null || file.lastModified() < (new Date().getTime() - (8 * 1000 * 3600))) {
-                                BackupManager.exportData(VasActivity.this, BackupManager.BackupType.Full);
+                                BackupManager.exportData(VasActivity.this, true);
                             }
 
                         } catch (Exception e) {

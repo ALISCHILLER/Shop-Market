@@ -1167,8 +1167,7 @@ public class TourManager {
                                             Timber.i("Backing up database before deleting temp tour data");
                                             progressChanged(callBack, R.string.backing_up_database);
                                             try {
-                                                saveConfirm();
-                                                BackupManager.exportData(context, BackupManager.BackupType.Last);
+                                                BackupManager.exportData(context, true, BackupManager.SEND_TOUR_BACKUP);
                                                 progressChanged(callBack, R.string.backup_finished_successfully);
                                                 progressChanged(callBack, R.string.populating_tour_info);
                                                 TourInfo tourInfo = createTourInfo();
@@ -1411,7 +1410,7 @@ public class TourManager {
     public void deleteTourData() {
         try {
             new CustomerManager(context).clearCache();
-            BackupManager.exportData(context, BackupManager.BackupType.Full);
+            BackupManager.exportData(context, true);
             emptyTempTables();
             Timber.i("temp tables wiped out");
             deleteTour();

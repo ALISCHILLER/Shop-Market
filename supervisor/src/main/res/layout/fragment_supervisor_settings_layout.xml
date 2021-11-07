@@ -109,38 +109,6 @@
                         android:layout_height="wrap_content"
                         app:title="@string/return_count" />
                 </LinearLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/updating_questionnaire_layout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/updating_questionnaire_imageView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_update_light_blue"
-                        app:layout_constraintBottom_toBottomOf="@+id/updating_questionnaire_textView"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/updating_questionnaire_textView" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/updating_questionnaire_textView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/padding_default"
-                        android:padding="@dimen/padding_small"
-                        android:text="@string/updating_questionnaire"
-                        android:textColor="@color/colorPrimary"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/updating_questionnaire_imageView"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
             </LinearLayout>
 
         </ScrollView>

@@ -40,12 +40,12 @@ import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.framework.util.recycler.BaseRecyclerAdapter;
 import com.varanegar.framework.util.recycler.ItemContextView;
 import com.varanegar.supervisor.R;
+import com.varanegar.supervisor.model.SupervisorCustomerModel;
 import com.varanegar.supervisor.webapi.CustomerSummaryViewModel;
 import com.varanegar.supervisor.webapi.SupervisorApi;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
-import com.varanegar.vaslibrary.model.customer.SupervisorCustomerModel;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 

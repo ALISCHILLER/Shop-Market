@@ -11,14 +11,10 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.constraintlayout.widget.ConstraintLayout;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
@@ -26,8 +22,6 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.varanegar.framework.base.MainVaranegarActivity;
-import com.varanegar.framework.network.Connectivity;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.util.Linq;
@@ -36,23 +30,14 @@ import com.varanegar.framework.util.component.PairedItemsSpinner;
 import com.varanegar.framework.util.component.SearchBox;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
-import com.varanegar.framework.util.component.toolbar.CuteButton;
 import com.varanegar.supervisor.model.VisitorManager;
 import com.varanegar.supervisor.model.VisitorModel;
 import com.varanegar.supervisor.webapi.SupervisorApi;
 import com.varanegar.supervisor.webapi.VisitorVisitInfoViewModel;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
 import com.varanegar.vaslibrary.manager.UserManager;
-import com.varanegar.vaslibrary.manager.updatemanager.CustomersUpdateFlow;
-import com.varanegar.vaslibrary.manager.updatemanager.ProductUpdateFlow;
-import com.varanegar.vaslibrary.manager.updatemanager.QuestionnaireUpdateFlow;
-import com.varanegar.vaslibrary.manager.updatemanager.UpdateCall;
 import com.varanegar.vaslibrary.model.user.UserModel;
-import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
-import com.varanegar.vaslibrary.webapi.ping.PingApi;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +66,6 @@ public class SettingsFragment extends IMainPageFragment {
     private PairedItems nonOrderCountPairedItems;
     private PairedItems nonVisitCount;
     private PairedItems returnCountPairedItems;
-    private ConstraintLayout updatingQuestionnaire;
 
     @Override
     protected View onCreateContentView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -109,7 +93,6 @@ public class SettingsFragment extends IMainPageFragment {
         nonOrderCountPairedItems = view.findViewById(R.id.non_order_count_paired_items);
         nonVisitCount = view.findViewById(R.id.non_visit_count_paired_items);
         returnCountPairedItems = view.findViewById(R.id.return_count_paired_items);
-        updatingQuestionnaire = view.findViewById(R.id.updating_questionnaire_layout);
 
         return view;
     }
@@ -196,71 +179,7 @@ public class SettingsFragment extends IMainPageFragment {
 
             }
         });
-        updatingQuestionnaire.setOnClickListener(new View.OnClickListener(){
 
-            @Override
-            public void onClick(View view) {
-                final MainVaranegarActivity activity = getVaranegarActvity();
-                if (activity == null || activity.isFinishing())
-                    return;
-                if (!Connectivity.isConnected(activity)) {
-                    ConnectionSettingDialog connectionSettingDialog = new ConnectionSettingDialog();
-                    connectionSettingDialog.show(activity.getSupportFragmentManager(), "ConnectionSettingDialog");
-                    return;
-                }
-                startProgress(com.varanegar.vaslibrary.R.string.please_wait, com.varanegar.vaslibrary.R.string.updating_questionnaire);
-                PingApi pingApi = new PingApi();
-                pingApi.refreshBaseServerUrl(activity, new PingApi.PingCallback() {
-                    @Override
-                    public void done(String ipAddress) {
-                        QuestionnaireUpdateFlow flow = new QuestionnaireUpdateFlow(activity);
-                        flow.syncQuestionnaire(new UpdateCall() {
-                            @Override
-                            protected void onSuccess() {
-                                finishProgress();
-                                MainVaranegarActivity activity = getVaranegarActvity();
-                                if (activity != null && !activity.isFinishing()) {
-                                    CuteMessageDialog dialog = new CuteMessageDialog(activity);
-                                    dialog.setMessage(com.varanegar.vaslibrary.R.string.updating_questionnaire_completed);
-                                    dialog.setTitle(com.varanegar.vaslibrary.R.string.done);
-                                    dialog.setIcon(Icon.Success);
-                                    dialog.setPositiveButton(com.varanegar.vaslibrary.R.string.ok, null);
-                                    dialog.show();
-                                }
-                            }
-
-                            @Override
-                            protected void onFailure(String error) {
-                                finishProgress();
-                                MainVaranegarActivity activity = getVaranegarActvity();
-                                if (activity != null && !activity.isFinishing()) {
-                                    CuteMessageDialog dialog = new CuteMessageDialog(activity);
-                                    dialog.setMessage(error);
-                                    dialog.setTitle(com.varanegar.vaslibrary.R.string.error);
-                                    dialog.setIcon(Icon.Error);
-                                    dialog.setPositiveButton(com.varanegar.vaslibrary.R.string.ok, null);
-                                    dialog.show();
-                                }
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void failed() {
-                        finishProgress();
-                        MainVaranegarActivity activity = getVaranegarActvity();
-                        if (activity != null && !activity.isFinishing()) {
-                            CuteMessageDialog dialog = new CuteMessageDialog(activity);
-                            dialog.setMessage(com.varanegar.vaslibrary.R.string.network_error);
-                            dialog.setTitle(com.varanegar.vaslibrary.R.string.error);
-                            dialog.setIcon(Icon.Error);
-                            dialog.setPositiveButton(com.varanegar.vaslibrary.R.string.ok, null);
-                            dialog.show();
-                        }
-                    }
-                });
-            }
-        });
         getVisitorsVisitInfo();
     }
 

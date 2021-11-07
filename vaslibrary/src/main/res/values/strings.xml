@@ -1475,11 +1475,4 @@
     <string name="error_in_saving_picture">خطا در ذخیره سازی عکس</string>
     <string name="please_try_again">لطفا مجددا تلاش کنید.</string>
     <string name="image_size_is_zero">حجم عکس صفر می باشد.</string>
-    <string name="updating_questionnaire">در حال بروزرسانی اطلاعات پرسشنامه</string>
-    <string name="updating_questionnaire_completed">بروزرسانی اطلاعات پرسشنامه با موفقیت انجام شد.</string>
-    <string name="questionnaire_not_supported_in_supervisor">این پرسشنامه در تبلت سرپرست پشتیبانی نمی شود</string>
-    <string name="enter_sayad_number">شماره صیاد را وارد نمایید.</string>
-    <string name="paybale_cash">مبلغ قابل پرداخت نقدی</string>
-    <string name="paybale_recipt">مبلغ قابل پرداخت عرفی</string>
-    <string name="restore">بازیابی</string>
 </resources>

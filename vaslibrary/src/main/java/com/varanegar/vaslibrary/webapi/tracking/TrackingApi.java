@@ -55,6 +55,8 @@ public class TrackingApi extends BaseApi implements ITrackingApi {
                 MAIN_SERVER = "http://178.173.131.177:9095";
             else if ("C0364F6F-D52E-459F-B549-552F31DA5A7E".equalsIgnoreCase(ownerKeysWrapper.DataOwnerKey))
                 MAIN_SERVER = "http://94.139.176.24:9095";
+            else if ("D5AFC59C-D5EA-400F-944A-E25C85A8536E".equalsIgnoreCase(ownerKeysWrapper.DataOwnerKey))
+                MAIN_SERVER = "http://176.12.64.44:9095";
             
             String TEST_OWNER_ID = "3784C8E6-B379-4812-9F72-5AF14DB5B92D";
             if (ownerKeysWrapper.DataOwnerKey != null &&

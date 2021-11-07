@@ -653,6 +653,6 @@ public class ConfirmAction extends CheckPathAction {
     private void backup() {
         Activity activity = getActivity();
         if (activity != null)
-            BackupManager.exportDataAsync(activity, BackupManager.BackupType.Partial);
+            BackupManager.exportDataAsync(activity, false);
     }
 }

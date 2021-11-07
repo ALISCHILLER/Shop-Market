@@ -3,7 +3,6 @@ package com.varanegar.vaslibrary.manager.questionnaire;
 import android.content.Context;
 import androidx.annotation.NonNull;
 
-import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.database.DbException;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
@@ -123,11 +122,7 @@ public class QuestionnaireManager {
     public void calculateCustomerQuestionnaire(final UUID customerId) throws DbException, ValidationException {
         // step 1: extract valid templates for the customer
         QuestionnaireHeaderManager headerManager = new QuestionnaireHeaderManager(context);
-        List<QuestionnaireHeaderModel> headers;
-        if (VaranegarApplication.is(VaranegarApplication.AppId.Supervisor))
-            headers = headerManager.getValidTemplatesForSupervisorCustomer(customerId);
-        else
-            headers = headerManager.getValidTemplatesForCustomer(customerId);
+        List<QuestionnaireHeaderModel> headers = headerManager.getValidTemplatesForCustomer(customerId);
         if (headers.size() == 0) {
             Timber.i("No Questionnaire template has been calculated for customer id = " + customerId.toString());
             return;

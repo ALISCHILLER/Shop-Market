@@ -8,7 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.varanegar.framework.network.gson.VaranegarGsonBuilder;
 import com.varanegar.supervisor.model.ProductModel;
-import com.varanegar.vaslibrary.model.customer.SupervisorCustomerModel;
+import com.varanegar.supervisor.model.SupervisorCustomerModel;
 import com.varanegar.supervisor.model.VisitorModel;
 import com.varanegar.supervisor.status.OrderSummaryRequestViewModel;
 import com.varanegar.supervisor.status.OrderSummaryResultViewModel;

@@ -79,38 +79,21 @@
                 app:title="@string/check_serial_number" />
 
             <com.varanegar.framework.util.component.PairedItemsEditable
+                android:id="@+id/sayad_number_paired_items_editable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number|phone"
+                android:orientation="vertical"
+                android:maxLength="16"
+                app:singleLine="true"
+                app:title="@string/sayad_number" />
+
+            <com.varanegar.framework.util.component.PairedItemsEditable
                 android:id="@+id/amount_paired_items_editable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:isCommaSeparated="true"
-                android:orientation="vertical"
                 app:title="@string/amount" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <com.varanegar.framework.util.component.PairedItemsEditable
-                    android:id="@+id/sayad_number_paired_items_editable"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:inputType="number|phone"
-                    android:maxLength="16"
-                    app:singleLine="true"
-                    app:title="@string/sayad_number" />
-
-                <ImageView
-                    android:id="@+id/sayad_number_checked_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:padding="@dimen/padding_default"
-                    android:src="@drawable/ic_help_black_24dp"
-                    android:visibility="gone" />
-
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

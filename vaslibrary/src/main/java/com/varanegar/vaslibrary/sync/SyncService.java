@@ -95,7 +95,7 @@ public abstract class SyncService extends Service {
                                             } catch (DbException e) {
                                                 Timber.e(e);
                                             }
-                                            BackupManager.exportData(SyncService.this, BackupManager.BackupType.Full);
+                                            BackupManager.exportData(SyncService.this, true);
                                             TourModel tourModel = tourManager.loadTour();
                                             final UserModel userModel = UserManager.readFromFile(SyncService.this);
                                             StartTourLocationViewModel locationViewModel = new StartTourLocationViewModel();

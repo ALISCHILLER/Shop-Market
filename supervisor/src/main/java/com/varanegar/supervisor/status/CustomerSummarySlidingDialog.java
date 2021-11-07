@@ -19,14 +19,14 @@ import com.varanegar.framework.util.component.SlidingDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.supervisor.R;
-import com.varanegar.vaslibrary.model.customer.SupervisorCustomer;
-import com.varanegar.vaslibrary.model.customer.SupervisorCustomerModel;
+import com.varanegar.supervisor.model.SupervisorCustomer;
+import com.varanegar.supervisor.model.SupervisorCustomerModel;
+import com.varanegar.supervisor.model.SupervisorCustomerModelRepository;
 import com.varanegar.supervisor.webapi.CustomerSummaryViewModel;
 import com.varanegar.supervisor.webapi.SupervisorApi;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
-import com.varanegar.vaslibrary.model.customer.SupervisorCustomerModelRepository;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 

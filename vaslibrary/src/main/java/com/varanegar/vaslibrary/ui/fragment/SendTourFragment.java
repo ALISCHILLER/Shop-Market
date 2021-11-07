@@ -319,7 +319,7 @@ public abstract class SendTourFragment extends PopupFragment {
                                 @Override
                                 public void onClick(View view) {
                                     try {
-                                        BackupManager.exportData(getContext(), BackupManager.BackupType.Full);
+                                        BackupManager.exportData(getContext(), true);
                                         tourManager.deleteTourData();
                                         isSending = false;
                                     } catch (Exception e) {

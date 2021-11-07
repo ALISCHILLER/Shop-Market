@@ -299,7 +299,7 @@ public class SaveOrderUtility {
                     paymentTypeOrderGroupRef = oldPaymentType.GroupBackOfficeId;
                 int orderTypeId = 0;
                 try {
-                    orderTypeId = new CustomerOrderTypesManager(context).getItem(callOrderModel.BackOfficeOrderTypeId).BackOfficeId;
+                    orderTypeId = new CustomerOrderTypesManager(context).getItem(callOrderModel.OrderTypeUniqueId).BackOfficeId;
                 } catch (Exception ignored) {
                 }
 
@@ -440,21 +440,27 @@ public class SaveOrderUtility {
                                 runCallBackError(R.string.error_on_usance_day);
                             else {
                                 try {
+                                    UUID oldPayType = callOrderModel.OrderPaymentTypeUniqueId;
+                                    UUID newPayType = data.OrderPaymentTypeId;
                                     callOrderModel.OrderPaymentTypeUniqueId = data.OrderPaymentTypeId;
                                     long affectedRows = new CustomerCallOrderManager(context).update(callOrderModel);
                                     Timber.e("update OrderPaymentTypeUniqueId in customer call order ", affectedRows);
-                                    extractAndCalcCustomerPrice(new PriceCalcCallback() {
-                                        @Override
-                                        public void onSucceeded() {
-                                            runCallBackProcess(R.string.please_wait);
-                                            finalSave();
-                                        }
+                                    if (oldPayType != null && newPayType != null && !oldPayType.equals(newPayType)) {
+                                        extractAndCalcCustomerPrice(new PriceCalcCallback() {
+                                            @Override
+                                            public void onSucceeded() {
+                                                runCallBackProcess(R.string.please_wait);
+                                                finalSave();
+                                            }
 
-                                        @Override
-                                        public void onFailed(String error) {
-                                            runCallBackError(error);
-                                        }
-                                    });
+                                            @Override
+                                            public void onFailed(String error) {
+                                                runCallBackError(error);
+                                            }
+                                        });
+                                    } else {
+                                        finalSave();
+                                    }
                                 } catch (Exception ex) {
                                     Timber.e(ex, "Error on update customer call order");
                                     runCallBackError(ex.getMessage());
@@ -528,7 +534,7 @@ public class SaveOrderUtility {
                     runCallBackProcess(R.string.return_control);
                     ReturnControlApi api = new ReturnControlApi(context);
                     ReturnControlHeaderViewModel returnControlHeaderViewModel = new ReturnControlHeaderViewModel();
-                    int dealerRef = UserManager.readFromFile(context).BackOfficeId;
+                    int dealerRef = SysConfigManager.getIntValue(sysConfigManager.read(ConfigKey.DealerRef, SysConfigManager.cloud), -1);
                     returnControlHeaderViewModel.OrderDetails = new ArrayList<>();
                     CustomerCallOrderManager callOrderManager = new CustomerCallOrderManager(context);
                     List<CustomerCallOrderModel> orders = callOrderManager.getCustomerCallOrders(customerId);

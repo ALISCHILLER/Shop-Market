@@ -63,10 +63,6 @@ import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
 import com.varanegar.vaslibrary.ui.dialog.ImportDialogFragment;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
 
-import org.w3c.dom.Text;
-
-import java.io.File;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -151,25 +147,6 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
                 dialog.show(getChildFragmentManager(), "SelectLanguageDialog");
             }
         });
-        TextView restoreBackups = view.findViewById(R.id.restore_last_backup_btn);
-        if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
-            restoreBackups.setVisibility(View.VISIBLE);
-            restoreBackups.setOnClickListener(view13 -> {
-                if (BackupManager.getList(getContext(), BackupManager.BackupType.Last).size() > 0) {
-                    ImportDialogFragment importDialog = new ImportDialogFragment();
-                    importDialog.setBackupType(BackupManager.BackupType.Last);
-                    importDialog.show(getChildFragmentManager(), "ImportDialogFragment");
-                } else {
-                    CuteMessageDialog dialog = new CuteMessageDialog(getContext());
-                    dialog.setTitle(R.string.error);
-                    dialog.setMessage(R.string.there_is_no_backup_file);
-                    dialog.setIcon(Icon.Alert);
-                    dialog.setPositiveButton(R.string.ok, null);
-                    dialog.show();
-                }
-            });
-        } else
-            restoreBackups.setVisibility(View.GONE);
 
         try {
             String packageName = getContext().getApplicationInfo().packageName;
@@ -329,7 +306,7 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
                                 @Override
                                 public void run(Token token) {
                                     try {
-                                        BackupManager.exportData(getContext(), BackupManager.BackupType.Full);
+                                        BackupManager.exportData(getContext(), true);
                                         AccountManager accountManager = new AccountManager();
                                         accountManager.writeToFile(token, getContext(), "user.token");
                                         user.LoginDate = new Date();

@@ -53,8 +53,7 @@ public class ControlReturnUtility implements IActionUtility {
     public void run(ActionData data, IActionUtilityCallBack callBack) {
         Context context = data.getContext();
         final SysConfigModel configModel = data.getCloudConfig(ConfigKey.ReturnValidationErrorType);
-        if (SysConfigManager.compare(configModel, UUID.fromString("266FB268-8106-40EE-B19F-C00FB79569C4")) || SysConfigManager.compare(configModel, UUID.fromString("337BCEA8-32A9-4A9E-8A70-C5C73944869D"))) {
-
+        if ((!VaranegarApplication.is(VaranegarApplication.AppId.Dist)) && (SysConfigManager.compare(configModel, UUID.fromString("266FB268-8106-40EE-B19F-C00FB79569C4")) || SysConfigManager.compare(configModel, UUID.fromString("337BCEA8-32A9-4A9E-8A70-C5C73944869D")))) {
             final PingApi pingApi = new PingApi();
             pingApi.refreshBaseServerUrl(context, new PingApi.PingCallback() {
                 @Override
@@ -62,7 +61,8 @@ public class ControlReturnUtility implements IActionUtility {
                     try {
 
                         ReturnControlHeaderViewModel returnControlHeaderViewModel = new ReturnControlHeaderViewModel();
-                        int dealerRef = UserManager.readFromFile(context).BackOfficeId;
+                        SysConfigManager sysConfigManager = new SysConfigManager(context);
+                        int dealerRef = SysConfigManager.getIntValue(sysConfigManager.read(ConfigKey.DealerRef, SysConfigManager.cloud), -1);
                         returnControlHeaderViewModel.OrderDetails = new ArrayList<>();
                         CustomerCallOrderManager callOrderManager = new CustomerCallOrderManager(context);
                         List<CustomerCallOrderModel> orders = callOrderManager.getCustomerCallOrders(data.getCustomer().UniqueId);

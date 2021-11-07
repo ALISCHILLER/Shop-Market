@@ -61,10 +61,8 @@ public class ImportDialogFragment extends CuteAlertDialog {
             if (bt != null) {
                 if (bt.equals("0"))
                     backupType = BackupManager.BackupType.Full;
-                else if (bt.equals("1"))
-                    backupType = BackupManager.BackupType.Partial;
                 else
-                    backupType = BackupManager.BackupType.Last;
+                    backupType = BackupManager.BackupType.Partial;
             }
         }
     }
@@ -89,13 +87,8 @@ public class ImportDialogFragment extends CuteAlertDialog {
         adapter = new BaseSelectionRecyclerAdapter<BackupInfoFile>(getVaranegarActvity(), backupInfoList, false) {
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                if (backupType == BackupManager.BackupType.Last) {
-                    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_backup_info_last, parent, false);
-                    return new LastBackupInfoViewHolder(view, this, getContext());
-                } else {
-                    View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_backup_info, parent, false);
-                    return new BackupInfoViewHolder(view, this, getContext());
-                }
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_backup_info, parent, false);
+                return new BackupInfoViewHolder(view, this, getContext());
             }
         };
 
@@ -244,65 +237,6 @@ public class ImportDialogFragment extends CuteAlertDialog {
                     dataCenterOwnerIdTextView.setText(getContext().getString(R.string.not_available));
                 }
 
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    class LastBackupInfoViewHolder extends BaseViewHolder<BackupInfoFile> {
-
-        private final TextView dateTextView;
-        private final TextView packageNameTextview;
-        private final TextView packageVersionTextView;
-        private final TextView visitorNameTextView;
-        private final TextView packageVersionNameTextView;
-        private final TextView tourNoTextView;
-
-        public LastBackupInfoViewHolder(View itemView, BaseRecyclerAdapter<BackupInfoFile> recyclerAdapter, Context context) {
-            super(itemView, recyclerAdapter, context);
-            dateTextView = itemView.findViewById(R.id.date_text_view);
-            packageNameTextview = itemView.findViewById(R.id.package_name_text_view);
-            packageVersionTextView = itemView.findViewById(R.id.package_version_text_view);
-            packageVersionNameTextView = itemView.findViewById(R.id.package_version_name_text_view);
-            visitorNameTextView = itemView.findViewById(R.id.visitor_name_text_view);
-            tourNoTextView = itemView.findViewById(R.id.tour_no_text_view);
-
-        }
-
-        @Override
-        public void bindView(final int position) {
-            try {
-                final String packageName = getContext().getPackageName();
-                final int appVersionCode = getContext().getApplicationContext().getPackageManager().getPackageInfo(packageName, 0).versionCode;
-                final BackupInfoFile backupInfo = recyclerAdapter.get(position);
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (packageName.equals(backupInfo.backupInfo.PackageName)) {
-                            adapter.notifyItemClicked(getAdapterPosition());
-                        } else {
-                            Toast.makeText(getContext(), R.string.this_backup_is_not_for_this_application, Toast.LENGTH_SHORT).show();
-                            adapter.notifyItemClicked(getAdapterPosition());
-                        }
-                    }
-                });
-                if (appVersionCode == backupInfo.backupInfo.AppVersionCode && packageName.equals(backupInfo.backupInfo.PackageName)) {
-                    itemView.findViewById(R.id.ok_layout).setVisibility(View.VISIBLE);
-                    itemView.setBackgroundColor(HelperMethods.getColor(getContext(), R.color.white));
-                } else {
-                    itemView.findViewById(R.id.ok_layout).setVisibility(View.GONE);
-                    itemView.setBackgroundColor(HelperMethods.getColor(getContext(), R.color.grey_light_light));
-                }
-                if (adapter.getSelectedPosition() == position) {
-                    itemView.setBackgroundColor(HelperMethods.getColor(getContext(), R.color.grey_light));
-                }
-                dateTextView.setText(DateHelper.toString(backupInfo.backupInfo.Date, DateFormat.Complete, Locale.US));
-                tourNoTextView.setText(String.valueOf(backupInfo.backupInfo.TourNo));
-                packageNameTextview.setText(backupInfo.backupInfo.PackageName);
-                packageVersionTextView.setText(" (" + String.valueOf(backupInfo.backupInfo.AppVersionCode) + ") ");
-                packageVersionNameTextView.setText(String.valueOf(backupInfo.backupInfo.AppVersionName));
-                visitorNameTextView.setText(backupInfo.backupInfo.UserName);
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
             }

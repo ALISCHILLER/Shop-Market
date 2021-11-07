@@ -133,5 +133,4 @@
     <string name="sending_backup">در حال ارسال پشتیبان</string>
     <string name="onhand_qty_report">گزارش موجودی انبار</string>
     <string name="onhand_qty_report_search_name_or_code">گزارش موجودی کالا (نام یا کد کالا را جستجو کنید ... )</string>
-    <string name="updating_questionnaire">بروزرسانی اطلاعات پرسشنامه</string>
 </resources>
