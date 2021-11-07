@@ -160,7 +160,8 @@ public class PromotionHandlerV3 {
     }
 
     /**
-     * Api تخفیف جوایز
+     * Api پیش نمایش
+     * تخفیف جوایز
      * برای برنامه توزیه یا موزع
      * @param orderPrizeList
      * @param discountCallOrderData

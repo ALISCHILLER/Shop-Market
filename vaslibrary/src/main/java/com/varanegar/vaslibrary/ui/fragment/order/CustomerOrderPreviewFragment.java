@@ -34,13 +34,17 @@ import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.manager.ProductManager;
 import com.varanegar.vaslibrary.manager.ProductUnitViewManager;
 import com.varanegar.vaslibrary.manager.PromotionException;
+import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.customercall.CallOrderLineManager;
+import com.varanegar.vaslibrary.manager.customercall.CustomerCallOrderManager;
 import com.varanegar.vaslibrary.manager.customercallmanager.CustomerCallManager;
 import com.varanegar.vaslibrary.manager.discountmanager.DiscountItemCountManager;
 import com.varanegar.vaslibrary.manager.orderprizemanager.OrderPrizeManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.BackOfficeType;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.UnknownBackOfficeException;
+import com.varanegar.vaslibrary.model.call.CustomerCallOrderModel;
+import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.model.discountSDS.DiscountItemCountModel;
 import com.varanegar.vaslibrary.model.orderprize.OrderPrizeModel;
 import com.varanegar.vaslibrary.model.product.ProductModel;
@@ -144,6 +148,10 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
             TextView thirdPartyAdds = view.findViewById(R.id.third_party_adds_text_view);
             TextView thirdPartythirdPartyNetAmountLayout = view.findViewById(R.id.third_party_net_amount_text_view);
 
+            CustomerModel customerModel=new CustomerManager(getContext()).getItem(customerId);
+            CustomerCallOrderModel customerCallOrderModel=new CustomerCallOrderManager(getContext()).getItem(callOrderId);
+            titleTextView.setText(getString(R.string.order_preview) + " : " +customerModel.CustomerName +" "+ customerCallOrderModel.SaleNoSDS);
+
             payableCashPairedItems = view.findViewById(R.id.payable_cash_paired_items);
             payableChequePairedItems = view.findViewById(R.id.payable_cheque_paired_items);
 
@@ -219,6 +227,9 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
             Timber.e(e);
             return null;
         }
+
+
+
     }
 
     private void calc(Boolean first) {
@@ -228,8 +239,7 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
             @Override
             public void onSuccess(CustomerCallOrderPromotion data) {
                 customerCallOrderPromotion = data;
-                titleTextView.setText(getString(R.string.order_preview) + " : " +
-                        customerCallOrderPromotion.CustomerName + " (" + customerCallOrderPromotion.CustomerCode + ")");
+              //  titleTextView.setText(getString(R.string.order_preview) + " : " + customerCallOrderPromotion.CustomerName + " (" + customerCallOrderPromotion.CustomerCode + ")");
                 Currency totalPayableCash = Currency.ZERO;
                 Currency totalPayableCheque = Currency.ZERO;
                 Currency totalCashDiscount =Currency.ZERO;

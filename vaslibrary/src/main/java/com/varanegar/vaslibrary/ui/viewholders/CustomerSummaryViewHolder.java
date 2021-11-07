@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import com.varanegar.vaslibrary.manager.sysconfigmanager.BackOfficeType;
 import com.varanegar.vaslibrary.model.customercall.CustomerCall;
 import com.varanegar.vaslibrary.model.customercall.CustomerCallModel;
 import com.varanegar.vaslibrary.model.customerpathview.CustomerPathViewModel;
+import com.varanegar.vaslibrary.ui.fragment.CustomersContentFragment;
 
 import java.util.List;
 
@@ -114,6 +116,10 @@ public class CustomerSummaryViewHolder extends BaseViewHolder<CustomerPathViewMo
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                CustomersContentFragment customersContentFragment=new CustomersContentFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("message", "true show message");
+                customersContentFragment.setArguments(bundle);
                 recyclerAdapter.runItemClickListener(position);
             }
         });

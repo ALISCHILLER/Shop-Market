@@ -229,6 +229,14 @@ public class SettlementFragment extends VisitFragment {
             usanceRefItems = view.findViewById(R.id.usance_ref_paired_items);
             usancePayItems = view.findViewById(R.id.usance_pay_paired_items);
 
+            oldRemainItems.setVisibility(View.GONE);
+            totalPaymentPairedItems.setVisibility(View.GONE);
+            returnAmountPairedItems.setVisibility(View.GONE);
+
+            oldInvoicesAmountPairedItems.setTitle("مبلغ نقدی");
+
+            invoiceAmountPairedItems.setTitle("مبلغ عرفی ");
+
             SysConfigManager sysConfigManager = new SysConfigManager(getContext());
             BackOfficeType backOfficeType = sysConfigManager.getBackOfficeType();
             if (backOfficeType == BackOfficeType.ThirdParty) {

@@ -84,6 +84,7 @@ import timber.log.Timber;
 
 /**
  * Created by atp on 1/14/2017.
+ * صفحه لیست مشتریان
  */
 
 public abstract class CustomersFragment extends DbListFragment<CustomerPathViewModel, CustomerPathViewModelRepository> {
@@ -309,6 +310,15 @@ public abstract class CustomersFragment extends DbListFragment<CustomerPathViewM
         multipan = getResources().getBoolean(R.bool.multipane);
     }
 
+
+    /**
+     *
+     * لیست مشتریان Adapter
+     * row_coustomer_multipan layout
+     * @param parent
+     * @param viewType
+     * @return
+     */
     @Override
     public BaseViewHolder<CustomerPathViewModel> createListItemViewHolder(ViewGroup parent, int viewType) {
         if (multipan) {

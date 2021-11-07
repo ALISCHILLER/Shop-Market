@@ -112,9 +112,9 @@ import varanegar.com.discountcalculatorlib.utility.JalaliCalendar;
  */
 
 /**
- * صفحه جز
+ * صفحه جزِِِئیات مشتری
  */
-public abstract class CustomersContentFragment extends VaranegarFragment {
+public class CustomersContentFragment extends VaranegarFragment {
 
     CustomerModel customer;
     private VasActionsAdapter actionsAdapter;
@@ -240,6 +240,7 @@ public abstract class CustomersContentFragment extends VaranegarFragment {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        String strtext = getArguments().getString("message");
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -327,8 +328,9 @@ public abstract class CustomersContentFragment extends VaranegarFragment {
             throw new NullPointerException("customer id not found : " + getSelectedId().toString());
         }
         View view = inflater.inflate(R.layout.layout_customer_detail, viewGroup, false);
-
-        if (customer.Description != null && !customer.Description.isEmpty()) {
+     //   String strtext = getArguments().getString("show","sadsa");
+        //customer.Description="true";
+        if (customer.Description != null && !customer.Description.isEmpty() ) {
             CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
             dialog.setTitle(getString(R.string.description));
             dialog.setMessage(customer.Description);
