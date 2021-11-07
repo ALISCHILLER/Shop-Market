@@ -96,18 +96,7 @@ public class TrackingLicense {
 
     // This method comment for testing tracking without license
     public static void logLicense(Context context) {
-//        SharedPreferences trackingLicenseSharedPref = context.getSharedPreferences("TRACKING_LICENSE", MODE_PRIVATE);
-//        String licenseStr = trackingLicenseSharedPref.getString("licenseStr", null);
-//        if (licenseStr != null && !licenseStr.isEmpty()) {
-//            try {
-//                String xml = LicenseEncryptor.decrypt("@zdadV@r@n" + getDeviceId(context).substring(0, 6), licenseStr);
-//                TrackingLogManager.addLog(context, LogType.LICENSE_FILE, LogLevel.Info, xml);
-//            } catch (Exception e) {
-//                TrackingLogManager.addLog(context, LogType.LICENSE_FILE, LogLevel.Error, "فایل لایسنس خراب است!", e.getMessage());
-//            }
-//        } else {
-//            TrackingLogManager.addLog(context, LogType.LICENSE_FILE, LogLevel.Error, "فایل لایسنس خالی است!");
-//        }
+
     }
 
     // This method change for testing tracking without license
