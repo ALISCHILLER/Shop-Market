@@ -15,8 +15,10 @@ import com.varanegar.framework.util.fragment.extendedlist.ActionsAdapter;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.manager.NoSaleReasonManager;
 import com.varanegar.vaslibrary.manager.paymentmanager.PaymentManager;
+import com.varanegar.vaslibrary.manager.picture.PictureCustomerViewManager;
 import com.varanegar.vaslibrary.model.noSaleReason.NoSaleReasonModel;
 import com.varanegar.vaslibrary.ui.dialog.NonVisitActionDialog;
+import com.varanegar.vaslibrary.ui.fragment.picturecustomer.CameraFragment;
 
 import java.util.List;
 import java.util.UUID;
@@ -135,6 +137,13 @@ public class NonVisitAction extends CheckPathAction {
             @Override
             public void onChanged() {
                 runActionCallBack();
+                PictureCustomerViewManager pictureCustomerManager = new PictureCustomerViewManager(getActivity());
+                String pictureError = pictureCustomerManager.checkMandatoryPicture(getSelectedId(), getCalls());
+                if (pictureError != null) {
+                    CameraFragment fragment = new CameraFragment();
+                    fragment.setCustomerId(getSelectedId());
+                    getActivity().pushFragment(fragment);
+                }
                 setRunning(false);
             }
         };
