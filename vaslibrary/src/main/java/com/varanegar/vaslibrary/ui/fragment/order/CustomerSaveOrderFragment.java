@@ -212,6 +212,7 @@ import static varanegar.com.discountcalculatorlib.Global.orderPrize;
 
 
 /**
+ *صفحه تحویل حواله
  * صفحه تحویل سفارش   **
 */
 public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePrizesDialog.choicePrizeDialogListener {

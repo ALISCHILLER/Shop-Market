@@ -96,6 +96,10 @@ import timber.log.Timber;
 import varanegar.com.discountcalculatorlib.utility.enumerations.EVCType;
 import varanegar.com.discountcalculatorlib.viewmodel.DiscountOrderPrizeViewModel;
 
+/**
+ * محاسبات صفحه تحویل سفارش
+ * و ثبت صفارش
+ */
 public class SaveOrderUtility {
     private CustomerCallOrderModel callOrderModel;
     private final CustomerCallOrderManager callOrderManager;
@@ -760,7 +764,9 @@ public class SaveOrderUtility {
                 runCallBackError(R.string.all_qtys_are_zero);
             else
                 saveDistReturn();
-        } else if (status.PartiallyDelivered || status.PaymentTypeChanged) {
+        } else
+//            if (status.PartiallyDelivered || status.PaymentTypeChanged)
+            {
             final CallOrderLineManager callOrderLineManager = new CallOrderLineManager(context);
             runCallBackProcess(R.string.calculating_discount);
             CalcPromotion.calcPromotionV3(null, orderPrizeList, context, callOrderId, customerId, EVCType.TOSELL, true, false, false, new PromotionCallback() {
@@ -769,6 +775,9 @@ public class SaveOrderUtility {
                     try {
                         callOrderModel.CashDuration = data.CashDuration;
                         callOrderModel.CheckDuration = data.CheckDuration;
+                        callOrderModel.TotalAmountNutCash=data.TotalAmountNutCash;
+                        callOrderModel.TotalAmountNutCheque=data.TotalAmountNutCheque;
+
                         callOrderManager.update(callOrderModel);
                         callOrderLineManager.insertOrUpdatePromoLines(callOrderId, data, customerId);
                         final CustomerCallManager callManager = new CustomerCallManager(context);
@@ -807,16 +816,17 @@ public class SaveOrderUtility {
                     runCallBackProcess(msg);
                 }
             });
-        } else {
-            try {
-                new CustomerCallManager(context).removeCalls(customerId, CustomerCallType.CompleteLackOfDelivery, CustomerCallType.CompleteReturnDelivery);
-                new CustomerCallOrderManager(context).initCall(callOrderId, false);
-                new CustomerCallManager(context).saveDistDeliveryCall(customerId, callOrderId);
-                runCallBackSuccess();
-            } catch (Exception e) {
-                runCallBackError(R.string.error_saving_request);
-            }
         }
+//            else {
+//            try {
+//                new CustomerCallManager(context).removeCalls(customerId, CustomerCallType.CompleteLackOfDelivery, CustomerCallType.CompleteReturnDelivery);
+//                new CustomerCallOrderManager(context).initCall(callOrderId, false);
+//                new CustomerCallManager(context).saveDistDeliveryCall(customerId, callOrderId);
+//                runCallBackSuccess();
+//            } catch (Exception e) {
+//                runCallBackError(R.string.error_saving_request);
+//            }
+//        }
     }
 
 

@@ -644,7 +644,7 @@ public class ConfirmAction extends CheckPathAction {
         BackOfficeType backOfficeType = new SysConfigManager(getActivity()).getBackOfficeType();
         PaymentManager paymentManager = new PaymentManager(getActivity());
         if (backOfficeType.equals(BackOfficeType.ThirdParty))
-            paymentManager.thirdPartyControlPayments(customerModel, customerCallOrderModels, customerPayment);
+            paymentManager.thirdPartyControlPayments(customerModel, customerCallOrderModels, customerPayment, true);
         else
             paymentManager.controlPayments(customerModel, customerCallOrderModels, customerPayment, getCloudConfigs());
     }

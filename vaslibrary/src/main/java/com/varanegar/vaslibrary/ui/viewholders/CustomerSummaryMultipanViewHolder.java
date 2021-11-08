@@ -80,9 +80,9 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
 
         setStatus(customerCalls);
         if (descriptionLayout != null) {
-            if (backOfficeType == BackOfficeType.ThirdParty && customerModel.Comments != null && !customerModel.Comments.isEmpty()) {
+            if (backOfficeType == BackOfficeType.ThirdParty && VaranegarApplication.is(VaranegarApplication.AppId.Dist) && customerModel.InvoiceComments != null && !customerModel.InvoiceComments.isEmpty()) {
                 descriptionLayout.setVisibility(View.VISIBLE);
-                descriptionTextView.setText(customerModel.Comments);
+                descriptionTextView.setText(customerModel.InvoiceComments);
             } else {
                 descriptionLayout.setVisibility(View.GONE);
             }
@@ -90,11 +90,6 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Bundle bundle = new Bundle();
-                bundle.putString("show","show_message");
-                CustomersContentFragment customersContentFragment=new CustomersContentFragment();
-                customersContentFragment.setArguments(bundle);
                 recyclerAdapter.runItemClickListener(position);
             }
         });

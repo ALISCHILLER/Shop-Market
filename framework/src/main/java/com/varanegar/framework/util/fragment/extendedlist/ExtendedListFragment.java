@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -184,10 +185,17 @@ public abstract class ExtendedListFragment<DataModel extends BaseModel> extends 
         mainRecyclerView.setAdapter(adapter);
     }
 
+    /**
+     * جهت نمایش ییام ویزیتور به موزع و برای اطمینان از ارسال درست از صفحه لیست مشتریان به جزئیات مشتری
+     * @param position
+     */
+
     public void setOnItemClickListener(int position) {
         DataModel selectedItem = adapter.get(position);
         VaranegarFragment contentFragment = onCreateContentFragment(selectedItem.UniqueId, LayoutInflater.from(getContext()), contentFrameLayout, savedInstanceState);
         if (contentFragment != null) {
+
+            contentFragment.addArgument("is from customer list", "true");
             contentFragment.addArgument("a129ef75-77ce-432a-8982-6bcab0bf7b51", selectedItem.UniqueId.toString());
             getVaranegarActvity().pushFragment(contentFragment);
         }

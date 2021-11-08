@@ -240,22 +240,6 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
             public void onSuccess(CustomerCallOrderPromotion data) {
                 customerCallOrderPromotion = data;
               //  titleTextView.setText(getString(R.string.order_preview) + " : " + customerCallOrderPromotion.CustomerName + " (" + customerCallOrderPromotion.CustomerCode + ")");
-                Currency totalPayableCash = Currency.ZERO;
-                Currency totalPayableCheque = Currency.ZERO;
-                Currency totalCashDiscount =Currency.ZERO;
-
-                if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
-                    for (CustomerCallOrderLinePromotion line:
-                         customerCallOrderPromotion.LinesWithPromo) {
-                        totalPayableCash = totalPayableCash.add(line.AmountNutCash);
-                        totalPayableCheque = totalPayableCheque.add(line.AmountNutCheque);
-                        totalCashDiscount =totalCashDiscount.add(line.CashDiscount);
-
-                    }
-                    payableCashPairedItems.setValue(totalPayableCash.toString());
-                    payableChequePairedItems.setValue(totalPayableCheque.toString());
-                    orderCostPairedItems.setValue(totalCashDiscount.toString());
-                }
 
                 for (CustomerCallOrderLinePromotion lines : customerCallOrderPromotion.LinesWithPromo) {
                     if (lines.AdjustmentPrice != null) {
@@ -831,6 +815,9 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
 
                 // change value of this pairedItem with chequeDiscount
 //                orderCostPairedItems.setValue(HelperMethods.currencyToString(customerCallOrderPromotion.TotalPriceWithPromo.add(customerCallOrderPromotion.TotalInvoiceAdd).subtract(customerCallOrderPromotion.TotalInvoiceDiscount)));
+                payableCashPairedItems.setValue(customerCallOrderPromotion.TotalAmountNutCash.toString());
+                payableChequePairedItems.setValue(customerCallOrderPromotion.TotalAmountNutCheque.toString());
+                orderCostPairedItems.setValue(customerCallOrderPromotion.TotalCashDiscount.toString());
             }
 
             addAmountPairedItems.setValue(HelperMethods.currencyToString(customerCallOrderPromotion.TotalInvoiceAdd));

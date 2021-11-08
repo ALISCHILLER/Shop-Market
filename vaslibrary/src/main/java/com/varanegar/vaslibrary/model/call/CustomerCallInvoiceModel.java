@@ -17,7 +17,7 @@ public class CustomerCallInvoiceModel extends OrderBaseModel {
         customerCallOrderModel.CustomerUniqueId = this.CustomerUniqueId;
         customerCallOrderModel.DistBackOfficeId = this.DistBackOfficeId;
         customerCallOrderModel.DisType = DisType;
-        customerCallOrderModel.Comment = Comment;
+//        customerCallOrderModel.Comment = Comment;
         customerCallOrderModel.LocalPaperNo = LocalPaperNo;
         customerCallOrderModel.BackOfficeOrderNo = BackOfficeOrderNo;
         customerCallOrderModel.SaleDate = SaleDate;
@@ -77,6 +77,10 @@ public class CustomerCallInvoiceModel extends OrderBaseModel {
         customerCallOrderModel.PinCode2 = PinCode2;
         customerCallOrderModel.PinCode3 =PinCode3;
         customerCallOrderModel.PinCode4=PinCode4;
+        customerCallOrderModel.TotalAmountNutCheque=TotalAmountNutCheque;
+        customerCallOrderModel.TotalAmountNutCash =TotalAmountNutCash;
+
+
         return customerCallOrderModel;
     }
 }

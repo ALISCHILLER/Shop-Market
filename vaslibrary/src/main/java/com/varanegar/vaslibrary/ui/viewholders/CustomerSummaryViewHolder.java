@@ -106,9 +106,9 @@ public class CustomerSummaryViewHolder extends BaseViewHolder<CustomerPathViewMo
 
         setStatus(customerCalls);
         if (descriptionLayout != null) {
-            if (backOfficeType == BackOfficeType.ThirdParty && customerModel.Comments != null && !customerModel.Comments.isEmpty()) {
+            if (backOfficeType == BackOfficeType.ThirdParty && VaranegarApplication.is(VaranegarApplication.AppId.Dist) && customerModel.InvoiceComments != null && !customerModel.InvoiceComments.isEmpty()) {
                 descriptionLayout.setVisibility(View.VISIBLE);
-                descriptionTextView.setText(customerModel.Comments);
+                descriptionTextView.setText(customerModel.InvoiceComments);
             } else {
                 descriptionLayout.setVisibility(View.GONE);
             }
@@ -116,10 +116,6 @@ public class CustomerSummaryViewHolder extends BaseViewHolder<CustomerPathViewMo
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CustomersContentFragment customersContentFragment=new CustomersContentFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("message", "true show message");
-                customersContentFragment.setArguments(bundle);
                 recyclerAdapter.runItemClickListener(position);
             }
         });

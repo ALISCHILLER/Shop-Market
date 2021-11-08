@@ -143,5 +143,8 @@ public class OrderBaseModel extends BaseModel {
     public String PinCode3;
     @Column
     public String PinCode4;
-
+    @Column
+    public Currency TotalAmountNutCash;
+    @Column
+    public  Currency TotalAmountNutCheque;
 }

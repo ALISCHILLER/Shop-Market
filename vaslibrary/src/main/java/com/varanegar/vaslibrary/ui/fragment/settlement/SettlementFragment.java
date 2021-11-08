@@ -77,7 +77,7 @@ import timber.log.Timber;
  */
 
 /**
- *  صفحه تسویه حساب
+ * صفحه تسویه حساب
  */
 public class SettlementFragment extends VisitFragment {
 
@@ -183,7 +183,7 @@ public class SettlementFragment extends VisitFragment {
             loadCustomerCalls();
             setupPaymentButtons(view);
             setupPaymentsList(view);
-            ((TextView) view.findViewById(R.id.title_text_view)).setText(customer.CustomerName+" "+customer.CustomerCode);
+            ((TextView) view.findViewById(R.id.title_text_view)).setText(customer.CustomerName + " " + customer.CustomerCode);
             View printImageBtn = view.findViewById(R.id.print_image_button);
             printImageBtn.setVisibility(View.VISIBLE);
             printImageBtn.setOnClickListener(view1 -> {
@@ -267,7 +267,7 @@ public class SettlementFragment extends VisitFragment {
         SysConfigManager sysConfigManager = new SysConfigManager(getContext());
         BackOfficeType backOfficeType = sysConfigManager.getBackOfficeType();
         if (backOfficeType == BackOfficeType.ThirdParty)
-            paymentManager.thirdPartyControlPayments(customer, customerCallOrderModels, customerPayment);
+            paymentManager.thirdPartyControlPayments(customer, customerCallOrderModels, customerPayment, false);
         else {
             paymentManager.controlPayments(customer, customerCallOrderModels, customerPayment, sysConfigMap);
         }
@@ -343,19 +343,25 @@ public class SettlementFragment extends VisitFragment {
         return new SaveOrderUtility.ISaveOrderCallback() {
             @Override
             public void onSuccess() {
-                if (print) {
-                    InvoicePrintHelper printInvoice = new InvoicePrintHelper(getVaranegarActvity(), customerId, OrderPrintType.Preview);
-                    printInvoice.start(null);
-                } else {
-                    try {
-                        new CustomerCallManager(getContext()).savePaymentCall(customerId);
-                        refreshSettlement();
+                try {
+                    paymentManager.thirdPartyControlPaymentsAfterEvc(customer, customerCallOrderModels, customerPayment);
+                    if (print) {
+                        InvoicePrintHelper printInvoice = new InvoicePrintHelper(getVaranegarActvity(), customerId, OrderPrintType.Preview);
+                        printInvoice.start(null);
+                    } else {
+                        try {
+                            new CustomerCallManager(getContext()).savePaymentCall(customerId);
+                            refreshSettlement();
 //                        getVaranegarActvity().popFragment();
-                    } catch (ValidationException e) {
-                        showErrorDialog();
-                    } catch (DbException e) {
-                        showErrorDialog();
+                        } catch (ValidationException e) {
+                            showErrorDialog();
+                        } catch (DbException e) {
+                            showErrorDialog();
+                        }
                     }
+                } catch (ControlPaymentException e) {
+                    Timber.e(e);
+                    showErrorDialog(e.getMessage());
                 }
             }
 
@@ -602,8 +608,8 @@ public class SettlementFragment extends VisitFragment {
         totalPaymentPairedItems.setValue(HelperMethods.currencyToString(totalPayment.subtract(discountAmount)));
         netAmountPairedItems.setValue(HelperMethods.currencyToString(customerPayment.getTotalAmount(false)));
         remainingPairedItems.setValue(HelperMethods.currencyToString(customerPayment.getTotalAmount(false).subtract(totalPayment)));
-        invoiceAmountPairedItems.setValue(HelperMethods.currencyToString(customerPayment.getInvoiceAmount()));
-        oldInvoicesAmountPairedItems.setValue(HelperMethods.currencyToString(customerPayment.getOldInvoicesAmount()));
+        invoiceAmountPairedItems.setValue(HelperMethods.currencyToString(paymentManager.getTotalAmountNutCheque(customerId)));
+        oldInvoicesAmountPairedItems.setValue(HelperMethods.currencyToString(paymentManager.getTotalAmountNutCash(customerId)));
         returnAmountPairedItems.setValue(HelperMethods.currencyToString(customerPayment.getReturnAmount()));
         discountPairedItems.setValue(HelperMethods.currencyToString(discountAmount));
         Currency customerRemain;

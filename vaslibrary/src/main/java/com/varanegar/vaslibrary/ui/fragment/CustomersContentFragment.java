@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -240,7 +241,7 @@ public class CustomersContentFragment extends VaranegarFragment {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        String strtext = getArguments().getString("message");
+
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -328,9 +329,14 @@ public class CustomersContentFragment extends VaranegarFragment {
             throw new NullPointerException("customer id not found : " + getSelectedId().toString());
         }
         View view = inflater.inflate(R.layout.layout_customer_detail, viewGroup, false);
-     //   String strtext = getArguments().getString("show","sadsa");
-        //customer.Description="true";
-        if (customer.Description != null && !customer.Description.isEmpty() ) {
+
+        /**
+         * برای نمایش پیام ویزیتور به موزع استفاده از Arguments در کلاس ExtendedListFragment در متد setOnItemClickListener
+         */
+        String message=getArguments().getString("is from customer list","false");
+        customer.Description="true";
+        if (customer.Description != null && !customer.Description.isEmpty()&& message.equals("true") ) {
+            getArguments().putString("is from customer list","false");
             CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
             dialog.setTitle(getString(R.string.description));
             dialog.setMessage(customer.Description);
