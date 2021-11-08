@@ -1,5 +1,7 @@
 package com.varanegar.vaslibrary.manager.locationmanager;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -8,14 +10,14 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.provider.Settings;
+import android.telephony.TelephonyManager;
+
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import android.telephony.TelephonyManager;
 
 import com.varanegar.framework.util.Linq;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
-import com.varanegar.vaslibrary.model.location.LocationModel;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 
 import org.simpleframework.xml.ElementList;
@@ -28,8 +30,6 @@ import java.util.Date;
 import java.util.List;
 
 import timber.log.Timber;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by A.Torabi on 8/12/2017.
@@ -94,36 +94,56 @@ public class TrackingLicense {
         return 20;
     }
 
+    // This method comment for testing tracking without license
     public static void logLicense(Context context) {
-        SharedPreferences trackingLicenseSharedPref = context.getSharedPreferences("TRACKING_LICENSE", MODE_PRIVATE);
-        String licenseStr = trackingLicenseSharedPref.getString("licenseStr", null);
-        if (licenseStr != null && !licenseStr.isEmpty()) {
-            try {
-                String xml = LicenseEncryptor.decrypt("@zdadV@r@n" + getDeviceId(context).substring(0, 6), licenseStr);
-                TrackingLogManager.addLog(context, LogType.LICENSE_FILE, LogLevel.Info, xml);
-            } catch (Exception e) {
-                TrackingLogManager.addLog(context, LogType.LICENSE_FILE, LogLevel.Error, "فایل لایسنس خراب است!", e.getMessage());
-            }
-        } else {
-            TrackingLogManager.addLog(context, LogType.LICENSE_FILE, LogLevel.Error, "فایل لایسنس خالی است!");
-        }
+
     }
 
+    // This method change for testing tracking without license
     public static TrackingLicense readLicense(Context context) {
-        SharedPreferences trackingLicenseSharedPref = context.getSharedPreferences("TRACKING_LICENSE", MODE_PRIVATE);
-        String licenseStr = trackingLicenseSharedPref.getString("licenseStr", null);
-        if (licenseStr != null && !licenseStr.isEmpty()) {
-            try {
-                String xml = LicenseEncryptor.decrypt("@zdadV@r@n" + getDeviceId(context).substring(0, 6), licenseStr);
-                Serializer serializer = new Persister();
-                return serializer.read(TrackingLicense.class, xml);
-            } catch (Exception e) {
-                Timber.d("Tracking license file corrupted!");
-                return null;
+        String xml = "<?xml version='1.0' encoding='utf-8'?>\n" +
+                "<Tracking xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>\n" +
+                "\t<TrackingLicense>\n" +
+                "\t\t<config>\n" +
+                "\t\t\t<name>workingday</name>\n" +
+                "\t\t\t<id>30</id>\n" +
+                "\t\t</config>\n" +
+                "\t\t<config>\n" +
+                "\t\t\t<name>timerInterval</name>\n" +
+                "\t\t\t<id>300</id>\n" +
+                "\t\t</config>\n" +
+                "\t\t<config>\n" +
+                "\t\t\t<name>duration</name>\n" +
+                "\t\t\t<id>8</id>\n" +
+                "\t\t</config>\n" +
+                "\t\t<config>\n" +
+                "\t\t\t<name>checkDistance</name>\n" +
+                "\t\t\t<id>0</id>\n" +
+                "\t\t</config>\n" +
+                "\t\t<config>\n" +
+                "\t\t\t<name>distanceAmount</name>\n" +
+                "\t\t\t<id>0</id>\n" +
+                "\t\t</config>\n" +
+                "\t\t<config>\n" +
+                "\t\t\t<name>expireAt</name>\n" +
+                "\t\t\t<id>8/13/2018 12:00:00 AM</id>\n" +
+                "\t\t</config>\n" +
+                "\t</TrackingLicense>\n" +
+                "</Tracking>";
+        try {
+            Serializer serializer = new Persister();
+            TrackingLicense trackingLicense = serializer.read(TrackingLicense.class, xml);
+            for (TrackingConfig trackingConfig :
+                    trackingLicense.configs) {
+                if (trackingConfig.name.equals("expireAt")) {
+                    Calendar newDate = Calendar.getInstance();
+                    newDate.add(Calendar.YEAR, 10); // valid license for 10 years
+                    trackingConfig.value = String.valueOf(newDate.getTime());
+                }
             }
-        }
-        {
-            Timber.d("Tracking license file not found!");
+            return trackingLicense;
+        } catch (Exception e) {
+            Timber.d("Tracking license file corrupted!");
             return null;
         }
     }
