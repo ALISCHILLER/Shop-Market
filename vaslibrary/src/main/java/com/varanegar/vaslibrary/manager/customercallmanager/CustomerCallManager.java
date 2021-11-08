@@ -20,6 +20,7 @@ import com.varanegar.vaslibrary.base.SubsystemType;
 import com.varanegar.vaslibrary.base.SubsystemTypeId;
 import com.varanegar.vaslibrary.base.SubsystemTypes;
 import com.varanegar.vaslibrary.manager.CustomerInventoryManager;
+import com.varanegar.vaslibrary.manager.NoSaleReasonManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallInvoiceManager;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallOrderManager;
@@ -35,6 +36,7 @@ import com.varanegar.vaslibrary.model.customercall.CustomerCall;
 import com.varanegar.vaslibrary.model.customercall.CustomerCallModel;
 import com.varanegar.vaslibrary.model.customercall.CustomerCallModelRepository;
 import com.varanegar.vaslibrary.model.customercall.CustomerCallType;
+import com.varanegar.vaslibrary.model.noSaleReason.NoSaleReasonModel;
 import com.varanegar.vaslibrary.model.orderprize.OrderPrize;
 
 import java.util.ArrayList;
@@ -288,6 +290,28 @@ public class CustomerCallManager extends BaseManager<CustomerCallModel> {
             }
         });
     }
+
+    /**
+     * needImage
+     * عکس از دلیل برگشتی
+     * @param calls
+     * @return
+     */
+    @SubsystemTypes(ids = {SubsystemTypeId.HotSales, SubsystemTypeId.PreSales})
+    public boolean isNeedImage(List<CustomerCallModel> calls) {
+        NoSaleReasonManager noSaleReasonManager = new NoSaleReasonManager(getContext());
+        return Linq.exists(calls, new Linq.Criteria<CustomerCallModel>() {
+            @Override
+            public boolean run(CustomerCallModel item) {
+                if (item.CallType == CustomerCallType.LackOfOrder || item.CallType == CustomerCallType.LackOfVisit) {
+                    NoSaleReasonModel noSaleReasonModel = noSaleReasonManager.getItem(UUID.fromString(item.ExtraField1));
+                    return (noSaleReasonModel!=null && noSaleReasonModel.NeedImage);
+                }
+                return false;
+            }
+        });
+    }
+
 
     public boolean isLackOfVisit(List<CustomerCallModel> calls) {
         return Linq.exists(calls, new Linq.Criteria<CustomerCallModel>() {

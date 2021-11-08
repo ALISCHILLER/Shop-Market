@@ -88,7 +88,7 @@ public class PictureCustomerManager extends BaseManager<PictureCustomerModel> {
             else if (p.DemandTypeUniqueId.equals(PictureDemandTypeId.NoSaleMandatory)) {
                 CustomerCallManager customerCallManager = new CustomerCallManager(getContext());
                 if(!VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
-                    if (customerCallManager.isLackOfOrder(customerCalls))
+                    if (customerCallManager.isNeedImage(customerCalls))
                         pictureCustomerModel.DemandType = PictureDemandType.Mandatory;
                 }
             } else

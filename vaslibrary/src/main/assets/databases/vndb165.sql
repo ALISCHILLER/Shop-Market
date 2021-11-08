@@ -60,7 +60,10 @@ ALTER TABLE CustomerCallOrder ADD COLUMN [TotalAmountNutCash]  REAL  NULL;
 ALTER TABLE CustomerCallOrder ADD COLUMN [TotalAmountNutCheque]  REAL  NULL;
 
 
-
+-- ----------------------------
+--  Alter Table NoSaleReason Add NeedImage Field
+-- ----------------------------
+ALTER TABLE NoSaleReason ADD COLUMN [NeedImage]  INTEGER  null;
 
 
 

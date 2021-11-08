@@ -170,7 +170,7 @@ public class CameraFragment extends VisitFragment {
             adapter = new BaseSelectionRecyclerAdapter<PictureCustomerViewModel>(
                     getVaranegarActvity(),
                     new PictureCustomerViewModelRepository(),
-                    PictureCustomerViewManager.getPicturesQuery(customerId, isLackOfOrder()),
+                    PictureCustomerViewManager.getPicturesQuery(customerId, isImageNeed()),
                     false) {
                 @Override
                 public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -193,14 +193,25 @@ public class CameraFragment extends VisitFragment {
         }
     }
 
-    private boolean isLackOfOrder() {
+//    private boolean isLackOfOrder() {
+//        CustomerCallManager callManager = new CustomerCallManager(getContext());
+//        if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist))
+//            return callManager.isNeedImage(callManager.loadCalls(customerId));
+//        else
+//            return false;
+//    }
+
+    /**
+     * ثبت عکس در حالت عدم سفارش و عدم ویزیت (در صورتی که دلیل انتخاب شده نیاز به عکس داشته باشد )
+     * @return
+     */
+    private boolean isImageNeed() {
         CustomerCallManager callManager = new CustomerCallManager(getContext());
         if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist))
-            return callManager.isLackOfOrder(callManager.loadCalls(customerId));
+            return callManager.isNeedImage(callManager.loadCalls(customerId));
         else
             return false;
     }
-
 
     private void dismissLoading() {
         loadingLayout.setVisibility(View.GONE);
@@ -306,7 +317,7 @@ public class CameraFragment extends VisitFragment {
         } else {
             // we get all pictures of this customer
             PictureCustomerViewManager pictureCustomerViewManager = new PictureCustomerViewManager(getContext());
-            List<PictureCustomerViewModel> pictureCustomerViewModelList = pictureCustomerViewManager.getPictures(customerId, isLackOfOrder());
+            List<PictureCustomerViewModel> pictureCustomerViewModelList = pictureCustomerViewManager.getPictures(customerId, isImageNeed());
             // we find all picture subjects that are mandatory and user has not taken any pictures for them
             // if there is any we find if user has confirmed that he or she was not able to take picture
             final List<PictureCustomerViewModel> mandatoryList = Linq.findAll(pictureCustomerViewModelList, new Linq.Criteria<PictureCustomerViewModel>() {
@@ -333,7 +344,7 @@ public class CameraFragment extends VisitFragment {
 
     public boolean hasTakenPhoto() {
         PictureCustomerViewManager pictureCustomerViewManager = new PictureCustomerViewManager(getContext());
-        List<PictureCustomerViewModel> pictureCustomerViewModelList = pictureCustomerViewManager.getPictures(customerId, isLackOfOrder());
+        List<PictureCustomerViewModel> pictureCustomerViewModelList = pictureCustomerViewManager.getPictures(customerId, isImageNeed());
         return Linq.exists(pictureCustomerViewModelList, new Linq.Criteria<PictureCustomerViewModel>() {
             @Override
             public boolean run(PictureCustomerViewModel item) {

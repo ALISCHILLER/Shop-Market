@@ -19,6 +19,10 @@ public class NoSaleReasonModel extends BaseModel{
     @Column
     public String NoSaleReasonName;
 
+
+    @Column
+    public boolean NeedImage;
+
     @Override
     public String toString() {
         return NoSaleReasonName;

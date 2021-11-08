@@ -68,16 +68,16 @@ public class PictureCustomerViewManager extends BaseManager<PictureCustomerViewM
             customerCalls = new ArrayList<>();
         CustomerCallManager callManager = new CustomerCallManager(getContext());
         boolean lakOfVisit = callManager.isLackOfVisit(customerCalls);
-        boolean lackOfOrder = false;
+        boolean isNeedImage = false;
         if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist))
-            lackOfOrder = callManager.isLackOfOrder(customerCalls);
-        if (lakOfVisit)
+            isNeedImage = callManager.isNeedImage(customerCalls);
+        if (lakOfVisit && !isNeedImage)
             return null;
         PictureTemplateManager pictureTemplateManager = new PictureTemplateManager(getContext());
         try {
             pictureTemplateManager.calculateCustomerPictures(customerId, customerCalls);
             PictureCustomerViewManager pictureCustomerViewManager = new PictureCustomerViewManager(getContext());
-            List<PictureCustomerViewModel> subjects = pictureCustomerViewManager.getPictures(customerId, lackOfOrder);
+            List<PictureCustomerViewModel> subjects = pictureCustomerViewManager.getPictures(customerId,isNeedImage);
             if (subjects.size() == 0)
                 return null;
             PictureCustomerViewModel force = Linq.findFirst(subjects, new Linq.Criteria<PictureCustomerViewModel>() {
