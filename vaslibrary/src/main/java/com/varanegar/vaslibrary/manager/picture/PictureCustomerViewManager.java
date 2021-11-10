@@ -43,41 +43,69 @@ public class PictureCustomerViewManager extends BaseManager<PictureCustomerViewM
         super(context, new PictureCustomerViewModelRepository());
     }
 
-    public static Query getPicturesQuery(UUID customerId, boolean isLackOfOrder) {
-        if (isLackOfOrder)
+
+    /**
+     * check db
+     * عدم ویزیت عدم سفارش
+     * Need Image
+     *  کوئری  گرفتن
+     *  لیست عدم ویزیت
+     * لیست عدم سفارش
+     * @param customerId
+     * @param isLackOfOrder
+     * @return
+     */
+    public static Query getPicturesQuery(UUID customerId, boolean isLackOfOrder, boolean isLackOfVisit) {
+        if (isLackOfVisit || isLackOfOrder)
+            return new Query().from(PictureCustomerView.PictureCustomerViewTbl)
+                    .whereAnd(Criteria.equals(PictureCustomerView.CustomerId, customerId.toString()))
+                    .whereAnd(Criteria.equals(PictureCustomerView.DemandTypeUniqueId,
+                            PictureDemandTypeId.NoSaleMandatory.toString()));
+
+
+        /*else if (isLackOfOrder)
             return new Query().from(PictureCustomerView.PictureCustomerViewTbl)
                     .whereAnd(Criteria.equals(PictureCustomerView.CustomerId, customerId.toString()))
                     .whereAnd(Criteria.equals(PictureCustomerView.DemandTypeUniqueId, PictureDemandTypeId.JustOnce.toString())
                             .and(Criteria.equals(PictureCustomerView.AlreadyTaken, false))
-                            .or(Criteria.notEquals(PictureCustomerView.DemandTypeUniqueId, PictureDemandTypeId.JustOnce.toString())));
+                            .or(Criteria.notEquals(PictureCustomerView.DemandTypeUniqueId, PictureDemandTypeId.JustOnce.toString())));*/
         else
             return new Query().from(PictureCustomerView.PictureCustomerViewTbl)
                     .whereAnd(Criteria.equals(PictureCustomerView.CustomerId, customerId.toString()))
                     .whereAnd(Criteria.equals(PictureCustomerView.DemandTypeUniqueId, PictureDemandTypeId.JustOnce.toString())
                             .and(Criteria.equals(PictureCustomerView.AlreadyTaken, false))
                             .or(Criteria.notEquals(PictureCustomerView.DemandTypeUniqueId, PictureDemandTypeId.JustOnce.toString())))
-                    .whereAnd(Criteria.notEquals(PictureCustomerView.DemandTypeUniqueId, PictureDemandTypeId.NoSaleMandatory.toString()));
+                    .whereAnd(Criteria.notEquals(PictureCustomerView.DemandTypeUniqueId,
+                            PictureDemandTypeId.NoSaleMandatory.toString()));
     }
 
-    public List<PictureCustomerViewModel> getPictures(UUID customerId, boolean isLackOfOrder) {
-        return getItems(getPicturesQuery(customerId, isLackOfOrder));
+
+    public List<PictureCustomerViewModel> getPictures(UUID customerId, boolean isLackOfOrder, boolean isLackOfVisit) {
+        return getItems(getPicturesQuery(customerId, isLackOfOrder, isLackOfVisit));
     }
+
 
     public String checkMandatoryPicture(final UUID customerId, @Nullable List<CustomerCallModel> customerCalls) {
         if (customerCalls == null)
             customerCalls = new ArrayList<>();
         CustomerCallManager callManager = new CustomerCallManager(getContext());
         boolean lakOfVisit = callManager.isLackOfVisit(customerCalls);
-        boolean isNeedImage = false;
-        if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist))
-            isNeedImage = callManager.isNeedImage(customerCalls);
-        if (lakOfVisit && !isNeedImage)
+        boolean isLackOfOrderAndNeedImage = false;
+        boolean isLackOfVisitAndNeedImage = false;
+        if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
+            isLackOfOrderAndNeedImage = callManager.isLackOfOrderAndNeedImage(customerCalls);
+            isLackOfVisitAndNeedImage = callManager.isLackOfVisitAndNeedImage(customerCalls);
+        }
+        if (lakOfVisit && !isLackOfVisitAndNeedImage)
             return null;
         PictureTemplateManager pictureTemplateManager = new PictureTemplateManager(getContext());
         try {
             pictureTemplateManager.calculateCustomerPictures(customerId, customerCalls);
             PictureCustomerViewManager pictureCustomerViewManager = new PictureCustomerViewManager(getContext());
-            List<PictureCustomerViewModel> subjects = pictureCustomerViewManager.getPictures(customerId,isNeedImage);
+            List<PictureCustomerViewModel> subjects = null;
+
+               subjects = pictureCustomerViewManager.getPictures(customerId, isLackOfOrderAndNeedImage, isLackOfVisitAndNeedImage);
+
             if (subjects.size() == 0)
                 return null;
             PictureCustomerViewModel force = Linq.findFirst(subjects, new Linq.Criteria<PictureCustomerViewModel>() {

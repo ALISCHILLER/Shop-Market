@@ -25,7 +25,8 @@ public class SubsystemChecker {
                 typeId == SubsystemTypeId.HotSales && !VaranegarApplication.is(VaranegarApplication.AppId.HotSales) ||
                 typeId == SubsystemTypeId.PreSales && !VaranegarApplication.is(VaranegarApplication.AppId.PreSales) ||
                 typeId == SubsystemTypeId.Supervisor && !VaranegarApplication.is(VaranegarApplication.AppId.Supervisor))
-            throw new IllegalAccessError("Method invocation is not permitted. Subsystem type is wrong! method " + signature.toShortString() + " is for " + subsystemType.id().name());
+            throw new IllegalAccessError("Method invocation is not permitted. Subsystem type is wrong! method " +
+                    signature.toShortString() + " is for " + subsystemType.id().name());
     }
 
     @Before("execution(@com.varanegar.vaslibrary.base.SubsystemTypes * *(..))")
@@ -44,7 +45,9 @@ public class SubsystemChecker {
                 isMatch = true;
         }
         if (!isMatch)
-            throw new IllegalAccessError("Method invocation is not permitted. Subsystem type is wrong! method " + signature.toShortString() + " is not for application with AppId = " + VaranegarApplication.getInstance().getAppId().toString());
+            throw new IllegalAccessError("Method invocation is not permitted. Subsystem type is wrong! method " +
+                    signature.toShortString() + " is not for application with AppId = " +
+                    VaranegarApplication.getInstance().getAppId().toString());
 
     }
 

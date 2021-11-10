@@ -14,6 +14,12 @@ import timber.log.Timber;
 /**
  * Created by atp on 12/10/2016.
  */
+
+
+/**
+ * AppId اپلیکیشن های
+ *
+ */
 public class VaranegarApplication {
 
     public UUID getAppId() {

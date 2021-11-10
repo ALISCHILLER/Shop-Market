@@ -89,9 +89,12 @@ public abstract class BaseAction extends Action {
     public String isEnabled() {
         if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
             SysConfigManager sysConfigManager = new SysConfigManager(getActivity());
-            SysConfigModel inactiveCustomers = sysConfigManager.read(ConfigKey.SendInactiveCustomers, SysConfigManager.cloud);
-            SysConfigModel TakeOrderFromInactiveCustomers = sysConfigManager.read(ConfigKey.TakeOrderFromInactiveCustomers, SysConfigManager.cloud);
-            if (!getCustomer().IsActive && (SysConfigManager.compare(inactiveCustomers, false)) && SysConfigManager.compare(TakeOrderFromInactiveCustomers, false))
+            SysConfigModel inactiveCustomers = sysConfigManager
+                    .read(ConfigKey.SendInactiveCustomers, SysConfigManager.cloud);
+            SysConfigModel TakeOrderFromInactiveCustomers = sysConfigManager
+                    .read(ConfigKey.TakeOrderFromInactiveCustomers, SysConfigManager.cloud);
+            if (!getCustomer().IsActive && (SysConfigManager.compare(inactiveCustomers, false)) &&
+                    SysConfigManager.compare(TakeOrderFromInactiveCustomers, false))
                 return getActivity().getString(R.string.the_action_is_disabled_for_you);
         }
         UUID taskId = getTaskUniqueId();

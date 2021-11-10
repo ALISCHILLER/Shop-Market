@@ -2,8 +2,10 @@ package com.varanegar.vaslibrary.action;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+
 import androidx.annotation.CallSuper;
 import androidx.annotation.Nullable;
+
 import android.view.View;
 
 import com.varanegar.framework.base.MainVaranegarActivity;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
+ * دکمه عدم ویزیت در صفحه جزئیات سفارش
  * Created by s.foroughi on 11/03/2017.
  */
 
@@ -35,6 +38,9 @@ public class NonVisitAction extends CheckPathAction {
         return UUID.fromString("9e83bf64-ead5-4cb8-a7e7-4faa09ce098b");
     }
 
+    /**
+     * @param selectedId شناسه کاربر یا همان customerid
+     */
     public NonVisitAction(MainVaranegarActivity activity, ActionsAdapter adapter, UUID selectedId) {
         super(activity, adapter, selectedId);
         icon = R.drawable.ic_do_not_disturb_on_white_24dp;
@@ -59,7 +65,7 @@ public class NonVisitAction extends CheckPathAction {
         if (error != null)
             return error;
 
-        if (getCallManager().isDataSent(getCalls() , null))
+        if (getCallManager().isDataSent(getCalls(), null))
             return getActivity().getString(R.string.customer_operation_is_sent_already);
 
         if (canNotEditOperationAfterPrint())
@@ -86,22 +92,26 @@ public class NonVisitAction extends CheckPathAction {
         String warning = null;
 
         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
-            if (getCallManager().hasDeliveryOrReturnCall(getCalls()) || new PaymentManager(getActivity()).getCustomerPayments(getSelectedId()).size() > 0)
+            if (getCallManager().hasDeliveryOrReturnCall(getCalls()) ||
+                    new PaymentManager(getActivity()).getCustomerPayments(getSelectedId()).size() > 0)
+
                 if (getCallManager().hasCameraCall(getCalls()))
                     warning = getActivity().getString(R.string.txt_assure_to_delete_cust_order_and_payment_and_pictures);
                 else
                     warning = getActivity().getString(R.string.txt_assure_to_delete_cust_order_and_payment);
         } else {
-            if (getCallManager().hasOrderOrReturnCall(getCalls()) || new PaymentManager(getActivity()).getCustomerPayments(getSelectedId()).size() > 0)
+            if (getCallManager().hasOrderOrReturnCall(getCalls()) ||
+                    new PaymentManager(getActivity()).getCustomerPayments(getSelectedId()).size() > 0) {
                 if (getCallManager().hasCameraCall(getCalls()))
                     warning = getActivity().getString(R.string.txt_assure_to_delete_cust_order_and_payment_and_pictures);
                 else
                     warning = getActivity().getString(R.string.txt_assure_to_delete_cust_order_and_payment);
+            }
+
         }
 
         if (warning == null && getCallManager().hasCameraCall(getCalls()))
             warning = getActivity().getString(R.string.txt_assure_to_delete_pictures);
-
 
         if (warning != null) {
             final CuteMessageDialog builder = new CuteMessageDialog(getActivity());

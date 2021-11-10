@@ -334,7 +334,6 @@ public class CustomersContentFragment extends VaranegarFragment {
          * برای نمایش پیام ویزیتور به موزع استفاده از Arguments در کلاس ExtendedListFragment در متد setOnItemClickListener
          */
         String message=getArguments().getString("is from customer list","false");
-        customer.Description="true";
         if (customer.Description != null && !customer.Description.isEmpty()&& message.equals("true") ) {
             getArguments().putString("is from customer list","false");
             CuteMessageDialog dialog = new CuteMessageDialog(getActivity());

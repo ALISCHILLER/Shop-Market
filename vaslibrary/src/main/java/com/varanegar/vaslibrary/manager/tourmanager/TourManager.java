@@ -1695,12 +1695,18 @@ public class TourManager {
         boolean isLackOfVisit = callManager.isLackOfVisit(calls);
         boolean isDataSent = callManager.isDataSent(calls, null);
         boolean isLackOfOrder = false;
-        boolean isNeedImage =false;
+        boolean isLackOfOrderAndNeedImage = false;
+        boolean isLackOfVisitAndNeedImage = false;
 
+        /**
+         * Need Image
+         *LackOfVisit لیست عدم ویزیت
+         * لیست عدم سفارش LackOfOrder
+         */
         if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
             isLackOfOrder = callManager.isLackOfOrder(calls);
-            isNeedImage=callManager.isNeedImage(calls);
-
+            isLackOfOrderAndNeedImage = callManager.isLackOfOrderAndNeedImage(calls);
+            isLackOfVisitAndNeedImage = callManager.isLackOfVisitAndNeedImage(calls);
         }
         // populate call orders
         if (!isLackOfOrder && !isLackOfVisit)
@@ -1715,8 +1721,8 @@ public class TourManager {
         if (!isLackOfVisit && !isDataSent)
             syncGetCustomerCallViewModel.CustomerCallQuestionnaires = populateCustomerQuestionnaires(customerModel.UniqueId);
         // populate customer pictures
-        if ((!isLackOfVisit || isNeedImage) && !isDataSent)
-            syncGetCustomerCallViewModel.CustomerCallPictures = populateCustomerPictures(customerModel.UniqueId,isNeedImage);
+        if ((!isLackOfVisit || isLackOfVisitAndNeedImage) && !isDataSent)
+            syncGetCustomerCallViewModel.CustomerCallPictures = populateCustomerPictures(customerModel.UniqueId, isLackOfOrderAndNeedImage, isLackOfVisitAndNeedImage);
         // populate customer stock level (Customer inventory)
         SysConfigManager sysConfigManager = new SysConfigManager(context);
         SysConfigModel sysConfigModel = sysConfigManager.read(ConfigKey.CheckCustomerStock, SysConfigManager.cloud);
@@ -1757,11 +1763,11 @@ public class TourManager {
         return catalogueLogManager.getLogs(customerId);
     }
 
-    private List<SyncGetCustomerCallPictureViewModel> populateCustomerPictures(UUID customerId, boolean isNeedImage) {
+    private List<SyncGetCustomerCallPictureViewModel> populateCustomerPictures(UUID customerId, boolean isLackOfOrderAndNeedImage, boolean isLackOfVisitAndNeedImage) {
 
         List<SyncGetCustomerCallPictureViewModel> syncGetCustomerCallPictureViewModels = new ArrayList<>();
         PictureCustomerViewManager pictureCustomerViewManager = new PictureCustomerViewManager(context);
-        List<PictureCustomerViewModel> pictureCustomerViewModels = pictureCustomerViewManager.getPictures(customerId, isNeedImage);
+        List<PictureCustomerViewModel> pictureCustomerViewModels = pictureCustomerViewManager.getPictures(customerId, isLackOfOrderAndNeedImage, isLackOfVisitAndNeedImage);
         for (PictureCustomerViewModel pictureCustomerViewModel :
                 pictureCustomerViewModels) {
             SyncGetCustomerCallPictureViewModel syncGetCustomerCallPictureViewModel = new SyncGetCustomerCallPictureViewModel();

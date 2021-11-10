@@ -54,6 +54,10 @@ public abstract class Action implements Serializable {
 
     private final ActionsAdapter adapter;
 
+    /**
+     * این شناسه مشتری می باشد. آی دی مشتری
+     * @return customer id
+     */
     public UUID getSelectedId() {
         return selectedId;
     }

@@ -292,11 +292,42 @@ public class CustomerCallManager extends BaseManager<CustomerCallModel> {
     }
 
     /**
-     * needImage
+     * NeedImage
      * عکس از دلیل برگشتی
+     * چک عکس دلیل برگشتی و عدم ویزئیت
      * @param calls
      * @return
      */
+    @SubsystemTypes(ids = {SubsystemTypeId.HotSales, SubsystemTypeId.PreSales})
+    public boolean isLackOfOrderAndNeedImage(List<CustomerCallModel> calls) {
+        NoSaleReasonManager noSaleReasonManager = new NoSaleReasonManager(getContext());
+        return Linq.exists(calls, new Linq.Criteria<CustomerCallModel>() {
+            @Override
+            public boolean run(CustomerCallModel item) {
+                if (item.CallType == CustomerCallType.LackOfOrder) {
+                    NoSaleReasonModel noSaleReasonModel = noSaleReasonManager.getItem(UUID.fromString(item.ExtraField1));
+                    return (noSaleReasonModel!=null && noSaleReasonModel.NeedImage);
+                }
+                return false;
+            }
+        });
+    }
+
+    @SubsystemTypes(ids = {SubsystemTypeId.HotSales, SubsystemTypeId.PreSales})
+    public boolean isLackOfVisitAndNeedImage(List<CustomerCallModel> calls) {
+        NoSaleReasonManager noSaleReasonManager = new NoSaleReasonManager(getContext());
+        return Linq.exists(calls, new Linq.Criteria<CustomerCallModel>() {
+            @Override
+            public boolean run(CustomerCallModel item) {
+                if (item.CallType == CustomerCallType.LackOfVisit) {
+                    NoSaleReasonModel noSaleReasonModel = noSaleReasonManager.getItem(UUID.fromString(item.ExtraField1));
+                    return (noSaleReasonModel!=null && noSaleReasonModel.NeedImage);
+                }
+                return false;
+            }
+        });
+    }
+
     @SubsystemTypes(ids = {SubsystemTypeId.HotSales, SubsystemTypeId.PreSales})
     public boolean isNeedImage(List<CustomerCallModel> calls) {
         NoSaleReasonManager noSaleReasonManager = new NoSaleReasonManager(getContext());
@@ -340,6 +371,11 @@ public class CustomerCallManager extends BaseManager<CustomerCallModel> {
         });
     }
 
+    /**
+     * آیا سفارش سفارش فروش یا برگشتی دارد.
+     * check db
+     *
+     */
     @SubsystemTypes(ids = {SubsystemTypeId.PreSales, SubsystemTypeId.HotSales})
     public boolean hasOrderOrReturnCall(List<CustomerCallModel> calls) {
         return Linq.exists(calls, new Linq.Criteria<CustomerCallModel>() {
@@ -352,6 +388,11 @@ public class CustomerCallManager extends BaseManager<CustomerCallModel> {
         });
     }
 
+    /**
+     * آیا سفارش تحویل کامل یا تحویل قسمتی یا برگشت با یا بدون مبنا دارد.
+     * check db
+     *
+     */
     @SubsystemType(id = SubsystemTypeId.Dist)
     public boolean hasDeliveryOrReturnCall(List<CustomerCallModel> calls) {
         return Linq.exists(calls, new Linq.Criteria<CustomerCallModel>() {
