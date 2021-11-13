@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.otaliastudios.cameraview.CameraListener;
@@ -58,6 +59,7 @@ public class CameraFragment extends VisitFragment {
     private PictureCustomerViewModel selectedSubject;
     private View takePicture;
     BaseSelectionRecyclerAdapter<PictureCustomerViewModel> adapter;
+    BaseRecyclerView subjectRecyclerView;
     private CameraView cameraView;
     Bitmap mBitmap;
     private TextView subjectTextView;
@@ -66,14 +68,21 @@ public class CameraFragment extends VisitFragment {
     private boolean mPortrait;
     private View loadingLayout;
     private View mainLayout;
+    private View drawerView;
+    private LinearLayout linearcamera;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        View drawerView = setDrawerLayout(R.layout.drawer_camera_layout);
-        BaseRecyclerView subjectRecyclerView = (BaseRecyclerView) drawerView.findViewById(R.id.subject_recycler_view);
+        drawerView = setDrawerLayout(R.layout.drawer_camera_layout);
+        subjectRecyclerView = (BaseRecyclerView) drawerView.findViewById(R.id.subject_recycler_view);
         subjectRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), R.color.grey_light, 1));
         subjectRecyclerView.setAdapter(adapter);
+
+        linearcamera=(LinearLayout) drawerView.findViewById(R.id.linear_camera_layout) ;
+
+
+
     }
 
     @Nullable
@@ -126,14 +135,23 @@ public class CameraFragment extends VisitFragment {
                     });
                 }
             });
+
+
             previewImageView = (ImageView) view.findViewById(R.id.preview_image_view);
             subjectTextView = (TextView) view.findViewById(R.id.subject_text_view);
             imagePreviewLayout = view.findViewById(R.id.image_preview_layout);
             takePicture = view.findViewById(R.id.take_picture);
+
             view.findViewById(R.id.choose_subject_fab).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    /**
+                     *  subjectRecyclerView.setAdapter(adapter);
+                     *              *عکس مشتری cameraFragment
+                     * در صورت زدن دکمه نمایش لیست انتخاب موضوع عکس چک می شود و درصورتopen بودن close می شود و بعلکس
+                     */
                     getVaranegarActvity().toggleDrawer();
+
                 }
             });
             view.findViewById(R.id.close_image_view).setOnClickListener(new View.OnClickListener() {
@@ -167,6 +185,15 @@ public class CameraFragment extends VisitFragment {
                     cameraView.capturePicture();
                 }
             });
+
+
+
+
+            /**subjectRecyclerView  ابجیکت
+             * adapter گرفتن داده های موضوع عکس برای لیست انتخاب موضوع عکس
+             * subjectRecyclerView.setAdapter(adapter);
+             *عکس مشتری cameraFragment
+             */
             adapter = new BaseSelectionRecyclerAdapter<PictureCustomerViewModel>(
                     getVaranegarActvity(),
                     new PictureCustomerViewModelRepository(),
@@ -175,9 +202,25 @@ public class CameraFragment extends VisitFragment {
                 @Override
                 public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                     View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_subject_picture, parent, false);
+
+                    /**
+                     * عکس مشتری cameraFragment
+                     * ست کردن انتخاب موضوع عکس که برابر با 0 هست بخاطر اینکه انتخاب موضوع عکس فقط یک گزینه در لیست هست
+                     *
+                     */
+                    selectedSubject = adapter.get(0);
+                    subjectTextView.setText(selectedSubject.Title);
                     return new PictureSubjectViewHolder(itemView, this, getContext());
                 }
+
+
             };
+
+
+            /**
+             * عکس مشتری cameraFragment
+             * کلیک کردن بروی گزینه ها در لیست انتخاب موضوع عکس
+             */
             adapter.setOnItemSelectedListener(new BaseSelectionRecyclerAdapter.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(int position, boolean selected) {
@@ -286,7 +329,15 @@ public class CameraFragment extends VisitFragment {
     public void onResume() {
         super.onResume();
         cameraView.start();
-        getVaranegarActvity().openDrawer(500);
+
+        /**
+         * subjectRecyclerView.setAdapter(adapter);
+         *                    عکس مشتری cameraFragment
+         * بطور پیش فرض منو باز میشد در این حالت الان منو به طور پیش فرض بروی حالت close هست و با زدن دکمه نمایش لیست انتخاب موضوع عکس open می شودو لیست به نمایش در می ایید
+         * INVISIBLE  انتخاب موضوع عکس
+         */
+        getVaranegarActvity().closeDrawer();
+        // getVaranegarActvity().openDrawer(500);
         showLoading();
     }
 

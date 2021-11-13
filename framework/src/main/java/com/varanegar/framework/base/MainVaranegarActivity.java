@@ -110,6 +110,9 @@ public abstract class MainVaranegarActivity extends VaranegarActivity {
         drawerView.invalidate();
     }
 
+    /**
+     * چک کردن باز بودن یا بسته بودنDrawer و باز کردن یا بستن  Drawer
+     */
     public void toggleDrawer() {
         if (isDrawerOpen())
             closeDrawer();
