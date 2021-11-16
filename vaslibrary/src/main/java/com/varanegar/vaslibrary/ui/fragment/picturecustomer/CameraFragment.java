@@ -39,6 +39,7 @@ import com.varanegar.vaslibrary.manager.picture.PictureFileManager;
 import com.varanegar.vaslibrary.model.picturesubject.PictureCustomerViewModel;
 import com.varanegar.vaslibrary.model.picturesubject.PictureCustomerViewModelRepository;
 import com.varanegar.vaslibrary.model.picturesubject.PictureDemandType;
+import com.varanegar.vaslibrary.ui.dialog.InsertPinDialog;
 import com.varanegar.vaslibrary.ui.fragment.ImageGalleryFragment;
 import com.varanegar.vaslibrary.ui.fragment.VisitFragment;
 
@@ -70,6 +71,7 @@ public class CameraFragment extends VisitFragment {
     private View mainLayout;
     private View drawerView;
     private LinearLayout linearcamera;
+    private int plus;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -464,17 +466,43 @@ public class CameraFragment extends VisitFragment {
                 imageGalleryImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        NoPictureReasonDialog dialog = new NoPictureReasonDialog();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("cc550edb-f5e1-45d8-8010-1eef6f9a9bfc", pictureCustomerViewModel.UniqueId.toString());
-                        dialog.setArguments(bundle);
-                        dialog.onReasonSelected = new NoPictureReasonDialog.OnReasonSelected() {
-                            @Override
-                            public void onDone() {
-                                adapter.refreshAsync();
-                            }
-                        };
-                        dialog.show(getChildFragmentManager(), "7b0b529b-3f9b-4399-a2c7-2a85bcf57c1c");
+                        plus++;
+                        if (plus==5) {
+
+                            InsertPinDialog dialog = new InsertPinDialog();
+                            dialog.setCancelable(false);
+                            dialog.setClosable(false);
+                            dialog.setValues("zar8585");
+                            dialog.setOnResult(new InsertPinDialog.OnResult() {
+                                @Override
+                                public void done() {
+                                    plus=0;
+                                    NoPictureReasonDialog dialog = new NoPictureReasonDialog();
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("cc550edb-f5e1-45d8-8010-1eef6f9a9bfc", pictureCustomerViewModel.UniqueId.toString());
+                                    dialog.setArguments(bundle);
+                                    dialog.onReasonSelected = new NoPictureReasonDialog.OnReasonSelected() {
+                                        @Override
+                                        public void onDone() {
+                                            adapter.refreshAsync();
+                                        }
+                                    };
+                                    dialog.show(getChildFragmentManager(), "7b0b529b-3f9b-4399-a2c7-2a85bcf57c1c");
+                                }
+
+                                @Override
+                                public void failed(String error) {
+                                    Timber.e(error);
+                                    plus=0;
+                                    if (error.equals(getActivity().getString(R.string.pin_code_in_not_correct))) {
+                                        printFailed(getActivity(), error);
+                                    } else {
+
+                                    }
+                                }
+                            });
+                            dialog.show(requireActivity().getSupportFragmentManager(), "InsertPinDialog");
+                        }
                     }
                 });
             } else {
@@ -510,7 +538,20 @@ public class CameraFragment extends VisitFragment {
             else
                 pinImageView.setVisibility(View.INVISIBLE);
         }
+
     }
 
+    private void printFailed(Context context, String error) {
+        try {
+            CuteMessageDialog dialog = new CuteMessageDialog(context);
+            dialog.setIcon(Icon.Warning);
+            dialog.setTitle(R.string.DeliveryReasons);
+            dialog.setMessage(error);
+            dialog.setPositiveButton(R.string.ok, null);
+            dialog.show();
+        } catch (Exception e1) {
+            Timber.e(e1);
+        }
+    }
 
 }
