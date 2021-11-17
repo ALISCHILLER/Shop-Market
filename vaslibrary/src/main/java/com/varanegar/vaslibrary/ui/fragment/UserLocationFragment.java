@@ -2,6 +2,7 @@ package com.varanegar.vaslibrary.ui.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,7 +14,9 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -53,6 +56,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.RoundCap;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarActivity;
 import com.varanegar.framework.base.VaranegarApplication;
@@ -149,7 +153,8 @@ public class UserLocationFragment extends VaranegarFragment {
     private View optimiseBtn;
     private List<Polyline> polyLines = new ArrayList<>();
     private int maxOPathId;
-
+    private FloatingActionButton googleMapFab;
+    private FloatingActionButton wazeFab;
     public void setCustomerId(@NonNull UUID customerId) {
         addArgument("bc2c441a-a714-4bfd-a167-03c91d5e85a4", customerId.toString());
     }
@@ -392,6 +397,8 @@ public class UserLocationFragment extends VaranegarFragment {
         View view = inflater.inflate(R.layout.fragment_map, container, false);
         optimiseBtn = view.findViewById(R.id.optimize_path_btn);
         customerInfoView = view.findViewById(R.id.customer_info_layout);
+        googleMapFab = view.findViewById(R.id.google_map_fab);
+        wazeFab = view.findViewById(R.id.waze_fab);
         locationView = view.findViewById(R.id.location_layout);
         customerNameTextView = (TextView) view.findViewById(R.id.customer_name_text_view);
         customerAddressTextView = (TextView) view.findViewById(R.id.customer_address_text_view);
@@ -423,6 +430,7 @@ public class UserLocationFragment extends VaranegarFragment {
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap mMap) {
+
                 googleMap = mMap;
                 try {
                     createMarkers(Type.Today);
@@ -595,6 +603,37 @@ public class UserLocationFragment extends VaranegarFragment {
             List<CustomerCallModel> calls = callManager.loadCalls(customer.UniqueId);
             String statusName = callManager.getName(calls, VaranegarApplication.is(VaranegarApplication.AppId.Contractor));
             customerStatusTextView.setText(statusName);
+
+                    googleMapFab.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            try {
+                                String map = "http://maps.google.com/maps?daddr=" + customer.Latitude + "," + customer.Longitude;
+                                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                                        Uri.parse(map));
+                                getContext().startActivity(intent);
+                            } catch (Exception ignored) {
+
+                            }
+
+                        }
+                    });
+
+            wazeFab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        String waze = "waze://?ll=" + customer.Latitude + ", " + customer.Longitude + "&navigate=yes";
+                        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                                Uri.parse(waze));
+                        getContext().startActivity(intent);
+                    } catch (Exception ignored) {
+
+                    }
+
+                }
+            });
+
         }
     }
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -58,6 +59,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:padding="@dimen/padding_small" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -112,6 +114,25 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:padding="@dimen/padding_small" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/google_map_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_small"
+                android:src="@mipmap/ic_navigate"
+
+                app:fabSize="mini" />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/waze_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_small"
+                android:src="@mipmap/ic_waze"
+                app:fabSize="mini" />
             </LinearLayout>
         </LinearLayout>
 

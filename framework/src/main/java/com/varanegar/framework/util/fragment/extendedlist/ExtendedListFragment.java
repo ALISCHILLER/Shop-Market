@@ -30,14 +30,16 @@ import com.varanegar.framework.util.filter.Filter;
 import com.varanegar.framework.util.filter.FiltersAdapter;
 import com.varanegar.framework.util.recycler.BaseRecyclerAdapter;
 import com.varanegar.framework.util.recycler.BaseRecyclerView;
-
 import java.util.List;
 import java.util.UUID;
 
 /**
  * Created by atp on 1/14/2017.
+ * سرچ در لیست مشتریان با  بارکد
+ * Search Barcode
  */
 public abstract class ExtendedListFragment<DataModel extends BaseModel> extends ProgressFragment {
+    private static final String TAG = "ExtendedListFragment";
     private String searchText;
     EditText searchEditText;
     private ImageView advancedSearchImageView;
@@ -88,6 +90,20 @@ public abstract class ExtendedListFragment<DataModel extends BaseModel> extends 
     protected View onCreateContentView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.savedInstanceState = savedInstanceState;
         return inflater.inflate(R.layout.fragment_extended_list, container, false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        /**
+         * چک کردن بارکد اسکن شده در دیتابیس و سرچ در لیست
+         */
+        String result = VaranegarApplication.getInstance().tryRetrieve("dd003d32-4f05-423f-b7ba-3ccc9f54fb39", true);
+        Log.d(TAG, "onResume: result = "+result);
+        if (result != null){
+            searchEditText.setText(result);
+        }
+
     }
 
     @Override
@@ -203,9 +219,14 @@ public abstract class ExtendedListFragment<DataModel extends BaseModel> extends 
 
 
     private View.OnClickListener advancedSearch;
+
+
+
     private int advancedSearchDrawable;
 
     public void setAdvancedSearch(@DrawableRes int drawable, View.OnClickListener search) {
+        Log.d(TAG, "setAdvancedSearch: called");
+
         this.advancedSearch = search;
         this.advancedSearchDrawable = drawable;
         if (advancedSearchImageView != null) {

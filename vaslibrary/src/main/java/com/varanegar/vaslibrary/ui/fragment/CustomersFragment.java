@@ -8,11 +8,11 @@ import static com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey.StartD
 import android.app.ActivityManager;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +43,7 @@ import com.varanegar.vaslibrary.catalogue.CatalogueHelper;
 import com.varanegar.vaslibrary.manager.CustomerPathViewManager;
 import com.varanegar.vaslibrary.manager.Target.TargetMasterManager;
 import com.varanegar.vaslibrary.manager.UserManager;
+import com.varanegar.vaslibrary.manager.customer.CustomerBarcodeManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.customercallmanager.CustomerCallManager;
 import com.varanegar.vaslibrary.manager.customercardex.CustomerCardexTempManager;
@@ -78,6 +79,7 @@ import com.varanegar.vaslibrary.webapi.ping.PingApi;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import timber.log.Timber;
@@ -88,8 +90,10 @@ import timber.log.Timber;
  */
 
 public abstract class CustomersFragment extends DbListFragment<CustomerPathViewModel, CustomerPathViewModelRepository> {
-
+    private static final String TAG = "CustomersFragment";
     private String barcode;
+
+
     private boolean multipan;
     BackOfficeType backOfficeType;
 
@@ -105,7 +109,7 @@ public abstract class CustomersFragment extends DbListFragment<CustomerPathViewM
     public void onPause() {
         super.onPause();
         Timber.d("Customers fragment paused");
-        remove("dd003d32-4f05-423f-b7ba-3ccc9f54fb39");
+       // remove("dd003d32-4f05-423f-b7ba-3ccc9f54fb39");
         Runtime.getRuntime().gc();
     }
 
@@ -118,10 +122,7 @@ public abstract class CustomersFragment extends DbListFragment<CustomerPathViewM
                     SharedPreferences sharedPreferences = context.getSharedPreferences("DATA_RECOVERY", Context.MODE_PRIVATE);
                     long lastClearDate = sharedPreferences.getLong("Last_Clear_Date", 0);
                     if (lastClearDate == 0 || ((new Date().getTime() - lastClearDate) / 1000) > 3600 * 24)
-                        PriceUpdateFlow.clearAdditionalData(context);
-                }
-            }
-        }.start();
+                        PriceUpdateFlow.clearAdditionalData(context);}}}.start();
     }
 
 
@@ -131,18 +132,17 @@ public abstract class CustomersFragment extends DbListFragment<CustomerPathViewM
         refreshCustomerCalls();
         Timber.d("Customers fragment resumed");
         if (!new TourManager(getContext()).isTourAvailable()) {
-            getVaranegarActvity().putFragment(getProfileFragment());
+            Objects.requireNonNull(getVaranegarActvity()).putFragment(getProfileFragment());
             return;
         }
-
-        String result = VaranegarApplication.getInstance().tryRetrieve("dd003d32-4f05-423f-b7ba-3ccc9f54fb39", true);
+        /*String result = VaranegarApplication.getInstance().tryRetrieve("dd003d32-4f05-423f-b7ba-3ccc9f54fb39", true);
+        Log.d(TAG, "onResume: result = "+result);
         if (result != null) {
             barcode = result;
         } else
-            barcode = "";
-
+            barcode = "";*/
         try {
-            CustomerCardexTempManager cardexTempManager = new CustomerCardexTempManager(getContext());
+            CustomerCardexTempManager cardexTempManager = new CustomerCardexTempManager(Objects.requireNonNull(getContext()));
             cardexTempManager.deleteAll();
             CustomerOldInvoiceHeaderTempManager customerOldInvoiceHeaderTempManager = new CustomerOldInvoiceHeaderTempManager(getContext());
             customerOldInvoiceHeaderTempManager.deleteAll();
@@ -165,23 +165,15 @@ public abstract class CustomersFragment extends DbListFragment<CustomerPathViewM
             Date oldInvoiceDate = updateManager.getLog(UpdateKey.CustomerOldInvoice);
             Date tourStartDate = updateManager.getLog(UpdateKey.TourStartTime);
             if (tourStartDate.after(oldInvoiceDate)) {
-                final CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+                final CuteMessageDialog dialog = new CuteMessageDialog(Objects.requireNonNull(getContext()));
                 dialog.setIcon(Icon.Alert);
                 dialog.setMessage(R.string.do_you_update_old_invoices);
-                dialog.setPositiveButton(R.string.yes, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        updateCustomerOldInvoices(false, false);
-                    }
-                });
-                dialog.setNegativeButton(R.string.no, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        try {
-                            sysConfigManager.save(ConfigKey.IgnoreOldInvoice, "True", SysConfigManager.local);
-                        } catch (Exception e) {
-                            Timber.e(e);
-                        }
+                dialog.setPositiveButton(R.string.yes, view -> updateCustomerOldInvoices(false, false));
+                dialog.setNegativeButton(R.string.no, view -> {
+                    try {
+                        sysConfigManager.save(ConfigKey.IgnoreOldInvoice, "True", SysConfigManager.local);
+                    } catch (Exception e) {
+                        Timber.e(e);
                     }
                 });
                 dialog.show();
@@ -190,30 +182,18 @@ public abstract class CustomersFragment extends DbListFragment<CustomerPathViewM
     }
 
     protected void refreshCustomerCalls() {
-        CustomerSummaryMultipanViewHolder.calls = new CustomerCallManager(getContext()).getItems(new Query().from(CustomerCall.CustomerCallTbl));
+        CustomerSummaryMultipanViewHolder.calls = new CustomerCallManager(Objects.requireNonNull(getContext())).getItems(new Query().from(CustomerCall.CustomerCallTbl));
     }
+
 
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Timber.d("Customers fragment created");
+        Log.d(TAG, "onCreate: called");
         setTitle(getString(R.string.customers_list));
-        setAdvancedSearch(R.drawable.ic_barcode_black_48dp, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                BarcodeFragment fragment = new BarcodeFragment();
-//                getVaranegarActvity().pushFragment(fragment);
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-//                intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/download/" + "Sepehr_varanegar.apk")), "application/vnd.android.package-archive");
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                startActivity(intent);
+        setAdvancedSearch(R.drawable.ic_barcode_black_48dp, this::onClick);
 
-                startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
-
-//                CustomerBarcodeManager customerBarcodeManager = new CustomerBarcodeManager(getActivity());
-//                customerBarcodeManager.readBarcode();
-            }
-        });
         if (savedInstanceState != null)
             barcode = savedInstanceState.getString("dd003d32-4f05-423f-b7ba-3ccc9f54fb39");
 
@@ -228,7 +208,7 @@ public abstract class CustomersFragment extends DbListFragment<CustomerPathViewM
 
     private Boolean isLowMemory() {
         try {
-            ActivityManager activityManager = (ActivityManager) getContext().getSystemService(ACTIVITY_SERVICE);
+            ActivityManager activityManager = (ActivityManager) Objects.requireNonNull(getContext()).getSystemService(ACTIVITY_SERVICE);
             ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
             activityManager.getMemoryInfo(memoryInfo);
             return memoryInfo.lowMemory;
@@ -248,14 +228,6 @@ public abstract class CustomersFragment extends DbListFragment<CustomerPathViewM
             unknownStatus = statusFilter.unknownStatus;
         }
         text = HelperMethods.convertToEnglishNumbers(HelperMethods.persian2Arabic(text));
-
-        if (barcode != null && !barcode.isEmpty()) {
-            Query query = CustomerPathViewManager.getByBarcode(barcode);
-            barcode = null;
-            return query;
-        }
-
-
         List<Filter> selectedPaths = new ArrayList<>();
         if (filters != null)
             selectedPaths = Linq.findAll(filters, new Linq.Criteria<Filter>() {
@@ -933,6 +905,23 @@ public abstract class CustomersFragment extends DbListFragment<CustomerPathViewM
             }
         } else
             return getContentFragment(selectedItem);
+    }
+
+    /**
+     * بارکد سرچ اسکن کد بارکد و برگشت کد بارکد  در کلاس ExtendedListFragment و چک در onResume() ExtendedListFragment
+     * @param v
+     */
+    private void onClick(View v) {
+//                BarcodeFragment fragment = new BarcodeFragment();
+//                getVaranegarActvity().pushFragment(fragment);
+//               Intent intent = new Intent(Intent.ACTION_VIEW);
+//                intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/download/" + "Sepehr_varanegar.apk")), "application/vnd.android.package-archive");
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                startActivity(intent);
+//                startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
+        CustomerBarcodeManager customerBarcodeManager = new CustomerBarcodeManager(getActivity());
+        customerBarcodeManager.readBarcode();
+
     }
 
     class StatusFilter {

@@ -160,6 +160,11 @@ public class CustomerManager extends BaseManager<CustomerModel> {
             protected void onSuccess(List<CustomerModel> result, Request request) {
                 if (result.size() > 0) {
                     try {
+                        for (CustomerModel item: result
+                             ) {
+                            item.Barcode = item.CustomerCode;
+                        }
+
                         insertOrUpdate(result);
                         updateFinanceData(new UpdateCall() {
                             @Override
