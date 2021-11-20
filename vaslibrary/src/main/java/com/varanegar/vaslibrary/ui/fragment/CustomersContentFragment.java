@@ -612,17 +612,22 @@ public class CustomersContentFragment extends VaranegarFragment {
     @CallSuper
     protected void addActions(@NonNull List<Action> actions) {
 
-        EditCustomerAction editCustomerAction = new EditCustomerAction(getVaranegarActvity(), actionsAdapter, getSelectedId());
-        editCustomerAction.setActionCallBack(new Action.ActionCallBack() {
-            @Override
-            public void done() {
-                updateCustomer();
-                updateItem();
-            }
-        });
-        actions.add(editCustomerAction);
-        actions.add(new SetCustomerLocationAction(getVaranegarActvity(), getActionsAdapter(), getSelectedId()));
 
+        /**
+         * دکمه ویرایش مشتری در صحه نمایش مشتری درpresale
+         */
+        if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+           EditCustomerAction editCustomerAction = new EditCustomerAction(getVaranegarActvity(), actionsAdapter, getSelectedId());
+           editCustomerAction.setActionCallBack(new Action.ActionCallBack() {
+               @Override
+               public void done() {
+                   updateCustomer();
+                   updateItem();
+               }
+           });
+           actions.add(editCustomerAction);
+           actions.add(new SetCustomerLocationAction(getVaranegarActvity(), getActionsAdapter(), getSelectedId()));
+       }
 
         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist))
             actions.add(new InvoiceAction(getVaranegarActvity(), getActionsAdapter(), getSelectedId()));

@@ -2,7 +2,9 @@ package com.varanegar.vaslibrary.model.tour;
 
 import com.varanegar.framework.database.model.BaseModel;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -23,4 +25,12 @@ public class TourModel extends BaseModel {
     public boolean IsFromBackup;
     public boolean IsVirtual;
     public String AgentMobile;
+    public List<PinHelper> Pins;
+
+    public TourModel() {
+        Pins=new ArrayList<>();
+    }
 }
+
+
+

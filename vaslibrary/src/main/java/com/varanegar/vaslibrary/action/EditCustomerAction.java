@@ -15,7 +15,9 @@ import com.varanegar.vaslibrary.manager.customercall.CustomerCallInvoiceManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.OwnerKeysWrapper;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
+import com.varanegar.vaslibrary.manager.tourmanager.TourManager;
 import com.varanegar.vaslibrary.model.call.CustomerCallInvoiceModel;
+import com.varanegar.vaslibrary.model.tour.TourModel;
 import com.varanegar.vaslibrary.ui.dialog.EditCustomerFragmentDialog;
 import com.varanegar.vaslibrary.ui.dialog.EditCustomerZarFragmentDialog;
 import com.varanegar.vaslibrary.ui.dialog.InsertPinDialog;
@@ -30,6 +32,8 @@ import timber.log.Timber;
  */
 
 public class EditCustomerAction extends CheckBarcodeAction {
+
+    private String pin ;
 
     @Nullable
     @Override
@@ -93,28 +97,38 @@ public class EditCustomerAction extends CheckBarcodeAction {
             CustomerCallInvoiceManager customerCallOrderManager = new CustomerCallInvoiceManager(getActivity());
             List<CustomerCallInvoiceModel> customerCallOrderModels = customerCallOrderManager.getCustomerCallInvoices(getSelectedId());
 
-            InsertPinDialog dialog = new InsertPinDialog();
-            dialog.setCancelable(false);
-            dialog.setClosable(false);
-            dialog.setValues(customerCallOrderModels.get(0).PinCode4);
-            dialog.setOnResult(new InsertPinDialog.OnResult() {
-                @Override
-                public void done() {
-                    showEditDialog();
-                }
-
-                @Override
-                public void failed(String error) {
-                    Timber.e(error);
-                    setRunning(false);
-                    if (error.equals(getActivity().getString(R.string.pin_code_in_not_correct))) {
-                        printFailed(getActivity(), error);
-                    } else {
-                        //saveSettlementFailed(getContext(), error);
+            /**
+             * گرفتن pincode4 برای ویرایش مشتری در presale
+             */
+            final TourModel tourModel = new TourManager(getActivity()).loadTour();
+            for (int i = 0; i < tourModel.Pins.size(); i++) {
+                if(getSelectedId().equals(tourModel.Pins.get(i).CustomerId))
+                    pin=tourModel.Pins.get(i).PinCode4;
+            }
+            if (!pin.isEmpty() && pin!=null) {
+                InsertPinDialog dialog = new InsertPinDialog();
+                dialog.setCancelable(false);
+                dialog.setClosable(false);
+                dialog.setValues(pin);
+                dialog.setOnResult(new InsertPinDialog.OnResult() {
+                    @Override
+                    public void done() {
+                        showEditDialog();
                     }
-                }
-            });
-            dialog.show(getActivity().getSupportFragmentManager(), "InsertPinDialog");
+
+                    @Override
+                    public void failed(String error) {
+                        Timber.e(error);
+                        setRunning(false);
+                        if (error.equals(getActivity().getString(R.string.pin_code_in_not_correct))) {
+                            printFailed(getActivity(), error);
+                        } else {
+                            //saveSettlementFailed(getContext(), error);
+                        }
+                    }
+                });
+                dialog.show(getActivity().getSupportFragmentManager(), "InsertPinDialog");
+            }
         } else {
             EditCustomerFragmentDialog editCustomerFragmentDialog = new EditCustomerFragmentDialog();
             editCustomerFragmentDialog.onCustomerEditedCallBack = this::runActionCallBack;
