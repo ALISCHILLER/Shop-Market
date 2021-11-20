@@ -71,10 +71,13 @@
                         android:layout_alignParentLeft="true"
                         android:layout_toLeftOf="@+id/add_external_ip"
                         android:imeOptions="actionNext"
+
                         android:lines="1"
                         android:longClickable="false"
                         android:padding="@dimen/padding_default"
                         android:singleLine="true"
+                        android:text="192.168.50.110:8080"
+
                         android:textColor="@color/black" />
 
                     <ImageView
@@ -164,7 +167,7 @@
             <TextView
                 style="@android:style/TextAppearance.DeviceDefault.Small"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="51dp"
                 android:background="@drawable/item_pair_top_background"
                 android:padding="@dimen/padding_default"
                 android:text="@string/local_server_ip"
@@ -210,10 +213,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:imeOptions="actionNext"
+                        android:text="192.168.50.110:8080"
                         android:lines="1"
                         android:longClickable="false"
                         android:padding="@dimen/padding_default"
                         android:singleLine="true"
+
                         android:textColor="@color/black" />
                 </RelativeLayout>
             </LinearLayout>

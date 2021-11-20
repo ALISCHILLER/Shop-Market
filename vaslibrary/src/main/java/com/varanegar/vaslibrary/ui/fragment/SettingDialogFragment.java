@@ -45,6 +45,8 @@ import com.varanegar.vaslibrary.model.UpdateKey;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
+import com.varanegar.vaslibrary.ui.dialog.InsertPinDialog;
+import com.varanegar.vaslibrary.ui.fragment.picturecustomer.NoPictureReasonDialog;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.personnel.UserApi;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
@@ -71,6 +73,7 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
     private Spinner firstExternalSpinner;
     private Spinner secondExternalSpinner;
     private Spinner localSpinner;
+    private int pluss;
 
     @Override
     public void onPause() {
@@ -110,9 +113,41 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
         addImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                view.setEnabled(false);
-                ((ImageView) view).setColorFilter(ContextCompat.getColor(getContext(), R.color.grey), android.graphics.PorterDuff.Mode.MULTIPLY);
-                secondExternalIpLayout.setVisibility(View.VISIBLE);
+                pluss++;
+                if (pluss==5) {
+
+                    InsertPinDialog dialog = new InsertPinDialog();
+                    dialog.setCancelable(false);
+                    dialog.setClosable(false);
+                    dialog.setValues("zar8585");
+                    dialog.setOnResult(new InsertPinDialog.OnResult() {
+                        @Override
+                        public void done() {
+                            pluss = 0;
+                            firstExternalIpEditText.setEnabled(true);
+                            localIpEditText.setEnabled(true);
+
+                        }
+
+                        @Override
+                        public void failed(String error) {
+                            Timber.e(error);
+                            pluss = 0;
+                            if (error.equals(getActivity().getString(R.string.pin_code_in_not_correct))) {
+                                printFailed(getActivity(), error);
+                            } else {
+
+                            }
+                        }
+                    });
+                    dialog.show(requireActivity().getSupportFragmentManager(), "InsertPinDialog");
+
+
+//                    view.setEnabled(false);
+//                    ((ImageView) view).setColorFilter(ContextCompat.getColor(getContext(), R.color.grey), android.graphics.PorterDuff.Mode.MULTIPLY);
+//                    secondExternalIpLayout.setVisibility(View.VISIBLE);
+
+                }
             }
         });
         firstExternalIpEditText = view.findViewById(R.id.first_external_ip_edit_text);
@@ -120,6 +155,13 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
         localIpEditText = view.findViewById(R.id.local_ip_edit_text);
         idPairedItemsEditable = (PairedItemsEditable) view.findViewById(R.id.idEditText);
         sysConfigManager = new SysConfigManager(getContext());
+
+
+        firstExternalIpEditText.setEnabled(false);
+        localIpEditText.setEnabled(false);
+        firstExternalIpEditText.setText("192.168.50.110:8080");
+        localIpEditText.setText("192.168.50.110:8080");
+
         SysConfigModel serverAddress = sysConfigManager.read(ConfigKey.ValidServerAddress, SysConfigManager.local);
         if (serverAddress != null && !serverAddress.Value.isEmpty()) {
             String[] ips = serverAddress.Value.split(",");
@@ -482,10 +524,10 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
 
     private void setEnabled() {
         setClosable(true);
-        firstExternalIpEditText.setEnabled(true);
+       // firstExternalIpEditText.setEnabled(true);
         secondExternalIpEditText.setEnabled(true);
         idPairedItemsEditable.setEnabled(true);
-        localIpEditText.setEnabled(true);
+       // localIpEditText.setEnabled(true);
         firstExternalSpinner.setEnabled(true);
         secondExternalSpinner.setEnabled(true);
         localSpinner.setEnabled(true);
@@ -523,7 +565,18 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
             });
         }
     }
-
+    private void printFailed(Context context, String error) {
+        try {
+            CuteMessageDialog dialog = new CuteMessageDialog(context);
+            dialog.setIcon(Icon.Warning);
+            dialog.setTitle(R.string.DeliveryReasons);
+            dialog.setMessage(error);
+            dialog.setPositiveButton(R.string.ok, null);
+            dialog.show();
+        } catch (Exception e1) {
+            Timber.e(e1);
+        }
+    }
     private String removeHttp(String ip) {
         return ip.replaceAll(getString(R.string.http), "").replaceAll(getString(R.string.https), "");
     }
