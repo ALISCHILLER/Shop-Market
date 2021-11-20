@@ -119,7 +119,7 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
                     InsertPinDialog dialog = new InsertPinDialog();
                     dialog.setCancelable(false);
                     dialog.setClosable(false);
-                    dialog.setValues("zar8585");
+                    dialog.setValues("8585075751");
                     dialog.setOnResult(new InsertPinDialog.OnResult() {
                         @Override
                         public void done() {

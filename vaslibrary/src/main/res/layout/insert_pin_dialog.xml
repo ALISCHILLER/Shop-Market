@@ -9,6 +9,7 @@
         android:id="@+id/pin_paired_items"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="number"
         app:title="@string/pin_code">
     </com.varanegar.framework.util.component.PairedItemsEditable>
 
