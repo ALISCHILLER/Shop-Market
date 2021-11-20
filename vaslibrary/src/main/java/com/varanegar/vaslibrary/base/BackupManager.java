@@ -190,6 +190,13 @@ public class BackupManager {
         Timber.d("Exporting data finished.");
     }
 
+    /**
+     * بک آپ TourModel وFILE_NAME
+     * tour.dat-user.dat
+     * @param context
+     * @param _zipFile
+     * @throws IOException
+     */
     public synchronized static void importData(Context context, String _zipFile) throws IOException {
         Timber.d("Importing backup started...");
         FileInputStream fin = new FileInputStream(_zipFile);
