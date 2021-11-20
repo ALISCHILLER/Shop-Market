@@ -15,6 +15,7 @@ import com.varanegar.framework.util.component.CuteDialogWithToolbar;
 import com.varanegar.framework.util.component.PairedItemsEditable;
 import com.varanegar.java.util.Currency;
 import com.varanegar.vaslibrary.R;
+import com.varanegar.vaslibrary.manager.canvertType.ConvertFaNumType;
 import com.varanegar.vaslibrary.manager.paymentmanager.exceptions.ControlPaymentException;
 
 /**
@@ -35,12 +36,15 @@ public class InsertPinDialog extends CuteDialogWithToolbar {
         final PairedItemsEditable pinCodePairItem = view.findViewById(R.id.pin_paired_items);
         TextView okTv = view.findViewById(R.id.ok_text_view);
         TextView cancelTv = view.findViewById(R.id.cancel_text_view);
+
         cancelTv.setOnClickListener(view12 -> {
             onResult.failed(getString(R.string.operation_canceled));
             dismiss();
         });
         okTv.setOnClickListener(view1 -> {
-            if (pinCodePairItem.getValue().equals(pinCode))
+           String convertPinCode= ConvertFaNumType.convert(pinCodePairItem.getValue());
+
+            if (convertPinCode.equals(pinCode))
                 onResult.done();
             else
                 onResult.failed(getString(R.string.pin_code_in_not_correct));
