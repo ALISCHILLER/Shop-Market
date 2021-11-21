@@ -49,7 +49,8 @@ public class NonDeliveryActionDialog extends CuteAlertDialog {
         View view = inflater.inflate(R.layout.fragment_non_order, viewGroup, true);
         BaseRecyclerView nonOrderList = (BaseRecyclerView) view.findViewById(R.id.non_order_list_view);
         NoSaleReasonManager manager = new NoSaleReasonManager(getContext());
-        final List<NoSaleReasonModel> noSalesReasons = manager.getNonDeliveryReason();
+       // final List<NoSaleReasonModel> noSalesReasons = manager.getNonDeliveryReason();
+        final List<NoSaleReasonModel> noSalesReasons = manager.getDistReturnReason();
         selectionAdapter = new SelectionRecyclerAdapter<>(getVaranegarActvity(), noSalesReasons, false);
         nonOrderList.setAdapter(selectionAdapter);
     }

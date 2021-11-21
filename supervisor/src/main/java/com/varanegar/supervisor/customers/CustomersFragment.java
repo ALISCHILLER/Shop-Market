@@ -50,6 +50,8 @@ import timber.log.Timber;
 
 /**
  * Created by A.Torabi on 7/8/2018.
+ * supervisor
+ * لیست نمایش مشتری در supervisor
  */
 
 public class CustomersFragment extends IMainPageFragment {
@@ -251,6 +253,8 @@ public class CustomersFragment extends IMainPageFragment {
                     columns.add(bind(entity, SupervisorCustomer.CustomerCategory, getString(R.string.customer_category)).sendToDetail());
                     columns.add(bind(entity, SupervisorCustomer.PathTitle, getString(R.string.path_title)).sendToDetail());
                     columns.add(bind(entity, SupervisorCustomer.DealerName, getString(R.string.dealer_name_label)).sendToDetail());
+                    columns.add(bind(entity, SupervisorCustomer.IsActive, getString(R.string.customer_Condition_label)).sendToDetail());
+
                     if (!isLandscape()) {
                         columns.add(bind(entity, SupervisorCustomer.Phone, "").setCustomViewHolder(new PhoneCustomerViewHoder()));
                     }

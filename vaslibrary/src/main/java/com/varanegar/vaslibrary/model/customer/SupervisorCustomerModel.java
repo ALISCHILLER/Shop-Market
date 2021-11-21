@@ -57,4 +57,6 @@ public class SupervisorCustomerModel extends BaseModel {
     public UUID AreaId;
     @Column
     public UUID StateId;
+    @Column
+    public Boolean IsActive;
 }

@@ -97,6 +97,7 @@
 
     <!-- Labels -->
     <string name="visitor_name_label">نام فروشنده :</string>
+    <string name="Customer_black_label">وضعیت مشتری :</string>
     <string name="day_sum_order_label">جمع سفارش روز :</string>
     <string name="line_customers_label">مشتریان مسیر :</string>
     <string name="day_customer">مشتریان روز</string>
@@ -1080,6 +1081,7 @@
     <string name="delivery_of_draft">تحویل حواله</string>
     <string name="dealer_name">نام فروشنده</string>
     <string name="dealer_name_label">نام فروشنده :</string>
+    <string name="customer_Condition_label">وضعیت مشتری :</string>
     <string name="dealer_mobile_label">شماره تماس فروشنده :</string>
     <string name="draft_no">شماره حواله</string>
     <string name="no_label">شماره :</string>

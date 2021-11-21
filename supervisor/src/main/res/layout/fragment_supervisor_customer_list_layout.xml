@@ -6,11 +6,17 @@
     android:orientation="vertical">
 
 
+
     <com.varanegar.framework.util.component.PairedItemsSpinner
         android:id="@+id/visitor_name_paired_items"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:title="@string/visitor_name_label" />
+    <com.varanegar.framework.util.component.PairedItemsSpinner
+        android:id="@+id/Customer_black_paired_items"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="@string/Customer_black_label" />
 
     <RelativeLayout
         android:layout_width="match_parent"

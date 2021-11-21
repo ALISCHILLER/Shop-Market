@@ -16,6 +16,7 @@ import com.varanegar.vaslibrary.manager.NoSaleReasonManager;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallInvoiceManager;
 import com.varanegar.vaslibrary.model.call.CustomerCallInvoiceModel;
 import com.varanegar.vaslibrary.model.noSaleReason.NoSaleReasonModel;
+import com.varanegar.vaslibrary.ui.dialog.CompleteReturnActionDialog;
 import com.varanegar.vaslibrary.ui.dialog.NonDeliveryActionDialog;
 
 import java.util.List;
@@ -64,8 +65,8 @@ public class NonDeliveryAction extends CheckDistanceAction {
             return getActivity().getString(R.string.can_not_edit_customer_operation_after_print);
 
         NoSaleReasonManager noSaleReasonManager = new NoSaleReasonManager(getActivity());
-        List<NoSaleReasonModel> noSalesReasons = noSaleReasonManager.getNonDeliveryReason();
-
+      //  List<NoSaleReasonModel> noSalesReasons = noSaleReasonManager.getNonDeliveryReason();
+        List<NoSaleReasonModel> noSalesReasons = noSaleReasonManager.getDistReturnReason();
         if (noSalesReasons.size() < 1)
             return getActivity().getString(R.string.no_delivery_reasons_not_defined);
 
@@ -135,6 +136,25 @@ public class NonDeliveryAction extends CheckDistanceAction {
         bundle.putString("CustomerUniqueId", selectedItem.toString());
         nonDeliveryActionDialog.setArguments(bundle);
         nonDeliveryActionDialog.show(getActivity().getSupportFragmentManager(), "NonDeliveryActionDialog");
+//        CompleteReturnActionDialog completeReturnActionDialog = new CompleteReturnActionDialog();
+//        completeReturnActionDialog.onOrderStatusChanged = new CompleteReturnActionDialog.OnOrderStatusChanged() {
+//            @Override
+//            public void onChanged() {
+//                runActionCallBack();
+//                setRunning(false);
+//            }
+//        };
+//
+//        completeReturnActionDialog.setOnResume(new CuteAlertDialog.OnResumeCallBack() {
+//            @Override
+//            public void run() {
+//                setRunning(false);
+//            }
+//        });
+//        Bundle bundle = new Bundle();
+//        bundle.putString("CustomerUniqueId", selectedItem.toString());
+//        completeReturnActionDialog.setArguments(bundle);
+//        completeReturnActionDialog.show(getActivity().getSupportFragmentManager(), "CompleteReturnActionDialog");
     }
 
 }

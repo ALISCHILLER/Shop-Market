@@ -100,6 +100,7 @@ public class ReportColumn<T extends BaseModel> {
             this.title = "";
     }
 
+
     public ReportColumn<T> sendToDetail() {
         this.detail = true;
         return this;

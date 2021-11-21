@@ -57,6 +57,7 @@ import timber.log.Timber;
 
 /**
  * Created by A.Torabi on 7/10/2018.
+ * نمایش خلاصه وضعیت مشتری supervisor
  */
 
 class CustomerSummaryContextView extends ItemContextView<SupervisorCustomerModel> {
