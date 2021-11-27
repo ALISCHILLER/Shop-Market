@@ -1484,9 +1484,11 @@
     <string name="enter_sayad_number">شماره صیاد را وارد نمایید.</string>
     <string name="paybale_cash">مبلغ قابل پرداخت نقدی</string>
     <string name="paybale_recipt">مبلغ قابل پرداخت عرفی</string>
-
+    <string name="paybale_card">مبلغ قابل پرداخت کارت خوان</string>
 
     <string name="DeliveryReasons">خطا پین را درست وارد کنید</string>
     <string name="cash_discount_amount">تخفیف نقدی</string>
     <string name="cheque_discount">تخفیف حجمی</string>
+    <string name="dialog_black">با انجام این عملیات کاربر بلاک میشود</string>
+    <string name="dialog_unblack">با انجام این عملیات کاربر از بلاک خارج میشود</string>
 </resources>

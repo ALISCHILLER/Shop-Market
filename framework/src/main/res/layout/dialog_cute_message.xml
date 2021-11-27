@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:minWidth="300dp"
     android:padding="@dimen/padding_default">
 
@@ -35,6 +36,29 @@
             android:padding="@dimen/padding_default"
             android:textStyle="bold" />
 
+                <TextView
+                    android:id="@+id/data_text_view"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|left"
+                    android:paddingBottom="@dimen/padding_default"
+                    android:paddingLeft="@dimen/padding_xxxlarge"
+                    android:paddingRight="@dimen/padding_xxxlarge"
+                    android:paddingTop="@dimen/padding_default"
+                    />
+            <TextView
+                android:id="@+id/data_text1_view"
+                style="@style/Base.TextAppearance.AppCompat.Body1"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|left"
+                android:paddingBottom="@dimen/padding_default"
+                android:paddingLeft="@dimen/padding_xxxlarge"
+                android:paddingRight="@dimen/padding_xxxlarge"
+                android:paddingTop="@dimen/padding_default"
+                />
         <TextView
             android:id="@+id/message_text_view"
             style="@style/Base.TextAppearance.AppCompat.Body1"

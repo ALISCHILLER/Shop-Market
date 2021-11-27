@@ -8,6 +8,9 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.varanegar.framework.network.gson.VaranegarGsonBuilder;
 import com.varanegar.supervisor.model.ProductModel;
+import com.varanegar.supervisor.model.StatusConfigModel;
+import com.varanegar.supervisor.model.changeOrdersStatus.ChangeOrdersStatusmModel;
+import com.varanegar.supervisor.model.reviewreport.ReviewreportModel;
 import com.varanegar.vaslibrary.model.customer.SupervisorCustomerModel;
 import com.varanegar.supervisor.model.VisitorModel;
 import com.varanegar.supervisor.status.OrderSummaryRequestViewModel;
@@ -56,6 +59,18 @@ public class SupervisorApi extends BaseApi implements ISupervisorApi {
         return getRetrofitBuilder(TokenType.UserToken, getBaseUrl())
                 .build().create(ISupervisorApi.class).deactivateTour(tourId);
     }
+    @Override
+    public Call<ResponseBody> getCustomerState(UUID id,Boolean State){
+         return getRetrofitBuilder(TokenType.UserToken, getBaseUrl())
+                .build().create(ISupervisorApi.class).getCustomerState(id,State);
+    }
+
+    @Override
+    public Call<ResponseBody> senddataorder(ChangeOrdersStatusmModel changeOrdersStatusmModel) {
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl())
+                .build().create(ISupervisorApi.class).senddataorder(changeOrdersStatusmModel);
+    }
+
 
     @Override
     public Call<ResponseBody> replicateTour(String tourId) {
@@ -116,6 +131,11 @@ public class SupervisorApi extends BaseApi implements ISupervisorApi {
     @Override
     public Call<List<OrderReviewReportViewModel>> order(String dealerId, String startDate, String endDate) {
         return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).order(dealerId, startDate, endDate);
+    }
+
+    @Override
+    public Call<List<ReviewreportModel>> Reviewreport(StatusConfigModel statusConfigModel) {
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).Reviewreport(statusConfigModel);
     }
 
     @Override

@@ -19,10 +19,12 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
 
         <RadioGroup
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
@@ -38,16 +40,39 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/padding_default"
+                android:visibility="gone"
                 android:text="@string/tours_list" />
-
         </RadioGroup>
+        <com.varanegar.supervisor.utill.multispinnerfilter.MultiSpinnerSearch
+            android:id="@+id/multipleItemSelectionSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            app:textColor="@color/colorAccent"
+            app:highlightColor="@color/colorAccent"
+            app:hintText="همه ویزیتورها" />
     </LinearLayout>
 
-    <com.varanegar.framework.util.recycler.BaseRecyclerView
-        android:id="@+id/status_options_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+<!--    <com.varanegar.framework.util.recycler.BaseRecyclerView-->
+<!--        android:id="@+id/status_options_recycler_view"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content" />-->
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <com.varanegar.framework.util.recycler.BaseRecyclerView
+            android:id="@+id/status_options_recycler_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -59,6 +84,7 @@
             android:id="@+id/visitor_name_paired_items"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             app:title="@string/visitor_name_label" />
 
 

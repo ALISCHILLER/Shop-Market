@@ -31,14 +31,17 @@ public class CuteMessageDialog extends Dialog {
     private TextView positiveTextView;
     private TextView negativeTextView;
     private TextView neutralTextView;
+
     private String title = null;
     private String message = null;
+    private String data = null;
     @StringRes
     private int titleId = 0;
     @StringRes
     private int messageId = 0;
     private TextView titleTextView;
     private TextView messageTextView;
+    private TextView dataTextView;
     private ImageView iconImageView;
 
     public CuteMessageDialog(@NonNull Context context) {
@@ -54,6 +57,7 @@ public class CuteMessageDialog extends Dialog {
         setupButtons();
         titleTextView = (TextView) findViewById(R.id.title_text_view);
         messageTextView = (TextView) findViewById(R.id.message_text_view);
+        dataTextView = (TextView) findViewById(R.id.data_text_view);
         setupText();
         iconImageView = (ImageView) findViewById(R.id.icon_image_view);
         setupIcon();
@@ -64,13 +68,12 @@ public class CuteMessageDialog extends Dialog {
     }
 
     private void miximize() {
-        Window window = getWindow();
-        Point size = new Point();
-        Display display = window.getWindowManager().getDefaultDisplay();
-        display.getSize(size);
-        int width = size.x;
-        window.setLayout((int) (width * 0.9), WindowManager.LayoutParams.WRAP_CONTENT);
-        window.setGravity(Gravity.CENTER);
+          Window window = getWindow();
+          Point size = new Point();
+          Display display = window.getWindowManager().getDefaultDisplay();
+          display.getSize(size);
+          int width = size.x;
+          window.setLayout((int) (width * 0.9), WindowManager.LayoutParams.WRAP_CONTENT);
     }
 
     public void setIcon(Icon icon) {
@@ -111,7 +114,10 @@ public class CuteMessageDialog extends Dialog {
         this.message = message;
         setupText();
     }
-
+    public void setData(String data) {
+        this.data = data;
+        setupText();
+    }
     private void setupIcon() {
         if (iconImageView != null) {
             if (icon == Icon.Error)
@@ -140,6 +146,11 @@ public class CuteMessageDialog extends Dialog {
             else if (messageId != 0)
                 messageTextView.setText(messageId);
             messageTextView.setMovementMethod(new ScrollingMovementMethod());
+        }
+
+        if (dataTextView!=null){
+            if (data != null)
+                dataTextView.setText(data);
         }
     }
 

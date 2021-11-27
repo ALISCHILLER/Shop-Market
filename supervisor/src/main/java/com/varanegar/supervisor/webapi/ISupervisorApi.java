@@ -3,6 +3,9 @@ package com.varanegar.supervisor.webapi;
 import androidx.annotation.Nullable;
 
 import com.varanegar.supervisor.model.ProductModel;
+import com.varanegar.supervisor.model.StatusConfigModel;
+import com.varanegar.supervisor.model.changeOrdersStatus.ChangeOrdersStatusmModel;
+import com.varanegar.supervisor.model.reviewreport.ReviewreportModel;
 import com.varanegar.vaslibrary.model.customer.SupervisorCustomerModel;
 import com.varanegar.supervisor.model.VisitorModel;
 import com.varanegar.supervisor.status.OrderSummaryRequestViewModel;
@@ -84,6 +87,9 @@ public interface ISupervisorApi {
     @GET("api/v2/ngt/reviewreport/Order")
     Call<List<OrderReviewReportViewModel>> order(@Query("DealerId") String dealerId, @Query("StartDate") String startDate, @Query("EndDate") String endDate);
 
+    @POST("api/v2/ngt/ReviewReport/Order")
+    Call<List<ReviewreportModel>> Reviewreport(@Body StatusConfigModel statusConfigModel);
+
     @GET("api/v2/ngt/reviewreport/Sell")
     Call<List<SellReviewReportViewModel>> sell(@Query("DealerId") String dealerId, @Query("StartDate") String startDate, @Query("EndDate") String endDate);
 
@@ -113,4 +119,10 @@ public interface ISupervisorApi {
 
     @GET("api/v2/ngt/supervisor/operation")
     Call<List<VisitorVisitInfoViewModel>> getVisitorsVisitInfo(@Query("SupervisorId") UUID supervisorId, @Query("DealerId") UUID dealerId);
+
+    @GET("api/v2/ngt/supervisor/ToggleCustomerState")
+    Call<ResponseBody> getCustomerState(@Query ("id") UUID id,@Query("State") Boolean State);
+
+    @POST("api/v2/ngt/invoice/ChangeOrdersStatus")
+    Call<ResponseBody> senddataorder(@Body ChangeOrdersStatusmModel changeOrdersStatusmModel);
 }

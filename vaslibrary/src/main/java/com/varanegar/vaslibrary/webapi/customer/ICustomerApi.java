@@ -12,6 +12,7 @@ import com.varanegar.vaslibrary.model.dataforregister.DataForRegisterModel;
 import java.util.List;
 import java.util.UUID;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -60,6 +61,6 @@ public interface ICustomerApi {
     Call<ZarCustomerInfoViewModel> getCustomerZarCustomerInfo(@Query("code") String customerCode);
 
     @POST("api/v2/ngt/customer/updateZarCustomer")
-    Call<CustomerModel> postCustomerZarCustomerInfo(@Body SyncZarGetNewCustomerViewModel customerInfoViewModel);
+    Call<String> postCustomerZarCustomerInfo(@Body SyncZarGetNewCustomerViewModel customerInfoViewModel);
 
 }

@@ -458,6 +458,7 @@ public class SimpleReportAdapter<T extends BaseModel> extends ReportAdapter<T> {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     if (clickDelay > 0) {
                         itemView.setEnabled(false);
                         new android.os.Handler().postDelayed(new Runnable() {

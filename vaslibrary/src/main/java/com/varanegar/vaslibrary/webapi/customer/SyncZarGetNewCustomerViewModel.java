@@ -9,6 +9,7 @@ import java.util.UUID;
  */
 
 public class SyncZarGetNewCustomerViewModel {
+    public UUID  customerUniqueId;
     public String PersonName;
     public String StoreName;
     public String Street;

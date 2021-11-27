@@ -15,5 +15,8 @@ enum OptionId {
     Deactivated,
     Confirmed,
     NotConfirmed,
-    Revoked
+    Revoked,
+    NotVerified,
+    Verified,
+    
 }

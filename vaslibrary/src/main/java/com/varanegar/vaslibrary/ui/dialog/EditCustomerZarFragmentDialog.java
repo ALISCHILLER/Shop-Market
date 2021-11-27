@@ -48,6 +48,7 @@ import java.util.List;
 import java.util.UUID;
 
 import okhttp3.Request;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 
@@ -458,20 +459,24 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
     }
 
     public void submit() {
+        syncGetNewCustomerViewModel.customerUniqueId=customerUniqueId;
         startProgressDialog();
         CustomerApi customerApi = new CustomerApi(getContext());
-        customerApi.runWebRequest(customerApi.postCustomerZarCustomerInfo(syncGetNewCustomerViewModel), new WebCallBack<CustomerModel>() {
+        customerApi.runWebRequest(customerApi.postCustomerZarCustomerInfo(syncGetNewCustomerViewModel), new WebCallBack<String>() {
             @Override
             protected void onFinish() {
                 stopProgressDialog();
             }
 
             @Override
-            protected void onSuccess(CustomerModel result, Request request) {
-                if (result != null)
-                    updateCustomer(result.UniqueId);
-                else
-                    showErrorDialog(R.string.error_saving_customer);
+            protected void onSuccess(String result, Request request) {
+//                if (result != null)
+//                    updateCustomer(result.UniqueId);
+//                else
+//                    showErrorDialog(R.string.error_saving_customer);
+                showResaltDialog(result);
+
+
             }
 
             @Override
@@ -512,6 +517,7 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
 
 
     private void createSyncViewModel() {
+
         syncGetNewCustomerViewModel = new SyncZarGetNewCustomerViewModel();
         syncGetNewCustomerViewModel.CustomerCode = customerInfo.customerCode;
         syncGetNewCustomerViewModel.PersonName = personNamePairedItem.getValue();
@@ -597,6 +603,16 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
             CuteMessageDialog dialog = new CuteMessageDialog(context);
             dialog.setTitle(R.string.error);
             dialog.setIcon(Icon.Error);
+            dialog.setMessage(err);
+            dialog.setPositiveButton(R.string.ok, null);
+            dialog.show();
+        }
+    } private void showResaltDialog(String err) {
+        Context context = getContext();
+        if (context != null) {
+            CuteMessageDialog dialog = new CuteMessageDialog(context);
+            dialog.setTitle(R.string.getsettings);
+            dialog.setIcon(Icon.Info);
             dialog.setMessage(err);
             dialog.setPositiveButton(R.string.ok, null);
             dialog.show();

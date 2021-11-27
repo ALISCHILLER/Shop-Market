@@ -8,6 +8,7 @@ class TourStatusOption {
     final OptionId id;
     boolean value;
 
+
     private String name;
 
     @Override

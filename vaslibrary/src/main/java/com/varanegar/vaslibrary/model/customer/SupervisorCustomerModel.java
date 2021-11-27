@@ -58,5 +58,31 @@ public class SupervisorCustomerModel extends BaseModel {
     @Column
     public UUID StateId;
     @Column
-    public Boolean IsActive;
+    public Boolean isActive;
+    @Column
+    public Boolean isPenddingChange;
+    @Column
+    public String newStoreName;
+    @Column
+    public String newAddress;
+    @Column
+    public String newPhone;
+    @Column
+    public String newMobile;
+    @Column
+    public String newPostCode;
+    @Column
+    public String newCustomerLevelName;
+    @Column
+    public String newCustomerActivityName;
+    @Column
+    public String newCustomerCategoryName;
+    @Column
+    public String newNationalCode;
+    @Column
+    public String newEconomicCode;
+    @Column
+    public String newCityName;
+    @Column
+    public String PostCode;
 }

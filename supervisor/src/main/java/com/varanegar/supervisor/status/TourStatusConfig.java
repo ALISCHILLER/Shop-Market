@@ -23,21 +23,22 @@ class TourStatusConfig {
     List<TourStatusOption> tourStatusOptions = new ArrayList<>();
     List<RequestStatusOption> requestStatusOptions = new ArrayList<>();
     private final SharedPreferences sharedPreferences;
+    private final SharedPreferences shared;
     private final Context context;
     private String statusType;
 
     TourStatusConfig(Context context) {
         this.context = context;
         sharedPreferences = context.getSharedPreferences("TourStatusConfig", Context.MODE_PRIVATE);
-
+        shared= context.getSharedPreferences("TourStatus", Context.MODE_PRIVATE);
         boolean ReadyToSend = sharedPreferences.getBoolean(OptionId.ReadyToSend.name(), false);
         tourStatusOptions.add(new TourStatusOption(OptionId.ReadyToSend, context.getString(R.string.ready_to_send), ReadyToSend));
 
         boolean Sent = sharedPreferences.getBoolean(OptionId.Sent.name(), true);
         tourStatusOptions.add(new TourStatusOption(OptionId.Sent, context.getString(R.string.sent), Sent));
 
-        boolean InProgress = sharedPreferences.getBoolean(OptionId.InProgress.name(), true);
-        tourStatusOptions.add(new TourStatusOption(OptionId.InProgress, context.getString(R.string.in_progress), InProgress));
+//        boolean InProgress = sharedPreferences.getBoolean(OptionId.InProgress.name(), true);
+     //   tourStatusOptions.add(new TourStatusOption(OptionId.InProgress, context.getString(R.string.in_progress), InProgress));
 
         boolean Received = sharedPreferences.getBoolean(OptionId.Received.name(), true);
         tourStatusOptions.add(new TourStatusOption(OptionId.Received, context.getString(R.string.received), Received));
@@ -52,14 +53,14 @@ class TourStatusConfig {
         tourStatusOptions.add(new TourStatusOption(OptionId.Deactivated, context.getString(R.string.Deactivated), Deactivated));
 
 
-        boolean Confirmed = sharedPreferences.getBoolean(OptionId.Confirmed.name(), false);
-        requestStatusOptions.add(new RequestStatusOption(OptionId.Confirmed, context.getString(R.string.confirmed), Confirmed));
+        boolean Confirmed = sharedPreferences.getBoolean(OptionId.Verified.name(), true);
+        requestStatusOptions.add(new RequestStatusOption(OptionId.Verified, context.getString(R.string.confirmed), Confirmed,"Verified"));
 
-        boolean NotConfirmed = sharedPreferences.getBoolean(OptionId.NotConfirmed.name(), true);
-        requestStatusOptions.add(new RequestStatusOption(OptionId.NotConfirmed, context.getString(R.string.not_confirmed), NotConfirmed));
+        boolean NotConfirmed = sharedPreferences.getBoolean(OptionId.NotVerified.name(), true);
+       // requestStatusOptions.add(new RequestStatusOption(OptionId.NotVerified, context.getString(R.string.not_confirmed), NotConfirmed,"NotVerified"));
 
-        boolean Revoked = sharedPreferences.getBoolean(OptionId.Revoked.name(), false);
-        requestStatusOptions.add(new RequestStatusOption(OptionId.Revoked, context.getString(R.string.revoked), Revoked));
+        boolean Revoked = sharedPreferences.getBoolean(OptionId.InProgress.name(), false);
+        requestStatusOptions.add(new RequestStatusOption(OptionId.InProgress, context.getString(R.string.not_stustos), Revoked,"InProgress"));
 
         long fromConfigTime = sharedPreferences.getLong("fromconfigtime", 0);
         long toConfigTime = sharedPreferences.getLong("toconfigtime", 0);
@@ -110,6 +111,7 @@ class TourStatusConfig {
 
     public void saveRequestOption(RequestStatusOption option) {
         sharedPreferences.edit().putBoolean(option.id.name(), option.value).apply();
+        shared.edit().putString(option.id.name(), option.nameid).apply();
     }
 
     public void setFromDate(@NonNull Date date) {

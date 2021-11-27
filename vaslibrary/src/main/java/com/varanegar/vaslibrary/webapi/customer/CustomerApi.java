@@ -16,6 +16,7 @@ import com.varanegar.vaslibrary.webapi.TokenType;
 import java.util.List;
 import java.util.UUID;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Query;
@@ -103,7 +104,7 @@ public class CustomerApi extends BaseApi implements ICustomerApi {
     }
 
     @Override
-    public Call<CustomerModel> postCustomerZarCustomerInfo(SyncZarGetNewCustomerViewModel customerInfoViewModel) {
+    public Call<String> postCustomerZarCustomerInfo(SyncZarGetNewCustomerViewModel customerInfoViewModel) {
         ICustomerApi api = getRetrofitBuilder(TokenType.UserToken).build().create(ICustomerApi.class);
         return api.postCustomerZarCustomerInfo(customerInfoViewModel);
     }

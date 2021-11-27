@@ -70,7 +70,7 @@ public class DataManager {
         }
     }
 
-    private static void getCustomers(UserModel userModel, final Callback callback, final Context context) {
+    public static void getCustomers(UserModel userModel, final Callback callback, final Context context) {
         SupervisorApi api = new SupervisorApi(context);
         api.runWebRequest(api.getCustomers(userModel.UniqueId), new WebCallBack<List<SupervisorCustomerModel>>() {
             @Override

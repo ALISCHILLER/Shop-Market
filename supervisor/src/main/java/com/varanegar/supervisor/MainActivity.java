@@ -1,7 +1,10 @@
 package com.varanegar.supervisor;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import com.varanegar.framework.network.gson.VaranegarGsonBuilder;
 import com.varanegar.framework.util.jobscheduler.JobSchedulerService;
 import com.varanegar.vaslibrary.base.VasActivity;
 import com.varanegar.vaslibrary.manager.UserManager;
@@ -42,4 +45,11 @@ public class MainActivity extends VasActivity {
         outState.putBoolean("firstCreation", true);
     }
 
+    @Override
+    protected void onDestroy() {
+        SharedPreferences editor = getSharedPreferences("KeyPairBoolData", Context.MODE_PRIVATE);
+        String json = VaranegarGsonBuilder.build().create().toJson(null);
+        editor.edit().putString("visitorBoolData", json).commit();
+        super.onDestroy();
+    }
 }
