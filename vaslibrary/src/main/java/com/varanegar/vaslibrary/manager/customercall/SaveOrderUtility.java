@@ -777,6 +777,7 @@ public class SaveOrderUtility {
                         callOrderModel.CheckDuration = data.CheckDuration;
                         callOrderModel.TotalAmountNutCash=data.TotalAmountNutCash;
                         callOrderModel.TotalAmountNutCheque=data.TotalAmountNutCheque;
+                        callOrderModel.TotalAmountNutImmediate=data.TotalAmountNutImmediate;
 
                         callOrderManager.update(callOrderModel);
                         callOrderLineManager.insertOrUpdatePromoLines(callOrderId, data, customerId);

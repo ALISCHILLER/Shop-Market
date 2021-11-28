@@ -97,6 +97,8 @@ public class DiscountCallOrderLineData {
     public BigDecimal amountCheque;
     public BigDecimal amountNutCash;
     public BigDecimal amountNutCheque;
+    public BigDecimal amountImmediate;
+    public BigDecimal amountNutImmediate;
 
     public DiscountCallOrderLineData() {
     }
@@ -394,6 +396,9 @@ public class DiscountCallOrderLineData {
         this.amountCheque = onlinedata.amountCheque;
         this.amountNutCash = onlinedata.amountNutCash;
         this.amountNutCheque = onlinedata.amountNutCheque;
+        this.amountImmediate = onlinedata.amountImmediate;
+        this.amountNutImmediate = onlinedata.amountNutImmediate;
+
         this.chequeDiscount =onlinedata.chequeDiscount;
         this.cashDiscount=onlinedata.cashDiscount;
 

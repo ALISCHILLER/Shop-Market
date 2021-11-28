@@ -449,8 +449,7 @@ public class CustomersContentFragment extends VaranegarFragment {
             @Override
             public void done() {
                 if (isResumed()) {
-                    for (OnItemUpdateListener listener :
-                            onItemUpdateListeners) {
+                    for (OnItemUpdateListener listener : onItemUpdateListeners) {
                         listener.run();
                     }
                     loading(false);

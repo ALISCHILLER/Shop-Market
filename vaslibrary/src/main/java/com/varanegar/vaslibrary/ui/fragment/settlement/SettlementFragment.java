@@ -231,7 +231,7 @@ public class SettlementFragment extends VisitFragment {
 
             oldRemainItems.setVisibility(View.GONE);
             totalPaymentPairedItems.setVisibility(View.GONE);
-            returnAmountPairedItems.setVisibility(View.GONE);
+            returnAmountPairedItems.setTitle("مبلغ آنی");
 
             oldInvoicesAmountPairedItems.setTitle("مبلغ نقدی");
 
@@ -610,7 +610,8 @@ public class SettlementFragment extends VisitFragment {
         remainingPairedItems.setValue(HelperMethods.currencyToString(customerPayment.getTotalAmount(false).subtract(totalPayment)));
         invoiceAmountPairedItems.setValue(HelperMethods.currencyToString(paymentManager.getTotalAmountNutCheque(customerId)));
         oldInvoicesAmountPairedItems.setValue(HelperMethods.currencyToString(paymentManager.getTotalAmountNutCash(customerId)));
-        returnAmountPairedItems.setValue(HelperMethods.currencyToString(customerPayment.getReturnAmount()));
+        returnAmountPairedItems.setValue(HelperMethods.currencyToString(paymentManager.getTotalAmountNutImmediate(customerId)));
+    //    returnAmountPairedItems.setValue(HelperMethods.currencyToString(customerPayment.getReturnAmount()));
         discountPairedItems.setValue(HelperMethods.currencyToString(discountAmount));
         Currency customerRemain;
         CustomerRemainPerLineManager customerRemainPerLineManager = new CustomerRemainPerLineManager(getContext());
