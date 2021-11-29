@@ -182,10 +182,12 @@ public class CustomersFragment extends IMainPageFragment {
                     public void onBind(View view, final SupervisorCustomerModel entity) {
                         ImageView callImageView = null;
                         ImageView customercondition=view.findViewById(R.id.customer_condition_image_view);
-                        if (!entity.isPenddingChange) {
-                            customercondition.setImageResource(R.drawable.ic_baseline_person_24);
-                        }else if(entity.isPenddingChange) {
-                            customercondition.setImageResource(R.drawable.ic_baseline_block_24);
+                        if (entity.isPenddingChange!=null) {
+                            if (!entity.isPenddingChange) {
+                                customercondition.setImageResource(R.drawable.ic_baseline_person_24);
+                            } else if (entity.isPenddingChange) {
+                                customercondition.setImageResource(R.drawable.ic_baseline_block_24);
+                            }
                         }
                         customercondition.setOnClickListener(new View.OnClickListener() {
                             @Override
