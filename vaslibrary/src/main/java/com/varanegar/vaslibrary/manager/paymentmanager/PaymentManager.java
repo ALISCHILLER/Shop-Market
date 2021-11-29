@@ -564,14 +564,25 @@ public class PaymentManager extends BaseManager<PaymentModel> {
             if (!paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PT01.toString())) {
                 double finalUsanceDay = 0;
                 Currency totalPayableAmount = paymentManager.calculateCustomerPayment(customerModel.UniqueId).getTotalAmount(false);
+
                 if (paymentModels.size() > 0 || totalPayableAmount.compareTo(Currency.ZERO) <= 0) {
                     finalUsanceDay = calculateUsancePay(customerModel.UniqueId);
                 } else
                     finalUsanceDay = getUsanceRef(customerCallOrderModels) + 1;
-                if (finalUsanceDay <= getUsanceDay(customerCallOrderModels)) {
+
+                /**
+                 * آنی بدون چک
+                 * تبدیل نوع پرداخت به PT01
+                 */
+                if(finalUsanceDay==1 &&  payedCashCheck.Check.compareTo(Currency.ZERO)<=0) {//آنی
+                    if (!paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PT01.toString())){
+                        throw new ThirdPartyControlPaymentChangedException(getString(R.string.payment_type_changed), ThirdPartyPaymentTypes.PT01, null);
+                    }
+                }
+                else if (finalUsanceDay <= getUsanceDay(customerCallOrderModels)) {//راس نقد
                     if (!paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PTCA.toString()))
                         throw new ThirdPartyControlPaymentChangedException(getString(R.string.payment_type_changed), ThirdPartyPaymentTypes.PTCA, null);
-                } else if (finalUsanceDay <= getUsanceRef(customerCallOrderModels)) {
+                } else if (finalUsanceDay <= getUsanceRef(customerCallOrderModels)) {//راس عرف
                     if (!paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PTCH.toString())) {
                         if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PTCA.toString()))
                             throw new ThirdPartyControlPaymentChangedException(getString(R.string.payment_type_changed), ThirdPartyPaymentTypes.PTCH, customerCall.PinCode2);
@@ -856,6 +867,21 @@ public class PaymentManager extends BaseManager<PaymentModel> {
         if (customerCallOrderModels != null && customerCallOrderModels.size() > 0) {
             CustomerCallOrderModel customerCall = customerCallOrderModels.get(0);
             return customerCall.TotalAmountNutCash;
+        }
+        return null;
+    }
+
+    /**
+     * گرفتن دیتای مبلغ آنی
+     * @param customerId
+     * @return
+     */
+    public Currency getTotalAmountNutImmediate(UUID customerId) {
+        CustomerCallOrderManager customerCallOrderManager = new CustomerCallOrderManager(getContext());
+        List<CustomerCallOrderModel> customerCallOrderModels = customerCallOrderManager.getCustomerCallOrders(customerId);
+        if (customerCallOrderModels != null && customerCallOrderModels.size() > 0) {
+            CustomerCallOrderModel customerCall = customerCallOrderModels.get(0);
+            return customerCall.TotalAmountNutImmediate;
         }
         return null;
     }

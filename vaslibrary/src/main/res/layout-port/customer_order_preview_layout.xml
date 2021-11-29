@@ -154,6 +154,20 @@
                         app:title="@string/paybale_recipt" />
 
                     <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/payable_immediate_paired_items"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        app:title="@string/paybale_Immediate" />
+                    <com.varanegar.framework.util.component.PairedItems
+                        android:id="@+id/discount_immediate_paired_items"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        app:title="@string/discunt_Immediate" />
+                    <com.varanegar.framework.util.component.PairedItems
                         android:id="@+id/usance_day_paired_items"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"

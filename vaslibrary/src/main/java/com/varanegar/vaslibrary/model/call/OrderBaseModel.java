@@ -147,4 +147,6 @@ public class OrderBaseModel extends BaseModel {
     public Currency TotalAmountNutCash;
     @Column
     public  Currency TotalAmountNutCheque;
+    @Column
+    public  Currency TotalAmountNutImmediate;
 }

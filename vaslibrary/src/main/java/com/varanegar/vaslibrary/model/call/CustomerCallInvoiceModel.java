@@ -79,6 +79,7 @@ public class CustomerCallInvoiceModel extends OrderBaseModel {
         customerCallOrderModel.PinCode4=PinCode4;
         customerCallOrderModel.TotalAmountNutCheque=TotalAmountNutCheque;
         customerCallOrderModel.TotalAmountNutCash =TotalAmountNutCash;
+        customerCallOrderModel.TotalAmountNutImmediate =TotalAmountNutImmediate;
 
 
         return customerCallOrderModel;

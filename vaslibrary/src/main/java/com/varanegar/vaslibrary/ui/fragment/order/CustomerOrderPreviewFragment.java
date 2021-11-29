@@ -90,6 +90,8 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
     private PairedItems addAmountPairedItems;
     private PairedItems payableCashPairedItems;
     private PairedItems payableChequePairedItems;
+    private PairedItems payableImmediatePairedItems;
+    private PairedItems discountImmediatePairedItems;
     private BaseRecyclerView recyclerView;
     private UUID customerId;
     private UUID callOrderId;
@@ -154,7 +156,8 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
 
             payableCashPairedItems = view.findViewById(R.id.payable_cash_paired_items);
             payableChequePairedItems = view.findViewById(R.id.payable_cheque_paired_items);
-
+            payableImmediatePairedItems = view.findViewById(R.id.payable_immediate_paired_items);
+            discountImmediatePairedItems = view.findViewById(R.id.discount_immediate_paired_items);
             SysConfigManager sysConfigManager = new SysConfigManager(getActivity());
             BackOfficeType backOfficeType = sysConfigManager.getBackOfficeType();
             if (backOfficeType.equals(BackOfficeType.ThirdParty)) {
@@ -180,11 +183,15 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                     if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
                         payableCashPairedItems.setVisibility(View.VISIBLE);
                         payableChequePairedItems.setVisibility(View.VISIBLE);
+                        payableImmediatePairedItems.setVisibility(View.VISIBLE);
+                        discountImmediatePairedItems.setVisibility(View.VISIBLE);
                         orderCostPairedItems.setTitle(getString(R.string.cash_discount_amount));
                         discountAmountPairedItems.setTitle(getString(R.string.cheque_discount));
                     } else {
                         payableCashPairedItems.setVisibility(View.GONE);
                         payableChequePairedItems.setVisibility(View.GONE);
+                        payableImmediatePairedItems.setVisibility(View.GONE);
+                        discountImmediatePairedItems.setVisibility(View.GONE);
 
                     }
                 }
@@ -817,6 +824,11 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
 //                orderCostPairedItems.setValue(HelperMethods.currencyToString(customerCallOrderPromotion.TotalPriceWithPromo.add(customerCallOrderPromotion.TotalInvoiceAdd).subtract(customerCallOrderPromotion.TotalInvoiceDiscount)));
                 payableCashPairedItems.setValue(customerCallOrderPromotion.TotalAmountNutCash.toString());
                 payableChequePairedItems.setValue(customerCallOrderPromotion.TotalAmountNutCheque.toString());
+                payableImmediatePairedItems.setValue(customerCallOrderPromotion.TotalAmountNutImmediate.toString());
+
+                discountImmediatePairedItems
+                        .setValue(customerCallOrderPromotion.TotalAmountNutCheque.subtract(
+                                customerCallOrderPromotion.TotalAmountNutImmediate).toString());
                 orderCostPairedItems.setValue(customerCallOrderPromotion.TotalCashDiscount.toString());
             }
 
