@@ -621,7 +621,7 @@ public class CustomerSaveReturnFragment extends VisitFragment {
             if (hasReturnCall() || isFromRequest()) {
                 SysConfigManager sysConfigManager = new SysConfigManager(getContext());
                 BackOfficeType backOfficeType = sysConfigManager.getBackOfficeType();
-                adapter = new ReturnReportAfterDiscountAdapter(getVaranegarActvity(), withRef, backOfficeType);
+                adapter = new ReturnReportAfterDiscountAdapter(getVaranegarActvity(), withRef, backOfficeType, isFromRequest());
                 adapter.setLocale(VasHelperMethods.getSysConfigLocale(getContext()));
                 adapter.create(new CustomerCallReturnAfterDiscountViewModelRepository(), CustomerCallReturnAfterDiscountViewManager.getLines(customerId, withRef, isFromRequest(), hasReturnCall()), null);
             } else {

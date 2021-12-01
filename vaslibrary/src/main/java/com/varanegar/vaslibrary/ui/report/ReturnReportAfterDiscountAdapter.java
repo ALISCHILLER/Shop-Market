@@ -48,11 +48,13 @@ public class ReturnReportAfterDiscountAdapter extends SimpleReportAdapter<Custom
     private final boolean withRef;
     private boolean returnTypeEnabled;
     private BackOfficeType backOfficeType;
+    private boolean isFromRequest;
 
-    public ReturnReportAfterDiscountAdapter(MainVaranegarActivity activity, boolean withRef, BackOfficeType backOfficeType) {
+    public ReturnReportAfterDiscountAdapter(MainVaranegarActivity activity, boolean withRef, BackOfficeType backOfficeType, boolean isFromRequest) {
         super(activity, CustomerCallReturnAfterDiscountViewModel.class);
         this.withRef = withRef;
         this.backOfficeType = backOfficeType;
+        this.isFromRequest=isFromRequest;
     }
 
     @Override
@@ -112,8 +114,12 @@ public class ReturnReportAfterDiscountAdapter extends SimpleReportAdapter<Custom
 
         if (withRef) {
             columns.add(bind(entity, CustomerCallReturnAfterDiscountView.TotalRequestNetAmount, activity.getString(R.string.sell_return_net_amount)).setSortable().setWeight(1.5f).calcTotal());
-            columns.add(bind(entity, CustomerCallReturnAfterDiscountView.SaleNo, activity.getString(R.string.invoice_no)).setSortable());
 
+            if (isFromRequest){
+                columns.add(bind(entity, CustomerCallReturnAfterDiscountView.ReturnRequestBackOfficeNo, activity.getString(R.string.invoice_no)).setSortable());
+            }else {
+                columns.add(bind(entity, CustomerCallReturnAfterDiscountView.SaleNo, activity.getString(R.string.invoice_no)).setSortable());
+            }
             columns.add(bind(entity, CustomerCallReturnAfterDiscountView.InvoiceQty, activity.getString(R.string.invoice_qty_label)));
         }
 

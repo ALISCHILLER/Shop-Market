@@ -32,6 +32,8 @@ import java.util.UUID;
 
 /**
  * Created by A.Torabi on 3/14/2018.
+ *
+ * صفحه ثبت  برگشتی
  */
 
 public class BaseReturnAction extends CheckDistanceAction {

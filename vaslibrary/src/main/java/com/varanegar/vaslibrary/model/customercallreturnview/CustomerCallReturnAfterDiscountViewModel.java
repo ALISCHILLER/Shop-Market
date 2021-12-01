@@ -9,4 +9,6 @@ public class CustomerCallReturnAfterDiscountViewModel extends CustomerCallReturn
     public String ReturnReasonName;
     @Column
     public String EditReasonName;
+    @Column
+    public String ReturnRequestBackOfficeNo;
 }

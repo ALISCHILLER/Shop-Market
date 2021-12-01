@@ -22,8 +22,17 @@ public interface ICalcOnlinePromotionAPI {
     Call<DiscountOutputOnline> getPromotion(@Body DiscountCallOrderDataOnline order,
                                                        @Query("calcDiscount") boolean calcDiscount,
                                                        @Query("calcSaleRestriction") boolean calcSaleRestriction ,
+
                                                        @Query("calcPaymentType")  boolean calcPaymentType);
 
+    /**
+     * محاسبه تخفیف جوایز
+     * @param order
+     * @param calcDiscount
+     * @param calcSaleRestriction
+     * @param calcPaymentType
+     * @return
+     */
     @POST("api/v2/ngt/evc/distribution")
     Call<DiscountOutputOnline> getDistOnlinePromotion(@Body PreSaleEvcHeaderViewModel order,
                                                       @Query("calcDiscount") boolean calcDiscount,

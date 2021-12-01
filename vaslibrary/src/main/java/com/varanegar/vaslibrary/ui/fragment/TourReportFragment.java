@@ -421,10 +421,10 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
 
                                             });
                                         });
-                                        dialog.setNegativeButton(R.string.cancel, view -> {
-                                            finishProgress();
-                                            getTourImageView.setEnabled(true);
-                                        });
+//                                        dialog.setNegativeButton(R.string.cancel, view -> {
+//                                            finishProgress();
+//                                            getTourImageView.setEnabled(true);
+//                                        });
                                         dialog.show();
                                     } else
                                         startTourDownload();

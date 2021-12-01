@@ -1381,6 +1381,10 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
         reportsButton.setTitle(R.string.customer_reports);
         reportsButton.setEnabled(() -> !hasCallOrder());
         reportsButton.setOnClickListener(() -> getVaranegarActvity().toggleDrawer());
+
+        /**
+         * دکمه ثبت سفارش
+         */
         CuteButton okButton = new CuteButton();
         okButton.setEnabled(() -> !hasCallOrder());
         okButton.setTitle(R.string.save_order_request);
@@ -2305,6 +2309,7 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
         }
     }
 
+
     private void updateAndSave() {
         try {
             if (VaranegarApplication.is(VaranegarApplication.AppId.Dist))
@@ -2620,6 +2625,9 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
                 }
             }
         } else {
+            /**
+             * چک کردن تحویل قسمتی و تغییر کردن اجناس
+             */
             DistOrderStatus status = customerCallOrderManager.getDistStatus(customerId, callOrderId);
             if (!status.PartiallyDelivered) {
                 saveOrderUtility.setReturnReasonUniqueId(null);
