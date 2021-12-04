@@ -95,6 +95,8 @@ import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by atp on 3/11/2017.
+ *
+ * صفحه دریافت تور
  */
 
 public abstract class TourReportFragment extends PopupFragment implements VirtualTourDialog.tourNoListener {

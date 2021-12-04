@@ -826,9 +826,7 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                 payableChequePairedItems.setValue(customerCallOrderPromotion.TotalAmountNutCheque.toString());
                 payableImmediatePairedItems.setValue(customerCallOrderPromotion.TotalAmountNutImmediate.toString());
 
-                discountImmediatePairedItems
-                        .setValue(customerCallOrderPromotion.TotalAmountNutCheque.subtract(
-                                customerCallOrderPromotion.TotalAmountNutImmediate).toString());
+                discountImmediatePairedItems.setValue(customerCallOrderPromotion.TotalAmountNutCheque.subtract(customerCallOrderPromotion.TotalAmountNutImmediate).toString());
                 orderCostPairedItems.setValue(customerCallOrderPromotion.TotalCashDiscount.toString());
             }
 

@@ -725,6 +725,14 @@ public class CustomerCallManager extends BaseManager<CustomerCallModel> {
             update(callModel);
         }
         removeCalls(customerId, CustomerCallType.CompleteReturnDelivery, CustomerCallType.CompleteLackOfDelivery, CustomerCallType.LackOfVisit);
+        /**
+         * save location
+         * ذخیره لوکیشن برای تحویل سفارش
+         */
+        SharedPreferences customerSharedPreferences = getContext().getSharedPreferences("customerStatusShared", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = customerSharedPreferences.edit();
+        editor.putBoolean(customerId.toString(), true);
+        editor.apply();
     }
 
     @SubsystemType(id = SubsystemTypeId.Dist)
