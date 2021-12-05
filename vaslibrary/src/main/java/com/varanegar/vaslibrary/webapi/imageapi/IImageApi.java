@@ -28,6 +28,8 @@ public interface IImageApi {
                                  @Header("DataOwnerKey") String dataownerkey,
                                  @Header("DataOwnerCenterKey") String dataownercenterkey,
                                  @Header("Authorization") String authorization,
+                                 @Header("SubSystemTypeId") String subsystemtypeid,
+                                 @Header("Version") String Version,
                                  @Part MultipartBody.Part file,
                                  @Query("token") String token,
                                  @Query("imageId") String imageId,

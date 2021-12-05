@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:imeOptions="actionNext"
             android:inputType="textUri"
+
             android:maxLines="1"
             android:orientation="vertical"
             custom:title="@string/external_ip"/>

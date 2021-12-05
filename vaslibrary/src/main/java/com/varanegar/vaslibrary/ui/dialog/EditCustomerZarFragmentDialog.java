@@ -518,8 +518,8 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
 
     private void createSyncViewModel() {
 
-//        String postcode=postalCodePairedItem.getValue();
-//        if (postcode !=null && !postcode.equals("") && !postcode.isEmpty()) {
+        String postcode=postalCodePairedItem.getValue();
+        if (postcode !=null && !postcode.equals("") && !postcode.isEmpty()) {
             syncGetNewCustomerViewModel = new SyncZarGetNewCustomerViewModel();
             syncGetNewCustomerViewModel.CustomerCode = customerInfo.customerCode;
             syncGetNewCustomerViewModel.PersonName = personNamePairedItem.getValue();
@@ -564,9 +564,9 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
                 syncGetNewCustomerViewModel.KVGR2 = group2.FieldKey;
 
             validator.validate(this);
-//        }else {
-//            showErrorDialog("کد پستی را وارد کنید");
-//        }
+        }else {
+            showErrorDialog("کد پستی را وارد کنید");
+        }
     }
 
     @Override

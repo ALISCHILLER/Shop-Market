@@ -73,7 +73,9 @@ public class SupervisorSettingDialogFragment extends CuteDialogWithToolbar {
         getButton.setMode(ActionProcessButton.Mode.ENDLESS);
 
         ipPairedItemsEditable = (PairedItemsEditable) view.findViewById(R.id.ipExitText);
+        ipPairedItemsEditable.setValue("http://192.168.50.110:8080/");
         localIpPairedItemsEditable = (PairedItemsEditable) view.findViewById(R.id.local_ip_edit_text);
+        localIpPairedItemsEditable.setValue("http://192.168.50.110:8080/");
         sysConfigManager = new SysConfigManager(getContext());
         SysConfigModel serverAddress = sysConfigManager.read(ConfigKey.ValidServerAddress, SysConfigManager.local);
         if (serverAddress != null) {
