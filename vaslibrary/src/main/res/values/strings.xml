@@ -1324,7 +1324,7 @@
     <string name="dist_no_label">شماره توزیع</string>
     <string name="payment_type_changed">تغییر نوع پرداخت</string>
     <string name="return_control">کنترل برگشتی</string>
-    <string name="payable_amount_will_change_check_payments">با ثبت برگشتی ممکن است مقادیر قابل پرداخت تغییر نمایند. لطفا فرم تسویه را مجدد کنترل نمایید.</string>
+    <string name="payable_amount_will_change_check_payments">با ثبت برگشتی ممکن است مقادیر قابل پرداخت تغییر نمایند و عملیات حذف گردد. لطفا فرم تسویه را مجدد کنترل نمایید.</string>
     <string name="customer_economic_code">کد اقتصادی مشتری</string>
     <string name="company_logo">لوگوی شرکت</string>
     <string name="invoice_title">عنوان فاکتر چاپی</string>

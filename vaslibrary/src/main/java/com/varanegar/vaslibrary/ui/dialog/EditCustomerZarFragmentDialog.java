@@ -518,50 +518,55 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
 
     private void createSyncViewModel() {
 
-        syncGetNewCustomerViewModel = new SyncZarGetNewCustomerViewModel();
-        syncGetNewCustomerViewModel.CustomerCode = customerInfo.customerCode;
-        syncGetNewCustomerViewModel.PersonName = personNamePairedItem.getValue();
-        syncGetNewCustomerViewModel.StoreName = tabloNamePairedItem.getValue();
-        syncGetNewCustomerViewModel.Street = addressPairedItem.getValue();
-        syncGetNewCustomerViewModel.Street2 = street2PairedItem.getValue();
-        syncGetNewCustomerViewModel.Street3 = street3PairedItem.getValue();
-        syncGetNewCustomerViewModel.Street4 = street4PairedItem.getValue();
-        syncGetNewCustomerViewModel.Street5 = street5PairedItem.getValue();
-        syncGetNewCustomerViewModel.PostalCode = postalCodePairedItem.getValue();
-        syncGetNewCustomerViewModel.CityId = cityNamePairedItem.getValue();
-        syncGetNewCustomerViewModel.Tel = telPairedItem.getValue();
-        syncGetNewCustomerViewModel.Mobile = mobilePairedItem.getValue();
+//        String postcode=postalCodePairedItem.getValue();
+//        if (postcode !=null && !postcode.equals("") && !postcode.isEmpty()) {
+            syncGetNewCustomerViewModel = new SyncZarGetNewCustomerViewModel();
+            syncGetNewCustomerViewModel.CustomerCode = customerInfo.customerCode;
+            syncGetNewCustomerViewModel.PersonName = personNamePairedItem.getValue();
+            syncGetNewCustomerViewModel.StoreName = tabloNamePairedItem.getValue();
+            syncGetNewCustomerViewModel.Street = addressPairedItem.getValue();
+            syncGetNewCustomerViewModel.Street2 = street2PairedItem.getValue();
+            syncGetNewCustomerViewModel.Street3 = street3PairedItem.getValue();
+            syncGetNewCustomerViewModel.Street4 = street4PairedItem.getValue();
+            syncGetNewCustomerViewModel.Street5 = street5PairedItem.getValue();
+            syncGetNewCustomerViewModel.PostalCode = postalCodePairedItem.getValue();
+            syncGetNewCustomerViewModel.CityId = cityNamePairedItem.getValue();
+            syncGetNewCustomerViewModel.Tel = telPairedItem.getValue();
+            syncGetNewCustomerViewModel.Mobile = mobilePairedItem.getValue();
 
 //        CityModel city = citySpinner.getSelectedItem();
 //        if (city != null)
 //            syncGetNewCustomerViewModel.CityId = city.UniqueId;
 
-        DataForRegisterModel zone = deliveryZoneSpinner.getSelectedItem();
-        if (zone != null)
-            syncGetNewCustomerViewModel.TRANSPZONE = zone.FieldKey;
+            DataForRegisterModel zone = deliveryZoneSpinner.getSelectedItem();
+            if (zone != null)
+                syncGetNewCustomerViewModel.TRANSPZONE = zone.FieldKey;
 
-        DataForRegisterModel degree = customerDegreeSpinner.getSelectedItem();
-        if (degree != null)
-            syncGetNewCustomerViewModel.KUKLA = degree.FieldKey;
+            DataForRegisterModel degree = customerDegreeSpinner.getSelectedItem();
+            if (degree != null)
+                syncGetNewCustomerViewModel.KUKLA = degree.FieldKey;
 
-        DataForRegisterModel sale = saleZonesSpinner.getSelectedItem();
-        if (sale != null)
-            syncGetNewCustomerViewModel.BZIRK = sale.FieldKey;
+            DataForRegisterModel sale = saleZonesSpinner.getSelectedItem();
+            if (sale != null)
+                syncGetNewCustomerViewModel.BZIRK = sale.FieldKey;
 
 //        DataForRegisterModel group = customerGroupSpinner.getSelectedItem();
 //        if (group != null)
 //            syncGetNewCustomerViewModel.KDGRP = group.FieldKey;
 
-        DataForRegisterModel group1 = customerGroup1Spinner.getSelectedItem();
-        if (group1 != null) {
-            syncGetNewCustomerViewModel.KVGR1 = group1.FieldKey;
-            syncGetNewCustomerViewModel.KDGRP = group1.FieldKey;
-        }
-        DataForRegisterModel group2 = customerGroup2Spinner.getSelectedItem();
-        if (group2 != null)
-            syncGetNewCustomerViewModel.KVGR2 = group2.FieldKey;
+            DataForRegisterModel group1 = customerGroup1Spinner.getSelectedItem();
+            if (group1 != null) {
+                syncGetNewCustomerViewModel.KVGR1 = group1.FieldKey;
+                syncGetNewCustomerViewModel.KDGRP = group1.FieldKey;
+            }
+            DataForRegisterModel group2 = customerGroup2Spinner.getSelectedItem();
+            if (group2 != null)
+                syncGetNewCustomerViewModel.KVGR2 = group2.FieldKey;
 
-        validator.validate(this);
+            validator.validate(this);
+//        }else {
+//            showErrorDialog("کد پستی را وارد کنید");
+//        }
     }
 
     @Override

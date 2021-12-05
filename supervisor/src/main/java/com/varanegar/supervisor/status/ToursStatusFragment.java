@@ -3,6 +3,7 @@ package com.varanegar.supervisor.status;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -38,6 +39,7 @@ import com.varanegar.supervisor.model.changeOrdersStatus.ChangeOrdersStatusmMode
 import com.varanegar.supervisor.model.reviewreport.ReviewreportModel;
 import com.varanegar.supervisor.model.reviewreport.ReviewreportView;
 import com.varanegar.supervisor.model.reviewreport.items;
+import com.varanegar.supervisor.utill.dialog.BackMessageDialog;
 import com.varanegar.supervisor.webapi.SupervisorApi;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
 import com.varanegar.vaslibrary.model.customer.SupervisorCustomer;
@@ -70,6 +72,7 @@ public class ToursStatusFragment extends IMainPageFragment {
         summaryReportView = view.findViewById(R.id.summary_report_view);
         fab_send=view.findViewById(R.id.fab_send);
 
+        fab_send.setVisibility(View.GONE);
 
         fab_send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,11 +122,11 @@ public class ToursStatusFragment extends IMainPageFragment {
                     status_options = "R2";
                 }
             }
-            if (statuses.size()==1){
-                fab_send.setVisibility(View.VISIBLE);
-            }else {
-                fab_send.setVisibility(View.GONE);
-            }
+//            if (statuses.size()==1){
+//               // fab_send.setVisibility(View.VISIBLE);
+//            }else {
+//                fab_send.setVisibility(View.GONE);
+//            }
 
             statusConfigModel.setDealersId(dealersId);
             statusConfigModel.setStatuses(statuses);
@@ -162,18 +165,49 @@ public class ToursStatusFragment extends IMainPageFragment {
                                     @Override
                                     public void onClick(View v) {
                                         if (entity.orderStatus.equals("D2")) {
-                                            customercondition.setImageResource(R.drawable.ic_baseline_done_24);
-                                            linearLayout.setBackgroundColor(Color.parseColor("#00BCD4"));
-                                            arr.add(entity.orderNumber);
-                                            Log.e("Tag", String.valueOf(arr));
-                                            entity.orderStatus=" ";
+//                                            customercondition.setImageResource(R.drawable.ic_baseline_done_24);
+//                                            linearLayout.setBackgroundColor(Color.parseColor("#00BCD4"));
+                                            CuteMessageDialog builder = new CuteMessageDialog(getActivity());
+                                            builder.setTitle(getActivity().getString(com.varanegar.vaslibrary.R.string.alert));
+
+                                            if (entity.orderStatus.equals("D2")) {
+                                                builder.setMessage("سفارش مشتری به حالت تایید تغییر می کند");
+                                            } else if (!entity.orderStatus.equals("D2")){
+
+                                            }
+                                            builder.setPositiveButton(com.varanegar.vaslibrary.R.string.yes, new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    arr.add(entity.orderNumber);
+                                                    Log.e("Tag", String.valueOf(arr));
+                                                    SendDataOrdor();
+                                                }
+                                            });
+                                            builder.setNegativeButton(com.varanegar.vaslibrary.R.string.no, new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+
+                                                }
+                                            });
+                                            builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                                @Override
+                                                public void onCancel(DialogInterface dialogInterface) {
+
+                                                }
+                                            });
+                                            builder.show();
+
+
+
+
+//                                            entity.orderStatus=" ";
 
                                         }else {
-                                            customercondition.setImageResource(R.drawable.ic_baseline_block_24);
-                                            linearLayout.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                            arr.remove(entity.orderNumber);
-                                            entity.orderStatus="D2";
-                                            Log.e("Tag", String.valueOf(arr));
+//                                            customercondition.setImageResource(R.drawable.ic_baseline_block_24);
+//                                            linearLayout.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//                                            arr.remove(entity.orderNumber);
+//                                            entity.orderStatus="D2";
+//                                            Log.e("Tag", String.valueOf(arr));
                                         }
                                     }
                                 });

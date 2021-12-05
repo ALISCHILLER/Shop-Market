@@ -8,20 +8,28 @@ import androidx.annotation.Nullable;
 
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarApplication;
+import com.varanegar.framework.database.DbException;
 import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.framework.util.fragment.extendedlist.ActionsAdapter;
+import com.varanegar.framework.validation.ValidationException;
 import com.varanegar.vaslibrary.R;
+import com.varanegar.vaslibrary.manager.customeractiontimemanager.CustomerActionTimeManager;
+import com.varanegar.vaslibrary.manager.customeractiontimemanager.CustomerActions;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallReturnManager;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallReturnRequestManager;
+import com.varanegar.vaslibrary.manager.customercall.CustomerPrintCountManager;
 import com.varanegar.vaslibrary.manager.customercallmanager.CustomerCallManager;
+import com.varanegar.vaslibrary.manager.paymentmanager.PaymentManager;
+import com.varanegar.vaslibrary.manager.printer.CancelInvoiceManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.model.call.CustomerCallReturnModel;
 import com.varanegar.vaslibrary.model.call.CustomerCallReturnRequestModel;
 import com.varanegar.vaslibrary.model.customercall.CustomerCallModel;
 import com.varanegar.vaslibrary.model.customercall.CustomerCallType;
+import com.varanegar.vaslibrary.model.payment.PaymentModel;
 import com.varanegar.vaslibrary.model.returnType.ReturnType;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.ui.dialog.ReturnTypeDialog;
@@ -37,6 +45,9 @@ import java.util.UUID;
  */
 
 public class BaseReturnAction extends CheckDistanceAction {
+
+    private List<PaymentModel> paymentsList;
+    private PaymentManager paymentManager;
     public BaseReturnAction(MainVaranegarActivity activity, ActionsAdapter adapter, UUID selectedId) {
         super(activity, adapter, selectedId);
         icon = R.drawable.ic_thumb_down_white_24dp;
@@ -86,6 +97,8 @@ public class BaseReturnAction extends CheckDistanceAction {
 
         List<UUID> enabledTypes = returnManager.getEnabledReturnTypes(getSelectedId());
 
+        paymentManager = new PaymentManager(getActivity());
+        paymentsList = paymentManager.listPayments(getSelectedId());
         boolean withRefFromRequest = Linq.exists(enabledTypes, new Linq.Criteria<UUID>() {
             @Override
             public boolean run(UUID item) {
@@ -129,12 +142,22 @@ public class BaseReturnAction extends CheckDistanceAction {
                 return item.CallType == CustomerCallType.Payment;
             }
         });
-        if (hasPayment) {
+
+        if (hasPayment || paymentsList.size()>0) {
             CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
             dialog.setPositiveButton(R.string.ok, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    showOptions();
+                  //  delete();
+                    try {
+                        paymentManager.deleteAllPayments(getSelectedId());
+                        showOptions();
+                    } catch (DbException e) {
+                        e.printStackTrace();
+                    } catch (ValidationException e) {
+                        e.printStackTrace();
+                    }
+
                 }
             });
             dialog.setNegativeButton(R.string.cancel, null);
@@ -321,4 +344,23 @@ public class BaseReturnAction extends CheckDistanceAction {
         getActivity().pushFragment(saveReturnFragment);
     }
 
+
+    private void delete() {
+        final CustomerPrintCountManager customerPrintCountManager = new CustomerPrintCountManager(getActivity());
+        final CustomerCallManager callManager = new CustomerCallManager(getActivity());
+        try {
+            if (getPrintCounts() > 0) {
+                CancelInvoiceManager cancelInvoiceManager = new CancelInvoiceManager(getActivity());
+                cancelInvoiceManager.addCancelInvoice(getSelectedId());
+                customerPrintCountManager.resetCount(getSelectedId());
+            }
+            callManager.removeAllCalls(getSelectedId());
+            callManager.removeCalls(getSelectedId());
+            new CustomerActionTimeManager(getActivity()).delete(getSelectedId(), CustomerActions.CustomerCallEnd);
+        } catch (DbException e) {
+            e.printStackTrace();
+        } catch (ValidationException e) {
+            e.printStackTrace();
+        }
+    }
 }
