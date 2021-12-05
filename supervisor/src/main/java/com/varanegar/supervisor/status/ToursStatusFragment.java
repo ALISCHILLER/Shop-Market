@@ -505,7 +505,7 @@ public class ToursStatusFragment extends IMainPageFragment {
    private void SendDataOrdor(){
        ChangeOrdersStatusmModel changeOrdersStatusmModel=new ChangeOrdersStatusmModel();
        changeOrdersStatusmModel.orderNumbers=arr;
-       changeOrdersStatusmModel.status=status_options;
+       changeOrdersStatusmModel.status="D2";
        final ProgressDialog progressDialog = new ProgressDialog(getContext());
        progressDialog.setMessage("درحال ارسال اطلاعات");
        progressDialog.show();
