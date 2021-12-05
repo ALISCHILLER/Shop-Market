@@ -505,7 +505,7 @@ public class ToursStatusFragment extends IMainPageFragment {
    private void SendDataOrdor(){
        ChangeOrdersStatusmModel changeOrdersStatusmModel=new ChangeOrdersStatusmModel();
        changeOrdersStatusmModel.orderNumbers=arr;
-       changeOrdersStatusmModel.status="D2";
+       changeOrdersStatusmModel.status="r2";
        final ProgressDialog progressDialog = new ProgressDialog(getContext());
        progressDialog.setMessage("درحال ارسال اطلاعات");
        progressDialog.show();
@@ -537,6 +537,8 @@ public class ToursStatusFragment extends IMainPageFragment {
                progressDialog.dismiss();
            }
        });
+
+       arr.clear();
    }
     private void showErrorDialog(String err) {
         if (isResumed()) {
