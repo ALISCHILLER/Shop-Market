@@ -106,6 +106,7 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
     private TourManager tourManager;
     private ImageView getTourImageView;
     private ImageView backupImageView;
+    private ImageView downloadApk;
     private ImageView logoutImageView;
     private ImageView trackingLicenseImageView;
     private RecordButton cancelTourRecordBtn;
@@ -176,6 +177,7 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
 
             return true;
         });
+
         backupImageView.setOnClickListener(v -> {
             final BackupConfigAlertDialog alertDialog = new BackupConfigAlertDialog();
             alertDialog.onBackupConfig = new BackupConfigAlertDialog.OnBackupConfig() {
@@ -242,6 +244,7 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
             getTour(null);
         });
 
+
         cancelTourRecordBtn.setRecordListener(new OnRecordListener() {
             @Override
             public void onRecord() {
@@ -271,6 +274,12 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
         });
 
 
+        downloadApk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DownloadApk();
+            }
+        });
         if (!tourManager.isTourDownloading()) {
             reportLayout.setVisibility(View.VISIBLE);
             createTourInfoView();
@@ -472,6 +481,137 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
         });
     }
 
+    private void DownloadApk(){
+        startProgress(R.string.please_wait, R.string.connecting_to_the_server);
+        pingApi = new PingApi();
+        pingApi.refreshBaseServerUrl(getContext(), new PingApi.PingCallback() {
+
+            @Override
+            public void done(String ipAddress) {
+                final MainVaranegarActivity activity = getVaranegarActvity();
+                if (activity != null && !activity.isFinishing()) {
+                    appVersionApi = new AppVersionApi(activity);
+                    appVersionApi.getLatestVersion(new VersionApiCallBack() {
+                        @Override
+                        public void onSuccess(final AppVersionInfo versionInfo) {
+                            MainVaranegarActivity activity = getVaranegarActvity();
+                            if (activity != null && !activity.isFinishing()) {
+                                try {
+                                    int versionCode = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0).versionCode;
+                                    if (versionInfo.VersionCode > versionCode) {
+                                        CuteMessageDialog dialog = new CuteMessageDialog(activity);
+                                        dialog.setIcon(Icon.Info);
+                                        dialog.setCancelable(false);
+                                        dialog.setTitle(R.string.new_version_exist);
+                                        dialog.setMessage(R.string.please_download_the_newest_version);
+                                        dialog.setPositiveButton(R.string.download, view -> {
+                                            getTourImageView.setEnabled(true);
+                                            startProgress(R.string.please_wait, R.string.downloading_apk);
+                                            appVersionApi.downloadAndSave(versionInfo.FileName, new ApkDownloadCallBack() {
+                                                @Override
+                                                public void onSuccess(String apkPath) {
+                                                    finishProgress();
+                                                    MainVaranegarActivity activity1 = getVaranegarActvity();
+                                                    if (activity1 != null && !activity1.isFinishing()) {
+                                                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                                                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                                                            intent.setDataAndType(Uri.fromFile(new File(apkPath)), "application/vnd.android.package-archive");
+                                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                        } else {
+                                                            Uri fileUri = FileProvider.getUriForFile(getContext(), getContext().getPackageName() + ".provider", new File(apkPath));
+                                                            intent.setDataAndType(fileUri, "application/vnd.android.package-archive");
+                                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                                        }
+                                                        startActivity(intent);
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onFailure(String err) {
+                                                    finishProgress();
+                                                    MainVaranegarActivity activity1 = getVaranegarActvity();
+                                                    if (activity1 != null && !activity1.isFinishing()) {
+                                                        CuteMessageDialog dialog1 = new CuteMessageDialog(activity1);
+                                                        dialog1.setIcon(Icon.Error);
+                                                        dialog1.setTitle(R.string.error);
+                                                        dialog1.setMessage(R.string.error_downloading_apk);
+                                                        dialog1.setPositiveButton(R.string.ok, null);
+                                                        dialog1.show();
+                                                    }
+                                                }
+
+                                            });
+                                        });
+//                                        dialog.setNegativeButton(R.string.cancel, view -> {
+//                                            finishProgress();
+//                                            getTourImageView.setEnabled(true);
+//                                        });
+                                        dialog.show();
+                                    } else{
+                                        finishProgress();
+                                        MainVaranegarActivity activity1 = getVaranegarActvity();
+                                        if (activity1 != null && !activity1.isFinishing()) {
+                                            CuteMessageDialog dialog1 = new CuteMessageDialog(activity1);
+                                            dialog1.setIcon(Icon.Error);
+                                            dialog1.setTitle(R.string.error);
+                                            dialog1.setMessage(R.string.not_download_apk);
+                                            dialog1.setPositiveButton(R.string.ok, null);
+                                            dialog1.show();
+                                        }
+
+                                    }
+
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    Timber.e(e);
+
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(String error) {
+                            finishProgress();
+                            MainVaranegarActivity activity1 = getVaranegarActvity();
+                            if (activity1 != null && !activity1.isFinishing()) {
+                                CuteMessageDialog dialog1 = new CuteMessageDialog(activity1);
+                                dialog1.setIcon(Icon.Error);
+                                dialog1.setTitle(R.string.error);
+                                dialog1.setMessage(R.string.not_download_apk);
+                                dialog1.setPositiveButton(R.string.ok, null);
+                                dialog1.show();
+                            }
+                        }
+
+                        @Override
+                        public void onCancel() {
+                            finishProgress();
+                            MainVaranegarActivity activity = getVaranegarActvity();
+                            if (activity != null && !activity.isFinishing())
+                                getTourImageView.setEnabled(true);
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void failed() {
+                finishProgress();
+                MainVaranegarActivity activity = getVaranegarActvity();
+                if (activity != null && !activity.isFinishing()) {
+                    if (isResumed()) {
+                        getTourImageView.setEnabled(true);
+                        CuteMessageDialog dialog = new CuteMessageDialog(activity);
+                        dialog.setIcon(Icon.Error);
+                        dialog.setTitle(R.string.error);
+                        dialog.setMessage(R.string.error_connecting_to_server);
+                        dialog.setPositiveButton(R.string.ok, null);
+                        dialog.show();
+                    }
+                }
+            }
+        });
+
+    }
     private void runBackup(final List<ImageType> imageTypes) {
         startProgress(R.string.please_wait, R.string.backing_up_database);
         final Handler handler = new Handler();
@@ -570,6 +710,7 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
         view = inflater.inflate(R.layout.fragment_tour_report, container, false);
         logsRecyclerView = view.findViewById(R.id.logs_recycler_view);
         backupImageView = view.findViewById(R.id.backup_image_view);
+        downloadApk=view.findViewById(R.id.download_apk);
         logoutImageView = view.findViewById(R.id.log_out_image_view);
         trackingLicenseImageView = view.findViewById(R.id.tracking_license_image_view);
         getTourImageView = view.findViewById(R.id.get_tour_image_view);
@@ -1077,4 +1218,5 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
         pingApi = null;
         appVersionApi = null;
     }
+
 }
