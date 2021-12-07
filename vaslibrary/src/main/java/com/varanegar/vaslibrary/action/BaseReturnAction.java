@@ -143,31 +143,60 @@ public class BaseReturnAction extends CheckDistanceAction {
             }
         });
 
-        if (hasPayment || paymentsList.size()>0) {
-            CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
-            dialog.setPositiveButton(R.string.ok, new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                  //  delete();
-                    try {
-                        paymentManager.deleteAllPayments(getSelectedId());
-                        showOptions();
-                    } catch (DbException e) {
-                        e.printStackTrace();
-                    } catch (ValidationException e) {
-                        e.printStackTrace();
-                    }
+        if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)){
+            if (hasPayment || paymentsList.size()>0) {
+                CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
+                dialog.setPositiveButton(R.string.ok, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //  delete();
+                        try {
+                            paymentManager.deleteAllPayments(getSelectedId());
+                            showOptions();
+                        } catch (DbException e) {
+                            e.printStackTrace();
+                        } catch (ValidationException e) {
+                            e.printStackTrace();
+                        }
 
-                }
-            });
-            dialog.setNegativeButton(R.string.cancel, null);
-            dialog.setTitle(R.string.warning);
-            dialog.setIcon(Icon.Warning);
-            dialog.setMessage(R.string.payable_amount_will_change_check_payments);
-            dialog.show();
-        } else
-            showOptions();
+                    }
+                });
+                dialog.setNegativeButton(R.string.cancel, null);
+                dialog.setTitle(R.string.warning);
+                dialog.setIcon(Icon.Warning);
+                dialog.setMessage(R.string.payable_amount_will_change_check_payments);
+                dialog.show();
+            } else
+                showOptions();
+        }else {
+            if (hasPayment) {
+                CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
+                dialog.setPositiveButton(R.string.ok, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //  delete();
+                        try {
+                            paymentManager.deleteAllPayments(getSelectedId());
+                            showOptions();
+                        } catch (DbException e) {
+                            e.printStackTrace();
+                        } catch (ValidationException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                });
+                dialog.setNegativeButton(R.string.cancel, null);
+                dialog.setTitle(R.string.warning);
+                dialog.setIcon(Icon.Warning);
+                dialog.setMessage(R.string.payable_amount_will_change_check_payments);
+                dialog.show();
+            } else
+                showOptions();
+        }
+
     }
+
 
     private void showOptions() {
         SysConfigManager sysConfigManager = new SysConfigManager(getActivity());

@@ -82,6 +82,7 @@ public class PaymentManager extends BaseManager<PaymentModel> {
     public PaymentManager(@NonNull Context context) {
         super(context, new PaymentModelRepository());
     }
+    private List<PaymentModel> paymentsList;
 
     /**
      * @param payment
@@ -574,7 +575,11 @@ public class PaymentManager extends BaseManager<PaymentModel> {
                  * آنی بدون چک
                  * تبدیل نوع پرداخت به PT01
                  */
-                if(finalUsanceDay==1 &&  payedCashCheck.Check.compareTo(Currency.ZERO)<=0) {//آنی
+
+
+
+                paymentsList = paymentManager.listPayments(customerModel.UniqueId);
+                if(finalUsanceDay==1 &&  payedCashCheck.Check.compareTo(Currency.ZERO)<=0 && paymentsList.size()>0 ) {//آنی
                     if (!paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PT01.toString())){
                         throw new ThirdPartyControlPaymentChangedException(getString(R.string.payment_type_changed), ThirdPartyPaymentTypes.PT01, null);
                     }
