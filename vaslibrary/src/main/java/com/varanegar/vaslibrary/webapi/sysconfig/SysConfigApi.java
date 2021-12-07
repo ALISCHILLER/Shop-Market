@@ -42,7 +42,6 @@ public class SysConfigApi extends BaseApi implements ISysConfigApi {
         GsonBuilder gsonBuilder = VaranegarGsonBuilder.build();
         Retrofit retrofit= new Retrofit.Builder()
                 .baseUrl(getBaseUrl())
-                .client(getClient())
                 .addConverterFactory(GsonConverterFactory.create(gsonBuilder.create()))
                 .build();
         return retrofit.create(ISysConfigApi.class).getOwnerKeys();
@@ -53,7 +52,6 @@ public class SysConfigApi extends BaseApi implements ISysConfigApi {
         GsonBuilder gsonBuilder = VaranegarGsonBuilder.build();
         Retrofit retrofit= new Retrofit.Builder()
                 .baseUrl(getBaseUrl())
-                .client(getClient())
                 .addConverterFactory(GsonConverterFactory.create(gsonBuilder.create()))
                 .build();
         return retrofit.create(ISysConfigApi.class).getLanguage();
@@ -64,22 +62,25 @@ public class SysConfigApi extends BaseApi implements ISysConfigApi {
         return getRetrofitBuilder(TokenType.UserToken).build().create(ISysConfigApi.class).getSupervisorConfigs();
     }
 
-    protected OkHttpClient getClient() {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
-
-
-        OwnerKeysWrapper ownerKeys =new OwnerKeysWrapper();
-        ownerKeys.subsystemtypeid = String.valueOf(VaranegarApplication.getInstance().getAppId());
-        try {
-            ownerKeys.Version=String.valueOf(getContext().getApplicationContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0).versionName);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        ownerKeys.DataOwnerCenterKey = "";
-        ownerKeys.DataOwnerKey = "";
-        ownerKeys.OwnerKey="";
-
-        builder.addInterceptor(new HeaderInterceptor(ownerKeys, null));
-        return builder.build();
-    }
+    /**
+     * متد پیاده سازی header
+     */
+//    protected OkHttpClient getClient() {
+//        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+//
+//
+//        OwnerKeysWrapper ownerKeys =new OwnerKeysWrapper();
+//        ownerKeys.subsystemtypeid = String.valueOf(VaranegarApplication.getInstance().getAppId());
+//        try {
+//            ownerKeys.Version=String.valueOf(getContext().getApplicationContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0).versionName);
+//        } catch (PackageManager.NameNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        ownerKeys.DataOwnerCenterKey = "";
+//        ownerKeys.DataOwnerKey = "";
+//        ownerKeys.OwnerKey="";
+//
+//        builder.addInterceptor(new HeaderInterceptor(ownerKeys, null));
+//        return builder.build();
+//    }
 }
