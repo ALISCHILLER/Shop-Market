@@ -384,7 +384,7 @@ public class BackupManager {
         void onFailure(String error);
     }
 
-    public static void uploadBackup(@NonNull final Context context, @NonNull final IUploadCallBack callBack) {
+    public static void uploadBackup(@NonNull final Context context,String TourNo,String backUpName, @NonNull final IUploadCallBack callBack) {
         final UserModel userModel = UserManager.readFromFile(context);
         if (userModel == null) {
             Timber.e("User not found.");
@@ -398,7 +398,7 @@ public class BackupManager {
                 @Override
                 public void done(String ipAddress) {
                     BackupApi backupApi = new BackupApi(context);
-                    backupApi.runWebRequest(backupApi.uploadBackup(userModel, file), new WebCallBack<ResponseBody>() {
+                    backupApi.runWebRequest(backupApi.uploadBackup(userModel, file,TourNo,backUpName), new WebCallBack<ResponseBody>() {
                         @Override
                         protected void onFinish() {
 

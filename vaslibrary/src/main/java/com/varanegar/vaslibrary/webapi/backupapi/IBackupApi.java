@@ -16,5 +16,5 @@ import retrofit2.http.Part;
 public interface IBackupApi {
     @POST("api/v2/ngt/backup")
     @Multipart
-    Call<ResponseBody> uploadBackup(@Header("FolderName") String folderName, @Part MultipartBody.Part file);
+    Call<ResponseBody> uploadBackup( @Header("FolderName")String folderName , @Header("TourNo") String TourNo,@Header("backUpName")String buckUpName, @Part MultipartBody.Part file );
 }

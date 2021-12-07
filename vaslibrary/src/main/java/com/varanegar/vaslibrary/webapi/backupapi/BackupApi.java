@@ -26,13 +26,13 @@ public class BackupApi extends BaseApi {
         super(context);
     }
 
-    public Call<ResponseBody> uploadBackup(@Nullable UserModel userModel, @NonNull File file) {
+    public Call<ResponseBody> uploadBackup(@Nullable UserModel userModel, @NonNull File file,String TourNo,String backUpName) {
         RequestBody requestFile = RequestBody.create(MediaType.parse("application/zip"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
         if (userModel != null && userModel.UserName != null && !userModel.UserName.isEmpty()) {
             String encoded = Base64.encodeToString(userModel.UserName.getBytes(), Base64.NO_WRAP);
-            return getRetrofitBuilder(TokenType.UserToken).build().create(IBackupApi.class).uploadBackup(encoded, body);
+            return getRetrofitBuilder(TokenType.UserToken).build().create(IBackupApi.class).uploadBackup(encoded,TourNo,backUpName, body);
         } else
-            return getRetrofitBuilder(TokenType.UserToken).build().create(IBackupApi.class).uploadBackup("NO USER", body);
+            return getRetrofitBuilder(TokenType.UserToken).build().create(IBackupApi.class).uploadBackup("NO USER","","", body);
     }
 }

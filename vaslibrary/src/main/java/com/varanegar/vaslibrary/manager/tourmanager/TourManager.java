@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 
 import com.google.gson.Gson;
+import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.database.DbException;
 import com.varanegar.framework.database.model.ModelProjection;
@@ -203,6 +204,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
@@ -212,6 +214,7 @@ import retrofit2.Call;
 import timber.log.Timber;
 
 import static android.content.Context.MODE_PRIVATE;
+import static java.security.AccessController.getContext;
 
 /**
  * Created by A.Jafarzadeh on 7/2/2017.
@@ -1169,6 +1172,7 @@ public class TourManager {
                                             try {
                                                 BackupManager.exportData(context, true, BackupManager.SEND_TOUR_BACKUP);
                                                 progressChanged(callBack, R.string.backup_finished_successfully);
+                                                sendBuckup();
                                                 progressChanged(callBack, R.string.populating_tour_info);
                                                 TourInfo tourInfo = createTourInfo();
                                                 if (tourInfo != null) {
@@ -1192,6 +1196,7 @@ public class TourManager {
                                                     locationViewModel.eventData.Time = tourInfo.Time;
                                                     locationViewModel.eventData.description = context.getString(R.string.tour_sent);
                                                     TrackingLogManager.addLog(context, LogType.EVENT, LogLevel.Info, "ارسال تور");
+
                                                     locationManager.addTrackingPoint(locationViewModel, new OnSaveLocation() {
                                                         @Override
                                                         public void onSaved(LocationModel location) {
@@ -1323,6 +1328,24 @@ public class TourManager {
         }
     }
 
+    public void sendBuckup(){
+        String date = DateHelper.toString(new Date(), DateFormat.FileName, Locale.US);
+        String zipFilename;
+        TourModel tourModel;
+        tourModel = loadTour();
+        zipFilename = date + "_f.backup";
+        BackupManager.uploadBackup(context,String.valueOf(tourModel.TourNo),zipFilename, new BackupManager.IUploadCallBack() {
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onFailure(String error) {
+
+            }
+        });
+    }
     public void sendTour(@Nullable final TourCallBack callBack) {
         TourModel tourModel = loadTour();
         if (tourModel == null) {

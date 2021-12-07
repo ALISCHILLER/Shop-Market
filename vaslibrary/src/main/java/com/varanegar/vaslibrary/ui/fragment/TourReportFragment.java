@@ -625,7 +625,7 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
                         dialog.setMessage(R.string.backup_finished_successfully);
                         dialog.setTitle(R.string.export_data);
                         dialog.setIcon(Icon.Success);
-                        dialog.setPositiveButton(R.string.send_backup, view -> BackupManager.uploadBackup(getContext(), new BackupManager.IUploadCallBack() {
+                        dialog.setPositiveButton(R.string.send_backup, view -> BackupManager.uploadBackup(getContext()," "," ", new BackupManager.IUploadCallBack() {
                             @Override
                             public void onSuccess() {
                                 if (isResumed())

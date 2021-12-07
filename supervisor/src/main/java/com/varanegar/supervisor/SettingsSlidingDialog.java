@@ -103,7 +103,7 @@ public class SettingsSlidingDialog extends SlidingDialog {
                                             @Override
                                             public void onClick(View v) {
                                                 startProgress(getString(R.string.sending_backup));
-                                                BackupManager.uploadBackup(getContext(), new BackupManager.IUploadCallBack() {
+                                                BackupManager.uploadBackup(getContext()," "," ", new BackupManager.IUploadCallBack() {
                                                     @Override
                                                     public void onSuccess() {
                                                         if (isResumed()) {
