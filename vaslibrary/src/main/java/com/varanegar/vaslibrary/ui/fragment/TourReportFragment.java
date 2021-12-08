@@ -106,7 +106,7 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
     private TourManager tourManager;
     private ImageView getTourImageView;
     private ImageView backupImageView;
-    private ImageView downloadApk;
+   // private ImageView downloadApk;
     private ImageView logoutImageView;
     private ImageView trackingLicenseImageView;
     private RecordButton cancelTourRecordBtn;
@@ -274,12 +274,12 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
         });
 
 
-        downloadApk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DownloadApk();
-            }
-        });
+//        downloadApk.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                DownloadApk();
+//            }
+//        });
         if (!tourManager.isTourDownloading()) {
             reportLayout.setVisibility(View.VISIBLE);
             createTourInfoView();
@@ -710,7 +710,7 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
         view = inflater.inflate(R.layout.fragment_tour_report, container, false);
         logsRecyclerView = view.findViewById(R.id.logs_recycler_view);
         backupImageView = view.findViewById(R.id.backup_image_view);
-        downloadApk=view.findViewById(R.id.download_apk);
+        //downloadApk=view.findViewById(R.id.download_apk);
         logoutImageView = view.findViewById(R.id.log_out_image_view);
         trackingLicenseImageView = view.findViewById(R.id.tracking_license_image_view);
         getTourImageView = view.findViewById(R.id.get_tour_image_view);
