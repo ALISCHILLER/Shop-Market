@@ -4,15 +4,15 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.varanegar.dist",
+  "applicationId": "com.varanegar.presale",
   "variantName": "processReleaseResources",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
-      "versionCode": 30101096,
-      "versionName": "3.1.1.96",
-      "outputFile": "varanegar.dist_V3.1.1.96_211208.apk"
+      "versionCode": 30101146,
+      "versionName": "3.1.1.146",
+      "outputFile": "varanegar.presale_V3.1.1.146_211208.apk"
     }
   ]
 }
