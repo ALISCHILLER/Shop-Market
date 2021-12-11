@@ -15,6 +15,10 @@ import java.util.List;
 public class DistCustomerContentFragment extends CustomersContentFragment {
     @Override
     protected void addActions(@NonNull List<Action> actions) {
+
         super.addActions(actions);
+
+
+
     }
 }

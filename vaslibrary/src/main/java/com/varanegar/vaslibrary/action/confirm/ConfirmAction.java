@@ -491,6 +491,7 @@ public class ConfirmAction extends CheckPathAction {
                             sendCustomerCalls();
                         else
                             setRunning(false);
+
                     } catch (Exception ex) {
                         showErrorMessage(R.string.error);
                         setRunning(false);
