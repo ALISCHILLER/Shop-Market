@@ -1451,9 +1451,11 @@
     <string name="time_settings_is_wrong">تنظمیات تاریخ و ساعت دستگاه اشتباه است. لطفا تنظیمات را اصلاح نمایید</string>
     <string name="transaction_canceled">تراکنش لغو شد.</string>
     <string name="pin_code">پین کد</string>
+    <string name="tourno_code">شماره تور</string>
     <string name="operation_canceled">عملیات کنسل شد</string>
     <string name="please_insert_pin_code">لطفا پین کد را وارد کنید</string>
     <string name="pin_code_in_not_correct">پین کد وارد شده صحیح نیست</string>
+    <string name="TourNo_in_not_correct">شماره تور وارد شده صحیح نیست</string>
     <string name="control_payments_again_for_usance_day">راس دریافتی ها با فاکتور مطابقت ندارد، دریافتی ها را مجددا کنترل کنید</string>
     <string name="weight">وزن</string>
     <string name="be">باشد</string>

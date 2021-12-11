@@ -76,6 +76,8 @@ import com.varanegar.vaslibrary.print.SentTourInfoPrint.TourInfo;
 import com.varanegar.vaslibrary.sync.SyncService;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
 import com.varanegar.vaslibrary.ui.dialog.ImportDialogFragment;
+import com.varanegar.vaslibrary.ui.dialog.InsertPinDialog;
+import com.varanegar.vaslibrary.ui.dialog.InsertTourNoSendRest;
 import com.varanegar.vaslibrary.ui.dialog.TrackingLicenseFragment;
 import com.varanegar.vaslibrary.ui.dialog.VirtualTourDialog;
 import com.varanegar.vaslibrary.webapi.appversion.ApkDownloadCallBack;
@@ -248,7 +250,11 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
          * سناریو ریست
          */
         refreshtour.setOnClickListener(view -> {
+            InsertTourNoSendRest dialog = new InsertTourNoSendRest();
+            dialog.setCancelable(false);
+            dialog.setClosable(false);
 
+            dialog.show(getChildFragmentManager(), "7b0b529b-3f9b-4399-a2c7-2a85bcf57c1c");
         });
 
         getTourImageView.setOnClickListener(view -> {
