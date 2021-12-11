@@ -1172,7 +1172,7 @@ public class TourManager {
                                             try {
 
 
-                                                BackupManager.exportData(context, true, BackupManager.SEND_TOUR_BACKUP);
+                                                BackupManager.exportData(context, true,true, BackupManager.SEND_TOUR_BACKUP);
                                                 progressChanged(callBack, R.string.backup_finished_successfully);
                                                // sendBuckup();
 

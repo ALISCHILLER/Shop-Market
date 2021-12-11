@@ -1494,5 +1494,6 @@
     <string name="dialog_black">با انجام این عملیات کاربر بلاک میشود</string>
     <string name="dialog_unblack">با انجام این عملیات کاربر از بلاک خارج میشود</string>
     <string name="download_apk">دانلود نسخه جدید</string>
+    <string name="refresh_tour">ریست تور</string>
     <string name="not_download_apk">نسخه جدید موجود نمی باشد</string>
 </resources>

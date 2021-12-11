@@ -106,7 +106,8 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
     private TourManager tourManager;
     private ImageView getTourImageView;
     private ImageView backupImageView;
-   // private ImageView downloadApk;
+    private ImageView downloadApk;
+    private ImageView refreshtour;
     private ImageView logoutImageView;
     private ImageView trackingLicenseImageView;
     private RecordButton cancelTourRecordBtn;
@@ -237,6 +238,19 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
             return false;
         });
 
+        /**
+         * دانلود نسخه جدید
+         */
+        downloadApk.setOnClickListener(view -> {
+            DownloadApk();
+        });
+        /**
+         * سناریو ریست
+         */
+        refreshtour.setOnClickListener(view -> {
+
+        });
+
         getTourImageView.setOnClickListener(view -> {
             SharedPreferences.Editor editor = getContext().getSharedPreferences(IS_VIRTUAL, MODE_PRIVATE).edit();
             editor.putBoolean(IS_VIRTUAL_BOOLEAN, false);
@@ -274,12 +288,7 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
         });
 
 
-//        downloadApk.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                DownloadApk();
-//            }
-//        });
+
         if (!tourManager.isTourDownloading()) {
             reportLayout.setVisibility(View.VISIBLE);
             createTourInfoView();
@@ -694,12 +703,16 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
                 logoutImageView.setEnabled(false);
                 trackingLicenseImageView.setEnabled(false);
                 backupImageView.setEnabled(false);
+                downloadApk.setEnabled(false);
+                refreshtour.setEnabled(false);
             } else {
                 cancelTourRecordBtn.setVisibility(View.GONE);
                 getTourImageView.setVisibility(View.VISIBLE);
                 logoutImageView.setEnabled(true);
                 trackingLicenseImageView.setEnabled(true);
                 backupImageView.setEnabled(true);
+                downloadApk.setEnabled(true);
+                refreshtour.setEnabled(true);
             }
         }
     }
@@ -710,7 +723,8 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
         view = inflater.inflate(R.layout.fragment_tour_report, container, false);
         logsRecyclerView = view.findViewById(R.id.logs_recycler_view);
         backupImageView = view.findViewById(R.id.backup_image_view);
-        //downloadApk=view.findViewById(R.id.download_apk);
+        downloadApk = view.findViewById(R.id.download_apk);
+        refreshtour= view.findViewById(R.id.refresh_tour);
         logoutImageView = view.findViewById(R.id.log_out_image_view);
         trackingLicenseImageView = view.findViewById(R.id.tracking_license_image_view);
         getTourImageView = view.findViewById(R.id.get_tour_image_view);
@@ -1203,6 +1217,8 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
         tourManager = null;
         getTourImageView = null;
         backupImageView = null;
+        downloadApk=null;
+        refreshtour=null;
         logoutImageView = null;
         trackingLicenseImageView = null;
         cancelTourRecordBtn = null;

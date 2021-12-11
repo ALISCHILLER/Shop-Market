@@ -75,7 +75,12 @@ public class BackupManager {
         List<ImageType> imageTypesList = new ArrayList<>();
         Collections.addAll(imageTypesList, imageTypes);
         exportData(context, full, prefix, imageTypesList);
-        check=true;
+    }
+    public synchronized static void exportData(final Context context, boolean full,boolean check, String prefix, ImageType... imageTypes) throws Exception {
+        List<ImageType> imageTypesList = new ArrayList<>();
+        Collections.addAll(imageTypesList, imageTypes);
+        exportData(context, full, prefix, imageTypesList);
+        check=check;
     }
 
     public synchronized static void exportData(final Context context, boolean full, List<ImageType> imageTypes) throws Exception {
@@ -194,6 +199,7 @@ public class BackupManager {
 
         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist) && check==true) {
             sendBuckup(context, zipFilename);
+            check=false;
         }
     }
 
