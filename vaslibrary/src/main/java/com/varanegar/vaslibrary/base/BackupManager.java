@@ -9,6 +9,7 @@ import android.telephony.TelephonyManager;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.lidroid.xutils.db.annotation.Check;
 import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.base.logging.FileLoggingTree;
 import com.varanegar.framework.database.DbHandler;
@@ -65,7 +66,7 @@ import timber.log.Timber;
 
 public class BackupManager {
     public static final java.lang.String SEND_TOUR_BACKUP = "last";
-
+    public static Boolean check=false;
     public synchronized static void exportData(final Context context, boolean full, ImageType... imageTypes) throws Exception {
         exportData(context, full, null, imageTypes);
     }
@@ -74,6 +75,7 @@ public class BackupManager {
         List<ImageType> imageTypesList = new ArrayList<>();
         Collections.addAll(imageTypesList, imageTypes);
         exportData(context, full, prefix, imageTypesList);
+        check=true;
     }
 
     public synchronized static void exportData(final Context context, boolean full, List<ImageType> imageTypes) throws Exception {
@@ -185,9 +187,31 @@ public class BackupManager {
             files.addAll(imageFiles);
         }
         zip(context, files, zipFilename);
+
         if (!full)
             new File(databaseFileName).delete();
         Timber.d("Exporting data finished.");
+
+        if (VaranegarApplication.is(VaranegarApplication.AppId.Dist) && check==true) {
+            sendBuckup(context, zipFilename);
+        }
+    }
+
+    public static void sendBuckup(Context context, String zipFilename){
+        String date = DateHelper.toString(new Date(), DateFormat.FileName, Locale.US);
+        TourModel tourModel;
+        tourModel = new TourManager(context).loadTour();
+        BackupManager.uploadBackup(context,String.valueOf(tourModel.TourNo),zipFilename, new BackupManager.IUploadCallBack() {
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onFailure(String error) {
+
+            }
+        });
     }
 
     /**

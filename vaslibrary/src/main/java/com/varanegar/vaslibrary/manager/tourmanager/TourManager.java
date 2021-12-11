@@ -1170,9 +1170,12 @@ public class TourManager {
                                             Timber.i("Backing up database before deleting temp tour data");
                                             progressChanged(callBack, R.string.backing_up_database);
                                             try {
+
+
                                                 BackupManager.exportData(context, true, BackupManager.SEND_TOUR_BACKUP);
                                                 progressChanged(callBack, R.string.backup_finished_successfully);
-                                                sendBuckup();
+                                               // sendBuckup();
+
                                                 progressChanged(callBack, R.string.populating_tour_info);
                                                 TourInfo tourInfo = createTourInfo();
                                                 if (tourInfo != null) {
