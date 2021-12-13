@@ -253,7 +253,19 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
             InsertTourNoSendRest dialog = new InsertTourNoSendRest();
             dialog.setCancelable(false);
             dialog.setClosable(false);
+            dialog.setOnResult(new InsertTourNoSendRest.OnResult() {
+                @Override
+                public void done(String TourNo) {
 
+
+                }
+
+                @Override
+                public void failed(String error) {
+                    if (error.equals(getString(R.string.TourNo_in_not_correct)))
+                        printFailed(getActivity(), error);
+                }
+            });
             dialog.show(getChildFragmentManager(), "7b0b529b-3f9b-4399-a2c7-2a85bcf57c1c");
         });
 
@@ -304,6 +316,18 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
         refreshTourProgress();
     }
 
+    private void printFailed(Context context, String error) {
+        try {
+            CuteMessageDialog dialog = new CuteMessageDialog(context);
+            dialog.setIcon(Icon.Warning);
+            dialog.setTitle(R.string.error_code);
+            dialog.setMessage(error);
+            dialog.setPositiveButton(R.string.ok, null);
+            dialog.show();
+        } catch (Exception e1) {
+            Timber.e(e1);
+        }
+    }
     private void getTour(final String tourNo) {
         getTourImageView.setEnabled(false);
         Timber.e("Get Tour Clicked!!");

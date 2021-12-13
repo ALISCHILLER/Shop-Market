@@ -1491,6 +1491,7 @@
     <string name="discunt_Immediate">تخفیف آنی</string>
 
     <string name="DeliveryReasons">خطا پین را درست وارد کنید</string>
+    <string name="error_code">خطاکد را درست وارد کنید</string>
     <string name="cash_discount_amount">تخفیف نقدی</string>
     <string name="cheque_discount">تخفیف حجمی</string>
     <string name="dialog_black">با انجام این عملیات کاربر بلاک میشود</string>
