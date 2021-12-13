@@ -49,6 +49,7 @@ import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.action.BaseAction;
 import com.varanegar.vaslibrary.action.BaseReturnAction;
 import com.varanegar.vaslibrary.action.CameraAction;
+import com.varanegar.vaslibrary.action.SendOperationAction;
 import com.varanegar.vaslibrary.action.confirm.ConfirmAction;
 import com.varanegar.vaslibrary.action.CustomerInventoryAction;
 import com.varanegar.vaslibrary.action.CustomerQuestionnaireAction;
@@ -814,6 +815,16 @@ public class CustomersContentFragment extends VaranegarFragment {
                 getVaranegarActvity(),
                 getActionsAdapter(),
                 getSelectedId()));
+
+        SendOperationAction sendOperationAction = new SendOperationAction(
+                getVaranegarActvity(),
+                actionsAdapter,
+                getSelectedId());
+        sendOperationAction.setActionCallBack(() -> {
+            updateItem();
+            updateCustomer();
+        });
+        actions.add(sendOperationAction);
     }
 
     private void sortActions(List<Action> actions) {

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -67,12 +68,13 @@ import java.util.UUID;
 
 import timber.log.Timber;
 
-
 /**
  * Created by atp on 5/30/2017.
+ * edited by moji
  */
 
 public class ConfirmAction extends CheckPathAction {
+    private static final String TAG = "ConfirmAction";
     @Nullable
     @Override
     public UUID getTaskUniqueId() {
@@ -85,7 +87,8 @@ public class ConfirmAction extends CheckPathAction {
     }
 
     private boolean isConfirmed() {
-        return getCallManager().isConfirmed(Linq.remove(getCalls(), it -> it.CallType == CustomerCallType.SendData));
+        return getCallManager().isConfirmed(Linq.remove(getCalls(),
+                it -> it.CallType == CustomerCallType.SendData));
     }
 
     @Override
@@ -123,17 +126,23 @@ public class ConfirmAction extends CheckPathAction {
             if ((SysConfigManager.compare(sysConfigModel, true)
                     && getCustomer().Latitude == 0
                     && getCustomer().Longitude == 0
-                    && !getCallManager().isLackOfVisit(getCalls())) || (getCustomer().Latitude == 0 && getCustomer().Longitude == 0 && getCustomer().IsNewCustomer && VaranegarApplication.is(VaranegarApplication.AppId.Contractor)))
+                    && !getCallManager().isLackOfVisit(getCalls())) ||
+                    (getCustomer().Latitude == 0 &&
+                            getCustomer().Longitude == 0 &&
+                            getCustomer().IsNewCustomer &&
+                            VaranegarApplication.is(VaranegarApplication.AppId.Contractor)))
                 return getActivity().getString(R.string.please_set_customer_location);
         }
 
         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
             if (isLackOfVisit() || isCompleteLackOfDelivery() || isCompleteReturnDelivery())
                 return null;
-            List<CustomerCallInvoiceModel> invoices = ((VasActionsAdapter) getAdapter()).getInvoices();
-            for (CustomerCallInvoiceModel invoice :
-                    invoices) {
-                if (!getCallManager().hasDistCall(getCalls(), invoice.UniqueId))
+            List<CustomerCallInvoiceModel> invoices =
+                    ((VasActionsAdapter) getAdapter())
+                            .getInvoices();
+            for (CustomerCallInvoiceModel invoice : invoices) {
+                if (invoice.UniqueId != null &&
+                        !getCallManager().hasDistCall(getCalls(), invoice.UniqueId))
                     return getActivity().getString(R.string.customer_has_undeciced_order);
             }
             return null;
@@ -152,20 +161,6 @@ public class ConfirmAction extends CheckPathAction {
     private boolean hasDelivery() {
         return getCallManager().hasDeliveryCall(getCalls(), null, null);
     }
-
-//    private boolean hasPayable() {
-//        CustomerCallOrderOrderViewManager customerCallOrderOrderViewManager = new CustomerCallOrderOrderViewManager(getActivity());
-//        Currency invoiceAmount = customerCallOrderOrderViewManager.calculateTotalAmountOfAllOrders(getCustomer().UniqueId, true);
-//        Currency returnAmount = new CustomerCallReturnViewManager(getActivity()).getTotalAmount(getCustomer().UniqueId);
-//        if (invoiceAmount.compareTo(returnAmount) == 1)
-//            return true;
-//        else
-//            return false;
-//    }
-
-//    private boolean hasPayment() {
-//        return getCallManager().hasPaymentCall(getCalls());
-//    }
 
     @SubsystemType(id = SubsystemTypeId.Dist)
     private boolean isCompleteLackOfDelivery() {
@@ -203,42 +198,65 @@ public class ConfirmAction extends CheckPathAction {
     public void run() {
         setRunning(true);
         if (!isConfirmed()) {
-            if (SysConfigManager.hasTracking(getActivity()) && TrackingLicense.isValid(getActivity())) {
-                android.location.LocationManager manager = (android.location.LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-                boolean gps = manager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER);
+            if (SysConfigManager.hasTracking(getActivity()) &&
+                    TrackingLicense.isValid(getActivity())) {
+                android.location.LocationManager manager =
+                        (android.location.LocationManager) getActivity()
+                                .getSystemService(Context.LOCATION_SERVICE);
+                boolean gps = manager
+                        .isProviderEnabled(android.location.LocationManager.GPS_PROVIDER);
                 if (!gps) {
-                    TrackingLogManager.addLog(getActivity(), LogType.PROVIDER, LogLevel.Error, "خاموش بودن جی پی اس در زمان تایید عملیات!");
+                    TrackingLogManager.addLog(
+                            getActivity(),
+                            LogType.PROVIDER,
+                            LogLevel.Error, "خاموش بودن جی پی اس در زمان تایید عملیات!");
                     showErrorMessage(R.string.please_turn_on_location);
                     setRunning(false);
                     return;
                 }
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                    int locationPermission = getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+                if (android.os.Build.VERSION.SDK_INT >=
+                        android.os.Build.VERSION_CODES.M) {
+                    int locationPermission =
+                            getActivity()
+                                    .checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
                     if (locationPermission != PackageManager.PERMISSION_GRANTED) {
-                        TrackingLogManager.addLog(getActivity(), LogType.LOCATION_SETTINGS, LogLevel.Error, "مجوز دسترسی به موقعیت در زمان تایید عملبات وجود ندارد!");
+                        TrackingLogManager.addLog(
+                                getActivity(),
+                                LogType.LOCATION_SETTINGS,
+                                LogLevel.Error,
+                                "مجوز دسترسی به موقعیت در زمان تایید عملبات وجود ندارد!");
                         showErrorMessage(R.string.coearse_location_permission_denied);
                         setRunning(false);
                         return;
                     }
                 }
-                new LocationManager(getActivity()).getLocation(new LocationManager.OnLocationUpdated() {
-                    @Override
-                    public void onSucceeded(LocationModel location) {
-                        confirm();
-                    }
+                new LocationManager(getActivity())
+                        .getLocation(new LocationManager.OnLocationUpdated() {
+                            @Override
+                            public void onSucceeded(LocationModel location) {
+                                confirm();
+                            }
 
-                    @Override
-                    public void onFailed(String error) {
-                        TrackingLogManager.addLog(getActivity(), LogType.POINT, LogLevel.Error, " در زمان تایید عملیات پوینت دریافت نشد!", error);
-                        setRunning(false);
-                        showErrorMessage(error);
-                    }
-                });
+                            @Override
+                            public void onFailed(String error) {
+                                TrackingLogManager.addLog(
+                                        getActivity(),
+                                        LogType.POINT,
+                                        LogLevel.Error,
+                                        " در زمان تایید عملیات پوینت دریافت نشد!",
+                                        error);
+                                setRunning(false);
+                                showErrorMessage(error);
+                            }
+                        });
             } else confirm();
         } else {
-            SysConfigModel cancelRegistration = getCloudConfig(ConfigKey.CancelRegistration);
+            SysConfigModel cancelRegistration =
+                    getCloudConfig(ConfigKey.CancelRegistration);
             if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
-                if (!hasDelivery() || SysConfigManager.compare(cancelRegistration, true) || getPrintCounts() == 0) {
+                if (!hasDelivery() ||
+                        SysConfigManager.compare(cancelRegistration, true) ||
+                        getPrintCounts() == 0) {
                     cancelConfirm();
                 } else {
                     setRunning(false);
@@ -248,28 +266,39 @@ public class ConfirmAction extends CheckPathAction {
                 cancelConfirm();
             }
         }
-
     }
 
     private void confirm() {
         if (getCustomer().IgnoreLocation == 0) {
-            SysConfigModel sysConfigModel = getCloudConfig(ConfigKey.SetCustomerLocation);
-            if (SysConfigManager.compare(sysConfigModel, true) && getCustomer().Latitude == 0 && getCustomer().Longitude == 0 && !getCallManager().isLackOfVisit(getCalls())) {
+            SysConfigModel sysConfigModel =
+                    getCloudConfig(ConfigKey.SetCustomerLocation);
+            if (SysConfigManager.compare(sysConfigModel, true) &&
+                    getCustomer().Latitude == 0 &&
+                    getCustomer().Longitude == 0 &&
+                    !getCallManager().isLackOfVisit(getCalls())) {
                 showErrorMessage(R.string.please_set_customer_location);
                 setRunning(false);
                 return;
             }
         }
         if (!isLackOfVisit()) {
-            CustomerCallOrderManager callOrderManager = new CustomerCallOrderManager(getActivity());
-            List<CustomerCallOrderModel> callOrderModels = callOrderManager.getCustomerCallOrders(getSelectedId());
-            List<CustomerCallOrderModel> confirmedCallOrders = Linq.findAll(callOrderModels, customerCallOrderModel ->
-                    Linq.exists(getCalls(), customerCallModel -> customerCallOrderModel.UniqueId.toString().equals(customerCallModel.ExtraField1)));
+            CustomerCallOrderManager callOrderManager =
+                    new CustomerCallOrderManager(getActivity());
+            List<CustomerCallOrderModel> callOrderModels =
+                    callOrderManager.getCustomerCallOrders(getSelectedId());
+            List<CustomerCallOrderModel> confirmedCallOrders =
+                    Linq.findAll(callOrderModels, customerCallOrderModel ->
+                            customerCallOrderModel.UniqueId != null && Linq.exists(getCalls(),
+                                    customerCallModel ->
+                                            customerCallOrderModel.UniqueId.toString()
+                                                    .equals(customerCallModel.ExtraField1)));
 
             boolean paymentTypeIsEmpty = false;
             for (CustomerCallOrderModel customerCallOrderModel : callOrderModels)
-                if (customerCallOrderModel.OrderPaymentTypeUniqueId == null)
+                if (customerCallOrderModel.OrderPaymentTypeUniqueId == null) {
                     paymentTypeIsEmpty = true;
+                    break;
+                }
 
             if (paymentTypeIsEmpty) {
                 showErrorMessage(R.string.payment_types_can_not_be_empty);
@@ -277,16 +306,24 @@ public class ConfirmAction extends CheckPathAction {
                 return;
             }
 
-            if (callOrderModels.size() > 0 && confirmedCallOrders.size() != callOrderModels.size()) {
+            if (callOrderModels.size() > 0 &&
+                    confirmedCallOrders.size() != callOrderModels.size()) {
                 showErrorMessage(R.string.there_is_an_unconfirmed_order);
                 setRunning(false);
                 return;
             }
 
-            CustomerCallReturnManager callReturnManager = new CustomerCallReturnManager(getActivity());
-            List<CustomerCallReturnModel> callReturnModels = callReturnManager.getReturnCalls(getSelectedId(), null, null);
-            boolean withRef = Linq.exists(getCalls(), item -> item.CallType == CustomerCallType.SaveReturnRequestWithRef);
-            boolean withoutRef = Linq.exists(getCalls(), item -> item.CallType == CustomerCallType.SaveReturnRequestWithoutRef);
+            CustomerCallReturnManager callReturnManager =
+                    new CustomerCallReturnManager(getActivity());
+            List<CustomerCallReturnModel> callReturnModels =
+                    callReturnManager.getReturnCalls(
+                            getSelectedId(),
+                            null,
+                            null);
+            boolean withRef = Linq.exists(getCalls(),
+                    item -> item.CallType == CustomerCallType.SaveReturnRequestWithRef);
+            boolean withoutRef = Linq.exists(getCalls(),
+                    item -> item.CallType == CustomerCallType.SaveReturnRequestWithoutRef);
             boolean returnError = false;
             for (CustomerCallReturnModel callReturnModel : callReturnModels) {
                 if (callReturnModel.BackOfficeInvoiceId == null && !withoutRef)
@@ -300,36 +337,15 @@ public class ConfirmAction extends CheckPathAction {
                 return;
             }
 
-//            String questionnaireError = new QuestionnaireManager(getActivity()).checkMandatoryQuestionnaire(getSelectedId());
-//            if (questionnaireError != null && !isLackOfVisit()) {
-//                setRunning(false);
-//                CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
-//                dialog.setIcon(Icon.Error);
-//                dialog.setTitle(R.string.error);
-//                dialog.setMessage(questionnaireError);
-//                dialog.setPositiveButton(R.string.ok, null);
-//                dialog.show();
-//                return;
-//            }
-//
-            String pictureError = new PictureCustomerViewManager(getActivity()).checkMandatoryPicture(getSelectedId(), getCalls());
+            String pictureError =
+                    new PictureCustomerViewManager(
+                            getActivity())
+                            .checkMandatoryPicture(getSelectedId(), getCalls());
             if (pictureError != null && !isLackOfVisit()) {
                 showErrorMessage(pictureError);
                 setRunning(false);
                 return;
             }
-//            PaymentManager paymentManager = new PaymentManager(getActivity());
-//            List<PaymentModel> paymentModels = paymentManager.getCustomerPayments(getSelectedId());
-//            if (!isConfirmed() && paymentModels.size() > 0 && !getCallManager().hasPaymentCall(getCalls())) {
-//                setRunning(false);
-//                CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
-//                dialog.setIcon(Icon.Error);
-//                dialog.setTitle(R.string.error);
-//                dialog.setMessage(R.string.please_confirm_payment);
-//                dialog.setPositiveButton(R.string.ok, null);
-//                dialog.show();
-//                return;
-//            }
         }
 
         if (Connectivity.isConnected(getActivity())) {
@@ -339,12 +355,12 @@ public class ConfirmAction extends CheckPathAction {
                     @Override
                     public void onSuccess() {
                         Timber.d("Pictures sent for customer id = " + getSelectedId());
-
                     }
 
                     @Override
                     public void onFailure(String error) {
-                        Timber.e("Sending pictures failed for customer id = " + getSelectedId());
+                        Timber.e("Sending pictures failed for customer id = " +
+                                getSelectedId());
                         Timber.e(error);
                     }
 
@@ -357,19 +373,32 @@ public class ConfirmAction extends CheckPathAction {
         }
 
         if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
-            RequestReportViewManager requestReportViewManager = new RequestReportViewManager(getActivity());
-            List<RequestReportViewModel> requestReportViewModels = requestReportViewManager.getItems(RequestReportViewManager.getCurrentCustomer(getCustomer().UniqueId));
-            CustomerCallOrderManager customerCallOrderManager = new CustomerCallOrderManager(getActivity());
+            RequestReportViewManager requestReportViewManager =
+                    new RequestReportViewManager(getActivity());
+            List<RequestReportViewModel> requestReportViewModels =
+                    requestReportViewManager
+                            .getItems(RequestReportViewManager
+                                    .getCurrentCustomer(getCustomer().UniqueId));
+            CustomerCallOrderManager customerCallOrderManager =
+                    new CustomerCallOrderManager(getActivity());
             final SysConfigModel orderBedLimit = getCloudConfig(ConfigKey.OrderBedLimit);
             final SysConfigModel orderAsnLimit = getCloudConfig(ConfigKey.OrderAsnLimit);
-            String errorMessage = customerCallOrderManager.checkCustomerCredits(requestReportViewModels, getCustomer(), orderBedLimit, orderAsnLimit);
+            String errorMessage = customerCallOrderManager
+                    .checkCustomerCredits(
+                            requestReportViewModels,
+                            getCustomer(),
+                            orderBedLimit,
+                            orderAsnLimit);
             if (errorMessage.isEmpty()) {
                 controlReturn();
             } else {
                 try {
                     setRunning(false);
-                    boolean save = !SysConfigManager.compare(orderBedLimit, "2") && !SysConfigManager.compare(orderAsnLimit, "2");
-                    BackOfficeType backOfficeType = new SysConfigManager(getActivity()).getBackOfficeType();
+                    boolean save =
+                            !SysConfigManager.compare(orderBedLimit, "2") &&
+                                    !SysConfigManager.compare(orderAsnLimit, "2");
+                    BackOfficeType backOfficeType =
+                            new SysConfigManager(getActivity()).getBackOfficeType();
                     if (backOfficeType == BackOfficeType.ThirdParty)
                         save = true;
                     CuteMessageDialog alert = new CuteMessageDialog(getActivity());
@@ -391,15 +420,22 @@ public class ConfirmAction extends CheckPathAction {
                 }
             }
         } else {
-            CustomerCallOrderManager customerCallOrderManager = new CustomerCallOrderManager(getActivity());
-            List<CustomerCallOrderModel> customerCallOrderModels = customerCallOrderManager.getCustomerCallOrders(getCustomer().UniqueId);
+            CustomerCallOrderManager customerCallOrderManager =
+                    new CustomerCallOrderManager(getActivity());
+
+            if (getCustomer().UniqueId == null) return;
+            List<CustomerCallOrderModel> customerCallOrderModels =
+                    customerCallOrderManager
+                            .getCustomerCallOrders(getCustomer().UniqueId);
             try {
                 controlAndSavePayments(customerCallOrderModels);
             } catch (ControlPaymentException e) {
                 showErrorMessage(e.getMessage());
                 setRunning(false);
             } catch (ThirdPartyControlPaymentChangedException e) {
-                showErrorMessage(getActivity().getString(R.string.control_payments_again_for_usance_day) + "\n" + e.getMessage());
+                showErrorMessage(getActivity()
+                        .getString(R.string.control_payments_again_for_usance_day) + "\n" +
+                        e.getMessage());
                 setRunning(false);
             } catch (Exception e) {
                 showErrorMessage(R.string.error_saving_request);
@@ -408,13 +444,20 @@ public class ConfirmAction extends CheckPathAction {
         }
     }
 
-    private void controlAndSavePayments(List<CustomerCallOrderModel> customerCallOrderModels) throws ControlPaymentException, DbException, ValidationException, ThirdPartyControlPaymentChangedException, UnknownBackOfficeException {
-        if (!VaranegarApplication.is(VaranegarApplication.AppId.HotSales) || !checkCloudConfig(ConfigKey.ScientificVisit, true)) {
+    private void controlAndSavePayments(
+            List<CustomerCallOrderModel> customerCallOrderModels) throws ControlPaymentException,
+            DbException, ValidationException, ThirdPartyControlPaymentChangedException,
+            UnknownBackOfficeException {
+        if (!VaranegarApplication.is(VaranegarApplication.AppId.HotSales) ||
+                !checkCloudConfig(ConfigKey.ScientificVisit, true)) {
             PaymentManager paymentManager = new PaymentManager(getActivity());
-            CustomerPayment customerPayment = paymentManager.calculateCustomerPayment(getSelectedId());
-            controlPayments(getCustomer(), customerCallOrderModels, customerPayment);
+            CustomerPayment customerPayment =
+                    paymentManager.calculateCustomerPayment(getSelectedId());
+            controlPayments(getCustomer(),
+                    customerCallOrderModels, customerPayment);
             if (customerPayment.getTotalAmount(false).compareTo(Currency.ZERO) > 0) {
-                CustomerCallManager customerCallManager = new CustomerCallManager(getActivity());
+                CustomerCallManager customerCallManager =
+                        new CustomerCallManager(getActivity());
                 customerCallManager.savePaymentCall(getSelectedId());
             }
         }
@@ -428,15 +471,22 @@ public class ConfirmAction extends CheckPathAction {
         dialog.setMessage(R.string.are_you_sure);
         dialog.setIcon(Icon.Warning);
         dialog.setPositiveButton(R.string.yes, v -> {
-            final CustomerCallManager callManager = new CustomerCallManager(getActivity());
+            final CustomerCallManager callManager =
+                    new CustomerCallManager(getActivity());
             try {
                 callManager.unConfirmAllCalls(getCustomer().UniqueId);
-                final CustomerActionTimeManager customerActionTimeManager = new CustomerActionTimeManager(getActivity());
-                customerActionTimeManager.delete(getSelectedId(), CustomerActions.CustomerCallEnd);
-                CustomerPrintCountManager customerPrintCountManager = new CustomerPrintCountManager(getActivity());
-                SysConfigModel unSubmitCancellationConfig = getCloudConfig(ConfigKey.UnSubmitCancellation);
-                if (getPrintCounts() > 0 && SysConfigManager.compare(unSubmitCancellationConfig, false)) {
-                    CancelInvoiceManager cancelInvoiceManager = new CancelInvoiceManager(getActivity());
+                final CustomerActionTimeManager customerActionTimeManager =
+                        new CustomerActionTimeManager(getActivity());
+                customerActionTimeManager.delete(getSelectedId(),
+                        CustomerActions.CustomerCallEnd);
+                CustomerPrintCountManager customerPrintCountManager =
+                        new CustomerPrintCountManager(getActivity());
+                SysConfigModel unSubmitCancellationConfig =
+                        getCloudConfig(ConfigKey.UnSubmitCancellation);
+                if (getPrintCounts() > 0 &&
+                        SysConfigManager.compare(unSubmitCancellationConfig, false)) {
+                    CancelInvoiceManager cancelInvoiceManager =
+                            new CancelInvoiceManager(getActivity());
                     cancelInvoiceManager.addCancelInvoice(getSelectedId());
                     customerPrintCountManager.resetCount(getSelectedId());
                 }
@@ -444,7 +494,6 @@ public class ConfirmAction extends CheckPathAction {
             } catch (Exception ex) {
                 showErrorMessage(R.string.un_confirm_failed);
             }
-
         });
         dialog.setNegativeButton(R.string.no, null);
         dialog.show();
@@ -452,58 +501,73 @@ public class ConfirmAction extends CheckPathAction {
 
     private void controlReturn() {
         setRunning(true);
-        ControlReturnUtility controlReturnUtility = new ControlReturnUtility();
-        controlReturnUtility.run(getActionData(), new IActionUtilityCallBack() {
-            @Override
-            public void onDone() {
-                saveAndSendConfirm();
-            }
+        ControlReturnUtility controlReturnUtility =
+                new ControlReturnUtility();
+        controlReturnUtility.run(getActionData(),
+                new IActionUtilityCallBack() {
+                    @Override
+                    public void onDone() {
+                        saveAndSendConfirm();
+                    }
 
-            @Override
-            public void onFailed(String error) {
-                setRunning(false);
-                showErrorMessage(error);
-            }
+                    @Override
+                    public void onFailed(String error) {
+                        setRunning(false);
+                        showErrorMessage(error);
+                    }
 
-            @Override
-            public void onCancel() {
-                setRunning(false);
-            }
-        });
+                    @Override
+                    public void onCancel() {
+                        setRunning(false);
+                    }
+                });
     }
 
     private void saveAndSendConfirm() {
         try {
-            CustomerActionTimeManager customerActionTimeManager = new CustomerActionTimeManager(getActivity());
-            customerActionTimeManager.save(getCustomer().UniqueId, CustomerActions.CustomerCallEnd);
-            CustomerCallManager customerCallManager = new CustomerCallManager(getActivity());
-            LocationManager locationManager = new LocationManager(getActivity());
-            locationManager.createOrderTracking(getCustomer(), new OnSaveLocation() {
-                @Override
-                public void onSaved(LocationModel location) {
-                    try {
-                        customerCallManager.confirmAll(getSelectedId());
-                        if (location != null)
-                            locationManager.tryToSendItem(location);
-                        backup();
-                        runActionCallBack();
-                        if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales) && checkCloudConfig(ConfigKey.AutoSynch, true))
-                            sendCustomerCalls();
-                        else
+            if (getCustomer().UniqueId == null) return;
+            CustomerActionTimeManager customerActionTimeManager =
+                    new CustomerActionTimeManager(getActivity());
+            customerActionTimeManager.save(getCustomer().UniqueId,
+                    CustomerActions.CustomerCallEnd);
+            CustomerCallManager customerCallManager =
+                    new CustomerCallManager(getActivity());
+            LocationManager locationManager =
+                    new LocationManager(getActivity());
+            locationManager.createOrderTracking(
+                    getCustomer(),
+                    new OnSaveLocation() {
+                        @Override
+                        public void onSaved(LocationModel location) {
+                            try {
+                                customerCallManager.confirmAll(getSelectedId());
+                                if (location != null)
+                                    locationManager.tryToSendItem(location);
+                                backup();
+                                runActionCallBack();
+                                if (VaranegarApplication
+                                        .is(VaranegarApplication.AppId.PreSales) &&
+                                        checkCloudConfig(ConfigKey.AutoSynch, true))
+                                    sendCustomerCalls();
+                                else if(VaranegarApplication
+                                        .is(VaranegarApplication.AppId.Dist) &&
+                                        checkCloudConfig(ConfigKey.DistAutoSync, true))
+                                    sendCustomerCalls();
+                                else
+                                    setRunning(false);
+
+                            } catch (Exception ex) {
+                                showErrorMessage(R.string.error);
+                                setRunning(false);
+                            }
+                        }
+
+                        @Override
+                        public void onFailed(String error) {
+                            showErrorMessage(error);
                             setRunning(false);
-
-                    } catch (Exception ex) {
-                        showErrorMessage(R.string.error);
-                        setRunning(false);
-                    }
-                }
-
-                @Override
-                public void onFailed(String error) {
-                    showErrorMessage(error);
-                    setRunning(false);
-                }
-            });
+                        }
+                    });
         } catch (Exception ex) {
             showErrorMessage(R.string.error);
             setRunning(false);
@@ -517,8 +581,10 @@ public class ConfirmAction extends CheckPathAction {
         if (activity != null && !activity.isFinishing()) {
             if (progressDialog == null)
                 progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setTitle(getActivity().getString(R.string.please_wait));
-            progressDialog.setMessage(getActivity().getString(R.string.sending_customer_action));
+            progressDialog.setTitle(getActivity()
+                    .getString(R.string.please_wait));
+            progressDialog.setMessage(getActivity()
+                    .getString(R.string.sending_customer_action));
             progressDialog.setCancelable(false);
             progressDialog.show();
         }
@@ -551,11 +617,14 @@ public class ConfirmAction extends CheckPathAction {
         }
     }
 
-    // Same of this method is in SendCustomerActionsAction class, Ali jan inaro be zudi yeki mikonam negaran bash !!!
+    // Same of this method is in SendCustomerActionsAction class,
+    // Ali jan inaro be zudi yeki mikonam negaran bash !!!
     private void sendCustomerCalls() {
         if (!Connectivity.isConnected(getActivity())) {
-            ConnectionSettingDialog connectionSettingDialog = new ConnectionSettingDialog();
-            connectionSettingDialog.show(getActivity().getSupportFragmentManager(), "ConnectionSettingDialog");
+            ConnectionSettingDialog connectionSettingDialog =
+                    new ConnectionSettingDialog();
+            connectionSettingDialog.show(getActivity()
+                    .getSupportFragmentManager(), "ConnectionSettingDialog");
             setRunning(false);
             return;
         }
@@ -578,19 +647,23 @@ public class ConfirmAction extends CheckPathAction {
                     dialog.setTitle(R.string.some_customer_data_is_not_saved);
                     CustomerManager customerManager = new CustomerManager(getActivity());
                     List<CustomerModel> customerModels = customerManager.getCustomers(result);
-                    String msg = getActivity().getString(R.string.do_you_want_to_restore_these_customers);
+                    StringBuilder msg = new StringBuilder(getActivity()
+                            .getString(R.string.do_you_want_to_restore_these_customers));
                     for (CustomerModel customerModel :
                             customerModels) {
-                        msg += System.getProperty("line.separator") + customerModel.CustomerName;
+                        msg.append(System.getProperty("line.separator"))
+                                .append(customerModel.CustomerName);
                     }
-                    Timber.d(msg);
-                    dialog.setMessage(msg);
+                    Timber.d(msg.toString());
+                    dialog.setMessage(msg.toString());
                     dialog.setPositiveButton(R.string.yes, view -> {
-                        CustomerCallManager customerCallManager = new CustomerCallManager(getActivity());
+                        CustomerCallManager customerCallManager =
+                                new CustomerCallManager(getActivity());
                         for (UUID customerId :
                                 result) {
                             try {
-                                customerCallManager.removeCall(CustomerCallType.SendData, customerId);
+                                customerCallManager
+                                        .removeCall(CustomerCallType.SendData, customerId);
                             } catch (DbException e) {
                                 Timber.e(e);
                             }
@@ -603,37 +676,42 @@ public class ConfirmAction extends CheckPathAction {
                 } else {
                     Thread thread = new Thread(() -> {
                         TourManager tourManager1 = new TourManager(getActivity());
-                        tourManager1.populatedAndSendTour(getSelectedId(), new TourManager.TourCallBack() {
-                            @Override
-                            public void onSuccess() {
-                                Timber.i("data tour for customer id = " + getSelectedId().toString() + " was sent successfully");
-                                getActivity().runOnUiThread(() -> {
-                                    setRunning(false);
-                                    progressDialog.dismiss();
-                                    CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
-                                    dialog.setIcon(Icon.Success);
-                                    dialog.setMessage(R.string.customer_actions_sent);
-                                    dialog.setPositiveButton(R.string.ok, null);
-                                    dialog.show();
-                                    runActionCallBack();
+                        tourManager1.populatedAndSendTour(
+                                getSelectedId(),
+                                new TourManager.TourCallBack() {
+                                    @Override
+                                    public void onSuccess() {
+                                        Timber.i("data tour for customer id = " +
+                                                getSelectedId().toString() +
+                                                " was sent successfully");
+                                        getActivity().runOnUiThread(() -> {
+                                            setRunning(false);
+                                            progressDialog.dismiss();
+                                            CuteMessageDialog dialog =
+                                                    new CuteMessageDialog(getActivity());
+                                            dialog.setIcon(Icon.Success);
+                                            dialog.setMessage(R.string.customer_actions_sent);
+                                            dialog.setPositiveButton(R.string.ok, null);
+                                            dialog.show();
+                                            runActionCallBack();
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onFailure(final String error) {
+                                        Timber.e(error);
+                                        getActivity().runOnUiThread(() -> {
+                                            setRunning(false);
+                                            progressDialog.dismiss();
+                                            showErrorMessage(error);
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onProgressChanged(String progress) {
+
+                                    }
                                 });
-                            }
-
-                            @Override
-                            public void onFailure(final String error) {
-                                Timber.e(error);
-                                getActivity().runOnUiThread(() -> {
-                                    setRunning(false);
-                                    progressDialog.dismiss();
-                                    showErrorMessage(error);
-                                });
-                            }
-
-                            @Override
-                            public void onProgressChanged(String progress) {
-
-                            }
-                        });
                     });
                     thread.start();
                 }
@@ -641,15 +719,28 @@ public class ConfirmAction extends CheckPathAction {
         });
     }
 
-    private void controlPayments(CustomerModel customerModel, List<CustomerCallOrderModel> customerCallOrderModels, CustomerPayment customerPayment) throws ControlPaymentException, ThirdPartyControlPaymentChangedException, UnknownBackOfficeException {
-        BackOfficeType backOfficeType = new SysConfigManager(getActivity()).getBackOfficeType();
+    private void controlPayments(CustomerModel customerModel,
+                                 List<CustomerCallOrderModel> customerCallOrderModels,
+                                 CustomerPayment customerPayment)
+            throws ControlPaymentException,
+            ThirdPartyControlPaymentChangedException,
+            UnknownBackOfficeException {
+        BackOfficeType backOfficeType =
+                new SysConfigManager(getActivity()).getBackOfficeType();
         PaymentManager paymentManager = new PaymentManager(getActivity());
         if (backOfficeType.equals(BackOfficeType.ThirdParty))
-            paymentManager.thirdPartyControlPayments(customerModel, customerCallOrderModels, customerPayment, true);
+            paymentManager.thirdPartyControlPayments(
+                    customerModel,
+                    customerCallOrderModels,
+                    customerPayment,
+                    true);
         else
-            paymentManager.controlPayments(customerModel, customerCallOrderModels, customerPayment, getCloudConfigs());
+            paymentManager.controlPayments(
+                    customerModel,
+                    customerCallOrderModels,
+                    customerPayment,
+                    getCloudConfigs());
     }
-
 
     private void backup() {
         Activity activity = getActivity();

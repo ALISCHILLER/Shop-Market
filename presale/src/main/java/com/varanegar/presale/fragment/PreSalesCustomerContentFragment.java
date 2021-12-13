@@ -16,18 +16,5 @@ public class PreSalesCustomerContentFragment extends CustomersContentFragment {
     @Override
     protected void addActions(@NonNull List<Action> actions) {
         super.addActions(actions);
-
-//        actions.add(new PaymentAction(getVaranegarActvity(), getActionsAdapter(), getSelectedId()));
-
-        SendCustomerActionsAction sendCustomerActionsAction = new SendCustomerActionsAction(getVaranegarActvity(), getActionsAdapter(), getSelectedId());
-        sendCustomerActionsAction.setActionCallBack(new Action.ActionCallBack() {
-            @Override
-            public void done() {
-                updateItem();
-                updateCustomer();
-            }
-        });
-        actions.add(sendCustomerActionsAction);
-
     }
 }

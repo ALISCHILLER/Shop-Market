@@ -221,7 +221,8 @@ public class ConfigKey {
     public static ConfigKey SettlementAllocation = new ConfigKey("SettlementAllocation");
     public static ConfigKey ShowInventoryMinusUnconfirmedRequests = new ConfigKey("ShowInventoryMinusUnconfirmedRequests");
     public static ConfigKey ApplyCurrentOrdersInInventory = new ConfigKey("ApplyCurrentOrdersInInventory");
-
+    public static ConfigKey DistAutoSync = new ConfigKey("DistAutoSync");
+    public static ConfigKey DistAllowSync = new ConfigKey("DistAllowSync");
 
     public static ConfigKey DeviceSettingNo = new ConfigKey("DeviceSettingNo");
     public static ConfigKey ScientificVisit = new ConfigKey("ScientificVisit");
