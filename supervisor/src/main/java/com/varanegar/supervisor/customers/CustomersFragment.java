@@ -509,15 +509,19 @@ public class CustomersFragment extends IMainPageFragment {
     public String getTextBackMessage(SupervisorCustomerModel entity){
         String messageback =" ";
         if (!entity.StoreName.equals(entity.newStoreName)){
-            messageback= "نام فروشگاه:" +" "+ entity.StoreName+ "\n";
+            messageback= "نام فروشگاه قبل از ویرایش:" +" "+ entity.StoreName+ "\n";
+            messageback= "نام فروشگاه بعد از ویرایش:" +" "+ entity.newStoreName+ "\n";
         }if(!entity.Mobile.equals(entity.newMobile)) {
-            messageback=messageback+" شماره موبایل:"+entity.Mobile+ "\n";
+            messageback=messageback+" شماره موبایل قبل از ویرایش:"+entity.Mobile+ "\n";
+            messageback=messageback+" شماره موبایل بعد از ویرایش:"+entity.newMobile+ "\n";
         }if(!entity.Phone.equals(entity.newPhone)) {
-            messageback=messageback+"شماره تلفن:"+entity.Phone+ "\n";
-        }if(!entity.Address.equals(entity.newAddress)) {
-            messageback=messageback+"ادرس:"+entity.Address+ "\n";
+            messageback=messageback+"شماره تلفن قبل از ویرایش:"+entity.Phone+ "\n";
+            messageback=messageback+"شماره تلفن بعد از ویرایش:"+entity.newPhone+ "\n";
+//        }if(!entity.Address.equals(entity.newAddress)) {
+//            messageback=messageback+"ادرس:"+entity.Address+ "\n";
         }if(!entity.CustomerLevel.equals(entity.newCustomerLevelName)) {
-            messageback=messageback+" درجه مشتری:"+ entity.CustomerLevel+ "\n";
+            messageback=messageback+" درجه مشتری قبل از ویرایش:"+ entity.CustomerLevel+ "\n";
+            messageback=messageback+" درجه مشتری بعد از ویرایش:"+ entity.newCustomerLevelName+ "\n";
         }
         
         
