@@ -30,6 +30,8 @@ import com.varanegar.framework.util.filter.Filter;
 import com.varanegar.framework.util.filter.FiltersAdapter;
 import com.varanegar.framework.util.recycler.BaseRecyclerAdapter;
 import com.varanegar.framework.util.recycler.BaseRecyclerView;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,7 +40,7 @@ import java.util.UUID;
  * سرچ در لیست مشتریان با  بارکد
  * Search Barcode
  */
-public abstract class ExtendedListFragment<DataModel extends BaseModel> extends ProgressFragment {
+public abstract class ExtendedListFragment<DataModel extends BaseModel,SPIN_TYPE> extends ProgressFragment {
     private static final String TAG = "ExtendedListFragment";
     private String searchText;
     EditText searchEditText;
@@ -236,9 +238,8 @@ public abstract class ExtendedListFragment<DataModel extends BaseModel> extends 
         }
     }
 
-    protected boolean setupAdvancedFilter(PairedItemsSpinner spinner) {
+    protected boolean setupAdvancedFilter(PairedItemsSpinner<SPIN_TYPE> spinner) {
         return false;
     }
-
 
 }

@@ -15,13 +15,16 @@ import com.varanegar.framework.util.filter.Filter;
 import com.varanegar.framework.util.recycler.BaseRecyclerAdapter;
 import com.varanegar.framework.util.recycler.BaseViewHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by atp on 1/14/2017.
  */
 
-public abstract class DbListFragment<DataModel extends BaseModel, Repository extends BaseRepository<DataModel>> extends ExtendedListFragment<DataModel> {
+public abstract class DbListFragment<DataModel extends BaseModel,
+        Repository extends BaseRepository<DataModel>,SPIN_TYPE>
+        extends ExtendedListFragment<DataModel,SPIN_TYPE> {
     protected abstract BaseViewHolder<DataModel> createListItemViewHolder(ViewGroup parent, int viewType);
 
 
@@ -52,4 +55,5 @@ public abstract class DbListFragment<DataModel extends BaseModel, Repository ext
     protected void runFilter(String text, List<Filter> filters, Object spinnerFilterItem) {
         getAdapter().refresh(createFiltersQuery(text, filters, spinnerFilterItem));
     }
+
 }

@@ -1099,11 +1099,16 @@ public class TourManager {
                     }
                 }
 
-                if (((callManager.isConfirmed(calls) || VaranegarApplication.is(VaranegarApplication.AppId.Contractor)) && !callManager.isDataSent(calls, null))) {
+                if (((callManager.isConfirmed(calls) ||
+                        VaranegarApplication.is(VaranegarApplication.AppId.Contractor)) &&
+                        !callManager.isDataSent(calls, null))) {
                     if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
                         populateCustomerCallDataForSend(syncGetTourViewModel, customerModel);
-                    } else if (callManager.hasOrderOrReturnCall(calls) || callManager.isLackOfVisit(calls) || callManager.isLackOfOrder(calls)) {
-                        if (callManager.isConfirmed(calls) || VaranegarApplication.is(VaranegarApplication.AppId.Contractor))
+                    } else if (callManager.hasOrderOrReturnCall(calls) ||
+                            callManager.isLackOfVisit(calls) ||
+                            callManager.isLackOfOrder(calls)) {
+                        if (callManager.isConfirmed(calls) ||
+                                VaranegarApplication.is(VaranegarApplication.AppId.Contractor))
                             populateCustomerCallDataForSend(syncGetTourViewModel, customerModel);
                         else {
                             saveConfirm();
@@ -1111,10 +1116,15 @@ public class TourManager {
                             return;
                         }
                     }
-                } else if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
+                } /*else if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
                     saveConfirm();
-                    onTourFailure(callBack, context.getString(R.string.customer) + " " + customerModel.CustomerName + " " + context.getString(R.string.is_not_confirmed));
+                    onTourFailure(callBack, context.getString(R.string.customer) + " " +
+                            customerModel.CustomerName + " " +
+                            context.getString(R.string.is_not_confirmed));
                     return;
+                }*/
+                else if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
+                    populateCustomerCallDataForSend(syncGetTourViewModel, customerModel);
                 }
 
                 populateCanceledInvoices(syncGetTourViewModel, customerModel);

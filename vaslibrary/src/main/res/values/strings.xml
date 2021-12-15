@@ -405,6 +405,7 @@
     <string name="please_select_return_type">لطفا نوع برگشتی را انتخاب نمایید</string>
     <string name="please_select_a_reason_of_no_order">لطفا دلیل عدم سفارش را انتخاب نمایید</string>
     <string name="please_select_a_reason_of_no_visit">لطفا دلیل عدم ویزیت را انتخاب نمایید</string>
+
     <string name="total_qty">تعداد کل</string>
     <string name="inventory_qty">موجودی</string>
     <string name="show_stock_products">کالاهای موجود</string>
@@ -1495,4 +1496,6 @@
     <string name="dialog_unblack">با انجام این عملیات کاربر از بلاک خارج میشود</string>
     <string name="download_apk">دانلود نسخه جدید</string>
     <string name="not_download_apk">نسخه جدید موجود نمی باشد</string>
+    <string name="tour_data_not_available">اطلاعات تور موجود نیست.</string>
+    <string name="non_deliver_all">عدم تحویل همه.</string>
 </resources>
