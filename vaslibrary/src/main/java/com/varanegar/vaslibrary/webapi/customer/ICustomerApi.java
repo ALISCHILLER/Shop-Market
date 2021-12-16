@@ -6,17 +6,16 @@ import com.varanegar.vaslibrary.model.customer.CustomerCategoryModel;
 import com.varanegar.vaslibrary.model.customer.CustomerLevelModel;
 import com.varanegar.vaslibrary.model.customer.CustomerMainSubTypeModel;
 import com.varanegar.vaslibrary.model.customer.CustomerModel;
-import com.varanegar.vaslibrary.model.customerownertype.CustomerOwnerTypeModel;
-import com.varanegar.vaslibrary.model.dataforregister.DataForRegisterModel;
 
 import java.util.List;
-import java.util.UUID;
 
-import okhttp3.ResponseBody;
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 /**
@@ -25,16 +24,24 @@ import retrofit2.http.Query;
 
 public interface ICustomerApi {
     @GET("api/v2/ngt/customer/sync/loaddata")
-    Call<List<CustomerModel>> get(@Query("Date") String dateAfter, @Query("dealerId") String dealerId, @Query("customerId") String customerId, @Query("DeviceSettingNo") String DeviceSettingNo);
+    Call<List<CustomerModel>> get(
+            @Query("Date") String dateAfter,
+            @Query("dealerId") String dealerId,
+            @Query("customerId") String customerId,
+            @Query("DeviceSettingNo") String DeviceSettingNo);
 
     @GET("api/v2/ngt/customer/DistributionCustomers")
     Call<List<CustomerModel>> get(@Query("TourId") String tourId);
 
     @POST("api/v2/ngt/customer/registernewcustomer")
-    Call<SyncGuidViewModel> registerNewCustomer(@Body SyncGetNewCustomerViewModel syncGetNewCustomerViewModel);
+    Call<SyncGuidViewModel> registerNewCustomer(
+            @Body SyncGetNewCustomerViewModel syncGetNewCustomerViewModel);
 
+    @Multipart
     @POST("api/v2/ngt/customer/registernewZarCustomer")
-    Call<SyncGuidViewModel> registerNewZarCustomer(@Body SyncZarGetNewCustomerViewModel syncGetNewCustomerViewModel);
+    Call<SyncGuidViewModel> registerNewZarCustomer(
+            @Body SyncZarGetNewCustomerViewModel syncGetNewCustomerViewModel,
+            @Part MultipartBody.Part file);
 
     @GET("api/v2/ngt/customermainsubtype")
     Call<List<CustomerMainSubTypeModel>> getCustomerMainSubTypes();
@@ -49,18 +56,29 @@ public interface ICustomerApi {
     Call<List<CustomerLevelModel>> getCustomerLevels();
 
     @GET("api/v2/ngt/customer/FinanceData")
-    Call<List<SyncSendCustomerFinanceDataViewModel>> getFinanceData(@Query("SubSystemTypeUniqueId") String subSystemTypeUniqueId, @Query("TourId") String tourId, @Query("DealerId") String dealerId, @Query("DeviceSettingNo") String deviceSettingNo, @Query("CustomerId") String customerId);
+    Call<List<SyncSendCustomerFinanceDataViewModel>> getFinanceData(
+            @Query("SubSystemTypeUniqueId") String subSystemTypeUniqueId,
+            @Query("TourId") String tourId,
+            @Query("DealerId") String dealerId,
+            @Query("DeviceSettingNo") String deviceSettingNo,
+            @Query("CustomerId") String customerId);
 
     @GET("api/v2/ngt/customer/customerbarcode")
-    Call<List<CustomerBarcodeModel>> getCustomerBarcode(@Query("Date") String dateAfter, @Query("dealerId") String dealerId, @Query("DeviceSettingNo") String DeviceSettingNo);
+    Call<List<CustomerBarcodeModel>> getCustomerBarcode(
+            @Query("Date") String dateAfter,
+            @Query("dealerId") String dealerId,
+            @Query("DeviceSettingNo") String DeviceSettingNo);
 
     @GET("api/v2/ngt/customer/AdditionalInfo")
-    Call<List<CustomerAdditionalInfoModel>> getCustomerAdditionalInfo(@Query("CustomerId") String customerId);
+    Call<List<CustomerAdditionalInfoModel>> getCustomerAdditionalInfo(
+            @Query("CustomerId") String customerId);
 
     @GET("api/v2/ngt/customer/GetFullData")
-    Call<ZarCustomerInfoViewModel> getCustomerZarCustomerInfo(@Query("code") String customerCode);
+    Call<ZarCustomerInfoViewModel> getCustomerZarCustomerInfo(
+            @Query("code") String customerCode);
 
     @POST("api/v2/ngt/customer/updateZarCustomer")
-    Call<String> postCustomerZarCustomerInfo(@Body SyncZarGetNewCustomerViewModel customerInfoViewModel);
+    Call<String> postCustomerZarCustomerInfo(
+            @Body SyncZarGetNewCustomerViewModel customerInfoViewModel);
 
 }
