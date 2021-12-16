@@ -88,8 +88,10 @@ public class DealerPaymentTypeManager extends BaseManager<DealerPaymentTypeModel
                                 Timber.e(e);
                                 updateCall.failure(getContext().getString(R.string.data_error));
                             }
-                        } else
-                            updateCall.success();
+                        } else {
+                            ///  updateCall.success();
+                            updateCall.failure(getContext().getString(R.string.dealerPayment_error));
+                        }
                     }
                 } catch (DbException e) {
                     Timber.e(e);

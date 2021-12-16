@@ -2,6 +2,7 @@ package com.varanegar.vaslibrary.webapi.customer;
 
 import android.content.Context;
 
+import com.varanegar.vaslibrary.manager.picture.ImageViewModel;
 import com.varanegar.vaslibrary.model.customer.CustomerActivityModel;
 import com.varanegar.vaslibrary.model.customer.CustomerBarcodeModel;
 import com.varanegar.vaslibrary.model.customer.CustomerCategoryModel;
@@ -13,9 +14,13 @@ import com.varanegar.vaslibrary.model.dataforregister.DataForRegisterModel;
 import com.varanegar.vaslibrary.webapi.BaseApi;
 import com.varanegar.vaslibrary.webapi.TokenType;
 
+import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -50,9 +55,20 @@ public class CustomerApi extends BaseApi implements ICustomerApi {
     }
 
     @Override
-    public Call<SyncGuidViewModel> registerNewZarCustomer(SyncZarGetNewCustomerViewModel syncGetNewCustomerViewModel) {
+    public Call<SyncGuidViewModel> registerNewZarCustomer(SyncZarGetNewCustomerViewModel syncGetNewCustomerViewModel/*,File file*/) {
         ICustomerApi api = getRetrofitBuilder(TokenType.UserToken).build().create(ICustomerApi.class);
-        return api.registerNewZarCustomer(syncGetNewCustomerViewModel);
+
+     /*   RequestBody requestFile =
+                RequestBody.create(
+                        MediaType.parse("multipart/form-data;"),
+                        file
+                );
+        MultipartBody.Part body =
+                MultipartBody.Part.createFormData(syncGetNewCustomerViewModel.CustomerCode + ".jpg", file.getName() + ".jpg", requestFile);
+        */
+
+        //return api.registerNewZarCustomer(syncGetNewCustomerViewModel,body);
+        return api.registerNewZarCustomer(syncGetNewCustomerViewModel/*,body*/);
     }
 
     @Override

@@ -49,6 +49,7 @@ import com.varanegar.vaslibrary.webapi.customer.CustomerApi;
 import com.varanegar.vaslibrary.webapi.customer.SyncGuidViewModel;
 import com.varanegar.vaslibrary.webapi.customer.SyncZarGetNewCustomerViewModel;
 
+import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -327,7 +328,7 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
 
     }
 
-    private void submit(final SyncZarGetNewCustomerViewModel syncGetNewCustomerViewModel) {
+    private void submit(final SyncZarGetNewCustomerViewModel syncGetNewCustomerViewModel/*, File file*/) {
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage(getString(R.string.registering_new_customer));
         progressDialog.setCancelable(false);
@@ -335,7 +336,7 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
 
 
         final CustomerApi customerApi = new CustomerApi(getContext());
-        customerApi.runWebRequest(customerApi.registerNewZarCustomer(syncGetNewCustomerViewModel), new WebCallBack<SyncGuidViewModel>() {
+        customerApi.runWebRequest(customerApi.registerNewZarCustomer(syncGetNewCustomerViewModel/*,file*/), new WebCallBack<SyncGuidViewModel>() {
             @Override
             protected void onFinish() {
 

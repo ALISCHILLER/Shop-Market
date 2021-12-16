@@ -401,6 +401,8 @@ public class TourManager {
         saveTour(tourModel, context);
     }
 
+
+
     public synchronized void saveFailure(String error) {
         latestError = error;
         TourModel tourModel = loadTour();

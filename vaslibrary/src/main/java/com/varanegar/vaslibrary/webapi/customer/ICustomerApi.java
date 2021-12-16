@@ -12,11 +12,14 @@ import com.varanegar.vaslibrary.model.dataforregister.DataForRegisterModel;
 import java.util.List;
 import java.util.UUID;
 
+import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 /**
@@ -33,8 +36,11 @@ public interface ICustomerApi {
     @POST("api/v2/ngt/customer/registernewcustomer")
     Call<SyncGuidViewModel> registerNewCustomer(@Body SyncGetNewCustomerViewModel syncGetNewCustomerViewModel);
 
+    @Multipart
     @POST("api/v2/ngt/customer/registernewZarCustomer")
-    Call<SyncGuidViewModel> registerNewZarCustomer(@Body SyncZarGetNewCustomerViewModel syncGetNewCustomerViewModel);
+    Call<SyncGuidViewModel> registerNewZarCustomer(@Body SyncZarGetNewCustomerViewModel syncGetNewCustomerViewModel
+                                                   /*,@Part MultipartBody.Part file*/
+                                                   );
 
     @GET("api/v2/ngt/customermainsubtype")
     Call<List<CustomerMainSubTypeModel>> getCustomerMainSubTypes();

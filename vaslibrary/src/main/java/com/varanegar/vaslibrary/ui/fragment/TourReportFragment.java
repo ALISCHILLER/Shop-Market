@@ -44,6 +44,7 @@ import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.PopupFragment;
 import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.base.VaranegarFragment;
+import com.varanegar.framework.database.DbException;
 import com.varanegar.framework.database.querybuilder.Query;
 import com.varanegar.framework.database.querybuilder.criteria.Criteria;
 import com.varanegar.framework.network.Connectivity;
@@ -58,9 +59,13 @@ import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.framework.util.datetime.DateHelper;
 import com.varanegar.framework.util.recycler.DividerItemDecoration;
 import com.varanegar.vaslibrary.R;
+import com.varanegar.vaslibrary.base.BackupInfo;
+import com.varanegar.vaslibrary.base.BackupInfoFile;
 import com.varanegar.vaslibrary.base.BackupManager;
 import com.varanegar.vaslibrary.manager.UserManager;
+import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.customeractiontimemanager.CustomerActionTimeManager;
+import com.varanegar.vaslibrary.manager.customercallmanager.CustomerCallManager;
 import com.varanegar.vaslibrary.manager.image.ImageType;
 import com.varanegar.vaslibrary.manager.productorderviewmanager.ProductOrderViewManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
@@ -70,6 +75,8 @@ import com.varanegar.vaslibrary.manager.updatemanager.TourUpdateLogManager;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateManager;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateQueue;
 import com.varanegar.vaslibrary.model.UpdateKey;
+import com.varanegar.vaslibrary.model.customer.CustomerModel;
+import com.varanegar.vaslibrary.model.customercall.CustomerCallType;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.model.tour.TourModel;
 import com.varanegar.vaslibrary.model.update.TourUpdateLog;
@@ -92,10 +99,12 @@ import com.varanegar.vaslibrary.webapi.ping.PingApi;
 import com.varanegar.vaslibrary.webapi.tour.TourApi;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import okhttp3.Request;
 import timber.log.Timber;
@@ -1303,10 +1312,14 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
      *
      */
     private void getBackupName(String nameBackUp){
-        if (BackupManager.getItemBackup(getContext(),BackupManager.BackupType.Full,nameBackUp).size() > 0) {
-            ImportDialogFragment importDialog = new ImportDialogFragment();
-            importDialog.setBackupType(BackupManager.BackupType.Full);
-            importDialog.show(getChildFragmentManager(), "ImportDialogFragment");
+
+        if (BackupManager.getItemBackup(getContext(),BackupManager.BackupType.Full,nameBackUp) !=null) {
+//            ImportDialogFragment importDialog = new ImportDialogFragment();
+//            importDialog.setBackupType(BackupManager.BackupType.Partial);
+//            importDialog.setBackupName(nameBackUp);
+//            importDialog.show(getChildFragmentManager(), "ImportDialogFragment");
+
+            restBackup(nameBackUp);
         } else {
             CuteMessageDialog dialog = new CuteMessageDialog(getContext());
             dialog.setTitle(R.string.error);
@@ -1314,7 +1327,135 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
             dialog.setIcon(Icon.Alert);
             dialog.setPositiveButton(R.string.ok, null);
             dialog.show();
+
         }
+    }
+
+    public void restBackup(String nameBackUp){
+        List<File> files = new ArrayList<>();
+        if(nameBackUp != null && !nameBackUp.isEmpty())
+            files.add(BackupManager.getItemBackup(getContext(), BackupManager.BackupType.Partial,nameBackUp));
+        List<BackupInfoFile> backupInfoList = new ArrayList<>();
+        for (File file : files) {
+            BackupInfo backupInfo = BackupManager.getBackupInfo(file.getAbsolutePath());
+            BackupInfoFile backupInfoFile = new BackupInfoFile();
+            backupInfoFile.backupInfo = backupInfo;
+            backupInfoFile.file = file;
+            backupInfoList.add(backupInfoFile);
+        }
+        final BackupInfoFile backupInfo = backupInfoList.get(0);
+        try {
+            BackupManager.importData(getContext(), backupInfo.file.getAbsolutePath());
+            TourManager tm =new TourManager(getContext());
+            TourModel tourModel = tm.loadTour();
+            toreRestBackup(String.valueOf(tourModel.UniqueId),nameBackUp);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+            dialog.setMessage(R.string.import_failed);
+            dialog.setTitle(R.string.import_data);
+            dialog.setIcon(Icon.Error);
+            dialog.setPositiveButton(R.string.ok, null);
+            dialog.show();
+        }
+
+    }
+    private void toreRestBackup(String id ,String nameBackUp) {
+        startProgress(R.string.please_wait, R.string.connecting_to_the_server);
+        TourApi tourApi = new TourApi(getContext());
+        tourApi.runWebRequest(tourApi.toreRestBackup(id), new WebCallBack<Boolean>() {
+            @Override
+            protected void onFinish() {
+            }
+            @Override
+            protected void onSuccess(Boolean result, Request request) {
+                finishProgress();
+                if (result) {
+                    //tour manager
+                    TourManager tm =new TourManager(getContext());
+                    try {
+                        tm.saveConfirm();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    if(getContext()==null)return;
+                    CustomerManager cm = new CustomerManager(getContext());
+                    List<CustomerModel> customerModels = cm.getCustomersWithDataSent();
+
+                    CustomerCallManager customerCallManager = new CustomerCallManager(getContext());
+                    for (CustomerModel customer :customerModels) {
+                        try {
+                            if(customer.UniqueId!=null){
+                                customerCallManager
+                                        .removeCall(CustomerCallType.SendData, customer.UniqueId);
+                            }
+
+                        } catch (DbException e) {
+                            Timber.e(e);
+                        }
+                    }
+                    CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+                    dialog.setMessage(R.string.import_finished_successfully);
+                    dialog.setTitle(R.string.import_data);
+                    dialog.setIcon(Icon.Success);
+                    dialog.setPositiveButton(R.string.ok, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            getVaranegarActvity().finish();
+                        }
+                    });
+                    dialog.show();
+
+                }else {
+                    finishProgress();
+                    MainVaranegarActivity activity = getVaranegarActvity();
+                    String err = "خطا در داده ریست";
+                    if (activity != null && !activity.isFinishing()) {
+                        if (isResumed()) {
+                            CuteMessageDialog dialog = new CuteMessageDialog(activity);
+                            dialog.setIcon(Icon.Error);
+                            dialog.setTitle(err);
+                            dialog.setMessage(R.string.error_connecting_to_server);
+                            dialog.setPositiveButton(R.string.ok, null);
+                            dialog.show();
+                        }
+                    }
+                }
+
+            }
+
+            @Override
+            protected void onApiFailure(ApiError error, Request request) {
+                finishProgress();
+                MainVaranegarActivity activity = getVaranegarActvity();
+                String err = WebApiErrorBody.log(error, getContext());
+                if (activity != null && !activity.isFinishing()) {
+                    if (isResumed()) {
+                        CuteMessageDialog dialog = new CuteMessageDialog(activity);
+                        dialog.setIcon(Icon.Error);
+                        dialog.setTitle(err);
+                        dialog.setMessage(R.string.error_connecting_to_server);
+                        dialog.setPositiveButton(R.string.ok, null);
+                        dialog.show();
+                    }
+                }
+            }
+
+            @Override
+            protected void onNetworkFailure(Throwable t, Request request) {
+                if (!getActivity().isFinishing()) {
+                    finishProgress();
+                    CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
+                    dialog.setMessage(t.getMessage());
+                    dialog.setTitle(com.varanegar.vaslibrary.R.string.error);
+                    dialog.setIcon(Icon.Error);
+                    dialog.setPositiveButton(com.varanegar.vaslibrary.R.string.ok, null);
+                    dialog.show();
+                }
+            }
+        });
     }
     @Override
     public void onDestroy() {
