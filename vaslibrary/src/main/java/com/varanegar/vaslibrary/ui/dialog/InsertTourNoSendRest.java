@@ -29,7 +29,7 @@ public class InsertTourNoSendRest  extends CuteDialogWithToolbar {
         okTv.setOnClickListener(view1 -> {
             String convertPinCode= ConvertFaNumType.convert(pinCodePairItem.getValue());
 
-            if (!convertPinCode.isEmpty()&& convertPinCode !=null &&convertPinCode.length()==5 )
+            if (!convertPinCode.isEmpty()&& convertPinCode !=null )
                 onResultt.done(convertPinCode);
             else
                 onResultt.failed(getString(R.string.TourNo_in_not_correct));
@@ -45,7 +45,7 @@ public class InsertTourNoSendRest  extends CuteDialogWithToolbar {
     private OnResult onResultt;
 
     public interface OnResult {
-        void done(String TourNo) ;
+        void done(String tourNo) ;
         void failed(String error);
     }
 }

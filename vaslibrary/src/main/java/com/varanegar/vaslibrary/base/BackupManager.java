@@ -2,14 +2,15 @@ package com.varanegar.vaslibrary.base;
 
 import android.content.Context;
 import android.os.Build;
+import android.provider.ContactsContract;
 import android.provider.Settings;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.lidroid.xutils.db.annotation.Check;
 import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.base.logging.FileLoggingTree;
 import com.varanegar.framework.database.DbHandler;
@@ -66,7 +67,7 @@ import timber.log.Timber;
 
 public class BackupManager {
     public static final java.lang.String SEND_TOUR_BACKUP = "last";
-    public static Boolean check=false;
+    public static Boolean chk=false;
     public synchronized static void exportData(final Context context, boolean full, ImageType... imageTypes) throws Exception {
         exportData(context, full, null, imageTypes);
     }
@@ -79,8 +80,9 @@ public class BackupManager {
     public synchronized static void exportData(final Context context, boolean full,boolean check, String prefix, ImageType... imageTypes) throws Exception {
         List<ImageType> imageTypesList = new ArrayList<>();
         Collections.addAll(imageTypesList, imageTypes);
+        chk=check;
         exportData(context, full, prefix, imageTypesList);
-        check=check;
+
     }
 
     public synchronized static void exportData(final Context context, boolean full, List<ImageType> imageTypes) throws Exception {
@@ -168,8 +170,8 @@ public class BackupManager {
         }
         String date = DateHelper.toString(new Date(), DateFormat.FileName, Locale.US);
         String zipFilename;
-
         zipFilename = date + "_f.backup";
+        String backupname=zipFilename;
         if (!full)
             zipFilename = date + "_p.backup";
 
@@ -197,9 +199,10 @@ public class BackupManager {
             new File(databaseFileName).delete();
         Timber.d("Exporting data finished.");
 
-        if (VaranegarApplication.is(VaranegarApplication.AppId.Dist) && check==true) {
+        if (VaranegarApplication.is(VaranegarApplication.AppId.Dist) && chk==true) {
+            Log.e("dsfsd","backupName:"+zipFilename +" "+ files);
             sendBuckup(context, zipFilename);
-            check=false;
+            chk=false;
         }
     }
 
@@ -341,6 +344,7 @@ public class BackupManager {
         return files;
     }
 
+
     public static File[] getBackUpFiles(Context context) {
         String path = HelperMethods.getExternalFilesDir(context, "backups").getPath();
         File directory = new File(path);
@@ -351,6 +355,33 @@ public class BackupManager {
             }
         });
         return files;
+    }
+    @NonNull
+    public static List<File> getItemBackup(Context context, @Nullable final BackupType backupType,String nameBackup) {
+        try {
+            String path = HelperMethods.getExternalFilesDir(context, "backups").getPath();
+            File directory = new File(path);
+            File[] files = directory.listFiles(new FileFilter() {
+                @Override
+                public boolean accept(File pathname) {
+//                    if (backupType == null)
+//                        return pathname.getName().endsWith(".backup");
+//                    else if (backupType == BackupType.Full)
+//                        return pathname.getName().endsWith("_f.backup");
+//                    else
+//                        return pathname.getName().endsWith("_p.backup");
+
+                    return pathname.getName().equals(nameBackup) && pathname.getName().endsWith("_f.backup");
+                }
+            });
+            if (files == null || files.length == 0)
+                return new ArrayList<>();
+            return Arrays.asList(files);
+        } catch (Exception ex) {
+            Timber.e(ex);
+            return new ArrayList<>();
+        }
+
     }
 
     @NonNull
@@ -377,7 +408,29 @@ public class BackupManager {
             return new ArrayList<>();
         }
     }
-
+    public static File getBackUpFile(Context context) {
+        try {
+        String path = HelperMethods.getExternalFilesDir(context, "backups").getPath();
+        File directory = new File(path);
+        File[] files = directory.listFiles(pathname ->
+                pathname.getName().endsWith(".backup"));
+        if (files == null || files.length == 0)
+            return null;
+        List<File> fileList = Arrays.asList(files);
+        Linq.sort(fileList, new Comparator() {
+            @Override
+            public int compare(Object o1, Object o2) {
+                File b1 = (File) o1;
+                File b2 = (File) o2;
+                return b2.getName().compareTo(b1.getName());
+            }
+        });
+        return fileList.get(0);
+    } catch (Exception ex) {
+        Timber.e(ex);
+        return null;
+    }
+}
     @Nullable
     public static File getLast(Context context) {
         try {
@@ -421,14 +474,18 @@ public class BackupManager {
             callBack.onFailure(context.getString(R.string.user_not_found));
             return;
         }
-        final File file = getLast(context);
+        File file = getLast(context);
+        if (!backUpName.isEmpty() && backUpName!=null){
+            file=getBackUpFile(context);
+        }
         if (file != null) {
             PingApi pingApi = new PingApi();
+            File finalFile = file;
             pingApi.refreshBaseServerUrl(context, new PingApi.PingCallback() {
                 @Override
                 public void done(String ipAddress) {
                     BackupApi backupApi = new BackupApi(context);
-                    backupApi.runWebRequest(backupApi.uploadBackup(userModel, file,TourNo,backUpName), new WebCallBack<ResponseBody>() {
+                    backupApi.runWebRequest(backupApi.uploadBackup(userModel, finalFile,TourNo,backUpName), new WebCallBack<ResponseBody>() {
                         @Override
                         protected void onFinish() {
 

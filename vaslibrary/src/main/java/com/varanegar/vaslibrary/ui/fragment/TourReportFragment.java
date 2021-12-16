@@ -19,6 +19,8 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -45,6 +47,8 @@ import com.varanegar.framework.base.VaranegarFragment;
 import com.varanegar.framework.database.querybuilder.Query;
 import com.varanegar.framework.database.querybuilder.criteria.Criteria;
 import com.varanegar.framework.network.Connectivity;
+import com.varanegar.framework.network.listeners.ApiError;
+import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.util.HelperMethods;
 import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.util.component.PairedItems;
@@ -80,10 +84,12 @@ import com.varanegar.vaslibrary.ui.dialog.InsertPinDialog;
 import com.varanegar.vaslibrary.ui.dialog.InsertTourNoSendRest;
 import com.varanegar.vaslibrary.ui.dialog.TrackingLicenseFragment;
 import com.varanegar.vaslibrary.ui.dialog.VirtualTourDialog;
+import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.appversion.ApkDownloadCallBack;
 import com.varanegar.vaslibrary.webapi.appversion.AppVersionApi;
 import com.varanegar.vaslibrary.webapi.appversion.VersionApiCallBack;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
+import com.varanegar.vaslibrary.webapi.tour.TourApi;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -91,6 +97,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import okhttp3.Request;
 import timber.log.Timber;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -153,6 +160,8 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
         }
         View userNameTextView = view.findViewById(R.id.user_name_text_view);
         ((TextView) userNameTextView).setText(userModel.UserName);
+
+
 
         SysConfigManager sysConfigManager = new SysConfigManager(getContext());
         SysConfigModel serverAddressConfig = sysConfigManager.read(ConfigKey.ValidServerAddress, SysConfigManager.local);
@@ -246,7 +255,7 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
         downloadApk.setOnClickListener(view -> {
             DownloadApk();
         });
-        /**
+        /**b
          * سناریو ریست
          */
         refreshtour.setOnClickListener(view -> {
@@ -255,8 +264,53 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
             dialog.setClosable(false);
             dialog.setOnResult(new InsertTourNoSendRest.OnResult() {
                 @Override
-                public void done(String TourNo) {
+                public void done(String tourNo) {
+                    startProgress(R.string.please_wait, R.string.connecting_to_the_server);
+                    String userId = UserManager.readFromFile(getContext()).UniqueId.toString();
+                    TourApi tourApi = new TourApi(getContext());
+                    tourApi.runWebRequest(tourApi.getRestBackup(tourNo, userId), new WebCallBack<String>() {
+                        @Override
+                        protected void onFinish() {
 
+                        }
+
+                        @Override
+                        protected void onSuccess(String result, Request request) {
+                            finishProgress();
+                            getBackupName(result);
+                            Log.e("Requst Backup",result);
+                        }
+
+                        @Override
+                        protected void onApiFailure(ApiError error, Request request) {
+                            finishProgress();
+                            MainVaranegarActivity activity = getVaranegarActvity();
+                            String err = WebApiErrorBody.log(error, getContext());
+                            if (activity != null && !activity.isFinishing()) {
+                                if (isResumed()) {
+                                    CuteMessageDialog dialog = new CuteMessageDialog(activity);
+                                    dialog.setIcon(Icon.Error);
+                                    dialog.setTitle(err);
+                                    dialog.setMessage(R.string.error_connecting_to_server);
+                                    dialog.setPositiveButton(R.string.ok, null);
+                                    dialog.show();
+                                }
+                            }
+                        }
+
+                        @Override
+                        protected void onNetworkFailure(Throwable t, Request request) {
+                            if (!getActivity().isFinishing()) {
+                                finishProgress();
+                                CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
+                                dialog.setMessage(t.getMessage());
+                                dialog.setTitle(com.varanegar.vaslibrary.R.string.error);
+                                dialog.setIcon(Icon.Error);
+                                dialog.setPositiveButton(com.varanegar.vaslibrary.R.string.ok, null);
+                                dialog.show();
+                            }
+                        }
+                    });
 
                 }
 
@@ -755,6 +809,7 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
         backupImageView = view.findViewById(R.id.backup_image_view);
         downloadApk = view.findViewById(R.id.download_apk);
         refreshtour= view.findViewById(R.id.refresh_tour);
+        LinearLayout refreshtourlin=view.findViewById(R.id.refresh_tour_lin);
         logoutImageView = view.findViewById(R.id.log_out_image_view);
         trackingLicenseImageView = view.findViewById(R.id.tracking_license_image_view);
         getTourImageView = view.findViewById(R.id.get_tour_image_view);
@@ -762,6 +817,9 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
         reportLayout = view.findViewById(R.id.report_layout);
         tourProgressLayout = view.findViewById(R.id.tour_progress_layout);
         totalProgressBar = view.findViewById(R.id.total_progress_bar);
+        if(!VaranegarApplication.is(VaranegarApplication.AppId.Dist)){
+            refreshtourlin.setVisibility(View.GONE);
+        }
         tourManager = new TourManager(getContext());
         userModel = UserManager.readFromFile(getContext());
         if (userModel == null) {
@@ -1239,6 +1297,25 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
         editor.apply();
     }
 
+    /**
+     * گرفتن بک آپ با اسم
+     * BackUp
+     *
+     */
+    private void getBackupName(String nameBackUp){
+        if (BackupManager.getItemBackup(getContext(),BackupManager.BackupType.Full,nameBackUp).size() > 0) {
+            ImportDialogFragment importDialog = new ImportDialogFragment();
+            importDialog.setBackupType(BackupManager.BackupType.Full);
+            importDialog.show(getChildFragmentManager(), "ImportDialogFragment");
+        } else {
+            CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+            dialog.setTitle(R.string.error);
+            dialog.setMessage(R.string.there_is_no_backup_file);
+            dialog.setIcon(Icon.Alert);
+            dialog.setPositiveButton(R.string.ok, null);
+            dialog.show();
+        }
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();

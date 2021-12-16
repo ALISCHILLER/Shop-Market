@@ -70,5 +70,10 @@ public class TourApi extends BaseApi implements ITourApi {
         ITourApi api = getRetrofitBuilder(TokenType.UserToken).build().create(ITourApi.class);
         return api.getTourStatus(tourId);
     }
+    @Override
+    public Call<String> getRestBackup(String tourNo,String driverID){
+        ITourApi api = getRetrofitBuilder(TokenType.UserToken).build().create(ITourApi.class);
+        return api.getRestBackup(tourNo,driverID);
+    }
 
 }
