@@ -327,8 +327,8 @@
 
                     <ImageView
                         android:id="@+id/log_out_image_view"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
                         android:layout_gravity="center_horizontal"
                         android:background="@drawable/btn_background"
                         android:src="@drawable/ic_exit_white_76dp" />
@@ -343,7 +343,7 @@
                 </LinearLayout>
 
                 <View
-                    android:layout_width="24dp"
+                    android:layout_width="10dp"
                     android:layout_height="24dp" />
 
                 <LinearLayout
@@ -354,8 +354,8 @@
 
                     <ImageView
                         android:id="@+id/get_tour_image_view"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
                         android:layout_gravity="center_horizontal"
                         android:background="@drawable/btn_background"
                         android:padding="@dimen/padding_default"
@@ -385,7 +385,7 @@
                 </LinearLayout>
 
                 <View
-                    android:layout_width="24dp"
+                    android:layout_width="10dp"
                     android:layout_height="24dp" />
 
                 <LinearLayout
@@ -395,8 +395,8 @@
 
                     <ImageView
                         android:id="@+id/tracking_license_image_view"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
                         android:layout_gravity="center_horizontal"
                         android:background="@drawable/btn_background"
                         android:padding="@dimen/padding_default"
@@ -410,36 +410,62 @@
                         android:text="@string/tracking_license" />
 
                 </LinearLayout>
-<!--                <View-->
-<!--                    android:layout_width="24dp"-->
-<!--                    android:layout_height="24dp" />-->
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="24dp" />
 
-<!--                <LinearLayout-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:orientation="vertical">-->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-<!--                    <ImageView-->
-<!--                        android:id="@+id/download_apk"-->
-<!--                        android:layout_width="80dp"-->
-<!--                        android:layout_height="80dp"-->
-<!--                        android:layout_gravity="center_horizontal"-->
-<!--                        android:background="@drawable/btn_background"-->
-<!--                        android:padding="@dimen/padding_default"-->
-<!--                        android:src="@drawable/ic_baseline_cloud_download_24" />-->
+                    <ImageView
+                        android:id="@+id/download_apk"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/btn_background"
+                        android:padding="@dimen/padding_default"
+                        android:src="@drawable/ic_stat_name" />
 
-<!--                    <TextView-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_gravity="center"-->
-<!--                        android:gravity="center"-->
-<!--                        android:text="@string/download_apk" />-->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="@string/download_apk" />
 
-<!--                </LinearLayout>-->
-
+                </LinearLayout>
 
                 <View
-                    android:layout_width="24dp"
+                    android:layout_width="10dp"
+                    android:layout_height="24dp" />
+
+                <LinearLayout
+                    android:id="@+id/refresh_tour_lin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/refresh_tour"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/btn_background"
+                        android:padding="@dimen/padding_default"
+                        android:src="@drawable/ic_stat_refresh" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="@string/refresh_tour" />
+
+                </LinearLayout>
+                <View
+                    android:layout_width="10dp"
                     android:layout_height="24dp" />
 
                 <LinearLayout
@@ -449,8 +475,8 @@
 
                     <ImageView
                         android:id="@+id/backup_image_view"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
                         android:layout_gravity="center_horizontal"
                         android:background="@drawable/btn_background"
                         android:padding="@dimen/padding_default"

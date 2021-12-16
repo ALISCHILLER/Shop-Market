@@ -1452,9 +1452,11 @@
     <string name="time_settings_is_wrong">تنظمیات تاریخ و ساعت دستگاه اشتباه است. لطفا تنظیمات را اصلاح نمایید</string>
     <string name="transaction_canceled">تراکنش لغو شد.</string>
     <string name="pin_code">پین کد</string>
+    <string name="tourno_code">شماره تور</string>
     <string name="operation_canceled">عملیات کنسل شد</string>
     <string name="please_insert_pin_code">لطفا پین کد را وارد کنید</string>
     <string name="pin_code_in_not_correct">پین کد وارد شده صحیح نیست</string>
+    <string name="TourNo_in_not_correct">شماره تور وارد شده صحیح نیست</string>
     <string name="control_payments_again_for_usance_day">راس دریافتی ها با فاکتور مطابقت ندارد، دریافتی ها را مجددا کنترل کنید</string>
     <string name="weight">وزن</string>
     <string name="be">باشد</string>
@@ -1490,11 +1492,13 @@
     <string name="discunt_Immediate">تخفیف آنی</string>
 
     <string name="DeliveryReasons">خطا پین را درست وارد کنید</string>
+    <string name="error_code">خطاکد را درست وارد کنید</string>
     <string name="cash_discount_amount">تخفیف نقدی</string>
     <string name="cheque_discount">تخفیف حجمی</string>
     <string name="dialog_black">با انجام این عملیات کاربر بلاک میشود</string>
     <string name="dialog_unblack">با انجام این عملیات کاربر از بلاک خارج میشود</string>
     <string name="download_apk">دانلود نسخه جدید</string>
+    <string name="refresh_tour">ریست تور</string>
     <string name="not_download_apk">نسخه جدید موجود نمی باشد</string>
     <string name="tour_data_not_available">اطلاعات تور موجود نیست.</string>
     <string name="non_deliver_all">عدم تحویل همه.</string>
