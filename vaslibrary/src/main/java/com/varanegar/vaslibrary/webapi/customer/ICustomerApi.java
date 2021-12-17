@@ -8,6 +8,7 @@ import com.varanegar.vaslibrary.model.customer.CustomerMainSubTypeModel;
 import com.varanegar.vaslibrary.model.customer.CustomerModel;
 
 import java.util.List;
+import java.util.UUID;
 
 import okhttp3.MultipartBody;
 import retrofit2.Call;
@@ -37,10 +38,16 @@ public interface ICustomerApi {
     Call<SyncGuidViewModel> registerNewCustomer(
             @Body SyncGetNewCustomerViewModel syncGetNewCustomerViewModel);
 
-    @Multipart
+
     @POST("api/v2/ngt/customer/registernewZarCustomer")
     Call<SyncGuidViewModel> registerNewZarCustomer(
-            @Body SyncZarGetNewCustomerViewModel syncGetNewCustomerViewModel,
+            @Body SyncZarGetNewCustomerViewModel syncGetNewCustomerViewModel
+    );
+
+    @Multipart
+    @POST("api/v2/ngt/customer/registernewZarCustomerNationalCardImage")
+    Call<Boolean> registerNewZarCustomerNationalCardImage(
+            @Query("customerId") UUID customerId,
             @Part MultipartBody.Part file);
 
     @GET("api/v2/ngt/customermainsubtype")

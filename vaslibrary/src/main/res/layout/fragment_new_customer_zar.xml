@@ -182,6 +182,21 @@
                 app:singleLine="true"
                 app:title="@string/customer_national_code_labl" />
 
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/national_card_pic"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_camera"
+                    />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
             <com.varanegar.framework.util.component.PairedItemsSpinner
                 android:id="@+id/payment_type_spinner"
                 android:layout_width="match_parent"
