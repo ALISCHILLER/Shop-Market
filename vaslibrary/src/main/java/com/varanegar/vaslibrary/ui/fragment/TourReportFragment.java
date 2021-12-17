@@ -1,6 +1,7 @@
 package com.varanegar.vaslibrary.ui.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -300,7 +301,6 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
                                     CuteMessageDialog dialog = new CuteMessageDialog(activity);
                                     dialog.setIcon(Icon.Error);
                                     dialog.setTitle(err);
-                                    dialog.setMessage(R.string.error_connecting_to_server);
                                     dialog.setPositiveButton(R.string.ok, null);
                                     dialog.show();
                                 }
@@ -1312,15 +1312,16 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
      *
      */
     private void getBackupName(String nameBackUp){
-
+        final ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setTitle(R.string.please_wait);
+        progressDialog.setMessage(getString(R.string.import_data));
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         if (BackupManager.getItemBackup(getContext(),BackupManager.BackupType.Full,nameBackUp) !=null) {
-//            ImportDialogFragment importDialog = new ImportDialogFragment();
-//            importDialog.setBackupType(BackupManager.BackupType.Partial);
-//            importDialog.setBackupName(nameBackUp);
-//            importDialog.show(getChildFragmentManager(), "ImportDialogFragment");
-
+            progressDialog.dismiss();
             restBackup(nameBackUp);
         } else {
+            progressDialog.dismiss();
             CuteMessageDialog dialog = new CuteMessageDialog(getContext());
             dialog.setTitle(R.string.error);
             dialog.setMessage(R.string.there_is_no_backup_file);
@@ -1332,6 +1333,11 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
     }
 
     public void restBackup(String nameBackUp){
+        final ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setTitle(R.string.please_wait);
+        progressDialog.setMessage(getString(R.string.import_data));
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         List<File> files = new ArrayList<>();
         if(nameBackUp != null && !nameBackUp.isEmpty())
             files.add(BackupManager.getItemBackup(getContext(), BackupManager.BackupType.Partial,nameBackUp));
@@ -1346,6 +1352,7 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
         final BackupInfoFile backupInfo = backupInfoList.get(0);
         try {
             BackupManager.importData(getContext(), backupInfo.file.getAbsolutePath());
+            progressDialog.dismiss();
             TourManager tm =new TourManager(getContext());
             TourModel tourModel = tm.loadTour();
             toreRestBackup(String.valueOf(tourModel.UniqueId),nameBackUp);
