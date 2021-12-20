@@ -14,7 +14,12 @@ public class EvcStatuteProductModel extends BaseModel {
     @Column
     public UUID TemplateId;
     @Column
+    public UUID evcStatuteUniqueId;
+    @Column
     public UUID ProductUniqueId;
     @Column
     public String Description;
+
+
+
 }

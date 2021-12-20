@@ -3,6 +3,7 @@ package com.varanegar.vaslibrary.manager.evcstatutemanager;
 import android.content.Context;
 import androidx.annotation.NonNull;
 
+import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.database.BaseManager;
 import com.varanegar.framework.database.DbException;
 import com.varanegar.framework.database.querybuilder.Query;
@@ -54,8 +55,9 @@ public class EvcStatuteTemplateManager extends BaseManager<EvcStatuteTemplateMod
     }
 
     private void save(final UpdateCall call) {
+
         EvcStatuteApi api = new EvcStatuteApi(getContext());
-        api.runWebRequest(api.get(), new WebCallBack<List<EvcStatuteTemplateModel>>() {
+        api.runWebRequest(api.get(VaranegarApplication.getInstance().getAppId()), new WebCallBack<List<EvcStatuteTemplateModel>>() {
             @Override
             protected void onFinish() {
 
