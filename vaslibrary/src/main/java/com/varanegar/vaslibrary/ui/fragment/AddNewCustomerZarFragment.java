@@ -138,7 +138,17 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
                         .show(getChildFragmentManager(), "ConnectionSettingDialog");
                 return;
             }
-            createSyncViewModel();
+            if (file !=null) {
+                createSyncViewModel();
+            }else{
+                CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+                dialog.setIcon(Icon.Error);
+                dialog.setTitle(R.string.error);
+                dialog.setMessage(getString(R.string.taking_picture_of) + "کارت ملی " +" "+ getString(R.string.is_mandatory));
+                dialog.setPositiveButton(R.string.ok, null);
+                dialog.show();
+                return;
+            }
         });
         return view;
     }

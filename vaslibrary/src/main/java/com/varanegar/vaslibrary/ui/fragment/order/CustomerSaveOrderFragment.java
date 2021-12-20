@@ -2644,7 +2644,7 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
     }
 
     private void showEmphaticItems() {
-        if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist) && !hasCallOrder()) {
+        if (!VaranegarApplication.is(VaranegarApplication.AppId.Supervisor) && !hasCallOrder()) {
             SysConfigManager sysConfigManager = new SysConfigManager(getContext());
             SysConfigModel dealerInformationNotification = sysConfigManager.read(ConfigKey.DealerInformationNotification, SysConfigManager.cloud);
             // check owner key for Poober in 2.1.1 in later versions we have a config for this!

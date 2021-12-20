@@ -46,6 +46,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="@dimen/padding_xsmall"
+                android:visibility="invisible"
                 android:text="@string/request_qty"
                 android:textColor="?attr/colorPrimary" />
 
@@ -70,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="@dimen/padding_xsmall"
-                android:text="@string/discounts_and_awards"
+                android:text="شرح کالا"
                 android:textColor="?attr/colorPrimary" />
 
             <TextView
