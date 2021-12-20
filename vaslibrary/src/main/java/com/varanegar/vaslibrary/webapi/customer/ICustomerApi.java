@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 import okhttp3.MultipartBody;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -39,7 +40,9 @@ public interface ICustomerApi {
             @Body SyncGetNewCustomerViewModel syncGetNewCustomerViewModel);
 
 
+    @Multipart
     @POST("api/v2/ngt/customer/registernewZarCustomer")
+
     Call<SyncGuidViewModel> registerNewZarCustomer(
             @Body SyncZarGetNewCustomerViewModel syncGetNewCustomerViewModel
     );
@@ -49,6 +52,7 @@ public interface ICustomerApi {
     Call<Boolean> registerNewZarCustomerNationalCardImage(
             @Query("customerId") UUID customerId,
             @Part MultipartBody.Part file);
+
 
     @GET("api/v2/ngt/customermainsubtype")
     Call<List<CustomerMainSubTypeModel>> getCustomerMainSubTypes();

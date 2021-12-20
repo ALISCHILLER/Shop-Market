@@ -7,6 +7,7 @@ import com.varanegar.vaslibrary.webapi.BaseApi;
 import com.varanegar.vaslibrary.webapi.TokenType;
 
 import java.util.List;
+import java.util.UUID;
 
 import retrofit2.Call;
 
@@ -20,7 +21,7 @@ public class EvcStatuteApi extends BaseApi implements IEvcStatuteApi {
     }
 
     @Override
-    public Call<List<EvcStatuteTemplateModel>> get() {
-        return getRetrofitBuilder(TokenType.UserToken).build().create(IEvcStatuteApi.class).get();
+    public Call<List<EvcStatuteTemplateModel>> get(UUID subSystemType) {
+        return getRetrofitBuilder(TokenType.UserToken).build().create(IEvcStatuteApi.class).get(subSystemType);
     }
 }

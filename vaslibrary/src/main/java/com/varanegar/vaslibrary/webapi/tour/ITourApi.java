@@ -43,4 +43,7 @@ public interface ITourApi {
 
     @GET("api/v2/ngt/tour/Dist/IsReadyToResetTour")
     Call<String> getRestBackup(@Query("tourNo") String tourNo,@Query("driverID") String driverID);
+    @GET("api/v2/ngt/tour/Dist/BackUpRestored")
+    Call<Boolean> toreRestBackup(@Query("id")String id);
+
 }

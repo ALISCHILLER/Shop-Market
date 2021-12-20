@@ -331,13 +331,14 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
         validator.addField(longitude, getString(R.string.geo_location), new NotNullChecker());
     }
 
-    private void submit(final SyncZarGetNewCustomerViewModel syncGetNewCustomerViewModel) {
+    private void submit(final SyncZarGetNewCustomerViewModel syncGetNewCustomerViewModel/*, File file*/) {
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage(getString(R.string.registering_new_customer));
         progressDialog.setCancelable(false);
         progressDialog.show();
 
         final CustomerApi customerApi = new CustomerApi(getContext());
+
 
         customerApi.runWebRequest(
                 customerApi.registerNewZarCustomer(syncGetNewCustomerViewModel),

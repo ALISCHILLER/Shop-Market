@@ -29,8 +29,10 @@ import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.base.BackupInfo;
 import com.varanegar.vaslibrary.base.BackupInfoFile;
 import com.varanegar.vaslibrary.base.BackupManager;
+import com.varanegar.vaslibrary.manager.tourmanager.TourManager;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -44,7 +46,6 @@ import timber.log.Timber;
 public class ImportDialogFragment extends CuteAlertDialog {
     private BaseSelectionRecyclerAdapter<BackupInfoFile> adapter;
     private BackupManager.BackupType backupType;
-
     public void setBackupType(BackupManager.BackupType backupType) {
         Bundle bundle = new Bundle();
         bundle.putString("BACKUP_TYPE", String.valueOf(backupType.ordinal()));
@@ -72,7 +73,9 @@ public class ImportDialogFragment extends CuteAlertDialog {
         setTitle(R.string.import_data);
         setSizingPolicy(SizingPolicy.Maximum);
         final View view = inflater.inflate(R.layout.dialog_import_data, viewGroup, true);
-        final List<File> files = BackupManager.getList(getContext(), backupType);
+
+         List<File> files = new ArrayList<>();
+             files = BackupManager.getList(getContext(), backupType);
         List<BackupInfoFile> backupInfoList = new ArrayList<>();
         for (File file :
                 files) {
@@ -116,6 +119,8 @@ public class ImportDialogFragment extends CuteAlertDialog {
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
+
+
                                 CuteMessageDialog dialog = new CuteMessageDialog(getContext());
                                 dialog.setMessage(R.string.import_finished_successfully);
                                 dialog.setTitle(R.string.import_data);

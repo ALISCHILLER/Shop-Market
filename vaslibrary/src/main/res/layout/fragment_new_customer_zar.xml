@@ -181,7 +181,7 @@
                 android:inputType="numberDecimal"
                 app:singleLine="true"
                 app:title="@string/customer_national_code_labl" />
-
+            
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:orientation="horizontal"
                 android:layout_width="match_parent"

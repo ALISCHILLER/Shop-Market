@@ -2,6 +2,7 @@ package com.varanegar.vaslibrary.webapi.customer;
 
 import android.content.Context;
 
+import com.varanegar.vaslibrary.manager.picture.ImageViewModel;
 import com.varanegar.vaslibrary.model.customer.CustomerActivityModel;
 import com.varanegar.vaslibrary.model.customer.CustomerBarcodeModel;
 import com.varanegar.vaslibrary.model.customer.CustomerCategoryModel;
@@ -18,6 +19,7 @@ import java.util.UUID;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Query;
@@ -68,6 +70,7 @@ public class CustomerApi extends BaseApi implements ICustomerApi {
     }
 
     @Override
+
     public Call<Boolean> registerNewZarCustomerNationalCardImage(
             UUID customerId,
             MultipartBody.Part body) {
@@ -83,10 +86,12 @@ public class CustomerApi extends BaseApi implements ICustomerApi {
                 .build().create(ICustomerApi.class);
 
         RequestBody requestFile =
+
                 RequestBody.create(
                         MediaType.parse("multipart/form-data;"),
                         file
                 );
+
 
         MultipartBody.Part body =
                 MultipartBody.Part.createFormData(
@@ -95,6 +100,7 @@ public class CustomerApi extends BaseApi implements ICustomerApi {
                         requestFile);
 
         return registerNewZarCustomerNationalCardImage(customerId, body);
+
     }
 
     @Override

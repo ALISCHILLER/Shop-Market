@@ -356,12 +356,16 @@ public class BackupManager {
         });
         return files;
     }
-    @NonNull
-    public static List<File> getItemBackup(Context context, @Nullable final BackupType backupType,String nameBackup) {
+
+    public static File getItemBackup(Context context, @Nullable final BackupType backupType,String nameBackup) {
         try {
             String path = HelperMethods.getExternalFilesDir(context, "backups").getPath();
-            File directory = new File(path);
-            File[] files = directory.listFiles(new FileFilter() {
+            File f = new File(path+"/"+nameBackup);
+            if(!f.exists())
+                return  null;
+            else
+                return f;
+           /* File[] files = directory.listFiles(new FileFilter() {
                 @Override
                 public boolean accept(File pathname) {
 //                    if (backupType == null)
@@ -371,15 +375,23 @@ public class BackupManager {
 //                    else
 //                        return pathname.getName().endsWith("_p.backup");
 
-                    return pathname.getName().equals(nameBackup) && pathname.getName().endsWith("_f.backup");
+                    return pathname.getName().equals(nameBackup) ;
+                }});
+            if (files == null || files.length == 0)
+                return null;
+            List<File> fileList = Arrays.asList(files);
+            Linq.sort(fileList, new Comparator() {
+                @Override
+                public int compare(Object o1, Object o2) {
+                    File b1 = (File) o1;
+                    File b2 = (File) o2;
+                    return b2.getName().compareTo(b1.getName());
                 }
             });
-            if (files == null || files.length == 0)
-                return new ArrayList<>();
-            return Arrays.asList(files);
+            return Collections.singletonList(fileList.get(0));*/
         } catch (Exception ex) {
             Timber.e(ex);
-            return new ArrayList<>();
+            return null;
         }
 
     }
