@@ -2,6 +2,8 @@ package com.varanegar.supervisor.tracking;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -27,12 +29,17 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.varanegar.framework.base.ProgressFragment;
 import com.varanegar.framework.network.Connectivity;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
+import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.supervisor.R;
@@ -72,6 +79,7 @@ import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.SummaryTourLoc
 import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.WaitLocationViewModel;
 import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.WifiOffLocationViewModel;
 import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.WifiOnLocationViewModel;
+import com.varanegar.vaslibrary.model.customerpathview.CustomerPathViewModel;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 
 import java.io.IOException;
@@ -100,6 +108,7 @@ public class MapFragment extends ProgressFragment {
     private Geocoder geocoder;
     private MapHelper mapHelper;
     private List<TrackingMarker> _markers = new ArrayList<>();
+    List<Marker> markers = new ArrayList<>();
     private float zoom;
 
     @Override
@@ -109,7 +118,9 @@ public class MapFragment extends ProgressFragment {
         mapHelper = new MapHelper(getActivity());
     }
 
+
     private List<TrackingMarker> createMarkers(List<EventViewModel> eventViewModels, boolean showEvents, boolean visitorName) {
+
         List<TrackingMarker> markers = new ArrayList<>();
         FragmentActivity activity = getActivity();
         if (activity == null)
@@ -368,7 +379,7 @@ public class MapFragment extends ProgressFragment {
         mapHelper.removeMarkers();
         final TrackingConfig trackingConfig = new TrackingConfig(getContext());
         final SupervisorApi api = new SupervisorApi(getContext());
-        if (trackingConfig.isTracking()) {
+        if (!trackingConfig.isTracking()) {
             final PersonnelPointsParam param = new PersonnelPointsParam();
             param.mDate = trackingConfig.getTrackingDate();
             param.FromTime = trackingConfig.getFromTime();
@@ -472,6 +483,9 @@ public class MapFragment extends ProgressFragment {
                 }
             });
         } else {
+            /**
+             * اخرین موقعیت
+             */
             LastPointsParam param = new LastPointsParam();
             param.mDate = trackingConfig.getStatusDate();
             param.LaststatusType = trackingConfig.getStatusType().ordinal();
@@ -485,33 +499,39 @@ public class MapFragment extends ProgressFragment {
 
                 @Override
                 protected void onSuccess(List<EventViewModel> result, Request request) {
-                    _markers = createMarkers(result, new TrackingConfig(getContext()).getStatusType() == StatusType.Event , true);
-                    if (_markers.size() > 0) {
-                        mapHelper.setMarkers(_markers);
-                        mapHelper.setDrawLines(false);
-                        mapHelper.moveToArea(_markers);
-                        mapHelper.draw(null);
-                        mapHelper.setOnMarkerInfoViewClickListener(new MapHelper.OnMarkerInfoViewClickListener() {
-                            @Override
-                            public void onClick(TrackingMarker marker) {
-                                BaseLocationViewModel locationViewModel = marker.getLocationViewModel();
-                                Activity activity = getActivity();
-                                if (activity != null && !activity.isFinishing() && isResumed()) {
-                                    TrackingConfig trackingConfig = new TrackingConfig(activity);
-                                    trackingConfig.isTracking(true);
-                                    trackingConfig.setFromTime(6, 0);
-                                    trackingConfig.setToTime(23, 55);
-                                    trackingConfig.isMap(true);
-                                    List<UUID> customersIds = new ArrayList<>();
-                                    customersIds.add(locationViewModel.CompanyPersonnelId);
-                                    trackingConfig.removePersonnelIds();
-                                    trackingConfig.setPersonnelIds2(customersIds);
-                                    trackingConfig.setTrackingDate(new Date());
-                                    showMarkers();
-                                }
-                            }
-                        });
-                    }
+
+
+                        createMarkers(result);
+
+
+
+//                    _markers = createMarkers(result, new TrackingConfig(getContext()).getStatusType() == StatusType.Event , true);
+//                    if (_markers.size() > 0) {
+//                        mapHelper.setMarkers(_markers);
+//                        mapHelper.setDrawLines(false);
+//                        mapHelper.moveToArea(_markers);
+//                        mapHelper.draw(null);
+//                        mapHelper.setOnMarkerInfoViewClickListener(new MapHelper.OnMarkerInfoViewClickListener() {
+//                            @Override
+//                            public void onClick(TrackingMarker marker) {
+//                                BaseLocationViewModel locationViewModel = marker.getLocationViewModel();
+//                                Activity activity = getActivity();
+//                                if (activity != null && !activity.isFinishing() && isResumed()) {
+//                                    TrackingConfig trackingConfig = new TrackingConfig(activity);
+//                                    trackingConfig.isTracking(true);
+//                                    trackingConfig.setFromTime(6, 0);
+//                                    trackingConfig.setToTime(23, 55);
+//                                    trackingConfig.isMap(true);
+//                                    List<UUID> customersIds = new ArrayList<>();
+//                                    customersIds.add(locationViewModel.CompanyPersonnelId);
+//                                    trackingConfig.removePersonnelIds();
+//                                    trackingConfig.setPersonnelIds2(customersIds);
+//                                    trackingConfig.setTrackingDate(new Date());
+//                                    showMarkers();
+//                                }
+//                            }
+//                        });
+//                    }
                 }
 
                 @Override
@@ -534,6 +554,36 @@ public class MapFragment extends ProgressFragment {
             });
         }
 
+    }
+    private void createMarkers(List<EventViewModel> result){
+        Linq.forEach(markers, new Linq.Consumer<Marker>() {
+            @Override
+            public void run(Marker item) {
+                item.remove();
+            }
+        });
+        markers = new ArrayList<>();
+
+
+        for (EventViewModel eventViewModel:result){
+            createMarker(eventViewModel);
+        }
+    }
+    private void createMarker(EventViewModel eventViewModel){
+        Context context = getContext();
+
+        if ( eventViewModel.Latitude != 0 && eventViewModel.Longitude != 0 && context != null) {
+            LatLng customerPosition = new LatLng(eventViewModel.Latitude, eventViewModel.Longitude);
+            MarkerOptions options = new MarkerOptions().position(customerPosition);
+            Marker marker = googleMap.addMarker(options);
+            int icon = R.drawable.ic_location_supervisor;
+            BitmapDescriptor bitmap = BitmapDescriptorFactory.fromResource(icon);
+            Bitmap b = BitmapFactory.decodeResource(getContext().getResources(), icon);
+            marker.setTitle(eventViewModel.Lable);
+            marker.setTag(eventViewModel.Lable);
+            marker.setIcon(bitmap);
+            markers.add(marker);
+        }
     }
 
     private void showError(String str) {

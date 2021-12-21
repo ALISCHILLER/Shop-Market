@@ -11,6 +11,7 @@ public enum ImageType {
     CatalogSmall("CatalogSmall"),
     ProductGroup("ProductGroup"),
     Product("Product"),
+    NationalCard("NationalCard"),
     Logo("Logo");
 
     public String getName() {

@@ -123,28 +123,28 @@ public class TrackingConfigDialog extends SlidingDialog {
         tabsViewPager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
-                if (position == 0)
-                    return new VisitorsPathConfigTabFragment();
-                else
+//                if (position == 0)
+//                    return new VisitorsPathConfigTabFragment();
+//                else
                     return new LastStatusConfigTabFragment();
             }
 
             @Override
             public int getCount() {
-                return 2;
+                return 1;
             }
         });
         trackingTypeTab = view.findViewById(R.id.tracking_type_tabs);
         trackingTypeTab.setupWithViewPager(tabsViewPager);
-        trackingTypeTab.getTabAt(0).setIcon(R.drawable.ic_tracking_cyan_24dp);
-        trackingTypeTab.getTabAt(1).setIcon(R.drawable.ic_location_on_cyan_24dp);
+     //   trackingTypeTab.getTabAt(0).setIcon(R.drawable.ic_tracking_cyan_24dp);
+        trackingTypeTab.getTabAt(0).setIcon(R.drawable.ic_location_on_cyan_24dp);
 
         t = view.findViewById(R.id.view_type_tab_layout);
-        TrackingConfig trackingConfig = new TrackingConfig(getContext());
-        if (trackingConfig.isMap())
+//        TrackingConfig trackingConfig = new TrackingConfig(getContext());
+//        if (trackingConfig.isMap())
+//            t.getTabAt(0).select();
+//        else
             t.getTabAt(0).select();
-        else
-            t.getTabAt(1).select();
         return view;
     }
 

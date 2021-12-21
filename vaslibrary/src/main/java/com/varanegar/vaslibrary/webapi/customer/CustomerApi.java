@@ -70,6 +70,13 @@ public class CustomerApi extends BaseApi implements ICustomerApi {
     }
 
     @Override
+    public Call<Boolean> registernewNationalCardImage(UUID CustomeId) {
+        ICustomerApi api = getRetrofitBuilder(TokenType.UserToken)
+                .build().create(ICustomerApi.class);
+        return api.registernewNationalCardImage(CustomeId);
+    }
+
+    @Override
 
     public Call<Boolean> registerNewZarCustomerNationalCardImage(
             UUID customerId,
@@ -82,11 +89,10 @@ public class CustomerApi extends BaseApi implements ICustomerApi {
     public Call<Boolean> registerNewZarCustomerNationalCardImage(
             UUID customerId,
             File file) {
-        ICustomerApi api = getRetrofitBuilder(TokenType.UserToken)
-                .build().create(ICustomerApi.class);
+//        ICustomerApi api = getRetrofitBuilder(TokenType.UserToken)
+//                .build().create(ICustomerApi.class);
 
         RequestBody requestFile =
-
                 RequestBody.create(
                         MediaType.parse("multipart/form-data;"),
                         file
@@ -95,8 +101,8 @@ public class CustomerApi extends BaseApi implements ICustomerApi {
 
         MultipartBody.Part body =
                 MultipartBody.Part.createFormData(
-                        customerId.toString() + ".jpg",
-                        file.getName() + ".jpg",
+                        file.getName(),
+                        file.getName(),
                         requestFile);
 
         return registerNewZarCustomerNationalCardImage(customerId, body);

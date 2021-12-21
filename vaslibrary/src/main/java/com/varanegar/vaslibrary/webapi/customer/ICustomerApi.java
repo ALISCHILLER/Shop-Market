@@ -42,11 +42,14 @@ public interface ICustomerApi {
 
     @Multipart
     @POST("api/v2/ngt/customer/registernewZarCustomer")
-
     Call<SyncGuidViewModel> registerNewZarCustomer(
             @Body SyncZarGetNewCustomerViewModel syncGetNewCustomerViewModel
     );
 
+
+    @GET("api/v2/ngt/customer/registernewZarCustomerNationalCardImage")
+    Call<Boolean>registernewNationalCardImage(
+            @Query("customerid")UUID CustomeId);
     @Multipart
     @POST("api/v2/ngt/customer/registernewZarCustomerNationalCardImage")
     Call<Boolean> registerNewZarCustomerNationalCardImage(

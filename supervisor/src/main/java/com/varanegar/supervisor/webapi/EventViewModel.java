@@ -9,6 +9,7 @@ import java.util.UUID;
 
 public class EventViewModel {
     public UUID Id;
+    public UUID uniqueId;
     public String JData;
     public String Desc;
     public String Lable;

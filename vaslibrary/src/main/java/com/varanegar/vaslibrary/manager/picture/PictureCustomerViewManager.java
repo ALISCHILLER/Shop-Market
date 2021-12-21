@@ -233,4 +233,32 @@ public class PictureCustomerViewManager extends BaseManager<PictureCustomerViewM
         );
         uploadPictures(pictureCustomerViewModels, call);
     }
+
+    public void uploadNationalCard(UUID customerId, File file, UpdateCall call){
+        ImageViewModel imageViewModel = new ImageViewModel();
+        imageViewModel.file = file;
+        imageViewModel.imageId = customerId.toString();
+        imageViewModel.token = customerId.toString();
+        imageViewModel.isDefault = false;
+        imageViewModel.imageType = ImageType.NationalCard;
+        ImageApi imageApi = new ImageApi(getContext());
+        final Handler handler = new Handler();
+
+        new Thread(() -> {
+
+            try {
+                imageApi.runWebRequest(imageApi.postImage(imageViewModel));
+                handler.post(call::success);
+            } catch (ApiException e) {
+                final String err = WebApiErrorBody.log(e.getApiError(), getContext());
+                handler.post(() -> call.failure(err));
+            } catch (NetworkException e) {
+                handler.post(() -> call.failure(getContext()
+                        .getString(R.string.connection_to_server_failed)));
+            } catch (InterruptedException e) {
+                handler.post(() -> call.failure(getContext()
+                        .getString(R.string.sending_images_canceled)));
+            }
+        }).start();
+    }
 }

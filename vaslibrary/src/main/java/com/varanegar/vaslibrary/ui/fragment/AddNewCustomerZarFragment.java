@@ -4,25 +4,33 @@ import static android.app.Activity.RESULT_OK;
 
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.ArrayMap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.MutableData;
 import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.base.VaranegarFragment;
+import com.varanegar.framework.database.DbException;
 import com.varanegar.framework.network.Connectivity;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
@@ -32,8 +40,11 @@ import com.varanegar.framework.util.component.PairedItemsEditable;
 import com.varanegar.framework.util.component.PairedItemsSpinner;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
+import com.varanegar.framework.util.datetime.DateFormat;
+import com.varanegar.framework.util.datetime.DateHelper;
 import com.varanegar.framework.validation.FormValidator;
 import com.varanegar.framework.validation.ValidationError;
+import com.varanegar.framework.validation.ValidationException;
 import com.varanegar.framework.validation.ValidationListener;
 import com.varanegar.framework.validation.annotations.IraniNationalCodeChecker;
 import com.varanegar.framework.validation.annotations.LengthChecker;
@@ -44,6 +55,9 @@ import com.varanegar.vaslibrary.manager.DataForRegisterManager;
 import com.varanegar.vaslibrary.manager.PaymentOrderTypeManager;
 import com.varanegar.vaslibrary.manager.UserManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
+import com.varanegar.vaslibrary.manager.image.ImageManager;
+import com.varanegar.vaslibrary.manager.image.ImageType;
+import com.varanegar.vaslibrary.manager.picture.PictureCustomerViewManager;
 import com.varanegar.vaslibrary.manager.tourmanager.TourManager;
 import com.varanegar.vaslibrary.manager.updatemanager.CustomersUpdateFlow;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateCall;
@@ -61,11 +75,16 @@ import com.varanegar.vaslibrary.webapi.customer.SyncZarGetNewCustomerViewModel;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
+import java.util.UUID;
 
 import okhttp3.Request;
 import timber.log.Timber;
@@ -127,6 +146,7 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
             @NonNull LayoutInflater inflater,
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
+        final CustomerApi customerApi = new CustomerApi(getContext());
         final View view = inflater.inflate(
                 R.layout.fragment_new_customer_zar, container, false);
 
@@ -138,13 +158,18 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
                         .show(getChildFragmentManager(), "ConnectionSettingDialog");
                 return;
             }
-            if (file !=null) {
-                createSyncViewModel();
-            }else{
+            if (file != null) {
+               // createSyncViewModel();
+
+               UUID localId = UUID.fromString("AFF430B9-B703-4DF7-827B-00299BC4A8ED");
+                SyncGuidViewModel result=new SyncGuidViewModel();
+                result.UniqueId=localId;
+                sendNationalImage("sadas",result);
+            } else {
                 CuteMessageDialog dialog = new CuteMessageDialog(getContext());
                 dialog.setIcon(Icon.Error);
                 dialog.setTitle(R.string.error);
-                dialog.setMessage(getString(R.string.taking_picture_of) + "کارت ملی " +" "+ getString(R.string.is_mandatory));
+                dialog.setMessage(getString(R.string.taking_picture_of) + "کارت ملی " + " " + getString(R.string.is_mandatory));
                 dialog.setPositiveButton(R.string.ok, null);
                 dialog.show();
                 return;
@@ -266,7 +291,7 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
         telPairedItem = view.findViewById(R.id.tel_paired_item);
         mobilePairedItem = view.findViewById(R.id.mobile_paired_item);
         economicCodePairedItem = view.findViewById(R.id.economic_code_paired_item);
-        nationalCardPic=view.findViewById(R.id.national_card_pic);
+        nationalCardPic = view.findViewById(R.id.national_card_pic);
         nationalCardPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -382,13 +407,14 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
                                         break;
                                     }
                                 }
-                                int messageRes;
+                                String messageRes;
                                 if (customerAddedToDb)
-                                    messageRes = R.string.registering_customer_completed;
+                                    messageRes = String.valueOf(R.string.registering_customer_completed);
                                 else
-                                    messageRes = R.string.registering_customer_completed_but_not_inserted_in_db;
+                                    messageRes = String.valueOf(R.string.registering_customer_completed_but_not_inserted_in_db);
 
-                                sendNationalImage(messageRes, customerApi, result);
+                                sendNationalImage(messageRes, result);
+
 
                             }
 
@@ -438,12 +464,53 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
                 });
     }
 
-    private void sendNationalImage(int messageRes, CustomerApi customerApi, SyncGuidViewModel result) {
+    private void sendNationalImage(String messageRes, SyncGuidViewModel result) {
+        if (getContext() == null) return;
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage(getString(R.string.registering_new_customer));
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        new PictureCustomerViewManager(getContext())
+                .uploadNationalCard(result.UniqueId, file, new UpdateCall() {
+                    @Override
+                    protected void onSuccess() {
+                        Timber.i("customer national card have been sent");
+                        final MainVaranegarActivity activity = getVaranegarActvity();
+                        if (activity != null && !activity.isFinishing()) {
+                            stopProgressDialog();
+                            registernewNationalCardImage(result.UniqueId,messageRes);
+
+                        }
+                    }
+
+                    @Override
+                    protected void onFailure(String error) {
+                        Timber.e("Uploading national card pictures failed");
+                        Timber.e(error);
+
+                        MainVaranegarActivity activity = getVaranegarActvity();
+                        if (activity != null && !activity.isFinishing()) {
+                            stopProgressDialog();
+                            CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(activity);
+                            cuteMessageDialog.setIcon(Icon.Error);
+                            cuteMessageDialog.setTitle(R.string.error);
+                            cuteMessageDialog.setMessage(error);
+                            cuteMessageDialog.setNeutralButton(R.string.ok, null);
+                            cuteMessageDialog.show();
+                        }
+                    }
+                });
+
+    }
+
+    private void registernewNationalCardImage(UUID CustomeId , String messageRes){
+        final CustomerApi customerApi = new CustomerApi(getContext());
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage(getString(R.string.registering_new_customer));
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         customerApi.runWebRequest(
-                customerApi.registerNewZarCustomerNationalCardImage(
-                        result.UniqueId,
-                        file
-                ), new WebCallBack<Boolean>() {
+                customerApi.registernewNationalCardImage(CustomeId), new WebCallBack<Boolean>() {
                     @Override
                     protected void onFinish() {
 
@@ -451,28 +518,27 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
 
                     @Override
                     protected void onSuccess(Boolean result, Request request) {
+                        final MainVaranegarActivity activity = getVaranegarActvity();
                         if (result){
-                            final MainVaranegarActivity activity = getVaranegarActvity();
+                        if (activity != null && !activity.isFinishing()) {
+                            stopProgressDialog();
+                            CuteMessageDialog dialog = new CuteMessageDialog(activity);
+                            dialog.setMessage(messageRes);
+                            dialog.setTitle(R.string.done);
+                            dialog.setIcon(Icon.Success);
+                            dialog.setPositiveButton(R.string.ok,
+                                    v -> activity.popFragment());
+                            dialog.show();
+                        }
+                        }else {
                             if (activity != null && !activity.isFinishing()) {
                                 stopProgressDialog();
                                 CuteMessageDialog dialog = new CuteMessageDialog(activity);
-                                dialog.setMessage(messageRes);
-                                dialog.setTitle(R.string.done);
-                                dialog.setIcon(Icon.Success);
-                                dialog.setPositiveButton(R.string.ok,
-                                        v -> activity.popFragment());
+                                dialog.setMessage("خطا در ذخیره سازی ");
+                                dialog.setTitle(R.string.error);
+                                dialog.setIcon(Icon.Error);
+                                dialog.setPositiveButton(R.string.ok, null);
                                 dialog.show();
-                            }
-                        }else {
-                            MainVaranegarActivity activity = getVaranegarActvity();
-                            if (activity != null && !activity.isFinishing()) {
-                                stopProgressDialog();
-                                CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(activity);
-                                cuteMessageDialog.setIcon(Icon.Error);
-                                cuteMessageDialog.setTitle(R.string.error);
-                                cuteMessageDialog.setMessage("خطا در ارسال تصویر کارت ملی ");
-                                cuteMessageDialog.setNeutralButton(R.string.ok, null);
-                                cuteMessageDialog.show();
                             }
                         }
 
@@ -505,9 +571,7 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
                             cuteMessageDialog.show();
                         }
                     }
-                }
-
-        );
+                });
     }
 
     private void createSyncViewModel() {
@@ -563,7 +627,7 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
 
         TourManager tourManager = new TourManager(getContext());
         TourModel tm = tourManager.loadTour();
-        if(tm!=null)
+        if (tm != null)
             syncGetNewCustomerViewModel.PathId = tm.DayVisitPathId;
 
         PaymentTypeOrderModel paymentTypeOrderModel =
@@ -602,48 +666,55 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
     //region capture image
     File file = null;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    String currentPhotoPath;
 
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    Uri photoURI;
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        try {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        } catch (ActivityNotFoundException e) {
-            Timber.e(e);
+        if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null) {
+            try {
+                file = createImageFile();
+            } catch (IOException ex) {
+
+            }
+
+            if (file != null) {
+               photoURI = FileProvider.getUriForFile(getContext(),
+                        getContext().getPackageName()+ ".provider",
+                        file);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
         }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            file = bitmapToFile(imageBitmap,"customercode.jpg");
-            nationalCardPic.setImageBitmap(imageBitmap);
+            Toast.makeText(getContext(), "Image saved", Toast.LENGTH_SHORT).show();
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), photoURI);
+                nationalCardPic.setImageBitmap(bitmap);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public static File bitmapToFile(Bitmap bitmap, String fileNameToSave) {
-        File file = null;
-        try {
-            file = new File(Environment.getExternalStorageDirectory() +
-                    File.separator +
-                    fileNameToSave);
-            boolean fileExist =  file.createNewFile();
-            if(fileExist)
-                return file;
-
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 0 , bos);
-            byte[] bitmapdata = bos.toByteArray();
-            FileOutputStream fos = new FileOutputStream(file);
-            fos.write(bitmapdata);
-            fos.flush();
-            fos.close();
-            return file;
-        }catch (Exception e){
-            e.printStackTrace();
-            return file;
-        }
-    }
-    //endregion
 }
