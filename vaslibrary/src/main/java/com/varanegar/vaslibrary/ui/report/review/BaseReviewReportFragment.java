@@ -143,7 +143,9 @@ public abstract class BaseReviewReportFragment<T extends ReviewReportViewModel> 
                             return;
                         }
                         startDate = calendar.getTime();
-                        startDatePairedItems.setValue(DateHelper.toString(startDate, DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext())));
+                        startDatePairedItems.setValue(DateHelper.toString
+                                        (startDate, DateFormat.Date,
+                                                VasHelperMethods.getSysConfigLocale(getContext())));
                     }
                 });
             }

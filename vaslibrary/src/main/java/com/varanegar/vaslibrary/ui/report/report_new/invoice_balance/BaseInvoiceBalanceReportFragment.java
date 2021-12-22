@@ -1,4 +1,4 @@
-package com.varanegar.vaslibrary.ui.report.report_new;
+package com.varanegar.vaslibrary.ui.report.report_new.invoice_balance;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -24,7 +24,7 @@ import com.varanegar.framework.util.report.SimpleReportAdapter;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
 import com.varanegar.vaslibrary.manager.UserManager;
-import com.varanegar.vaslibrary.ui.report.report_new.model.InvoiveBalanceReportViewModel;
+import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.model.InvoiveBalanceReportViewModel;
 import com.varanegar.vaslibrary.ui.report.report_new.webApi.ReportApi;
 import com.varanegar.vaslibrary.ui.report.review.BaseReviewReportFragment;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;

@@ -1,10 +1,9 @@
-package com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary;
+package com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary.model;
 
 import com.varanegar.framework.database.model.ModelProjection;
-import com.varanegar.vaslibrary.ui.report.report_new.model.ProductInvoiveBalanceReportView;
 
-public class ProductCustomerGroupSalesSummaryView extends
-        ModelProjection<ProductCustomerGroupSalesSummaryViewModel> {
+public class ProductCustomerGroupSalesSummaryView extends ModelProjection<ProductCustomerGroupSalesSummaryViewModel> {
+
     protected ProductCustomerGroupSalesSummaryView(String name) {
         super(name);
     }
@@ -21,12 +20,12 @@ public class ProductCustomerGroupSalesSummaryView extends
             ProductCustomerGroupSalesSummaryView
             ("ProductCustomerGroupSalesSummaryView.CustomerActivityTXT");
 
-    public static ProductCustomerGroupSalesSummaryView NETWeight = new
+    public static ProductCustomerGroupSalesSummaryView NetWeight = new
             ProductCustomerGroupSalesSummaryView
-            ("ProductCustomerGroupSalesSummaryView.NETWeight");
+            ("ProductCustomerGroupSalesSummaryView.NetWeight");
 
-    public static ProductCustomerGroupSalesSummaryView NETCount_CA = new
+    public static ProductCustomerGroupSalesSummaryView NetCount_CA = new
             ProductCustomerGroupSalesSummaryView
-            ("ProductCustomerGroupSalesSummaryView.NETCount_CA");
+            ("ProductCustomerGroupSalesSummaryView.NetCount_CA");
 
 }

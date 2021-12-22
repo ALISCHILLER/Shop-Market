@@ -159,12 +159,7 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
                 return;
             }
             if (file != null) {
-               // createSyncViewModel();
-
-               UUID localId = UUID.fromString("AFF430B9-B703-4DF7-827B-00299BC4A8ED");
-                SyncGuidViewModel result=new SyncGuidViewModel();
-                result.UniqueId=localId;
-                sendNationalImage("sadas",result);
+                createSyncViewModel();
             } else {
                 CuteMessageDialog dialog = new CuteMessageDialog(getContext());
                 dialog.setIcon(Icon.Error);

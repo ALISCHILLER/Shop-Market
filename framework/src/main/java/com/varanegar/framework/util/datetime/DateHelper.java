@@ -72,6 +72,7 @@ public class DateHelper {
             language = locale.getLanguage();
 
         if (language.equals("fa")) {
+
             DatePickerDialog datePickerDialog = new DatePickerDialog();
             datePickerDialog.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
                 @Override

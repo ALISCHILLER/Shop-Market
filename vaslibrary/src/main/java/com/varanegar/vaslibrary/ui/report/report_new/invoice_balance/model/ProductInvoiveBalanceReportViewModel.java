@@ -1,4 +1,4 @@
-package com.varanegar.vaslibrary.ui.report.report_new.model;
+package com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.model;
 
 
 import com.varanegar.java.util.Currency;

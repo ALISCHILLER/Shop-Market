@@ -1,11 +1,11 @@
-package com.varanegar.vaslibrary.ui.report.report_new;
+package com.varanegar.vaslibrary.ui.report.report_new.invoice_balance;
 
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarFragment;
 import com.varanegar.framework.util.report.ReportColumns;
 import com.varanegar.framework.util.report.SimpleReportAdapter;
-import com.varanegar.vaslibrary.ui.report.report_new.model.ProductInvoiveBalanceReportView;
-import com.varanegar.vaslibrary.ui.report.report_new.model.ProductInvoiveBalanceReportViewModel;
+import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.model.ProductInvoiveBalanceReportView;
+import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.model.ProductInvoiveBalanceReportViewModel;
 
 public class ProductInvoiceReportAdapter extends SimpleReportAdapter<ProductInvoiveBalanceReportViewModel> {
 
@@ -18,7 +18,7 @@ public class ProductInvoiceReportAdapter extends SimpleReportAdapter<ProductInvo
     }
     @Override
     public void bind(ReportColumns columns,ProductInvoiveBalanceReportViewModel entity){
-        columns.add(bind(entity, ProductInvoiveBalanceReportView.CustomerBackOfficeCode,"کد مشتری").setWeight(2));
+        columns.add(bind(entity, ProductInvoiveBalanceReportView.CustomerBackOfficeCode,"کد مشتری").setWeight(2.5f));
         columns.add(bind(entity, ProductInvoiveBalanceReportView.CustomerName,"نام مشتری").setWeight(1).setFrizzed());
         columns.add(bind(entity,ProductInvoiveBalanceReportView.InvoiceNumber,"شماره فاکتور").setFrizzed());
         columns.add(bind(entity,ProductInvoiveBalanceReportView.InvoiceShmsiDate,"تاریخ فاکتور").setFrizzed());

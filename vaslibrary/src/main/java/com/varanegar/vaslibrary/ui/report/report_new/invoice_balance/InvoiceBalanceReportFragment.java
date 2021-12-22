@@ -1,7 +1,7 @@
-package com.varanegar.vaslibrary.ui.report.report_new;
+package com.varanegar.vaslibrary.ui.report.report_new.invoice_balance;
 
 import com.varanegar.framework.util.report.SimpleReportAdapter;
-import com.varanegar.vaslibrary.ui.report.report_new.model.ProductInvoiveBalanceReportViewModel;
+import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.model.ProductInvoiveBalanceReportViewModel;
 import com.varanegar.vaslibrary.ui.report.report_new.webApi.ReportApi;
 
 import java.util.Collections;
@@ -9,10 +9,11 @@ import java.util.List;
 
 import retrofit2.Call;
 
-public class InvoiceBalanceReportFragment extends BaseInvoiceBalanceReportFragment<ProductInvoiveBalanceReportViewModel>{
+public class InvoiceBalanceReportFragment extends BaseInvoiceBalanceReportFragment<ProductInvoiveBalanceReportViewModel> {
     @Override
     protected Call<List<ProductInvoiveBalanceReportViewModel>> reportApi() {
-        return new ReportApi(getContext()).product(Collections.singletonList(getDealerId().toString()), getStartDateString(), getEndDateString());
+        return new ReportApi(getContext()).product(Collections.singletonList
+                (getDealerId().toString()), getStartDateString(), getEndDateString());
     }
 
     @Override

@@ -1,14 +1,14 @@
-package com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary;
+package com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary.model;
 
-import com.lidroid.xutils.db.annotation.Column;
-import com.lidroid.xutils.db.annotation.Table;
-import com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary.model.CustomerGroupSalesSummaryViewModel;
 
+import com.varanegar.processor.annotations.Column;
+import com.varanegar.processor.annotations.Table;
 import java.math.BigDecimal;
 
 @Table
 public class ProductCustomerGroupSalesSummaryViewModel extends CustomerGroupSalesSummaryViewModel {
-
+    @Column
+    public String CustomerGroup;
     @Column
     public String CustomerGroupTXT;
     @Column
@@ -16,8 +16,8 @@ public class ProductCustomerGroupSalesSummaryViewModel extends CustomerGroupSale
     @Column
     public String CustomerActivityTXT ;
     @Column
-    public BigDecimal NETWeight ;
+    public BigDecimal NetWeight;
     @Column
-    public BigDecimal NETCount_CA;
+    public BigDecimal NetCount_CA;
 
 }

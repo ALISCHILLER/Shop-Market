@@ -36,6 +36,7 @@ import com.varanegar.vaslibrary.ui.report.CustomerOpenInvoicesReportFragment;
 import com.varanegar.vaslibrary.ui.report.CustomerStatuseSummaryReportFragment;
 import com.varanegar.vaslibrary.ui.report.OldInvoiceDetailReportFragment;
 import com.varanegar.vaslibrary.ui.report.OldInvoicesReportFragment;
+import com.varanegar.vaslibrary.ui.report.report_new.customer_purchase_history_report.CustomerPurchaseHistoryReportFragment;
 import com.varanegar.vaslibrary.ui.report.target.TargetHeaderReport;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
 
@@ -44,6 +45,8 @@ import java.util.UUID;
 
 /**
  * Created by s.foroughi on 12/04/2017.
+ *
+ * لیست منو سه خطی صفحه مشتری
  */
 
 public class CustomerReportsDrawerAdapter extends DrawerAdapter {
@@ -105,7 +108,9 @@ public class CustomerReportsDrawerAdapter extends DrawerAdapter {
             add(new DrawerItem(activity, R.string.buy_summury, R.drawable.ic_purchase_summary_24dp).setClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    OldInvoiceDetailReportFragment fragment = new OldInvoiceDetailReportFragment();
+
+                    CustomerPurchaseHistoryReportFragment fragment = new CustomerPurchaseHistoryReportFragment();
+                  //  OldInvoiceDetailReportFragment fragment = new OldInvoiceDetailReportFragment();
                     fragment.addArgument("ac2208bc-a990-4c28-bbfc-6f143a6aa9c2", String.valueOf(customerId));
                     gotoReportFragment(fragment);
                 }

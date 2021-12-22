@@ -37,9 +37,9 @@ import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
 import com.varanegar.vaslibrary.ui.dialog.TrackingLicenseFragment;
 import com.varanegar.vaslibrary.ui.fragment.CustomersFragment;
-import com.varanegar.vaslibrary.ui.report.ProductReportFragment;
-import com.varanegar.vaslibrary.ui.report.Rep3013;
-import com.varanegar.vaslibrary.ui.report.ReturnReportFragment;
+import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.InvoiceBalanceReportFragment;
+import com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary.CustomerGroupSalesSummaryFragment;
+import com.varanegar.vaslibrary.ui.report.report_new.products_purchase_history_report.ProductsPurchaseHistoryReportFragment;
 import com.varanegar.vaslibrary.ui.report.review.OrderReviewReportFragment;
 import com.varanegar.vaslibrary.ui.report.review.ProductReviewReportFragment;
 import com.varanegar.vaslibrary.ui.report.review.SellReturnReviewReportFragment;
@@ -280,38 +280,72 @@ public class MainDrawerAdapter extends DrawerAdapter {
         }
 
         reports = new DrawerSectionItem(activity, this, R.string.reports, R.drawable.ic_report_24dp);
-        if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
-            reports.addItem(new DrawerItem(activity, R.string.rep3013).setClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Rep3013 fragment = new Rep3013();
-                    gotoReportFragment(fragment, false);
-                }
-            }));
-            reports.addItem(new DrawerItem(activity, R.string.product_sales_report).setClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ProductReportFragment fragment = new ProductReportFragment();
-                    gotoReportFragment(fragment, false);
-                }
-            }));
 
-            reports.addItem(new DrawerItem(activity, R.string.return_report_report).setClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ReturnReportFragment fragment = new ReturnReportFragment();
-                    gotoReportFragment(fragment, false);
-                }
-            }));
-
-//            reports.addItem(new DrawerItem(activity, R.string.target_report).setClickListener(new View.OnClickListener() {
+        /**
+         * گزارشات قبلی
+         */
+          //        if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
+//            reports.addItem(new DrawerItem(activity, R.string.rep3013).setClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View view) {
-//                    TargetHeaderReport fragment = new TargetHeaderReport();
-//                    fragment.setCostumer("");
+//                    Rep3013 fragment = new Rep3013();
 //                    gotoReportFragment(fragment, false);
 //                }
 //            }));
+//            reports.addItem(new DrawerItem(activity, R.string.product_sales_report).setClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    ProductReportFragment fragment = new ProductReportFragment();
+//                    gotoReportFragment(fragment, false);
+//                }
+//            }));
+//
+//            reports.addItem(new DrawerItem(activity, R.string.return_report_report).setClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    ReturnReportFragment fragment = new ReturnReportFragment();
+//                    gotoReportFragment(fragment, false);
+//                }
+//            }));
+//
+////            reports.addItem(new DrawerItem(activity, R.string.target_report).setClickListener(new View.OnClickListener() {
+////                @Override
+////                public void onClick(View view) {
+////                    TargetHeaderReport fragment = new TargetHeaderReport();
+////                    fragment.setCostumer("");
+////                    gotoReportFragment(fragment, false);
+////                }
+////            }));
+//        }
+
+        /**
+         * گزارشات جدید
+         */
+
+        if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+            reports.addItem(new DrawerItem(activity, "گزارش مانده فاکتور").setClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    InvoiceBalanceReportFragment fragment = new InvoiceBalanceReportFragment();
+                    gotoReportFragment(fragment, true);
+                }
+            }));
+
+            reports.addItem(new DrawerItem(activity, "گزارش خلاصه فروش کالا").setClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ProductsPurchaseHistoryReportFragment fragment = new ProductsPurchaseHistoryReportFragment();
+                    gotoReportFragment(fragment, true);
+                }
+            }));
+
+            reports.addItem(new DrawerItem(activity, "گزارش مانده فاکتور").setClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    InvoiceBalanceReportFragment fragment = new InvoiceBalanceReportFragment();
+                    gotoReportFragment(fragment, true);
+                }
+            }));
         }
         if (!VaranegarApplication.is(VaranegarApplication.AppId.Contractor))
             add(reports);

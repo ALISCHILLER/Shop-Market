@@ -17,21 +17,24 @@ public class PreSalesDrawerAdapter extends MainDrawerAdapter {
     public PreSalesDrawerAdapter(final MainVaranegarActivity activity) {
         super(activity);
 
-        add(1, new PreSalesTourReportDrawerItem(activity));
-        reports.addItem(new DrawerItem(activity, R.string.inventory_qty).setClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PresalesWarehouseFragment fragment = new PresalesWarehouseFragment();
-                gotoReportFragment(fragment,false);
-            }
-        }));
-        reports.addItem(new DrawerItem(activity, com.varanegar.vaslibrary.R.string.order_report).setClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SalesOrRequestReportFragment fragment = new SalesOrRequestReportFragment();
-                gotoReportFragment(fragment,false);
-            }
-        }));
+        /**
+         * گزارشات قبلی
+         */
+        //        add(1, new PreSalesTourReportDrawerItem(activity));
+//        reports.addItem(new DrawerItem(activity, R.string.inventory_qty).setClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                PresalesWarehouseFragment fragment = new PresalesWarehouseFragment();
+//                gotoReportFragment(fragment,false);
+//            }
+//        }));
+//        reports.addItem(new DrawerItem(activity, com.varanegar.vaslibrary.R.string.order_report).setClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                SalesOrRequestReportFragment fragment = new SalesOrRequestReportFragment();
+//                gotoReportFragment(fragment,false);
+//            }
+//        }));
 
     }
 }
