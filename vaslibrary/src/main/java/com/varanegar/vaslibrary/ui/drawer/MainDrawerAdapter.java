@@ -339,10 +339,10 @@ public class MainDrawerAdapter extends DrawerAdapter {
                 }
             }));
 
-            reports.addItem(new DrawerItem(activity, "گزارش مانده فاکتور").setClickListener(new View.OnClickListener() {
+            reports.addItem(new DrawerItem(activity, "گزارش خلاصه فروش گروه مشتری").setClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    InvoiceBalanceReportFragment fragment = new InvoiceBalanceReportFragment();
+                    CustomerGroupSalesSummaryFragment fragment = new CustomerGroupSalesSummaryFragment();
                     gotoReportFragment(fragment, true);
                 }
             }));
