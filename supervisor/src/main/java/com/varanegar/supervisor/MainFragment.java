@@ -39,9 +39,9 @@ public class MainFragment extends VaranegarFragment {
         tl.getTabAt(0).setIcon(R.drawable.ic_settings_applications_cyan_48dp);
         tl.getTabAt(1).setIcon(R.drawable.ic_customers_cyan_48dp);
         tl.getTabAt(2).setIcon(R.drawable.ic_status_cyan_48dp);
-        tl.getTabAt(3).setIcon(R.drawable.ic_report_cyan_48dp);
-        tl.getTabAt(4).setIcon(R.drawable.ic_tracking_cyan_48dp);
-        tl.getTabAt(5).setIcon(R.drawable.ic_view_list_cyan_48dp);
+        tl.getTabAt(4).setIcon(R.drawable.ic_report_cyan_48dp);
+        tl.getTabAt(3).setIcon(R.drawable.ic_tracking_cyan_48dp);
+//        tl.getTabAt(5).setIcon(R.drawable.ic_view_list_cyan_48dp);
         return view;
     }
 
@@ -82,19 +82,20 @@ public class MainFragment extends VaranegarFragment {
                 return customersFragment;
             else if (position == 2)
                 return statusFragment;
-            else if (position == 3)
-                return reportsFragment;
             else if (position == 4)
+                return reportsFragment;
+            else if (position == 3)
                 return trackingFragment;
-            else if (position == 5)
-                return menuFragment;
-            else return menuFragment;
+//            else if (position == 5)
+//                return menuFragment;
+//            else return menuFragment;
+            else  return statusFragment;
 
         }
 
         @Override
         public int getCount() {
-            return 6;
+            return 5;
         }
     }
 
