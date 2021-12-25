@@ -21,9 +21,11 @@ import com.varanegar.framework.util.report.ReportView;
 import com.varanegar.framework.util.report.SimpleReportAdapter;
 import com.varanegar.supervisor.IMainPageFragment;
 import com.varanegar.supervisor.R;
+import com.varanegar.supervisor.VisitorFilter;
 import com.varanegar.supervisor.webapi.SupervisorApi;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
 import com.varanegar.vaslibrary.ui.list.ProductReturnWithoutRefListAdapter;
+import com.varanegar.vaslibrary.ui.report.report_new.webApi.ReportApi;
 import com.varanegar.vaslibrary.ui.report.review.adapter.OrderReviewReportAdapter;
 import com.varanegar.vaslibrary.ui.report.review.adapter.ProductReviewReportAdapter;
 import com.varanegar.vaslibrary.ui.report.review.adapter.SellReturnReviewReportAdapter;
@@ -31,6 +33,7 @@ import com.varanegar.vaslibrary.ui.report.review.adapter.SellReviewReportAdapter
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.reviewreport.ReviewReportViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Request;
@@ -106,16 +109,18 @@ public class ReportsFragment extends IMainPageFragment {
             ReportConfig reportConfig = new ReportConfig(context);
             final String fromDate = DateHelper.toString(config.getFromDate(), DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext()));
             final String toDate = DateHelper.toString(config.getToDate(), DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext()));
+            List<String> dealersId = new ArrayList<>();
+            dealersId = VisitorFilter.getList(getContext());
             Call reportApi = null;
-            final SupervisorApi supervisorApi = new SupervisorApi(getContext());
+            final ReportApi supervisorApi = new ReportApi(getContext());
             if (tabPosition == 0)
-                reportApi = supervisorApi.order(reportConfig.getSelectedVisitorId(), fromDate, toDate);
+                reportApi = supervisorApi.product(dealersId, fromDate, toDate);
             else if (tabPosition == 1)
-                reportApi = supervisorApi.sell(reportConfig.getSelectedVisitorId(), fromDate, toDate);
+                reportApi = supervisorApi.CustomerGroupSales(dealersId, fromDate, toDate);
             else if (tabPosition == 2)
-                reportApi = supervisorApi.product(reportConfig.getSelectedVisitorId(), fromDate, toDate);
-            else
-                reportApi = supervisorApi.sellReturn(reportConfig.getSelectedVisitorId(), fromDate, toDate);
+                reportApi = supervisorApi.ProductsPurchaseHistoryReport(dealersId, fromDate, toDate);
+//            else
+//                reportApi = supervisorApi.sellReturn(reportConfig.getSelectedVisitorId(), fromDate, toDate);
 
 
             startProgress(R.string.please_wait, R.string.connecting_to_the_server);

@@ -31,22 +31,18 @@
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/sell_request" />
+                    android:text="گزارش مانده فاکتور" />
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/sell_invoice" />
+                    android:text="گزارش خلاصه فروش گروه مشتری" />
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/product_sale" />
+                    android:text="گزارش خلاصه فروش کالا" />
 
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/return_report" />
             </com.google.android.material.tabs.TabLayout>
         </LinearLayout>
 

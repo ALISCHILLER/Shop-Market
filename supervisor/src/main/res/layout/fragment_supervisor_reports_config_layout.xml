@@ -18,7 +18,17 @@
         android:id="@+id/users_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="300dp"
+        android:visibility="gone"
         android:layout_margin="@dimen/padding_xsmall" />
+
+    <com.varanegar.supervisor.utill.multispinnerfilter.MultiSpinnerSearch
+        android:id="@+id/multipleItemSelectionSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:textColor="@color/colorAccent"
+        app:highlightColor="@color/colorAccent"
+        app:hintText="همه ویزیتورها" />
 
     <LinearLayout
         android:layout_width="match_parent"

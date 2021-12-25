@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +20,14 @@ import com.varanegar.framework.util.recycler.BaseRecyclerView;
 import com.varanegar.framework.util.recycler.selectionlistadapter.BaseSelectionRecyclerAdapter;
 import com.varanegar.framework.util.recycler.selectionlistadapter.SelectionRecyclerAdapter;
 import com.varanegar.supervisor.R;
+import com.varanegar.supervisor.VisitorFilter;
 import com.varanegar.supervisor.model.VisitorManager;
 import com.varanegar.supervisor.model.VisitorModel;
+import com.varanegar.supervisor.utill.multispinnerfilter.KeyPairBoolData;
+import com.varanegar.supervisor.utill.multispinnerfilter.MultiSpinnerListener;
+import com.varanegar.supervisor.utill.multispinnerfilter.MultiSpinnerSearch;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -89,6 +96,65 @@ public class ReportConfigDialog extends SlidingDialog {
 //                }
 //            }
 //        });
+
+
+
+            /**
+             *لیست ویزیتورها
+             */
+            MultiSpinnerSearch multiSelectSpinnerWithSearch = view.findViewById(R.id.multipleItemSelectionSpinner);
+
+
+
+            // Pass true If you want searchView above the list. Otherwise false. default = true.
+            multiSelectSpinnerWithSearch.setSearchEnabled(true);
+            multiSelectSpinnerWithSearch.setHintText("لیست ویزیتورها");
+            //A text that will display in clear text button
+            multiSelectSpinnerWithSearch.setClearText("پاک کردن لیست");
+            // A text that will display in search hint.
+            multiSelectSpinnerWithSearch.setSearchHint("جستجو");
+            // Set text that will display when search result not found...
+            multiSelectSpinnerWithSearch.setEmptyTitle("Not Data Found!");
+            // If you will set the limit, this button will not display automatically.
+            multiSelectSpinnerWithSearch.setShowSelectAllButton(true);
+            List<VisitorModel> visitorModelss = new VisitorManager(getContext()).getAll();
+            final List<KeyPairBoolData> listArray1 = new ArrayList<>();
+            List<String> list =new ArrayList<>();
+            for (int i = 0; i < visitorModelss.size(); i++) {
+                list.clear();
+                KeyPairBoolData h = new KeyPairBoolData();
+                h.setId(visitorModelss.get(i).UniqueId);
+                h.setName(visitorModelss.get(i).Name);
+                h.setSelected(false);
+                listArray1.add(h);
+            }
+            /**
+             * گرفتن ویزیتورهای انتخابی برای نمایش
+             */
+            // Removed second parameter, position. Its not required now..
+            // If you want to pass preselected items, you can do it while making listArray,
+            // Pass true in setSelected of any item that you want to preselect
+            multiSelectSpinnerWithSearch.setItems(listArray1, new MultiSpinnerListener() {
+                @Override
+                public void onItemsSelected(List<KeyPairBoolData> selectedItems) {
+                    //The followings are selected items.
+                    for (int i = 0; i < selectedItems.size(); i++) {
+
+                        list.add(String.valueOf(selectedItems.get(i).getId()));
+                    }
+                    VisitorFilter.setSaveVisitor(getContext(),list);
+                }
+
+                @Override
+                public void onClear() {
+
+                }
+            });
+
+
+
+
+
 
             final String visitorId = config.getSelectedVisitorId();
             if (visitorId != null) {
