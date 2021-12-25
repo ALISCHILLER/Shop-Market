@@ -25,6 +25,9 @@ import com.varanegar.supervisor.VisitorFilter;
 import com.varanegar.supervisor.webapi.SupervisorApi;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
 import com.varanegar.vaslibrary.ui.list.ProductReturnWithoutRefListAdapter;
+import com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary.CustomerGroupSalesSummaryAdapter;
+import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.ProductInvoiceReportAdapter;
+import com.varanegar.vaslibrary.ui.report.report_new.products_purchase_history_report.ProductsPurchaseHistoryReportAdapter;
 import com.varanegar.vaslibrary.ui.report.report_new.webApi.ReportApi;
 import com.varanegar.vaslibrary.ui.report.review.adapter.OrderReviewReportAdapter;
 import com.varanegar.vaslibrary.ui.report.review.adapter.ProductReviewReportAdapter;
@@ -146,11 +149,16 @@ public class ReportsFragment extends IMainPageFragment {
 
                             SimpleReportAdapter adapter = null;
                             if (tabPosition == 0) {
-                                adapter = new OrderReviewReportAdapter(getVaranegarActvity());
+                               // adapter = new OrderReviewReportAdapter(getVaranegarActvity());
+                                adapter =new ProductInvoiceReportAdapter(getVaranegarActvity());
                             } else if (tabPosition == 1) {
-                                adapter = new SellReviewReportAdapter(getVaranegarActvity());
+                              //  adapter = new SellReviewReportAdapter(getVaranegarActvity());
+                                adapter = new CustomerGroupSalesSummaryAdapter(getVaranegarActvity());
+
                             } else if (tabPosition == 2) {
-                                adapter = new ProductReviewReportAdapter(getVaranegarActvity());
+                               // adapter = new ProductReviewReportAdapter(getVaranegarActvity());
+                                adapter = new ProductsPurchaseHistoryReportAdapter(getVaranegarActvity());
+
                             } else if (tabPosition == 3) {
                                 adapter = new SellReturnReviewReportAdapter(getVaranegarActvity());
                             }

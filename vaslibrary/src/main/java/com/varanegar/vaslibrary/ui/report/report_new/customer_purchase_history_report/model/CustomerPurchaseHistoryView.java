@@ -8,6 +8,11 @@ public class CustomerPurchaseHistoryView extends ModelProjection<PCustomerPurcha
         super(name);
     }
 
+
+    public static CustomerPurchaseHistoryView CustomerBackOfficeCode = new
+            CustomerPurchaseHistoryView
+            ("CustomerPurchaseHistoryView.CustomerBackOfficeCode");
+
     public static CustomerPurchaseHistoryView CustomerName = new
             CustomerPurchaseHistoryView
             ("CustomerPurchaseHistoryView.CustomerName");

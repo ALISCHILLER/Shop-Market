@@ -40,7 +40,7 @@ public interface ICustomerApi {
             @Body SyncGetNewCustomerViewModel syncGetNewCustomerViewModel);
 
 
-    @Multipart
+
     @POST("api/v2/ngt/customer/registernewZarCustomer")
     Call<SyncGuidViewModel> registerNewZarCustomer(
             @Body SyncZarGetNewCustomerViewModel syncGetNewCustomerViewModel

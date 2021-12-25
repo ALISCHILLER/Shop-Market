@@ -20,14 +20,15 @@ public class CustomerPurchaseHistoryReportAdapter extends SimpleReportAdapter<PC
 
     @Override
     public void bind(ReportColumns columns, PCustomerPurchaseHistoryViewModel entity){
+        columns.add(bind(entity, CustomerPurchaseHistoryView.CustomerBackOfficeCode,"کد مشتری").setWeight(2).setFrizzed());
         columns.add(bind(entity, CustomerPurchaseHistoryView.CustomerName,"نام مشتری").setWeight(2).setFrizzed());
-        columns.add(bind(entity, CustomerPurchaseHistoryView.InvoiceShamsiDate,"تاریخ").setWeight(2).setFrizzed());
-        columns.add(bind(entity, CustomerPurchaseHistoryView.InvoiceNumber,"شماره فاکتور").setWeight(2).setFrizzed());
-        columns.add(bind(entity, CustomerPurchaseHistoryView.ProductBackOfficeCode,"کد کالا").setWeight(2));
+        columns.add(bind(entity, CustomerPurchaseHistoryView.InvoiceShamsiDate,"تاریخ").setWeight(1));
+        columns.add(bind(entity, CustomerPurchaseHistoryView.InvoiceNumber,"شماره فاکتور").setWeight(1));
+        columns.add(bind(entity, CustomerPurchaseHistoryView.ProductBackOfficeCode,"کد کالا").setWeight(1));
         columns.add(bind(entity, CustomerPurchaseHistoryView.ProductName,"نام کالا").setWeight(2.5f));
         columns.add(bind(entity, CustomerPurchaseHistoryView.Count_CA,"تعداد کارتن").setWeight(1));
         columns.add(bind(entity, CustomerPurchaseHistoryView.Count_EA,"تعداد بسته").setWeight(1));
-        columns.add(bind(entity, CustomerPurchaseHistoryView.Price,"فی ").setWeight(2));
-        columns.add(bind(entity, CustomerPurchaseHistoryView.Amount,"مبلغ خالص").setWeight(2));
+        columns.add(bind(entity, CustomerPurchaseHistoryView.Price,"فی ").sendToDetail().setWeight(1).calcTotal());
+        columns.add(bind(entity, CustomerPurchaseHistoryView.Amount,"مبلغ خالص").sendToDetail().setWeight(1.5f).calcTotal());
     }
 }
