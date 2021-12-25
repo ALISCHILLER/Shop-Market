@@ -8,6 +8,8 @@ import androidx.annotation.Nullable;
 
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dd.processbutton.iml.ActionProcessButton;
 import com.varanegar.framework.base.MainVaranegarActivity;
@@ -407,6 +410,7 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
                                     setEnabled();
                                     getButton.setProgress(-1);
                                     getButton.setText(R.string.ip_addresses_are_not_found);
+                                    Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
                                 }
                             });
 

@@ -625,9 +625,9 @@ public class CustomersContentFragment extends VaranegarFragment {
                }
            });
            actions.add(editCustomerAction);
-           actions.add(new SetCustomerLocationAction(getVaranegarActvity(), getActionsAdapter(), getSelectedId()));
-       }
 
+       }
+        actions.add(new SetCustomerLocationAction(getVaranegarActvity(), getActionsAdapter(), getSelectedId()));
         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist))
             actions.add(new InvoiceAction(getVaranegarActvity(), getActionsAdapter(), getSelectedId()));
         else

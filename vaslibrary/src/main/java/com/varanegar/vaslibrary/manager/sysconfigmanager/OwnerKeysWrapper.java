@@ -24,4 +24,7 @@ public class OwnerKeysWrapper {
     public String OwnerKey;
     public String DataOwnerKey;
     public String DataOwnerCenterKey;
+    public String subsystemtypeid;
+    public String Version;
+
 }

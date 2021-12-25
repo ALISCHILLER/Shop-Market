@@ -22,4 +22,7 @@ public class CustomerCallReturnLinesViewModel extends BaseCustomerCallReturnLine
     @Nullable
     @Column
     public UUID EditReasonId;
+    @Column
+    public String ReturnRequestBackOfficeNo;
+
 }

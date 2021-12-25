@@ -7,7 +7,7 @@ ext.versionVariant = null // for example : nestle
 ext.versionMajor = 3
 ext.versionMinor = 1
 ext.versionPatch = 1
-ext.versionBuild = 144
+ext.versionBuild = 146
 // VersionReplaceEndTag
 ext.versionType = null // stable(null), beta, snapshot, ...
 
@@ -116,7 +116,7 @@ private void commitRelease() {
             try {
                 runCommands("git", "add", ".")
                 runCommands("git", "commit", "-m", version)
-                runCommands("git", "tag", "-a", "Presale-" + generateVersionName(), "-m", "${version}")
+                runCommands("git", "tag", "-a", "Presale -" + generateVersionName(), "-m", "${version}")
                 runCommands("git", "push", "origin", "--tags")
                 runCommands("git", "push", "origin")
             } catch (Exception e) {

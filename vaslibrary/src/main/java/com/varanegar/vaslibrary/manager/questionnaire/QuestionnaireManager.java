@@ -49,7 +49,7 @@ public class QuestionnaireManager {
     public void sync(final UpdateCall call) {
         UpdateManager updateManager = new UpdateManager(context);
         final QuestionnaireApi questionnaireApi = new QuestionnaireApi(context);
-        questionnaireApi.runWebRequest(questionnaireApi.getQuestionnaireHeaders(null), new WebCallBack<List<QuestionnaireHeaderViewModel>>() {
+        questionnaireApi.runWebRequest(questionnaireApi.getQuestionnaireHeaders(null,VaranegarApplication.getInstance().getAppId()), new WebCallBack<List<QuestionnaireHeaderViewModel>>() {
             @Override
             protected void onFinish() {
 

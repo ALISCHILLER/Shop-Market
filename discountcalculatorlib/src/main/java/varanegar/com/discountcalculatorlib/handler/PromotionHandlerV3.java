@@ -200,6 +200,9 @@ public class PromotionHandlerV3 {
                     totallyError = "";
                     orderPrize = new ArrayList<>();
                     hasChoicePrize = false;
+                    /**
+                     * محاسبه تخفیف جوایز
+                     */
                     Call<DiscountOutputOnline> call = calcPromotionAPI.getDistOnlinePromotion(onlineData,
                             GlobalVariables.getCalcDiscount(),
                             GlobalVariables.getCalcSaleRestriction(),

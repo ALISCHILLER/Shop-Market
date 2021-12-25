@@ -1,16 +1,23 @@
 package com.varanegar.vaslibrary.webapi.sysconfig;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 
 import com.google.gson.GsonBuilder;
+import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.network.gson.VaranegarGsonBuilder;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.CenterSysConfigModel;
+import com.varanegar.vaslibrary.manager.sysconfigmanager.OwnerKeysWrapper;
+import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.webapi.BaseApi;
+import com.varanegar.vaslibrary.webapi.HeaderInterceptor;
 import com.varanegar.vaslibrary.webapi.TokenType;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -54,4 +61,26 @@ public class SysConfigApi extends BaseApi implements ISysConfigApi {
     public Call<List<SysConfigModel>> getSupervisorConfigs() {
         return getRetrofitBuilder(TokenType.UserToken).build().create(ISysConfigApi.class).getSupervisorConfigs();
     }
+
+    /**
+     * متد پیاده سازی header
+     */
+//    protected OkHttpClient getClient() {
+//        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+//
+//
+//        OwnerKeysWrapper ownerKeys =new OwnerKeysWrapper();
+//        ownerKeys.subsystemtypeid = String.valueOf(VaranegarApplication.getInstance().getAppId());
+//        try {
+//            ownerKeys.Version=String.valueOf(getContext().getApplicationContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0).versionName);
+//        } catch (PackageManager.NameNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        ownerKeys.DataOwnerCenterKey = "";
+//        ownerKeys.DataOwnerKey = "";
+//        ownerKeys.OwnerKey="";
+//
+//        builder.addInterceptor(new HeaderInterceptor(ownerKeys, null));
+//        return builder.build();
+//    }
 }

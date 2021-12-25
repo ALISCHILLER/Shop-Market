@@ -38,7 +38,10 @@ public class HeaderInterceptor implements Interceptor {
                         .header("DataOwnerKey", ownerKeys.DataOwnerKey)
                         .header("DataOwnerCenterKey", ownerKeys.DataOwnerCenterKey)
                         .header("Accept", " application/json")
-                        .header("http.keepAlive", "false");
+                        .header("http.keepAlive", "false")
+                        .header("SubSystemTypeId",ownerKeys.subsystemtypeid)
+                        .header("Version",ownerKeys.Version)
+                        ;
                 if (token != null)
                     builder = builder.header("Authorization", "Bearer " + token);
                 return chain.proceed(builder.build());

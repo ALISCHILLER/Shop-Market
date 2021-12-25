@@ -1,6 +1,7 @@
 package com.varanegar.vaslibrary.manager.sysconfigmanager;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -512,12 +513,22 @@ public class SysConfigManager extends BaseManager<SysConfigModel> {
             String ownerKey = st.nextToken();
             String dataOwnerKey = st.nextToken();
             String dataOwnerCenterKey = st.nextToken();
+            String subsystemtypeid=String.valueOf(VaranegarApplication.getInstance().getAppId());
+            String version="";
+            try {
+                version=String.valueOf(getContext().getApplicationContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0).versionName);
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+
             if (ownerKey == null || dataOwnerKey == null || dataOwnerCenterKey == null)
                 throw new OwnerKeysNotFoundException();
             OwnerKeysWrapper result = new OwnerKeysWrapper();
             result.OwnerKey = ownerKey;
             result.DataOwnerKey = dataOwnerKey;
             result.DataOwnerCenterKey = dataOwnerCenterKey;
+            result.subsystemtypeid=subsystemtypeid;
+            result.Version=version;
             return result;
         }
     }

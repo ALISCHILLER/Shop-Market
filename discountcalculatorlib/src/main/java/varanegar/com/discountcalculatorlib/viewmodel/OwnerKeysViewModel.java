@@ -9,4 +9,6 @@ public class OwnerKeysViewModel {
     public String DataOwnerKey;
     public String DataOwnerCenterKey;
     public String Token;
+    public String subsystemtypeid;
+    public String Version;
 }

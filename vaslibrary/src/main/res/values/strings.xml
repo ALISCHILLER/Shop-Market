@@ -1324,7 +1324,7 @@
     <string name="dist_no_label">شماره توزیع</string>
     <string name="payment_type_changed">تغییر نوع پرداخت</string>
     <string name="return_control">کنترل برگشتی</string>
-    <string name="payable_amount_will_change_check_payments">با ثبت برگشتی ممکن است مقادیر قابل پرداخت تغییر نمایند. لطفا فرم تسویه را مجدد کنترل نمایید.</string>
+    <string name="payable_amount_will_change_check_payments">با ثبت برگشتی ممکن است مقادیر قابل پرداخت تغییر نمایند و عملیات حذف گردد. لطفا فرم تسویه را مجدد کنترل نمایید.</string>
     <string name="customer_economic_code">کد اقتصادی مشتری</string>
     <string name="company_logo">لوگوی شرکت</string>
     <string name="invoice_title">عنوان فاکتر چاپی</string>
@@ -1493,4 +1493,6 @@
     <string name="cheque_discount">تخفیف حجمی</string>
     <string name="dialog_black">با انجام این عملیات کاربر بلاک میشود</string>
     <string name="dialog_unblack">با انجام این عملیات کاربر از بلاک خارج میشود</string>
+    <string name="download_apk">دانلود نسخه جدید</string>
+    <string name="not_download_apk">نسخه جدید موجود نمی باشد</string>
 </resources>

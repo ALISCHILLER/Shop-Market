@@ -182,10 +182,12 @@ public class CustomersFragment extends IMainPageFragment {
                     public void onBind(View view, final SupervisorCustomerModel entity) {
                         ImageView callImageView = null;
                         ImageView customercondition=view.findViewById(R.id.customer_condition_image_view);
-                        if (!entity.isPenddingChange) {
-                            customercondition.setImageResource(R.drawable.ic_baseline_person_24);
-                        }else if(entity.isPenddingChange) {
-                            customercondition.setImageResource(R.drawable.ic_baseline_block_24);
+                        if (entity.isPenddingChange!=null) {
+                            if (!entity.isPenddingChange) {
+                                customercondition.setImageResource(R.drawable.ic_baseline_person_24);
+                            } else if (entity.isPenddingChange) {
+                                customercondition.setImageResource(R.drawable.ic_baseline_block_24);
+                            }
                         }
                         customercondition.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -198,8 +200,8 @@ public class CustomersFragment extends IMainPageFragment {
                                 BackMessageDialog builder = new BackMessageDialog(getActivity());
                                 builder.setTitle(getActivity().getString(com.varanegar.vaslibrary.R.string.alert));
 
-                                builder.setData("داده های ویرایش شده" + " \n "+ "نام فروشگاه:" +" "+ entity.StoreName+ "\n " +" شماره موبایل:"+entity.Mobile+" \n " +"شماره تلفن:"+entity.Phone+"\n"+"نام مشتری :"+entity.CustomerName +
-                                        " \n "+"ادرس:"+entity.Address+"\n" +" درجه مشتری:"+ entity.CustomerLevel+"\n"+"کدپستی:"+entity.PostCode+"\n"+"نوع مشتری 2:"+entity.CustomerActivityId+"\n"+"نوع مشتری 1 :"+entity.CustomerCategoryId);
+                               String messageback= getTextBackMessage(entity);
+                                builder.setData("داده های ویرایش شده" + " \n "+messageback);
                                 if (entity.isActive) {
                                     builder.setMessage(getActivity().getString(com.varanegar.vaslibrary.R.string.dialog_black ));
                                 } else if (!entity.isActive){
@@ -502,5 +504,23 @@ public class CustomersFragment extends IMainPageFragment {
             }
         });
 
+    }
+    
+    public String getTextBackMessage(SupervisorCustomerModel entity){
+        String messageback =" ";
+        if (!entity.StoreName.equals(entity.newStoreName)){
+            messageback= "نام فروشگاه:" +" "+ entity.StoreName+ "\n";
+        }if(!entity.Mobile.equals(entity.newMobile)) {
+            messageback=messageback+" شماره موبایل:"+entity.Mobile+ "\n";
+        }if(!entity.Phone.equals(entity.newPhone)) {
+            messageback=messageback+"شماره تلفن:"+entity.Phone+ "\n";
+        }if(!entity.Address.equals(entity.newAddress)) {
+            messageback=messageback+"ادرس:"+entity.Address+ "\n";
+        }if(!entity.CustomerLevel.equals(entity.newCustomerLevelName)) {
+            messageback=messageback+" درجه مشتری:"+ entity.CustomerLevel+ "\n";
+        }
+        
+        
+        return messageback;
     }
 }

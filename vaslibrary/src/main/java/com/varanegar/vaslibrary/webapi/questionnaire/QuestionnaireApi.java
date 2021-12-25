@@ -7,6 +7,7 @@ import com.varanegar.vaslibrary.webapi.BaseApi;
 import com.varanegar.vaslibrary.webapi.TokenType;
 
 import java.util.List;
+import java.util.UUID;
 
 import retrofit2.Call;
 import retrofit2.http.Query;
@@ -23,8 +24,8 @@ public class QuestionnaireApi extends BaseApi implements IQuestionnaireApi {
 
 
     @Override
-    public Call<List<QuestionnaireHeaderViewModel>> getQuestionnaireHeaders(@Query("date") String date) {
-        return getRetrofitBuilder(TokenType.UserToken).build().create(IQuestionnaireApi.class).getQuestionnaireHeaders(date);
+    public Call<List<QuestionnaireHeaderViewModel>> getQuestionnaireHeaders(@Query("date") String date,@Query("SubSystemType") UUID SubSystemType) {
+        return getRetrofitBuilder(TokenType.UserToken).build().create(IQuestionnaireApi.class).getQuestionnaireHeaders(date,SubSystemType);
 
     }
 

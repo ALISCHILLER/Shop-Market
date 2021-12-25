@@ -1,6 +1,7 @@
 package com.varanegar.vaslibrary.promotion.V3;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Environment;
 
 import com.varanegar.framework.base.VaranegarApplication;
@@ -50,6 +51,12 @@ public abstract class DiscountInitializeHandler implements IDiscountInitializeHa
         key.DataOwnerCenterKey = ownerKeys.DataOwnerCenterKey;
         key.DataOwnerKey = ownerKeys.DataOwnerKey;
         key.OwnerKey = ownerKeys.OwnerKey;
+        key.subsystemtypeid= String.valueOf(VaranegarApplication.getInstance().getAppId());
+        try {
+            key.Version= String.valueOf(_context.getApplicationContext().getPackageManager().getPackageInfo(_context.getPackageName(), 0).versionCode);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
         return key;
     }
 

@@ -1,5 +1,7 @@
 package varanegar.com.discountcalculatorlib.api;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import java.io.IOException;
@@ -34,7 +36,10 @@ public class HeaderInterceptor implements Interceptor {
                         .header("Accept", " application/json")
                         .header("http.keepAlive", "false")
                         .header("Authorization", "Bearer " + ownerKeys.Token)
+                        .header("SubSystemTypeId",ownerKeys.subsystemtypeid)
+                        .header("Version",ownerKeys.Version)
                         .build();
+                Log.e("Header", String.valueOf(request));
                 return chain.proceed(request);
             }
 
