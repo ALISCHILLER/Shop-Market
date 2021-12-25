@@ -1,6 +1,7 @@
 package com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary.model;
 
 
+import com.varanegar.java.util.Currency;
 import com.varanegar.processor.annotations.Column;
 import com.varanegar.processor.annotations.Table;
 import java.math.BigDecimal;
@@ -16,7 +17,7 @@ public class ProductCustomerGroupSalesSummaryViewModel extends CustomerGroupSale
     @Column
     public String CustomerActivityTXT ;
     @Column
-    public BigDecimal NetWeight;
+    public Currency NetWeight;
     @Column
     public BigDecimal NetCount_CA;
 

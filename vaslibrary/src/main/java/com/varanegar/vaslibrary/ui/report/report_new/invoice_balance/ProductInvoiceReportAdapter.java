@@ -18,8 +18,8 @@ public class ProductInvoiceReportAdapter extends SimpleReportAdapter<ProductInvo
     }
     @Override
     public void bind(ReportColumns columns,ProductInvoiveBalanceReportViewModel entity){
-        columns.add(bind(entity, ProductInvoiveBalanceReportView.CustomerBackOfficeCode,"کد مشتری").setWeight(2.5f));
-        columns.add(bind(entity, ProductInvoiveBalanceReportView.CustomerName,"نام مشتری").setWeight(1).setFrizzed());
+        columns.add(bind(entity, ProductInvoiveBalanceReportView.CustomerBackOfficeCode,"کد مشتری").setWeight(1.5f));
+        columns.add(bind(entity, ProductInvoiveBalanceReportView.CustomerName,"نام مشتری").setWeight(2).setFrizzed());
         columns.add(bind(entity,ProductInvoiveBalanceReportView.InvoiceNumber,"شماره فاکتور").setFrizzed());
         columns.add(bind(entity,ProductInvoiveBalanceReportView.InvoiceShmsiDate,"تاریخ فاکتور").setFrizzed());
         columns.add(bind(entity,ProductInvoiveBalanceReportView.InvoiceOverDue,"مدت"));
