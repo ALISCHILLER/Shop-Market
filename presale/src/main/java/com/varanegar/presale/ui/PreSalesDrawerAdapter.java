@@ -20,7 +20,7 @@ public class PreSalesDrawerAdapter extends MainDrawerAdapter {
         /**
          * گزارشات قبلی
          */
-        //        add(1, new PreSalesTourReportDrawerItem(activity));
+                add(1, new PreSalesTourReportDrawerItem(activity));
 //        reports.addItem(new DrawerItem(activity, R.string.inventory_qty).setClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
