@@ -349,6 +349,8 @@ public class CustomerInventoryFragment extends VisitFragment {
         }
 
         private void showCalculator(final ProductInventoryModel item) {
+
+            if (!item.IsCompetitor)
             if (!item.IsSold) {
                 return;
             }

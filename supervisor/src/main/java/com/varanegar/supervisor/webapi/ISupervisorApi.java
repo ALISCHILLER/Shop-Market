@@ -71,7 +71,11 @@ public interface ISupervisorApi {
     @GET("api/v2/ngt/Customercall")
     Call<List<CustomerCallViewModel>> customerCalls(@Query("Show_Confirmed") boolean showConfirmed, @Query("Show_Unconfirmed") boolean showUnconfirmed, @Query("Show_Canceled") boolean showCanceled, @Query("From_Date") String startDate, @Query("TO_Date") String endDate , @Query("AgentUniqueId") UUID agentUniqueId);
 
-    @POST("api/v2/ngt/tracking/personellastlocationv2")
+//    @POST("api/v2/ngt/tracking/personellastlocationv2")
+//    Call<List<EventViewModel>> loadLastPoints(@Body LastPointsParam parameter);
+
+
+    @POST("api/dsd/tracking/ldlstpntv2")
     Call<List<EventViewModel>> loadLastPoints(@Body LastPointsParam parameter);
 
     @POST("api/v2/ngt/tracking/personelmarkerv2")

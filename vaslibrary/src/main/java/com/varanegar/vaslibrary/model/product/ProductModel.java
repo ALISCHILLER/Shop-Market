@@ -85,6 +85,8 @@ public class ProductModel extends BaseModel {
     public int PayDuration;
     @Column
     public boolean IsActive;
+    @Column
+    public boolean IsCompetitor;
 
     @Override
     public String toString() {

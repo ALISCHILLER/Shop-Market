@@ -10,6 +10,6 @@ import java.util.UUID;
 
 public class LastPointsParam {
     public List<UUID> PersonelIds;
-    public Date mDate;
+    public String date;
     public int LaststatusType;
 }

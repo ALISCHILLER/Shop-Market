@@ -42,6 +42,9 @@ import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
+import com.varanegar.framework.util.datetime.DateFormat;
+import com.varanegar.framework.util.datetime.DateHelper;
+import com.varanegar.framework.util.datetime.JalaliCalendar;
 import com.varanegar.supervisor.R;
 import com.varanegar.supervisor.VisitorViewModel;
 import com.varanegar.supervisor.webapi.EventViewModel;
@@ -84,6 +87,7 @@ import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -486,8 +490,12 @@ public class MapFragment extends ProgressFragment {
             /**
              * اخرین موقعیت
              */
+            JalaliCalendar calendar = new JalaliCalendar();
+            Date d=new Date();
+            String date = DateHelper.toString(d, DateFormat.Date, Locale.getDefault());
+
             LastPointsParam param = new LastPointsParam();
-            param.mDate = trackingConfig.getStatusDate();
+            param.date = date;
             param.LaststatusType = trackingConfig.getStatusType().ordinal();
             param.PersonelIds = trackingConfig.getPersonnelIds();
             startProgress(R.string.please_wait, R.string.downloading_data);

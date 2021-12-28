@@ -407,7 +407,7 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
                                     messageRes = String.valueOf(R.string.registering_customer_completed);
                                 else
                                     messageRes = String.valueOf(R.string.registering_customer_completed_but_not_inserted_in_db);
-
+                                stopProgressDialog();
                                 sendNationalImage(messageRes, result);
 
 

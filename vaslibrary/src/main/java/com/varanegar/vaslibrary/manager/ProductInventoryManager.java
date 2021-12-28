@@ -42,6 +42,7 @@ public class ProductInventoryManager extends BaseManager<ProductInventoryModel> 
                 Projection.column(Product.UniqueId).as("UniqueId"),
                 Projection.column(Product.ProductName).as("ProductName"),
                 Projection.column(Product.ProductCode).as("ProductCode"),
+                Projection.column(Product.IsCompetitor).as("IsCompetitor"),
                 Projection.column(CustomerInventoryView.CustomerId).as("CustomerId"),
                 Projection.column(CustomerInventoryView.UniqueId).as("CustomerInventoryId"),
                 Projection.column(CustomerInventoryView.Qty).as("Qty"),

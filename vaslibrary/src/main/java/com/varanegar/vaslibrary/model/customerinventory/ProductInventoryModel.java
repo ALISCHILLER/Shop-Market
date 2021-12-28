@@ -17,6 +17,8 @@ public class ProductInventoryModel extends BaseModel {
     @Column
     public String ProductCode;
     @Column
+    public Boolean IsCompetitor;
+    @Column
     public UUID CustomerId;
     @Column
     public UUID CustomerInventoryId;

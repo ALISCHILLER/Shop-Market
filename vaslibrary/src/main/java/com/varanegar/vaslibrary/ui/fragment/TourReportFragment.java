@@ -287,8 +287,20 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
                         @Override
                         protected void onSuccess(String result, Request request) {
                             finishProgress();
-                            getBackupName(result);
-                            Log.e("Requst Backup",result);
+                            if (result!=null) {
+                                getBackupName(result);
+                            }else {
+                                MainVaranegarActivity activity = getVaranegarActvity();
+                                if (activity != null && !activity.isFinishing()) {
+                                    if (isResumed()) {
+                                        CuteMessageDialog dialog = new CuteMessageDialog(activity);
+                                        dialog.setIcon(Icon.Error);
+                                        dialog.setTitle("خالی بودن دیتا");
+                                        dialog.setPositiveButton(R.string.ok, null);
+                                        dialog.show();
+                                    }
+                                }
+                            }
                         }
 
                         @Override
