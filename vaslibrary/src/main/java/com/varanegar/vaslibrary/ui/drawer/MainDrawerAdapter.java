@@ -354,9 +354,6 @@ public class MainDrawerAdapter extends DrawerAdapter {
                     ReturnReportFragment fragment = new ReturnReportFragment();
                     gotoReportFragment(fragment, false); }
             }));
-//
-
-
 
         }
         if (!VaranegarApplication.is(VaranegarApplication.AppId.Contractor))
