@@ -557,6 +557,6 @@ public class ToursStatusFragment extends IMainPageFragment {
     @Override
     public void onResume() {
         super.onResume();
-        refresh();
+//        refresh();
     }
 }
