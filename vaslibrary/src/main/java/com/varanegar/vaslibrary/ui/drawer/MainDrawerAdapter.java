@@ -37,6 +37,7 @@ import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
 import com.varanegar.vaslibrary.ui.dialog.TrackingLicenseFragment;
 import com.varanegar.vaslibrary.ui.fragment.CustomersFragment;
+import com.varanegar.vaslibrary.ui.report.ReturnReportFragment;
 import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.InvoiceBalanceReportFragment;
 import com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary.CustomerGroupSalesSummaryFragment;
 import com.varanegar.vaslibrary.ui.report.report_new.products_purchase_history_report.ProductsPurchaseHistoryReportFragment;
@@ -346,6 +347,17 @@ public class MainDrawerAdapter extends DrawerAdapter {
                     gotoReportFragment(fragment, true);
                 }
             }));
+
+            reports.addItem(new DrawerItem(activity, R.string.return_report_report).setClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ReturnReportFragment fragment = new ReturnReportFragment();
+                    gotoReportFragment(fragment, false); }
+            }));
+//
+
+
+
         }
         if (!VaranegarApplication.is(VaranegarApplication.AppId.Contractor))
             add(reports);
