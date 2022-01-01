@@ -22,6 +22,7 @@ import java.util.Locale;
 public class TrackingPointMarker extends TrackingMarker<BaseLocationViewModel> {
 
     private final String label;
+    private String jData;
     PointType pointType;
     private TextView infoTextView;
 
@@ -29,8 +30,15 @@ public class TrackingPointMarker extends TrackingMarker<BaseLocationViewModel> {
         super(activity, locationModel, false);
         this.pointType = pointType;
         this.label = label;
+
     }
 
+    public TrackingPointMarker(@NonNull Activity activity, BaseLocationViewModel locationModel, PointType pointType, String label,String jData) {
+        super(activity, locationModel, false);
+        this.pointType = pointType;
+        this.label = label;
+        this.jData = jData;
+    }
     public TrackingPointMarker(@NonNull Activity activity, BaseLocationViewModel locationModel, PointType pointType) {
         this(activity, locationModel, pointType, null);
     }
@@ -59,7 +67,7 @@ public class TrackingPointMarker extends TrackingMarker<BaseLocationViewModel> {
         ImageView iconImageView = view.findViewById(R.id.icon_image_view);
         TextView labelTextView = view.findViewById(R.id.label_text_view);
         if (label != null && !label.isEmpty())
-            labelTextView.setText(label);
+            labelTextView.setText(label+"\n"+jData);
         else
             labelTextView.setVisibility(View.GONE);
         if (pointType == PointType.Start)

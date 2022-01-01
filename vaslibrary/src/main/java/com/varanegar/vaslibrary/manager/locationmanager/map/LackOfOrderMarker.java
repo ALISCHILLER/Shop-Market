@@ -13,6 +13,10 @@ import com.varanegar.framework.util.datetime.DateHelper;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.LackOfOrderLocationViewModel;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Locale;
 
 /**
@@ -31,6 +35,7 @@ public class LackOfOrderMarker extends TrackingMarker<LackOfOrderLocationViewMod
         ImageView iconImageView = view.findViewById(R.id.icon_image_view);
         iconImageView.setImageResource(R.drawable.lackorder);
         LackOfOrderLocationViewModel lackOfOrderLocationViewModel = getLocationViewModel();
+
         TextView timeTextView = view.findViewById(R.id.time_text_view);
         timeTextView.setText(DateHelper.toString(lackOfOrderLocationViewModel.ActivityDate, DateFormat.Complete, Locale.getDefault()));
         return view;
@@ -41,9 +46,24 @@ public class LackOfOrderMarker extends TrackingMarker<LackOfOrderLocationViewMod
     public View onCreateInfoView(@NonNull LayoutInflater inflater) {
         LackOfOrderLocationViewModel locationViewModel = getLocationViewModel();
         if (locationViewModel != null && locationViewModel.Desc != null) {
+
+            String str="["+ locationViewModel.JData+"]";
+            String CustomerName = null;
+            try {
+                JSONArray array = new JSONArray(str);
+                for(int i=0; i < array.length(); i++)
+                {
+                    JSONObject object = array.getJSONObject(i);
+                    CustomerName="نام مشتری:"+object.getString("CustomerName")+"\n";
+                    CustomerName+="کد مشتری :"+object.getString("CustomerCode")+"\n";
+                    CustomerName+="مبلغ سفارش:"+object.getString("OrderAmunt");
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             View view = inflater.inflate(R.layout.info_view_layout, null);
             TextView titleTextView = view.findViewById(R.id.title_text_view);
-            titleTextView.setText(Html.fromHtml(locationViewModel.Desc));
+            titleTextView.setText(Html.fromHtml(locationViewModel.Desc)+"\n"+CustomerName);
             return view;
         } else {
             View view = inflater.inflate(R.layout.tracking_lack_of_rder_info_view_layout, null);

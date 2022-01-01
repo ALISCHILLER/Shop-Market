@@ -218,6 +218,7 @@ public class SupervisorApi extends BaseApi implements ISupervisorApi {
                 locationViewModel.Desc = eventViewModel.Desc;
                 locationViewModel.SubType = eventViewModel.SubType;
                 locationViewModel.Lable = eventViewModel.Lable;
+                locationViewModel.JData=eventViewModel.JData;
                 if (eventViewModel.ActivityDate != null)
                     locationViewModel.ActivityDate = eventViewModel.ActivityDate;
                 return locationViewModel;

@@ -12,6 +12,10 @@ import com.varanegar.framework.util.datetime.DateHelper;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.manager.locationmanager.BaseLocationViewModel;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Locale;
 
 /**
@@ -44,8 +48,24 @@ public abstract class TrackingMarker<T extends BaseLocationViewModel> extends Cu
         BaseLocationViewModel locationViewModel = getLocationViewModel();
         View view = inflater.inflate(R.layout.info_view_layout, null);
         TextView titleTextView = view.findViewById(R.id.title_text_view);
+
+        String str="["+ locationViewModel.JData+"]";
+        String customerName = null;
+        try {
+            JSONArray array = new JSONArray(str);
+            for(int i=0; i < array.length(); i++)
+            {
+                JSONObject object = array.getJSONObject(i);
+                customerName="نام مشتری:"+object.getString("CustomerName")+"\n";
+                customerName+="کد مشتری :"+object.getString("CustomerCode")+"\n";
+                customerName+="مبلغ سفارش:"+object.getString("OrderAmunt");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         if (locationViewModel != null && locationViewModel.Desc != null) {
-            titleTextView.setText(Html.fromHtml(locationViewModel.Desc));
+            titleTextView.setText(Html.fromHtml(locationViewModel.Desc)+"\n"+customerName);
         } else {
             String time = inflater.getContext().getString(R.string.time);
             String location = inflater.getContext().getString(R.string.location);

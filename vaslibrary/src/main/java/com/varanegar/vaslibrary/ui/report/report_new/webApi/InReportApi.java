@@ -38,5 +38,11 @@ public interface InReportApi {
              @Query("StartDate") String startDate,
              @Query("EndDate") String endDate);
 
+    @GET("api/v2/ngt/ReviewReport/CustomerNoSaleReport")
+    Call<List<String>> CustomerNoSaleReport
+            (@Query("DealersId") List<String> dealersId,
+             @Query("StartDate") String startDate,
+             @Query("EndDate") String endDate,
+             @Query("ProductCategoriesId") String productCategoriesId);
 
 }

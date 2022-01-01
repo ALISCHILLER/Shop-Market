@@ -214,7 +214,7 @@ public class ReportsFragment extends IMainPageFragment {
     @Override
     public void onResume() {
         super.onResume();
-        refresh(0);
+     //   refresh(0);
     }
 
 

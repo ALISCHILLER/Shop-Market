@@ -34,6 +34,7 @@ public class BaseLocationViewModel {
     public String CompanyPersonnelName;
     public int SubType;
     public String Lable;
+    public String JData;
     private int LicensePolicy;
     private String Provider;
     private Date DeviceTime;

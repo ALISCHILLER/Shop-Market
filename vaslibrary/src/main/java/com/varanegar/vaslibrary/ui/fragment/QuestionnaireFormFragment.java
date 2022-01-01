@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarApplication;
@@ -39,7 +40,7 @@ public class QuestionnaireFormFragment extends VisitFragment {
     private UUID customerId;
     private FormAdapter adapter;
     private QuestionnaireCustomerViewManager questionnaireCustomerViewManager;
-
+    private Button okbtn;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -65,10 +66,12 @@ public class QuestionnaireFormFragment extends VisitFragment {
         adapter = new FormAdapter(getVaranegarActvity());
         adapter.addControls(controls);
         formView.setAdapter(adapter);
-        view.findViewById(R.id.ok_button).setOnClickListener(new View.OnClickListener() {
+        okbtn= view.findViewById(R.id.ok_button);
+        okbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 trySave();
+                okbtn.setClickable(false);
             }
         });
 
@@ -98,6 +101,7 @@ public class QuestionnaireFormFragment extends VisitFragment {
                             @Override
                             public void onClick(View view) {
                                 getVaranegarActvity().popFragment();
+                                okbtn.setClickable(true);
                             }
                         });
                         dialog.show();
@@ -107,9 +111,11 @@ public class QuestionnaireFormFragment extends VisitFragment {
                 }
             } catch (Exception ex) {
                 getVaranegarActvity().showSnackBar(R.string.error_saving_request, MainVaranegarActivity.Duration.Short);
+                okbtn.setClickable(true);
             }
         } else
             getVaranegarActvity().showSnackBar(R.string.please_correct_errors, MainVaranegarActivity.Duration.Short);
+        okbtn.setClickable(true);
     }
 
     private void saveCallAndExit() {
@@ -125,12 +131,14 @@ public class QuestionnaireFormFragment extends VisitFragment {
                 @Override
                 public void onClick(View view) {
                     getVaranegarActvity().popFragment();
+                    okbtn.setClickable(true);
                 }
             });
             dialog.show();
         } catch (Exception e) {
             Timber.e(e);
             getVaranegarActvity().showSnackBar(R.string.error_saving_request, MainVaranegarActivity.Duration.Short);
+            okbtn.setClickable(true);
         }
     }
 

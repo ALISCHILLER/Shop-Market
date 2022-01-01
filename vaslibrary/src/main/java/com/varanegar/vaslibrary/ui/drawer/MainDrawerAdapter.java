@@ -39,6 +39,7 @@ import com.varanegar.vaslibrary.ui.dialog.TrackingLicenseFragment;
 import com.varanegar.vaslibrary.ui.fragment.CustomersFragment;
 import com.varanegar.vaslibrary.ui.report.ProductReportFragment;
 import com.varanegar.vaslibrary.ui.report.ReturnReportFragment;
+import com.varanegar.vaslibrary.ui.report.report_new.customerNoSaleReport.CustomerNoSaleReportFragment;
 import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.InvoiceBalanceReportFragment;
 import com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary.CustomerGroupSalesSummaryFragment;
 import com.varanegar.vaslibrary.ui.report.report_new.products_purchase_history_report.ProductsPurchaseHistoryReportFragment;
@@ -354,6 +355,14 @@ public class MainDrawerAdapter extends DrawerAdapter {
                 public void onClick(View view) {
                     ProductReportFragment fragment = new ProductReportFragment();
                     gotoReportFragment(fragment, false);
+                }
+            }));
+
+            reports.addItem(new DrawerItem(activity, "مشتریان بدون خرید ماه جاری").setClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CustomerNoSaleReportFragment fragment = new CustomerNoSaleReportFragment();
+                    gotoReportFragment(fragment, true);
                 }
             }));
 
