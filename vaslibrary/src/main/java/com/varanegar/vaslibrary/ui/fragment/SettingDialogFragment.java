@@ -162,8 +162,8 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
 
         firstExternalIpEditText.setEnabled(false);
         localIpEditText.setEnabled(false);
-        firstExternalIpEditText.setText("192.168.50.110:8080");
-        localIpEditText.setText("192.168.50.110:8080");
+        firstExternalIpEditText.setText("192.168.50.151:8080");
+        localIpEditText.setText("192.168.50.151:8080");
 
         SysConfigModel serverAddress = sysConfigManager.read(ConfigKey.ValidServerAddress, SysConfigManager.local);
         if (serverAddress != null && !serverAddress.Value.isEmpty()) {
