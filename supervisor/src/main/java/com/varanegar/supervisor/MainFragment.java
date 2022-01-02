@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 
 import com.varanegar.framework.base.VaranegarFragment;
 import com.varanegar.supervisor.customers.CustomersFragment;
+import com.varanegar.supervisor.customers.CustomersFullFragment;
 import com.varanegar.supervisor.menu.MenuFragment;
 import com.varanegar.supervisor.report.ReportsFragment;
 import com.varanegar.supervisor.status.ToursStatusFragment;
@@ -43,7 +44,7 @@ public class MainFragment extends VaranegarFragment {
         tl.getTabAt(4).setIcon(R.drawable.ic_report_cyan_48dp);
         tl.getTabAt(3).setIcon(R.drawable.ic_tracking_cyan_48dp);
 
-//        tl.getTabAt(5).setIcon(R.drawable.ic_view_list_cyan_48dp);
+        tl.getTabAt(5).setIcon(R.drawable.ic_view_list_cyan_48dp);
         return view;
     }
 
@@ -70,6 +71,7 @@ public class MainFragment extends VaranegarFragment {
         ToursStatusFragment statusFragment = new ToursStatusFragment();
         ReportsFragment reportsFragment = new ReportsFragment();
         TrackingFragment trackingFragment = new TrackingFragment();
+        CustomersFullFragment customersFullFragment =new CustomersFullFragment();
         MenuFragment menuFragment = new MenuFragment();
 
         public TabsPagerAdapter(FragmentManager fm) {
@@ -89,8 +91,8 @@ public class MainFragment extends VaranegarFragment {
                 return reportsFragment;
             else if (position == 3)
                 return trackingFragment;
-
-//            else if (position == 5)
+            else if (position == 5)
+                return customersFullFragment;
 //                return menuFragment;
 //            else return menuFragment;
             else  return statusFragment;
@@ -101,7 +103,7 @@ public class MainFragment extends VaranegarFragment {
         public int getCount() {
 
 
-            return 5;
+            return 6;
 
         }
     }
