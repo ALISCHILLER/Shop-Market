@@ -133,6 +133,7 @@ public class EVCHeaderSDSDBAdapter extends DiscountBaseDataAdapter {
         values.put(KEY_ADD_2, add2);
         values.put(KEY_ADD_OTHER, addOther);
         values.put(KEY_ORDER_YPE, orderType);
+        //todo this line has bug
         values.put(KEY_PAY_TYPE, DiscountCustomerSellPayTypeDBAdapter.getInstance().getCustomerBuyTypeId(Integer.parseInt(paymentTypeId)));
         values.put(KEY_CUST_REF, customerId);
         values.put(KEY_CALL_ID, callUniqueId);
