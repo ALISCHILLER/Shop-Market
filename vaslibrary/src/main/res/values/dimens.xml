@@ -7,4 +7,7 @@
     <dimen name="calculator_text_size_small">10sp</dimen>
     <dimen name="width_small">120dp</dimen>
     <dimen name="width_medium">240dp</dimen>
+
+    <dimen name="margin_basic_25">0.25dp</dimen>
+    <dimen name="font_size">15sp</dimen>
 </resources>

@@ -43,6 +43,6 @@ public interface InReportApi {
             (@Query("DealersId") List<String> dealersId,
              @Query("StartDate") String startDate,
              @Query("EndDate") String endDate,
-             @Query("ProductCategoriesId") String productCategoriesId);
+             @Query("ProductCategoriesId") List<String> productCategoriesId);
 
 }

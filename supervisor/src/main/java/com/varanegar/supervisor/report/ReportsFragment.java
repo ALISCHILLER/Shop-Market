@@ -91,7 +91,9 @@ public class ReportsFragment extends IMainPageFragment {
                                 if (activity != null && !activity.isFinishing() && isResumed()) {
                                     dialog.dismiss();
                                     config = new ReportConfig(activity);
-                                    if (config.getSelectedVisitorId() == null) {
+                                    List<String> dealersId = new ArrayList<>();
+                                    dealersId = VisitorFilter.getList(getContext());
+                                    if (dealersId == null) {
                                         showErrorDialog(getString(R.string.please_select_a_visitor));
                                     } else
                                         refresh(reportsTabLayout.getSelectedTabPosition());

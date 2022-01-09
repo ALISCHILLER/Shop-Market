@@ -49,7 +49,7 @@ public class ReportApi extends BaseApi implements InReportApi {
     }
 
     @Override
-    public Call<List<String>> CustomerNoSaleReport(List<String> dealersId, String startDate, String endDate, String productCategoriesId) {
+    public Call<List<String>> CustomerNoSaleReport(List<String> dealersId, String startDate, String endDate, List<String> productCategoriesId) {
         return  getRetrofitBuilder(TokenType.UserToken).build().create(InReportApi.class)
                 .CustomerNoSaleReport(dealersId,startDate,endDate,productCategoriesId);
     }

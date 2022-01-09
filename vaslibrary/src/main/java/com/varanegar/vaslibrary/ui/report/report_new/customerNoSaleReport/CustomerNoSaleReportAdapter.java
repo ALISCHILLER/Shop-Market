@@ -21,9 +21,9 @@ public class CustomerNoSaleReportAdapter extends SimpleReportAdapter<CustomerMod
     @Override
     public void bind(ReportColumns columns, CustomerModel entity){
         columns.add(bind(entity, CustomerModelView.CustomerCode,"کد مشتری").setWeight(1.5f));
-        columns.add(bind(entity, CustomerModelView.CustomerName,"نام مشتری").setWeight(1.5f));
+        columns.add(bind(entity, CustomerModelView.CustomerName,"نام مشتری").setWeight(2.5f));
+        columns.add(bind(entity, CustomerModelView.StoreName,"نام فروشگاه").setWeight(2.5f));
         columns.add(bind(entity, CustomerModelView.Phone,"شماره تماس").setWeight(1.5f));
-        columns.add(bind(entity, CustomerModelView.StoreName,"نام فروشگاه").setWeight(1.5f));
         columns.add(bind(entity, CustomerModelView.Mobile,"شماره موبایل").setWeight(1.5f));
     }
 }

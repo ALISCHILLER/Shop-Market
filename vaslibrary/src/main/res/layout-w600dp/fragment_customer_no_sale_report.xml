@@ -29,12 +29,21 @@
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
-                <com.varanegar.framework.util.component.PairedItemsSpinner
-                    android:id="@+id/product_group_spinner"
-                    android:layout_width="match_parent"
+<!--                <com.varanegar.framework.util.component.PairedItemsSpinner-->
+<!--                    android:id="@+id/product_group_spinner"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:singleLine="true"-->
+<!--                    -->
+<!--                    app:title="گروه کالا" />-->
+                <com.varanegar.vaslibrary.util.multispinnerfilter.MultiSpinnerSearch
+                    android:id="@+id/multipleItemSelectionSpinnerr"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:singleLine="true"
-                    app:title="گروه کالا" />
+                    android:layout_margin="10dp"
+                    app:textColor="@color/blue_pressed"
+                    app:highlightColor="@color/orange"
+                    app:hintText="لیست کالا ها" />
 
             </LinearLayout>
         </LinearLayout>

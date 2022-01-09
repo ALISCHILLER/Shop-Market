@@ -95,11 +95,13 @@ public abstract class BaseCustomerPurchaseHistoryReportFragment <T extends Custo
     }
 
     protected String getEndDateString() {
-        JalaliCalendar calendar = new JalaliCalendar();
-        String year= String.valueOf(calendar.get(Calendar.YEAR));
-        String month= String.format(Locale.US,"%2d",calendar.get(Calendar.MONTH));
-        String day=String.format(Locale.US,"%2d",calendar.get(Calendar.DAY_OF_MONTH));
-        String date=year+"/"+month+"/"+day;
+//        JalaliCalendar calendar = new JalaliCalendar();
+//        String year= String.valueOf(calendar.get(Calendar.YEAR));
+//        String month= String.format(Locale.US,"%2d",calendar.get(Calendar.MONTH));
+//        String day=String.format(Locale.US,"%2d",calendar.get(Calendar.DAY_OF_MONTH));
+//        String date=year+"/"+month+"/"+day;
+        Date d=new Date();
+        String date = DateHelper.toString(d, DateFormat.Date, Locale.getDefault());
 
         return date;
     }
