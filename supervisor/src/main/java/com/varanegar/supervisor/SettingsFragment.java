@@ -348,6 +348,8 @@ public class SettingsFragment extends IMainPageFragment {
                     if (visitorModels.size() > 0)
                         populateSpinner(visitorModels);
                     finishProgress();
+
+                //    getQuestionnaire();
                 }
             }
 
@@ -374,4 +376,7 @@ public class SettingsFragment extends IMainPageFragment {
             dialog.show();
         }
     }
+
+
+
 }

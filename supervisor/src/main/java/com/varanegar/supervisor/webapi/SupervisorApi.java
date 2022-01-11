@@ -18,6 +18,7 @@ import com.varanegar.supervisor.status.OrderSummaryResultViewModel;
 import com.varanegar.vaslibrary.manager.locationmanager.BaseLocationViewModel;
 import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.BaseEventLocationViewModel;
 import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.EventTypeId;
+import com.varanegar.vaslibrary.model.customer.SupervisorFullCustomerModel;
 import com.varanegar.vaslibrary.webapi.BaseApi;
 import com.varanegar.vaslibrary.webapi.TokenType;
 import com.varanegar.vaslibrary.webapi.reviewreport.OrderReviewReportViewModel;
@@ -71,6 +72,14 @@ public class SupervisorApi extends BaseApi implements ISupervisorApi {
                 .build().create(ISupervisorApi.class).senddataorder(changeOrdersStatusmModel);
     }
 
+    @Override
+    public Call<List<SupervisorFullCustomerModel>> getsupervisorCustomers(List<String> DealersId) {
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).getsupervisorCustomers(DealersId);
+    }
+    @Override
+    public Call<List<SupervisorCustomerModel>> getCustomers(UUID supervisorId) {
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).getCustomers(supervisorId);
+    }
 
     @Override
     public Call<ResponseBody> replicateTour(String tourId) {
@@ -168,10 +177,7 @@ public class SupervisorApi extends BaseApi implements ISupervisorApi {
         return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).getProducts(searchText);
     }
 
-    @Override
-    public Call<List<SupervisorCustomerModel>> getCustomers(UUID supervisorId) {
-        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).getCustomers(supervisorId);
-    }
+
 
     @Override
     public Call<List<CustomerSummaryViewModel>> getCustomerFinanceData(UUID customerId, UUID dealerId, UUID subsystemTypeId, int deviceSettingNo) {

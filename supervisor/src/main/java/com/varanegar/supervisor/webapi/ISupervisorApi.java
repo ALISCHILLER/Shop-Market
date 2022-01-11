@@ -10,6 +10,7 @@ import com.varanegar.vaslibrary.model.customer.SupervisorCustomerModel;
 import com.varanegar.supervisor.model.VisitorModel;
 import com.varanegar.supervisor.status.OrderSummaryRequestViewModel;
 import com.varanegar.supervisor.status.OrderSummaryResultViewModel;
+import com.varanegar.vaslibrary.model.customer.SupervisorFullCustomerModel;
 import com.varanegar.vaslibrary.webapi.reviewreport.OrderReviewReportViewModel;
 import com.varanegar.vaslibrary.webapi.reviewreport.ProductGroupReviewReportViewModel;
 import com.varanegar.vaslibrary.webapi.reviewreport.ProductReviewReportViewModel;
@@ -129,4 +130,7 @@ public interface ISupervisorApi {
 
     @POST("api/v2/ngt/invoice/ChangeOrdersStatus")
     Call<ResponseBody> senddataorder(@Body ChangeOrdersStatusmModel changeOrdersStatusmModel);
+
+    @GET("api/v2/ngt/customer/sync/GetsupervisorCustomers")
+    Call<List<SupervisorFullCustomerModel>> getsupervisorCustomers(@Query("DealersId") List<String> DealersId);
 }

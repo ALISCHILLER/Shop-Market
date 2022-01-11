@@ -38,7 +38,7 @@
 <!--                    app:title="گروه کالا" />-->
                 <com.varanegar.vaslibrary.util.multispinnerfilter.MultiSpinnerSearch
                     android:id="@+id/multipleItemSelectionSpinnerr"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     app:textColor="@color/blue_pressed"

@@ -168,7 +168,7 @@ public abstract class BaseCustomerNoSaleReportFragment <T extends CustomerModel>
 
         // Pass true If you want searchView above the list. Otherwise false. default = true.
         multiSelectSpinnerWithSearch.setSearchEnabled(true);
-        multiSelectSpinnerWithSearch.setHintText("لیست ویزیتورها");
+        multiSelectSpinnerWithSearch.setHintText("لیست کالاها");
         //A text that will display in clear text button
         multiSelectSpinnerWithSearch.setClearText("پاک کردن لیست");
         // A text that will display in search hint.

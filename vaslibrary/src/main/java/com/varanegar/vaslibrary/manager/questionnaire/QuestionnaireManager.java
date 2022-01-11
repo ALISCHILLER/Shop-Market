@@ -49,7 +49,10 @@ public class QuestionnaireManager {
     public void sync(final UpdateCall call) {
         UpdateManager updateManager = new UpdateManager(context);
         final QuestionnaireApi questionnaireApi = new QuestionnaireApi(context);
-        questionnaireApi.runWebRequest(questionnaireApi.getQuestionnaireHeaders(null,VaranegarApplication.getInstance().getAppId()), new WebCallBack<List<QuestionnaireHeaderViewModel>>() {
+        questionnaireApi.runWebRequest(questionnaireApi.getQuestionnaireHeaders
+                (null,VaranegarApplication.getInstance().getAppId())
+                , new WebCallBack<List<QuestionnaireHeaderViewModel>>() {
+
             @Override
             protected void onFinish() {
 
@@ -124,9 +127,10 @@ public class QuestionnaireManager {
         // step 1: extract valid templates for the customer
         QuestionnaireHeaderManager headerManager = new QuestionnaireHeaderManager(context);
         List<QuestionnaireHeaderModel> headers;
-        if (VaranegarApplication.is(VaranegarApplication.AppId.Supervisor))
-            headers = headerManager.getValidTemplatesForSupervisorCustomer(customerId);
-        else
+        if (VaranegarApplication.is(VaranegarApplication.AppId.Supervisor)) {
+          //  headers = headerManager.getValidTemplatesForSupervisorCustomer(customerId);
+            headers = headerManager.getValidTemplatesForSupervisorFullCustomer(customerId);
+        }else
             headers = headerManager.getValidTemplatesForCustomer(customerId);
         if (headers.size() == 0) {
             Timber.i("No Questionnaire template has been calculated for customer id = " + customerId.toString());

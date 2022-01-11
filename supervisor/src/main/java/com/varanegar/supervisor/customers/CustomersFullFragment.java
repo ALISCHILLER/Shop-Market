@@ -41,6 +41,9 @@ import com.varanegar.supervisor.model.VisitorManager;
 import com.varanegar.supervisor.model.VisitorModel;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
 import com.varanegar.vaslibrary.model.customer.SupervisorCustomerModelRepository;
+import com.varanegar.vaslibrary.model.customer.SupervisorFullCustomer;
+import com.varanegar.vaslibrary.model.customer.SupervisorFullCustomerModel;
+import com.varanegar.vaslibrary.model.customer.SupervisorFullCustomerModelRepository;
 import com.varanegar.vaslibrary.model.questionnaire.QuestionnaireCustomerViewModel;
 import com.varanegar.vaslibrary.ui.fragment.QuestionnaireFragment;
 
@@ -57,7 +60,7 @@ public class CustomersFullFragment  extends IMainPageFragment {
     private long delay = 200;
     private String keyWord;
     private ImageView clearSearchImageView;
-    private SimpleReportAdapter<SupervisorCustomerModel> adapter;
+    private SimpleReportAdapter<SupervisorFullCustomerModel> adapter;
     private TextView errorTextView;
     private PairedItemsSpinner<VisitorModel> visitorNameSpinner;
 
@@ -126,25 +129,26 @@ public class CustomersFullFragment  extends IMainPageFragment {
     }
 
     private void refreshAdapter() {
-        Query query = new Query().from(SupervisorCustomer.SupervisorCustomerTbl);
+        Query query = new Query().from(SupervisorFullCustomer.SupervisorFullCustomerTbl);
         if (keyWord != null && !keyWord.isEmpty()) {
             String key = VasHelperMethods.convertToEnglishNumbers(keyWord);
             key = VasHelperMethods.persian2Arabic(key);
             final String finalKey = key;
-            query = new Query().from(SupervisorCustomer.SupervisorCustomerTbl).whereAnd(Criteria.contains(SupervisorCustomer.CustomerCode, finalKey)
-                    .or(Criteria.contains(SupervisorCustomer.CustomerName, finalKey))
-                    .or(Criteria.contains(SupervisorCustomer.StoreName, finalKey)));
+            query = new Query().from(SupervisorFullCustomer.SupervisorFullCustomerTbl)
+                    .whereAnd(Criteria.contains(SupervisorFullCustomer.CustomerCode, finalKey)
+                    .or(Criteria.contains(SupervisorFullCustomer.CustomerName, finalKey))
+                    .or(Criteria.contains(SupervisorFullCustomer.StoreName, finalKey)));
         }
         VisitorModel visitorModel = VisitorFilter.read(getContext());
         if (visitorModel.UniqueId != null)
-            query = query.whereAnd(Criteria.equals(SupervisorCustomer.DealerId, visitorModel.UniqueId));
+            query = query.whereAnd(Criteria.equals(SupervisorFullCustomer.dealerUniqueId, visitorModel.UniqueId));
 
         if (errorTextView != null) {
-            adapter = new SimpleReportAdapter<SupervisorCustomerModel>(this, SupervisorCustomerModel.class) {
-                class PhoneCustomerViewHoder extends CustomViewHolder<SupervisorCustomerModel> {
+            adapter = new SimpleReportAdapter<SupervisorFullCustomerModel>(this, SupervisorFullCustomerModel.class) {
+                class PhoneCustomerViewHoder extends CustomViewHolder<SupervisorFullCustomerModel> {
 
                     @Override
-                    public void onBind(View view, final SupervisorCustomerModel entity) {
+                    public void onBind(View view, final SupervisorFullCustomerModel entity) {
                         ImageView callImageView = null;
 
                         view.findViewById(R.id.phone_image_view).setOnClickListener(new View.OnClickListener() {
@@ -199,13 +203,25 @@ public class CustomersFullFragment  extends IMainPageFragment {
                             @Override
                             public void onClick(View view) {
                                 QuestionnaireManager questionnaireManager = new QuestionnaireManager(getContext());
+
                                 try {
-                                    questionnaireManager.calculateCustomerQuestionnaire(entity.UniqueId);
-                                    QuestionnaireCustomerViewManager questionnaireCustomerViewManager = new QuestionnaireCustomerViewManager(getContext());
-                                    List<QuestionnaireCustomerViewModel> questionnaireCustomerViewModels = questionnaireCustomerViewManager.getQuestionnaires(entity.UniqueId);
+
+                                    questionnaireManager.calculateCustomerQuestionnaire(entity.customerUniqueId);
+
+                                    QuestionnaireCustomerViewManager questionnaireCustomerViewManager =
+                                            new QuestionnaireCustomerViewManager(getContext());
+
+                                    List<QuestionnaireCustomerViewModel> questionnaireCustomerViewModels
+                                            = questionnaireCustomerViewManager.getQuestionnaires(entity.UniqueId);
+
                                     if (questionnaireCustomerViewModels.size() == 0) {
-                                        getVaranegarActvity().showSnackBar(com.varanegar.vaslibrary.R.string.no_questionnaire_for_this_customer, MainVaranegarActivity.Duration.Short);
+
+                                        getVaranegarActvity().
+                                                showSnackBar(com.varanegar.vaslibrary.R.string.no_questionnaire_for_this_customer,
+                                                MainVaranegarActivity.Duration.Short);
+
                                     } else {
+
                                         QuestionnaireFragment fragment = new QuestionnaireFragment();
                                         fragment.setCustomerId(entity.UniqueId);
                                         getVaranegarActvity().pushFragment(fragment);
@@ -229,36 +245,37 @@ public class CustomersFullFragment  extends IMainPageFragment {
                 }
 
                 @Override
-                public void bind(ReportColumns columns, SupervisorCustomerModel entity) {
+                public void bind(ReportColumns columns, SupervisorFullCustomerModel entity) {
                     bindRowNumber(columns);
-                    columns.add(bind(entity, SupervisorCustomer.CustomerCode, getString(R.string.customer_code)).setFrizzed());
-                    columns.add(bind(entity, SupervisorCustomer.CustomerName, getString(R.string.customer_name)));
-                    columns.add(bind(entity, SupervisorCustomer.StoreName, getString(R.string.store_name)));
+                    columns.add(bind(entity, SupervisorFullCustomer.CustomerCode, getString(R.string.customer_code)).setFrizzed());
+                    columns.add(bind(entity, SupervisorFullCustomer.CustomerName, getString(R.string.customer_name)));
+                    columns.add(bind(entity, SupervisorFullCustomer.StoreName, getString(R.string.store_name)));
                     if (isLandscape()) {
-                        columns.add(bind(entity, SupervisorCustomer.Phone, "").setCustomViewHolder(new PhoneCustomerViewHoder()).setWeight(1.7f));
+                        columns.add(bind(entity, SupervisorFullCustomer.Phone, "").setCustomViewHolder(new PhoneCustomerViewHoder()).setWeight(1.7f));
                     }
-                    columns.add(bind(entity, SupervisorCustomer.Phone, getString(R.string.phone_number)));
-                    columns.add(bind(entity, SupervisorCustomer.Mobile, getString(R.string.mobile_label)));
-                    columns.add(bind(entity, SupervisorCustomer.Address, getString(R.string.address)).setWeight(3));
+                    columns.add(bind(entity, SupervisorFullCustomer.Phone, getString(R.string.phone_number)));
+                    columns.add(bind(entity, SupervisorFullCustomer.Mobile, getString(R.string.mobile_label)));
+                    columns.add(bind(entity, SupervisorFullCustomer.Address, getString(R.string.address)).setWeight(3));
 
-                    columns.add(bind(entity, SupervisorCustomer.NationalCode, getString(R.string.national_id_label)).sendToDetail());
-                    columns.add(bind(entity, SupervisorCustomer.CustomerActivity, getString(R.string.customer_activity)).sendToDetail());
-                    columns.add(bind(entity, SupervisorCustomer.CustomerLevel, getString(R.string.customer_level)).sendToDetail());
-                    columns.add(bind(entity, SupervisorCustomer.CustomerCategory, getString(R.string.customer_category)).sendToDetail());
-                    columns.add(bind(entity, SupervisorCustomer.PathTitle, getString(R.string.path_title)).sendToDetail());
-                    columns.add(bind(entity, SupervisorCustomer.DealerName, getString(R.string.dealer_name_label)).sendToDetail());
+                    columns.add(bind(entity, SupervisorFullCustomer.NationalCode, getString(R.string.national_id_label)).sendToDetail());
+                    columns.add(bind(entity, SupervisorFullCustomer.CustomerActivity, getString(R.string.customer_activity)).sendToDetail());
+                    columns.add(bind(entity, SupervisorFullCustomer.CustomerLevel, getString(R.string.customer_level)).sendToDetail());
+                    columns.add(bind(entity, SupervisorFullCustomer.customerCategoryUniqueId, getString(R.string.customer_category)).sendToDetail());
+//                    columns.add(bind(entity, SupervisorFullCustomer.PathTitle, getString(R.string.path_title)).sendToDetail());
+                    columns.add(bind(entity, SupervisorFullCustomer.DealerName, getString(R.string.dealer_name_label)).sendToDetail());
                     if (!isLandscape()) {
-                        columns.add(bind(entity, SupervisorCustomer.Phone, "").setCustomViewHolder(new PhoneCustomerViewHoder()));
+                        columns.add(bind(entity, SupervisorFullCustomer.Phone, "").setCustomViewHolder(new PhoneCustomerViewHoder()));
                     }
                 }
 
                 @Override
-                protected ItemContextView<SupervisorCustomerModel> onCreateContextView() {
-                    CustomerSummaryContextView contextView = new CustomerSummaryContextView(getAdapter(), getContext());
-                    return contextView;
+                protected ItemContextView<SupervisorFullCustomerModel> onCreateContextView() {
+//                    CustomerSummaryContextView contextView = new CustomerSummaryContextView(getAdapter(), getContext());
+//                    return contextView;
+                    return null;
                 }
             };
-            adapter.create(new SupervisorCustomerModelRepository(), query, null);
+            adapter.create(new SupervisorFullCustomerModelRepository(), query, null);
             adapter.setItemClickDelay(2000);
             customersReportView.setAdapter(adapter);
 
