@@ -9,6 +9,7 @@ import com.google.gson.stream.JsonReader;
 import com.varanegar.framework.network.gson.VaranegarGsonBuilder;
 import com.varanegar.supervisor.model.ProductModel;
 import com.varanegar.supervisor.model.StatusConfigModel;
+import com.varanegar.supervisor.model.SupervisorTourId;
 import com.varanegar.supervisor.model.changeOrdersStatus.ChangeOrdersStatusmModel;
 import com.varanegar.supervisor.model.reviewreport.ReviewreportModel;
 import com.varanegar.vaslibrary.model.customer.SupervisorCustomerModel;
@@ -76,6 +77,17 @@ public class SupervisorApi extends BaseApi implements ISupervisorApi {
     public Call<List<SupervisorFullCustomerModel>> getsupervisorCustomers(List<String> DealersId) {
         return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).getsupervisorCustomers(DealersId);
     }
+
+    @Override
+    public Call<SupervisorTourId> getTourBySupervisorId(UUID supervisorId) {
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).getTourBySupervisorId(supervisorId);
+    }
+
+    @Override
+    public Call<String> supervisor_tour_sent(UUID id) {
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).supervisor_tour_sent(id);
+    }
+
     @Override
     public Call<List<SupervisorCustomerModel>> getCustomers(UUID supervisorId) {
         return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).getCustomers(supervisorId);

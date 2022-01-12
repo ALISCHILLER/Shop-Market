@@ -4,8 +4,10 @@ import androidx.annotation.Nullable;
 
 import com.varanegar.supervisor.model.ProductModel;
 import com.varanegar.supervisor.model.StatusConfigModel;
+import com.varanegar.supervisor.model.SupervisorTourId;
 import com.varanegar.supervisor.model.changeOrdersStatus.ChangeOrdersStatusmModel;
 import com.varanegar.supervisor.model.reviewreport.ReviewreportModel;
+import com.varanegar.supervisor.model.sendAnswersQustion.SyncGetTourModel;
 import com.varanegar.vaslibrary.model.customer.SupervisorCustomerModel;
 import com.varanegar.supervisor.model.VisitorModel;
 import com.varanegar.supervisor.status.OrderSummaryRequestViewModel;
@@ -133,4 +135,11 @@ public interface ISupervisorApi {
 
     @GET("api/v2/ngt/customer/sync/GetsupervisorCustomers")
     Call<List<SupervisorFullCustomerModel>> getsupervisorCustomers(@Query("DealersId") List<String> DealersId);
+
+
+    @GET("api/v2/ngt/tour/supervisor/GetTourBySupervisorId")
+    Call<SupervisorTourId> getTourBySupervisorId(@Query("supervisorId") UUID supervisorId);
+
+    @GET("api/v2/ngt/tour/sync/supervisor/toursent")
+    Call<String> supervisor_tour_sent(@Query("id") UUID id);
 }

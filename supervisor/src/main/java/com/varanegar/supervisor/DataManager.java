@@ -1,6 +1,7 @@
 package com.varanegar.supervisor;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.varanegar.framework.base.MainVaranegarActivity;
@@ -10,8 +11,14 @@ import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
+import com.varanegar.framework.util.datetime.DateFormat;
+import com.varanegar.framework.util.datetime.DateHelper;
 import com.varanegar.framework.validation.ValidationException;
+import com.varanegar.supervisor.model.SupervisorTourId;
+import com.varanegar.vaslibrary.manager.updatemanager.ProductUpdateFlow;
 import com.varanegar.vaslibrary.manager.updatemanager.QuestionnaireUpdateFlow;
+import com.varanegar.vaslibrary.manager.updatemanager.UpdateManager;
+import com.varanegar.vaslibrary.model.UpdateKey;
 import com.varanegar.vaslibrary.model.customer.SupervisorCustomerModel;
 import com.varanegar.supervisor.model.VisitorManager;
 import com.varanegar.supervisor.model.VisitorModel;
@@ -22,15 +29,23 @@ import com.varanegar.vaslibrary.manager.updatemanager.UpdateCall;
 import com.varanegar.vaslibrary.model.customer.SupervisorCustomerModelRepository;
 import com.varanegar.vaslibrary.model.customer.SupervisorFullCustomerModel;
 import com.varanegar.vaslibrary.model.customer.SupervisorFullCustomerModelRepository;
+import com.varanegar.vaslibrary.model.productGroup.ProductGroupModel;
+import com.varanegar.vaslibrary.model.productGroup.ProductGroupModelRepository;
 import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
+import com.varanegar.vaslibrary.webapi.product.ProductGroupApi;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
 
 import okhttp3.Request;
+import retrofit2.Call;
+import timber.log.Timber;
 
 public class DataManager {
     public interface Callback {
@@ -103,8 +118,8 @@ public class DataManager {
                         repository.deleteAll();
                         repository.insert(result);
                     }
+                    getSupervisorId(userModel,visitorModel, callback, context);
 
-                    getsupervisorCustomers(visitorModel, callback, context);
                 } catch (Exception e) {
                     callback.onError(context.getString(R.string.error_saving_request));
                 }
@@ -127,6 +142,39 @@ public class DataManager {
     }
 
 
+    public static void getSupervisorId(UserModel userModel,List<String> visitorModel, final Callback callback, final Context context){
+        SupervisorApi api = new SupervisorApi(context);
+        api.runWebRequest(api.getTourBySupervisorId(userModel.UniqueId), new WebCallBack<SupervisorTourId>() {
+            @Override
+            protected void onFinish() {
+
+            }
+
+            @Override
+            protected void onSuccess(SupervisorTourId result, Request request) {
+
+                if (result.uniqueId!= null){
+                    SharedPreferences sharedconditionCustomer = context.getSharedPreferences("SupervisorId", Context.MODE_PRIVATE);
+                    sharedconditionCustomer.edit().putString("SupervisorIduniqueId", String.valueOf(result.uniqueId)).commit();
+                }
+
+                getsupervisorCustomers(visitorModel, callback, context);
+            }
+
+            @Override
+            protected void onApiFailure(ApiError error, Request request) {
+                String err = WebApiErrorBody.log(error, context);
+                callback.onError(err);
+            }
+
+            @Override
+            protected void onNetworkFailure(Throwable t, Request request) {
+                callback.onError(context.getString(R.string.connection_to_server_failed));
+            }
+        });
+
+    }
+
     public static void getsupervisorCustomers(List<String> userModel, final Callback callback, final Context context){
         SupervisorApi api = new SupervisorApi(context);
         api.runWebRequest(api.getsupervisorCustomers(userModel), new WebCallBack<List<SupervisorFullCustomerModel>>() {
@@ -143,7 +191,7 @@ public class DataManager {
                         repository.deleteAll();
                         repository.insert(result);
                     }
-                    getQuestionnaire(callback,context);
+                    getProductGroup(callback,context);
 //                    SysConfigManager sysConfigManager = new SysConfigManager(context);
 //                    sysConfigManager.sync(new UpdateCall() {
 //                        @Override
@@ -170,6 +218,56 @@ public class DataManager {
     }
 
 
+    public static void getProductGroup(final Callback callback,final Context context){
+        UpdateManager updateManager = new UpdateManager(context);
+        Date date = updateManager.getLog(UpdateKey.ProductGroup);
+        String dateString = DateHelper.toString(date, DateFormat.MicrosoftDateTime, Locale.US);
+        ProductGroupApi productGroupApi = new ProductGroupApi(context);
+        Call<List<ProductGroupModel>> call;
+        call = productGroupApi.getAll(dateString);
+        productGroupApi.runWebRequest(call, new WebCallBack<List<ProductGroupModel>>() {
+            @Override
+            protected void onFinish() {
+
+            }
+
+            @Override
+            protected void onSuccess(List<ProductGroupModel> result, Request request) {
+
+                    try {
+                        if (result != null && result.size() > 0) {
+                            ProductGroupModelRepository repository =new ProductGroupModelRepository();
+                            repository.deleteAll();
+                            repository.insert(result);
+                        }
+                        getQuestionnaire(callback,context);
+                    } catch (Exception e) {
+                        Timber.e(e);
+                        callback.onError(context.getString(R.string.error_saving_request));
+                    }
+                }
+
+
+            @Override
+            protected void onApiFailure(ApiError error, Request request) {
+                String err = WebApiErrorBody.log(error, context);
+                callback.onError(err);
+            }
+
+            @Override
+            protected void onNetworkFailure(Throwable t, Request request) {
+                Timber.e(t.getMessage());
+                callback.onError(context.getString(R.string.connection_to_server_failed));
+            }
+
+            @Override
+            public void onCancel(Request request) {
+                super.onCancel(request);
+
+            }
+        });
+
+    }
 
     public static void getQuestionnaire(final Callback callback,final Context context){
                 QuestionnaireUpdateFlow flow = new QuestionnaireUpdateFlow(context);
@@ -182,13 +280,7 @@ public class DataManager {
                     @Override
                     protected void onSuccess() {
                         try {
-                            SysConfigManager sysConfigManager = new SysConfigManager(context);
-                            sysConfigManager.sync(new UpdateCall() {
-                                @Override
-                                protected void onFinish() {
-                                    callback.onSuccess();
-                                }
-                            });
+                            supervisor_tour_sent(callback,context);
                         } catch (Exception e) {
                             callback.onError(context.getString(R.string.error_saving_request));
                         }
@@ -207,5 +299,44 @@ public class DataManager {
                     }
                 });
     }
+    public static void supervisor_tour_sent(final Callback callback,final Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("SupervisorId", Context.MODE_PRIVATE);
+        UUID userModel = UUID.fromString(sharedPreferences.getString("SupervisorIduniqueId", null));
+        SupervisorApi api = new SupervisorApi(context);
+        api.runWebRequest(api.supervisor_tour_sent(userModel), new WebCallBack<String>() {
+            @Override
+            protected void onFinish() {
+
+            }
+
+            @Override
+            protected void onSuccess(String result, Request request) {
+                try {
+                    SysConfigManager sysConfigManager = new SysConfigManager(context);
+                    sysConfigManager.sync(new UpdateCall() {
+                        @Override
+                        protected void onFinish() {
+                            callback.onSuccess();
+                        }
+                    });
+                } catch (Exception e) {
+                    callback.onError(context.getString(R.string.error_saving_request));
+                }
+            }
+
+            @Override
+            protected void onApiFailure(ApiError error, Request request) {
+                String err = WebApiErrorBody.log(error, context);
+                callback.onError(err);
+            }
+
+            @Override
+            protected void onNetworkFailure(Throwable t, Request request) {
+                callback.onError(context.getString(R.string.connection_to_server_failed));
+            }
+        });
+    }
+
+
 
 }

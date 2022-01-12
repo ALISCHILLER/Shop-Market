@@ -28,6 +28,25 @@ public class VisitorFilter {
         String json = VaranegarGsonBuilder.build().create().toJson(list);
         editor.edit().putString("visitorBoolData", json).commit();
     }
+    public static void setSave_product_group(Context context, List<String> list) {
+        SharedPreferences editor = context.getSharedPreferences("product_groupData", Context.MODE_PRIVATE);
+        String json = VaranegarGsonBuilder.build().create().toJson(list);
+        editor.edit().putString("product_group", json).commit();
+    }
+    public static List<String> getproduct_group(Context context){
+        List<String> arrayItems = null;
+        SharedPreferences sharedPreferences = context.getSharedPreferences("product_groupData", Context.MODE_PRIVATE);
+        String json = sharedPreferences.getString("product_group", null);
+        if (json != null){
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<String>>(){}.getType();
+            arrayItems = gson.fromJson(json, type);
+            return arrayItems;
+        }else {
+            return arrayItems;
+        }
+    }
+
     public static List<String> getList(Context context){
         List<String> arrayItems = null;
         SharedPreferences sharedPreferences = context.getSharedPreferences("KeyPairBoolData", Context.MODE_PRIVATE);

@@ -162,7 +162,7 @@ public abstract class BaseCustomerNoSaleReportFragment <T extends CustomerModel>
 
 
         /**
-         *لیست ویزیتورها
+         *لیست کالاها
          */
         MultiSpinnerSearch multiSelectSpinnerWithSearch = view.findViewById(R.id.multipleItemSelectionSpinnerr);
 
@@ -171,6 +171,8 @@ public abstract class BaseCustomerNoSaleReportFragment <T extends CustomerModel>
         multiSelectSpinnerWithSearch.setHintText("لیست کالاها");
         //A text that will display in clear text button
         multiSelectSpinnerWithSearch.setClearText("پاک کردن لیست");
+
+        multiSelectSpinnerWithSearch.setSelectAllText("همه کالا ها");
         // A text that will display in search hint.
         multiSelectSpinnerWithSearch.setSearchHint("جستجو");
         // Set text that will display when search result not found...
@@ -182,7 +184,6 @@ public abstract class BaseCustomerNoSaleReportFragment <T extends CustomerModel>
 
         for (int i=0;i<catalogModels.size();i++){
             //list.add(catalogModels.get(i).ProductGroupName);
-
             list.clear();
             product_group.clear();
             KeyPairBoolData h = new KeyPairBoolData();
@@ -190,8 +191,8 @@ public abstract class BaseCustomerNoSaleReportFragment <T extends CustomerModel>
             h.setName(catalogModels.get(i).ProductGroupName);
             h.setSelected(false);
             listArray1.add(h);
-
         }
+
         multiSelectSpinnerWithSearch.setItems(listArray1, new MultiSpinnerListener() {
             @Override
             public void onItemsSelected(List<KeyPairBoolData> selectedItems) {
@@ -204,7 +205,8 @@ public abstract class BaseCustomerNoSaleReportFragment <T extends CustomerModel>
 
             @Override
             public void onClear() {
-
+                list.clear();
+                product_group.clear();
             }
         });
 

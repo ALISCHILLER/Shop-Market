@@ -128,9 +128,13 @@ public class MultiSpinnerSearch extends AppCompatSpinner implements OnCancelList
 	public void setClearText(String clearText){
 		this.clearText = clearText;
 	}
+	public void setAllText(String selectAllText){
+		this.selectAllText = selectAllText;
+	}
 	public void setOkText(String okText){
 		this.okText = okText;
 	}
+
 	public void setSelectAllText(String selectAllText){
 		this.selectAllText = selectAllText;
 	}

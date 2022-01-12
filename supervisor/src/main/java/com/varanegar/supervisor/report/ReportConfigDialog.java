@@ -26,6 +26,9 @@ import com.varanegar.supervisor.model.VisitorModel;
 import com.varanegar.supervisor.utill.multispinnerfilter.KeyPairBoolData;
 import com.varanegar.supervisor.utill.multispinnerfilter.MultiSpinnerListener;
 import com.varanegar.supervisor.utill.multispinnerfilter.MultiSpinnerSearch;
+import com.varanegar.vaslibrary.manager.ProductGroupManager;
+import com.varanegar.vaslibrary.manager.ProductType;
+import com.varanegar.vaslibrary.model.productGroup.ProductGroupModel;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -152,11 +155,59 @@ public class ReportConfigDialog extends SlidingDialog {
             });
 
 
+            /**
+             *لیست کالاها
+             */
+          MultiSpinnerSearch multiSelectproduct_group
+                    = view.findViewById(R.id.multipleItem_product_group_Spinnerr);
 
 
+            // Pass true If you want searchView above the list. Otherwise false. default = true.
+            multiSelectproduct_group.setSearchEnabled(true);
+            multiSelectproduct_group.setHintText("لیست کالاها");
+            //A text that will display in clear text button
+            multiSelectproduct_group.setClearText("پاک کردن لیست");
+
+            multiSelectproduct_group.setSelectAllText("همه کالا ها");
+            // A text that will display in search hint.
+            multiSelectproduct_group.setSearchHint("جستجو");
+            // Set text that will display when search result not found...
+            multiSelectproduct_group.setEmptyTitle("Not Data Found!");
+            // If you will set the limit, this button will not display automatically.
+            multiSelectproduct_group.setShowSelectAllButton(true);
 
 
-            final String visitorId = config.getSelectedVisitorId();
+            ProductGroupManager ProductGroupManager = new ProductGroupManager(getContext());
+            List<ProductGroupModel> catalogModels = ProductGroupManager.getAll();
+            final List<KeyPairBoolData> product_listArray = new ArrayList<>();
+            List<String> product_list =new ArrayList<>();
+
+            for (int i=0;i<catalogModels.size();i++){
+                //list.add(catalogModels.get(i).ProductGroupName);
+                product_list.clear();
+                KeyPairBoolData h = new KeyPairBoolData();
+                h.setId(catalogModels.get(i).UniqueId);
+                h.setName(catalogModels.get(i).ProductGroupName);
+                h.setSelected(false);
+                product_listArray.add(h);
+            }
+            multiSelectproduct_group.setItems(product_listArray, new MultiSpinnerListener() {
+                @Override
+                public void onItemsSelected(List<KeyPairBoolData> selectedItems) {
+                    for (int i = 0; i < selectedItems.size(); i++) {
+                        product_list.add(String.valueOf(selectedItems.get(i).getId()));
+                    }
+                    VisitorFilter.setSave_product_group(getContext(),product_list);
+                }
+
+                @Override
+                public void onClear() {
+
+                }
+            });
+
+
+                final String visitorId = config.getSelectedVisitorId();
             if (visitorId != null) {
                 visitorsAdapter.select(new Linq.Criteria<VisitorModel>() {
                     @Override

@@ -86,7 +86,9 @@ public class ProductGroupManager extends BaseManager<ProductGroupModel> {
             ids[i] = (groups.get(i).UniqueId);
         return ids;
     }
-
+    public List<ProductGroupModel> getAll(){
+        return getItems(new Query().from(ProductGroup.ProductGroupTbl));
+    }
     public List<ProductGroupModel> getParentItems(ProductType type) {
         Query query = new Query();
         if (type == ProductType.isForSale) {

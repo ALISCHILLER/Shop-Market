@@ -17,6 +17,7 @@ import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialo
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.framework.util.datetime.DateFormat;
 import com.varanegar.framework.util.datetime.DateHelper;
+import com.varanegar.framework.util.datetime.JalaliCalendar;
 import com.varanegar.framework.util.report.ReportView;
 import com.varanegar.framework.util.report.SimpleReportAdapter;
 import com.varanegar.supervisor.IMainPageFragment;
@@ -25,6 +26,7 @@ import com.varanegar.supervisor.VisitorFilter;
 import com.varanegar.supervisor.webapi.SupervisorApi;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
 import com.varanegar.vaslibrary.ui.list.ProductReturnWithoutRefListAdapter;
+import com.varanegar.vaslibrary.ui.report.report_new.customerNoSaleReport.CustomerNoSaleReportAdapter;
 import com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary.CustomerGroupSalesSummaryAdapter;
 import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.ProductInvoiceReportAdapter;
 import com.varanegar.vaslibrary.ui.report.report_new.products_purchase_history_report.ProductsPurchaseHistoryReportAdapter;
@@ -37,7 +39,10 @@ import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.reviewreport.ReviewReportViewModel;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import okhttp3.Request;
 import retrofit2.Call;
@@ -114,8 +119,19 @@ public class ReportsFragment extends IMainPageFragment {
             ReportConfig reportConfig = new ReportConfig(context);
             final String fromDate = DateHelper.toString(config.getFromDate(), DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext()));
             final String toDate = DateHelper.toString(config.getToDate(), DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext()));
+
+            Date d=new Date();
+            String endData = DateHelper.toString(d, DateFormat.Date, Locale.getDefault());
+            JalaliCalendar calendar = new JalaliCalendar();
+            String YEAR = String.valueOf(calendar.get(Calendar.YEAR));
+            int MONTH = calendar.get(Calendar.MONTH)+1;
+            String Startdata=YEAR+"/"+MONTH+"/"+"01";
+
             List<String> dealersId = new ArrayList<>();
             dealersId = VisitorFilter.getList(getContext());
+            List<String> product_list = new ArrayList<>();
+            product_list = VisitorFilter.getproduct_group(getContext());
+
             Call reportApi = null;
             final ReportApi supervisorApi = new ReportApi(getContext());
             if (tabPosition == 0)
@@ -124,6 +140,8 @@ public class ReportsFragment extends IMainPageFragment {
                 reportApi = supervisorApi.CustomerGroupSales(dealersId, fromDate, toDate);
             else if (tabPosition == 2)
                 reportApi = supervisorApi.ProductsPurchaseHistoryReport(dealersId, fromDate, toDate);
+            else if (tabPosition == 3)
+                reportApi = supervisorApi.CustomerNoSaleReport(dealersId, Startdata, endData,product_list);
 //            else
 //                reportApi = supervisorApi.sellReturn(reportConfig.getSelectedVisitorId(), fromDate, toDate);
 
@@ -162,7 +180,8 @@ public class ReportsFragment extends IMainPageFragment {
                                 adapter = new ProductsPurchaseHistoryReportAdapter(getVaranegarActvity());
 
                             } else if (tabPosition == 3) {
-                                adapter = new SellReturnReviewReportAdapter(getVaranegarActvity());
+                            //    adapter = new SellReturnReviewReportAdapter(getVaranegarActvity());
+                                adapter = new CustomerNoSaleReportAdapter(getVaranegarActvity());
                             }
                             if (adapter != null) {
                                 adapter.setLocale(VasHelperMethods.getSysConfigLocale(getContext()));

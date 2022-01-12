@@ -29,3 +29,15 @@ CREATE TABLE "SupervisorFullCustomer" (
 "CenterId"  TEXT COLLATE NOCASE ,
 PRIMARY KEY ("customerUniqueId" ASC)
 );
+
+
+CREATE TABLE "ProductGroup" (
+"UniqueId"  TEXT NOT NULL COLLATE NOCASE ,
+"ProductGroupParentId"  TEXT  COLLATE NOCASE ,
+"ProductGroupName"  TEXT,
+"OrderOf" NUMBER,
+"LastUpdate" DATE,
+"RowIndex" NUMBER,
+
+PRIMARY KEY ("UniqueId" ASC)
+);

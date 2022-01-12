@@ -17,10 +17,14 @@ import android.widget.TextView;
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.database.DbException;
+import com.varanegar.framework.network.listeners.ApiError;
+import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.util.component.SimpleToolbar;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
+import com.varanegar.framework.util.datetime.DateFormat;
+import com.varanegar.framework.util.datetime.DateHelper;
 import com.varanegar.framework.util.recycler.BaseRecyclerAdapter;
 import com.varanegar.framework.util.recycler.BaseRecyclerView;
 import com.varanegar.framework.util.recycler.BaseViewHolder;
@@ -31,14 +35,28 @@ import com.varanegar.vaslibrary.manager.questionnaire.QuestionnaireCustomerManag
 import com.varanegar.vaslibrary.manager.questionnaire.QuestionnaireCustomerViewManager;
 import com.varanegar.vaslibrary.manager.questionnaire.QuestionnaireLineManager;
 import com.varanegar.vaslibrary.model.customercall.CustomerCallType;
+import com.varanegar.vaslibrary.model.questionnaire.QuestionnaireAnswerModel;
 import com.varanegar.vaslibrary.model.questionnaire.QuestionnaireCustomerModel;
 import com.varanegar.vaslibrary.model.questionnaire.QuestionnaireCustomerViewModel;
 import com.varanegar.vaslibrary.model.questionnaire.QuestionnaireDemandType;
 import com.varanegar.vaslibrary.model.questionnaire.QuestionnaireLineModel;
+import com.varanegar.vaslibrary.model.sendAnswersQustion.SyncCustomerCallQuestionnaire;
+import com.varanegar.vaslibrary.model.sendAnswersQustion.SyncGetCustomerCallModel;
+import com.varanegar.vaslibrary.model.sendAnswersQustion.SyncGetCustomerQuestionnaireAnswerModel;
+import com.varanegar.vaslibrary.model.sendAnswersQustion.SyncGetTourModel;
+import com.varanegar.vaslibrary.ui.report.report_new.webApi.ReportApi;
+import com.varanegar.vaslibrary.webapi.tour.SyncGetCustomerCallQuestionnaireAnswerViewModel;
+import com.varanegar.vaslibrary.webapi.tour.SyncGetCustomerCallQuestionnaireViewModel;
+import com.varanegar.vaslibrary.webapi.tour.SyncGetCustomerCallViewModel;
+import com.varanegar.vaslibrary.webapi.tour.SyncGetTourViewModel;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
+import okhttp3.Request;
 import timber.log.Timber;
 
 /**
@@ -72,6 +90,46 @@ public class QuestionnaireFragment extends VisitFragment {
             if (VaranegarApplication.is(VaranegarApplication.AppId.Supervisor)) {
                 sendButton.setVisibility(View.VISIBLE);
                 sendButton.setOnClickListener(view1 -> {
+                    Date date =new Date();
+                    String endData = DateHelper.toString(date, DateFormat.Date, Locale.getDefault());
+                    SyncGetTourModel  syncGetTourModel=new SyncGetTourModel(getContext(),UUID.fromString(getArguments().getString("f8c2abc4-c401-4f16-8f7d-1019e80574af")));
+                    SyncGetCustomerCallModel syncGetCustomerCallViewModel = new SyncGetCustomerCallModel();
+                    syncGetCustomerCallViewModel.customerUniqueId=customerId;
+                    syncGetCustomerCallViewModel.callDate=date;
+                    syncGetCustomerCallViewModel.callPDate=endData;
+                    syncGetCustomerCallViewModel.startTime=date;
+                    syncGetCustomerCallViewModel.startPTime=endData;
+                    syncGetCustomerCallViewModel.endTime=date;
+                    syncGetCustomerCallViewModel.endPTime=endData;
+                    syncGetCustomerCallViewModel.latitude=51.48330420255661;
+                    syncGetCustomerCallViewModel.latitude=51.48330420255661;
+                    syncGetCustomerCallViewModel.receiveDate=date;
+                    syncGetCustomerCallViewModel.receivePDate=endData;
+                    syncGetCustomerCallViewModel.visitDuration=245000;
+                    syncGetCustomerCallViewModel.customerCallQuestionnaires = (ArrayList<SyncCustomerCallQuestionnaire>) populateCustomerQuestionnaires(customerId);
+                    syncGetTourModel.CustomerCalls.add(syncGetCustomerCallViewModel);
+                    ReportApi reportApi =new ReportApi(getContext());
+                    reportApi.runWebRequest(reportApi.savetourdata(syncGetTourModel), new WebCallBack<String>() {
+                        @Override
+                        protected void onFinish() {
+
+                        }
+
+                        @Override
+                        protected void onSuccess(String result, Request request) {
+
+                        }
+
+                        @Override
+                        protected void onApiFailure(ApiError error, Request request) {
+
+                        }
+
+                        @Override
+                        protected void onNetworkFailure(Throwable t, Request request) {
+
+                        }
+                    });
 
                 });
             } else {
@@ -236,5 +294,35 @@ public class QuestionnaireFragment extends VisitFragment {
         } catch (Exception e) {
             Timber.e(e);
         }
+    }
+
+    private List<SyncCustomerCallQuestionnaire> populateCustomerQuestionnaires(UUID customerId) {
+        List<SyncCustomerCallQuestionnaire> syncGetCustomerCallQuestionnaireViewModels = new ArrayList<>();
+        QuestionnaireCustomerViewManager questionnaireCustomerViewManager = new QuestionnaireCustomerViewManager(getContext());
+        QuestionnaireAnswerManager questionnaireAnswerManager = new QuestionnaireAnswerManager(getContext());
+        QuestionnaireLineManager questionnaireLineManager = new QuestionnaireLineManager(getContext());
+
+        List<QuestionnaireCustomerViewModel> answeredQuestionnaires = questionnaireCustomerViewManager.getQuestionnaires(customerId, true);
+        for (QuestionnaireCustomerViewModel questionnaireCustomerViewModel :
+                answeredQuestionnaires) {
+            SyncCustomerCallQuestionnaire syncCustomerCallQuestionnaire = new SyncCustomerCallQuestionnaire();
+            syncCustomerCallQuestionnaire.questionnaireUniqueId = questionnaireCustomerViewModel.QuestionnaireId;
+            List<QuestionnaireAnswerModel> questionnaireAnswerModels = questionnaireAnswerManager.getLines(customerId, questionnaireCustomerViewModel.QuestionnaireId);
+            List<QuestionnaireLineModel> lines = questionnaireLineManager.getLines(questionnaireCustomerViewModel.QuestionnaireId);
+            for (QuestionnaireLineModel line :
+                    lines) {
+                QuestionnaireAnswerModel answerModel = questionnaireAnswerManager.getLine(questionnaireAnswerModels, line.UniqueId);
+                SyncGetCustomerQuestionnaireAnswerModel  answer=new SyncGetCustomerQuestionnaireAnswerModel();
+                answer.hasAttachments = answerModel.AttachmentId != null;
+                answer.questionnaireLineUniqueId = line.UniqueId;
+                answer.uniqueId = answerModel.AttachmentId == null ? UUID.randomUUID() : answerModel.AttachmentId;
+                answer.customerCallQuestionnaireUniqueId = questionnaireCustomerViewModel.QuestionnaireId;
+                answer.answer = questionnaireLineManager.serialize(line, answerModel);
+                answer.options = questionnaireLineManager.serializeOptions(line, answerModel);
+                syncCustomerCallQuestionnaire.answers.add(answer);
+            }
+            syncGetCustomerCallQuestionnaireViewModels.add(syncCustomerCallQuestionnaire);
+        }
+        return syncGetCustomerCallQuestionnaireViewModels;
     }
 }

@@ -29,6 +29,14 @@
         app:textColor="@color/colorAccent"
         app:highlightColor="@color/colorAccent"
         app:hintText="همه ویزیتورها" />
+    <com.varanegar.supervisor.utill.multispinnerfilter.MultiSpinnerSearch
+        android:id="@+id/multipleItem_product_group_Spinnerr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:textColor="@color/blue_pressed"
+        app:highlightColor="@color/orange"
+        app:hintText="لیست کالا ها" />
 
     <LinearLayout
         android:layout_width="match_parent"
