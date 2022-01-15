@@ -16,4 +16,11 @@
         <item name="android:textColor">@color/colorPrimaryText</item>
     </style>
 
+    <style name="RTableHeaderTheme" parent="Theme.AppCompat.Light">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textColor">@color/colorPrimaryText</item>
+        <item name="android:textSize">@dimen/font_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

@@ -2,6 +2,8 @@ package com.varanegar.supervisor.webapi;
 
 import androidx.annotation.Nullable;
 
+import com.varanegar.supervisor.customreport.orderstatus.model.OrderStatusReport;
+import com.varanegar.supervisor.customreport.orderstatus.model.orderStatusModel;
 import com.varanegar.supervisor.model.ProductModel;
 import com.varanegar.supervisor.model.StatusConfigModel;
 import com.varanegar.supervisor.model.SupervisorTourId;
@@ -142,4 +144,6 @@ public interface ISupervisorApi {
 
     @GET("api/v2/ngt/tour/sync/supervisor/toursent")
     Call<String> supervisor_tour_sent(@Query("id") UUID id);
+    @POST("api/v2/ngt/ReviewReport/OrderStatusReport")
+    Call<List<OrderStatusReport>> OrderStatusReport(@Body orderStatusModel param);
 }

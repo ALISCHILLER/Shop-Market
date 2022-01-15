@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import com.varanegar.framework.base.VaranegarFragment;
 import com.varanegar.supervisor.customers.CustomersFragment;
 import com.varanegar.supervisor.customers.CustomersFullFragment;
+import com.varanegar.supervisor.customreport.orderstatus.OrderReportFragment;
 import com.varanegar.supervisor.menu.MenuFragment;
 import com.varanegar.supervisor.report.ReportsFragment;
 import com.varanegar.supervisor.status.ToursStatusFragment;
@@ -71,7 +72,7 @@ public class MainFragment extends VaranegarFragment {
         ToursStatusFragment statusFragment = new ToursStatusFragment();
         ReportsFragment reportsFragment = new ReportsFragment();
         TrackingFragment trackingFragment = new TrackingFragment();
-        CustomersFullFragment customersFullFragment =new CustomersFullFragment();
+        OrderReportFragment customersFullFragment =new OrderReportFragment();
         MenuFragment menuFragment = new MenuFragment();
 
         public TabsPagerAdapter(FragmentManager fm) {
