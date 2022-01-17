@@ -1,540 +1,653 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-
-        <HorizontalScrollView
+    <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-            android:scrollbars="none"
-        >
+        android:scrollbars="none">
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/layout_hedar"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="#1AEDE7"
+                android:visibility="gone">
+
+                <androidx.appcompat.widget.AppCompatTextView
+
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="3dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="3dp"
+                    android:text="تاریخ"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="3dp"
+                    android:text="وزن سفارش"
+                    app:layout_constraintStart_toEndOf="@+id/txtDate"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="3dp"
+                    android:text="وزن سفارش"
+                    app:layout_constraintStart_toEndOf="@+id/txtorderWeight"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="3dp"
+                    android:text="وزن سفارش"
+                    app:layout_constraintStart_toEndOf="@+id/txtpendingOrderWeight"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="3dp"
+                    android:text="وزن سفارش"
+                    app:layout_constraintStart_toEndOf="@+id/txtinProgressOrderWeight"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:background="#AFAFAF"
+
+                    />
+
+                <androidx.appcompat.widget.AppCompatTextView
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:layout_weight="1"
+                    android:padding="3dp"
+                    android:text="وزن سفارش"
+                    app:layout_constraintStart_toEndOf="@+id/txtundeliverdOrderWeight"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_super"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
-                <LinearLayout
-                    android:id="@+id/layout_hedar"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:background="#1AEDE7"
-                    android:visibility="gone"
-                    >
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-                    <androidx.appcompat.widget.AppCompatTextView
-
-                        android:text="تاریخ"
-                        android:layout_width="90dp"
-                        android:padding="3dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="18dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="wrap_content"
-                        android:background="#AFAFAF"
-                        />
-                    <androidx.appcompat.widget.AppCompatTextView
-
-                        android:layout_width="120dp"
-                        android:text="وزن سفارش"
-                        android:padding="3dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="18dp"
-                        app:layout_constraintStart_toEndOf="@+id/txtDate"
-                        app:layout_constraintTop_toTopOf="parent" />
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="wrap_content"
-                        android:background="#AFAFAF"
-                        />
-                    <androidx.appcompat.widget.AppCompatTextView
-
-                        android:layout_width="90dp"
-                        android:padding="3dp"
-                        android:text="وزن سفارش"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="18dp"
-                        app:layout_constraintStart_toEndOf="@+id/txtorderWeight"
-                        app:layout_constraintTop_toTopOf="parent" />
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="wrap_content"
-                        android:background="#AFAFAF"
-                        />
-                    <androidx.appcompat.widget.AppCompatTextView
-
-                        android:layout_width="90dp"
-                        android:padding="3dp"
-                        android:text="وزن سفارش"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="18dp"
-                        app:layout_constraintStart_toEndOf="@+id/txtpendingOrderWeight"
-                        app:layout_constraintTop_toTopOf="parent" />
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="wrap_content"
-                        android:background="#AFAFAF"
-                        />
-                    <androidx.appcompat.widget.AppCompatTextView
-
-                        android:layout_width="90dp"
-                        android:layout_height="wrap_content"
-                        android:padding="3dp"
-                        android:text="وزن سفارش"
-                        android:layout_marginStart="18dp"
-                        app:layout_constraintStart_toEndOf="@+id/txtinProgressOrderWeight"
-                        app:layout_constraintTop_toTopOf="parent" />
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="wrap_content"
-                        android:background="#AFAFAF"
-
-                        />
-                    <androidx.appcompat.widget.AppCompatTextView
-
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:padding="3dp"
-                        android:layout_height="wrap_content"
-                        android:text="وزن سفارش"
-                        android:layout_marginStart="18dp"
-                        app:layout_constraintStart_toEndOf="@+id/txtundeliverdOrderWeight"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/layout_super"
-                    android:layout_width="wrap_content"
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/add_item"
+                    android:layout_width="30dp"
                     android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginStart="18dp"
+                    android:padding="3dp"
+                    android:text="+"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/txtDate"
-                        android:layout_width="90dp"
-                        android:padding="2dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="18dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="#AFAFAF"
-                        />
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/txtorderWeight"
-                        android:layout_width="120dp"
-                        android:padding="2dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="18dp"
-                        app:layout_constraintStart_toEndOf="@+id/txtDate"
-                        app:layout_constraintTop_toTopOf="parent" />
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="#AFAFAF"
-                        />
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/txtpendingOrderWeight"
-                        android:layout_width="90dp"
-                        android:padding="2dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="18dp"
-                        app:layout_constraintStart_toEndOf="@+id/txtorderWeight"
-                        app:layout_constraintTop_toTopOf="parent" />
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="#AFAFAF"
-                        />
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/txtinProgressOrderWeight"
-                        android:layout_width="90dp"
-                        android:padding="2dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="18dp"
-                        app:layout_constraintStart_toEndOf="@+id/txtpendingOrderWeight"
-                        app:layout_constraintTop_toTopOf="parent" />
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="#AFAFAF"
-                        />
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/txtundeliverdOrderWeight"
-                        android:layout_width="90dp"
-                        android:padding="2dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="18dp"
-                        app:layout_constraintStart_toEndOf="@+id/txtinProgressOrderWeight"
-                        app:layout_constraintTop_toTopOf="parent" />
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="#AFAFAF"
-                        />
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/finalWeight"
-                        android:layout_width="0dp"
-                        android:padding="2dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="18dp"
-                        app:layout_constraintStart_toEndOf="@+id/txtundeliverdOrderWeight"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-
-
-                </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/layout_header_sub"
-                    android:layout_width="wrap_content"
+                <View
+                    android:layout_width="1dp"
                     android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:visibility="gone"
-                    android:background="#1AEDE7"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txtDate"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="2dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/layout_super">
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="90dp"
-                        android:padding="2dp"
-                        android:layout_height="wrap_content"
-                        android:text="تاریخ"
-                        android:layout_marginStart="18dp"
-                        app:layout_constraintStart_toEndOf="@+id/txtundeliverdOrderWeight"
-                        app:layout_constraintTop_toTopOf="parent" />
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="#AFAFAF"
-                        />
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="120dp"
-                        android:padding="2dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="18dp"
-                        android:text="نام ویزیتور"
-                        app:layout_constraintStart_toEndOf="@+id/txt_dealersItems_data"
-                        app:layout_constraintTop_toTopOf="parent" />
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="#AFAFAF"
-                        />
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="90dp"
-                        android:padding="2dp"
-                        android:gravity="center"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="18dp"
-                        android:text="کد ویزیتور"
-                        app:layout_constraintStart_toEndOf="@+id/txt_dealersname_data"
-                        app:layout_constraintTop_toTopOf="parent" />
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="#AFAFAF"
-                        />
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="90dp"
-                        android:layout_height="wrap_content"
-                        android:padding="2dp"
-                        android:layout_marginStart="18dp"
-                        app:layout_constraintStart_toEndOf="@+id/txt_dealerCode_data"
-                        app:layout_constraintTop_toTopOf="parent" />
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="#AFAFAF"
-                        />
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="90dp"
-                        android:layout_height="wrap_content"
-                        android:padding="2dp"
-                        android:layout_marginStart="18dp"
-                        android:text="وزن"
-                        app:layout_constraintStart_toEndOf="@+id/txt_orderWeight"
-                        app:layout_constraintTop_toTopOf="parent" />
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="#AFAFAF"
-                        />
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="90dp"
-                        android:layout_height="wrap_content"
-                        android:padding="2dp"
-                        android:layout_marginStart="18dp"
-                        android:text="وزن"
-                        app:layout_constraintStart_toEndOf="@+id/txt_pendingOrderWeight"
-                        app:layout_constraintTop_toTopOf="parent" />
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="#AFAFAF"
-                        />
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="90dp"
-                        android:layout_height="wrap_content"
-                        android:padding="2dp"
-                        android:layout_marginStart="18dp"
-                        android:text="وزن"
-                        app:layout_constraintStart_toEndOf="@+id/txt_inProgressOrderWeight"
-                        app:layout_constraintTop_toTopOf="parent" />
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="#AFAFAF"
-                        />
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="90dp"
-                        android:padding="2dp"
-                        android:layout_height="wrap_content"
-                        android:text="وزن"
-                        android:layout_marginStart="18dp"
-                        app:layout_constraintStart_toEndOf="@+id/txt_inProgressOrderWeight"
-                        app:layout_constraintTop_toTopOf="parent" />
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#AFAFAF" />
 
-                </LinearLayout>
-                 <LinearLayout
-                     android:id="@+id/layout_sub"
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     app:layout_constraintEnd_toEndOf="parent"
-                     android:visibility="gone"
-                     app:layout_constraintStart_toStartOf="parent"
-                     app:layout_constraintTop_toBottomOf="@+id/layout_super">
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txtorderWeight"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="2dp"
+                    app:layout_constraintStart_toEndOf="@+id/txtDate"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                     <androidx.appcompat.widget.AppCompatTextView
-                         android:id="@+id/txt_dealersItems_data"
-                         android:layout_width="90dp"
-                         android:padding="2dp"
-                         android:layout_height="wrap_content"
-                         android:layout_marginStart="18dp"
-                         app:layout_constraintStart_toEndOf="@+id/txtundeliverdOrderWeight"
-                         app:layout_constraintTop_toTopOf="parent" />
-                     <View
-                         android:layout_width="1dp"
-                         android:layout_height="match_parent"
-                         android:background="#AFAFAF"
-                         />
-                     <androidx.appcompat.widget.AppCompatTextView
-                         android:id="@+id/txt_dealerName"
-                         android:layout_width="120dp"
-                         android:padding="2dp"
-                         android:layout_height="wrap_content"
-                         android:layout_marginStart="18dp"
-                         app:layout_constraintStart_toEndOf="@+id/txt_dealersItems_data"
-                         app:layout_constraintTop_toTopOf="parent" />
-                     <View
-                         android:layout_width="1dp"
-                         android:layout_height="match_parent"
-                         android:background="#AFAFAF"
-                         />
-                     <androidx.appcompat.widget.AppCompatTextView
-                         android:id="@+id/txt_dealerCode"
-                         android:layout_width="90dp"
-                         android:padding="2dp"
-                         android:gravity="center"
-                         android:layout_height="wrap_content"
-                         android:layout_marginStart="18dp"
-                         app:layout_constraintStart_toEndOf="@+id/txt_dealersname_data"
-                         app:layout_constraintTop_toTopOf="parent" />
-                     <View
-                         android:layout_width="1dp"
-                         android:layout_height="match_parent"
-                         android:background="#AFAFAF"
-                         />
-                     <androidx.appcompat.widget.AppCompatTextView
-                         android:id="@+id/txt_orderWeight"
-                         android:layout_width="90dp"
-                         android:layout_height="wrap_content"
-                         android:padding="2dp"
-                         android:layout_marginStart="18dp"
-                         app:layout_constraintStart_toEndOf="@+id/txt_dealerCode_data"
-                         app:layout_constraintTop_toTopOf="parent" />
-                     <View
-                         android:layout_width="1dp"
-                         android:layout_height="match_parent"
-                         android:background="#AFAFAF"
-                         />
-                     <androidx.appcompat.widget.AppCompatTextView
-                         android:id="@+id/txt_pendingOrderWeight"
-                         android:layout_width="90dp"
-                         android:layout_height="wrap_content"
-                         android:padding="2dp"
-                         android:layout_marginStart="18dp"
-                         app:layout_constraintStart_toEndOf="@+id/txt_orderWeight"
-                         app:layout_constraintTop_toTopOf="parent" />
-                     <View
-                         android:layout_width="1dp"
-                         android:layout_height="match_parent"
-                         android:background="#AFAFAF"
-                         />
-                     <androidx.appcompat.widget.AppCompatTextView
-                         android:id="@+id/txt_inProgressOrderWeight"
-                         android:layout_width="90dp"
-                         android:layout_height="wrap_content"
-                         android:padding="2dp"
-                         android:layout_marginStart="18dp"
-                         app:layout_constraintStart_toEndOf="@+id/txt_pendingOrderWeight"
-                         app:layout_constraintTop_toTopOf="parent" />
-                     <View
-                         android:layout_width="1dp"
-                         android:layout_height="match_parent"
-                         android:background="#AFAFAF"
-                         />
-                     <androidx.appcompat.widget.AppCompatTextView
-                         android:id="@+id/txt_undeliverdOrderWeight"
-                         android:layout_width="90dp"
-                         android:layout_height="wrap_content"
-                         android:padding="2dp"
-                         android:layout_marginStart="18dp"
-                         app:layout_constraintStart_toEndOf="@+id/txt_inProgressOrderWeight"
-                         app:layout_constraintTop_toTopOf="parent" />
-                     <View
-                         android:layout_width="1dp"
-                         android:layout_height="match_parent"
-                         android:background="#AFAFAF"
-                         />
-                     <androidx.appcompat.widget.AppCompatTextView
-                         android:id="@+id/txt_deliverdOrderWeight"
-                         android:layout_width="90dp"
-                         android:padding="2dp"
-                         android:layout_height="wrap_content"
-                         android:layout_marginStart="18dp"
-                         app:layout_constraintStart_toEndOf="@+id/txt_inProgressOrderWeight"
-                         app:layout_constraintTop_toTopOf="parent" />
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#AFAFAF" />
 
-                 </LinearLayout>
-                 <LinearLayout
-                     android:id="@+id/layout_sub_sub"
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     app:layout_constraintEnd_toEndOf="parent"
-                     app:layout_constraintStart_toStartOf="parent"
-                     android:visibility="gone"
-                     app:layout_constraintTop_toBottomOf="@+id/layout_sub">
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txtpendingOrderWeight"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="2dp"
+                    app:layout_constraintStart_toEndOf="@+id/txtorderWeight"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                     <androidx.appcompat.widget.AppCompatTextView
-                         android:id="@+id/txt_customerItems_dealerCode"
-                         android:layout_width="90dp"
-                         android:layout_height="wrap_content"
-                         android:layout_marginStart="18dp"
-                         android:padding="2dp"
-                         android:gravity="center"
-                         app:layout_constraintStart_toEndOf="@+id/layout_sub_sub"
-                         app:layout_constraintTop_toTopOf="parent" />
-                     <View
-                         android:layout_width="1dp"
-                         android:layout_height="match_parent"
-                         android:background="#AFAFAF"
-                         />
-                     <androidx.appcompat.widget.AppCompatTextView
-                         android:id="@+id/txt_customerItems_customerName"
-                         android:layout_width="120dp"
-                         android:layout_height="wrap_content"
-                         android:padding="2dp"
-                         android:layout_marginStart="18dp"
-                         app:layout_constraintStart_toEndOf="@+id/txt_customerItems_dealerCode"
-                         app:layout_constraintTop_toTopOf="parent" />
-                     <View
-                         android:layout_width="1dp"
-                         android:layout_height="match_parent"
-                         android:background="#AFAFAF"
-                         />
-                     <androidx.appcompat.widget.AppCompatTextView
-                         android:id="@+id/txt_customerItems_customerCode"
-                         android:layout_width="90dp"
-                         android:layout_height="wrap_content"
-                         android:layout_marginStart="18dp"
-                         android:padding="2dp"
-                         app:layout_constraintStart_toEndOf="@+id/txt_customerItems_customerName"
-                         app:layout_constraintTop_toTopOf="parent" />
-                     <View
-                         android:layout_width="1dp"
-                         android:layout_height="match_parent"
-                         android:background="#AFAFAF"
-                         />
-                     <androidx.appcompat.widget.AppCompatTextView
-                         android:id="@+id/txt_customerItems_orderWeight"
-                         android:layout_width="90dp"
-                         android:layout_height="wrap_content"
-                         android:layout_marginStart="18dp"
-                         android:padding="2dp"
-                         app:layout_constraintStart_toEndOf="@+id/txt_customerItems_customerCode"
-                         app:layout_constraintTop_toTopOf="parent" />
-                     <View
-                         android:layout_width="1dp"
-                         android:layout_height="match_parent"
-                         android:background="#AFAFAF"
-                         />
-                     <androidx.appcompat.widget.AppCompatTextView
-                         android:id="@+id/txt_customerItems_pendingOrderWeight"
-                         android:layout_width="90dp"
-                         android:layout_height="wrap_content"
-                         android:layout_marginStart="18dp"
-                         android:padding="2dp"
-                         app:layout_constraintStart_toEndOf="@+id/txt_customerItems_orderWeight"
-                         app:layout_constraintTop_toTopOf="parent" />
-                     <View
-                         android:layout_width="1dp"
-                         android:layout_height="match_parent"
-                         android:background="#AFAFAF"
-                         />
-                     <androidx.appcompat.widget.AppCompatTextView
-                         android:id="@+id/txt_customerItems_inProgressOrderWeight"
-                         android:layout_width="90dp"
-                         android:layout_height="wrap_content"
-                         android:padding="2dp"
-                         android:layout_marginStart="18dp"
-                         app:layout_constraintStart_toEndOf="@+id/txt_customerItems_pendingOrderWeight"
-                         app:layout_constraintTop_toTopOf="parent" />
-                     <View
-                         android:layout_width="1dp"
-                         android:layout_height="match_parent"
-                         android:background="#AFAFAF"
-                         />
-                     <androidx.appcompat.widget.AppCompatTextView
-                         android:id="@+id/txt_customerItems_undeliverdOrderWeight"
-                         android:layout_width="90dp"
-                         android:layout_height="wrap_content"
-                         android:padding="2dp"
-                         android:layout_marginStart="18dp"
-                         app:layout_constraintStart_toEndOf="@+id/txt_customerItems_inProgressOrderWeight"
-                         app:layout_constraintTop_toTopOf="parent" />
-                     <View
-                         android:layout_width="1dp"
-                         android:layout_height="match_parent"
-                         android:background="#AFAFAF"
-                         />
-                     <androidx.appcompat.widget.AppCompatTextView
-                         android:id="@+id/txt_customerItems_finalWeight"
-                         android:layout_width="90dp"
-                         android:padding="2dp"
-                         android:layout_height="wrap_content"
-                         android:layout_marginStart="18dp"
-                         app:layout_constraintStart_toEndOf="@+id/txt_customerItems_undeliverdOrderWeight"
-                         app:layout_constraintTop_toTopOf="parent" />
-                 </LinearLayout>
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txtinProgressOrderWeight"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="2dp"
+                    app:layout_constraintStart_toEndOf="@+id/txtpendingOrderWeight"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txtundeliverdOrderWeight"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="2dp"
+                    app:layout_constraintStart_toEndOf="@+id/txtinProgressOrderWeight"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/finalWeight"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:layout_weight="1"
+                    android:padding="2dp"
+                    app:layout_constraintStart_toEndOf="@+id/txtundeliverdOrderWeight"
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_header_sub"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#AEE5FF"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layout_super">
+
+                <androidx.appcompat.widget.AppCompatTextView
+
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="3dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="2dp"
+                    android:text="تاریخ"
+                    android:textSize="10sp"
+                    app:layout_constraintStart_toEndOf="@+id/txtundeliverdOrderWeight"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="2dp"
+                    android:text="نام ویزیتور"
+                    android:textSize="5sp"
+                    app:layout_constraintStart_toEndOf="@+id/txt_dealersItems_data"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:gravity="center"
+                    android:padding="2dp"
+                    android:text="کد ویزیتور"
+                    android:textSize="5sp"
+                    app:layout_constraintStart_toEndOf="@+id/txt_dealersname_data"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="2dp"
+                    android:text="وزن"
+                    android:textSize="5sp"
+                    app:layout_constraintStart_toEndOf="@+id/txt_dealerCode_data"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="2dp"
+                    android:text="وزن"
+                    android:textSize="5sp"
+                    app:layout_constraintStart_toEndOf="@+id/txt_orderWeight"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="2dp"
+                    android:text="وزن"
+                    android:textSize="5sp"
+                    app:layout_constraintStart_toEndOf="@+id/txt_pendingOrderWeight"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="2dp"
+                    android:text="وزن"
+                    android:textSize="5sp"
+                    app:layout_constraintStart_toEndOf="@+id/txt_inProgressOrderWeight"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="2dp"
+                    android:text="وزن"
+                    android:textSize="5sp"
+                    app:layout_constraintStart_toEndOf="@+id/txt_inProgressOrderWeight"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_sub"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layout_super">
+
+                <androidx.appcompat.widget.AppCompatTextView
+
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="3dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txt_dealersItems_data"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="2dp"
+                    app:layout_constraintStart_toEndOf="@+id/txtundeliverdOrderWeight"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txt_dealerName"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="2dp"
+                    app:layout_constraintStart_toEndOf="@+id/txt_dealersItems_data"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txt_dealerCode"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:gravity="center"
+                    android:padding="2dp"
+                    app:layout_constraintStart_toEndOf="@+id/txt_dealersname_data"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txt_orderWeight"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="2dp"
+                    app:layout_constraintStart_toEndOf="@+id/txt_dealerCode_data"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txt_pendingOrderWeight"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="2dp"
+                    app:layout_constraintStart_toEndOf="@+id/txt_orderWeight"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txt_inProgressOrderWeight"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="2dp"
+                    app:layout_constraintStart_toEndOf="@+id/txt_pendingOrderWeight"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txt_undeliverdOrderWeight"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="2dp"
+                    app:layout_constraintStart_toEndOf="@+id/txt_inProgressOrderWeight"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txt_deliverdOrderWeight"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="2dp"
+                    app:layout_constraintStart_toEndOf="@+id/txt_inProgressOrderWeight"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_sub_sub"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layout_sub">
+
+                <androidx.appcompat.widget.AppCompatTextView
+
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="3dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txt_customerItems_dealerCode"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:gravity="center"
+                    android:padding="2dp"
+                    app:layout_constraintStart_toEndOf="@+id/layout_sub_sub"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txt_customerItems_customerName"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="2dp"
+                    app:layout_constraintStart_toEndOf="@+id/txt_customerItems_dealerCode"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txt_customerItems_customerCode"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="2dp"
+                    app:layout_constraintStart_toEndOf="@+id/txt_customerItems_customerName"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txt_customerItems_orderWeight"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="2dp"
+                    app:layout_constraintStart_toEndOf="@+id/txt_customerItems_customerCode"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txt_customerItems_pendingOrderWeight"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="2dp"
+                    app:layout_constraintStart_toEndOf="@+id/txt_customerItems_orderWeight"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txt_customerItems_inProgressOrderWeight"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="2dp"
+                    app:layout_constraintStart_toEndOf="@+id/txt_customerItems_pendingOrderWeight"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txt_customerItems_undeliverdOrderWeight"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="2dp"
+                    app:layout_constraintStart_toEndOf="@+id/txt_customerItems_inProgressOrderWeight"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txt_customerItems_finalWeight"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="2dp"
+                    app:layout_constraintStart_toEndOf="@+id/txt_customerItems_undeliverdOrderWeight"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </LinearLayout>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/pnl_customers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
 
-        </HorizontalScrollView>
+    </HorizontalScrollView>
 
 
 </androidx.appcompat.widget.LinearLayoutCompat>

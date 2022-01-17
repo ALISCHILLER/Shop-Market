@@ -1,28 +1,20 @@
 package com.varanegar.supervisor.customreport.orderstatus.model;
 
 import com.google.gson.annotations.SerializedName;
-import com.varanegar.supervisor.customreport.orderstatus.annotations.GridColumn;
 
-import java.util.Date;
 import java.util.List;
 
 public class OrderStatusReport {
     @SerializedName("date")
-    @GridColumn(width = 50, position = 0)
     private String date;
-    @GridColumn(width = 50, position = 0)
     @SerializedName("orderWeight")
-    private Double  orderWeight;
-    @GridColumn(width = 50, position = 0)
+    private Double orderWeight;
     @SerializedName("pendingOrderWeight")
-    private Double   pendingOrderWeight;
-    @GridColumn(width = 50, position = 0)
+    private Double pendingOrderWeight;
     @SerializedName("inProgressOrderWeight")
-    private Double  inProgressOrderWeight;
-    @GridColumn(width = 50, position = 0)
+    private Double inProgressOrderWeight;
     @SerializedName("undeliverdOrderWeight")
-    private Double  undeliverdOrderWeight;
-    @GridColumn(width = 50, position = 0)
+    private Double undeliverdOrderWeight;
     @SerializedName("finalWeight")
     private Double finalWeight;
     private List<DealersItem> dealersItems;

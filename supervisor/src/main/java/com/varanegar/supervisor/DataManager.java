@@ -118,7 +118,8 @@ public class DataManager {
                         repository.deleteAll();
                         repository.insert(result);
                     }
-                    getSupervisorId(userModel,visitorModel, callback, context);
+                    getProductGroup(callback,context);
+                  //  getSupervisorId(userModel,visitorModel, callback, context);
 
                 } catch (Exception e) {
                     callback.onError(context.getString(R.string.error_saving_request));
@@ -155,10 +156,11 @@ public class DataManager {
 
                 if (result.uniqueId!= null){
                     SharedPreferences sharedconditionCustomer = context.getSharedPreferences("SupervisorId", Context.MODE_PRIVATE);
-                    sharedconditionCustomer.edit().putString("SupervisorIduniqueId", String.valueOf(result.uniqueId)).commit();
+                    sharedconditionCustomer.edit().putString("SupervisorIduniqueId", String.valueOf(result.uniqueId)).apply();
                 }
 
-                getsupervisorCustomers(visitorModel, callback, context);
+             ///   getsupervisorCustomers(visitorModel, callback, context);
+                getProductGroup(callback,context);
             }
 
             @Override
@@ -195,7 +197,7 @@ public class DataManager {
 //                    SysConfigManager sysConfigManager = new SysConfigManager(context);
 //                    sysConfigManager.sync(new UpdateCall() {
 //                        @Override
-//                        protected void onFinish() {
+//                        protected void onFinish() {error = {WebRequest$1$1@13703}
 //                            callback.onSuccess();
 //                        }
 //                    });
@@ -240,7 +242,14 @@ public class DataManager {
                             repository.deleteAll();
                             repository.insert(result);
                         }
-                        getQuestionnaire(callback,context);
+                        SysConfigManager sysConfigManager = new SysConfigManager(context);
+                        sysConfigManager.sync(new UpdateCall() {
+                            @Override
+                            protected void onFinish() {
+                                callback.onSuccess();
+                            }
+                        });
+                       // getQuestionnaire(callback,context);
                     } catch (Exception e) {
                         Timber.e(e);
                         callback.onError(context.getString(R.string.error_saving_request));

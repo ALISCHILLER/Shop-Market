@@ -82,6 +82,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'androidx.multidex:multidex:2.0.1'
     annotationProcessor project(':processor')
+    implementation 'com.github.bmelnychuk:atv:1.2.+'
 }
 
 tasks.whenTaskAdded { task ->

@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.varanegar.framework.network.gson.VaranegarGsonBuilder;
+import com.varanegar.supervisor.customreport.orderreturn.model.ReturnDealerModel;
+import com.varanegar.supervisor.customreport.orderstatus.model.DealersItem;
 import com.varanegar.supervisor.customreport.orderstatus.model.OrderStatusReport;
 import com.varanegar.supervisor.customreport.orderstatus.model.orderStatusModel;
 import com.varanegar.supervisor.model.ProductModel;
@@ -92,8 +94,18 @@ public class SupervisorApi extends BaseApi implements ISupervisorApi {
     }
 
     @Override
+    public Call<String> tourreceived(UUID id) {
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).tourreceived(id);
+    }
+
+    @Override
     public Call<List<OrderStatusReport>> OrderStatusReport(orderStatusModel orderStatusModel) {
         return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).OrderStatusReport(orderStatusModel);
+    }
+
+    @Override
+    public Call<List<ReturnDealerModel>> GetReturnReport(orderStatusModel param) {
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).GetReturnReport(param);
     }
 
     @Override

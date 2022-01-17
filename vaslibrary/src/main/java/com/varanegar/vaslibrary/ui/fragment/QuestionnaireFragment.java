@@ -1,6 +1,7 @@
 package com.varanegar.vaslibrary.ui.fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.database.DbException;
+import com.varanegar.framework.database.querybuilder.Query;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.util.Linq;
@@ -34,6 +36,9 @@ import com.varanegar.vaslibrary.manager.questionnaire.QuestionnaireAnswerManager
 import com.varanegar.vaslibrary.manager.questionnaire.QuestionnaireCustomerManager;
 import com.varanegar.vaslibrary.manager.questionnaire.QuestionnaireCustomerViewManager;
 import com.varanegar.vaslibrary.manager.questionnaire.QuestionnaireLineManager;
+import com.varanegar.vaslibrary.model.customer.SupervisorFullCustomer;
+import com.varanegar.vaslibrary.model.customer.SupervisorFullCustomerModel;
+import com.varanegar.vaslibrary.model.customer.SupervisorFullCustomerModelRepository;
 import com.varanegar.vaslibrary.model.customercall.CustomerCallType;
 import com.varanegar.vaslibrary.model.questionnaire.QuestionnaireAnswerModel;
 import com.varanegar.vaslibrary.model.questionnaire.QuestionnaireCustomerModel;
@@ -50,6 +55,8 @@ import com.varanegar.vaslibrary.webapi.tour.SyncGetCustomerCallQuestionnaireView
 import com.varanegar.vaslibrary.webapi.tour.SyncGetCustomerCallViewModel;
 import com.varanegar.vaslibrary.webapi.tour.SyncGetTourViewModel;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -90,46 +97,6 @@ public class QuestionnaireFragment extends VisitFragment {
             if (VaranegarApplication.is(VaranegarApplication.AppId.Supervisor)) {
                 sendButton.setVisibility(View.VISIBLE);
                 sendButton.setOnClickListener(view1 -> {
-                    Date date =new Date();
-                    String endData = DateHelper.toString(date, DateFormat.Date, Locale.getDefault());
-                    SyncGetTourModel  syncGetTourModel=new SyncGetTourModel(getContext(),UUID.fromString(getArguments().getString("f8c2abc4-c401-4f16-8f7d-1019e80574af")));
-                    SyncGetCustomerCallModel syncGetCustomerCallViewModel = new SyncGetCustomerCallModel();
-                    syncGetCustomerCallViewModel.customerUniqueId=customerId;
-                    syncGetCustomerCallViewModel.callDate=date;
-                    syncGetCustomerCallViewModel.callPDate=endData;
-                    syncGetCustomerCallViewModel.startTime=date;
-                    syncGetCustomerCallViewModel.startPTime=endData;
-                    syncGetCustomerCallViewModel.endTime=date;
-                    syncGetCustomerCallViewModel.endPTime=endData;
-                    syncGetCustomerCallViewModel.latitude=51.48330420255661;
-                    syncGetCustomerCallViewModel.latitude=51.48330420255661;
-                    syncGetCustomerCallViewModel.receiveDate=date;
-                    syncGetCustomerCallViewModel.receivePDate=endData;
-                    syncGetCustomerCallViewModel.visitDuration=245000;
-                    syncGetCustomerCallViewModel.customerCallQuestionnaires = (ArrayList<SyncCustomerCallQuestionnaire>) populateCustomerQuestionnaires(customerId);
-                    syncGetTourModel.CustomerCalls.add(syncGetCustomerCallViewModel);
-                    ReportApi reportApi =new ReportApi(getContext());
-                    reportApi.runWebRequest(reportApi.savetourdata(syncGetTourModel), new WebCallBack<String>() {
-                        @Override
-                        protected void onFinish() {
-
-                        }
-
-                        @Override
-                        protected void onSuccess(String result, Request request) {
-
-                        }
-
-                        @Override
-                        protected void onApiFailure(ApiError error, Request request) {
-
-                        }
-
-                        @Override
-                        protected void onNetworkFailure(Throwable t, Request request) {
-
-                        }
-                    });
 
                 });
             } else {
@@ -177,6 +144,54 @@ public class QuestionnaireFragment extends VisitFragment {
 
         }
 
+       public void sendQuestion(){
+
+
+          ///  SupervisorFullCustomerModel customerModel= new SupervisorFullCustomerModelRepository().getItem(new Query().from(SupervisorFullCustomer.SupervisorFullCustomerTbl).whereAnd())
+
+            Date date =new Date();
+            SharedPreferences sharedPreferences = getContext().getSharedPreferences("SupervisorId", Context.MODE_PRIVATE);
+            UUID userModel = UUID.fromString(sharedPreferences.getString("SupervisorIduniqueId", null));
+            String endData = DateHelper.toString(date, DateFormat.Date, Locale.getDefault());
+            SyncGetTourModel  syncGetTourModel=new SyncGetTourModel(getContext(),userModel);
+            SyncGetCustomerCallModel syncGetCustomerCallViewModel = new SyncGetCustomerCallModel();
+            syncGetCustomerCallViewModel.customerUniqueId=customerId;
+            syncGetCustomerCallViewModel.callDate=date;
+            syncGetCustomerCallViewModel.callPDate=endData;
+            syncGetCustomerCallViewModel.startTime=date;
+            syncGetCustomerCallViewModel.startPTime=endData;
+            syncGetCustomerCallViewModel.endTime=date;
+            syncGetCustomerCallViewModel.endPTime=endData;
+            syncGetCustomerCallViewModel.latitude=51.48330420255661;
+            syncGetCustomerCallViewModel.latitude=51.48330420255661;
+            syncGetCustomerCallViewModel.receiveDate=date;
+            syncGetCustomerCallViewModel.receivePDate=endData;
+            syncGetCustomerCallViewModel.visitDuration=245000;
+            syncGetCustomerCallViewModel.customerCallQuestionnaires = (ArrayList<SyncCustomerCallQuestionnaire>) populateCustomerQuestionnaires(customerId);
+            syncGetTourModel.CustomerCalls.add(syncGetCustomerCallViewModel);
+            ReportApi reportApi =new ReportApi(getContext());
+            reportApi.runWebRequest(reportApi.savetourdata(syncGetTourModel), new WebCallBack<String>() {
+                @Override
+                protected void onFinish() {
+
+                }
+
+                @Override
+                protected void onSuccess(String result, Request request) {
+
+                }
+
+                @Override
+                protected void onApiFailure(ApiError error, Request request) {
+
+                }
+
+                @Override
+                protected void onNetworkFailure(Throwable t, Request request) {
+
+                }
+            });
+        }
         @Override
         public void bindView(final int position) {
             final QuestionnaireCustomerViewModel q = recyclerAdapter.get(position);

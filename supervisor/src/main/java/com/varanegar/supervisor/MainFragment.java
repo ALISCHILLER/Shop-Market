@@ -46,6 +46,7 @@ public class MainFragment extends VaranegarFragment {
         tl.getTabAt(3).setIcon(R.drawable.ic_tracking_cyan_48dp);
 
         tl.getTabAt(5).setIcon(R.drawable.ic_view_list_cyan_48dp);
+     ///   tl.getTabAt(6).setIcon(R.drawable.ic_view_list_cyan_48dp);
         return view;
     }
 
@@ -72,7 +73,8 @@ public class MainFragment extends VaranegarFragment {
         ToursStatusFragment statusFragment = new ToursStatusFragment();
         ReportsFragment reportsFragment = new ReportsFragment();
         TrackingFragment trackingFragment = new TrackingFragment();
-        OrderReportFragment customersFullFragment =new OrderReportFragment();
+        OrderReportFragment orderReportFragment =new OrderReportFragment();
+        CustomersFullFragment customersFullFragment=new CustomersFullFragment();
         MenuFragment menuFragment = new MenuFragment();
 
         public TabsPagerAdapter(FragmentManager fm) {
@@ -87,13 +89,14 @@ public class MainFragment extends VaranegarFragment {
                 return customersFragment;
             else if (position == 2)
                 return statusFragment;
-
             else if (position == 4)
                 return reportsFragment;
             else if (position == 3)
                 return trackingFragment;
             else if (position == 5)
-                return customersFullFragment;
+                return orderReportFragment;
+//            else if (position == 6)
+//                return customersFullFragment;
 //                return menuFragment;
 //            else return menuFragment;
             else  return statusFragment;

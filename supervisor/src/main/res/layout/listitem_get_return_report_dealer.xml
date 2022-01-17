@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+
+
+
+    <!--    <HorizontalScrollView-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:scrollbars="none">-->
+
+    <!--        <androidx.appcompat.widget.LinearLayoutCompat-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:orientation="vertical">-->
+    <LinearLayout
+        android:id="@+id/layout_header_sub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#AEE5FF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_super">
+
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:padding="3dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:background="#AFAFAF" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:padding="2dp"
+            android:text="تاریخ"
+            android:textSize="10sp"
+            app:layout_constraintStart_toEndOf="@+id/txtundeliverdOrderWeight"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#AFAFAF" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:padding="2dp"
+            android:text="نام ویزیتور"
+            android:textSize="10sp"
+            app:layout_constraintStart_toEndOf="@+id/txt_dealersItems_data"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#AFAFAF" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="کد ویزیتور"
+            android:textSize="10sp"
+            app:layout_constraintStart_toEndOf="@+id/txt_dealersname_data"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#AFAFAF" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:padding="2dp"
+            android:text="وزن"
+            android:textSize="10sp"
+            app:layout_constraintStart_toEndOf="@+id/txt_dealerCode_data"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#AFAFAF" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:padding="2dp"
+            android:text="وزن"
+            android:textSize="10sp"
+            app:layout_constraintStart_toEndOf="@+id/txt_orderWeight"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#AFAFAF" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:padding="2dp"
+            android:text="وزن"
+            android:textSize="10sp"
+            app:layout_constraintStart_toEndOf="@+id/txt_pendingOrderWeight"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#AFAFAF" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:padding="2dp"
+            android:text="وزن"
+            android:textSize="10sp"
+            app:layout_constraintStart_toEndOf="@+id/txt_inProgressOrderWeight"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#AFAFAF" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:padding="2dp"
+            android:text="وزن"
+            android:textSize="10sp"
+            app:layout_constraintStart_toEndOf="@+id/txt_inProgressOrderWeight"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_sub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/addite_dleer"
+            android:layout_width="30dp"
+            android:text="+"
+            android:textColor="#4DFF56"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:padding="3dp"
+            />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:background="#AFAFAF" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txt_dealersItems_data"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:textColor="#FF945B"
+            android:padding="2dp"
+            />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#AFAFAF" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txt_dealerName"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:textColor="#FF945B"
+            android:padding="2dp"
+            />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#AFAFAF" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txt_dealerCode"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:textColor="#FF945B"
+            android:gravity="center"
+            android:padding="2dp"
+            />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#AFAFAF" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txt_orderWeight"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:textColor="#FF945B"
+            android:padding="2dp"
+            />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#AFAFAF" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txt_pendingOrderWeight"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:textColor="#FF945B"
+            android:padding="2dp"
+            />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#AFAFAF" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txt_inProgressOrderWeight"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:textColor="#FF945B"
+            android:padding="2dp"
+            />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#AFAFAF" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txt_undeliverdOrderWeight"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:textColor="#FF945B"
+            android:layout_marginStart="18dp"
+            android:padding="2dp"
+            />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#AFAFAF" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txt_deliverdOrderWeight"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:textColor="#FF945B"
+            android:layout_marginStart="18dp"
+            android:padding="2dp"
+            />
+
+    </LinearLayout>
+    <!--        </androidx.appcompat.widget.LinearLayoutCompat>-->
+
+    <!--    </HorizontalScrollView>-->
+</androidx.appcompat.widget.LinearLayoutCompat>

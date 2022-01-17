@@ -2,6 +2,7 @@ package com.varanegar.supervisor;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -13,9 +14,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.varanegar.framework.base.MainVaranegarActivity;
+import com.varanegar.framework.network.listeners.ApiError;
+import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.util.component.SlidingDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
+import com.varanegar.supervisor.webapi.SupervisorApi;
 import com.varanegar.vaslibrary.base.BackupManager;
 import com.varanegar.vaslibrary.manager.UserManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
@@ -23,7 +27,11 @@ import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.ui.dialog.TrackingLicenseFragment;
+import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 
+import java.util.UUID;
+
+import okhttp3.Request;
 import timber.log.Timber;
 
 public class SettingsSlidingDialog extends SlidingDialog {
@@ -76,6 +84,7 @@ public class SettingsSlidingDialog extends SlidingDialog {
                 dialog.show();
             }
         });
+
 
         view.findViewById(R.id.backup_image_view).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,6 +161,54 @@ public class SettingsSlidingDialog extends SlidingDialog {
             Timber.e(e);
         }
 
+        view.findViewById(R.id.send_tour).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final ProgressDialog progressDialog = new ProgressDialog(getContext());
+                progressDialog.setMessage(getString(R.string.downloading_data));
+                progressDialog.show();
+                SharedPreferences sharedPreferences = getContext().getSharedPreferences("SupervisorId", Context.MODE_PRIVATE);
+                UUID userModel = UUID.fromString(sharedPreferences.getString("SupervisorIduniqueId", null));
+                SupervisorApi supervisorApi=new SupervisorApi(getContext());
+                supervisorApi.runWebRequest(supervisorApi.tourreceived(userModel), new WebCallBack<String>() {
+                    @Override
+                    protected void onFinish() {
+
+                    }
+
+                    @Override
+                    protected void onSuccess(String result, Request request) {
+
+                    }
+
+                    @Override
+                    protected void onApiFailure(ApiError error, Request request) {
+                        String err = WebApiErrorBody.log(error, getContext());
+                        showError(err);
+                        if (progressDialog != null && progressDialog.isShowing()) {
+                            try {
+                                progressDialog.dismiss();
+                            } catch (Exception ignored) {
+
+                            }
+                        }
+                    }
+
+                    @Override
+                    protected void onNetworkFailure(Throwable t, Request request) {
+                        showError(getContext().getString(R.string.error_connecting_to_server));
+                        if (progressDialog != null && progressDialog.isShowing()) {
+                            try {
+                                progressDialog.dismiss();
+                            } catch (Exception ignored) {
+
+                            }
+                        }
+                    }
+                });
+
+            }
+        });
         view.findViewById(R.id.get_tour_image_view).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
