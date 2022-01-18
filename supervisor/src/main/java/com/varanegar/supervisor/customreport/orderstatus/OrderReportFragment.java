@@ -387,20 +387,22 @@ public class OrderReportFragment extends IMainPageFragment {
     int totalCount = 0;
     private final TreeNode.TreeNodeClickListener returnNodeClickListener = (node, value) -> {
         if(node.getLevel() == 1){
-
+            LinearLayout  layout_header_sub=node.getViewHolder().getView().findViewById(R.id.layout_header_sub);
             AppCompatTextView add_item=node.getViewHolder().getView().findViewById(R.id.add_item);
             if (node.isExpanded()){
                 add_item.setText("+");
                 add_item.setTextColor(Color.parseColor("#4DFF56"));
+                layout_header_sub.setVisibility(View.GONE);
             }else {
                 add_item.setText("-");
                 add_item.setTextColor(Color.parseColor("#FF00F2"));
+                layout_header_sub.setVisibility(View.VISIBLE);
             }
         }
 
         Log.d("orderreportfragment", "begin load: " + childCount+ "node level = "+node.getId());
         if (node.getLevel() == 2) {
-
+            LinearLayout  layout_header_sub=node.getViewHolder().getView().findViewById(R.id.layout_header_sub);
             AppCompatTextView addite_dleer=node.getViewHolder().getView().findViewById(R.id.addite_dleer);
 
         //    totalCount = ((OrderStatusReportFlat) value).getChilds().size();
@@ -408,10 +410,14 @@ public class OrderReportFragment extends IMainPageFragment {
             if (node.isExpanded()){
                 addite_dleer.setText("+");
                 addite_dleer.setTextColor(Color.parseColor("#4DFF56"));
+                layout_header_sub.setVisibility(View.GONE);
+
             }else {
                 addite_dleer.setText("-");
                 addite_dleer.setTextColor(Color.parseColor("#FF00F2"));
                 containerView.setEnabled(false);
+                layout_header_sub.setVisibility(View.VISIBLE);
+
             }
 
 
@@ -422,12 +428,16 @@ public class OrderReportFragment extends IMainPageFragment {
         if(((OrderStatusReportFlat)value).getLevel() == 1){
 
             AppCompatTextView add_item=node.getViewHolder().getView().findViewById(R.id.add_item);
+          LinearLayout  layout_header_sub=node.getViewHolder().getView().findViewById(R.id.layout_header_sub);
+
             if (node.isExpanded()){
                 add_item.setText("+");
                 add_item.setTextColor(Color.parseColor("#4DFF56"));
+                layout_header_sub.setVisibility(View.GONE);
             }else {
                 add_item.setText("-");
                 add_item.setTextColor(Color.parseColor("#FF00F2"));
+                layout_header_sub.setVisibility(View.VISIBLE);
             }
         }
 
@@ -435,16 +445,18 @@ public class OrderReportFragment extends IMainPageFragment {
         if (((OrderStatusReportFlat)value).getLevel() == 2) {
 
             AppCompatTextView addite_dleer=node.getViewHolder().getView().findViewById(R.id.addite_dleer);
-
+            LinearLayout  layout_header_sub=node.getViewHolder().getView().findViewById(R.id.layout_header_sub);
             totalCount = ((OrderStatusReportFlat) value).getChilds().size();
 
             if (node.isExpanded()){
                 addite_dleer.setText("+");
                 addite_dleer.setTextColor(Color.parseColor("#4DFF56"));
+                layout_header_sub.setVisibility(View.GONE);
             }else {
                 addite_dleer.setText("-");
                 addite_dleer.setTextColor(Color.parseColor("#FF00F2"));
                 containerView.setEnabled(false);
+                layout_header_sub.setVisibility(View.VISIBLE);
             }
 
 

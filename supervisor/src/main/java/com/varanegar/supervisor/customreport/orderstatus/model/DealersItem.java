@@ -21,7 +21,7 @@ public class DealersItem {
     private Double inProgressOrderWeight;
     @SerializedName("undeliverdOrderWeight")
     private Double   undeliverdOrderWeight;
-    @SerializedName("deliverdOrderWeight")
+    @SerializedName("finalWeight")
     private Double  deliverdOrderWeight;
     @SerializedName("customerItems")
     List<CustomerItem> customerItems;

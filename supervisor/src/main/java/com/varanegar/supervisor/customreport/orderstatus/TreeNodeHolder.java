@@ -50,6 +50,7 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
         AppCompatTextView txt_customerItems_inProgressOrderWeight;
         AppCompatTextView txt_customerItems_undeliverdOrderWeight;
         AppCompatTextView txt_customerItems_finalWeight;
+
         txt_customerItems_dealerCode = itemView.findViewById(R.id.txt_customerItems_dealerCode);
         txt_customerItems_customerName = itemView.findViewById(R.id.txt_customerItems_customerName);
         txt_customerItems_customerCode = itemView.findViewById(R.id.txt_customerItems_customerCode);
@@ -58,6 +59,7 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
         txt_customerItems_inProgressOrderWeight = itemView.findViewById(R.id.txt_customerItems_inProgressOrderWeight);
         txt_customerItems_undeliverdOrderWeight = itemView.findViewById(R.id.txt_customerItems_undeliverdOrderWeight);
         txt_customerItems_finalWeight = itemView.findViewById(R.id.txt_customerItems_finalWeight);
+
         txt_customerItems_customerName.setText(String.valueOf(customer.getCustomerName()));
         txt_customerItems_customerCode.setText(customer.getCustomerCode());
         txt_customerItems_dealerCode.setText(customer.getDealerCode());

@@ -35,7 +35,7 @@
             android:layout_margin="10dp"
             app:textColor="@color/blue_pressed"
             app:highlightColor="@color/orange"
-            app:hintText="لیست کالا ها" />
+            app:hintText="لیست گروه کالا ها" />
     </LinearLayout>
 
     <LinearLayout

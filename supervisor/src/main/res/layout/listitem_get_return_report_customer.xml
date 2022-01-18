@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
+    android:orientation="vertical"
     android:layout_height="wrap_content">
 
     <LinearLayout
@@ -31,28 +32,14 @@
             android:layout_height="wrap_content"
             android:background="#AFAFAF" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/txtcustomerName"
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:padding="2dp"
-            android:textColor="#975B12"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="#AFAFAF" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txtCustomerCode"
-            android:layout_width="120dp"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="2dp"
-            android:textColor="#975B12"
+            android:textColor="#FF945B"
             app:layout_constraintStart_toEndOf="@+id/txtDate"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -62,13 +49,164 @@
             android:background="#AFAFAF" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/txtproductCountCa"
-            android:layout_width="90dp"
+            android:id="@+id/txtcustomerName"
+            android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="2dp"
-            android:textColor="#975B12"
+            android:textColor="#FF945B"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#AFAFAF" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtproductCountCa"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:padding="2dp"
+            android:textColor="#FF945B"
             app:layout_constraintStart_toEndOf="@+id/txtorderWeight"
             app:layout_constraintTop_toTopOf="parent" />
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/layout_footer_sub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:background="#F60080"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_super">
+
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:padding="3dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:background="#AFAFAF" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:padding="2dp"
+
+            android:textSize="10sp"
+            app:layout_constraintStart_toEndOf="@+id/txtundeliverdOrderWeight"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#AFAFAF" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:padding="2dp"
+
+            android:textSize="10sp"
+            app:layout_constraintStart_toEndOf="@+id/txt_dealersItems_data"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#AFAFAF" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:gravity="center"
+            android:padding="2dp"
+            android:textColor="#000000"
+            android:id="@+id/txt_sum"
+            android:textSize="10sp"
+
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/layout_header_sub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:background="#52ECBC"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_super">
+
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:padding="3dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:background="#AFAFAF" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:padding="2dp"
+            android:text="کد دلیل"
+            android:textSize="10sp"
+            app:layout_constraintStart_toEndOf="@+id/txtundeliverdOrderWeight"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#AFAFAF" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:padding="2dp"
+            android:text="دلیل برگشتی"
+            android:textSize="10sp"
+            app:layout_constraintStart_toEndOf="@+id/txt_dealersItems_data"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#AFAFAF" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="تعداد کارتن برگشتی"
+            android:textSize="10sp"
+            app:layout_constraintStart_toEndOf="@+id/txt_dealersname_data"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
+
 </androidx.appcompat.widget.LinearLayoutCompat>

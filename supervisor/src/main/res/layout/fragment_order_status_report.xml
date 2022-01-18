@@ -69,7 +69,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-            <LinearLayout
+
+
+                <LinearLayout
                 android:id="@+id/layout_header_order"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
@@ -92,7 +94,7 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
 
-                    android:layout_width="90dp"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
                     android:padding="3dp"
@@ -111,7 +113,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
                     android:padding="3dp"
-                    android:text="وزن سفارش"
+                    android:text="کل سفارش"
                     app:layout_constraintStart_toEndOf="@+id/txtDate"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -122,11 +124,11 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
 
-                    android:layout_width="90dp"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
                     android:padding="3dp"
-                    android:text="وزن سفارش"
+                    android:text="سفارش بدون وضعیت"
                     app:layout_constraintStart_toEndOf="@+id/txtorderWeight"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -137,11 +139,11 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
 
-                    android:layout_width="90dp"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
                     android:padding="3dp"
-                    android:text="وزن سفارش"
+                    android:text="سفارشات ستل شده"
                     app:layout_constraintStart_toEndOf="@+id/txtpendingOrderWeight"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -152,11 +154,11 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
 
-                    android:layout_width="90dp"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
                     android:padding="3dp"
-                    android:text="وزن سفارش"
+                    android:text="سفارشات برگشتی"
                     app:layout_constraintStart_toEndOf="@+id/txtinProgressOrderWeight"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -169,17 +171,18 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
 
-                    android:layout_width="0dp"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
-                    android:layout_weight="1"
+
                     android:padding="3dp"
-                    android:text="وزن سفارش"
+                    android:text="سفارشات فاکتور شده"
                     app:layout_constraintStart_toEndOf="@+id/txtundeliverdOrderWeight"
                     app:layout_constraintTop_toTopOf="parent" />
 
 
             </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/layout_header_return"
                     android:layout_width="match_parent"
@@ -203,11 +206,11 @@
 
                     <androidx.appcompat.widget.AppCompatTextView
 
-                        android:layout_width="90dp"
+                        android:layout_width="120dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="18dp"
                         android:padding="3dp"
-                        android:text="تاریخ"
+                        android:text="کدویزیتور"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -222,7 +225,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="18dp"
                         android:padding="3dp"
-                        android:text="وزن سفارش"
+                        android:text="نام ویزیتور"
                         app:layout_constraintStart_toEndOf="@+id/txtDate"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -233,11 +236,11 @@
 
                     <androidx.appcompat.widget.AppCompatTextView
 
-                        android:layout_width="90dp"
+                        android:layout_width="120dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="18dp"
                         android:padding="3dp"
-                        android:text="وزن سفارش"
+                        android:text="تعداد کارتن برگشتی"
                         app:layout_constraintStart_toEndOf="@+id/txtorderWeight"
                         app:layout_constraintTop_toTopOf="parent" />
 

@@ -46,6 +46,10 @@ public class ReportConfigDialog extends SlidingDialog {
     private ImageView fromDateImageView;
     private ImageView toDateImageView;
     private ReportConfig config;
+    private int mproduct;
+    public ReportConfigDialog(int product) {
+        this.mproduct=product;
+    }
 
     OnReportConfigUpdate onReportConfigUpdate;
 
@@ -107,8 +111,6 @@ public class ReportConfigDialog extends SlidingDialog {
              */
             MultiSpinnerSearch multiSelectSpinnerWithSearch = view.findViewById(R.id.multipleItemSelectionSpinner);
 
-
-
             // Pass true If you want searchView above the list. Otherwise false. default = true.
             multiSelectSpinnerWithSearch.setSearchEnabled(true);
             multiSelectSpinnerWithSearch.setHintText("لیست ویزیتورها");
@@ -160,7 +162,11 @@ public class ReportConfigDialog extends SlidingDialog {
              */
           MultiSpinnerSearch multiSelectproduct_group
                     = view.findViewById(R.id.multipleItem_product_group_Spinnerr);
-
+            if (mproduct==1){
+                multiSelectproduct_group.setVisibility(View.VISIBLE);
+            }else {
+                multiSelectproduct_group.setVisibility(View.GONE);
+            }
 
             // Pass true If you want searchView above the list. Otherwise false. default = true.
             multiSelectproduct_group.setSearchEnabled(true);
@@ -178,7 +184,7 @@ public class ReportConfigDialog extends SlidingDialog {
 
 
             ProductGroupManager ProductGroupManager = new ProductGroupManager(getContext());
-            List<ProductGroupModel> catalogModels = ProductGroupManager.getAll();
+            List<ProductGroupModel> catalogModels = ProductGroupManager.getParentItems(ProductType.All);
             final List<KeyPairBoolData> product_listArray = new ArrayList<>();
             List<String> product_list =new ArrayList<>();
 

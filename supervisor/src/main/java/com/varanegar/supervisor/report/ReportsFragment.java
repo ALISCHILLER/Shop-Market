@@ -57,6 +57,7 @@ public class ReportsFragment extends IMainPageFragment {
     private ReportConfig config;
     private ReportView reportView;
     private TabLayout reportsTabLayout;
+    private int product;
     private TextView errorTextView;
 
     @Override
@@ -71,7 +72,13 @@ public class ReportsFragment extends IMainPageFragment {
             reportsTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
-                    refresh(tab.getPosition());
+//                    refresh(tab.getPosition());
+                    if(tab.getPosition()==3){
+                        product=1;
+                    }else {
+                        product=0;
+                    }
+
                 }
 
                 @Override
@@ -87,7 +94,7 @@ public class ReportsFragment extends IMainPageFragment {
             view.findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    final ReportConfigDialog dialog = new ReportConfigDialog();
+                    final ReportConfigDialog dialog = new ReportConfigDialog(product);
                     dialog.onReportConfigUpdate = new ReportConfigDialog.OnReportConfigUpdate() {
                         @Override
                         public void run() {
