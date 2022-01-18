@@ -133,7 +133,7 @@ public class ReturnTreeNodeHolder extends TreeNode.BaseNodeViewHolder<ReturnRepo
         if(node.getId() == node.getParent().getChildren().size()) {
 
             double sum = 0;
-            for (ReturnReportFlat itemSub : ((ReturnReportFlat) node.getParent().getValue()).getChilds()) {
+            for (ReturnReportFlat itemSub : item.getChilds()) {
                 sum += itemSub.getProductCountCa();
             }
             txt_sum.setText(String.valueOf(sum));
