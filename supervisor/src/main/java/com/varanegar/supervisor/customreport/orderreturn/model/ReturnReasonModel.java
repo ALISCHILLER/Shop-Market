@@ -3,11 +3,11 @@ package com.varanegar.supervisor.customreport.orderreturn.model;
 import com.google.gson.annotations.SerializedName;
 
 public class ReturnReasonModel {
-    @SerializedName("Reason")
+    @SerializedName("reason")
     private String reason;
-    @SerializedName("ReasonCode")
+    @SerializedName("reasonCode")
     private String reasonCode;
-    @SerializedName("ProductCountCa")
+    @SerializedName("productCountCa")
     private Double productCountCa;
 
     public String getReason() {

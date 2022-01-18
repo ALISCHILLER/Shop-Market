@@ -36,6 +36,7 @@ import com.varanegar.supervisor.VisitorFilter;
 
 import com.varanegar.supervisor.customreport.orderreturn.ReturnFlatGenerator;
 import com.varanegar.supervisor.customreport.orderreturn.model.ReturnDealerModel;
+import com.varanegar.supervisor.customreport.orderreturn.model.ReturnReportFlat;
 import com.varanegar.supervisor.customreport.orderstatus.model.CustomerItem;
 import com.varanegar.supervisor.customreport.orderstatus.model.DealersItem;
 
@@ -57,26 +58,57 @@ import timber.log.Timber;
 
 public class OrderReportFragment extends IMainPageFragment {
     private TreeNode root;
-    private TreeNode l3;
-    private TreeNode l2;
-    private TreeNode l1;
+    private View view;
     private orderStatusModel orderStatusModel;
     private LinearLayoutCompat containerView;
-    private AndroidTreeView tView2;
     private OrderReportConfig config;
     private LinearLayout layout_header_return,layout_header_order;
     private int typeReport;
+    private LinearLayoutCompat linear_view;
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (view != null) {
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null) {
+                parent.removeAllViews();
+            }
+        }
+    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        if (view != null) {
+//            ViewGroup parent = (ViewGroup) view.getParent();
+//            if (parent != null) {
+//                parent.removeAllViews();
+//            }
+//        }
+//    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (view != null) {
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null) {
+                parent.removeAllViews();
+            }
+        }
+    }
     @Override
     protected View onCreateContentView(@NonNull LayoutInflater inflater,
                                        @Nullable ViewGroup container,
                                        @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_order_status_report,
+        view = inflater.inflate(R.layout.fragment_order_status_report,
                 container, false);
-        root = TreeNode.root();
- ;
+
         containerView = view.findViewById(R.id.container_view);
         layout_header_return=view.findViewById(R.id.layout_header_return);
         layout_header_order=view.findViewById(R.id.layout_header_order);
+        linear_view=view.findViewById(R.id.linear_view);
         view.findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,9 +116,11 @@ public class OrderReportFragment extends IMainPageFragment {
                 orderConfigDialog.onReportConfigUpdate = new OrderReportConfigDialog.OnReportConfigUpdate() {
                     @Override
                     public void run() {
+
                         if (isResumed()) {
                             Activity activity = getActivity();
                             if (activity != null && !activity.isFinishing() && isResumed()) {
+
                                 orderConfigDialog.dismiss();
                                 config = new OrderReportConfig(activity);
                                 List<String> dealersId = new ArrayList<>();
@@ -129,148 +163,135 @@ public class OrderReportFragment extends IMainPageFragment {
     private void refreshapi() {
         Context context = getContext();
         if (context != null) {
-            containerView.removeAllViews();
-//            if (root.getParent() !=null){
-//                containerView.removeView(tView.getView());
-//                tView.removeNode(root.getParent());
-//                tView.removeNode(root.getRoot());
-//
-//            }
-            if (typeReport==1) {
+
+            if (typeReport == 1) {
                 layout_header_return.setVisibility(View.GONE);
                 layout_header_order.setVisibility(View.VISIBLE);
-               final String fromDate = DateHelper.toString(config.getFromDate(), DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext()));
-               final String toDate = DateHelper.toString(config.getToDate(), DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext()));
-               List<String> dealersId = new ArrayList<>();
-               dealersId = VisitorFilter.getList(getContext());
-               List<String> product_list = new ArrayList<>();
-               product_list = VisitorFilter.getproduct_group(getContext());
+                final String fromDate = DateHelper.toString(config.getFromDate(), DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext()));
+                final String toDate = DateHelper.toString(config.getToDate(), DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext()));
+                List<String> dealersId = new ArrayList<>();
+                dealersId = VisitorFilter.getList(getContext());
+                List<String> product_list = new ArrayList<>();
+                product_list = VisitorFilter.getproduct_group(getContext());
 
-               orderStatusModel = new orderStatusModel();
-               orderStatusModel.setDealersId(dealersId);
-               orderStatusModel.setStartdata(fromDate);
-               orderStatusModel.setEndDate(toDate);
-               startProgress(R.string.please_wait, R.string.connecting_to_the_server);
-               SupervisorApi supervisorApi = new SupervisorApi(getContext());
-               supervisorApi.runWebRequest(supervisorApi.OrderStatusReport(orderStatusModel),
-                       new WebCallBack<List<OrderStatusReport>>() {
-                           @Override
-                           protected void onFinish() {
-                               finishProgress();
-                           }
+                orderStatusModel = new orderStatusModel();
+                orderStatusModel.setDealersId(dealersId);
+                orderStatusModel.setStartdata(fromDate);
+                orderStatusModel.setEndDate(toDate);
+                startProgress(R.string.please_wait, R.string.connecting_to_the_server);
+                SupervisorApi supervisorApi = new SupervisorApi(getContext());
+                supervisorApi.runWebRequest(supervisorApi.OrderStatusReport(orderStatusModel),
+                        new WebCallBack<List<OrderStatusReport>>() {
+                            @Override
+                            protected void onFinish() {
+                                finishProgress();
+                            }
 
-                           @Override
-                           protected void onSuccess(List<OrderStatusReport> result, Request request) {
-                               containerView.removeAllViews();
-                               containerView.invalidate();
+                            @Override
+                            protected void onSuccess(List<OrderStatusReport> result, Request request) {
+                                containerView.removeAllViews();
+                                root = TreeNode.root();
+                                List<OrderStatusReportFlat> data = generateTreeData(result);
+                                generateTreeFromData(data);
+                                AndroidTreeView tView = new AndroidTreeView(getActivity(), root);
+                                tView.setDefaultNodeClickListener(nodeClickListener);
+                                containerView.addView(tView.getView());
+                                finishProgress();
+                            }
 
-                               List<OrderStatusReportFlat> data = generateTreeData(result);
-                               generateTreeFromData(data);
-                               AndroidTreeView tView = new AndroidTreeView(getActivity(), root);
-                               tView.setDefaultNodeClickListener(nodeClickListener);
-                               containerView.addView(tView.getView());
-                               finishProgress();
-                           }
+                            @Override
+                            protected void onApiFailure(ApiError error, Request request) {
+                                if (isResumed()) {
+                                    finishProgress();
+                                    Activity activity = getActivity();
+                                    if (activity != null && !activity.isFinishing()) {
+                                        String err = WebApiErrorBody.log(error, getContext());
+                                        showErrorDialog(err);
+                                    }
+                                }
+                            }
 
-                           @Override
-                           protected void onApiFailure(ApiError error, Request request) {
-                               if (isResumed()) {
-                                   finishProgress();
-                                   Activity activity = getActivity();
-                                   if (activity != null && !activity.isFinishing()) {
-                                       String err = WebApiErrorBody.log(error, getContext());
-                                       showErrorDialog(err);
-                                   }
-                               }
-                           }
-
-                           @Override
-                           protected void onNetworkFailure(Throwable t, Request request) {
-                               if (isResumed()) {
-                                   finishProgress();
-                                   Activity activity = getActivity();
-                                   if (activity != null && !activity.isFinishing()) {
-                                       Timber.e(t);
-                                       showErrorDialog(getContext().getString(R.string.error_connecting_to_server));
-                                   }
-                               }
-                           }
-                       });
-           }else if(typeReport==2){
+                            @Override
+                            protected void onNetworkFailure(Throwable t, Request request) {
+                                if (isResumed()) {
+                                    finishProgress();
+                                    Activity activity = getActivity();
+                                    if (activity != null && !activity.isFinishing()) {
+                                        Timber.e(t);
+                                        showErrorDialog(getContext().getString(R.string.error_connecting_to_server));
+                                    }
+                                }
+                            }
+                        });
+            } else if (typeReport == 2) {
                 layout_header_return.setVisibility(View.VISIBLE);
                 layout_header_order.setVisibility(View.GONE);
-               final String fromDate = DateHelper.toString(config.getFromDate(), DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext()));
-               final String toDate = DateHelper.toString(config.getToDate(), DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext()));
-               List<String> dealersId = new ArrayList<>();
-               dealersId = VisitorFilter.getList(getContext());
-               List<String> product_list = new ArrayList<>();
-               product_list = VisitorFilter.getproduct_group(getContext());
+                final String fromDate = DateHelper.toString(config.getFromDate(), DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext()));
+                final String toDate = DateHelper.toString(config.getToDate(), DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext()));
+                List<String> dealersId = new ArrayList<>();
+                dealersId = VisitorFilter.getList(getContext());
+                List<String> product_list = new ArrayList<>();
+                product_list = VisitorFilter.getproduct_group(getContext());
 
-               orderStatusModel = new orderStatusModel();
-               orderStatusModel.setDealersId(dealersId);
-               orderStatusModel.setStartdata(fromDate);
-               orderStatusModel.setEndDate(toDate);
-               startProgress(R.string.please_wait, R.string.connecting_to_the_server);
+                orderStatusModel = new orderStatusModel();
+                orderStatusModel.setDealersId(dealersId);
+                orderStatusModel.setStartdata(fromDate);
+                orderStatusModel.setEndDate(toDate);
+                startProgress(R.string.please_wait, R.string.connecting_to_the_server);
 
-               SupervisorApi supervisorApi = new SupervisorApi(getContext());
-               supervisorApi.runWebRequest(supervisorApi.GetReturnReport(orderStatusModel),
-                       new WebCallBack<List<ReturnDealerModel>>() {
-                           @Override
-                           protected void onFinish() {
-                               finishProgress();
-                           }
+                SupervisorApi supervisorApi = new SupervisorApi(getContext());
+                supervisorApi.runWebRequest(supervisorApi.GetReturnReport(orderStatusModel),
+                        new WebCallBack<List<ReturnDealerModel>>() {
+                            @Override
+                            protected void onFinish() {
+                                finishProgress();
+                            }
 
-                           @Override
-                           protected void onSuccess(List<ReturnDealerModel> result, Request request) {
-                               containerView.removeAllViews();
-                               containerView.invalidate();
-                               if (root.getParent()!=null){
-                                   l2.deleteChild(l3);
-                                   l1.deleteChild(l2);
-                                   root.deleteChild(l1);
-                               }
+                            @Override
+                            protected void onSuccess(List<ReturnDealerModel> result, Request request) {
+                                containerView.removeAllViews();
+                                root = TreeNode.root();
+                                ReturnFlatGenerator g = new ReturnFlatGenerator(
+                                        getContext(),
+                                        root,
+                                        result
+                                );
+                                g.build();
+                                root = g.getRoot();
+                                AndroidTreeView tView2 = new AndroidTreeView(getActivity(), root);
+                                tView2.setDefaultNodeClickListener(returnNodeClickListener);
+                                containerView.addView(tView2.getView());
+                                finishProgress();
+                            }
 
-                               ReturnFlatGenerator g = new ReturnFlatGenerator(
-                                       getContext(),
-                                       root,
-                                       result
-                               );
-                               g.build();
-                               root = g.getRoot();
+                            @Override
+                            protected void onApiFailure(ApiError error, Request request) {
+                                if (isResumed()) {
+                                    finishProgress();
+                                    Activity activity = getActivity();
+                                    if (activity != null && !activity.isFinishing()) {
+                                        String err = WebApiErrorBody.log(error, getContext());
+                                        showErrorDialog(err);
+                                    }
+                                }
+                            }
 
-                               tView2 = new AndroidTreeView(getActivity(), root);
-                               tView2.setDefaultNodeClickListener(nodeClickListener);
-                               containerView.addView(tView2.getView());
-                               finishProgress();
-                           }
-
-                           @Override
-                           protected void onApiFailure(ApiError error, Request request) {
-                               if (isResumed()) {
-                                   finishProgress();
-                                   Activity activity = getActivity();
-                                   if (activity != null && !activity.isFinishing()) {
-                                       String err = WebApiErrorBody.log(error, getContext());
-                                       showErrorDialog(err);
-                                   }
-                               }
-                           }
-
-                           @Override
-                           protected void onNetworkFailure(Throwable t, Request request) {
-                               if (isResumed()) {
-                                   finishProgress();
-                                   Activity activity = getActivity();
-                                   if (activity != null && !activity.isFinishing()) {
-                                       Timber.e(t);
-                                       showErrorDialog(getContext().getString(R.string.error_connecting_to_server));
-                                   }
-                               }
-                           }
-                       });
+                            @Override
+                            protected void onNetworkFailure(Throwable t, Request request) {
+                                if (isResumed()) {
+                                    finishProgress();
+                                    Activity activity = getActivity();
+                                    if (activity != null && !activity.isFinishing()) {
+                                        Timber.e(t);
+                                        showErrorDialog(getContext().getString(R.string.error_connecting_to_server));
+                                    }
+                                }
+                            }
+                        });
             }
         }
     }
+
 
     private List<OrderStatusReportFlat> generateTreeData(List<OrderStatusReport> result) {
         List<OrderStatusReportFlat> reports = new ArrayList<>();
@@ -335,15 +356,15 @@ public class OrderReportFragment extends IMainPageFragment {
 
     private void generateTreeFromData(List<OrderStatusReportFlat> treeData) {
         for (OrderStatusReportFlat level1 : treeData) {
-          l1 = new TreeNode(level1).setViewHolder(new TreeNodeHolder(getContext(),
+          TreeNode l1 = new TreeNode(level1).setViewHolder(new TreeNodeHolder(getContext(),
                     null));
 
             for (OrderStatusReportFlat level2 : level1.getChilds()) {
-             l2 = new TreeNode(level2).setViewHolder(new TreeNodeHolder(getContext(),
+                TreeNode l2 = new TreeNode(level2).setViewHolder(new TreeNodeHolder(getContext(),
                         null));
 
                 for (OrderStatusReportFlat level3 : level2.getChilds()) {
-                   l3 = new TreeNode(level3).setViewHolder(new TreeNodeHolder(getContext(), (parentNode) -> {
+                    TreeNode l3 = new TreeNode(level3).setViewHolder(new TreeNodeHolder(getContext(), (parentNode) -> {
 
                         childCount++;
                         Log.d("orderreportfragment", "loading: " + childCount);
@@ -364,6 +385,39 @@ public class OrderReportFragment extends IMainPageFragment {
 
     int childCount = 0;
     int totalCount = 0;
+    private final TreeNode.TreeNodeClickListener returnNodeClickListener = (node, value) -> {
+        if(node.getLevel() == 1){
+
+            AppCompatTextView add_item=node.getViewHolder().getView().findViewById(R.id.add_item);
+            if (node.isExpanded()){
+                add_item.setText("+");
+                add_item.setTextColor(Color.parseColor("#4DFF56"));
+            }else {
+                add_item.setText("-");
+                add_item.setTextColor(Color.parseColor("#FF00F2"));
+            }
+        }
+
+        Log.d("orderreportfragment", "begin load: " + childCount+ "node level = "+node.getId());
+        if (node.getLevel() == 2) {
+
+            AppCompatTextView addite_dleer=node.getViewHolder().getView().findViewById(R.id.addite_dleer);
+
+        //    totalCount = ((OrderStatusReportFlat) value).getChilds().size();
+
+            if (node.isExpanded()){
+                addite_dleer.setText("+");
+                addite_dleer.setTextColor(Color.parseColor("#4DFF56"));
+            }else {
+                addite_dleer.setText("-");
+                addite_dleer.setTextColor(Color.parseColor("#FF00F2"));
+                containerView.setEnabled(false);
+            }
+
+
+
+        }
+    };
     private final TreeNode.TreeNodeClickListener nodeClickListener = (node, value) -> {
         if(((OrderStatusReportFlat)value).getLevel() == 1){
 

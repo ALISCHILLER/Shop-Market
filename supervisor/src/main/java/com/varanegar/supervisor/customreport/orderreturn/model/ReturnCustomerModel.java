@@ -5,14 +5,14 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class ReturnCustomerModel {
-    @SerializedName("CustomerName")
+    @SerializedName("customerName")
     private String customerName;
-    @SerializedName("CustomerCode")
+    @SerializedName("customerCode")
     private String customerCode;
-    @SerializedName("ProductCountCa")
+    @SerializedName("productCountCa")
     private Double productCountCa;
 
-    @SerializedName("CustomerItems")
+    @SerializedName("customerItems")
     private List<ReturnReasonModel> returnReasonModels;
 
     public String getCustomerName() {

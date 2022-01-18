@@ -76,8 +76,7 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
 
     private View level2(OrderStatusReportFlat dealersItem) {
         final LayoutInflater inflater = LayoutInflater.from(context);
-        final View itemView = inflater.inflate(R.layout.listitem_order_status_report_dealer,
-                null, false);
+        final View itemView = inflater.inflate(R.layout.listitem_order_status_report_dealer, null, false);
 
         AppCompatTextView txt_dealerCode;
         AppCompatTextView txt_dealersItems_data;
