@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.util.component.PairedItems;
@@ -162,15 +163,18 @@ public class ReportConfigDialog extends SlidingDialog {
              */
           MultiSpinnerSearch multiSelectproduct_group
                     = view.findViewById(R.id.multipleItem_product_group_Spinnerr);
+           LinearLayout Linear_time= view.findViewById(R.id.linear_time);
             if (mproduct==1){
                 multiSelectproduct_group.setVisibility(View.VISIBLE);
+                Linear_time.setVisibility(View.GONE);
             }else {
                 multiSelectproduct_group.setVisibility(View.GONE);
+                Linear_time.setVisibility(View.VISIBLE);
             }
 
             // Pass true If you want searchView above the list. Otherwise false. default = true.
             multiSelectproduct_group.setSearchEnabled(true);
-            multiSelectproduct_group.setHintText("لیست کالاها");
+            multiSelectproduct_group.setHintText("لیست گروه کالاها");
             //A text that will display in clear text button
             multiSelectproduct_group.setClearText("پاک کردن لیست");
 

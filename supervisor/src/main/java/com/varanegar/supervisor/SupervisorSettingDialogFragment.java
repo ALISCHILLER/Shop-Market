@@ -53,7 +53,7 @@ public class SupervisorSettingDialogFragment extends CuteDialogWithToolbar {
     private ActionProcessButton getButton;
     private BaseRecyclerAdapter<CenterSysConfigModel> adapter;
     private View view;
-
+    private int pluss;
     @Override
     public void onPause() {
         super.onPause();
@@ -74,8 +74,21 @@ public class SupervisorSettingDialogFragment extends CuteDialogWithToolbar {
 
         ipPairedItemsEditable = (PairedItemsEditable) view.findViewById(R.id.ipExitText);
         ipPairedItemsEditable.setValue("http://192.168.50.110:8080/");
+        ipPairedItemsEditable.setEnabled(false);
         localIpPairedItemsEditable = (PairedItemsEditable) view.findViewById(R.id.local_ip_edit_text);
         localIpPairedItemsEditable.setValue("http://192.168.50.110:8080/");
+        localIpPairedItemsEditable .setEnabled(false);
+        localIpPairedItemsEditable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pluss++;
+                if (pluss==5){
+                    ipPairedItemsEditable.setEnabled(true);
+                    localIpPairedItemsEditable.setEnabled(true);
+                    pluss=0;
+                }
+            }
+        });
         sysConfigManager = new SysConfigManager(getContext());
         SysConfigModel serverAddress = sysConfigManager.read(ConfigKey.ValidServerAddress, SysConfigManager.local);
         if (serverAddress != null) {

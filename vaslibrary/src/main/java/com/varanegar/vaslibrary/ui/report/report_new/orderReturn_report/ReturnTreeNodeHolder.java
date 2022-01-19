@@ -1,4 +1,4 @@
-package com.varanegar.supervisor.customreport.orderreturn;
+package com.varanegar.vaslibrary.ui.report.report_new.orderReturn_report;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,8 +8,9 @@ import android.widget.LinearLayout;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.unnamed.b.atv.model.TreeNode;
-import com.varanegar.supervisor.R;
-import com.varanegar.supervisor.customreport.orderreturn.model.ReturnReportFlat;
+import com.varanegar.vaslibrary.R;
+import com.varanegar.vaslibrary.ui.report.report_new.orderReturn_report.model.ReturnReportFlat;
+
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -39,6 +40,8 @@ public class ReturnTreeNodeHolder extends TreeNode.BaseNodeViewHolder<ReturnRepo
         final LayoutInflater inflater = LayoutInflater.from(context);
         final View itemView = inflater.inflate(R.layout.listitem_get_return_report_reason,
                 null, false);
+        int castdouble;
+        double d;
         AppCompatTextView txtreason;
         AppCompatTextView txtreasonCode;
         AppCompatTextView txtproductCountCa;
@@ -51,7 +54,9 @@ public class ReturnTreeNodeHolder extends TreeNode.BaseNodeViewHolder<ReturnRepo
 
         txtreason.setText(reson.getReason());
         txtreasonCode.setText(reson.getReasonCode());
-        txtproductCountCa.setText(String.valueOf(reson.getProductCountCa()));
+        d=reson.getProductCountCa();
+        castdouble= (int) d;
+        txtproductCountCa.setText(String.valueOf(castdouble));
 
         AppCompatTextView  txt_sum= itemView.findViewById(R.id.txt_sum);
         LinearLayout layout_footer_sub=itemView.findViewById(R.id.layout_footer_sub);
@@ -61,7 +66,8 @@ public class ReturnTreeNodeHolder extends TreeNode.BaseNodeViewHolder<ReturnRepo
             for (ReturnReportFlat itemSub : ((ReturnReportFlat) node.getParent().getValue()).getChilds()) {
                 sum += itemSub.getProductCountCa();
             }
-            txt_sum.setText(String.valueOf(sum));
+            castdouble= (int) sum;
+            txt_sum.setText(String.valueOf(castdouble));
             layout_footer_sub.setVisibility(View.VISIBLE);
         }else {
             layout_footer_sub.setVisibility(View.GONE);
@@ -73,7 +79,8 @@ public class ReturnTreeNodeHolder extends TreeNode.BaseNodeViewHolder<ReturnRepo
         final LayoutInflater inflater = LayoutInflater.from(context);
         final View itemView = inflater.inflate(R.layout.listitem_get_return_report_customer,
                 null, false);
-
+        int castdouble;
+        double d;
         AppCompatTextView txtcustomerName;
         AppCompatTextView txtCustomerCode;
         AppCompatTextView txtproductCountCa;
@@ -86,7 +93,10 @@ public class ReturnTreeNodeHolder extends TreeNode.BaseNodeViewHolder<ReturnRepo
 
         txtcustomerName.setText(dealersItem.getCustomerName());
         txtCustomerCode.setText(dealersItem.getCustomerCode());
-        txtproductCountCa.setText(String.valueOf(dealersItem.getProductCountCa()));
+
+        d=dealersItem.getProductCountCa();
+        castdouble= (int) d;
+        txtproductCountCa.setText(String.valueOf(castdouble));
 
         AppCompatTextView  txt_sum= itemView.findViewById(R.id.txt_sum);
         LinearLayout layout_footer_sub=itemView.findViewById(R.id.layout_footer_sub);
@@ -96,7 +106,8 @@ public class ReturnTreeNodeHolder extends TreeNode.BaseNodeViewHolder<ReturnRepo
             for (ReturnReportFlat itemSub : ((ReturnReportFlat) node.getParent().getValue()).getChilds()) {
                 sum += itemSub.getProductCountCa();
             }
-            txt_sum.setText(df.format(sum));
+            castdouble= (int) sum;
+            txt_sum.setText(String.valueOf(castdouble));
             layout_footer_sub.setVisibility(View.VISIBLE);
         }else {
             layout_footer_sub.setVisibility(View.GONE);
@@ -111,8 +122,8 @@ public class ReturnTreeNodeHolder extends TreeNode.BaseNodeViewHolder<ReturnRepo
         final LayoutInflater inflater = LayoutInflater.from(context);
         final View itemView = inflater.inflate(R.layout.listitem_get_return_report_dealer,
                 null, false);
-
-
+        int castdouble;
+        double d;
         AppCompatTextView txtdealerNamee;
         AppCompatTextView txtdealerCode;
         AppCompatTextView txtproductCountCa;
@@ -123,20 +134,23 @@ public class ReturnTreeNodeHolder extends TreeNode.BaseNodeViewHolder<ReturnRepo
 
         txtdealerNamee.setText(item.getDealerName());
         txtdealerCode.setText(String.valueOf(item.getDealerCode()));
-        txtproductCountCa.setText(String.valueOf(item.getProductCountCa()));
+        d=item.getProductCountCa();
+        castdouble= (int) d;
+        txtproductCountCa.setText(String.valueOf(castdouble));
 
 
         AppCompatTextView  txt_sum= itemView.findViewById(R.id.txt_sum);
         LinearLayout layout_footer_sub=itemView.findViewById(R.id.layout_footer_sub);
 
         if(node.getId() == node.getParent().getChildren().size()) {
-            DecimalFormat df=new DecimalFormat("###.##");
+
             double sum = 0;
+            DecimalFormat df=new DecimalFormat("###.##");
             for (ReturnReportFlat itemSub : _data) {
                 sum += itemSub.getProductCountCa();
             }
-
-            txt_sum.setText(df.format(sum));
+            castdouble= (int) sum;
+            txt_sum.setText(String.valueOf(castdouble));
             layout_footer_sub.setVisibility(View.VISIBLE);
         }else {
             layout_footer_sub.setVisibility(View.GONE);

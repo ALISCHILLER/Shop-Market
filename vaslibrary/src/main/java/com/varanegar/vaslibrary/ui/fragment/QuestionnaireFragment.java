@@ -97,7 +97,7 @@ public class QuestionnaireFragment extends VisitFragment {
             if (VaranegarApplication.is(VaranegarApplication.AppId.Supervisor)) {
                 sendButton.setVisibility(View.VISIBLE);
                 sendButton.setOnClickListener(view1 -> {
-
+                    sendQuestion();
                 });
             } else {
                 sendButton.setVisibility(View.GONE);
@@ -120,6 +120,57 @@ public class QuestionnaireFragment extends VisitFragment {
             return null;
         }
 
+
+    }
+
+
+    public void sendQuestion(){
+
+
+        ///  SupervisorFullCustomerModel customerModel= new SupervisorFullCustomerModelRepository().getItem(new Query().from(SupervisorFullCustomer.SupervisorFullCustomerTbl).whereAnd())
+
+        Date date =new Date();
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("SupervisorId", Context.MODE_PRIVATE);
+        UUID userModel = UUID.fromString(sharedPreferences.getString("SupervisorIduniqueId", null));
+        String endData = DateHelper.toString(date, DateFormat.Date, Locale.getDefault());
+        SyncGetTourModel  syncGetTourModel=new SyncGetTourModel(getContext(),userModel);
+        SyncGetCustomerCallModel syncGetCustomerCallViewModel = new SyncGetCustomerCallModel();
+        syncGetCustomerCallViewModel.customerUniqueId=customerId;
+        syncGetCustomerCallViewModel.callDate=date;
+        syncGetCustomerCallViewModel.callPDate=endData;
+        syncGetCustomerCallViewModel.startTime=date;
+        syncGetCustomerCallViewModel.startPTime=endData;
+        syncGetCustomerCallViewModel.endTime=date;
+        syncGetCustomerCallViewModel.endPTime=endData;
+        syncGetCustomerCallViewModel.latitude=51.48330420255661;
+        syncGetCustomerCallViewModel.latitude=51.48330420255661;
+        syncGetCustomerCallViewModel.receiveDate=date;
+        syncGetCustomerCallViewModel.receivePDate=endData;
+        syncGetCustomerCallViewModel.visitDuration=245000;
+        syncGetCustomerCallViewModel.customerCallQuestionnaires = (ArrayList<SyncCustomerCallQuestionnaire>) populateCustomerQuestionnaires(customerId);
+        syncGetTourModel.CustomerCalls.add(syncGetCustomerCallViewModel);
+        ReportApi reportApi =new ReportApi(getContext());
+        reportApi.runWebRequest(reportApi.savetourdata(syncGetTourModel), new WebCallBack<String>() {
+            @Override
+            protected void onFinish() {
+
+            }
+
+            @Override
+            protected void onSuccess(String result, Request request) {
+
+            }
+
+            @Override
+            protected void onApiFailure(ApiError error, Request request) {
+
+            }
+
+            @Override
+            protected void onNetworkFailure(Throwable t, Request request) {
+
+            }
+        });
     }
 
     @NonNull
@@ -144,54 +195,7 @@ public class QuestionnaireFragment extends VisitFragment {
 
         }
 
-       public void sendQuestion(){
 
-
-          ///  SupervisorFullCustomerModel customerModel= new SupervisorFullCustomerModelRepository().getItem(new Query().from(SupervisorFullCustomer.SupervisorFullCustomerTbl).whereAnd())
-
-            Date date =new Date();
-            SharedPreferences sharedPreferences = getContext().getSharedPreferences("SupervisorId", Context.MODE_PRIVATE);
-            UUID userModel = UUID.fromString(sharedPreferences.getString("SupervisorIduniqueId", null));
-            String endData = DateHelper.toString(date, DateFormat.Date, Locale.getDefault());
-            SyncGetTourModel  syncGetTourModel=new SyncGetTourModel(getContext(),userModel);
-            SyncGetCustomerCallModel syncGetCustomerCallViewModel = new SyncGetCustomerCallModel();
-            syncGetCustomerCallViewModel.customerUniqueId=customerId;
-            syncGetCustomerCallViewModel.callDate=date;
-            syncGetCustomerCallViewModel.callPDate=endData;
-            syncGetCustomerCallViewModel.startTime=date;
-            syncGetCustomerCallViewModel.startPTime=endData;
-            syncGetCustomerCallViewModel.endTime=date;
-            syncGetCustomerCallViewModel.endPTime=endData;
-            syncGetCustomerCallViewModel.latitude=51.48330420255661;
-            syncGetCustomerCallViewModel.latitude=51.48330420255661;
-            syncGetCustomerCallViewModel.receiveDate=date;
-            syncGetCustomerCallViewModel.receivePDate=endData;
-            syncGetCustomerCallViewModel.visitDuration=245000;
-            syncGetCustomerCallViewModel.customerCallQuestionnaires = (ArrayList<SyncCustomerCallQuestionnaire>) populateCustomerQuestionnaires(customerId);
-            syncGetTourModel.CustomerCalls.add(syncGetCustomerCallViewModel);
-            ReportApi reportApi =new ReportApi(getContext());
-            reportApi.runWebRequest(reportApi.savetourdata(syncGetTourModel), new WebCallBack<String>() {
-                @Override
-                protected void onFinish() {
-
-                }
-
-                @Override
-                protected void onSuccess(String result, Request request) {
-
-                }
-
-                @Override
-                protected void onApiFailure(ApiError error, Request request) {
-
-                }
-
-                @Override
-                protected void onNetworkFailure(Throwable t, Request request) {
-
-                }
-            });
-        }
         @Override
         public void bindView(final int position) {
             final QuestionnaireCustomerViewModel q = recyclerAdapter.get(position);

@@ -1,7 +1,6 @@
-package com.varanegar.supervisor.customreport.orderstatus;
+package com.varanegar.vaslibrary.ui.report.report_new.orderStatus_Report;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -9,9 +8,9 @@ import android.widget.LinearLayout;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.unnamed.b.atv.model.TreeNode;
-import com.varanegar.supervisor.R;
-import com.varanegar.supervisor.customreport.orderreturn.model.ReturnReportFlat;
-import com.varanegar.supervisor.customreport.orderstatus.model.OrderStatusReportFlat;
+import com.varanegar.vaslibrary.R;
+import com.varanegar.vaslibrary.ui.report.report_new.orderStatus_Report.model.OrderStatusReportFlat;
+
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -23,7 +22,7 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
         void viewCount(TreeNode parentNode);
     }
 
-    public TreeNodeHolder(Context context,List<OrderStatusReportFlat> data, IOnViewCount _onViewCount) {
+    public TreeNodeHolder(Context context, List<OrderStatusReportFlat> data, IOnViewCount _onViewCount) {
         super(context);
         this.onViewCount = _onViewCount;
         _data = data;
@@ -31,14 +30,9 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
 
     @Override
     public View createNodeView(TreeNode node, OrderStatusReportFlat value) {
-        if (value.getLevel() == 1) {
+        if (node.getLevel() == 1) {
             return level1(node,value);
-        } else if (value.getLevel() == 2) {
-            return level2(node,value);
-        } else {
-
-            if (onViewCount != null)
-                onViewCount.viewCount(node.getParent());
+        } else  {
             return level3(node,value);
         }
     }

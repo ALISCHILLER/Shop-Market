@@ -42,6 +42,8 @@ import com.varanegar.vaslibrary.ui.report.ReturnReportFragment;
 import com.varanegar.vaslibrary.ui.report.report_new.customerNoSaleReport.CustomerNoSaleReportFragment;
 import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.InvoiceBalanceReportFragment;
 import com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary.CustomerGroupSalesSummaryFragment;
+import com.varanegar.vaslibrary.ui.report.report_new.orderReturn_report.RerurnReportFragment;
+import com.varanegar.vaslibrary.ui.report.report_new.orderStatus_Report.OrderReportFragment;
 import com.varanegar.vaslibrary.ui.report.report_new.products_purchase_history_report.ProductsPurchaseHistoryReportFragment;
 import com.varanegar.vaslibrary.ui.report.review.OrderReviewReportFragment;
 import com.varanegar.vaslibrary.ui.report.review.ProductReviewReportFragment;
@@ -330,6 +332,21 @@ public class MainDrawerAdapter extends DrawerAdapter {
                 @Override
                 public void onClick(View v) {
                     InvoiceBalanceReportFragment fragment = new InvoiceBalanceReportFragment();
+                    gotoReportFragment(fragment, true);
+                }
+            }));
+            reports.addItem(new DrawerItem(activity, "گزارش وضعیت سفارش ها").setClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    OrderReportFragment fragment = new OrderReportFragment();
+                    gotoReportFragment(fragment, true);
+                }
+            }));
+
+            reports.addItem(new DrawerItem(activity, "گزارش برگشتی").setClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RerurnReportFragment fragment = new RerurnReportFragment();
                     gotoReportFragment(fragment, true);
                 }
             }));

@@ -1,6 +1,9 @@
 package com.varanegar.vaslibrary.webapi.supervisor;
 
 import com.varanegar.vaslibrary.model.TourStatusSummaryViewModel;
+import com.varanegar.vaslibrary.ui.report.report_new.orderReturn_report.model.ReturnDealerModel;
+import com.varanegar.vaslibrary.ui.report.report_new.orderStatus_Report.model.OrderStatusModel;
+import com.varanegar.vaslibrary.ui.report.report_new.orderStatus_Report.model.OrderStatusReport;
 import com.varanegar.vaslibrary.ui.report.review.CustomerCallViewModel;
 import com.varanegar.vaslibrary.ui.report.review.TourCustomerSummaryViewModel;
 
@@ -8,7 +11,9 @@ import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -40,6 +45,11 @@ public interface ISupervisorApi {
 
     @GET("api/v2/ngt/Customercall/{Id}")
     Call<CustomerCallViewModel> customerCalls(@Path("Id") String tourId);
+    @POST("api/v2/ngt/ReviewReport/OrderStatusReport")
+    Call<List<OrderStatusReport>> OrderStatusReport(@Body OrderStatusModel param);
+
+    @POST("api/v2/ngt/ReviewReport/GetReturnReport")
+    Call<List<ReturnDealerModel>> GetReturnReport(@Body OrderStatusModel param);
 
 //    @POST("api/dsd/tracking/ldlstpnt")
 //    Call<List<EventViewModel>> loadLastPoints(@Body LastPointsParam parameter);

@@ -1,6 +1,8 @@
 package com.varanegar.vaslibrary.ui.report.report_new.webApi;
 
+import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.model.sendAnswersQustion.SyncGetTourModel;
+import com.varanegar.vaslibrary.ui.report.report_new.customerNoSaleReport.model.CustomerNoSaleModel;
 import com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary.model.ProductCustomerGroupSalesSummaryViewModel;
 import com.varanegar.vaslibrary.ui.report.report_new.customer_purchase_history_report.model.PCustomerPurchaseHistoryViewModel;
 import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.model.ProductInvoiveBalanceReportViewModel;
@@ -42,7 +44,7 @@ public interface InReportApi {
              @Query("EndDate") String endDate);
 
     @GET("api/v2/ngt/ReviewReport/CustomerNoSaleReport")
-    Call<List<String>> CustomerNoSaleReport
+    Call<List<CustomerNoSaleModel>> CustomerNoSaleReport
             (@Query("DealersId") List<String> dealersId,
              @Query("StartDate") String startDate,
              @Query("EndDate") String endDate,

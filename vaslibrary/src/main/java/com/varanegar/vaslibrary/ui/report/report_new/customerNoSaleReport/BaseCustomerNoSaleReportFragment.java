@@ -33,6 +33,7 @@ import com.varanegar.vaslibrary.manager.UserManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.model.productGroup.ProductGroupModel;
+import com.varanegar.vaslibrary.ui.report.report_new.customerNoSaleReport.model.CustomerNoSaleModel;
 import com.varanegar.vaslibrary.ui.report.report_new.webApi.ReportApi;
 import com.varanegar.vaslibrary.ui.report.review.BaseReviewReportFragment;
 import com.varanegar.vaslibrary.util.multispinnerfilter.KeyPairBoolData;
@@ -50,7 +51,7 @@ import java.util.UUID;
 import okhttp3.Request;
 import retrofit2.Call;
 
-public abstract class BaseCustomerNoSaleReportFragment <T extends CustomerModel> extends VaranegarFragment {
+public abstract class BaseCustomerNoSaleReportFragment <T extends CustomerNoSaleModel> extends VaranegarFragment {
 
     private ReportView reportView;
     private ProgressDialog progressDialog;
@@ -118,7 +119,7 @@ public abstract class BaseCustomerNoSaleReportFragment <T extends CustomerModel>
         return endDate == null ? new Date() : endDate;
     }
 
-    protected abstract Call<List<String>> reportApi();
+    protected abstract Call<List<T>> reportApi();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -168,7 +169,7 @@ public abstract class BaseCustomerNoSaleReportFragment <T extends CustomerModel>
 
         // Pass true If you want searchView above the list. Otherwise false. default = true.
         multiSelectSpinnerWithSearch.setSearchEnabled(true);
-        multiSelectSpinnerWithSearch.setHintText("لیست کالاها");
+        multiSelectSpinnerWithSearch.setHintText("لیست گروه کالاها");
         //A text that will display in clear text button
         multiSelectSpinnerWithSearch.setClearText("پاک کردن لیست");
 
@@ -263,42 +264,24 @@ public abstract class BaseCustomerNoSaleReportFragment <T extends CustomerModel>
         progressDialog.setMessage(getContext().getString(R.string.downloading_data));
         progressDialog.show();
         ReportApi invoiceReportApi = new ReportApi(getContext());
-        invoiceReportApi.runWebRequest(reportApi(), new WebCallBack<List<String>>() {
-
+        invoiceReportApi.runWebRequest(reportApi(), new WebCallBack<List<T>>() {
             @Override
             protected void onFinish() {
-
+                dismissProgressDialog();
             }
 
             @Override
-            protected void onSuccess(List<String> result, Request request) {
-                Log.e("report", String.valueOf(result));
+            protected void onSuccess(List<T> result, Request request) {
                 MainVaranegarActivity activity = getVaranegarActvity();
-                List<CustomerModel> customerModels = new CustomerManager(getContext()).getAll();
                 if (activity != null && !activity.isFinishing() && isResumed()) {
                     adapter = createAdapter();
-                    if (result.size()>0) {
-                        List<T> list_no_sale = null;
-                        for (String list : result) {
-                            for (CustomerModel customerModel : customerModels) {
-                                if (list.equals(customerModel.UniqueId)) {
-                                    list_no_sale.add((T) customerModel);
-                                }
-                            }
-                        }
-                        adapter.create((List<T>) list_no_sale, null);
-                    }
                     adapter.setLocale(VasHelperMethods.getSysConfigLocale(getContext()));
-                    if (result.size()<=0) {
-                        adapter.create((List<T>) customerModels, null);
-                    }
+                    adapter.create(result, null);
                     reportView.setAdapter(adapter);
                     if (onAdapterCallback != null)
                         onAdapterCallback.onSuccess();
-                    dismissProgressDialog();
                 }
             }
-
 
             @Override
             protected void onApiFailure(ApiError error, Request request) {
@@ -308,7 +291,6 @@ public abstract class BaseCustomerNoSaleReportFragment <T extends CustomerModel>
                     showErrorDialog(err);
                     if (onAdapterCallback != null)
                         onAdapterCallback.onFailure();
-                    dismissProgressDialog();
                 }
             }
 
@@ -319,7 +301,6 @@ public abstract class BaseCustomerNoSaleReportFragment <T extends CustomerModel>
                     showErrorDialog(getString(R.string.connection_to_server_failed));
                     if (onAdapterCallback != null)
                         onAdapterCallback.onFailure();
-                    dismissProgressDialog();
                 }
             }
         });

@@ -29,7 +29,7 @@
 
         <View
             android:layout_width="1dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="#AFAFAF" />
 
 
@@ -78,7 +78,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:background="#F60080"
+        android:background="#0DF8F8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout_super">
@@ -96,7 +96,7 @@
 
         <View
             android:layout_width="1dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="#AFAFAF" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -104,7 +104,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="2dp"
-
+            android:text="جمع کالا"
+            android:textColor="#000000"
             android:textSize="10sp"
             app:layout_constraintStart_toEndOf="@+id/txtundeliverdOrderWeight"
             app:layout_constraintTop_toTopOf="parent" />
@@ -146,7 +147,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:background="#52ECBC"
+        android:background="#00C1F1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout_super">
@@ -164,7 +165,7 @@
 
         <View
             android:layout_width="1dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="#AFAFAF" />
 
         <androidx.appcompat.widget.AppCompatTextView

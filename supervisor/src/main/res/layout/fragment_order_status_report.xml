@@ -7,25 +7,7 @@
     android:background="@color/grey_light_light_light"
     android:orientation="vertical">
 
-    <!--<HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none"
-        >
 
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/reports_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
-        </androidx.appcompat.widget.LinearLayoutCompat>
-    </HorizontalScrollView>-->
     <RelativeLayout
         android:id="@+id/progress_bar_layout"
         android:layout_width="wrap_content"
@@ -75,7 +57,7 @@
                 android:id="@+id/layout_header_order"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:background="#1AEDE7"
+                    android:background="#00C1F1"
                 >
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -89,12 +71,12 @@
 
                 <View
                     android:layout_width="1dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:background="#AFAFAF" />
 
                 <androidx.appcompat.widget.AppCompatTextView
 
-                    android:layout_width="120dp"
+                    android:layout_width="130dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
                     android:padding="3dp"
@@ -109,11 +91,12 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
 
-                    android:layout_width="120dp"
+                    android:layout_width="130dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
                     android:padding="3dp"
                     android:text="کل سفارش"
+                    android:textSize="12sp"
                     app:layout_constraintStart_toEndOf="@+id/txtDate"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -124,7 +107,7 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
 
-                    android:layout_width="120dp"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
                     android:padding="3dp"
@@ -139,11 +122,11 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
 
-                    android:layout_width="120dp"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
                     android:padding="3dp"
-                    android:text="سفارشات ستل شده"
+                    android:text="سفارشات ستل نشده"
                     app:layout_constraintStart_toEndOf="@+id/txtpendingOrderWeight"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -154,7 +137,7 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
 
-                    android:layout_width="120dp"
+                    android:layout_width="130dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
                     android:padding="3dp"
@@ -171,7 +154,7 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
 
-                    android:layout_width="120dp"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
 
@@ -187,7 +170,7 @@
                     android:id="@+id/layout_header_return"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:background="#1AEDE7"
+                    android:background="#00C1F1"
                     >
 
                     <androidx.appcompat.widget.AppCompatTextView
@@ -201,12 +184,12 @@
 
                     <View
                         android:layout_width="1dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:background="#AFAFAF" />
 
                     <androidx.appcompat.widget.AppCompatTextView
 
-                        android:layout_width="120dp"
+                        android:layout_width="130dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="18dp"
                         android:padding="3dp"
@@ -221,7 +204,7 @@
 
                     <androidx.appcompat.widget.AppCompatTextView
 
-                        android:layout_width="120dp"
+                        android:layout_width="130dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="18dp"
                         android:padding="3dp"
@@ -236,7 +219,7 @@
 
                     <androidx.appcompat.widget.AppCompatTextView
 
-                        android:layout_width="120dp"
+                        android:layout_width="130dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="18dp"
                         android:padding="3dp"

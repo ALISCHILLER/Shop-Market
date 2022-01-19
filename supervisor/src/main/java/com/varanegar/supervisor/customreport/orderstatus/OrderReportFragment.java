@@ -67,37 +67,10 @@ public class OrderReportFragment extends IMainPageFragment {
     private LinearLayoutCompat linear_view;
 
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (view != null) {
-            ViewGroup parent = (ViewGroup) view.getParent();
-            if (parent != null) {
-                parent.removeAllViews();
-            }
-        }
-    }
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        if (view != null) {
-//            ViewGroup parent = (ViewGroup) view.getParent();
-//            if (parent != null) {
-//                parent.removeAllViews();
-//            }
-//        }
-//    }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (view != null) {
-            ViewGroup parent = (ViewGroup) view.getParent();
-            if (parent != null) {
-                parent.removeAllViews();
-            }
-        }
-    }
+
+
+
     @Override
     protected View onCreateContentView(@NonNull LayoutInflater inflater,
                                        @Nullable ViewGroup container,
@@ -356,15 +329,16 @@ public class OrderReportFragment extends IMainPageFragment {
 
     private void generateTreeFromData(List<OrderStatusReportFlat> treeData) {
         for (OrderStatusReportFlat level1 : treeData) {
-          TreeNode l1 = new TreeNode(level1).setViewHolder(new TreeNodeHolder(getContext(),
-                    null));
+          TreeNode l1 = new TreeNode(level1)
+                  .setViewHolder(new TreeNodeHolder(getContext(),
+                          treeData,null));
 
             for (OrderStatusReportFlat level2 : level1.getChilds()) {
                 TreeNode l2 = new TreeNode(level2).setViewHolder(new TreeNodeHolder(getContext(),
-                        null));
+                        null,null));
 
                 for (OrderStatusReportFlat level3 : level2.getChilds()) {
-                    TreeNode l3 = new TreeNode(level3).setViewHolder(new TreeNodeHolder(getContext(), (parentNode) -> {
+                    TreeNode l3 = new TreeNode(level3).setViewHolder(new TreeNodeHolder(getContext(),(null),(parentNode)  -> {
 
                         childCount++;
                         Log.d("orderreportfragment", "loading: " + childCount);

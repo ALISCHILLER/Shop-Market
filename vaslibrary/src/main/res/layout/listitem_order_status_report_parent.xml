@@ -61,7 +61,7 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/txtorderWeight"
-                    android:layout_width="130dp"
+                    android:layout_width="190dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
                     android:padding="2dp"
@@ -76,7 +76,7 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/txtpendingOrderWeight"
-                    android:layout_width="150dp"
+                    android:layout_width="190dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
                     android:padding="2dp"
@@ -91,7 +91,7 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/txtinProgressOrderWeight"
-                    android:layout_width="150dp"
+                    android:layout_width="190dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
                     android:padding="2dp"
@@ -106,7 +106,7 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/txtundeliverdOrderWeight"
-                    android:layout_width="130dp"
+                    android:layout_width="190dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
                     android:padding="2dp"
@@ -121,7 +121,7 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/finalWeight"
-                    android:layout_width="150dp"
+                    android:layout_width="190dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
                     android:layout_weight="1"
@@ -136,7 +136,7 @@
         android:id="@+id/layout_footer_order"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:background="#05C5FF"
+        android:background="@color/color_list_footer"
         >
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -170,7 +170,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_sum_orderWeight"
-            android:layout_width="130dp"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="3dp"
@@ -185,7 +185,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_sum_pendingOrderWeight"
-            android:layout_width="150dp"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="3dp"
@@ -200,7 +200,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_sum_inProgressOrderWeight"
-            android:layout_width="150dp"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="3dp"
@@ -215,7 +215,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_sum_undeliverdOrderWeight"
-            android:layout_width="130dp"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="3dp"
@@ -232,7 +232,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_sum_finalWeight"
-            android:layout_width="150dp"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="3dp"
@@ -246,7 +246,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:background="#05C5FF"
+        android:background="@color/color_list_hedear"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout_super">
@@ -273,25 +273,8 @@
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
-            android:gravity="center"
             android:padding="2dp"
-            android:text="کد ویزیتور"
-            android:textSize="10sp"
-            app:layout_constraintStart_toEndOf="@+id/txt_dealersname_data"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="#AFAFAF" />
-
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="130dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:padding="2dp"
-            android:text="نام ویزیتور"
+            android:text="کد مشتری"
             android:textSize="10sp"
             app:layout_constraintStart_toEndOf="@+id/txt_dealersItems_data"
             app:layout_constraintTop_toTopOf="parent" />
@@ -302,7 +285,23 @@
             android:background="#AFAFAF" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="150dp"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:gravity="center"
+            android:padding="2dp"
+            android:text="نام مشتری"
+            android:textSize="10sp"
+            app:layout_constraintStart_toEndOf="@+id/txt_dealersname_data"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#AFAFAF" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="2dp"
@@ -317,11 +316,11 @@
             android:background="#AFAFAF" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="150dp"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="2dp"
-            android:text="سفارشات بدون وزن"
+            android:text="سفارشات بدون وضعیت"
             android:textSize="10sp"
             app:layout_constraintStart_toEndOf="@+id/txt_orderWeight"
             app:layout_constraintTop_toTopOf="parent" />
@@ -332,11 +331,11 @@
             android:background="#AFAFAF" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="130dp"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="2dp"
-            android:text="سفارشات ستل نشده"
+            android:text="سفارش ستل نشده"
             android:textSize="10sp"
             app:layout_constraintStart_toEndOf="@+id/txt_pendingOrderWeight"
             app:layout_constraintTop_toTopOf="parent" />
@@ -347,7 +346,7 @@
             android:background="#AFAFAF" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="150dp"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="2dp"
@@ -362,7 +361,7 @@
             android:background="#AFAFAF" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="130dp"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="2dp"

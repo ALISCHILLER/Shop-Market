@@ -6,7 +6,7 @@ import com.varanegar.vaslibrary.ui.report.report_new.products_purchase_history_r
 import com.varanegar.vaslibrary.ui.report.report_new.products_purchase_history_report.model.TProductsPurchaseHistoryReportViewModel;
 
 public class CustomerModelView extends
-        ModelProjection<CustomerModel> {
+        ModelProjection<CustomerNoSaleModel> {
     protected CustomerModelView(String name) {
         super(name);
     }
@@ -26,10 +26,22 @@ public class CustomerModelView extends
             CustomerModelView
             ("CustomerModelView.Phone");
 
+    public static CustomerModelView Address = new
+            CustomerModelView
+            ("CustomerModelView.Address");
+
+
     public static CustomerModelView StoreName = new
             CustomerModelView
             ("CustomerModelView.StoreName");
 
+    public static CustomerModelView CustomerActivity = new
+            CustomerModelView
+            ("CustomerModelView.CustomerActivity");
+
+    public static CustomerModelView CustomerCategory = new
+            CustomerModelView
+            ("CustomerModelView.CustomerCategory");
     public static CustomerModelView Mobile = new
             CustomerModelView
             ("CustomerModelView.Mobile");

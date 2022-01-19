@@ -39,6 +39,7 @@
         app:hintText="لیست گروه کالا ها" />
 
     <LinearLayout
+        android:id="@+id/linear_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"

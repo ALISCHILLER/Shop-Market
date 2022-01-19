@@ -2,7 +2,9 @@ package com.varanegar.vaslibrary.ui.report.report_new.webApi;
 
 import android.content.Context;
 
+import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.model.sendAnswersQustion.SyncGetTourModel;
+import com.varanegar.vaslibrary.ui.report.report_new.customerNoSaleReport.model.CustomerNoSaleModel;
 import com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary.model.ProductCustomerGroupSalesSummaryViewModel;
 import com.varanegar.vaslibrary.ui.report.report_new.customer_purchase_history_report.model.PCustomerPurchaseHistoryViewModel;
 import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.model.ProductInvoiveBalanceReportViewModel;
@@ -50,7 +52,7 @@ public class ReportApi extends BaseApi implements InReportApi {
     }
 
     @Override
-    public Call<List<String>> CustomerNoSaleReport(List<String> dealersId, String startDate, String endDate, List<String> productCategoriesId) {
+    public Call<List<CustomerNoSaleModel>> CustomerNoSaleReport(List<String> dealersId, String startDate, String endDate, List<String> productCategoriesId) {
         return  getRetrofitBuilder(TokenType.UserToken).build().create(InReportApi.class)
                 .CustomerNoSaleReport(dealersId,startDate,endDate,productCategoriesId);
     }

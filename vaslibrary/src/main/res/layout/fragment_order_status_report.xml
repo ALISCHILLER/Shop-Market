@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/grey_light_light_light"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/linear_date_picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/start_date_picker"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <com.varanegar.framework.util.component.PairedItems
+                android:id="@+id/start_date_item"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                app:title="@string/start_date" />
+
+            <ImageView
+                android:id="@+id/start_calendar_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/padding_default"
+                android:layout_marginRight="@dimen/padding_default"
+                android:padding="@dimen/padding_default"
+                android:src="@drawable/ic_date_range_black_24dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/end_date_picker"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <com.varanegar.framework.util.component.PairedItems
+                android:id="@+id/end_date_item"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                app:title="@string/end_date" />
+
+            <ImageView
+                android:id="@+id/end_calendar_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/padding_default"
+                android:layout_marginRight="@dimen/padding_default"
+                android:padding="@dimen/padding_default"
+                android:src="@drawable/ic_date_range_black_24dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linear_date_picker"
+        android:layout_marginTop="10dp"
+      >
+
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/linear_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:id="@+id/layout_header_order"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@color/color_list_hedear">
+
+                <androidx.appcompat.widget.AppCompatTextView
+
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="3dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="3dp"
+                    android:text="تاریخ"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+
+                    android:layout_width="190dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="3dp"
+                    android:text="کل سفارش"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toEndOf="@+id/txtDate"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+
+                    android:layout_width="190dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="3dp"
+                    android:text="سفارش بدون وضعیت"
+                    app:layout_constraintStart_toEndOf="@+id/txtorderWeight"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+
+                    android:layout_width="190dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="3dp"
+                    android:text="سفارشات ستل نشده"
+                    app:layout_constraintStart_toEndOf="@+id/txtpendingOrderWeight"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+
+                    android:layout_width="190dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="3dp"
+                    android:text="سفارشات برگشتی"
+                    app:layout_constraintStart_toEndOf="@+id/txtinProgressOrderWeight"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:background="#AFAFAF"
+
+                    />
+
+                <androidx.appcompat.widget.AppCompatTextView
+
+                    android:layout_width="190dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+
+                    android:padding="3dp"
+                    android:text="سفارشات فاکتور شده"
+                    app:layout_constraintStart_toEndOf="@+id/txtundeliverdOrderWeight"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_header_return"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="@color/color_list_hedear">
+
+                <androidx.appcompat.widget.AppCompatTextView
+
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="3dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="3dp"
+                    android:text="کدویزیتور"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="3dp"
+                    android:text="نام ویزیتور"
+                    app:layout_constraintStart_toEndOf="@+id/txtDate"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:background="#AFAFAF" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:padding="3dp"
+                    android:text="تعداد کارتن برگشتی"
+                    app:layout_constraintStart_toEndOf="@+id/txtorderWeight"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </LinearLayout>
+
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/container_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </HorizontalScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom|end"
+        android:layout_marginStart="@dimen/padding_large"
+        android:layout_marginLeft="@dimen/padding_large"
+        android:layout_marginTop="@dimen/padding_large"
+        android:layout_marginEnd="@dimen/padding_large"
+        android:layout_marginRight="@dimen/padding_large"
+        android:layout_marginBottom="@dimen/padding_large"
+        android:src="@drawable/ic_refresh_black_36dp"
+        app:borderWidth="0dp"
+        app:elevation="@dimen/elevation_default"
+        app:fabSize="normal"
+        app:rippleColor="?attr/colorPrimaryDark" />
+</RelativeLayout>

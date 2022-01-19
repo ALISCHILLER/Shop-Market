@@ -3,6 +3,9 @@ package com.varanegar.vaslibrary.webapi.supervisor;
 import android.content.Context;
 
 import com.varanegar.vaslibrary.model.TourStatusSummaryViewModel;
+import com.varanegar.vaslibrary.ui.report.report_new.orderReturn_report.model.ReturnDealerModel;
+import com.varanegar.vaslibrary.ui.report.report_new.orderStatus_Report.model.OrderStatusModel;
+import com.varanegar.vaslibrary.ui.report.report_new.orderStatus_Report.model.OrderStatusReport;
 import com.varanegar.vaslibrary.ui.report.review.CustomerCallViewModel;
 import com.varanegar.vaslibrary.ui.report.review.TourCustomerSummaryViewModel;
 import com.varanegar.vaslibrary.webapi.BaseApi;
@@ -12,6 +15,8 @@ import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.POST;
 
 /**
  * Created by A.Torabi on 6/7/2018.
@@ -50,6 +55,16 @@ public class SupervisorApi extends BaseApi implements ISupervisorApi {
         return getRetrofitBuilder(TokenType.UserToken)
                 .build().create(ISupervisorApi.class).customerCalls(tourId);
     }
+
+    @Override
+    public Call<List<OrderStatusReport>> OrderStatusReport(OrderStatusModel orderStatusModel) {
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).OrderStatusReport(orderStatusModel);
+    }
+    @Override
+    public Call<List<ReturnDealerModel>> GetReturnReport(OrderStatusModel param) {
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).GetReturnReport(param);
+    }
+
 
 //    @Override
 //    public Call<List<EventViewModel>> loadLastPoints(LastPointsParam parameter) {
