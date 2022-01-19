@@ -46,7 +46,6 @@ import com.varanegar.supervisor.VisitorFilter;
 import com.varanegar.supervisor.model.ConditionModel;
 import com.varanegar.supervisor.utill.dialog.BackMessageDialog;
 import com.varanegar.supervisor.webapi.SupervisorApi;
-import com.varanegar.vaslibrary.manager.UserManager;
 import com.varanegar.vaslibrary.manager.questionnaire.QuestionnaireCustomerViewManager;
 import com.varanegar.vaslibrary.manager.questionnaire.QuestionnaireManager;
 import com.varanegar.vaslibrary.model.customer.SupervisorCustomer;
@@ -56,7 +55,6 @@ import com.varanegar.supervisor.model.VisitorModel;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
 import com.varanegar.vaslibrary.model.customer.SupervisorCustomerModelRepository;
 import com.varanegar.vaslibrary.model.questionnaire.QuestionnaireCustomerViewModel;
-import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.ui.fragment.QuestionnaireFragment;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 
@@ -478,7 +476,7 @@ public class CustomersFragment extends IMainPageFragment {
         final ProgressDialog progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage(getString(R.string.downloading_data));
         progressDialog.show();
-        DataManager.getData(getContext(), new DataManager.Callback() {
+        DataManager.getVisitor(getContext(), new DataManager.Callback() {
             @Override
             public void onSuccess() {
                 if (progressDialog != null && progressDialog.isShowing()) {
