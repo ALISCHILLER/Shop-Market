@@ -54,124 +54,10 @@
 
 
                 <LinearLayout
-                android:id="@+id/layout_header_order"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                    android:background="#00C1F1"
-                >
-
-                <androidx.appcompat.widget.AppCompatTextView
-
-                    android:layout_width="30dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="18dp"
-                    android:padding="3dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="#AFAFAF" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-
-                    android:layout_width="130dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="18dp"
-                    android:padding="3dp"
-                    android:text="تاریخ"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="wrap_content"
-                    android:background="#AFAFAF" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-
-                    android:layout_width="130dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="18dp"
-                    android:padding="3dp"
-                    android:text="کل سفارش"
-                    android:textSize="12sp"
-                    app:layout_constraintStart_toEndOf="@+id/txtDate"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="wrap_content"
-                    android:background="#AFAFAF" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="18dp"
-                    android:padding="3dp"
-                    android:text="سفارش بدون وضعیت"
-                    app:layout_constraintStart_toEndOf="@+id/txtorderWeight"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="wrap_content"
-                    android:background="#AFAFAF" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="18dp"
-                    android:padding="3dp"
-                    android:text="سفارشات ستل نشده"
-                    app:layout_constraintStart_toEndOf="@+id/txtpendingOrderWeight"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="wrap_content"
-                    android:background="#AFAFAF" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-
-                    android:layout_width="130dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="18dp"
-                    android:padding="3dp"
-                    android:text="سفارشات برگشتی"
-                    app:layout_constraintStart_toEndOf="@+id/txtinProgressOrderWeight"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="wrap_content"
-                    android:background="#AFAFAF"
-
-                    />
-
-                <androidx.appcompat.widget.AppCompatTextView
-
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="18dp"
-
-                    android:padding="3dp"
-                    android:text="سفارشات فاکتور شده"
-                    app:layout_constraintStart_toEndOf="@+id/txtundeliverdOrderWeight"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
-            </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/layout_header_return"
+                    android:id="@+id/layout_header_order"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:background="#00C1F1"
-                    >
+                    android:layout_height="50dp"
+                    android:background="@color/color_list_hedear">
 
                     <androidx.appcompat.widget.AppCompatTextView
 
@@ -188,12 +74,13 @@
                         android:background="#AFAFAF" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-
+                        android:layout_gravity="center"
+                        android:gravity="center"
                         android:layout_width="130dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="18dp"
                         android:padding="3dp"
-                        android:text="کدویزیتور"
+                        android:text="تاریخ"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -203,12 +90,14 @@
                         android:background="#AFAFAF" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-
-                        android:layout_width="130dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="230dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="18dp"
                         android:padding="3dp"
-                        android:text="نام ویزیتور"
+                        android:text="کل سفارش"
+                        android:textSize="12sp"
                         app:layout_constraintStart_toEndOf="@+id/txtDate"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -218,8 +107,128 @@
                         android:background="#AFAFAF" />
 
                     <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="190dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="18dp"
+                        android:padding="3dp"
+                        android:text="سفارش بدون وضعیت"
+                        app:layout_constraintStart_toEndOf="@+id/txtorderWeight"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                        android:layout_width="130dp"
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="wrap_content"
+                        android:background="#AFAFAF" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="190dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="18dp"
+                        android:padding="3dp"
+                        android:text="سفارشات ستل نشده"
+                        app:layout_constraintStart_toEndOf="@+id/txtpendingOrderWeight"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="wrap_content"
+                        android:background="#AFAFAF" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="190dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="18dp"
+                        android:padding="3dp"
+                        android:text="سفارشات برگشتی"
+                        app:layout_constraintStart_toEndOf="@+id/txtinProgressOrderWeight"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="wrap_content"
+                        android:background="#AFAFAF"
+
+                        />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="190dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="18dp"
+
+                        android:padding="3dp"
+                        android:text="سفارشات فاکتور شده"
+                        app:layout_constraintStart_toEndOf="@+id/txtundeliverdOrderWeight"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_header_return"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@color/color_list_hedear">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+
+                        android:layout_width="30dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="18dp"
+                        android:padding="3dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="#AFAFAF" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="180dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="18dp"
+                        android:padding="3dp"
+                        android:text="کدویزیتور"
+
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="wrap_content"
+                        android:background="#AFAFAF" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="260dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="18dp"
+                        android:padding="3dp"
+                        android:text="نام ویزیتور"
+
+                        app:layout_constraintStart_toEndOf="@+id/txtDate"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="wrap_content"
+                        android:background="#AFAFAF" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="230dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="18dp"
                         android:padding="3dp"

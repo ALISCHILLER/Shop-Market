@@ -38,7 +38,7 @@
         android:background="#AFAFAF" />
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_customerItems_customerName"
-            android:layout_width="190dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="2dp" />
@@ -125,7 +125,8 @@
             android:background="#AFAFAF" />
 
         <androidx.appcompat.widget.AppCompatTextView
-
+            android:layout_gravity="center"
+            android:gravity="center"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
@@ -140,7 +141,9 @@
             android:background="#AFAFAF" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="190dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="3dp"
@@ -152,6 +155,8 @@
             android:layout_height="wrap_content"
             android:background="#AFAFAF" />
         <androidx.appcompat.widget.AppCompatTextView
+            android:layout_gravity="center"
+            android:gravity="center"
             android:id="@+id/txt_sum_orderWeight"
             android:layout_width="190dp"
             android:layout_height="wrap_content"
@@ -166,6 +171,8 @@
             android:background="#AFAFAF" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:layout_gravity="center"
+            android:gravity="center"
             android:id="@+id/txt_sum_pendingOrderWeight"
             android:layout_width="190dp"
             android:layout_height="wrap_content"
@@ -180,6 +187,8 @@
             android:background="#AFAFAF" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:layout_gravity="center"
+            android:gravity="center"
             android:id="@+id/txt_sum_inProgressOrderWeight"
             android:layout_width="190dp"
             android:layout_height="wrap_content"
@@ -194,6 +203,8 @@
             android:background="#AFAFAF" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:layout_gravity="center"
+            android:gravity="center"
             android:id="@+id/txt_sum_undeliverdOrderWeight"
             android:layout_width="190dp"
             android:layout_height="wrap_content"
@@ -210,6 +221,8 @@
             />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:layout_gravity="center"
+            android:gravity="center"
             android:id="@+id/txt_sum_finalWeight"
             android:layout_width="190dp"
             android:layout_height="wrap_content"

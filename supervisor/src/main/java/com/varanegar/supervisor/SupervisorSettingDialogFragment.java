@@ -33,6 +33,8 @@ import com.varanegar.vaslibrary.model.UpdateKey;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
+import com.varanegar.vaslibrary.ui.dialog.InsertPinDialog;
+import com.varanegar.vaslibrary.ui.fragment.picturecustomer.NoPictureReasonDialog;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.personnel.UserApi;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
@@ -78,14 +80,37 @@ public class SupervisorSettingDialogFragment extends CuteDialogWithToolbar {
         localIpPairedItemsEditable = (PairedItemsEditable) view.findViewById(R.id.local_ip_edit_text);
         localIpPairedItemsEditable.setValue("http://192.168.50.110:8080/");
         localIpPairedItemsEditable .setEnabled(false);
-        localIpPairedItemsEditable.setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.settings_linear).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pluss++;
-                if (pluss==5){
-                    ipPairedItemsEditable.setEnabled(true);
-                    localIpPairedItemsEditable.setEnabled(true);
-                    pluss=0;
+                if (pluss>=10){
+                    InsertPinDialog insertPinDialog=new InsertPinDialog();
+                    InsertPinDialog dialog = new InsertPinDialog();
+                    dialog.setCancelable(false);
+                    dialog.setClosable(false);
+                    dialog.setValues("8585075751");
+                    dialog.setOnResult(new InsertPinDialog.OnResult() {
+                        @Override
+                        public void done() {
+                            ipPairedItemsEditable.setEnabled(true);
+                            localIpPairedItemsEditable.setEnabled(true);
+                            pluss=0;
+
+                        }
+                        @Override
+                        public void failed(String error) {
+                            Timber.e(error);
+                            pluss=0;
+                            if (error.equals(getActivity().getString(com.varanegar.vaslibrary.R.string.pin_code_in_not_correct))) {
+                                printFailed(getActivity(), error);
+                            } else {
+
+                            }
+                        }
+                    });
+                    dialog.show(requireActivity().getSupportFragmentManager(), "InsertPinDialog");
+                   ;
                 }
             }
         });
@@ -335,6 +360,20 @@ public class SupervisorSettingDialogFragment extends CuteDialogWithToolbar {
                     recyclerAdapter.runItemClickListener(position);
                 }
             });
+        }
+    }
+
+
+    private void printFailed(Context context, String error) {
+        try {
+            CuteMessageDialog dialog = new CuteMessageDialog(context);
+            dialog.setIcon(Icon.Warning);
+            dialog.setTitle(com.varanegar.vaslibrary.R.string.DeliveryReasons);
+            dialog.setMessage(error);
+            dialog.setPositiveButton(com.varanegar.vaslibrary.R.string.ok, null);
+            dialog.show();
+        } catch (Exception e1) {
+            Timber.e(e1);
         }
     }
 }

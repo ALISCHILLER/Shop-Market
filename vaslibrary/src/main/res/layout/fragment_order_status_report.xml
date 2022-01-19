@@ -91,7 +91,7 @@
             <LinearLayout
                 android:id="@+id/layout_header_order"
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:background="@color/color_list_hedear">
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -109,7 +109,8 @@
                     android:background="#AFAFAF" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-
+                    android:layout_gravity="center"
+                    android:gravity="center"
                     android:layout_width="130dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
@@ -124,8 +125,9 @@
                     android:background="#AFAFAF" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-
-                    android:layout_width="190dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_width="230dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
                     android:padding="3dp"
@@ -140,7 +142,8 @@
                     android:background="#AFAFAF" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-
+                    android:layout_gravity="center"
+                    android:gravity="center"
                     android:layout_width="190dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
@@ -155,7 +158,8 @@
                     android:background="#AFAFAF" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-
+                    android:layout_gravity="center"
+                    android:gravity="center"
                     android:layout_width="190dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
@@ -170,7 +174,8 @@
                     android:background="#AFAFAF" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-
+                    android:layout_gravity="center"
+                    android:gravity="center"
                     android:layout_width="190dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
@@ -187,7 +192,8 @@
                     />
 
                 <androidx.appcompat.widget.AppCompatTextView
-
+                    android:layout_gravity="center"
+                    android:gravity="center"
                     android:layout_width="190dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
@@ -203,7 +209,7 @@
             <LinearLayout
                 android:id="@+id/layout_header_return"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="50dp"
                 android:background="@color/color_list_hedear">
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -221,12 +227,14 @@
                     android:background="#AFAFAF" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-
+                    android:layout_gravity="center"
+                    android:gravity="center"
                     android:layout_width="180dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
                     android:padding="3dp"
                     android:text="کدویزیتور"
+
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -236,12 +244,14 @@
                     android:background="#AFAFAF" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-
-                    android:layout_width="180dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_width="260dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
                     android:padding="3dp"
                     android:text="نام ویزیتور"
+
                     app:layout_constraintStart_toEndOf="@+id/txtDate"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -251,8 +261,9 @@
                     android:background="#AFAFAF" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-
-                    android:layout_width="180dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_width="230dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
                     android:padding="3dp"

@@ -5,23 +5,22 @@
     android:layout_width="wrap_content"
     android:orientation="vertical"
     android:layout_height="wrap_content">
-
     <LinearLayout
         android:id="@+id/layout_sub_sub"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-    >
+        >
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="30dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:padding="3dp" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:padding="3dp" />
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="#AFAFAF" />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#AFAFAF" />
 
 
 
@@ -32,83 +31,83 @@
             android:layout_marginStart="18dp"
             android:padding="2dp" />
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="#AFAFAF" />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#AFAFAF" />
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_customerItems_customerName"
-            android:layout_width="130dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="2dp" />
 
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="#AFAFAF" />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#AFAFAF" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/txt_customerItems_orderWeight"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:padding="2dp" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txt_customerItems_orderWeight"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:padding="2dp" />
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="#AFAFAF" />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#AFAFAF" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/txt_customerItems_pendingOrderWeight"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:padding="2dp" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txt_customerItems_pendingOrderWeight"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:padding="2dp" />
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="#AFAFAF" />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#AFAFAF" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/txt_customerItems_inProgressOrderWeight"
-        android:layout_width="130dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:padding="2dp" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txt_customerItems_inProgressOrderWeight"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:padding="2dp" />
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="#AFAFAF" />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#AFAFAF" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/txt_customerItems_undeliverdOrderWeight"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:padding="2dp" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txt_customerItems_undeliverdOrderWeight"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:padding="2dp" />
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="#AFAFAF" />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#AFAFAF" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/txt_customerItems_finalWeight"
-        android:layout_width="130dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:padding="2dp" />
-</LinearLayout>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txt_customerItems_finalWeight"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:padding="2dp" />
+    </LinearLayout>
     <LinearLayout
         android:id="@+id/layout_footer_order"
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:background="#05C5FF"
+        android:background="@color/color_list_footer"
         >
         <androidx.appcompat.widget.AppCompatTextView
 
@@ -125,7 +124,8 @@
             android:background="#AFAFAF" />
 
         <androidx.appcompat.widget.AppCompatTextView
-
+            android:layout_gravity="center"
+            android:gravity="center"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
@@ -140,7 +140,9 @@
             android:background="#AFAFAF" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="130dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="3dp"
@@ -152,8 +154,10 @@
             android:layout_height="wrap_content"
             android:background="#AFAFAF" />
         <androidx.appcompat.widget.AppCompatTextView
+            android:layout_gravity="center"
+            android:gravity="center"
             android:id="@+id/txt_sum_orderWeight"
-            android:layout_width="150dp"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="3dp"
@@ -166,8 +170,10 @@
             android:background="#AFAFAF" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:layout_gravity="center"
+            android:gravity="center"
             android:id="@+id/txt_sum_pendingOrderWeight"
-            android:layout_width="150dp"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="3dp"
@@ -180,8 +186,10 @@
             android:background="#AFAFAF" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:layout_gravity="center"
+            android:gravity="center"
             android:id="@+id/txt_sum_inProgressOrderWeight"
-            android:layout_width="130dp"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="3dp"
@@ -194,8 +202,10 @@
             android:background="#AFAFAF" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:layout_gravity="center"
+            android:gravity="center"
             android:id="@+id/txt_sum_undeliverdOrderWeight"
-            android:layout_width="150dp"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="3dp"
@@ -210,8 +220,10 @@
             />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:layout_gravity="center"
+            android:gravity="center"
             android:id="@+id/txt_sum_finalWeight"
-            android:layout_width="130dp"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="3dp"

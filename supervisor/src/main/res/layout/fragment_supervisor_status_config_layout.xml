@@ -26,6 +26,7 @@
         <RadioGroup
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:orientation="horizontal">
 
             <RadioButton
@@ -61,6 +62,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         >
 
         <com.varanegar.framework.util.recycler.BaseRecyclerView
@@ -76,7 +78,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:padding="@dimen/padding_xsmall">
 
 
@@ -91,7 +93,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_xsmall"
+            android:layout_margin="@dimen/padding_small"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
             android:orientation="horizontal">
 
             <com.varanegar.framework.util.component.PairedItems
@@ -119,7 +123,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_xsmall"
+            android:layout_margin="@dimen/padding_small"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
             android:orientation="horizontal">
 
             <com.varanegar.framework.util.component.PairedItems

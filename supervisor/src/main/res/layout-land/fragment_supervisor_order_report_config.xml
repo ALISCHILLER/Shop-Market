@@ -30,7 +30,7 @@
 
         <com.varanegar.framework.util.component.PairedItemsSpinner
             android:id="@+id/report_name_paired_items"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title="نوع گزارش" />
 

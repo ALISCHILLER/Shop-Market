@@ -72,13 +72,14 @@ public class ReportsFragment extends IMainPageFragment {
             reportsTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
                 @Override
                 public void onTabSelected(TabLayout.Tab tab) {
-//                    refresh(tab.getPosition());
+                  //  refresh(tab.getPosition());
                     if(tab.getPosition()==3){
                         product=1;
                     }else {
                         product=0;
                     }
 
+                    reportView.removeAllViews();
                 }
 
                 @Override

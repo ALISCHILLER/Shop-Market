@@ -104,12 +104,12 @@ public class ToursStatusViewFragment extends IMainPageFragment {
         adapter=new SimpleReportAdapter<items>(getVaranegarActvity(),items.class){
             @Override
             public void bind(ReportColumns columns, items entity) {
-                columns.add(bind(entity, ItemsView.productCategory,"گروه کالا").setFrizzed().setSortable());
-                columns.add(bind(entity, ItemsView.amount,"جمع مبلغ"));
-                columns.add(bind(entity, ItemsView.productCode,"کد کالا"));
-                columns.add(bind(entity, ItemsView.productName,"نام کالا"));
+                columns.add(bind(entity, ItemsView.productCategory,"گروه کالا").setFrizzed().setSortable().setWeight(2f));
+                columns.add(bind(entity, ItemsView.productCode,"کد کالا").setWeight(1.5f));
+                columns.add(bind(entity, ItemsView.productName,"نام کالا").setWeight(2.5f));
                 columns.add(bind(entity, ItemsView.productCountStr,"تعداد"));
-                columns.add(bind(entity, ItemsView.tax,"مالیات"));
+                columns.add(bind(entity, ItemsView.amount,"جمع مبلغ").setWeight(1.5f));
+                columns.add(bind(entity, ItemsView.tax,"مالیات").setWeight(2f));
             }
         };
         adapter.setLocale(VasHelperMethods.getSysConfigLocale(getContext()));

@@ -48,6 +48,7 @@
                         android:id="@+id/phone_image_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:visibility="gone"
                         android:padding="@dimen/padding_default"
                         android:src="@drawable/ic_phone_green_24dp" />
 
@@ -117,6 +118,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/updating_questionnaire_layout"
                     android:layout_width="wrap_content"
+                    android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 

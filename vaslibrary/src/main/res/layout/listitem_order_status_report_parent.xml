@@ -61,7 +61,7 @@
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/txtorderWeight"
-                    android:layout_width="190dp"
+                    android:layout_width="230dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="18dp"
                     android:padding="2dp"
@@ -135,7 +135,7 @@
     <LinearLayout
         android:id="@+id/layout_footer_order"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="50dp"
         android:background="@color/color_list_footer"
         >
 
@@ -159,6 +159,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="3dp"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:text=" جمع کل"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -170,11 +172,12 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_sum_orderWeight"
-            android:layout_width="190dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="3dp"
-
+            android:layout_gravity="center"
+            android:gravity="center"
             app:layout_constraintStart_toEndOf="@+id/txtDate"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -189,7 +192,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="3dp"
-
+            android:layout_gravity="center"
+            android:gravity="center"
             app:layout_constraintStart_toEndOf="@+id/txtorderWeight"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -204,7 +208,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="3dp"
-
+            android:layout_gravity="center"
+            android:gravity="center"
             app:layout_constraintStart_toEndOf="@+id/txtpendingOrderWeight"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -219,7 +224,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="3dp"
-
+            android:layout_gravity="center"
+            android:gravity="center"
             app:layout_constraintStart_toEndOf="@+id/txtinProgressOrderWeight"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -236,6 +242,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="3dp"
+            android:layout_gravity="center"
+            android:gravity="center"
             app:layout_constraintStart_toEndOf="@+id/txtundeliverdOrderWeight"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -276,6 +284,8 @@
             android:padding="2dp"
             android:text="کد مشتری"
             android:textSize="10sp"
+            android:layout_gravity="center"
+            android:gravity="center"
             app:layout_constraintStart_toEndOf="@+id/txt_dealersItems_data"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -285,15 +295,18 @@
             android:background="#AFAFAF" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="190dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
-            android:gravity="center"
+
             android:padding="2dp"
             android:text="نام مشتری"
             android:textSize="10sp"
             app:layout_constraintStart_toEndOf="@+id/txt_dealersname_data"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            />
 
         <View
             android:layout_width="1dp"
@@ -308,7 +321,10 @@
             android:text="کل سفارش"
             android:textSize="10sp"
             app:layout_constraintStart_toEndOf="@+id/txt_dealerCode_data"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            />
 
         <View
             android:layout_width="1dp"
@@ -322,6 +338,8 @@
             android:padding="2dp"
             android:text="سفارشات بدون وضعیت"
             android:textSize="10sp"
+            android:layout_gravity="center"
+            android:gravity="center"
             app:layout_constraintStart_toEndOf="@+id/txt_orderWeight"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -337,6 +355,8 @@
             android:padding="2dp"
             android:text="سفارش ستل نشده"
             android:textSize="10sp"
+            android:layout_gravity="center"
+            android:gravity="center"
             app:layout_constraintStart_toEndOf="@+id/txt_pendingOrderWeight"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -352,6 +372,8 @@
             android:padding="2dp"
             android:text="سفارشات برگشتی"
             android:textSize="10sp"
+            android:layout_gravity="center"
+            android:gravity="center"
             app:layout_constraintStart_toEndOf="@+id/txt_inProgressOrderWeight"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -367,6 +389,8 @@
             android:padding="2dp"
             android:text="سفارشات فاکتور شده"
             android:textSize="10sp"
+            android:layout_gravity="center"
+            android:gravity="center"
             app:layout_constraintStart_toEndOf="@+id/txt_inProgressOrderWeight"
             app:layout_constraintTop_toTopOf="parent" />
 

@@ -226,15 +226,15 @@ public class ToursStatusFragment extends IMainPageFragment {
                         }
                         @Override
                         public void bind(ReportColumns columns, ReviewreportModel entity) {
-                            columns.add(bind(entity, ReviewreportView.orderNumber,"شماره سفارش").setFrizzed().setSortable());
-                            columns.add(bind(entity, ReviewreportView.orderStatus, "وضعیت سفارش").setCustomViewHolder(new PhoneCustomerViewHoder()).setWeight(0.70f));
+                            columns.add(bind(entity, ReviewreportView.orderNumber,"شماره سفارش").setFrizzed().setSortable().setWeight(2.5f));
+                            columns.add(bind(entity, ReviewreportView.orderStatus, "وضعیت سفارش").setCustomViewHolder(new PhoneCustomerViewHoder()).setWeight(1.5f));
                             columns.add(bind(entity, ReviewreportView.orderDate,"تاریخ سفارش"));
                             columns.add(bind(entity, ReviewreportView.dealerCode,"کد ویزیتور"));
-                            columns.add(bind(entity, ReviewreportView.dealerName,"نام ویزیتور"));
+                            columns.add(bind(entity, ReviewreportView.dealerName,"نام ویزیتور").setWeight(2.5f));
                             columns.add(bind(entity, ReviewreportView.customerCode,"کد مشتری"));
-                            columns.add(bind(entity, ReviewreportView.customerName,"نام مشتری"));
-                            columns.add(bind(entity, ReviewreportView.paymentType,"نحوه تسویه"));
-                            columns.add(bind(entity, ReviewreportView.comment,"توضیحات"));
+                            columns.add(bind(entity, ReviewreportView.customerName,"نام مشتری").setWeight(2.5f));
+                            columns.add(bind(entity, ReviewreportView.comment,"توضیحات").setWeight(2.5f));
+                            columns.add(bind(entity, ReviewreportView.paymentType,"نحوه تسویه").setWeight(2.5f));
                             columns.add(bind(entity, ReviewreportView.customerCategory,"نوع مشتری"));
 
                         }

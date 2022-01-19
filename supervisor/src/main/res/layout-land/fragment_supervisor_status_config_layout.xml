@@ -39,6 +39,7 @@
         <RadioGroup
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:orientation="horizontal">
 
             <RadioButton
@@ -77,6 +78,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:visibility="gone"
             android:orientation="horizontal"
             android:padding="@dimen/padding_default">
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -105,11 +107,9 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:padding="@dimen/padding_xsmall">
+            android:orientation="horizontal">
 
 
             <com.varanegar.framework.util.component.PairedItemsSpinner
@@ -123,6 +123,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/padding_small"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
                 android:orientation="horizontal">
 
                 <com.varanegar.framework.util.component.PairedItems
@@ -152,6 +154,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/padding_small"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
                 android:orientation="horizontal">
 
                 <com.varanegar.framework.util.component.PairedItems
