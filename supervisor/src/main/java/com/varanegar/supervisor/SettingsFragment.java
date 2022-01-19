@@ -16,9 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
@@ -36,23 +34,18 @@ import com.varanegar.framework.util.component.PairedItemsSpinner;
 import com.varanegar.framework.util.component.SearchBox;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
-import com.varanegar.framework.util.component.toolbar.CuteButton;
 import com.varanegar.supervisor.model.VisitorManager;
 import com.varanegar.supervisor.model.VisitorModel;
 import com.varanegar.supervisor.webapi.SupervisorApi;
 import com.varanegar.supervisor.webapi.VisitorVisitInfoViewModel;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
 import com.varanegar.vaslibrary.manager.UserManager;
-import com.varanegar.vaslibrary.manager.updatemanager.CustomersUpdateFlow;
-import com.varanegar.vaslibrary.manager.updatemanager.ProductUpdateFlow;
 import com.varanegar.vaslibrary.manager.updatemanager.QuestionnaireUpdateFlow;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateCall;
 import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -338,7 +331,7 @@ public class SettingsFragment extends IMainPageFragment {
     private void getData() {
         parentFrag.disableTab();
         startProgress(R.string.please_wait, R.string.downloading_data);
-        DataManager.getData(getContext(), new DataManager.Callback() {
+        DataManager.getVisitor(getContext(), new DataManager.Callback() {
             @Override
             public void onSuccess() {
                 Activity activity = getActivity();
@@ -359,13 +352,25 @@ public class SettingsFragment extends IMainPageFragment {
                 if (isResumed() && activity != null && !activity.isFinishing()) {
                     parentFrag.enableTab();
                     finishProgress();
-                    showError(R.string.data_error);
+                    showError(error);
                 }
             }
         });
     }
 
     private void showError(@StringRes int error) {
+        Context context = getContext();
+        if (isResumed() && context != null) {
+            CuteMessageDialog dialog = new CuteMessageDialog(context);
+            dialog.setTitle(R.string.error);
+            dialog.setMessage(error);
+            dialog.setIcon(Icon.Error);
+            dialog.setPositiveButton(R.string.ok, null);
+            dialog.show();
+        }
+    }
+
+    private void showError(String error) {
         Context context = getContext();
         if (isResumed() && context != null) {
             CuteMessageDialog dialog = new CuteMessageDialog(context);

@@ -215,7 +215,7 @@ public class SettingsSlidingDialog extends SlidingDialog {
                 final ProgressDialog progressDialog = new ProgressDialog(getContext());
                 progressDialog.setMessage(getString(R.string.downloading_data));
                 progressDialog.show();
-                DataManager.getData(getContext(), new DataManager.Callback() {
+                DataManager.getVisitor(getContext(), new DataManager.Callback() {
                     @Override
                     public void onSuccess() {
                         if (progressDialog != null && progressDialog.isShowing()) {
