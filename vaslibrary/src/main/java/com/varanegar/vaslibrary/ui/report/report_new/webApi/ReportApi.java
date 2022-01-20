@@ -58,7 +58,7 @@ public class ReportApi extends BaseApi implements InReportApi {
     }
 
     @Override
-    public Call<String> savetourdata(SyncGetTourModel syncGetTourModel) {
+    public Call<Void> savetourdata(SyncGetTourModel syncGetTourModel) {
         return  getRetrofitBuilder(TokenType.UserToken).build().create(InReportApi.class)
                 .savetourdata(syncGetTourModel);
     }

@@ -5,29 +5,121 @@ import java.util.Date;
 import java.util.UUID;
 
 public class SyncGetCustomerCallModel {
+    private UUID customerUniqueId;
+    private Date callDate;
+    private String callPDate;
+    private Date startTime;
+    private String startPTime;
+    private Date endTime;
+    private String endPTime;
+    private double latitude;
+    private double longitude;
+    private Date receiveDate;
+    private String receivePDate;
+    private int visitDuration;
+    private ArrayList<SyncCustomerCallQuestionnaire> customerCallQuestionnaires;
 
-    public UUID customerUniqueId;
+    public UUID getCustomerUniqueId() {
+        return customerUniqueId;
+    }
 
-    public Date callDate;
+    public void setCustomerUniqueId(UUID customerUniqueId) {
+        this.customerUniqueId = customerUniqueId;
+    }
 
-    public String callPDate;
+    public Date getCallDate() {
+        return callDate;
+    }
 
-    public Date startTime;
+    public void setCallDate(Date callDate) {
+        this.callDate = callDate;
+    }
 
-    public String startPTime;
+    public String getCallPDate() {
+        return callPDate;
+    }
 
-    public Date endTime;
+    public void setCallPDate(String callPDate) {
+        this.callPDate = callPDate;
+    }
 
-    public String endPTime;
+    public Date getStartTime() {
+        return startTime;
+    }
 
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
 
-    public double latitude;
+    public String getStartPTime() {
+        return startPTime;
+    }
 
-    public Date receiveDate;
+    public void setStartPTime(String startPTime) {
+        this.startPTime = startPTime;
+    }
 
-    public String receivePDate;
+    public Date getEndTime() {
+        return endTime;
+    }
 
-    public int visitDuration;
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
 
-    public ArrayList<SyncCustomerCallQuestionnaire> customerCallQuestionnaires;
+    public String getEndPTime() {
+        return endPTime;
+    }
+
+    public void setEndPTime(String endPTime) {
+        this.endPTime = endPTime;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Date getReceiveDate() {
+        return receiveDate;
+    }
+
+    public void setReceiveDate(Date receiveDate) {
+        this.receiveDate = receiveDate;
+    }
+
+    public String getReceivePDate() {
+        return receivePDate;
+    }
+
+    public void setReceivePDate(String receivePDate) {
+        this.receivePDate = receivePDate;
+    }
+
+    public int getVisitDuration() {
+        return visitDuration;
+    }
+
+    public void setVisitDuration(int visitDuration) {
+        this.visitDuration = visitDuration;
+    }
+
+    public ArrayList<SyncCustomerCallQuestionnaire> getCustomerCallQuestionnaires() {
+        return customerCallQuestionnaires;
+    }
+
+    public void setCustomerCallQuestionnaires(ArrayList<SyncCustomerCallQuestionnaire> customerCallQuestionnaires) {
+        this.customerCallQuestionnaires = customerCallQuestionnaires;
+    }
 }

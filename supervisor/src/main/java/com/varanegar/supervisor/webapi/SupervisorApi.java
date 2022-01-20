@@ -89,7 +89,7 @@ public class SupervisorApi extends BaseApi implements ISupervisorApi {
     }
 
     @Override
-    public Call<String> supervisor_tour_sent(UUID id) {
+    public Call<Void> supervisor_tour_sent(UUID id) {
         return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).supervisor_tour_sent(id);
     }
 

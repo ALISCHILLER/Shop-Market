@@ -145,7 +145,7 @@ public interface ISupervisorApi {
     Call<SupervisorTourId> getTourBySupervisorId(@Query("supervisorId") UUID supervisorId);
 
     @GET("api/v2/ngt/tour/sync/supervisor/toursent")
-    Call<String> supervisor_tour_sent(@Query("id") UUID id);
+    Call<Void> supervisor_tour_sent(@Query("id") UUID id);
 
     @GET("api/v2/ngt/tour/sync/supervisor/tourreceived")
     Call<String> tourreceived(@Query("id") UUID id);

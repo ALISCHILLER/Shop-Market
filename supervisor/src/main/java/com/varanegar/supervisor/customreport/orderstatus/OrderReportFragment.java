@@ -439,4 +439,10 @@ public class OrderReportFragment extends IMainPageFragment {
 
 
     };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshapi();
+    }
 }

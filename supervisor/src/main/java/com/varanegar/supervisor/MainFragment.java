@@ -46,7 +46,7 @@ public class MainFragment extends VaranegarFragment {
         tl.getTabAt(3).setIcon(R.drawable.ic_tracking_cyan_48dp);
 
         tl.getTabAt(5).setIcon(R.drawable.ic_view_list_cyan_48dp);
-        tl.getTabAt(6).setIcon(R.drawable.ic_view_list_cyan_48dp);
+        tl.getTabAt(6).setIcon(R.drawable.ic_baseline_format_quote_24);
         return view;
     }
 

@@ -51,6 +51,6 @@ public interface InReportApi {
              @Query("ProductCategoriesId") List<String> productCategoriesId);
 
     @POST("api/v2/ngt/tour/supervisor/savetourdata")
-    Call<String> savetourdata(@Body SyncGetTourModel syncGetTourModel);
+    Call<Void> savetourdata(@Body SyncGetTourModel syncGetTourModel);
 
 }

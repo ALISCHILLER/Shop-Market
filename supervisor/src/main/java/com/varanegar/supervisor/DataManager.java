@@ -350,14 +350,14 @@ public class DataManager {
         UUID userModel = UUID.fromString(
                 sharedPreferences.getString("SupervisorIduniqueId", null));
         SupervisorApi api = new SupervisorApi(_context);
-        api.runWebRequest(api.supervisor_tour_sent(userModel), new WebCallBack<String>() {
+        api.runWebRequest(api.supervisor_tour_sent(userModel), new WebCallBack<Void>() {
             @Override
             protected void onFinish() {
 
             }
 
             @Override
-            protected void onSuccess(String result, Request request) {
+            protected void onSuccess(Void result, Request request) {
                 try {
                     SysConfigManager sysConfigManager = new SysConfigManager(_context);
                     sysConfigManager.sync(new UpdateCall() {
@@ -575,13 +575,13 @@ public class DataManager {
                         repository.deleteAll();
                         repository.insert(result);
                     }
-                    SysConfigManager sysConfigManager = new SysConfigManager(context);
-                    sysConfigManager.sync(new UpdateCall() {
-                        @Override
-                        protected void onFinish() {
-                            callback.onSuccess();
-                        }
-                    });
+//                    SysConfigManager sysConfigManager = new SysConfigManager(context);
+//                    sysConfigManager.sync(new UpdateCall() {
+//                        @Override
+//                        protected void onFinish() {
+//                            callback.onSuccess();
+//                        }
+//                    });
                     getQuestionnaire(callback, context);
                 } catch (Exception e) {
                     Timber.e(e);
@@ -646,14 +646,14 @@ public class DataManager {
         SharedPreferences sharedPreferences = context.getSharedPreferences("SupervisorId", Context.MODE_PRIVATE);
         UUID userModel = UUID.fromString(sharedPreferences.getString("SupervisorIduniqueId", null));
         SupervisorApi api = new SupervisorApi(context);
-        api.runWebRequest(api.supervisor_tour_sent(userModel), new WebCallBack<String>() {
+        api.runWebRequest(api.supervisor_tour_sent(userModel), new WebCallBack<Void>() {
             @Override
             protected void onFinish() {
 
             }
 
             @Override
-            protected void onSuccess(String result, Request request) {
+            protected void onSuccess(Void result, Request request) {
                 try {
                     SysConfigManager sysConfigManager = new SysConfigManager(context);
                     sysConfigManager.sync(new UpdateCall() {

@@ -93,7 +93,7 @@ public class ToursStatusFragment extends IMainPageFragment {
                     public void done() {
                         dialog.dismiss();
 
-                        refresh();
+                        refresh_report();
                     }
                 };
                 dialog.show(getChildFragmentManager(), "StatusConfigDialog");
@@ -102,7 +102,7 @@ public class ToursStatusFragment extends IMainPageFragment {
         return view;
     }
 
-    private void refresh() {
+    private void refresh_report() {
         Context context = getContext();
         if (context != null && errorTextView != null) {
             startProgress(R.string.please_wait, R.string.connecting_to_the_server);
@@ -520,8 +520,7 @@ public class ToursStatusFragment extends IMainPageFragment {
            protected void onSuccess(ResponseBody result, Request request) {
                Log.e("CustomerFragment", String.valueOf(result));
                progressDialog.dismiss();
-               refresh();
-           }
+               refresh_report();          }
 
            @Override
            protected void onApiFailure(ApiError error, Request request) {
@@ -557,6 +556,6 @@ public class ToursStatusFragment extends IMainPageFragment {
     @Override
     public void onResume() {
         super.onResume();
-//        refresh();
+        refresh_report();
     }
 }

@@ -260,7 +260,7 @@ public class CustomersFullFragment  extends IMainPageFragment {
                     columns.add(bind(entity, SupervisorFullCustomer.NationalCode, getString(R.string.national_id_label)).sendToDetail());
                     columns.add(bind(entity, SupervisorFullCustomer.CustomerActivity, getString(R.string.customer_activity)).sendToDetail());
                     columns.add(bind(entity, SupervisorFullCustomer.CustomerLevel, getString(R.string.customer_level)).sendToDetail());
-                    columns.add(bind(entity, SupervisorFullCustomer.customerCategoryUniqueId, getString(R.string.customer_category)).sendToDetail());
+                    columns.add(bind(entity, SupervisorFullCustomer.CustomerCategory, getString(R.string.customer_category)).sendToDetail());
 //                    columns.add(bind(entity, SupervisorFullCustomer.PathTitle, getString(R.string.path_title)).sendToDetail());
                     columns.add(bind(entity, SupervisorFullCustomer.DealerName, getString(R.string.dealer_name_label)).sendToDetail());
                     if (!isLandscape()) {

@@ -1,7 +1,10 @@
 package com.varanegar.vaslibrary.ui.fragment;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -50,6 +53,7 @@ import com.varanegar.vaslibrary.model.sendAnswersQustion.SyncGetCustomerCallMode
 import com.varanegar.vaslibrary.model.sendAnswersQustion.SyncGetCustomerQuestionnaireAnswerModel;
 import com.varanegar.vaslibrary.model.sendAnswersQustion.SyncGetTourModel;
 import com.varanegar.vaslibrary.ui.report.report_new.webApi.ReportApi;
+import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.tour.SyncGetCustomerCallQuestionnaireAnswerViewModel;
 import com.varanegar.vaslibrary.webapi.tour.SyncGetCustomerCallQuestionnaireViewModel;
 import com.varanegar.vaslibrary.webapi.tour.SyncGetCustomerCallViewModel;
@@ -73,6 +77,17 @@ import timber.log.Timber;
 public class QuestionnaireFragment extends VisitFragment {
 
     private UUID customerId;
+    private ProgressDialog progressDialog;
+
+    private void dismissProgressDialog() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            try {
+                progressDialog.dismiss();
+            } catch (Exception ignored) {
+
+            }
+        }
+    }
 
     public void setCustomerId(UUID customerId) {
         addArgument("f8c2abc4-c401-4f16-8f7d-1019e80574af", customerId.toString());
@@ -124,51 +139,96 @@ public class QuestionnaireFragment extends VisitFragment {
     }
 
 
-    public void sendQuestion(){
+    public void sendQuestion() {
+        if (getContext() == null)
+            return;
 
-
-        ///  SupervisorFullCustomerModel customerModel= new SupervisorFullCustomerModelRepository().getItem(new Query().from(SupervisorFullCustomer.SupervisorFullCustomerTbl).whereAnd())
-
-        Date date =new Date();
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("SupervisorId", Context.MODE_PRIVATE);
-        UUID userModel = UUID.fromString(sharedPreferences.getString("SupervisorIduniqueId", null));
+        Date date = new Date();
+        SharedPreferences sharedPreferences =
+                getContext().getSharedPreferences("SupervisorId",
+                        Context.MODE_PRIVATE);
+        UUID tourId = UUID.fromString(
+                sharedPreferences.getString(
+                        "SupervisorIduniqueId",
+                        null));
         String endData = DateHelper.toString(date, DateFormat.Date, Locale.getDefault());
-        SyncGetTourModel  syncGetTourModel=new SyncGetTourModel(getContext(),userModel);
+        SyncGetTourModel syncGetTourModel = new SyncGetTourModel();
+        syncGetTourModel.setTourUniqueId(tourId);
+        syncGetTourModel.setSendDate(date);
+        try {
+            syncGetTourModel.setApkVersion(
+                    getContext()
+                            .getPackageManager()
+                            .getPackageInfo(getContext()
+                                            .getApplicationInfo()
+                                            .packageName,
+                                    0)
+                            .versionName
+            );
+        } catch (PackageManager.NameNotFoundException e) {
+            Timber.e(e);
+            e.printStackTrace();
+        }
+
         SyncGetCustomerCallModel syncGetCustomerCallViewModel = new SyncGetCustomerCallModel();
-        syncGetCustomerCallViewModel.customerUniqueId=customerId;
-        syncGetCustomerCallViewModel.callDate=date;
-        syncGetCustomerCallViewModel.callPDate=endData;
-        syncGetCustomerCallViewModel.startTime=date;
-        syncGetCustomerCallViewModel.startPTime=endData;
-        syncGetCustomerCallViewModel.endTime=date;
-        syncGetCustomerCallViewModel.endPTime=endData;
-        syncGetCustomerCallViewModel.latitude=51.48330420255661;
-        syncGetCustomerCallViewModel.latitude=51.48330420255661;
-        syncGetCustomerCallViewModel.receiveDate=date;
-        syncGetCustomerCallViewModel.receivePDate=endData;
-        syncGetCustomerCallViewModel.visitDuration=245000;
-        syncGetCustomerCallViewModel.customerCallQuestionnaires = (ArrayList<SyncCustomerCallQuestionnaire>) populateCustomerQuestionnaires(customerId);
-        syncGetTourModel.CustomerCalls.add(syncGetCustomerCallViewModel);
-        ReportApi reportApi =new ReportApi(getContext());
-        reportApi.runWebRequest(reportApi.savetourdata(syncGetTourModel), new WebCallBack<String>() {
+        syncGetCustomerCallViewModel.setCustomerUniqueId(customerId);
+        syncGetCustomerCallViewModel.setCallDate(date);
+        syncGetCustomerCallViewModel.setCallPDate(endData);
+        syncGetCustomerCallViewModel.setStartTime(date);
+        syncGetCustomerCallViewModel.setStartPTime(endData);
+        syncGetCustomerCallViewModel.setEndTime(date);
+        syncGetCustomerCallViewModel.setEndPTime(endData);
+        syncGetCustomerCallViewModel.setLatitude(51.48330420255661);
+        syncGetCustomerCallViewModel.setLongitude(51.48330420255661);
+        syncGetCustomerCallViewModel.setReceiveDate(date);
+        syncGetCustomerCallViewModel.setReceivePDate(endData);
+        syncGetCustomerCallViewModel.setVisitDuration(245000);
+        syncGetCustomerCallViewModel.setCustomerCallQuestionnaires(
+                (ArrayList<SyncCustomerCallQuestionnaire>) populateCustomerQuestionnaires(customerId)
+        );
+        List<SyncGetCustomerCallModel> calls = new ArrayList<>();
+        calls.add(syncGetCustomerCallViewModel);
+        syncGetTourModel.setCustomerCalls(calls);
+
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setTitle(R.string.please_wait);
+        progressDialog.setMessage(getContext().getString(R.string.downloading_data));
+        progressDialog.show();
+        ReportApi reportApi = new ReportApi(getContext());
+
+        reportApi.runWebRequest(reportApi.savetourdata(syncGetTourModel), new WebCallBack<Void>() {
             @Override
             protected void onFinish() {
-
+                dismissProgressDialog();
             }
 
             @Override
-            protected void onSuccess(String result, Request request) {
-
+            protected void onSuccess(Void result, Request request) {
             }
 
             @Override
             protected void onApiFailure(ApiError error, Request request) {
+                if (isResumed()) {
+                    Activity activity = getActivity();
+                    if (activity != null && !activity.isFinishing()) {
 
+                        String err = WebApiErrorBody.log(error, getContext());
+                        showErrorDialog(err);
+                    }
+                }
             }
 
             @Override
             protected void onNetworkFailure(Throwable t, Request request) {
+                if (isResumed()) {
 
+                    Activity activity = getActivity();
+                    if (activity != null && !activity.isFinishing()) {
+                        Timber.e(t);
+                        showErrorDialog(getContext().getString(R.string.error_connecting_to_server));
+                        dismissProgressDialog();
+                    }
+                }
             }
         });
     }
@@ -331,7 +391,7 @@ public class QuestionnaireFragment extends VisitFragment {
             for (QuestionnaireLineModel line :
                     lines) {
                 QuestionnaireAnswerModel answerModel = questionnaireAnswerManager.getLine(questionnaireAnswerModels, line.UniqueId);
-                SyncGetCustomerQuestionnaireAnswerModel  answer=new SyncGetCustomerQuestionnaireAnswerModel();
+                SyncGetCustomerQuestionnaireAnswerModel answer = new SyncGetCustomerQuestionnaireAnswerModel();
                 answer.hasAttachments = answerModel.AttachmentId != null;
                 answer.questionnaireLineUniqueId = line.UniqueId;
                 answer.uniqueId = answerModel.AttachmentId == null ? UUID.randomUUID() : answerModel.AttachmentId;
@@ -343,5 +403,17 @@ public class QuestionnaireFragment extends VisitFragment {
             syncGetCustomerCallQuestionnaireViewModels.add(syncCustomerCallQuestionnaire);
         }
         return syncGetCustomerCallQuestionnaireViewModels;
+    }
+
+
+    private void showErrorDialog(String error) {
+        if (isResumed()) {
+            CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+            dialog.setTitle(com.varanegar.vaslibrary.R.string.error);
+            dialog.setMessage(error);
+            dialog.setIcon(Icon.Error);
+            dialog.setPositiveButton(com.varanegar.vaslibrary.R.string.ok, null);
+            dialog.show();
+        }
     }
 }
