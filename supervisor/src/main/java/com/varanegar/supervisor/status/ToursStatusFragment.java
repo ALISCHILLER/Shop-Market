@@ -233,9 +233,9 @@ public class ToursStatusFragment extends IMainPageFragment {
                             columns.add(bind(entity, ReviewreportView.dealerName,"نام ویزیتور").setWeight(2.5f));
                             columns.add(bind(entity, ReviewreportView.customerCode,"کد مشتری"));
                             columns.add(bind(entity, ReviewreportView.customerName,"نام مشتری").setWeight(2.5f));
-                            columns.add(bind(entity, ReviewreportView.comment,"توضیحات").setWeight(2.5f));
-                            columns.add(bind(entity, ReviewreportView.paymentType,"نحوه تسویه").setWeight(2.5f));
                             columns.add(bind(entity, ReviewreportView.customerCategory,"نوع مشتری"));
+                            columns.add(bind(entity, ReviewreportView.paymentType,"نحوه تسویه").setWeight(2.5f));
+                            columns.add(bind(entity, ReviewreportView.comment,"توضیحات").setWeight(2.5f));
 
                         }
 
