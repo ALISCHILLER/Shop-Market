@@ -520,35 +520,36 @@ public class MapFragment extends ProgressFragment {
                 protected void onSuccess(List<EventViewModel> result, Request request) {
 
 
-                    if (param.LaststatusType==0)
-                    createMarkers(result,param.LaststatusType);
-
-                    _markers = createMarkers(result, new TrackingConfig(getContext()).getStatusType() == StatusType.Event , true);
-                    if (_markers.size() > 0) {
-                        mapHelper.setMarkers(_markers);
-                        mapHelper.setDrawLines(false);
-                        mapHelper.moveToArea(_markers);
-                        mapHelper.draw(null);
-                        mapHelper.setOnMarkerInfoViewClickListener(new MapHelper.OnMarkerInfoViewClickListener() {
-                            @Override
-                            public void onClick(TrackingMarker marker) {
-                                BaseLocationViewModel locationViewModel = marker.getLocationViewModel();
-                                Activity activity = getActivity();
-                                if (activity != null && !activity.isFinishing() && isResumed()) {
-                                    TrackingConfig trackingConfig = new TrackingConfig(activity);
-                                    trackingConfig.isTracking(true);
-                                    trackingConfig.setFromTime(6, 0);
-                                    trackingConfig.setToTime(23, 55);
-                                    trackingConfig.isMap(true);
-                                    List<UUID> customersIds = new ArrayList<>();
-                                    customersIds.add(locationViewModel.CompanyPersonnelId);
-                                    trackingConfig.removePersonnelIds();
-                                    trackingConfig.setPersonnelIds2(customersIds);
-                                    trackingConfig.setTrackingDate(new Date());
-                                   showMarkers();
+                    if (param.LaststatusType==0) {
+                        createMarkers(result, param.LaststatusType);
+                    }else {
+                        _markers = createMarkers(result, new TrackingConfig(getContext()).getStatusType() == StatusType.Event, true);
+                        if (_markers.size() > 0) {
+                            mapHelper.setMarkers(_markers);
+                            mapHelper.setDrawLines(false);
+                            mapHelper.moveToArea(_markers);
+                            mapHelper.draw(null);
+                            mapHelper.setOnMarkerInfoViewClickListener(new MapHelper.OnMarkerInfoViewClickListener() {
+                                @Override
+                                public void onClick(TrackingMarker marker) {
+                                    BaseLocationViewModel locationViewModel = marker.getLocationViewModel();
+                                    Activity activity = getActivity();
+                                    if (activity != null && !activity.isFinishing() && isResumed()) {
+                                        TrackingConfig trackingConfig = new TrackingConfig(activity);
+                                        trackingConfig.isTracking(true);
+                                        trackingConfig.setFromTime(6, 0);
+                                        trackingConfig.setToTime(23, 55);
+                                        trackingConfig.isMap(true);
+                                        List<UUID> customersIds = new ArrayList<>();
+                                        customersIds.add(locationViewModel.CompanyPersonnelId);
+                                        trackingConfig.removePersonnelIds();
+                                        trackingConfig.setPersonnelIds2(customersIds);
+                                        trackingConfig.setTrackingDate(new Date());
+                                        showMarkers();
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
                 }
 
