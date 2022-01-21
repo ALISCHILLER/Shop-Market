@@ -223,7 +223,7 @@ import static varanegar.com.discountcalculatorlib.Global.orderPrize;
 public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePrizesDialog.choicePrizeDialogListener {
     private OnItemQtyChangedHandler onItemQtyChangedHandler;
     private HashMap<UUID, ProductUnitsViewModel> productUnitsHashMap;
-
+    private ProgressDialog progressDialog;
     private CustomerModel customer;
     BaseRecyclerAdapter<CustomerCallOrderOrderViewModel> orderAdapter;
     private CuteToolbar toolbar;
@@ -1387,6 +1387,21 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
     }
 
 
+    private void startProgressDialog() {
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage(getString(R.string.please_wait));
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
+
+    private void stopProgressDialog() {
+        if (getVaranegarActvity() != null && progressDialog != null && progressDialog.isShowing())
+            try {
+                progressDialog.dismiss();
+            } catch (Exception ignored) {
+
+            }
+    }
     private void setupToolbarButtons(View view) {
         toolbar = (CuteToolbar) view.findViewById(R.id.options_toolbar);
         toolbar.setVisibility(View.GONE);
@@ -1407,18 +1422,21 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
         okButton.setOnClickListener(() -> {
 
             if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
-
+                startProgressDialog();
+                List<String> customerCode=new ArrayList<>();
+                customerCode.add(customer.CustomerCode);
                 CustomerApi api = new CustomerApi(getContext());
-                api.runWebRequest(api.CheckCustomerCredits(customer.CustomerCode), new WebCallBack<Boolean>() {
+                api.runWebRequest(api.CheckCustomerCredits(customerCode), new WebCallBack<Boolean>() {
                     @Override
                     protected void onFinish() {
-
+                        stopProgressDialog();
                     }
 
                     @Override
                     protected void onSuccess(Boolean result, Request request) {
                         if (isResumed()) {
                             if (result) {
+                                saveOrder();
                                 SysConfigManager sysConfigManager = new SysConfigManager(getContext());
                                 SysConfigModel sendPromotionPreview = sysConfigManager.read(ConfigKey.SendPromotionPreview, SysConfigManager.cloud);
                                 if (SysConfigManager.compare(sendPromotionPreview, true)) {
@@ -1437,6 +1455,7 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
                                 confirmDialog1.setIcon(Icon.Error);
                                 confirmDialog1.setNeutralButton(R.string.cancel, null);
                                 confirmDialog1.setPositiveButton(R.string.yes_i_take_responsibility, v1 -> {
+                                    saveOrder();
                                     SysConfigManager sysConfigManager = new SysConfigManager(getContext());
                                     SysConfigModel sendPromotionPreview = sysConfigManager.read(ConfigKey.SendPromotionPreview, SysConfigManager.cloud);
                                     if (SysConfigManager.compare(sendPromotionPreview, true)) {
@@ -1460,6 +1479,7 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
                         String err = WebApiErrorBody.log(error, getContext());
                         if (isResumed()) {
                             showErrorDialog(err);
+
                         }
                     }
 
@@ -1479,7 +1499,7 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
                 cuteMessageDialog.setMessage(R.string.discount_can_not_more_amount);
                 cuteMessageDialog.setNegativeButton(R.string.ok, null);
                 cuteMessageDialog.show();
-            } else {
+            } else if (!VaranegarApplication.is(VaranegarApplication.AppId.PreSales)){
                 saveOrder();
             }
         });

@@ -181,7 +181,7 @@ public class CustomerApi extends BaseApi implements ICustomerApi {
     }
 
     @Override
-    public Call<Boolean> CheckCustomerCredits(String customerCode) {
+    public Call<Boolean> CheckCustomerCredits(List<String> customerCode ) {
         ICustomerApi api = getRetrofitBuilder(TokenType.UserToken)
                 .build().create(ICustomerApi.class);
         return api.CheckCustomerCredits(customerCode);

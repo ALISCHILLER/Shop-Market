@@ -99,5 +99,5 @@ public interface ICustomerApi {
 
     @GET("api/v2/ngt/customer/CheckCustomerCredits")
     Call<Boolean>CheckCustomerCredits (
-            @Query("customerCode") String customerCode);
+            @Query("CustomersId") List<String> customerCode);
 }

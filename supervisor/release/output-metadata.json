@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.varanegar.supervisor",
+  "variantName": "processReleaseResources",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "versionCode": 30001007,
+      "versionName": "3.0.1.7",
+      "outputFile": "varanegar.supervisor_V3.0.1.7_220121.apk"
+    }
+  ]
+}
