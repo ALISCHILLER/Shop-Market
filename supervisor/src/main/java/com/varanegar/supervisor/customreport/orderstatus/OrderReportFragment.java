@@ -49,6 +49,8 @@ import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -162,6 +164,10 @@ public class OrderReportFragment extends IMainPageFragment {
 
                             @Override
                             protected void onSuccess(List<OrderStatusReport> result, Request request) {
+                                Collections.sort(result, (o1, o2) -> o2.getDate().compareTo(o1.getDate()));
+
+
+
                                 containerView.removeAllViews();
                                 root = TreeNode.root();
                                 List<OrderStatusReportFlat> data = generateTreeData(result);

@@ -44,9 +44,27 @@
             android:layout_height="match_parent"
             android:background="#AFAFAF" />
 
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txt_reportCode"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:textColor="@color/color_list_delear"
+            android:padding="2dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            />
+
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#AFAFAF" />
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txtDate"
-            android:layout_width="130dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="2dp"
@@ -76,7 +94,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txtpendingOrderWeight"
-            android:layout_width="190dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="2dp"
@@ -188,7 +206,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_sum_pendingOrderWeight"
-            android:layout_width="190dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="3dp"
@@ -204,7 +222,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_sum_inProgressOrderWeight"
-            android:layout_width="190dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="3dp"
@@ -313,7 +331,7 @@
             android:background="#AFAFAF" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="190dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="2dp"
@@ -330,11 +348,11 @@
             android:background="#AFAFAF" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="190dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="2dp"
-            android:text="سفارشات بدون وزن"
+            android:text="سفارشات بدون وضعیت"
             android:textSize="10sp"
             android:layout_gravity="center"
             android:gravity="center"

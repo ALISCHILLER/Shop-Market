@@ -74,9 +74,25 @@
                         android:background="#AFAFAF" />
 
                     <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="130dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="18dp"
+                        android:padding="2dp"
+                        android:text="ردیف"
+                        android:textSize="10sp"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:layout_width="130dp"
+                        app:layout_constraintStart_toEndOf="@+id/txt_dealersname_data"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="#AFAFAF" />
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_width="230dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="18dp"
                         android:padding="3dp"
@@ -109,7 +125,7 @@
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:layout_width="190dp"
+                        android:layout_width="230dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="18dp"
                         android:padding="3dp"

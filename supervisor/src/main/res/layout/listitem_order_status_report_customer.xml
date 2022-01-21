@@ -50,7 +50,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_customerItems_orderWeight"
-            android:layout_width="190dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="2dp" />
@@ -62,7 +62,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_customerItems_pendingOrderWeight"
-            android:layout_width="190dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="2dp" />
@@ -157,7 +157,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:id="@+id/txt_sum_orderWeight"
-            android:layout_width="190dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="3dp"
@@ -173,7 +173,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:id="@+id/txt_sum_pendingOrderWeight"
-            android:layout_width="190dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="3dp"

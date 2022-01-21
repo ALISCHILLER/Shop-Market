@@ -35,10 +35,15 @@ import java.util.UUID;
     public View getInfoContents(Marker marker) {
         Object obj = marker.getTag();
         if (obj != null) {
-            UUID tag = (UUID) obj;
-            TrackingMarker trackingMarker = markers.get(tag);
-            if (trackingMarker != null)
-                return trackingMarker.onCreateInfoView(activity.getLayoutInflater());
+            try {
+                UUID tag = (UUID) obj;
+                TrackingMarker trackingMarker = markers.get(tag);
+                if (trackingMarker != null)
+                    return trackingMarker.onCreateInfoView(activity.getLayoutInflater());
+            }catch (Exception e){
+                return null;
+            }
+
         }
         return null;
     }

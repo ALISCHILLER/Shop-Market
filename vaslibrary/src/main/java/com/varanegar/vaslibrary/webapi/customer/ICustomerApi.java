@@ -95,4 +95,9 @@ public interface ICustomerApi {
     Call<String> postCustomerZarCustomerInfo(
             @Body SyncZarGetNewCustomerViewModel customerInfoViewModel);
 
+
+
+    @GET("api/v2/ngt/customer/CheckCustomerCredits")
+    Call<Boolean>CheckCustomerCredits (
+            @Query("customerCode") String customerCode);
 }

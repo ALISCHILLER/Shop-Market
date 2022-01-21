@@ -18,6 +18,7 @@ import java.util.List;
 
 public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusReportFlat> {
     private final IOnViewCount onViewCount;
+    private int i;
     private List<OrderStatusReportFlat> _data;
     interface IOnViewCount {
         void viewCount(TreeNode parentNode);
@@ -32,6 +33,7 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
     @Override
     public View createNodeView(TreeNode node, OrderStatusReportFlat value) {
         if (value.getLevel() == 1) {
+            i++;
             return level1(node,value);
         } else if (value.getLevel() == 2) {
             return level2(node,value);
@@ -159,7 +161,6 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
                 .getDeliverdOrderWeight()));
 
 
-
         AppCompatTextView txt_sum_orderWeight;
         AppCompatTextView txt_sum_pendingOrderWeight;
         AppCompatTextView txt_sum_inProgressOrderWeight;
@@ -217,12 +218,18 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
         AppCompatTextView inProgressOrderWeight;
         AppCompatTextView undeliverdOrderWeight;
         AppCompatTextView finalWeight;
+
+        AppCompatTextView txt_reportCode;
+
+
         date = itemView.findViewById(R.id.txtDate);
         orderWeight = itemView.findViewById(R.id.txtorderWeight);
         pendingOrderWeight = itemView.findViewById(R.id.txtpendingOrderWeight);
         inProgressOrderWeight = itemView.findViewById(R.id.txtinProgressOrderWeight);
         undeliverdOrderWeight = itemView.findViewById(R.id.txtundeliverdOrderWeight);
         finalWeight = itemView.findViewById(R.id.finalWeight);
+        txt_reportCode= itemView.findViewById(R.id.txt_reportCode);
+
         date.setText(item.getDate());
         orderWeight.setText(String.valueOf(item.getOrderWeight()));
         pendingOrderWeight.setText(String.valueOf(item
@@ -232,6 +239,8 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
         undeliverdOrderWeight.setText(String.valueOf(item
                 .getUndeliverdOrderWeight()));
         finalWeight.setText(String.valueOf(item.getFinalWeight()));
+
+        txt_reportCode.setText(String.valueOf(node.getId()));
 
         AppCompatTextView txt_sum_orderWeight;
         AppCompatTextView txt_sum_pendingOrderWeight;

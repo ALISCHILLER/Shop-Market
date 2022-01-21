@@ -36,4 +36,7 @@ public class items extends BaseModel {
     @Expose
     @Column
     public int tax;
+
+
+
 }

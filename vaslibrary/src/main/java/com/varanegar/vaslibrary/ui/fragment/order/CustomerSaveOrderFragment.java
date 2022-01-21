@@ -37,6 +37,8 @@ import com.varanegar.framework.database.model.BaseModel;
 import com.varanegar.framework.database.querybuilder.Query;
 import com.varanegar.framework.database.querybuilder.criteria.Criteria;
 import com.varanegar.framework.network.Connectivity;
+import com.varanegar.framework.network.listeners.ApiError;
+import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.util.HelperMethods;
 import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.util.component.PairedItems;
@@ -179,6 +181,8 @@ import com.varanegar.vaslibrary.ui.fragment.productgroup.ProductGroupFragment;
 import com.varanegar.vaslibrary.ui.fragment.settlement.CardReaderDialog;
 import com.varanegar.vaslibrary.ui.fragment.settlement.CashPaymentDialog;
 import com.varanegar.vaslibrary.ui.fragment.settlement.CustomerPayment;
+import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
+import com.varanegar.vaslibrary.webapi.customer.CustomerApi;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
 
 import java.math.BigDecimal;
@@ -195,6 +199,7 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import okhttp3.Request;
 import timber.log.Timber;
 import varanegar.com.discountcalculatorlib.utility.enumerations.EVCType;
 import varanegar.com.discountcalculatorlib.viewmodel.DiscountOrderPrizeViewModel;
@@ -1242,7 +1247,17 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
             cuteMessageDialog.show();
         }
     }
-
+ private void showErrorDialog(String err) {
+     Context context = getContext();
+     if (context != null) {
+         CuteMessageDialog dialog = new CuteMessageDialog(context);
+         dialog.setTitle(R.string.error);
+         dialog.setIcon(Icon.Error);
+         dialog.setMessage(err);
+         dialog.setPositiveButton(R.string.ok, null);
+         dialog.show();
+     }
+ }
     protected void showErrorMessage(@StringRes int str) {
         Activity activity = getVaranegarActvity();
         if (activity != null && !activity.isFinishing()) {
@@ -1390,20 +1405,74 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
         okButton.setTitle(R.string.save_order_request);
         okButton.setIcon(R.drawable.ic_done_white_36dp);
         okButton.setOnClickListener(() -> {
+
             if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
-                SysConfigManager sysConfigManager = new SysConfigManager(getContext());
-                SysConfigModel sendPromotionPreview = sysConfigManager.read(ConfigKey.SendPromotionPreview, SysConfigManager.cloud);
-                if (SysConfigManager.compare(sendPromotionPreview, true)) {
-                    UUID customerIdOrderPreview = VaranegarApplication.getInstance().tryRetrieve("CUSTOMER_ID_ORDER_PREVIEW", false);
-                    if (!customerId.equals(customerIdOrderPreview)) {
-                        CustomerOrderPreviewFragment previewFragment = new CustomerOrderPreviewFragment();
-                        previewFragment.setArguments(customerId, callOrderId);
-                        getVaranegarActvity().pushFragment(previewFragment);
-                        return;
+
+                CustomerApi api = new CustomerApi(getContext());
+                api.runWebRequest(api.CheckCustomerCredits(customer.CustomerCode), new WebCallBack<Boolean>() {
+                    @Override
+                    protected void onFinish() {
+
                     }
-                }
-            }
-            if (VaranegarApplication.is(VaranegarApplication.AppId.Contractor) && otherDiscount.compareTo(orderAmount.TotalAmount) > 0) {
+
+                    @Override
+                    protected void onSuccess(Boolean result, Request request) {
+                        if (isResumed()) {
+                            if (result) {
+                                SysConfigManager sysConfigManager = new SysConfigManager(getContext());
+                                SysConfigModel sendPromotionPreview = sysConfigManager.read(ConfigKey.SendPromotionPreview, SysConfigManager.cloud);
+                                if (SysConfigManager.compare(sendPromotionPreview, true)) {
+                                    UUID customerIdOrderPreview = VaranegarApplication.getInstance().tryRetrieve("CUSTOMER_ID_ORDER_PREVIEW", false);
+                                    if (!customerId.equals(customerIdOrderPreview)) {
+                                        CustomerOrderPreviewFragment previewFragment = new CustomerOrderPreviewFragment();
+                                        previewFragment.setArguments(customerId, callOrderId);
+                                        getVaranegarActvity().pushFragment(previewFragment);
+                                        return;
+                                    }
+                                }
+                            } else {
+                                CuteMessageDialog confirmDialog1 = new CuteMessageDialog(getContext());
+                                confirmDialog1.setTitle(R.string.warning);
+                                confirmDialog1.setMessage("مشتری فاقد اعتبار می باشد \n آیا تمایل به ثبت سفارش دارید دارید؟");
+                                confirmDialog1.setIcon(Icon.Error);
+                                confirmDialog1.setNeutralButton(R.string.cancel, null);
+                                confirmDialog1.setPositiveButton(R.string.yes_i_take_responsibility, v1 -> {
+                                    SysConfigManager sysConfigManager = new SysConfigManager(getContext());
+                                    SysConfigModel sendPromotionPreview = sysConfigManager.read(ConfigKey.SendPromotionPreview, SysConfigManager.cloud);
+                                    if (SysConfigManager.compare(sendPromotionPreview, true)) {
+                                        UUID customerIdOrderPreview = VaranegarApplication.getInstance().tryRetrieve("CUSTOMER_ID_ORDER_PREVIEW", false);
+                                        if (!customerId.equals(customerIdOrderPreview)) {
+                                            CustomerOrderPreviewFragment previewFragment = new CustomerOrderPreviewFragment();
+                                            previewFragment.setArguments(customerId, callOrderId);
+                                            getVaranegarActvity().pushFragment(previewFragment);
+                                            return;
+                                        }
+                                    }
+                                });
+                                confirmDialog1.show();
+
+                            }
+                        }
+                    }
+
+                    @Override
+                    protected void onApiFailure(ApiError error, Request request) {
+                        String err = WebApiErrorBody.log(error, getContext());
+                        if (isResumed()) {
+                            showErrorDialog(err);
+                        }
+                    }
+
+                    @Override
+                    protected void onNetworkFailure(Throwable t, Request request) {
+                        if (isResumed()) {
+                            showErrorDialog(getString(R.string.network_error));
+
+                        }
+                    }
+                });
+
+            }if (VaranegarApplication.is(VaranegarApplication.AppId.Contractor) && otherDiscount.compareTo(orderAmount.TotalAmount) > 0) {
                 CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(getContext());
                 cuteMessageDialog.setIcon(Icon.Error);
                 cuteMessageDialog.setTitle(R.string.error);

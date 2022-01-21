@@ -5,10 +5,10 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:minHeight="200dp"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical"
@@ -36,16 +36,18 @@
 
     </LinearLayout>
 
+
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:padding="@dimen/padding_default">
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_small"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
             android:orientation="horizontal">
 
             <com.varanegar.framework.util.component.PairedItems
@@ -73,6 +75,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_small"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
             android:orientation="horizontal">
 
             <com.varanegar.framework.util.component.PairedItems

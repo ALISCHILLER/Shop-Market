@@ -20,7 +20,7 @@
 
     <color name="stroke_border">#D7D7D7</color>
     <!-- FF5722, E64A19-->
-    <color name="color_list_hedear">#00BCD4</color>
+    <color name="color_list_hedear">#0097A7</color>
     <color name="color_list_footer">#07CDE6</color>
     <color name="color_list_delear">#191A1B</color>
 </resources>

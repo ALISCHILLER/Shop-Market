@@ -2,11 +2,13 @@ package com.varanegar.supervisor.tracking;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -520,9 +522,13 @@ public class MapFragment extends ProgressFragment {
                 protected void onSuccess(List<EventViewModel> result, Request request) {
 
 
+
                     if (param.LaststatusType==0) {
+                        mapHelper.removeMarkers();
+                        _markers.clear();
+                        mapHelper.removeOnMarkerInfoViewClickListener();
                         createMarkers(result, param.LaststatusType);
-                    }else {
+                    }else if(param.LaststatusType!=0) {
                         _markers = createMarkers(result, new TrackingConfig(getContext()).getStatusType() == StatusType.Event, true);
                         if (_markers.size() > 0) {
                             mapHelper.setMarkers(_markers);
@@ -532,6 +538,7 @@ public class MapFragment extends ProgressFragment {
                             mapHelper.setOnMarkerInfoViewClickListener(new MapHelper.OnMarkerInfoViewClickListener() {
                                 @Override
                                 public void onClick(TrackingMarker marker) {
+                                    if(param.LaststatusType!=0){
                                     BaseLocationViewModel locationViewModel = marker.getLocationViewModel();
                                     Activity activity = getActivity();
                                     if (activity != null && !activity.isFinishing() && isResumed()) {
@@ -546,6 +553,7 @@ public class MapFragment extends ProgressFragment {
                                         trackingConfig.setPersonnelIds2(customersIds);
                                         trackingConfig.setTrackingDate(new Date());
                                         showMarkers();
+                                    }
                                     }
                                 }
                             });
@@ -606,7 +614,9 @@ public class MapFragment extends ProgressFragment {
            }
             marker.setTag(eventViewModel.Lable);
             marker.setIcon(bitmap);
+            mapHelper.removeOnMarkerInfoViewClickListener();
             markers.add(marker);
+            mapHelper.removeOnMarkerInfoViewClickListener();
         }
     }
 

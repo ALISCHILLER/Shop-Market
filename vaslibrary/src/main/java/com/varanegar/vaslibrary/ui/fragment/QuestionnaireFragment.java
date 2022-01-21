@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarApplication;
@@ -75,10 +76,12 @@ import timber.log.Timber;
  */
 
 public class QuestionnaireFragment extends VisitFragment {
-
+    private Boolean back_prees=false;
+    private boolean cheack=false;
     private UUID customerId;
+    private String _customer;
     private ProgressDialog progressDialog;
-
+    private  SharedPreferences sharedconditionCustomer;
     private void dismissProgressDialog() {
         if (progressDialog != null && progressDialog.isShowing()) {
             try {
@@ -97,15 +100,29 @@ public class QuestionnaireFragment extends VisitFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list_quetionaire, container, false);
+
+        sharedconditionCustomer = getVaranegarActvity().getSharedPreferences("QuestionCustomer", Context.MODE_PRIVATE);
+
         SimpleToolbar toolbar = (SimpleToolbar) view.findViewById(R.id.toolbar);
         toolbar.setOnBackClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getVaranegarActvity().popFragment();
+                cheack = sharedconditionCustomer.getBoolean(_customer, false);
+                if (!cheack) {
+                    if (back_prees) {
+                        Toast.makeText(getContext(), "لطفاپرسشنامه را ارسال کنید", Toast.LENGTH_LONG).show();
+                    }else {
+                        getVaranegarActvity().popFragment();
+                    }
+
+                } else {
+                    getVaranegarActvity().popFragment();
+                }
             }
         });
         BaseRecyclerView formsRecyclerView = (BaseRecyclerView) view.findViewById(R.id.forms_recycler_view);
         customerId = UUID.fromString(getArguments().getString("f8c2abc4-c401-4f16-8f7d-1019e80574af"));
+        _customer =getArguments().getString("f8c2abc4-c401-4f16-8f7d-1019e80574af");
         final CustomerCallManager callManager = new CustomerCallManager(getContext());
         Button sendButton = view.findViewById(R.id.send_questionnaire_btn);
         try {
@@ -138,6 +155,21 @@ public class QuestionnaireFragment extends VisitFragment {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        cheack = sharedconditionCustomer.getBoolean(_customer, false);
+        if (!cheack) {
+            if (back_prees) {
+                Toast.makeText(getContext(), "لطفاپرسشنامه را ارسال کنید", Toast.LENGTH_LONG).show();
+            }else {
+                super.onBackPressed();
+            }
+        } else {
+            super.onBackPressed();
+        }
+
+
+    }
 
     public void sendQuestion() {
         if (getContext() == null)
@@ -169,6 +201,7 @@ public class QuestionnaireFragment extends VisitFragment {
             Timber.e(e);
             e.printStackTrace();
         }
+        cheack = sharedconditionCustomer.getBoolean(_customer, false);
 
         SyncGetCustomerCallModel syncGetCustomerCallViewModel = new SyncGetCustomerCallModel();
         syncGetCustomerCallViewModel.setCustomerUniqueId(customerId);
@@ -196,41 +229,47 @@ public class QuestionnaireFragment extends VisitFragment {
         progressDialog.show();
         ReportApi reportApi = new ReportApi(getContext());
 
-        reportApi.runWebRequest(reportApi.savetourdata(syncGetTourModel), new WebCallBack<Void>() {
-            @Override
-            protected void onFinish() {
-                dismissProgressDialog();
-            }
+        if (!cheack) {
+            reportApi.runWebRequest(reportApi.savetourdata(syncGetTourModel), new WebCallBack<Void>() {
+                @Override
+                protected void onFinish() {
+                    dismissProgressDialog();
+                }
 
-            @Override
-            protected void onSuccess(Void result, Request request) {
-            }
+                @Override
+                protected void onSuccess(Void result, Request request) {
+                    back_prees = false;
+                    sharedconditionCustomer.edit().putBoolean(_customer, true).apply();
+                }
 
-            @Override
-            protected void onApiFailure(ApiError error, Request request) {
-                if (isResumed()) {
-                    Activity activity = getActivity();
-                    if (activity != null && !activity.isFinishing()) {
+                @Override
+                protected void onApiFailure(ApiError error, Request request) {
+                    if (isResumed()) {
+                        Activity activity = getActivity();
+                        if (activity != null && !activity.isFinishing()) {
 
-                        String err = WebApiErrorBody.log(error, getContext());
-                        showErrorDialog(err);
+                            String err = WebApiErrorBody.log(error, getContext());
+                            showErrorDialog(err);
+                        }
                     }
                 }
-            }
 
-            @Override
-            protected void onNetworkFailure(Throwable t, Request request) {
-                if (isResumed()) {
+                @Override
+                protected void onNetworkFailure(Throwable t, Request request) {
+                    if (isResumed()) {
 
-                    Activity activity = getActivity();
-                    if (activity != null && !activity.isFinishing()) {
-                        Timber.e(t);
-                        showErrorDialog(getContext().getString(R.string.error_connecting_to_server));
-                        dismissProgressDialog();
+                        Activity activity = getActivity();
+                        if (activity != null && !activity.isFinishing()) {
+                            Timber.e(t);
+                            showErrorDialog(getContext().getString(R.string.error_connecting_to_server));
+                            dismissProgressDialog();
+                        }
                     }
                 }
-            }
-        });
+            });
+        }else {
+            showErrorDialog("پرسش نامه قبلا ارسال شده است");
+        }
     }
 
     @NonNull
@@ -253,6 +292,9 @@ public class QuestionnaireFragment extends VisitFragment {
             cancelImageView = (ImageView) itemView.findViewById(R.id.cancel_image_view);
             forceImageView = (ImageView) itemView.findViewById(R.id.force_image_view);
 
+            if (VaranegarApplication.is(VaranegarApplication.AppId.Supervisor)){
+                cancelImageView.setVisibility(View.GONE);
+            }
         }
 
 
@@ -260,9 +302,10 @@ public class QuestionnaireFragment extends VisitFragment {
         public void bindView(final int position) {
             final QuestionnaireCustomerViewModel q = recyclerAdapter.get(position);
             title.setText(q.Title);
-            if (q.HasAnswer)
+            if (q.HasAnswer) {
                 doneImageView.setImageResource(R.drawable.ic_done_green_900_24dp);
-            else
+                back_prees = true;
+            }else
                 doneImageView.setImageResource(R.drawable.ic_done_blue_grey_300_24dp);
             if (q.DemandType == QuestionnaireDemandType.Mandatory)
                 forceImageView.setVisibility(View.VISIBLE);

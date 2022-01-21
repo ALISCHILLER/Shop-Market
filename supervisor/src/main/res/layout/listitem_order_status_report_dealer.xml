@@ -65,7 +65,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_orderWeight"
-            android:layout_width="190dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:textColor="@color/color_list_delear"
@@ -79,7 +79,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_pendingOrderWeight"
-            android:layout_width="190dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:textColor="@color/color_list_delear"
@@ -149,7 +149,6 @@
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:background="#AFAFAF" />
-
         <androidx.appcompat.widget.AppCompatTextView
 
             android:layout_width="130dp"
@@ -159,6 +158,21 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:text=" جمع کل"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:background="#AFAFAF" />
+        <androidx.appcompat.widget.AppCompatTextView
+
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:padding="3dp"
+            android:layout_gravity="center"
+            android:gravity="center"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -181,7 +195,7 @@
             android:background="#AFAFAF" />
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_sum_orderWeight"
-            android:layout_width="190dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="3dp"
@@ -312,7 +326,7 @@
             android:background="#AFAFAF" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="190dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="2dp"
@@ -329,7 +343,7 @@
             android:background="#AFAFAF" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="190dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="2dp"

@@ -108,8 +108,8 @@ public class ToursStatusViewFragment extends IMainPageFragment {
                 columns.add(bind(entity, ItemsView.productCode,"کد کالا").setWeight(1.5f));
                 columns.add(bind(entity, ItemsView.productName,"نام کالا").setWeight(2.5f));
                 columns.add(bind(entity, ItemsView.productCountStr,"تعداد"));
-                columns.add(bind(entity, ItemsView.amount,"جمع مبلغ").setWeight(1.5f));
-                columns.add(bind(entity, ItemsView.tax,"مالیات").setWeight(2f));
+                columns.add(bind(entity, ItemsView.amount,"جمع مبلغ").sendToDetail().setWeight(1.5f).calcTotal());
+                columns.add(bind(entity, ItemsView.tax,"مالیات").sendToDetail().setWeight(1.5f).calcTotal());
             }
         };
         adapter.setLocale(VasHelperMethods.getSysConfigLocale(getContext()));

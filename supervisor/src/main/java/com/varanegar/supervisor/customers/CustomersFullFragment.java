@@ -2,7 +2,9 @@ package com.varanegar.supervisor.customers;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -198,8 +200,16 @@ public class CustomersFullFragment  extends IMainPageFragment {
                                 }
                             }
                         });
+                        ImageView questionnaire_image_view=view.findViewById(R.id.Questionnaire_image_view);
+                        SharedPreferences sharedconditionCustomer = getVaranegarActvity().getSharedPreferences("QuestionCustomer", Context.MODE_PRIVATE);
+                       boolean cheack= sharedconditionCustomer.getBoolean(entity.UniqueId.toString(),false);
+                        if (cheack){
+                            questionnaire_image_view.setImageResource(R.drawable.ic_question_answer_reed_24dp);
+                        }else {
 
-                        view.findViewById(R.id.Questionnaire_image_view).setOnClickListener(new View.OnClickListener() {
+                        }
+
+                        questionnaire_image_view.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 QuestionnaireManager questionnaireManager = new QuestionnaireManager(getContext());
@@ -247,22 +257,26 @@ public class CustomersFullFragment  extends IMainPageFragment {
                 @Override
                 public void bind(ReportColumns columns, SupervisorFullCustomerModel entity) {
                     bindRowNumber(columns);
+                    columns.add(bind(entity, SupervisorFullCustomer.DealerName, getString(R.string.dealer_name_label_supervisor)).setWeight(2f).sendToDetail().setFrizzed());
                     columns.add(bind(entity, SupervisorFullCustomer.CustomerCode, getString(R.string.customer_code)).setFrizzed());
-                    columns.add(bind(entity, SupervisorFullCustomer.CustomerName, getString(R.string.customer_name)));
+                    columns.add(bind(entity, SupervisorFullCustomer.CustomerName, getString(R.string.customer_name)).setFrizzed().setWeight(2f));
                     columns.add(bind(entity, SupervisorFullCustomer.StoreName, getString(R.string.store_name)));
                     if (isLandscape()) {
                         columns.add(bind(entity, SupervisorFullCustomer.Phone, "").setCustomViewHolder(new PhoneCustomerViewHoder()).setWeight(1.7f));
                     }
-                    columns.add(bind(entity, SupervisorFullCustomer.Phone, getString(R.string.phone_number)));
-                    columns.add(bind(entity, SupervisorFullCustomer.Mobile, getString(R.string.mobile_label)));
-                    columns.add(bind(entity, SupervisorFullCustomer.Address, getString(R.string.address)).setWeight(3));
-
-                    columns.add(bind(entity, SupervisorFullCustomer.NationalCode, getString(R.string.national_id_label)).sendToDetail());
+                    columns.add(bind(entity, SupervisorFullCustomer.CustomerCategory, getString(R.string.customer_category)).sendToDetail());
                     columns.add(bind(entity, SupervisorFullCustomer.CustomerActivity, getString(R.string.customer_activity)).sendToDetail());
                     columns.add(bind(entity, SupervisorFullCustomer.CustomerLevel, getString(R.string.customer_level)).sendToDetail());
-                    columns.add(bind(entity, SupervisorFullCustomer.CustomerCategory, getString(R.string.customer_category)).sendToDetail());
+                    columns.add(bind(entity, SupervisorFullCustomer.NationalCode, getString(R.string.national_id_label_supervisor)).sendToDetail());
+                    columns.add(bind(entity, SupervisorFullCustomer.Phone, getString(R.string.phone_number)));
+                    columns.add(bind(entity, SupervisorFullCustomer.Mobile, getString(R.string.mobile_label_supervisor)));
+                    columns.add(bind(entity, SupervisorFullCustomer.Address, getString(R.string.address)).setWeight(4.5f));
+
+
+
+
 //                    columns.add(bind(entity, SupervisorFullCustomer.PathTitle, getString(R.string.path_title)).sendToDetail());
-                    columns.add(bind(entity, SupervisorFullCustomer.DealerName, getString(R.string.dealer_name_label)).sendToDetail());
+
                     if (!isLandscape()) {
                         columns.add(bind(entity, SupervisorFullCustomer.Phone, "").setCustomViewHolder(new PhoneCustomerViewHoder()));
                     }

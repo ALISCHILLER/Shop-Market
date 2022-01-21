@@ -110,7 +110,9 @@
     <string name="store_name_label">نام فروشگاه :</string>
     <string name="telephone_label">تلفن :</string>
     <string name="mobile_label">موبایل :</string>
+    <string name="mobile_label_supervisor">موبایل</string>
     <string name="national_id_label">کد ملی :</string>
+    <string name="national_id_label_supervisor">کد ملی </string>
     <string name="adress_label">آدرس :</string>
     <string name="status_label">وضعیت :</string>
     <string name="order_sum_label">جمع سفارش :</string>
@@ -1083,6 +1085,7 @@
     <string name="delivery_of_draft">تحویل حواله</string>
     <string name="dealer_name">نام فروشنده</string>
     <string name="dealer_name_label">نام فروشنده :</string>
+    <string name="dealer_name_label_supervisor">نام فروشنده </string>
     <string name="customer_Condition_label">وضعیت مشتری :</string>
     <string name="dealer_mobile_label">شماره تماس فروشنده :</string>
     <string name="draft_no">شماره حواله</string>

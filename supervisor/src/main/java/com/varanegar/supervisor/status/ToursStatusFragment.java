@@ -227,7 +227,7 @@ public class ToursStatusFragment extends IMainPageFragment {
                         @Override
                         public void bind(ReportColumns columns, ReviewreportModel entity) {
                             columns.add(bind(entity, ReviewreportView.orderNumber,"شماره سفارش").setFrizzed().setSortable().setWeight(2.5f));
-                            columns.add(bind(entity, ReviewreportView.orderStatus, "وضعیت سفارش").setCustomViewHolder(new PhoneCustomerViewHoder()).setWeight(1.5f));
+                            columns.add(bind(entity, ReviewreportView.orderStatus, "وضعیت سفارش").setCustomViewHolder(new PhoneCustomerViewHoder()).setWeight(1f));
                             columns.add(bind(entity, ReviewreportView.orderDate,"تاریخ سفارش"));
                             columns.add(bind(entity, ReviewreportView.dealerCode,"کد ویزیتور"));
                             columns.add(bind(entity, ReviewreportView.dealerName,"نام ویزیتور").setWeight(2.5f));
@@ -556,6 +556,14 @@ public class ToursStatusFragment extends IMainPageFragment {
     @Override
     public void onResume() {
         super.onResume();
-        refresh_report();
+
+
+        List<String> dealersId = new ArrayList<>();
+        dealersId = VisitorFilter.getList(getContext());
+        TourStatusConfig config = new TourStatusConfig(getContext());
+        String startdata=DateHelper.toString(config.getFromDate(), DateFormat.MicrosoftDateTime, Locale.US);
+        String enddata=DateHelper.toString(config.getToDate(), DateFormat.MicrosoftDateTime, Locale.US);
+        if (dealersId!=null&&!startdata.isEmpty()&&!enddata.isEmpty())
+            refresh_report();
     }
 }

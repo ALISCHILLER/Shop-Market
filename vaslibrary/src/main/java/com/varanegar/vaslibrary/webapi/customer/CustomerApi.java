@@ -179,4 +179,11 @@ public class CustomerApi extends BaseApi implements ICustomerApi {
                 .build().create(ICustomerApi.class);
         return api.postCustomerZarCustomerInfo(customerInfoViewModel);
     }
+
+    @Override
+    public Call<Boolean> CheckCustomerCredits(String customerCode) {
+        ICustomerApi api = getRetrofitBuilder(TokenType.UserToken)
+                .build().create(ICustomerApi.class);
+        return api.CheckCustomerCredits(customerCode);
+    }
 }
