@@ -15,21 +15,16 @@ import android.view.ViewGroup;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.varanegar.framework.network.gson.VaranegarGsonBuilder;
 import com.varanegar.framework.util.report.ReportColumns;
 import com.varanegar.framework.util.report.ReportView;
 import com.varanegar.framework.util.report.SimpleReportAdapter;
 import com.varanegar.supervisor.IMainPageFragment;
 import com.varanegar.supervisor.R;
-import com.varanegar.supervisor.model.VisitorModel;
 import com.varanegar.supervisor.model.reviewreport.ItemsView;
-import com.varanegar.supervisor.model.reviewreport.ReviewreportModel;
-import com.varanegar.supervisor.model.reviewreport.ReviewreportView;
-import com.varanegar.supervisor.model.reviewreport.items;
+import com.varanegar.supervisor.model.reviewreport.ItemsModel;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,7 +34,7 @@ import java.util.List;
  */
 public class ToursStatusViewFragment extends IMainPageFragment {
     private ReportView summaryStatustView;
-    private SimpleReportAdapter<items> adapter;
+    private SimpleReportAdapter<ItemsModel> adapter;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -48,7 +43,7 @@ public class ToursStatusViewFragment extends IMainPageFragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private List<items> list;
+    private List<ItemsModel> list;
     public ToursStatusViewFragment() {
         // Required empty public constructor
     }
@@ -98,12 +93,12 @@ public class ToursStatusViewFragment extends IMainPageFragment {
         String json = sharedPreferences.getString("Status", null);
         if (json != null){
             Gson gson = new Gson();
-            Type type = new TypeToken<List<items>>(){}.getType();
+            Type type = new TypeToken<List<ItemsModel>>(){}.getType();
             list = gson.fromJson(json, type);
         }
-        adapter=new SimpleReportAdapter<items>(getVaranegarActvity(),items.class){
+        adapter=new SimpleReportAdapter<ItemsModel>(getVaranegarActvity(), ItemsModel.class){
             @Override
-            public void bind(ReportColumns columns, items entity) {
+            public void bind(ReportColumns columns, ItemsModel entity) {
                 columns.add(bind(entity, ItemsView.productCategory,"گروه کالا").setFrizzed().setSortable().setWeight(2f));
                 columns.add(bind(entity, ItemsView.productCode,"کد کالا").setWeight(1.5f));
                 columns.add(bind(entity, ItemsView.productName,"نام کالا").setWeight(2.5f));

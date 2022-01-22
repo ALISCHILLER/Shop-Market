@@ -54,6 +54,6 @@ public class ReviewreportModel extends BaseModel {
     public String customerCategory;
     @SerializedName("items")
     @Expose
-    public List<items> items = null;
+    public List<ItemsModel> items = null;
 
 }

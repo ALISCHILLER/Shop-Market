@@ -2,9 +2,10 @@ package com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.model;
 
 
 import com.varanegar.java.util.Currency;
+
+
 import com.varanegar.processor.annotations.Column;
 import com.varanegar.processor.annotations.Table;
-
 import java.math.BigDecimal;
 
 @Table

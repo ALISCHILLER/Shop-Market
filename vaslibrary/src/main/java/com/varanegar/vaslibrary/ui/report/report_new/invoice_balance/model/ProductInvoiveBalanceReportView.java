@@ -9,39 +9,43 @@ public class ProductInvoiveBalanceReportView extends ModelProjection<ProductInvo
 
     public static ProductInvoiveBalanceReportView CustomerBackOfficeCode = new
             ProductInvoiveBalanceReportView
-            ("ProductInvoiveBalanceReportView.CustomerBackOfficeCode");
+            ("ProductInvoiveBalanceReport.CustomerBackOfficeCode");
 
     public static ProductInvoiveBalanceReportView CustomerName = new
-            ProductInvoiveBalanceReportView("ProductInvoiveBalanceReportView.CustomerName");
+            ProductInvoiveBalanceReportView("ProductInvoiveBalanceReport.CustomerName");
     public static ProductInvoiveBalanceReportView InvoiceNumber = new
-            ProductInvoiveBalanceReportView("ProductInvoiveBalanceReportView.InvoiceNumber");
+            ProductInvoiveBalanceReportView("ProductInvoiveBalanceReport.InvoiceNumber");
 
     public static ProductInvoiveBalanceReportView InvoiceShmsiDate = new
-            ProductInvoiveBalanceReportView("ProductInvoiveBalanceReportView.InvoiceShmsiDate");
+            ProductInvoiveBalanceReportView("ProductInvoiveBalanceReport.InvoiceShmsiDate");
 
     public static ProductInvoiveBalanceReportView InvoiceOverDue = new
-            ProductInvoiveBalanceReportView("ProductInvoiveBalanceReportView.InvoiceOverDue");
+            ProductInvoiveBalanceReportView("ProductInvoiveBalanceReport.InvoiceOverDue");
     public static ProductInvoiveBalanceReportView InvoiceFinalPrice = new
-            ProductInvoiveBalanceReportView("ProductInvoiveBalanceReportView.InvoiceFinalPrice");
+            ProductInvoiveBalanceReportView("ProductInvoiveBalanceReport.InvoiceFinalPrice");
 
 
     public static ProductInvoiveBalanceReportView PaidPose = new
-            ProductInvoiveBalanceReportView("ProductInvoiveBalanceReportView.PaidPose");
+            ProductInvoiveBalanceReportView("ProductInvoiveBalanceReport.PaidPose");
 
     public static ProductInvoiveBalanceReportView PaidCash = new
-            ProductInvoiveBalanceReportView("ProductInvoiveBalanceReportView.PaidCash");
+            ProductInvoiveBalanceReportView("ProductInvoiveBalanceReport.PaidCash");
 
 
     public static ProductInvoiveBalanceReportView PaidCheck = new
-            ProductInvoiveBalanceReportView("ProductInvoiveBalanceReportView.PaidCheck");
+            ProductInvoiveBalanceReportView("ProductInvoiveBalanceReport.PaidCheck");
 
 
     public static ProductInvoiveBalanceReportView IvoiceRemain = new
-            ProductInvoiveBalanceReportView("ProductInvoiveBalanceReportView.IvoiceRemain");
+            ProductInvoiveBalanceReportView("ProductInvoiveBalanceReport.IvoiceRemain");
 
 
     public static ProductInvoiveBalanceReportView UsancePaid = new
-            ProductInvoiveBalanceReportView("ProductInvoiveBalanceReportView.UsancePaid");
+            ProductInvoiveBalanceReportView("ProductInvoiveBalanceReport.UsancePaid");
 
+    public static ProductInvoiveBalanceReportView ProductInvoiveBalanceReportTbl =
+            new ProductInvoiveBalanceReportView("ProductInvoiveBalanceReport");
 
+    public static ProductInvoiveBalanceReportView ProductInvoiveBalanceReportAll =
+            new ProductInvoiveBalanceReportView("ProductInvoiveBalanceReport.*");
 }

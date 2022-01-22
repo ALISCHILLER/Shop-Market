@@ -1,6 +1,5 @@
 package com.varanegar.supervisor.status;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -36,13 +35,13 @@ import com.varanegar.supervisor.R;
 import com.varanegar.supervisor.VisitorFilter;
 import com.varanegar.supervisor.model.StatusConfigModel;
 import com.varanegar.supervisor.model.changeOrdersStatus.ChangeOrdersStatusmModel;
+import com.varanegar.supervisor.model.reviewreport.ItemsModelRepository;
 import com.varanegar.supervisor.model.reviewreport.ReviewreportModel;
+import com.varanegar.supervisor.model.reviewreport.ReviewreportModelRepository;
 import com.varanegar.supervisor.model.reviewreport.ReviewreportView;
-import com.varanegar.supervisor.model.reviewreport.items;
-import com.varanegar.supervisor.utill.dialog.BackMessageDialog;
+import com.varanegar.supervisor.model.reviewreport.ItemsModel;
 import com.varanegar.supervisor.webapi.SupervisorApi;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
-import com.varanegar.vaslibrary.model.customer.SupervisorCustomer;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 
 import java.util.ArrayList;
@@ -142,6 +141,28 @@ public class ToursStatusFragment extends IMainPageFragment {
 
                 @Override
                 protected void onSuccess(List<ReviewreportModel> result, Request request) {
+
+                    ReviewreportModelRepository reviewreportModelRepository=new ReviewreportModelRepository();
+                    ItemsModelRepository itemsModelRepository=new ItemsModelRepository();
+                    ItemsModel itemsModels=new ItemsModel();
+                    for (ReviewreportModel reviewreportModel:result){
+                        for (ItemsModel itemsModel:reviewreportModel.items){
+                            itemsModels.UniqueId=reviewreportModel.UniqueId;
+                            itemsModels.amount=itemsModel.amount;
+                            itemsModels.productCount=itemsModel.productCount;
+                            itemsModels.productCode=itemsModel.productCode;
+                            itemsModels.productCategory=itemsModel.productCategory;
+                            itemsModels.productCountStr=itemsModel.productCountStr;
+                            itemsModels.productName=itemsModel.productName;
+                            itemsModels.tax=itemsModel.tax;
+
+                        }
+                    }
+                    itemsModelRepository.deleteAll();
+                    itemsModelRepository.insert(itemsModels);
+                    reviewreportModelRepository.deleteAll();
+                    reviewreportModelRepository.insert(result);
+
                     adapter = new SimpleReportAdapter<ReviewreportModel>(getVaranegarActvity(),ReviewreportModel.class){
                         class PhoneCustomerViewHoder extends CustomViewHolder<ReviewreportModel>{
 
@@ -249,8 +270,8 @@ public class ToursStatusFragment extends IMainPageFragment {
                         @Override
                         public void onItemSelected(int idx) {
                             Log.e("t", String.valueOf(idx));
-                            List<items> list=result.get(idx).items;
-                            ArrayList<items> arrayList=new ArrayList<>(list.size());
+                            List<ItemsModel> list=result.get(idx).items;
+                            ArrayList<ItemsModel> arrayList=new ArrayList<>(list.size());
                             arrayList.addAll(list);
 //                            Bundle bundle = new Bundle();
 //                            bundle.putSerializable("valuesStatus", arrayList);
