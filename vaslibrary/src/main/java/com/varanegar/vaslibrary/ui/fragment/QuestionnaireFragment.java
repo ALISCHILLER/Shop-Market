@@ -110,7 +110,7 @@ public class QuestionnaireFragment extends VisitFragment {
                 cheack = sharedconditionCustomer.getBoolean(_customer, false);
                 if (!cheack) {
                     if (back_prees) {
-                        Toast.makeText(getContext(), "لطفاپرسشنامه را ارسال کنید", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "لطفاپرسشنامه را ارسال کنید", Toast.LENGTH_SHORT).show();
                     }else {
                         getVaranegarActvity().popFragment();
                     }
@@ -160,7 +160,7 @@ public class QuestionnaireFragment extends VisitFragment {
         cheack = sharedconditionCustomer.getBoolean(_customer, false);
         if (!cheack) {
             if (back_prees) {
-                Toast.makeText(getContext(), "لطفاپرسشنامه را ارسال کنید", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "لطفاپرسشنامه را ارسال کنید", Toast.LENGTH_SHORT).show();
             }else {
                 super.onBackPressed();
             }

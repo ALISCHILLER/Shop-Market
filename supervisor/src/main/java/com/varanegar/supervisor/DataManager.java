@@ -622,7 +622,14 @@ public class DataManager {
             @Override
             protected void onSuccess() {
                 try {
+
+                    SharedPreferences preferences =context.getSharedPreferences("QuestionCustomer",Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.clear();
+                    editor.apply();
+
                     supervisor_tour_sent(callback, context);
+
                 } catch (Exception e) {
                     callback.onError(context.getString(R.string.error_saving_request));
                 }
