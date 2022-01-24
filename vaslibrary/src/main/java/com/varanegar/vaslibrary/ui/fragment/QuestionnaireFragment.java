@@ -108,14 +108,18 @@ public class QuestionnaireFragment extends VisitFragment {
             @Override
             public void onClick(View v) {
                 cheack = sharedconditionCustomer.getBoolean(_customer, false);
-                if (!cheack) {
-                    if (back_prees) {
-                        Toast.makeText(getContext(), "لطفاپرسشنامه را ارسال کنید", Toast.LENGTH_LONG).show();
-                    }else {
+                if (VaranegarApplication.is(VaranegarApplication.AppId.Supervisor)) {
+                    if (!cheack) {
+                        if (back_prees) {
+                            Toast.makeText(getContext(), "لطفاپرسشنامه را ارسال کنید", Toast.LENGTH_LONG).show();
+                        } else {
+                            getVaranegarActvity().popFragment();
+                        }
+
+                    } else {
                         getVaranegarActvity().popFragment();
                     }
-
-                } else {
+                }else {
                     getVaranegarActvity().popFragment();
                 }
             }
@@ -157,14 +161,17 @@ public class QuestionnaireFragment extends VisitFragment {
 
     @Override
     public void onBackPressed() {
-        cheack = sharedconditionCustomer.getBoolean(_customer, false);
-        if (!cheack) {
-            if (back_prees) {
-                Toast.makeText(getContext(), "لطفاپرسشنامه را ارسال کنید", Toast.LENGTH_LONG).show();
-            }else {
+        if (VaranegarApplication.is(VaranegarApplication.AppId.Supervisor)) {
+            if (!cheack) {
+                if (back_prees) {
+                    Toast.makeText(getContext(), "لطفاپرسشنامه را ارسال کنید", Toast.LENGTH_SHORT).show();
+                } else {
+                    super.onBackPressed();
+                }
+            } else {
                 super.onBackPressed();
             }
-        } else {
+        }else {
             super.onBackPressed();
         }
 
