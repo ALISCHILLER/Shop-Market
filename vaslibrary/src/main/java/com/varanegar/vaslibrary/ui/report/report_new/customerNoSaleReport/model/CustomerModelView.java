@@ -1,9 +1,6 @@
 package com.varanegar.vaslibrary.ui.report.report_new.customerNoSaleReport.model;
 
 import com.varanegar.framework.database.model.ModelProjection;
-import com.varanegar.vaslibrary.model.customer.CustomerModel;
-import com.varanegar.vaslibrary.ui.report.report_new.products_purchase_history_report.model.ProductsPurchaseHistoryReportView;
-import com.varanegar.vaslibrary.ui.report.report_new.products_purchase_history_report.model.TProductsPurchaseHistoryReportViewModel;
 
 public class CustomerModelView extends
         ModelProjection<CustomerNoSaleModel> {
@@ -12,41 +9,44 @@ public class CustomerModelView extends
     }
     public static CustomerModelView BackOfficeId = new
             CustomerModelView
-            ("CustomerModelView.BackOfficeId");
+            ("CustomerNoSale.BackOfficeId");
 
     public static CustomerModelView CustomerName = new
             CustomerModelView
-            ("CustomerModelView.CustomerName");
+            ("CustomerNoSale.CustomerName");
 
     public static CustomerModelView CustomerCode = new
             CustomerModelView
-            ("CustomerModelView.CustomerCode");
+            ("CustomerNoSale.CustomerCode");
 
     public static CustomerModelView Phone = new
             CustomerModelView
-            ("CustomerModelView.Phone");
+            ("CustomerNoSale.Phone");
 
     public static CustomerModelView Address = new
             CustomerModelView
-            ("CustomerModelView.Address");
+            ("CustomerNoSale.Address");
 
 
     public static CustomerModelView StoreName = new
             CustomerModelView
-            ("CustomerModelView.StoreName");
+            ("CustomerNoSale.StoreName");
 
     public static CustomerModelView CustomerActivity = new
             CustomerModelView
-            ("CustomerModelView.CustomerActivity");
+            ("CustomerNoSale.CustomerActivity");
 
     public static CustomerModelView CustomerCategory = new
             CustomerModelView
-            ("CustomerModelView.CustomerCategory");
+            ("CustomerNoSale.CustomerCategory");
     public static CustomerModelView Mobile = new
             CustomerModelView
-            ("CustomerModelView.Mobile");
+            ("CustomerNoSale.Mobile");
 
     public static CustomerModelView NationalCode = new
             CustomerModelView
-            ("CustomerModelView.NationalCode");
+            ("CustomerNoSale.NationalCode");
+    public static CustomerModelView CustomerModelTbl = new
+            CustomerModelView
+            ("CustomerNoSale");
 }

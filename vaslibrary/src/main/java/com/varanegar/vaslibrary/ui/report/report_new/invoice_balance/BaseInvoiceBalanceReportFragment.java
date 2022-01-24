@@ -24,7 +24,7 @@ import com.varanegar.framework.util.report.SimpleReportAdapter;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
 import com.varanegar.vaslibrary.manager.UserManager;
-import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.model.InvoiveBalanceReportViewModel;
+import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.model.ProductInvoiveBalanceReportModel;
 import com.varanegar.vaslibrary.ui.report.report_new.webApi.ReportApi;
 import com.varanegar.vaslibrary.ui.report.review.BaseReviewReportFragment;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
@@ -37,7 +37,7 @@ import java.util.UUID;
 import okhttp3.Request;
 import retrofit2.Call;
 
-public abstract class BaseInvoiceBalanceReportFragment<T extends InvoiveBalanceReportViewModel> extends VaranegarFragment {
+public abstract class BaseInvoiceBalanceReportFragment<T extends ProductInvoiveBalanceReportModel> extends VaranegarFragment {
 
     private ReportView reportView;
     private ProgressDialog progressDialog;

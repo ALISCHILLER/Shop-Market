@@ -7,7 +7,7 @@ import com.varanegar.processor.annotations.Table;
 import java.math.BigDecimal;
 
 @Table
-public class TProductsPurchaseHistoryReportViewModel extends ProductsPurchaseHistoryReportViewModel{
+public class TProductsPurchaseHistoryReportModel extends ProductsPurchaseHistoryReportViewModel{
     @Column
     public String ProductBackOfficeCode  ;
     @Column

@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.varanegar.framework.database.querybuilder.Query;
 import com.varanegar.framework.network.gson.VaranegarGsonBuilder;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
@@ -42,7 +43,10 @@ import com.varanegar.supervisor.model.reviewreport.ReviewreportView;
 import com.varanegar.supervisor.model.reviewreport.ItemsModel;
 import com.varanegar.supervisor.webapi.SupervisorApi;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
+import com.varanegar.vaslibrary.model.customer.SupervisorFullCustomer;
+import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.model.ProductInvoiveBalanceReportView;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
+import com.varanegar.vaslibrary.webapi.reviewreport.ReviewReportViewModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -121,6 +125,8 @@ public class ToursStatusFragment extends IMainPageFragment {
                     status_options = "R2";
                 }
             }
+
+
 //            if (statuses.size()==1){
 //               // fab_send.setVisibility(View.VISIBLE);
 //            }else {
@@ -142,8 +148,11 @@ public class ToursStatusFragment extends IMainPageFragment {
                 @Override
                 protected void onSuccess(List<ReviewreportModel> result, Request request) {
 
-                    ReviewreportModelRepository reviewreportModelRepository=new ReviewreportModelRepository();
+                    ReviewreportModelRepository reviewreportModelRepository=
+                            new ReviewreportModelRepository();
+
                     ItemsModelRepository itemsModelRepository=new ItemsModelRepository();
+
                     ItemsModel itemsModels=new ItemsModel();
                     for (ReviewreportModel reviewreportModel:result){
                         for (ItemsModel itemsModel:reviewreportModel.items){
@@ -158,142 +167,16 @@ public class ToursStatusFragment extends IMainPageFragment {
 
                         }
                     }
+
                     itemsModelRepository.deleteAll();
                     itemsModelRepository.insert(itemsModels);
                     reviewreportModelRepository.deleteAll();
                     reviewreportModelRepository.insert(result);
-
-                    adapter = new SimpleReportAdapter<ReviewreportModel>(getVaranegarActvity(),ReviewreportModel.class){
-                        class PhoneCustomerViewHoder extends CustomViewHolder<ReviewreportModel>{
-
-
-                            @Override
-                            public void onBind(View view, ReviewreportModel entity) {
-                                ImageView callImageView = null;
-                                view.findViewById(R.id.phone_image_view).setVisibility(View.GONE);
-                                view.findViewById(R.id.mobile_image_view).setVisibility(View.GONE);
-                                view.findViewById(R.id.Questionnaire_image_view).setVisibility(View.GONE);
-                                ImageView customercondition=view.findViewById(R.id.customer_condition_image_view);
-                                LinearLayout linearLayout=view.findViewById(R.id.linear_view);
-                                if (entity.orderStatus.equals("D2")) {
-                                    customercondition.setImageResource(R.drawable.ic_baseline_block_24);
-                                    linearLayout.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                                }else {
-                                    customercondition.setImageResource(R.drawable.ic_baseline_done_24);
-                                    linearLayout.setBackgroundColor(Color.parseColor("#00BCD4"));
-                                }
-                                linearLayout.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        if (entity.orderStatus.equals("D2")) {
-//                                            customercondition.setImageResource(R.drawable.ic_baseline_done_24);
-//                                            linearLayout.setBackgroundColor(Color.parseColor("#00BCD4"));
-                                            CuteMessageDialog builder = new CuteMessageDialog(getActivity());
-                                            builder.setTitle(getActivity().getString(com.varanegar.vaslibrary.R.string.alert));
-
-                                            if (entity.orderStatus.equals("D2")) {
-                                                builder.setMessage("سفارش مشتری به حالت تایید تغییر می کند");
-                                            } else if (!entity.orderStatus.equals("D2")){
-
-                                            }
-                                            builder.setPositiveButton(com.varanegar.vaslibrary.R.string.yes, new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-                                                    arr.add(entity.orderNumber);
-                                                    Log.e("Tag", String.valueOf(arr));
-                                                    SendDataOrdor();
-                                                }
-                                            });
-                                            builder.setNegativeButton(com.varanegar.vaslibrary.R.string.no, new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View view) {
-
-                                                }
-                                            });
-                                            builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                                                @Override
-                                                public void onCancel(DialogInterface dialogInterface) {
-
-                                                }
-                                            });
-                                            builder.show();
+                    getdataReport();
 
 
 
 
-//                                            entity.orderStatus=" ";
-
-                                        }else {
-//                                            customercondition.setImageResource(R.drawable.ic_baseline_block_24);
-//                                            linearLayout.setBackgroundColor(Color.parseColor("#FFFFFF"));
-//                                            arr.remove(entity.orderNumber);
-//                                            entity.orderStatus="D2";
-//                                            Log.e("Tag", String.valueOf(arr));
-                                        }
-                                    }
-                                });
-
-
-
-
-                            }
-
-                            @Override
-                            public View onCreateView(LayoutInflater inflater, ViewGroup parent) {
-                                View view = inflater.inflate(R.layout.supervisor_report_phone_layput, parent, false);
-
-                                return view;
-                            }
-                        }
-                        @Override
-                        public void bind(ReportColumns columns, ReviewreportModel entity) {
-                            columns.add(bind(entity, ReviewreportView.orderNumber,"شماره سفارش").setFrizzed().setSortable().setWeight(2.5f));
-                            columns.add(bind(entity, ReviewreportView.orderStatus, "وضعیت سفارش").setCustomViewHolder(new PhoneCustomerViewHoder()).setWeight(1f));
-                            columns.add(bind(entity, ReviewreportView.orderDate,"تاریخ سفارش"));
-                            columns.add(bind(entity, ReviewreportView.dealerCode,"کد ویزیتور"));
-                            columns.add(bind(entity, ReviewreportView.dealerName,"نام ویزیتور").setWeight(2.5f));
-                            columns.add(bind(entity, ReviewreportView.customerCode,"کد مشتری"));
-                            columns.add(bind(entity, ReviewreportView.customerName,"نام مشتری").setWeight(2.5f));
-                            columns.add(bind(entity, ReviewreportView.customerCategory,"نوع مشتری"));
-                            columns.add(bind(entity, ReviewreportView.paymentType,"نحوه تسویه").setWeight(2.5f));
-                            columns.add(bind(entity, ReviewreportView.comment,"توضیحات").setWeight(2.5f));
-
-                        }
-
-
-
-
-                    };
-                    adapter.setLocale(VasHelperMethods.getSysConfigLocale(getContext()));
-                    adapter.create(result, null);
-                    adapter.setOnItemSelectListener(new ReportAdapter.OnItemSelectListener() {
-                        @Override
-                        public void onItemSelected(int idx) {
-                            Log.e("t", String.valueOf(idx));
-                            List<ItemsModel> list=result.get(idx).items;
-                            ArrayList<ItemsModel> arrayList=new ArrayList<>(list.size());
-                            arrayList.addAll(list);
-//                            Bundle bundle = new Bundle();
-//                            bundle.putSerializable("valuesStatus", arrayList);
-                            SharedPreferences sharedPreferences = context.getSharedPreferences("valuesStatus", Context.MODE_PRIVATE);
-                            String json = VaranegarGsonBuilder.build().create().toJson(arrayList);
-                            sharedPreferences.edit().putString("Status", json).commit();
-
-                            ToursStatusViewFragment nextFrag= new ToursStatusViewFragment();
-                            getVaranegarActvity().pushFragment(nextFrag);
-//                            getActivity().getSupportFragmentManager().beginTransaction()
-//                                    .replace(R.id.Layout_container, nextFrag, "findThisFragment")
-//                                    .addToBackStack("ToursStatusFragment")
-//                                    .commit();
-
-                        }
-
-                        @Override
-                        public void onItemDeSelected(int idx) {
-
-                        }
-                    });
-                    summaryReportView.setAdapter(adapter);
 
                 }
 
@@ -523,6 +406,148 @@ public class ToursStatusFragment extends IMainPageFragment {
 
 
    }
+
+
+   private void getdataReport(){
+       Query query = new Query().from(ReviewreportView.ReviewreportTbl);
+
+       adapter = new SimpleReportAdapter<ReviewreportModel>(getVaranegarActvity(),
+               ReviewreportModel.class){
+           class PhoneCustomerViewHoder extends CustomViewHolder<ReviewreportModel>{
+
+
+               @Override
+               public void onBind(View view, ReviewreportModel entity) {
+                   ImageView callImageView = null;
+                   view.findViewById(R.id.phone_image_view).setVisibility(View.GONE);
+                   view.findViewById(R.id.mobile_image_view).setVisibility(View.GONE);
+                   view.findViewById(R.id.Questionnaire_image_view).setVisibility(View.GONE);
+                   ImageView customercondition=view.findViewById(R.id.customer_condition_image_view);
+                   LinearLayout linearLayout=view.findViewById(R.id.linear_view);
+                   if (entity.orderStatus.equals("D2")) {
+                       customercondition.setImageResource(R.drawable.ic_baseline_block_24);
+                       linearLayout.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                   }else {
+                       customercondition.setImageResource(R.drawable.ic_baseline_done_24);
+                       linearLayout.setBackgroundColor(Color.parseColor("#00BCD4"));
+                   }
+                   linearLayout.setOnClickListener(new View.OnClickListener() {
+                       @Override
+                       public void onClick(View v) {
+                           if (entity.orderStatus.equals("D2")) {
+//                                            customercondition.setImageResource(R.drawable.ic_baseline_done_24);
+//                                            linearLayout.setBackgroundColor(Color.parseColor("#00BCD4"));
+                               CuteMessageDialog builder = new CuteMessageDialog(getActivity());
+                               builder.setTitle(getActivity().getString(com.varanegar.vaslibrary.R.string.alert));
+
+                               if (entity.orderStatus.equals("D2")) {
+                                   builder.setMessage("سفارش مشتری به حالت تایید تغییر می کند");
+                               } else if (!entity.orderStatus.equals("D2")){
+
+                               }
+                               builder.setPositiveButton(com.varanegar.vaslibrary.R.string.yes, new View.OnClickListener() {
+                                   @Override
+                                   public void onClick(View view) {
+                                       arr.add(entity.orderNumber);
+                                       Log.e("Tag", String.valueOf(arr));
+                                       SendDataOrdor();
+                                   }
+                               });
+                               builder.setNegativeButton(com.varanegar.vaslibrary.R.string.no, new View.OnClickListener() {
+                                   @Override
+                                   public void onClick(View view) {
+
+                                   }
+                               });
+                               builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                   @Override
+                                   public void onCancel(DialogInterface dialogInterface) {
+
+                                   }
+                               });
+                               builder.show();
+
+
+
+
+//                                            entity.orderStatus=" ";
+
+                           }else {
+//                                            customercondition.setImageResource(R.drawable.ic_baseline_block_24);
+//                                            linearLayout.setBackgroundColor(Color.parseColor("#FFFFFF"));
+//                                            arr.remove(entity.orderNumber);
+//                                            entity.orderStatus="D2";
+//                                            Log.e("Tag", String.valueOf(arr));
+                           }
+                       }
+                   });
+
+
+
+
+               }
+
+               @Override
+               public View onCreateView(LayoutInflater inflater, ViewGroup parent) {
+                   View view = inflater.inflate(R.layout.supervisor_report_phone_layput, parent, false);
+
+                   return view;
+               }
+           }
+           @Override
+           public void bind(ReportColumns columns, ReviewreportModel entity) {
+               columns.add(bind(entity, ReviewreportView.orderNumber,"شماره سفارش").setFrizzed().setSortable().setWeight(2.5f));
+               columns.add(bind(entity, ReviewreportView.orderStatus, "وضعیت سفارش").setCustomViewHolder(new PhoneCustomerViewHoder()).setWeight(1f));
+               columns.add(bind(entity, ReviewreportView.orderDate,"تاریخ سفارش"));
+               columns.add(bind(entity, ReviewreportView.dealerCode,"کد ویزیتور"));
+               columns.add(bind(entity, ReviewreportView.dealerName,"نام ویزیتور").setWeight(2.5f));
+               columns.add(bind(entity, ReviewreportView.customerCode,"کد مشتری"));
+               columns.add(bind(entity, ReviewreportView.customerName,"نام مشتری").setWeight(2.5f));
+               columns.add(bind(entity, ReviewreportView.customerCategory,"نوع مشتری"));
+               columns.add(bind(entity, ReviewreportView.paymentType,"نحوه تسویه").setWeight(2.5f));
+               columns.add(bind(entity, ReviewreportView.comment,"توضیحات").setWeight(2.5f));
+
+           }
+
+
+
+
+       };
+       adapter.setLocale(VasHelperMethods.getSysConfigLocale(getContext()));
+       adapter.create(new ReviewreportModelRepository(),query, null);
+       adapter.setOnItemSelectListener(new ReportAdapter.OnItemSelectListener() {
+           @Override
+           public void onItemSelected(int idx) {
+//               Log.e("t", String.valueOf(idx));
+//               List<ItemsModel> list=result.get(idx).items;
+//               ArrayList<ItemsModel> arrayList=new ArrayList<>(list.size());
+//               arrayList.addAll(list);
+////                            Bundle bundle = new Bundle();
+////                            bundle.putSerializable("valuesStatus", arrayList);
+               SharedPreferences sharedPreferences = getContext().getSharedPreferences("valuesStatus", Context.MODE_PRIVATE);
+//               String json = VaranegarGsonBuilder.build().create().toJson(arrayList);
+//               sharedPreferences.edit().putString("Status", json).commit();
+
+               ToursStatusViewFragment nextFrag= new ToursStatusViewFragment();
+               getVaranegarActvity().pushFragment(nextFrag);
+//                            getActivity().getSupportFragmentManager().beginTransaction()
+//                                    .replace(R.id.Layout_container, nextFrag, "findThisFragment")
+//                                    .addToBackStack("ToursStatusFragment")
+//                                    .commit();
+           }
+
+           @Override
+           public void onItemDeSelected(int idx) {
+
+           }
+       });
+       summaryReportView.setAdapter(adapter);
+   }
+
+
+
+
+
    private void SendDataOrdor(){
        ChangeOrdersStatusmModel changeOrdersStatusmModel=new ChangeOrdersStatusmModel();
        changeOrdersStatusmModel.orderNumbers=arr;

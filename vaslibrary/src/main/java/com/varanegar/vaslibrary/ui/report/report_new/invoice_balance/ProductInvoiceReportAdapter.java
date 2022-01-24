@@ -4,20 +4,20 @@ import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarFragment;
 import com.varanegar.framework.util.report.ReportColumns;
 import com.varanegar.framework.util.report.SimpleReportAdapter;
+import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.model.ProductInvoiveBalanceReportModel;
 import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.model.ProductInvoiveBalanceReportView;
-import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.model.ProductInvoiveBalanceReportViewModel;
 
-public class ProductInvoiceReportAdapter extends SimpleReportAdapter<ProductInvoiveBalanceReportViewModel> {
+public class ProductInvoiceReportAdapter extends SimpleReportAdapter<ProductInvoiveBalanceReportModel> {
 
     public ProductInvoiceReportAdapter(MainVaranegarActivity activity) {
-        super(activity, ProductInvoiveBalanceReportViewModel.class);
+        super(activity, ProductInvoiveBalanceReportModel.class);
     }
 
     public ProductInvoiceReportAdapter(VaranegarFragment fragment) {
-        super(fragment, ProductInvoiveBalanceReportViewModel.class);
+        super(fragment, ProductInvoiveBalanceReportModel.class);
     }
     @Override
-    public void bind(ReportColumns columns,ProductInvoiveBalanceReportViewModel entity){
+    public void bind(ReportColumns columns, ProductInvoiveBalanceReportModel entity){
         columns.add(bind(entity, ProductInvoiveBalanceReportView.CustomerBackOfficeCode,"کد مشتری").setWeight(1.5f));
         columns.add(bind(entity, ProductInvoiveBalanceReportView.CustomerName,"نام مشتری").setWeight(2).setFrizzed());
         columns.add(bind(entity,ProductInvoiveBalanceReportView.InvoiceNumber,"شماره فاکتور").setFrizzed());

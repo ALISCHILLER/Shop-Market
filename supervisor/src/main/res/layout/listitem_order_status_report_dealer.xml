@@ -181,18 +181,7 @@
             android:layout_height="wrap_content"
             android:background="#AFAFAF" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="230dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:padding="3dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="wrap_content"
-            android:background="#AFAFAF" />
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_sum_orderWeight"
             android:layout_width="230dp"
@@ -209,7 +198,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_sum_pendingOrderWeight"
-            android:layout_width="190dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="3dp"

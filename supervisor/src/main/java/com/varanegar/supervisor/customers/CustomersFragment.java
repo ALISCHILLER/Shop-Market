@@ -44,6 +44,7 @@ import com.varanegar.supervisor.IMainPageFragment;
 import com.varanegar.supervisor.R;
 import com.varanegar.supervisor.VisitorFilter;
 import com.varanegar.supervisor.model.ConditionModel;
+import com.varanegar.supervisor.status.StatusConfigDialog;
 import com.varanegar.supervisor.utill.dialog.BackMessageDialog;
 import com.varanegar.supervisor.webapi.SupervisorApi;
 import com.varanegar.vaslibrary.manager.questionnaire.QuestionnaireCustomerViewManager;
@@ -148,7 +149,27 @@ public class CustomersFragment extends IMainPageFragment {
                 before = after;
             }
         });
+        view.findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final ProgressDialog progressDialog = new ProgressDialog(getContext());
+                progressDialog.setMessage(getString(R.string.downloading_data));
+                progressDialog.show();
+                DataManager dataManager=new DataManager(getContext());
+                dataManager.getNewCustomers2(new DataManager.Callback() {
+                    @Override
+                    public void onSuccess() {
 
+                    }
+
+                    @Override
+                    public void onError(String error) {
+
+                    }
+                });
+
+            }
+        });
         return view;
     }
 

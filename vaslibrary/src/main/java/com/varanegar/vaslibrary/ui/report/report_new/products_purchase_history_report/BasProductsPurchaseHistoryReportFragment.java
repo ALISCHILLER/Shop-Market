@@ -5,10 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarFragment;
 import com.varanegar.framework.network.listeners.ApiError;
@@ -24,7 +22,7 @@ import com.varanegar.framework.util.report.SimpleReportAdapter;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
 import com.varanegar.vaslibrary.manager.UserManager;
-import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.model.InvoiveBalanceReportViewModel;
+;
 import com.varanegar.vaslibrary.ui.report.report_new.products_purchase_history_report.model.ProductsPurchaseHistoryReportViewModel;
 import com.varanegar.vaslibrary.ui.report.report_new.webApi.ReportApi;
 import com.varanegar.vaslibrary.ui.report.review.BaseReviewReportFragment;

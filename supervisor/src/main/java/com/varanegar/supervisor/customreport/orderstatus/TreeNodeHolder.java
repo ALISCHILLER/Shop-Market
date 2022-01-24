@@ -49,7 +49,7 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
         final LayoutInflater inflater = LayoutInflater.from(context);
         final View itemView = inflater.inflate(R.layout.listitem_order_status_report_customer,
                 null, false);
-
+        DecimalFormat df=new DecimalFormat("###.##");
 
         AppCompatTextView txt_customerItems_customerName;
         AppCompatTextView txt_customerItems_customerCode;
@@ -71,15 +71,15 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
         txt_customerItems_customerName.setText(String.valueOf(customer.getCustomerName()));
         txt_customerItems_customerCode.setText(customer.getCustomerCode());
 
-        txt_customerItems_orderWeight.setText(customer.getOrderWeight() + "");
+        txt_customerItems_orderWeight.setText(df.format(customer.getOrderWeight()));
         txt_customerItems_pendingOrderWeight
-                .setText("" + customer.getPendingOrderWeight());
+                .setText(df.format( customer.getPendingOrderWeight()));
         txt_customerItems_inProgressOrderWeight
-                .setText("" + customer.getInProgressOrderWeight());
+                .setText(df.format(customer.getInProgressOrderWeight()));
         txt_customerItems_undeliverdOrderWeight
-                .setText("" + customer.getUndeliverdOrderWeight());
+                .setText(df.format( customer.getUndeliverdOrderWeight()));
         txt_customerItems_finalWeight
-                .setText("" + customer.getFinalWeight());
+                .setText(df.format( customer.getFinalWeight()));
 
 
 
@@ -113,11 +113,11 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
                 sum_finalWeight+= itemSub.getFinalWeight();
 
             }
-            txt_sum_orderWeight.setText(String.valueOf(sum_orderWeight));
-            txt_sum_pendingOrderWeight.setText(String.valueOf(sum_pendingOrderWeightt));
-            txt_sum_inProgressOrderWeight.setText(String.valueOf(sum_inProgressOrderWeight));
-            txt_sum_undeliverdOrderWeight.setText(String.valueOf(sum_undeliverdOrderWeight));
-            txt_sum_finalWeight.setText(String.valueOf(sum_finalWeight));
+            txt_sum_orderWeight.setText(df.format(sum_orderWeight));
+            txt_sum_pendingOrderWeight.setText(df.format(sum_pendingOrderWeightt));
+            txt_sum_inProgressOrderWeight.setText(df.format(sum_inProgressOrderWeight));
+            txt_sum_undeliverdOrderWeight.setText(df.format(sum_undeliverdOrderWeight));
+            txt_sum_finalWeight.setText(df.format(sum_finalWeight));
             layout_footer_order.setVisibility(View.VISIBLE);
         }else {
             layout_footer_order.setVisibility(View.GONE);
@@ -150,15 +150,22 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
 
         txt_dealerName.setText(dealersItem.getDealerName());
         txt_dealerCode.setText(dealersItem.getDealerCode());
-        txt_orderWeight.setText(String.valueOf(dealersItem.getOrderWeight()));
-        txt_pendingOrderWeight.setText(String.valueOf(dealersItem
-                .getPendingOrderWeight()));
-        txt_inProgressOrderWeight.setText(String.valueOf(dealersItem
-                .getInProgressOrderWeight()));
-        txt_undeliverdOrderWeight.setText(String.valueOf(dealersItem
-                .getUndeliverdOrderWeight()));
-        txt_deliverdOrderWeight.setText(String.valueOf(dealersItem
-                .getDeliverdOrderWeight()));
+        DecimalFormat df=new DecimalFormat("###.##");
+
+        txt_orderWeight
+                .setText(String.valueOf(df.format(dealersItem.getOrderWeight())));
+
+        txt_pendingOrderWeight
+                .setText(String.valueOf(df.format(dealersItem.getPendingOrderWeight())));
+
+        txt_inProgressOrderWeight
+                .setText(String.valueOf(df.format(dealersItem.getInProgressOrderWeight())));
+
+        txt_undeliverdOrderWeight
+                .setText(String.valueOf(df.format(dealersItem.getUndeliverdOrderWeight())));
+
+        txt_deliverdOrderWeight
+                .setText(String.valueOf(df.format(dealersItem.getDeliverdOrderWeight())));
 
 
         AppCompatTextView txt_sum_orderWeight;
@@ -190,11 +197,11 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
                 sum_finalWeight+= itemSub.getDeliverdOrderWeight();
 
             }
-            txt_sum_orderWeight.setText(String.valueOf(sum_orderWeight));
-            txt_sum_pendingOrderWeight.setText(String.valueOf(sum_pendingOrderWeightt));
-            txt_sum_inProgressOrderWeight.setText(String.valueOf(sum_inProgressOrderWeight));
-            txt_sum_undeliverdOrderWeight.setText(String.valueOf(sum_undeliverdOrderWeight));
-            txt_sum_finalWeight.setText(String.valueOf(sum_finalWeight));
+            txt_sum_orderWeight.setText(df.format(sum_orderWeight));
+            txt_sum_pendingOrderWeight.setText(df.format(sum_pendingOrderWeightt));
+            txt_sum_inProgressOrderWeight.setText(df.format(sum_inProgressOrderWeight));
+            txt_sum_undeliverdOrderWeight.setText(df.format(sum_undeliverdOrderWeight));
+            txt_sum_finalWeight.setText(df.format(sum_finalWeight));
             layout_footer_order.setVisibility(View.VISIBLE);
         }else {
             layout_footer_order.setVisibility(View.GONE);
@@ -230,15 +237,22 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
         finalWeight = itemView.findViewById(R.id.finalWeight);
         txt_reportCode= itemView.findViewById(R.id.txt_reportCode);
 
+        DecimalFormat df=new DecimalFormat("###.##");
+
         date.setText(item.getDate());
-        orderWeight.setText(String.valueOf(item.getOrderWeight()));
-        pendingOrderWeight.setText(String.valueOf(item
-                .getPendingOrderWeight()));
-        inProgressOrderWeight.setText(String.valueOf(item
-                .getInProgressOrderWeight()));
-        undeliverdOrderWeight.setText(String.valueOf(item
-                .getUndeliverdOrderWeight()));
-        finalWeight.setText(String.valueOf(item.getFinalWeight()));
+
+        orderWeight.setText(String.valueOf(df.format(item.getOrderWeight())));
+
+        pendingOrderWeight.setText(String.valueOf(df.format(item
+                .getPendingOrderWeight())));
+
+        inProgressOrderWeight.setText(String.valueOf(df.format(item
+                .getInProgressOrderWeight())));
+
+        undeliverdOrderWeight.setText(String.valueOf(df.format(item
+                .getUndeliverdOrderWeight())));
+
+        finalWeight.setText(String.valueOf(df.format(item.getFinalWeight())));
 
         txt_reportCode.setText(String.valueOf(node.getId()));
 
@@ -257,7 +271,7 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
 
         layout_footer_order= itemView.findViewById(R.id.layout_footer_order);
         if(node.getId() == node.getParent().getChildren().size()) {
-            DecimalFormat df=new DecimalFormat("###.##");
+
             double sum_orderWeight= 0;
             double sum_pendingOrderWeightt= 0;
             double sum_inProgressOrderWeight= 0;

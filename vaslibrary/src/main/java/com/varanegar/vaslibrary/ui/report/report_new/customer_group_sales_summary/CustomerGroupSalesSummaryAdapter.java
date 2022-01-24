@@ -4,20 +4,20 @@ import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarFragment;
 import com.varanegar.framework.util.report.ReportColumns;
 import com.varanegar.framework.util.report.SimpleReportAdapter;
+import com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary.model.ProductCustomerGroupSalesSummaryModel;
 import com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary.model.ProductCustomerGroupSalesSummaryView;
-import com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary.model.ProductCustomerGroupSalesSummaryViewModel;
 
-public class CustomerGroupSalesSummaryAdapter extends SimpleReportAdapter<ProductCustomerGroupSalesSummaryViewModel> {
+public class CustomerGroupSalesSummaryAdapter extends SimpleReportAdapter<ProductCustomerGroupSalesSummaryModel> {
     public CustomerGroupSalesSummaryAdapter(MainVaranegarActivity activity) {
-        super(activity, ProductCustomerGroupSalesSummaryViewModel.class);
+        super(activity, ProductCustomerGroupSalesSummaryModel.class);
     }
 
     public CustomerGroupSalesSummaryAdapter(VaranegarFragment fragment) {
-        super(fragment, ProductCustomerGroupSalesSummaryViewModel.class);
+        super(fragment, ProductCustomerGroupSalesSummaryModel.class);
     }
 
     @Override
-    public void bind(ReportColumns columns, ProductCustomerGroupSalesSummaryViewModel entity){
+    public void bind(ReportColumns columns, ProductCustomerGroupSalesSummaryModel entity){
         columns.add(bind(entity, ProductCustomerGroupSalesSummaryView.CustomerGroupTXT,"گروه مشتری").setWeight(2));
         columns.add(bind(entity,ProductCustomerGroupSalesSummaryView.CustomerActivityTXT,"فعالیت مشتری").setWeight(2).setFrizzed());
         columns.add(bind(entity,ProductCustomerGroupSalesSummaryView.NetWeight,"وزن خالص").sendToDetail().setWeight(1.5f).calcTotal());

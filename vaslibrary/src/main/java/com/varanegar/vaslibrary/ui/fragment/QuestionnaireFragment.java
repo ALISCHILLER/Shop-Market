@@ -107,15 +107,19 @@ public class QuestionnaireFragment extends VisitFragment {
         toolbar.setOnBackClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cheack = sharedconditionCustomer.getBoolean(_customer, false);
-                if (!cheack) {
-                    if (back_prees) {
-                        Toast.makeText(getContext(), "لطفاپرسشنامه را ارسال کنید", Toast.LENGTH_SHORT).show();
-                    }else {
+                if (VaranegarApplication.is(VaranegarApplication.AppId.Supervisor)){
+                    cheack = sharedconditionCustomer.getBoolean(_customer, false);
+                    if (!cheack) {
+                        if (back_prees) {
+                            Toast.makeText(getContext(), "لطفاپرسشنامه را ارسال کنید", Toast.LENGTH_SHORT).show();
+                        } else {
+                            getVaranegarActvity().popFragment();
+                        }
+
+                    } else {
                         getVaranegarActvity().popFragment();
                     }
-
-                } else {
+                }else{
                     getVaranegarActvity().popFragment();
                 }
             }
@@ -158,13 +162,17 @@ public class QuestionnaireFragment extends VisitFragment {
     @Override
     public void onBackPressed() {
         cheack = sharedconditionCustomer.getBoolean(_customer, false);
-        if (!cheack) {
-            if (back_prees) {
-                Toast.makeText(getContext(), "لطفاپرسشنامه را ارسال کنید", Toast.LENGTH_SHORT).show();
-            }else {
+        if (VaranegarApplication.is(VaranegarApplication.AppId.Supervisor)) {
+            if (!cheack) {
+                if (back_prees) {
+                    Toast.makeText(getContext(), "لطفاپرسشنامه را ارسال کنید", Toast.LENGTH_SHORT).show();
+                } else {
+                    super.onBackPressed();
+                }
+            } else {
                 super.onBackPressed();
             }
-        } else {
+        }else {
             super.onBackPressed();
         }
 
@@ -318,41 +326,44 @@ public class QuestionnaireFragment extends VisitFragment {
             doneImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    QuestionnaireCustomerManager questionnaireCustomerManager = new QuestionnaireCustomerManager(getContext());
-                    QuestionnaireCustomerModel item = questionnaireCustomerManager.getCustomerQuestionnaire(q.CustomerId, q.QuestionnaireId);
-                    item.NoAnswerReason = null;
-                    try {
-                        questionnaireCustomerManager.insertOrUpdate(item);
+                    if(!cheack) {
+                        QuestionnaireCustomerManager questionnaireCustomerManager = new QuestionnaireCustomerManager(getContext());
+                        QuestionnaireCustomerModel item = questionnaireCustomerManager.getCustomerQuestionnaire(q.CustomerId, q.QuestionnaireId);
+                        item.NoAnswerReason = null;
+                        try {
+                            questionnaireCustomerManager.insertOrUpdate(item);
 
-                        List<QuestionnaireLineModel> lines = new QuestionnaireLineManager(getContext()).getLines(item.QuestionnaireId);
-                        QuestionnaireLineModel epoll = Linq.findFirst(lines, new Linq.Criteria<QuestionnaireLineModel>() {
-                            @Override
-                            public boolean run(QuestionnaireLineModel item) {
-                                return item.QuestionnaireLineTypeUniqueId.equals(QuestionnaireLineManager.QuestionnaireLineTypeUniqueId.EPoll);
-                            }
-                        });
-                        if (epoll == null) {
-                            QuestionnaireFormFragment fragment = new QuestionnaireFormFragment();
-                            fragment.setArguments(q.CustomerId, q.QuestionnaireId);
-                            getVaranegarActvity().pushFragment(fragment);
-                        } else {
-                            if (VaranegarApplication.is(VaranegarApplication.AppId.Supervisor)) {
-                                CuteMessageDialog dialog = new CuteMessageDialog(getContext());
-                                dialog.setIcon(Icon.Info);
-                                dialog.setMessage(R.string.questionnaire_not_supported_in_supervisor);
-                                dialog.setPositiveButton(R.string.ok, null);
-                                dialog.show();
-                            } else {
-                                EPollFragment fragment = new EPollFragment();
-                                fragment.setArguments(q.CustomerId, q.QuestionnaireId, epoll.UniqueId);
+                            List<QuestionnaireLineModel> lines = new QuestionnaireLineManager(getContext()).getLines(item.QuestionnaireId);
+                            QuestionnaireLineModel epoll = Linq.findFirst(lines, new Linq.Criteria<QuestionnaireLineModel>() {
+                                @Override
+                                public boolean run(QuestionnaireLineModel item) {
+                                    return item.QuestionnaireLineTypeUniqueId.equals(QuestionnaireLineManager.QuestionnaireLineTypeUniqueId.EPoll);
+                                }
+                            });
+                            if (epoll == null) {
+                                QuestionnaireFormFragment fragment = new QuestionnaireFormFragment();
+                                fragment.setArguments(q.CustomerId, q.QuestionnaireId);
                                 getVaranegarActvity().pushFragment(fragment);
+                            } else {
+                                if (VaranegarApplication.is(VaranegarApplication.AppId.Supervisor)) {
+                                    CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+                                    dialog.setIcon(Icon.Info);
+                                    dialog.setMessage(R.string.questionnaire_not_supported_in_supervisor);
+                                    dialog.setPositiveButton(R.string.ok, null);
+                                    dialog.show();
+                                } else {
+                                    EPollFragment fragment = new EPollFragment();
+                                    fragment.setArguments(q.CustomerId, q.QuestionnaireId, epoll.UniqueId);
+                                    getVaranegarActvity().pushFragment(fragment);
+                                }
                             }
+                        } catch (Exception ex) {
+                            Timber.e(ex);
+                            getVaranegarActvity().showSnackBar(R.string.error_saving_request, MainVaranegarActivity.Duration.Short);
                         }
-                    } catch (Exception ex) {
-                        Timber.e(ex);
-                        getVaranegarActvity().showSnackBar(R.string.error_saving_request, MainVaranegarActivity.Duration.Short);
+                    }else {
+                        getVaranegarActvity().showSnackBar("پرسشنامه ارسال شده است قابلیت ویراش موجود نیست", MainVaranegarActivity.Duration.Short);
                     }
-
                 }
             });
             cancelImageView.setOnClickListener(new View.OnClickListener() {

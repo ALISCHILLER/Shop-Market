@@ -2,7 +2,7 @@ package com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summa
 
 import com.varanegar.framework.database.model.ModelProjection;
 
-public class ProductCustomerGroupSalesSummaryView extends ModelProjection<ProductCustomerGroupSalesSummaryViewModel> {
+public class ProductCustomerGroupSalesSummaryView extends ModelProjection<ProductCustomerGroupSalesSummaryModel> {
 
     protected ProductCustomerGroupSalesSummaryView(String name) {
         super(name);
@@ -10,22 +10,26 @@ public class ProductCustomerGroupSalesSummaryView extends ModelProjection<Produc
 
     public static ProductCustomerGroupSalesSummaryView CustomerGroupTXT = new
             ProductCustomerGroupSalesSummaryView
-            ("ProductCustomerGroupSalesSummaryView.CustomerGroupTXT");
+            ("ProductCustomerGroupSalesSummary.CustomerGroupTXT");
 
     public static ProductCustomerGroupSalesSummaryView CustomerActivity = new
             ProductCustomerGroupSalesSummaryView
-            ("ProductCustomerGroupSalesSummaryView.CustomerActivity");
+            ("ProductCustomerGroupSalesSummary.CustomerActivity");
 
     public static ProductCustomerGroupSalesSummaryView CustomerActivityTXT = new
             ProductCustomerGroupSalesSummaryView
-            ("ProductCustomerGroupSalesSummaryView.CustomerActivityTXT");
+            ("ProductCustomerGroupSalesSummary.CustomerActivityTXT");
 
     public static ProductCustomerGroupSalesSummaryView NetWeight = new
             ProductCustomerGroupSalesSummaryView
-            ("ProductCustomerGroupSalesSummaryView.NetWeight");
+            ("ProductCustomerGroupSalesSummary.NetWeight");
 
     public static ProductCustomerGroupSalesSummaryView NetCount_CA = new
             ProductCustomerGroupSalesSummaryView
-            ("ProductCustomerGroupSalesSummaryView.NetCount_CA");
+            ("ProductCustomerGroupSalesSummary.NetCount_CA");
+
+    public static ProductCustomerGroupSalesSummaryView ProductCustomerGroupSalesSummaryTbl = new
+            ProductCustomerGroupSalesSummaryView
+            ("ProductCustomerGroupSalesSummary");
 
 }

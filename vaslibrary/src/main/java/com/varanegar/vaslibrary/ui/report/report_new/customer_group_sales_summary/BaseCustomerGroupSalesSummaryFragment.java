@@ -25,6 +25,7 @@ import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
 import com.varanegar.vaslibrary.manager.UserManager;
 import com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary.model.CustomerGroupSalesSummaryViewModel;
+import com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary.model.ProductCustomerGroupSalesSummaryModel;
 import com.varanegar.vaslibrary.ui.report.report_new.webApi.ReportApi;
 import com.varanegar.vaslibrary.ui.report.review.BaseReviewReportFragment;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
@@ -37,7 +38,7 @@ import java.util.UUID;
 import okhttp3.Request;
 import retrofit2.Call;
 
-public abstract class BaseCustomerGroupSalesSummaryFragment<T extends CustomerGroupSalesSummaryViewModel> extends VaranegarFragment {
+public abstract class BaseCustomerGroupSalesSummaryFragment<T extends ProductCustomerGroupSalesSummaryModel> extends VaranegarFragment {
 
     private ReportView reportView;
     private ProgressDialog progressDialog;

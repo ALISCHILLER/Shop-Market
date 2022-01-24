@@ -4,7 +4,7 @@ import com.varanegar.framework.database.model.ModelProjection;
 
 
 public class ProductsPurchaseHistoryReportView  extends
-        ModelProjection<TProductsPurchaseHistoryReportViewModel> {
+        ModelProjection<TProductsPurchaseHistoryReportModel> {
 
     protected ProductsPurchaseHistoryReportView(String name) {
         super(name);
@@ -12,27 +12,30 @@ public class ProductsPurchaseHistoryReportView  extends
 
     public static ProductsPurchaseHistoryReportView ProductBackOfficeCode = new
             ProductsPurchaseHistoryReportView
-            ("ProductsPurchaseHistoryReportView.ProductBackOfficeCode");
+            ("TProductsPurchaseHistoryReport.ProductBackOfficeCode");
 
 
 
     public static ProductsPurchaseHistoryReportView ProductName = new
-            ProductsPurchaseHistoryReportView("ProductsPurchaseHistoryReportView.ProductName");
+            ProductsPurchaseHistoryReportView("TProductsPurchaseHistoryReport.ProductName");
 
     public static ProductsPurchaseHistoryReportView ProductCategoryCode = new
             ProductsPurchaseHistoryReportView
-            ("ProductsPurchaseHistoryReportView.ProductCategoryCode");
+            ("TProductsPurchaseHistoryReport.ProductCategoryCode");
 
 
     public static ProductsPurchaseHistoryReportView ProductCategoryName = new
             ProductsPurchaseHistoryReportView
-            ("ProductsPurchaseHistoryReportView.ProductCategoryName");
+            ("TProductsPurchaseHistoryReport.ProductCategoryName");
 
     public static ProductsPurchaseHistoryReportView ProductNetWeight = new
             ProductsPurchaseHistoryReportView
-            ("ProductsPurchaseHistoryReportView.ProductNetWeight");
+            ("TProductsPurchaseHistoryReport.ProductNetWeight");
 
     public static ProductsPurchaseHistoryReportView ProductNetCount_CA = new
             ProductsPurchaseHistoryReportView
-            ("ProductsPurchaseHistoryReportView.ProductNetCount_CA");
+            ("TProductsPurchaseHistoryReport.ProductNetCount_CA");
+    public static ProductsPurchaseHistoryReportView TProductsPurchaseHistoryReportTbl = new
+            ProductsPurchaseHistoryReportView
+            ("TProductsPurchaseHistoryReport");
 }

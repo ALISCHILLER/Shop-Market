@@ -4,24 +4,22 @@ import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarFragment;
 import com.varanegar.framework.util.report.ReportColumns;
 import com.varanegar.framework.util.report.SimpleReportAdapter;
-import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.model.ProductInvoiveBalanceReportView;
-import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.model.ProductInvoiveBalanceReportViewModel;
 import com.varanegar.vaslibrary.ui.report.report_new.products_purchase_history_report.model.ProductsPurchaseHistoryReportView;
-import com.varanegar.vaslibrary.ui.report.report_new.products_purchase_history_report.model.TProductsPurchaseHistoryReportViewModel;
+import com.varanegar.vaslibrary.ui.report.report_new.products_purchase_history_report.model.TProductsPurchaseHistoryReportModel;
 
 public class ProductsPurchaseHistoryReportAdapter  extends
-        SimpleReportAdapter<TProductsPurchaseHistoryReportViewModel> {
+        SimpleReportAdapter<TProductsPurchaseHistoryReportModel> {
     public ProductsPurchaseHistoryReportAdapter(MainVaranegarActivity activity) {
-        super(activity, TProductsPurchaseHistoryReportViewModel.class);
+        super(activity, TProductsPurchaseHistoryReportModel.class);
     }
 
     public ProductsPurchaseHistoryReportAdapter(VaranegarFragment fragment) {
-        super(fragment, TProductsPurchaseHistoryReportViewModel.class);
+        super(fragment, TProductsPurchaseHistoryReportModel.class);
     }
 
 
     @Override
-    public void bind(ReportColumns columns, TProductsPurchaseHistoryReportViewModel entity) {
+    public void bind(ReportColumns columns, TProductsPurchaseHistoryReportModel entity) {
         columns.add(bind(entity, ProductsPurchaseHistoryReportView.ProductBackOfficeCode, "کد کالا").setWeight(2).setFrizzed());
         columns.add(bind(entity, ProductsPurchaseHistoryReportView.ProductName, "نام کالا").setWeight(2.5f).setFrizzed());
         columns.add(bind(entity, ProductsPurchaseHistoryReportView.ProductCategoryCode, "کد گروه کالا").setWeight(2));

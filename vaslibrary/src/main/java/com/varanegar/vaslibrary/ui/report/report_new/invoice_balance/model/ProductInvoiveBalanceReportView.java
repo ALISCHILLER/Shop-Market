@@ -2,7 +2,7 @@ package com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.model;
 
 import com.varanegar.framework.database.model.ModelProjection;
 
-public class ProductInvoiveBalanceReportView extends ModelProjection<ProductInvoiveBalanceReportViewModel> {
+public class ProductInvoiveBalanceReportView extends ModelProjection<ProductInvoiveBalanceReportModel> {
     protected ProductInvoiveBalanceReportView(String name) {
         super(name);
     }

@@ -6,7 +6,6 @@ import com.varanegar.framework.util.report.ReportColumns;
 import com.varanegar.framework.util.report.SimpleReportAdapter;
 import com.varanegar.vaslibrary.ui.report.report_new.customer_purchase_history_report.model.CustomerPurchaseHistoryView;
 import com.varanegar.vaslibrary.ui.report.report_new.customer_purchase_history_report.model.PCustomerPurchaseHistoryViewModel;
-import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.model.ProductInvoiveBalanceReportViewModel;
 
 public class CustomerPurchaseHistoryReportAdapter extends SimpleReportAdapter<PCustomerPurchaseHistoryViewModel> {
     public CustomerPurchaseHistoryReportAdapter(MainVaranegarActivity activity) {

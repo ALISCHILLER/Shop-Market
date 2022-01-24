@@ -8,7 +8,7 @@ import com.varanegar.processor.annotations.Table;
 import java.math.BigDecimal;
 
 @Table
-public class ProductInvoiveBalanceReportViewModel extends BaseModel {
+public class ProductInvoiveBalanceReportModel extends BaseModel {
     @Column
     public String CustomerBackOfficeCode;
     @Column

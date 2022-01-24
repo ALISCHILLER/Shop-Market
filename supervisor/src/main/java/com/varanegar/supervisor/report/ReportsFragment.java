@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.varanegar.framework.database.querybuilder.Query;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
@@ -23,20 +24,25 @@ import com.varanegar.framework.util.report.SimpleReportAdapter;
 import com.varanegar.supervisor.IMainPageFragment;
 import com.varanegar.supervisor.R;
 import com.varanegar.supervisor.VisitorFilter;
-import com.varanegar.supervisor.webapi.SupervisorApi;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
-import com.varanegar.vaslibrary.model.customerinventory.ProductInventoryModelRepository;
-import com.varanegar.vaslibrary.ui.list.ProductReturnWithoutRefListAdapter;
+import com.varanegar.vaslibrary.model.customer.CustomerModelRepository;
 import com.varanegar.vaslibrary.ui.report.report_new.customerNoSaleReport.CustomerNoSaleReportAdapter;
+import com.varanegar.vaslibrary.ui.report.report_new.customerNoSaleReport.model.CustomerModelView;
+import com.varanegar.vaslibrary.ui.report.report_new.customerNoSaleReport.model.CustomerNoSaleModel;
+import com.varanegar.vaslibrary.ui.report.report_new.customerNoSaleReport.model.CustomerNoSaleModelRepository;
 import com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary.CustomerGroupSalesSummaryAdapter;
+import com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary.model.ProductCustomerGroupSalesSummaryModel;
+import com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary.model.ProductCustomerGroupSalesSummaryModelRepository;
+import com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary.model.ProductCustomerGroupSalesSummaryView;
 import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.ProductInvoiceReportAdapter;
+import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.model.ProductInvoiveBalanceReportModel;
+import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.model.ProductInvoiveBalanceReportModelRepository;
 import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.model.ProductInvoiveBalanceReportView;
 import com.varanegar.vaslibrary.ui.report.report_new.products_purchase_history_report.ProductsPurchaseHistoryReportAdapter;
+import com.varanegar.vaslibrary.ui.report.report_new.products_purchase_history_report.model.ProductsPurchaseHistoryReportView;
+import com.varanegar.vaslibrary.ui.report.report_new.products_purchase_history_report.model.TProductsPurchaseHistoryReportModel;
+import com.varanegar.vaslibrary.ui.report.report_new.products_purchase_history_report.model.TProductsPurchaseHistoryReportModelRepository;
 import com.varanegar.vaslibrary.ui.report.report_new.webApi.ReportApi;
-import com.varanegar.vaslibrary.ui.report.review.adapter.OrderReviewReportAdapter;
-import com.varanegar.vaslibrary.ui.report.review.adapter.ProductReviewReportAdapter;
-import com.varanegar.vaslibrary.ui.report.review.adapter.SellReturnReviewReportAdapter;
-import com.varanegar.vaslibrary.ui.report.review.adapter.SellReviewReportAdapter;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.reviewreport.ReviewReportViewModel;
 
@@ -60,6 +66,7 @@ public class ReportsFragment extends IMainPageFragment {
     private ReportView reportView;
     private TabLayout reportsTabLayout;
     private int product;
+
     private TextView errorTextView;
 
     @Override
@@ -82,6 +89,7 @@ public class ReportsFragment extends IMainPageFragment {
                     }
 
                     reportView.removeAllViews();
+                    refresh_report(tab.getPosition());
                 }
 
                 @Override
@@ -175,30 +183,70 @@ public class ReportsFragment extends IMainPageFragment {
                                 errorTextView.setVisibility(View.GONE);
                                 reportView.setVisibility(View.VISIBLE);
                             }
-
-
-
-                            SimpleReportAdapter adapter = null;
                             if (tabPosition == 0) {
-                               // adapter = new OrderReviewReportAdapter(getVaranegarActvity());
-                                adapter =new ProductInvoiceReportAdapter(getVaranegarActvity());
+                                ProductInvoiveBalanceReportModelRepository productModelRepository=
+                                        new ProductInvoiveBalanceReportModelRepository();
+
+                                List<ProductInvoiveBalanceReportModel>list
+                                        =new ArrayList<>();
+                                for ( Object item:result){
+                                    list.add ((ProductInvoiveBalanceReportModel)item);
+                                }
+
+                                productModelRepository.deleteAll();
+                                productModelRepository.
+                                        insert(list);
+                                refresh_report(tabPosition);
                             } else if (tabPosition == 1) {
-                              //  adapter = new SellReviewReportAdapter(getVaranegarActvity());
-                                adapter = new CustomerGroupSalesSummaryAdapter(getVaranegarActvity());
+                                ProductCustomerGroupSalesSummaryModelRepository productModelRepository=
+                                        new ProductCustomerGroupSalesSummaryModelRepository();
 
-                            } else if (tabPosition == 2) {
-                               // adapter = new ProductReviewReportAdapter(getVaranegarActvity());
-                                adapter = new ProductsPurchaseHistoryReportAdapter(getVaranegarActvity());
+                                List<ProductCustomerGroupSalesSummaryModel>list
+                                        =new ArrayList<>();
+                                for ( Object item:result){
+                                    list.add ((ProductCustomerGroupSalesSummaryModel)item);
+                                }
 
-                            } else if (tabPosition == 3) {
-                            //    adapter = new SellReturnReviewReportAdapter(getVaranegarActvity());
-                                adapter = new CustomerNoSaleReportAdapter(getVaranegarActvity());
+                                productModelRepository.deleteAll();
+                                productModelRepository.
+                                        insert(list);
+                                refresh_report(tabPosition);
+                            }else if(tabPosition == 2){
+                                TProductsPurchaseHistoryReportModelRepository productModelRepository=
+                                        new TProductsPurchaseHistoryReportModelRepository();
+
+                                List<TProductsPurchaseHistoryReportModel>list
+                                        =new ArrayList<>();
+                                for ( Object item:result){
+                                    list.add ((TProductsPurchaseHistoryReportModel)item);
+                                }
+
+                                productModelRepository.deleteAll();
+                                productModelRepository.
+                                        insert(list);
+                                refresh_report(tabPosition);
+                            }else if(tabPosition == 3){
+
+                                CustomerNoSaleModelRepository noSaleModelRepository=
+                                        new CustomerNoSaleModelRepository();
+
+                                List<CustomerNoSaleModel>list
+                                        =new ArrayList<>();
+
+                                CustomerNoSaleModel customerNoSaleModel=new CustomerNoSaleModel();
+                                for ( Object item:result){
+                                    list.add ((CustomerNoSaleModel)item);
+
+                                }
+
+                                noSaleModelRepository.deleteAll();
+                                noSaleModelRepository.
+                                        insert(list);
+                                refresh_report(tabPosition);
                             }
-                            if (adapter != null) {
-                                adapter.setLocale(VasHelperMethods.getSysConfigLocale(getContext()));
-                                adapter.create(result, null);
-                                reportView.setAdapter(adapter);
-                            }
+
+
+
                         }
                     }
                 }
@@ -233,6 +281,57 @@ public class ReportsFragment extends IMainPageFragment {
     }
 
 
+    private void refresh_report(final int tabPosition){
+        if (isResumed()) {
+            Activity activity = getActivity();
+            if (activity != null && !activity.isFinishing()) {
+                SimpleReportAdapter adapter = null;
+                Query query = null;
+                List<? extends ReviewReportViewModel> result = null;
+                if (tabPosition == 0) {
+                     query = new Query()
+                            .from(ProductInvoiveBalanceReportView.ProductInvoiveBalanceReportTbl);
+                    // adapter = new OrderReviewReportAdapter(getVaranegarActvity());
+
+
+                    adapter =new ProductInvoiceReportAdapter(getVaranegarActvity());
+                    adapter.create(new ProductInvoiveBalanceReportModelRepository(),query, null);
+                } else if (tabPosition == 1) {
+                    //  adapter = new SellReviewReportAdapter(getVaranegarActvity());
+
+                    query = new Query()
+                            .from(ProductCustomerGroupSalesSummaryView.ProductCustomerGroupSalesSummaryTbl);
+                    adapter = new CustomerGroupSalesSummaryAdapter(getVaranegarActvity());
+                    adapter.create(new ProductCustomerGroupSalesSummaryModelRepository(),query,
+                            null);
+
+                } else if (tabPosition == 2) {
+                    // adapter = new ProductReviewReportAdapter(getVaranegarActvity());
+
+                    query = new Query()
+                            .from(ProductsPurchaseHistoryReportView.TProductsPurchaseHistoryReportTbl);
+                    adapter = new ProductsPurchaseHistoryReportAdapter(getVaranegarActvity());
+                    adapter.create(new TProductsPurchaseHistoryReportModelRepository(),query,
+                            null);
+
+
+                } else if (tabPosition == 3) {
+                    //    adapter = new SellReturnReviewReportAdapter(getVaranegarActvity());
+
+                    query = new Query()
+                            .from(CustomerModelView.CustomerModelTbl);
+                    adapter = new CustomerNoSaleReportAdapter(getVaranegarActvity());
+                    adapter.create(new CustomerNoSaleModelRepository(),query,null);
+
+                }
+                if (adapter != null&&query!=null) {
+                    adapter.setLocale(VasHelperMethods.getSysConfigLocale(getContext()));
+//                    adapter.create(, null);
+                    reportView.setAdapter(adapter);
+                }
+            }
+        }
+    }
     private void showErrorDialog(String error) {
         if (isResumed()) {
             CuteMessageDialog dialog = new CuteMessageDialog(getContext());
@@ -247,7 +346,7 @@ public class ReportsFragment extends IMainPageFragment {
     @Override
     public void onResume() {
         super.onResume();
-     //   refresh(0);
+       refresh_report(reportsTabLayout.getSelectedTabPosition());
     }
 
 
