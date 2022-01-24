@@ -37,13 +37,17 @@ import com.varanegar.supervisor.VisitorFilter;
 import com.varanegar.supervisor.model.StatusConfigModel;
 import com.varanegar.supervisor.model.changeOrdersStatus.ChangeOrdersStatusmModel;
 import com.varanegar.supervisor.model.reviewreport.ItemsModelRepository;
+import com.varanegar.supervisor.model.reviewreport.ItemsView;
 import com.varanegar.supervisor.model.reviewreport.ReviewreportModel;
 import com.varanegar.supervisor.model.reviewreport.ReviewreportModelRepository;
 import com.varanegar.supervisor.model.reviewreport.ReviewreportView;
 import com.varanegar.supervisor.model.reviewreport.ItemsModel;
 import com.varanegar.supervisor.webapi.SupervisorApi;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
+import com.varanegar.vaslibrary.manager.ProductGroupManager;
 import com.varanegar.vaslibrary.model.customer.SupervisorFullCustomer;
+import com.varanegar.vaslibrary.model.productGroup.ProductGroup;
+import com.varanegar.vaslibrary.model.productGroup.ProductGroupModel;
 import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.model.ProductInvoiveBalanceReportView;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.reviewreport.ReviewReportViewModel;
@@ -52,6 +56,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import okhttp3.Request;
 import okhttp3.ResponseBody;
@@ -67,6 +72,7 @@ public class ToursStatusFragment extends IMainPageFragment {
     private TextView errorTextView;
     ArrayList<String> arr = new ArrayList();
     private FloatingActionButton fab_send;
+
     private String status_options;
     @Override
     protected View onCreateContentView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
@@ -147,36 +153,58 @@ public class ToursStatusFragment extends IMainPageFragment {
 
                 @Override
                 protected void onSuccess(List<ReviewreportModel> result, Request request) {
+                    if(result.size()>0) {
+                        ReviewreportModelRepository reviewreportModelRepository =
+                                new ReviewreportModelRepository();
 
-                    ReviewreportModelRepository reviewreportModelRepository=
-                            new ReviewreportModelRepository();
+                        ItemsModelRepository itemsModelRepository = new ItemsModelRepository();
 
-                    ItemsModelRepository itemsModelRepository=new ItemsModelRepository();
 
-                    ItemsModel itemsModels=new ItemsModel();
-                    for (ReviewreportModel reviewreportModel:result){
-                        for (ItemsModel itemsModel:reviewreportModel.items){
-                            itemsModels.UniqueId=reviewreportModel.UniqueId;
-                            itemsModels.amount=itemsModel.amount;
-                            itemsModels.productCount=itemsModel.productCount;
-                            itemsModels.productCode=itemsModel.productCode;
-                            itemsModels.productCategory=itemsModel.productCategory;
-                            itemsModels.productCountStr=itemsModel.productCountStr;
-                            itemsModels.productName=itemsModel.productName;
-                            itemsModels.tax=itemsModel.tax;
+//                    ItemsModel itemsModels=new ItemsModel();
+//                    for (ReviewreportModel reviewreportModel:result){
+//                        for (ItemsModel itemsModel:reviewreportModel.items){
+//                            itemsModels.UniqueId=reviewreportModel.UniqueId;
+//                            itemsModels.amount=itemsModel.amount;
+//                            itemsModels.productCount=itemsModel.productCount;
+//                            itemsModels.productCode=itemsModel.productCode;
+//                            itemsModels.productCategory=itemsModel.productCategory;
+//                            itemsModels.productCountStr=itemsModel.productCountStr;
+//                            itemsModels.productName=itemsModel.productName;
+//                            itemsModels.tax=itemsModel.tax;
+//                        }
+//                    }
+                        int b=0;
 
+                        List<ItemsModel> itemsModels1 = new ArrayList<>();
+                        for (int i = 0; i < result.size(); i++) {
+                            for (int a = 0; a < result.get(i).items.size(); a++) {
+                                ItemsModel itemsModels = new ItemsModel();
+                                itemsModels.UniqueId = result.get(i).UniqueId;
+                                itemsModels.amount = result.get(i).items.get(a).amount;
+                                itemsModels.productCount = result.get(i).items.get(a).productCount;
+                                itemsModels.productCode = result.get(i).items.get(a).productCode;
+                                itemsModels.productCategory = result.get(i).items.get(a).productCategory;
+                                itemsModels.productCountStr = result.get(i).items.get(a).productCountStr;
+                                itemsModels.productName = result.get(i).items.get(a).productName;
+                                itemsModels.tax = result.get(i).items.get(a).tax;
+                                itemsModels1.add(b, itemsModels);
+                                b++;
+                            }
                         }
+
+
+                        itemsModelRepository.deleteAll();
+                        if (itemsModels1.size() > 0) {
+                            itemsModelRepository.insert(itemsModels1);
+                        }
+                        reviewreportModelRepository.deleteAll();
+                        if (result.size() > 0)
+                            reviewreportModelRepository.insert(result);
+
+                        getdataReport();
+
+
                     }
-
-                    itemsModelRepository.deleteAll();
-                    itemsModelRepository.insert(itemsModels);
-                    reviewreportModelRepository.deleteAll();
-                    reviewreportModelRepository.insert(result);
-                    getdataReport();
-
-
-
-
 
                 }
 
@@ -410,7 +438,6 @@ public class ToursStatusFragment extends IMainPageFragment {
 
    private void getdataReport(){
        Query query = new Query().from(ReviewreportView.ReviewreportTbl);
-
        adapter = new SimpleReportAdapter<ReviewreportModel>(getVaranegarActvity(),
                ReviewreportModel.class){
            class PhoneCustomerViewHoder extends CustomViewHolder<ReviewreportModel>{
@@ -518,22 +545,14 @@ public class ToursStatusFragment extends IMainPageFragment {
        adapter.setOnItemSelectListener(new ReportAdapter.OnItemSelectListener() {
            @Override
            public void onItemSelected(int idx) {
-//               Log.e("t", String.valueOf(idx));
-//               List<ItemsModel> list=result.get(idx).items;
-//               ArrayList<ItemsModel> arrayList=new ArrayList<>(list.size());
-//               arrayList.addAll(list);
-////                            Bundle bundle = new Bundle();
-////                            bundle.putSerializable("valuesStatus", arrayList);
+               Log.e("t", String.valueOf(idx));
+               ToursStatusManager toursStatusManager = new ToursStatusManager(getContext());
+               List<ReviewreportModel> list=toursStatusManager.getAll();
+               UUID uuid =list.get(idx).UniqueId;
                SharedPreferences sharedPreferences = getContext().getSharedPreferences("valuesStatus", Context.MODE_PRIVATE);
-//               String json = VaranegarGsonBuilder.build().create().toJson(arrayList);
-//               sharedPreferences.edit().putString("Status", json).commit();
-
+               sharedPreferences.edit().putString("Status", String.valueOf(uuid)).commit();
                ToursStatusViewFragment nextFrag= new ToursStatusViewFragment();
                getVaranegarActvity().pushFragment(nextFrag);
-//                            getActivity().getSupportFragmentManager().beginTransaction()
-//                                    .replace(R.id.Layout_container, nextFrag, "findThisFragment")
-//                                    .addToBackStack("ToursStatusFragment")
-//                                    .commit();
            }
 
            @Override
@@ -602,14 +621,20 @@ public class ToursStatusFragment extends IMainPageFragment {
     @Override
     public void onResume() {
         super.onResume();
+        Query r_query = new Query().from(ReviewreportView.ReviewreportTbl);
+        if(r_query!=null){
+            getdataReport();
+        }
 
-
-        List<String> dealersId = new ArrayList<>();
-        dealersId = VisitorFilter.getList(getContext());
-        TourStatusConfig config = new TourStatusConfig(getContext());
-        String startdata=DateHelper.toString(config.getFromDate(), DateFormat.MicrosoftDateTime, Locale.US);
-        String enddata=DateHelper.toString(config.getToDate(), DateFormat.MicrosoftDateTime, Locale.US);
-        if (dealersId!=null&&!startdata.isEmpty()&&!enddata.isEmpty())
-            refresh_report();
+//        List<String> dealersId = new ArrayList<>();
+//        dealersId = VisitorFilter.getList(getContext());
+//        TourStatusConfig config = new TourStatusConfig(getContext());
+//        String startdata=DateHelper.toString(config.getFromDate(), DateFormat.MicrosoftDateTime, Locale.US);
+//        String enddata=DateHelper.toString(config.getToDate(), DateFormat.MicrosoftDateTime, Locale.US);
+//        if (dealersId!=null&&!startdata.isEmpty()&&!enddata.isEmpty())
+//            refresh_report();
     }
+
+
+
 }

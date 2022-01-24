@@ -159,12 +159,25 @@ public class CustomersFragment extends IMainPageFragment {
                 dataManager.getNewCustomers2(new DataManager.Callback() {
                     @Override
                     public void onSuccess() {
+                        if (progressDialog != null && progressDialog.isShowing()) {
+                            try {
+                                progressDialog.dismiss();
+                                refreshAdapter();
+                            } catch (Exception ignored) {
 
+                            }
+                        }
                     }
 
                     @Override
                     public void onError(String error) {
+                        if (progressDialog != null && progressDialog.isShowing()) {
+                            try {
+                                progressDialog.dismiss();
+                            } catch (Exception ignored) {
 
+                            }
+                        }
                     }
                 });
 

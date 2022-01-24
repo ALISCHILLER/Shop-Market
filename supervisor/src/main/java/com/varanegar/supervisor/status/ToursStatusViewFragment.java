@@ -15,17 +15,24 @@ import android.view.ViewGroup;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.varanegar.framework.database.querybuilder.Query;
+import com.varanegar.framework.database.querybuilder.criteria.Criteria;
 import com.varanegar.framework.util.report.ReportColumns;
 import com.varanegar.framework.util.report.ReportView;
 import com.varanegar.framework.util.report.SimpleReportAdapter;
 import com.varanegar.supervisor.IMainPageFragment;
 import com.varanegar.supervisor.R;
+import com.varanegar.supervisor.model.reviewreport.ItemsModelRepository;
 import com.varanegar.supervisor.model.reviewreport.ItemsView;
 import com.varanegar.supervisor.model.reviewreport.ItemsModel;
+import com.varanegar.supervisor.model.reviewreport.ReviewreportView;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
+import com.varanegar.vaslibrary.model.customer.SupervisorCustomer;
+import com.varanegar.vaslibrary.model.customer.SupervisorFullCustomer;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -89,28 +96,31 @@ public class ToursStatusViewFragment extends IMainPageFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("valuesStatus", Context.MODE_PRIVATE);
-        String json = sharedPreferences.getString("Status", null);
-        if (json != null){
-            Gson gson = new Gson();
-            Type type = new TypeToken<List<ItemsModel>>(){}.getType();
-            list = gson.fromJson(json, type);
-        }
+        SharedPreferences sharedPreferences = getContext()
+                .getSharedPreferences("valuesStatus", Context.MODE_PRIVATE);
+        UUID uuid = UUID.fromString(sharedPreferences.getString("Status", null));
+        Query query = new Query().from(ItemsView.ItemsTbl);
+
+        query= query.whereAnd(Criteria.equals(ItemsView.UniqueId, uuid));
+
+
         adapter=new SimpleReportAdapter<ItemsModel>(getVaranegarActvity(), ItemsModel.class){
             @Override
             public void bind(ReportColumns columns, ItemsModel entity) {
-                columns.add(bind(entity, ItemsView.productCategory,"گروه کالا").setFrizzed().setSortable().setWeight(2f));
+                columns.add(bind(entity, ItemsView.productCategory,"گروه کالا").setFrizzed()
+                        .setSortable().setWeight(2f));
                 columns.add(bind(entity, ItemsView.productCode,"کد کالا").setWeight(1.5f));
                 columns.add(bind(entity, ItemsView.productName,"نام کالا").setWeight(2.5f));
                 columns.add(bind(entity, ItemsView.productCountStr,"تعداد"));
-                columns.add(bind(entity, ItemsView.amount,"جمع مبلغ").sendToDetail().setWeight(1.5f).calcTotal());
-                columns.add(bind(entity, ItemsView.tax,"مالیات").sendToDetail().setWeight(1.5f).calcTotal());
+                columns.add(bind(entity, ItemsView.amount,"جمع مبلغ").sendToDetail()
+                        .setWeight(1.5f).calcTotal());
+                columns.add(bind(entity, ItemsView.tax,"مالیات").sendToDetail()
+                        .setWeight(1.5f).calcTotal());
             }
         };
         adapter.setLocale(VasHelperMethods.getSysConfigLocale(getContext()));
-        adapter.create(list, null);
+        adapter.create(new ItemsModelRepository(),query, null);
         summaryStatustView.setAdapter(adapter);
-        Log.e("ToursStatusViewFragment", list.get(0).productName);
     }
 
     @Override

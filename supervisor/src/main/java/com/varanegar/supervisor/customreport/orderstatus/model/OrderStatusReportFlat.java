@@ -4,7 +4,6 @@ import java.util.List;
 
 public class OrderStatusReportFlat {
     private int level;
-
     private String date;
     private Double orderWeight;
     private Double pendingOrderWeight;

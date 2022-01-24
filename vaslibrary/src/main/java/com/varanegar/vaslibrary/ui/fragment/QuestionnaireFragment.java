@@ -231,13 +231,14 @@ public class QuestionnaireFragment extends VisitFragment {
         calls.add(syncGetCustomerCallViewModel);
         syncGetTourModel.setCustomerCalls(calls);
 
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.setTitle(R.string.please_wait);
-        progressDialog.setMessage(getContext().getString(R.string.downloading_data));
-        progressDialog.show();
-        ReportApi reportApi = new ReportApi(getContext());
+
 
         if (!cheack) {
+            progressDialog = new ProgressDialog(getContext());
+            progressDialog.setTitle(R.string.please_wait);
+            progressDialog.setMessage(getContext().getString(R.string.downloading_data));
+            progressDialog.show();
+            ReportApi reportApi = new ReportApi(getContext());
             reportApi.runWebRequest(reportApi.savetourdata(syncGetTourModel), new WebCallBack<Void>() {
                 @Override
                 protected void onFinish() {
@@ -326,7 +327,7 @@ public class QuestionnaireFragment extends VisitFragment {
             doneImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(!cheack) {
+
                         QuestionnaireCustomerManager questionnaireCustomerManager = new QuestionnaireCustomerManager(getContext());
                         QuestionnaireCustomerModel item = questionnaireCustomerManager.getCustomerQuestionnaire(q.CustomerId, q.QuestionnaireId);
                         item.NoAnswerReason = null;
@@ -361,9 +362,6 @@ public class QuestionnaireFragment extends VisitFragment {
                             Timber.e(ex);
                             getVaranegarActvity().showSnackBar(R.string.error_saving_request, MainVaranegarActivity.Duration.Short);
                         }
-                    }else {
-                        getVaranegarActvity().showSnackBar("پرسشنامه ارسال شده است قابلیت ویراش موجود نیست", MainVaranegarActivity.Duration.Short);
-                    }
                 }
             });
             cancelImageView.setOnClickListener(new View.OnClickListener() {

@@ -15,7 +15,6 @@ CREATE TABLE "Reviewreport" (
 "paymentType"  TEXT,
 "comment"      TEXT,
 "customerCategory" TEXT,
-
 PRIMARY KEY ("UniqueId" ASC)
 );
 -- ----------------------------
@@ -23,15 +22,15 @@ PRIMARY KEY ("UniqueId" ASC)
 -- ----------------------------
 
 CREATE TABLE "Items" (
-"UniqueId" TEXT NOT NULL COLLATE NOCASE,
+"number" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+"UniqueId" TEXT  COLLATE NOCASE,
 "productCategory"  TEXT ,
 "amount"  TEXT  COLLATE NOCASE ,
 "productCode" TEXT ,
 "productName"  TEXT ,
 "productCount" TEXT,
 "productCountStr" TEXT,
-"tax" INT,
-PRIMARY KEY ("UniqueId" ASC)
+"tax" INT
 );
 
 -- ----------------------------
@@ -102,80 +101,24 @@ CREATE TABLE "CustomerNoSale" (
 "CityId" TEXT  COLLATE NOCASE,
 "NationalCode"TEXT,
 
---"Description" TEXT ,
---"OPathId"   INT,
---"ParentCustomerId" INT,
---"IgnoreLocation" INT,
---"PayableTypes"INT,
---"Barcode" TEXT  ,
---"RealName"TEXT,
---"DCName"TEXT,
---"CustomerPostalCode"TEXT,
---"CityZone" INT,
---"ErrorMessage"TEXT,
---"ErrorType"INT,
---"AmountChq"DOUBLE,
---"CountChq"INT,
---"CustomerSubGroup1Id"TEXT,
---"CustomerSubGroup2Id"TEXT,
---"DCRef" INTEGER,
---"DcCode"TEXT,
---"AreaId"TEXT  COLLATE NOCASE,
---"CenterId"TEXT  COLLATE NOCASE,
---"StateCode"TEXT  ,
---"OwnerTypeCode"TEXT  ,
---"OwnerTypeRef"INT  ,
---"CityArea" TEXT ,
---"CustLevelCode" TEXT,
---"CustActCode" TEXT,
---"CustCtgrCode" TEXT,
---"CountyRef" INT,
---"CountyCode"TEXT,
---"CityCode"INT,
---"DistZoneNo"INT,
---"DistZoneRef"INT,
---"DistAreaNo"INT,
---"DistAreaRef"INT,
---"DistPathNo"INT,
---"DistPathRef"INT,
---"SaleZoneNo"INT,
---"SaleZoneRef"INT,
---"SaleAreaNo"INT,
---"SaleAreaRef"INT,
---"SalePathNo"INT,
---"SalePathRef"INT,
---"IsNewCustomer"BIT,
---"EconomicCode" TEXT,
---"Alarm" TEXT,
---"rowIndex" INT,
---"checkDebit"BIT,
---"checkCredit"BIT,
---"ReturnChequeAmount"DECIMAL,
---"ReturnChequeCount"INT,
---"OpenChequeAmount"DECIMAL,
---"OpenChequeCount"INT,
---"OpenInvoiceAmount"DECIMAL,
---"OpenInvoiceCount"INT,
---"InitDebit"DECIMAL,
---"InitCredit"DECIMAL,
---"CustomerRemain"DECIMAL,
---"CustRemAmountAll"DECIMAL,
---"CustRemAmountForSaleOffice"DECIMAL,
---"RemainCredit"DECIMAL,
---"RemainDebit"DECIMAL,
---
---"RemainDebit"DECIMAL,
---"CustomerCategoryRef"INT,
---"CustomerActivityRef"INT,
---"CustomerLevelRef"INT,
---"CustomerCategoryId"TEXT  COLLATE NOCASE,
---"CustomerActivityId"TEXT  COLLATE NOCASE,
---"CustomerLevelId"TEXT  COLLATE NOCASE,
---"CityRef"INT,
---"StateRef"TEXT  COLLATE NOCASE,
---"StateId"TEXT  COLLATE NOCASE,
---"CountyId"TEXT  COLLATE NOCASE,
---"IsActive"BIT,
---"NationalCode"TEXT ,
 PRIMARY KEY ("UniqueId" ASC)
+);
+-- ----------------------------
+-- Table OrderStatusReportFlatModel for
+-- ----------------------------
+
+CREATE TABLE "OrderStatusReportFlatdbMode" (
+"number" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+"level" INT,
+"date" TEXT ,
+"dealerName"  TEXT ,
+"dealerCode"  TEXT  ,
+"customerName" TEXT ,
+"customerCode" TEXT ,
+"orderWeight"  DOUBLE ,
+"pendingOrderWeight" DOUBLE,
+"inProgressOrderWeight"  DOUBLE ,
+"undeliverdOrderWeight" DOUBLE,
+"finalWeight"  DOUBLE ,
+"deliverdOrderWeight" DOUBLE
 );

@@ -1,5 +1,7 @@
 package com.varanegar.vaslibrary.ui.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,11 +43,21 @@ public class QuestionnaireFormFragment extends VisitFragment {
     private FormAdapter adapter;
     private QuestionnaireCustomerViewManager questionnaireCustomerViewManager;
     private Button okbtn;
+    private SharedPreferences sharedconditionCustomer;
+    private String _customer;
+    boolean cheack;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         questionnaireId = UUID.fromString(getArguments().getString("79403496-ce59-4533-931e-e983eee6f75d"));
         customerId = UUID.fromString(getArguments().getString("0c91c445-4c34-4162-a6b5-17ff2ec1644b"));
+        _customer =getArguments().getString("0c91c445-4c34-4162-a6b5-17ff2ec1644b");
+
+        sharedconditionCustomer = getVaranegarActvity().getSharedPreferences("QuestionCustomer", Context.MODE_PRIVATE);
+      cheack = sharedconditionCustomer.getBoolean(_customer, false);
+
+
+
         View view = inflater.inflate(R.layout.fragment_questionnaire_form, container, false);
         SimpleToolbar toolbar = (SimpleToolbar) view.findViewById(R.id.toolbar);
         toolbar.setOnBackClickListener(new View.OnClickListener() {
@@ -70,8 +82,13 @@ public class QuestionnaireFormFragment extends VisitFragment {
         okbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                trySave();
-                okbtn.setClickable(false);
+
+                if (!cheack) {
+                    okbtn.setClickable(false);
+                    trySave();
+                }else {
+                    getVaranegarActvity().showSnackBar("پرسشنامه ارسال شده است فابلیت ویرایش ندارید", MainVaranegarActivity.Duration.Short);
+                }
             }
         });
 
@@ -115,7 +132,7 @@ public class QuestionnaireFormFragment extends VisitFragment {
             }
         } else
             getVaranegarActvity().showSnackBar(R.string.please_correct_errors, MainVaranegarActivity.Duration.Short);
-        okbtn.setClickable(true);
+            okbtn.setClickable(true);
     }
 
     private void saveCallAndExit() {
@@ -149,25 +166,29 @@ public class QuestionnaireFormFragment extends VisitFragment {
 
     @Override
     public void onBackPressed() {
-        if (adapter.isChanged()) {
-            CuteMessageDialog dialog = new CuteMessageDialog(getContext());
-            dialog.setIcon(Icon.Warning);
-            dialog.setTitle(R.string.warning);
-            dialog.setMessage(R.string.do_you_want_to_save_changes);
-            dialog.setPositiveButton(R.string.yes, new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    trySave();
-                }
-            });
-            dialog.setNegativeButton(R.string.no, new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    getVaranegarActvity().popFragment();
-                }
-            });
-            dialog.show();
-        } else {
+        if (!cheack) {
+            if (adapter.isChanged()) {
+                CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+                dialog.setIcon(Icon.Warning);
+                dialog.setTitle(R.string.warning);
+                dialog.setMessage(R.string.do_you_want_to_save_changes);
+                dialog.setPositiveButton(R.string.yes, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        trySave();
+                    }
+                });
+                dialog.setNegativeButton(R.string.no, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        getVaranegarActvity().popFragment();
+                    }
+                });
+                dialog.show();
+            } else {
+                getVaranegarActvity().popFragment();
+            }
+        }else {
             getVaranegarActvity().popFragment();
         }
     }

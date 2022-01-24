@@ -37,6 +37,7 @@ import com.varanegar.supervisor.VisitorFilter;
 import com.varanegar.supervisor.customreport.orderreturn.ReturnFlatGenerator;
 import com.varanegar.supervisor.customreport.orderreturn.model.ReturnDealerModel;
 import com.varanegar.supervisor.customreport.orderreturn.model.ReturnReportFlat;
+import com.varanegar.supervisor.customreport.orderstatus.dbModel.OrderStatusReportFlatdbModel;
 import com.varanegar.supervisor.customreport.orderstatus.model.CustomerItem;
 import com.varanegar.supervisor.customreport.orderstatus.model.DealersItem;
 

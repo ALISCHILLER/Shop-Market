@@ -9,6 +9,7 @@ import com.varanegar.processor.annotations.Table;
 
 @Table
 public class ItemsModel extends BaseModel {
+
     @SerializedName("productCategory")
     @Expose
     @Column
