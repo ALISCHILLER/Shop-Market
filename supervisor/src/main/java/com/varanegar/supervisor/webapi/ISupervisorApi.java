@@ -12,6 +12,7 @@ import com.varanegar.supervisor.model.SupervisorTourId;
 import com.varanegar.supervisor.model.changeOrdersStatus.ChangeOrdersStatusmModel;
 import com.varanegar.supervisor.model.reviewreport.ReviewreportModel;
 import com.varanegar.supervisor.model.sendAnswersQustion.SyncGetTourModel;
+import com.varanegar.vaslibrary.model.CheckCustomerCreditsModel;
 import com.varanegar.vaslibrary.model.customer.SupervisorCustomerModel;
 import com.varanegar.supervisor.model.VisitorModel;
 import com.varanegar.supervisor.status.OrderSummaryRequestViewModel;
@@ -129,7 +130,7 @@ public interface ISupervisorApi {
     Call<OrderSummaryResultViewModel> getOrderPreview(@Body OrderSummaryRequestViewModel requestViewModel);
 
     @GET("api/v2/ngt/supervisor/operation")
-    Call<List<VisitorVisitInfoViewModel>> getVisitorsVisitInfo(@Query("SupervisorId") UUID supervisorId, @Query("DealerId") UUID dealerId);
+    Call<List<VisitorVisitInfoViewModel>> getVisitorsVisitInfo(@Query("SupervisorId") String supervisorId, @Query("DealersId") List<String> dealerId);
 
     @GET("api/v2/ngt/supervisor/ToggleCustomerState")
     Call<ResponseBody> getCustomerState(@Query ("id") UUID id,@Query("State") Boolean State);
@@ -157,4 +158,8 @@ public interface ISupervisorApi {
 
     @POST("api/v2/ngt/ReviewReport/GetReturnReport")
     Call<List<ReturnDealerModel>> GetReturnReport(@Body orderStatusModel param);
+
+    @GET("api/v2/ngt/customer/CheckCustomerCredits")
+    Call<List<CheckCustomerCreditsModel>>CheckCustomerCredits (
+            @Query("CustomersId") List<String> customerCode);
 }

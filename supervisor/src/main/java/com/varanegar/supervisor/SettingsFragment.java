@@ -75,7 +75,7 @@ public class SettingsFragment extends IMainPageFragment {
     private PairedItems nonVisitCount;
     private PairedItems returnCountPairedItems;
     private ConstraintLayout updatingQuestionnaire;
-
+    private List<VisitorModel> visitorModels;
     @Override
     protected View onCreateContentView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_supervisor_settings_layout, container, false);
@@ -120,7 +120,7 @@ public class SettingsFragment extends IMainPageFragment {
     }
 
     private void start() {
-        List<VisitorModel> visitorModels = new VisitorManager(getContext()).getAll();
+       visitorModels = new VisitorManager(getContext()).getAll();
         if (visitorModels.size() == 0) {
             getData();
         } else {
@@ -264,7 +264,19 @@ public class SettingsFragment extends IMainPageFragment {
         errorLayout.setVisibility(View.GONE);
         final UserModel userModel = UserManager.readFromFile(getContext());
         SupervisorApi api = new SupervisorApi(getContext());
-        api.runWebRequest(api.getVisitorsVisitInfo(userModel.UniqueId, visitorModel.UniqueId), new WebCallBack<List<VisitorVisitInfoViewModel>>() {
+        List<String> listVisitor = new ArrayList<>();
+
+       if (visitorModel.Name.equals("همه ویزیتورها")) {
+           for(int i=0;i<visitorModels.size();i++){
+               if(visitorModels.get(i).UniqueId!=null)
+               listVisitor.add(String.valueOf(visitorModels.get(i).UniqueId));
+           }
+       }else {
+           listVisitor.add(String.valueOf(userModel.UniqueId));
+       }
+
+
+        api.runWebRequest(api.getVisitorsVisitInfo(String.valueOf(userModel.UniqueId), listVisitor), new WebCallBack<List<VisitorVisitInfoViewModel>>() {
             @Override
             protected void onFinish() {
                 Activity activity = getActivity();
@@ -337,7 +349,7 @@ public class SettingsFragment extends IMainPageFragment {
                 Activity activity = getActivity();
                 if (isResumed() && activity != null && !activity.isFinishing()) {
                     parentFrag.enableTab();
-                    List<VisitorModel> visitorModels = new VisitorManager(activity).getAll();
+                     visitorModels = new VisitorManager(activity).getAll();
                     if (visitorModels.size() > 0)
                         populateSpinner(visitorModels);
                     finishProgress();

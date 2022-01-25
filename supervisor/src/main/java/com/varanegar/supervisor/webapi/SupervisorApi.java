@@ -16,6 +16,7 @@ import com.varanegar.supervisor.model.StatusConfigModel;
 import com.varanegar.supervisor.model.SupervisorTourId;
 import com.varanegar.supervisor.model.changeOrdersStatus.ChangeOrdersStatusmModel;
 import com.varanegar.supervisor.model.reviewreport.ReviewreportModel;
+import com.varanegar.vaslibrary.model.CheckCustomerCreditsModel;
 import com.varanegar.vaslibrary.model.customer.SupervisorCustomerModel;
 import com.varanegar.supervisor.model.VisitorModel;
 import com.varanegar.supervisor.status.OrderSummaryRequestViewModel;
@@ -106,6 +107,11 @@ public class SupervisorApi extends BaseApi implements ISupervisorApi {
     @Override
     public Call<List<ReturnDealerModel>> GetReturnReport(orderStatusModel param) {
         return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).GetReturnReport(param);
+    }
+
+    @Override
+    public Call<List<CheckCustomerCreditsModel>> CheckCustomerCredits(List<String> customerCode) {
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).CheckCustomerCredits(customerCode);
     }
 
     @Override
@@ -222,7 +228,7 @@ public class SupervisorApi extends BaseApi implements ISupervisorApi {
     }
 
     @Override
-    public Call<List<VisitorVisitInfoViewModel>> getVisitorsVisitInfo(UUID supervisorId, UUID dealerId) {
+    public Call<List<VisitorVisitInfoViewModel>> getVisitorsVisitInfo(String supervisorId, List<String> dealerId) {
         return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).getVisitorsVisitInfo(supervisorId, dealerId);
     }
 

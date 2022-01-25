@@ -31,6 +31,7 @@ import com.varanegar.framework.util.report.ReportAdapter;
 import com.varanegar.framework.util.report.ReportColumns;
 import com.varanegar.framework.util.report.ReportView;
 import com.varanegar.framework.util.report.SimpleReportAdapter;
+import com.varanegar.java.util.Currency;
 import com.varanegar.supervisor.IMainPageFragment;
 import com.varanegar.supervisor.R;
 import com.varanegar.supervisor.VisitorFilter;
@@ -42,9 +43,12 @@ import com.varanegar.supervisor.model.reviewreport.ReviewreportModel;
 import com.varanegar.supervisor.model.reviewreport.ReviewreportModelRepository;
 import com.varanegar.supervisor.model.reviewreport.ReviewreportView;
 import com.varanegar.supervisor.model.reviewreport.ItemsModel;
+import com.varanegar.supervisor.utill.dialog.BackMessageDialog;
 import com.varanegar.supervisor.webapi.SupervisorApi;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
 import com.varanegar.vaslibrary.manager.ProductGroupManager;
+import com.varanegar.vaslibrary.model.CheckCustomerCreditsModel;
+import com.varanegar.vaslibrary.model.customer.SupervisorCustomerModel;
 import com.varanegar.vaslibrary.model.customer.SupervisorFullCustomer;
 import com.varanegar.vaslibrary.model.productGroup.ProductGroup;
 import com.varanegar.vaslibrary.model.productGroup.ProductGroupModel;
@@ -71,6 +75,7 @@ public class ToursStatusFragment extends IMainPageFragment {
     private SimpleReportAdapter adapter;
     private TextView errorTextView;
     ArrayList<String> arr = new ArrayList();
+    ArrayList<String> ordernumberarr = new ArrayList();
     private FloatingActionButton fab_send;
 
     private String status_options;
@@ -87,7 +92,9 @@ public class ToursStatusFragment extends IMainPageFragment {
             @Override
             public void onClick(View v) {
                 if (arr.size()>0 && arr!=null){
-                    SendDataOrdor();
+
+                    getSendDataOrdor();
+                    //SendDataOrdor();
                 }else {
                     showErrorDialog("مشتری را انتخاب کنید ");
                 }
@@ -173,7 +180,7 @@ public class ToursStatusFragment extends IMainPageFragment {
 //                            itemsModels.tax=itemsModel.tax;
 //                        }
 //                    }
-                        int b=0;
+                        int b = 0;
 
                         List<ItemsModel> itemsModels1 = new ArrayList<>();
                         for (int i = 0; i < result.size(); i++) {
@@ -195,12 +202,21 @@ public class ToursStatusFragment extends IMainPageFragment {
 
                         itemsModelRepository.deleteAll();
                         if (itemsModels1.size() > 0) {
-                            itemsModelRepository.insert(itemsModels1);
+                            try {
+                                itemsModelRepository.insert(itemsModels1);
+                            } catch (Exception e) {
+                                showErrorDialog(context.getString(R.string.error_saving_request));
+                            }
+
                         }
                         reviewreportModelRepository.deleteAll();
-                        if (result.size() > 0)
+                        if (result.size() > 0) {
+                            try {
                             reviewreportModelRepository.insert(result);
-
+                            } catch(Exception e){
+                            showErrorDialog(context.getString(R.string.error_saving_request));
+                            }
+                    }
                         getdataReport();
 
 
@@ -462,8 +478,8 @@ public class ToursStatusFragment extends IMainPageFragment {
                        @Override
                        public void onClick(View v) {
                            if (entity.orderStatus.equals("D2")) {
-//                                            customercondition.setImageResource(R.drawable.ic_baseline_done_24);
-//                                            linearLayout.setBackgroundColor(Color.parseColor("#00BCD4"));
+                               customercondition.setImageResource(R.drawable.ic_baseline_done_24);
+                               linearLayout.setBackgroundColor(Color.parseColor("#00BCD4"));
                                CuteMessageDialog builder = new CuteMessageDialog(getActivity());
                                builder.setTitle(getActivity().getString(com.varanegar.vaslibrary.R.string.alert));
 
@@ -475,9 +491,11 @@ public class ToursStatusFragment extends IMainPageFragment {
                                builder.setPositiveButton(com.varanegar.vaslibrary.R.string.yes, new View.OnClickListener() {
                                    @Override
                                    public void onClick(View view) {
-                                       arr.add(entity.orderNumber);
+                                       arr.add(String.valueOf(entity.customerCode));
+                                       ordernumberarr.add(entity.orderNumber);
                                        Log.e("Tag", String.valueOf(arr));
-                                       SendDataOrdor();
+                                       fab_send.setVisibility(View.VISIBLE);
+                                     //  SendDataOrdor();
                                    }
                                });
                                builder.setNegativeButton(com.varanegar.vaslibrary.R.string.no, new View.OnClickListener() {
@@ -494,17 +512,18 @@ public class ToursStatusFragment extends IMainPageFragment {
                                });
                                builder.show();
 
-
-
-
-//                                            entity.orderStatus=" ";
+                               entity.orderStatus=" ";
 
                            }else {
-//                                            customercondition.setImageResource(R.drawable.ic_baseline_block_24);
-//                                            linearLayout.setBackgroundColor(Color.parseColor("#FFFFFF"));
-//                                            arr.remove(entity.orderNumber);
-//                                            entity.orderStatus="D2";
-//                                            Log.e("Tag", String.valueOf(arr));
+                               customercondition.setImageResource(R.drawable.ic_baseline_block_24);
+                               linearLayout.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                                            arr.remove(entity.customerCode);
+                                             ordernumberarr.remove(entity.orderNumber);
+                                            entity.orderStatus="D2";
+                                            Log.e("Tag", String.valueOf(arr));
+                                            if (arr.size()==0){
+                                                fab_send.setVisibility(View.GONE);
+                                            }
                            }
                        }
                    });
@@ -567,14 +586,83 @@ public class ToursStatusFragment extends IMainPageFragment {
 
 
 
-   private void SendDataOrdor(){
+   private void getSendDataOrdor(){
+       SupervisorApi api = new SupervisorApi(getContext());
        ChangeOrdersStatusmModel changeOrdersStatusmModel=new ChangeOrdersStatusmModel();
        changeOrdersStatusmModel.orderNumbers=arr;
        changeOrdersStatusmModel.status="r2";
        final ProgressDialog progressDialog = new ProgressDialog(getContext());
        progressDialog.setMessage("درحال ارسال اطلاعات");
        progressDialog.show();
+
+       api.runWebRequest(api.CheckCustomerCredits(arr), new WebCallBack<List<CheckCustomerCreditsModel>>() {
+           @Override
+           protected void onFinish() {
+               progressDialog.dismiss();
+           }
+
+           @Override
+           protected void onSuccess(List<CheckCustomerCreditsModel> result, Request request) {
+               String messageback = "";
+
+               if (result.size()>0) {
+                   for (int i = 0; i < result.size(); i++) {
+                       if (result.get(i).customerRemainCredit.compareTo(Currency.valueOf(0))<0)
+                        messageback =messageback+getTextBackMessage(result.get(i));
+                   }
+                   BackMessageDialog builder = new BackMessageDialog(getActivity());
+                   builder.setTitle(getActivity().getString(com.varanegar.vaslibrary.R.string.alert));
+                   builder.setData("برسی اعتبار" + " \n " + messageback);
+                   builder.setMessage("اعتبار مشتری برای ارسال روی بله کلیک کنید");
+                   builder.setPositiveButton(com.varanegar.vaslibrary.R.string.yes, new View.OnClickListener() {
+                       @Override
+                       public void onClick(View view) {
+                          // SendDataOrdor();
+
+                       }
+                   });
+                   builder.setNegativeButton(com.varanegar.vaslibrary.R.string.no, new View.OnClickListener() {
+                       @Override
+                       public void onClick(View view) {
+
+                       }
+                   });
+                   builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                       @Override
+                       public void onCancel(DialogInterface dialogInterface) {
+
+                       }
+                   });
+                   builder.show();
+               }
+           }
+
+           @Override
+           protected void onApiFailure(ApiError error, Request request) {
+               String err = WebApiErrorBody.log(error, getContext());
+               showErrorDialog(err);
+               progressDialog.dismiss();
+           }
+
+           @Override
+           protected void onNetworkFailure(Throwable t, Request request) {
+               Timber.e(t);
+               showErrorDialog(getContext().getString(R.string.error_connecting_to_server));
+               progressDialog.dismiss();;
+           }
+       });
+
+   }
+
+   private void SendDataOrdor(){
        SupervisorApi api = new SupervisorApi(getContext());
+
+       ChangeOrdersStatusmModel changeOrdersStatusmModel=new ChangeOrdersStatusmModel();
+       changeOrdersStatusmModel.orderNumbers=ordernumberarr;
+       changeOrdersStatusmModel.status="r2";
+       final ProgressDialog progressDialog = new ProgressDialog(getContext());
+       progressDialog.setMessage("درحال ارسال اطلاعات");
+       progressDialog.show();
        api.runWebRequest(api.senddataorder(changeOrdersStatusmModel), new WebCallBack<ResponseBody>() {
            @Override
            protected void onFinish() {
@@ -585,7 +673,10 @@ public class ToursStatusFragment extends IMainPageFragment {
            protected void onSuccess(ResponseBody result, Request request) {
                Log.e("CustomerFragment", String.valueOf(result));
                progressDialog.dismiss();
-               refresh_report();          }
+               ordernumberarr.clear();
+               arr.clear();
+               refresh_report();
+           }
 
            @Override
            protected void onApiFailure(ApiError error, Request request) {
@@ -602,8 +693,9 @@ public class ToursStatusFragment extends IMainPageFragment {
            }
        });
 
-       arr.clear();
    }
+
+
     private void showErrorDialog(String err) {
         if (isResumed()) {
             Context context = getContext();
@@ -617,7 +709,15 @@ public class ToursStatusFragment extends IMainPageFragment {
             }
         }
     }
-
+    public String getTextBackMessage(CheckCustomerCreditsModel entity){
+        String messageback =" ";
+            messageback= "کد مشتری:" +" "+ entity.customerBackOfficeCode+ "\n";
+            messageback=messageback+" اعتبار مشتری:"+entity.CustomerCreditLimit+ "\n";
+            messageback=messageback+"اعتبارمصرف شده:"+entity.customerUsedCredit+ "\n";
+            messageback=messageback+" اعتبار باقی مانده:"+" "+ entity.customerRemainCredit+ "\n";
+            messageback=messageback+"-----------------------------------------"+"\n";
+        return messageback;
+    }
     @Override
     public void onResume() {
         super.onResume();
