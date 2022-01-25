@@ -1420,10 +1420,10 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
         okButton.setTitle(R.string.save_order_request);
         okButton.setIcon(R.drawable.ic_done_white_36dp);
         okButton.setOnClickListener(() -> {
-            startProgressDialog();
-            List<String> customerCode=new ArrayList<>();
-            customerCode.add(customer.CustomerCode);
-            //                CustomerApi api = new CustomerApi(getContext());
+//            startProgressDialog();
+//            List<String> customerCode=new ArrayList<>();
+//            customerCode.add(customer.CustomerCode);
+//            CustomerApi api = new CustomerApi(getContext());
 //                api.runWebRequest(api.CheckCustomerCredits(customerCode), new WebCallBack<Boolean>() {
 //                    @Override
 //                    protected void onFinish() {
