@@ -41,6 +41,7 @@ import com.varanegar.framework.validation.ValidationListener;
 import com.varanegar.framework.validation.Validator;
 import com.varanegar.framework.validation.annotations.NotEmpty;
 import com.varanegar.framework.validation.annotations.NotEmptyChecker;
+import com.varanegar.supervisor.getTour_fragment.Get_Tour_Fragment;
 import com.varanegar.vaslibrary.base.BackupManager;
 import com.varanegar.vaslibrary.manager.UserManager;
 import com.varanegar.vaslibrary.manager.locationmanager.LogLevel;
@@ -286,7 +287,7 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
                                                 VaranegarApplication.getInstance().getDbHandler().emptyAllTablesExcept(User.UserTbl, SysConfig.SysConfigTbl);
                                                 MainVaranegarActivity activity = getVaranegarActvity();
                                                 if (activity != null && !activity.isFinishing() && isResumed())
-                                                    activity.putFragment(new MainFragment());
+                                                    activity.putFragment(new Get_Tour_Fragment());
                                                 setEnabled(true);
                                                 loginButton.setProgress(0);
                                                 getTrackingLicense();

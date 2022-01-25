@@ -14,11 +14,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.varanegar.framework.base.MainVaranegarActivity;
+import com.varanegar.framework.database.DbException;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.util.component.SlidingDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
+import com.varanegar.supervisor.model.VisitorManager;
 import com.varanegar.supervisor.webapi.SupervisorApi;
 import com.varanegar.vaslibrary.base.BackupManager;
 import com.varanegar.vaslibrary.manager.UserManager;
@@ -72,13 +74,22 @@ public class SettingsSlidingDialog extends SlidingDialog {
                 dialog.setIcon(Icon.Warning);
                 dialog.setMessage(R.string.do_you_want_to_log_out);
                 dialog.setNegativeButton(R.string.no, null);
+
                 dialog.setPositiveButton(R.string.yes, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        VisitorManager visitorManager = new VisitorManager(getContext());
                         getContext().getSharedPreferences("TrackingConfig", Context.MODE_PRIVATE).edit().clear().apply();
                         getContext().getSharedPreferences("TourStatusConfig", Context.MODE_PRIVATE).edit().clear().apply();
                         getContext().getSharedPreferences("ReportConfig", Context.MODE_PRIVATE).edit().clear().apply();
-                        UserManager.logout(getVaranegarActvity());
+                        try {
+                            visitorManager.deleteAll();
+                        } catch (DbException e) {
+                            e.printStackTrace();
+                        }
+                        if (!getVaranegarActvity().isFinishing())
+                            getVaranegarActvity().finish();
+//                      UserManager.logout(getVaranegarActvity());
                     }
                 });
                 dialog.show();
