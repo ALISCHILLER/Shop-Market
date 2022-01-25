@@ -92,9 +92,9 @@ public class ToursStatusFragment extends IMainPageFragment {
             @Override
             public void onClick(View v) {
                 if (arr.size()>0 && arr!=null){
-
-                    getSendDataOrdor();
-                    //SendDataOrdor();
+                    fab_send.setEnabled(false);
+                   // getSendDataOrdor();
+                    SendDataOrdor();
                 }else {
                     showErrorDialog("مشتری را انتخاب کنید ");
                 }
@@ -108,7 +108,6 @@ public class ToursStatusFragment extends IMainPageFragment {
                     @Override
                     public void done() {
                         dialog.dismiss();
-
                         refresh_report();
                     }
                 };
@@ -666,6 +665,7 @@ public class ToursStatusFragment extends IMainPageFragment {
        api.runWebRequest(api.senddataorder(changeOrdersStatusmModel), new WebCallBack<ResponseBody>() {
            @Override
            protected void onFinish() {
+               fab_send.setEnabled(true);
 
            }
 
@@ -676,6 +676,8 @@ public class ToursStatusFragment extends IMainPageFragment {
                ordernumberarr.clear();
                arr.clear();
                refresh_report();
+               fab_send.setEnabled(true);
+
            }
 
            @Override
@@ -683,6 +685,7 @@ public class ToursStatusFragment extends IMainPageFragment {
                String err = WebApiErrorBody.log(error, getContext());
                showErrorDialog(err);
                progressDialog.dismiss();
+               fab_send.setEnabled(true);
            }
 
            @Override
@@ -690,6 +693,7 @@ public class ToursStatusFragment extends IMainPageFragment {
                Timber.e(t);
                showErrorDialog(getContext().getString(R.string.error_connecting_to_server));
                progressDialog.dismiss();
+               fab_send.setEnabled(true);
            }
        });
 
