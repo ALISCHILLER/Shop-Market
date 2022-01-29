@@ -160,11 +160,12 @@ public class ToursStatusFragment extends IMainPageFragment {
 
                 @Override
                 protected void onSuccess(List<ReviewreportModel> result, Request request) {
-                    if(result.size()>0) {
-                        ReviewreportModelRepository reviewreportModelRepository =
-                                new ReviewreportModelRepository();
+                    ReviewreportModelRepository reviewreportModelRepository =
+                            new ReviewreportModelRepository();
 
-                        ItemsModelRepository itemsModelRepository = new ItemsModelRepository();
+                    ItemsModelRepository itemsModelRepository = new ItemsModelRepository();
+                    if(result.size()>0) {
+
 
 
 //                    ItemsModel itemsModels=new ItemsModel();
@@ -220,6 +221,9 @@ public class ToursStatusFragment extends IMainPageFragment {
                         getdataReport();
 
 
+                    }else {
+                        reviewreportModelRepository.deleteAll();
+                        getdataReport();
                     }
 
                 }
