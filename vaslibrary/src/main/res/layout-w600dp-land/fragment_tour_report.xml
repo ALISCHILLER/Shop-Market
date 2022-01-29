@@ -261,6 +261,14 @@
                             android:orientation="horizontal"
                             app:singleLine="true"
                             app:title="@string/total_tour_time" />
+
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/send_point"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="تعداد پوینت های ارسال شده" />
                     </LinearLayout>
                 </ScrollView>
 

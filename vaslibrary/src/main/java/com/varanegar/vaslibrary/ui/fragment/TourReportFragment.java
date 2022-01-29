@@ -68,6 +68,7 @@ import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.customeractiontimemanager.CustomerActionTimeManager;
 import com.varanegar.vaslibrary.manager.customercallmanager.CustomerCallManager;
 import com.varanegar.vaslibrary.manager.image.ImageType;
+import com.varanegar.vaslibrary.manager.locationmanager.LocationManager;
 import com.varanegar.vaslibrary.manager.productorderviewmanager.ProductOrderViewManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
@@ -78,6 +79,7 @@ import com.varanegar.vaslibrary.manager.updatemanager.UpdateQueue;
 import com.varanegar.vaslibrary.model.UpdateKey;
 import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.model.customercall.CustomerCallType;
+import com.varanegar.vaslibrary.model.location.LocationModel;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.model.tour.TourModel;
 import com.varanegar.vaslibrary.model.update.TourUpdateLog;
@@ -102,7 +104,9 @@ import com.varanegar.vaslibrary.webapi.tour.TourApi;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -838,6 +842,8 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
         reportLayout = view.findViewById(R.id.report_layout);
         tourProgressLayout = view.findViewById(R.id.tour_progress_layout);
         totalProgressBar = view.findViewById(R.id.total_progress_bar);
+
+         PairedItems send_point=view.findViewById(R.id.send_point);
         if(!VaranegarApplication.is(VaranegarApplication.AppId.Dist)){
             refreshtourlin.setVisibility(View.GONE);
         }
@@ -850,6 +856,25 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
             activity = null;
             return view;
         }
+        Date date =new Date();
+        SimpleDateFormat postFormater = new SimpleDateFormat("MMMM dd, yyyy");
+        String d = postFormater.format(date);
+        final LocationManager locationManager = new LocationManager(getActivity());
+        List<LocationModel> locationModels = Collections.singletonList(locationManager.getLocationModel());
+
+        List<LocationModel> list=new ArrayList<>();
+        for (LocationModel locationModel:locationModels
+             ) {
+            String newDateStr = postFormater.format(locationModel.Date);
+            if (newDateStr.equals(d)){
+                if (locationModel.IsSend==true){
+                    list.add(locationModel);
+                }
+            }
+        }
+        int i=list.size();
+        send_point.setValue(String.valueOf(list.size()));
+
         return view;
     }
 

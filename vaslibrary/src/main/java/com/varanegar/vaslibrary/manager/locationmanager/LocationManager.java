@@ -180,6 +180,9 @@ public class LocationManager extends BaseManager<LocationModel> {
 
     }
 
+    public LocationModel getLocationModel(){
+        return getItem(new Query().from(Location.LocationTbl));
+    }
     public LocationModel getLastLocation() {
         return getItem(new Query().from(Location.LocationTbl).orderByDescending(Location.rowid));
     }
