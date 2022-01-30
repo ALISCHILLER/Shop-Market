@@ -92,9 +92,33 @@ public class ToursStatusFragment extends IMainPageFragment {
             @Override
             public void onClick(View v) {
                 if (arr.size()>0 && arr!=null){
-                    fab_send.setEnabled(false);
-                   // getSendDataOrdor();
-                    SendDataOrdor();
+
+
+                    CuteMessageDialog builder = new CuteMessageDialog(getActivity());
+                    builder.setTitle(getActivity().getString(com.varanegar.vaslibrary.R.string.alert));
+                    builder.setMessage("سفارش مشتری به حالت تایید تغییر می کند");
+                    builder.setPositiveButton(com.varanegar.vaslibrary.R.string.yes, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            // getSendDataOrdor();
+                            fab_send.setEnabled(false);
+                            SendDataOrdor();
+                        }
+                    });
+                    builder.setNegativeButton(com.varanegar.vaslibrary.R.string.no, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    });
+                    builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialogInterface) {
+
+                        }
+                    });
+                    builder.show();
+
                 }else {
                     showErrorDialog("مشتری را انتخاب کنید ");
                 }
@@ -483,37 +507,13 @@ public class ToursStatusFragment extends IMainPageFragment {
                            if (entity.orderStatus.equals("D2")) {
                                customercondition.setImageResource(R.drawable.ic_baseline_done_24);
                                linearLayout.setBackgroundColor(Color.parseColor("#00BCD4"));
-                               CuteMessageDialog builder = new CuteMessageDialog(getActivity());
-                               builder.setTitle(getActivity().getString(com.varanegar.vaslibrary.R.string.alert));
 
-                               if (entity.orderStatus.equals("D2")) {
-                                   builder.setMessage("سفارش مشتری به حالت تایید تغییر می کند");
-                               } else if (!entity.orderStatus.equals("D2")){
-
-                               }
-                               builder.setPositiveButton(com.varanegar.vaslibrary.R.string.yes, new View.OnClickListener() {
-                                   @Override
-                                   public void onClick(View view) {
                                        arr.add(String.valueOf(entity.customerCode));
                                        ordernumberarr.add(entity.orderNumber);
                                        Log.e("Tag", String.valueOf(arr));
                                        fab_send.setVisibility(View.VISIBLE);
                                      //  SendDataOrdor();
-                                   }
-                               });
-                               builder.setNegativeButton(com.varanegar.vaslibrary.R.string.no, new View.OnClickListener() {
-                                   @Override
-                                   public void onClick(View view) {
 
-                                   }
-                               });
-                               builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                                   @Override
-                                   public void onCancel(DialogInterface dialogInterface) {
-
-                                   }
-                               });
-                               builder.show();
 
                                entity.orderStatus=" ";
 

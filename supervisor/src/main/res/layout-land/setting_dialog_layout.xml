@@ -23,14 +23,14 @@
                 android:layout_height="80dp"
                 android:layout_gravity="center_horizontal"
                 android:background="@drawable/btn_background"
-                android:src="@drawable/ic_exit_white_76dp" />
+                android:src="@drawable/ic_cloud_upload_white_48dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="@string/exit_app" />
+                android:text="ارسال تور" />
 
         </LinearLayout>
 
@@ -102,7 +102,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="@string/get_data" />
+                android:text="بروزرسانی اطلاعات"/>
 
         </LinearLayout>
 
@@ -113,6 +113,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:orientation="vertical">
 
             <ImageView

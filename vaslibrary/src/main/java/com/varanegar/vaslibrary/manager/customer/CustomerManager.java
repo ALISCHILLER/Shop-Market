@@ -105,7 +105,8 @@ public class CustomerManager extends BaseManager<CustomerModel> {
 
     private Date getCustomerLatestUpdate(UUID customerId) {
         UpdateManager updateManager = new UpdateManager(getContext());
-        UpdateLogModel model = updateManager.getItem(new Query().from(UpdateLog.UpdateLogTbl).whereAnd(Criteria.equals(UpdateLog.Name, "customer_update_" + customerId.toString())));
+        UpdateLogModel model = updateManager.getItem(new Query().from(UpdateLog.UpdateLogTbl)
+                .whereAnd(Criteria.equals(UpdateLog.Name, "customer_update_" + customerId.toString())));
         if (model == null) {
             return new Date(87, 3, 1);
         } else {
@@ -116,7 +117,8 @@ public class CustomerManager extends BaseManager<CustomerModel> {
     private void setCustomerLatestUpdate(UUID customerId) {
         UpdateManager updateManager = new UpdateManager(getContext());
         UpdateLogModel model;
-        model = updateManager.getItem(new Query().from(UpdateLog.UpdateLogTbl).whereAnd(Criteria.equals(UpdateLog.Name, "customer_update_" + customerId.toString())));
+        model = updateManager.getItem(new Query().from(UpdateLog.UpdateLogTbl)
+                .whereAnd(Criteria.equals(UpdateLog.Name, "customer_update_" + customerId.toString())));
         if (model == null) {
             model = new UpdateLogModel();
             model.UniqueId = UUID.randomUUID();

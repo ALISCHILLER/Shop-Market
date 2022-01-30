@@ -51,17 +51,21 @@ public class CustomerPathViewManager extends BaseManager<CustomerPathViewModel> 
             Query subQuery = new Query();
             subQuery.from(UnConfirmedCustomerPathView.UnConfirmedCustomerPathViewTbl);
             SysConfigManager sysConfigManager = new SysConfigManager(context);
-            SysConfigModel inactiveCustomers = sysConfigManager.read(ConfigKey.SendInactiveCustomers, SysConfigManager.cloud);
-            if (SysConfigManager.compare(inactiveCustomers, false))
-                subQuery.whereAnd(Criteria.equals(UnConfirmedCustomerPathView.IsActive, true).or(Criteria.equals(UnConfirmedCustomerPathView.IsNewCustomer, 1)));
+            SysConfigModel inactiveCustomers = sysConfigManager
+                    .read(ConfigKey.SendInactiveCustomers, SysConfigManager.cloud);
+//            if (SysConfigManager.compare(inactiveCustomers, false))
+//                subQuery.whereAnd(Criteria.equals(UnConfirmedCustomerPathView.IsActive, true)
+//                        .or(Criteria.equals(UnConfirmedCustomerPathView.IsNewCustomer, 1)));
             return subQuery;
         } else if (checkConfirmStatus) {
             Query subQuery = new Query();
             subQuery.from(CustomerPathView.CustomerPathViewTbl);
             SysConfigManager sysConfigManager = new SysConfigManager(context);
-            SysConfigModel inactiveCustomers = sysConfigManager.read(ConfigKey.SendInactiveCustomers, SysConfigManager.cloud);
-            if (SysConfigManager.compare(inactiveCustomers, false))
-                subQuery.whereAnd(Criteria.equals(CustomerPathView.IsActive, true).or(Criteria.equals(CustomerPathView.IsNewCustomer, 1)));
+            SysConfigModel inactiveCustomers = sysConfigManager
+                    .read(ConfigKey.SendInactiveCustomers, SysConfigManager.cloud);
+//            if (SysConfigManager.compare(inactiveCustomers, false))
+//                subQuery.whereAnd(Criteria.equals(CustomerPathView.IsActive, true)
+//                .or(Criteria.equals(CustomerPathView.IsNewCustomer, 1)));
             return subQuery;
         } else {
             Query subQuery = new Query();

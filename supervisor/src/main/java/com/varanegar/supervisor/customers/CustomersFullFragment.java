@@ -70,6 +70,7 @@ public class CustomersFullFragment  extends IMainPageFragment {
     protected View onCreateContentView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_supervisor_customer_list_layout, container, false);
         visitorNameSpinner = view.findViewById(R.id.visitor_name_paired_items);
+        view.findViewById(R.id.fab).setVisibility(View.GONE);
         errorTextView = view.findViewById(R.id.error_text_view);
         clearSearchImageView = view.findViewById(R.id.clear_text);
         clearSearchImageView.setOnClickListener(new View.OnClickListener() {

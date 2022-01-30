@@ -310,7 +310,9 @@ public class CustomersFragment extends IMainPageFragment {
                             }
                         });
 
-                        view.findViewById(R.id.Questionnaire_image_view).setOnClickListener(new View.OnClickListener() {
+                        ImageView imageView=view.findViewById(R.id.Questionnaire_image_view);
+                        imageView.setVisibility(View.GONE);
+                        imageView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 QuestionnaireManager questionnaireManager = new QuestionnaireManager(getContext());
@@ -473,6 +475,8 @@ public class CustomersFragment extends IMainPageFragment {
     }
 
     private void requsttoconditionCustomer(SupervisorCustomerModel entity){
+
+
         final ProgressDialog progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage("درحال ارسال اطلاعات");
         progressDialog.show();

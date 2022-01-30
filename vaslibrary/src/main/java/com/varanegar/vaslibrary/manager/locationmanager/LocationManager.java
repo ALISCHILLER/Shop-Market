@@ -161,7 +161,8 @@ public class LocationManager extends BaseManager<LocationModel> {
 
     public LocationModel getLastLocation(Class<? extends BaseEventLocationViewModel> locationViewModelClass) {
         return getItem(new Query().from(Location.LocationTbl)
-                .whereAnd(Criteria.equals(Location.EventType, locationViewModelClass.getName())).orderByDescending(Location.rowid));
+                .whereAnd(Criteria.equals(Location.EventType, locationViewModelClass.getName()))
+                .orderByDescending(Location.rowid));
     }
 
     public List<LocationModel> getLocations(@NonNull UUID customerId, @Nullable UUID tourId) {
@@ -180,8 +181,27 @@ public class LocationManager extends BaseManager<LocationModel> {
 
     }
 
-    public LocationModel getLocationModel(){
-        return getItem(new Query().from(Location.LocationTbl));
+    public List<LocationModel> getLocationModel(){
+        return getItems(new Query().from(Location.LocationTbl));
+    }
+
+    public LocationModel getLastPointLocationIsSend() {
+        return getItem(
+                new Query()
+                        .from(Location.LocationTbl)
+                        .whereAnd(Criteria.equals(Location.IsSend, true))
+                        .orderByDescending(Location.Date)
+        );
+    }
+
+    /**
+     *آخرین point
+     * @return
+     */
+    public LocationModel getLastPointLocation() {
+        return getItem(
+                new Query()
+                        .from(Location.LocationTbl).orderByDescending(Location.Date));
     }
     public LocationModel getLastLocation() {
         return getItem(new Query().from(Location.LocationTbl).orderByDescending(Location.rowid));

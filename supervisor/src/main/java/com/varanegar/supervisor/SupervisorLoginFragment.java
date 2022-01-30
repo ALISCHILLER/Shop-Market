@@ -250,12 +250,12 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
 
 
                 String deviceId = getDeviceId();
-                if (deviceId == null) {
-                    showErrorMessage(R.string.device_id_is_not_available);
-                    setEnabled(true);
-                    loginButton.setProgress(0);
-                    return;
-                }
+//                if (deviceId == null) {
+//                    showErrorMessage(R.string.device_id_is_not_available);
+//                    setEnabled(true);
+//                    loginButton.setProgress(0);
+//                    return;
+//                }
 
                 DeviceApi deviceApi = new DeviceApi(getContext());
                 CompanyDeviceAppData data = new CompanyDeviceAppData();

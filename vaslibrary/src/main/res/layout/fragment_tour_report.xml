@@ -206,7 +206,13 @@
                             android:orientation="horizontal"
                             app:singleLine="true"
                             app:title="@string/total_tour_time" />
-
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/all_point"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="کل پونیت" />
                         <com.varanegar.framework.util.component.PairedItems
                             android:id="@+id/send_point"
                             android:layout_width="match_parent"
@@ -214,7 +220,28 @@
                             android:orientation="horizontal"
                             app:singleLine="true"
                             app:title="تعداد پوینت های ارسال شده" />
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/notsend_point"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="تعداد پوینت های ارسال نشده" />
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/last_send_point"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="آخرین پوینت ارسال شده" />
 
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/last_point"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="آخرین پوینت " />
 
                     </LinearLayout>
                 </ScrollView>

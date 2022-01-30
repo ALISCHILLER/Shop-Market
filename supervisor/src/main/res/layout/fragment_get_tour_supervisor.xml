@@ -107,6 +107,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_small"
+            android:visibility="gone"
             android:orientation="vertical">
 
             <ImageView
@@ -284,7 +285,10 @@
                 android:textColor="@color/black" />
         </LinearLayout>
 
-
     </LinearLayout>
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="@drawable/supervisor"
+        android:layout_height="match_parent"
+        ></LinearLayout>
 </LinearLayout>

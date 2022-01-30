@@ -69,6 +69,30 @@ public class DataManager {
         _api = new SupervisorApi(_context);
     }
 
+    public void getUpdate(Callback callback){
+        final int[] c = {0};
+        final boolean[] hasErr = {false};
+        final int maxReq = 2;
+        Callback callbackInner = new Callback() {
+            @Override
+            public void onSuccess() {
+                if (!hasErr[0]) {
+                    c[0]++;
+                    if (c[0] >= maxReq) callback.onSuccess();
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                if (!hasErr[0]){
+                    hasErr[0] = true;
+                    callback.onError(error);
+                }
+            }
+        };
+        getVisitor2(callbackInner, () -> getSupervisorCustomers2(callbackInner));
+
+    }
     public void getAllData(Callback callback) {
         final int[] c = {0};
         final boolean[] hasErr = {false};
@@ -103,6 +127,8 @@ public class DataManager {
 
         supervisorTourSent2(callbackInner);
     }
+
+
 
     public void getVisitor2(final Callback callback, final AfterCallback afterCallback) {
         visitorIds = new ArrayList<>();
@@ -386,6 +412,37 @@ public class DataManager {
     }
 
 
+    public void tourreceived(Callback callback){
+        SharedPreferences sharedPreferences = _context
+                .getSharedPreferences("SupervisorId", Context.MODE_PRIVATE);
+        UUID userModel = UUID.
+                fromString(sharedPreferences.getString("SupervisorIduniqueId", null));
+
+        SupervisorApi api = new SupervisorApi(_context);
+        api.runWebRequest(api.tourreceived(userModel), new WebCallBack<Void>() {
+            @Override
+            protected void onFinish() {
+
+            }
+
+            @Override
+            protected void onSuccess(Void result, Request request) {
+                callback.onSuccess();
+            }
+
+            @Override
+            protected void onApiFailure(ApiError error, Request request) {
+                String err = WebApiErrorBody.log(error, _context);
+                callback.onError(err);
+            }
+
+            @Override
+            protected void onNetworkFailure(Throwable t, Request request) {
+                callback.onError(_context.getString(R.string.connection_to_server_failed));
+            }
+        });
+
+    }
 
     public static void getVisitor(final Context context, final Callback callback) {
         final UserModel userModel = UserManager.readFromFile(context);

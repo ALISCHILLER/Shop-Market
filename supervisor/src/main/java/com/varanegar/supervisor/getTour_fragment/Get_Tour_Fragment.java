@@ -176,14 +176,14 @@ public class Get_Tour_Fragment extends VaranegarFragment {
                 SharedPreferences sharedPreferences = getContext().getSharedPreferences("SupervisorId", Context.MODE_PRIVATE);
                 UUID userModel = UUID.fromString(sharedPreferences.getString("SupervisorIduniqueId", null));
                 SupervisorApi supervisorApi=new SupervisorApi(getContext());
-                supervisorApi.runWebRequest(supervisorApi.tourreceived(userModel), new WebCallBack<String>() {
+                supervisorApi.runWebRequest(supervisorApi.tourreceived(userModel), new WebCallBack<Void>() {
                     @Override
                     protected void onFinish() {
 
                     }
 
                     @Override
-                    protected void onSuccess(String result, Request request) {
+                    protected void onSuccess(Void result, Request request) {
 
                     }
 

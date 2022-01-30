@@ -844,6 +844,11 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
         totalProgressBar = view.findViewById(R.id.total_progress_bar);
 
          PairedItems send_point=view.findViewById(R.id.send_point);
+         PairedItems last_send_point=view.findViewById(R.id.last_send_point);
+        PairedItems  all_point=view.findViewById(R.id.all_point);
+        PairedItems last_point=view.findViewById(R.id.last_point);
+
+        PairedItems notsend_point=view.findViewById(R.id.notsend_point);
         if(!VaranegarApplication.is(VaranegarApplication.AppId.Dist)){
             refreshtourlin.setVisibility(View.GONE);
         }
@@ -856,24 +861,48 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
             activity = null;
             return view;
         }
+
+
+        /**
+         * دریافت point
+         */
+
         Date date =new Date();
         SimpleDateFormat postFormater = new SimpleDateFormat("MMMM dd, yyyy");
+       SimpleDateFormat df = new SimpleDateFormat("HH:mm");
         String d = postFormater.format(date);
         final LocationManager locationManager = new LocationManager(getActivity());
-        List<LocationModel> locationModels = Collections.singletonList(locationManager.getLocationModel());
-
+        List<LocationModel> locationModels = locationManager.getLocationModel();
+        List<LocationModel> lastISSend= Collections.singletonList(locationManager.getLastPointLocationIsSend());
+        List<LocationModel> last= Collections.singletonList(locationManager.getLastPointLocation());
         List<LocationModel> list=new ArrayList<>();
-        for (LocationModel locationModel:locationModels
-             ) {
-            String newDateStr = postFormater.format(locationModel.Date);
-            if (newDateStr.equals(d)){
-                if (locationModel.IsSend==true){
-                    list.add(locationModel);
-                }
-            }
-        }
-        int i=list.size();
-        send_point.setValue(String.valueOf(list.size()));
+        List<LocationModel> listnot=new ArrayList<>();
+       if (locationModels.get(0)!=null) {
+
+           for (LocationModel locationModel : locationModels
+           ) {
+               if (locationModel.Date!=null) {
+                   String newDateStr = postFormater.format(locationModel.Date);
+                   if (newDateStr.equals(d)) {
+                       if (locationModel.IsSend == true) {
+                           list.add(locationModel);
+                       }else{
+                           listnot.add(locationModel);
+                       }
+                   }
+               }
+           }
+
+           String newTimeLast = df.format(last.get(0).Date);
+           String newTimeIsLast = df.format(lastISSend.get(0).Date);
+           notsend_point.setValue(String.valueOf(listnot.size()));
+           all_point.setValue(String.valueOf(locationModels.size()));
+           send_point.setValue(String.valueOf(list.size()));
+           last_send_point.setValue(newTimeIsLast);
+           last_point.setValue(newTimeLast);
+       }
+
+        CustomerManager customerManager=new CustomerManager(getContext());
 
         return view;
     }

@@ -78,18 +78,47 @@ public class SettingsSlidingDialog extends SlidingDialog {
                 dialog.setPositiveButton(R.string.yes, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        VisitorManager visitorManager = new VisitorManager(getContext());
-                        getContext().getSharedPreferences("TrackingConfig", Context.MODE_PRIVATE).edit().clear().apply();
-                        getContext().getSharedPreferences("TourStatusConfig", Context.MODE_PRIVATE).edit().clear().apply();
-                        getContext().getSharedPreferences("ReportConfig", Context.MODE_PRIVATE).edit().clear().apply();
-                        try {
-                            visitorManager.deleteAll();
-                        } catch (DbException e) {
-                            e.printStackTrace();
-                        }
-                        if (!getVaranegarActvity().isFinishing())
-                            getVaranegarActvity().finish();
-//                      UserManager.logout(getVaranegarActvity());
+                        final ProgressDialog progressDialog = new ProgressDialog(getContext());
+                        progressDialog.setMessage("ارسال اطلاعات..");
+                        progressDialog.show();
+                        DataManager dataManager=new DataManager(getContext());
+                        dataManager.tourreceived(new DataManager.Callback() {
+                            @Override
+                            public void onSuccess() {
+                                try {
+                                    progressDialog.dismiss();
+                                    dismissAllowingStateLoss();
+                                } catch (Exception ignored) {
+                                }
+                                VisitorManager visitorManager = new VisitorManager(getContext());
+                                getContext().getSharedPreferences("TrackingConfig", Context.MODE_PRIVATE).edit().clear().apply();
+                                getContext().getSharedPreferences("TourStatusConfig", Context.MODE_PRIVATE).edit().clear().apply();
+                                getContext().getSharedPreferences("ReportConfig", Context.MODE_PRIVATE).edit().clear().apply();
+                                try {
+                                    visitorManager.deleteAll();
+                                } catch (DbException e) {
+                                    e.printStackTrace();
+                                }
+                                if (!getVaranegarActvity().isFinishing())
+                                    getVaranegarActvity().finish();
+                                //UserManager.logout(getVaranegarActvity());
+                            }
+
+                            @Override
+                            public void onError(String error) {
+                                showError(error);
+                                if (progressDialog != null && progressDialog.isShowing()) {
+                                    try {
+                                        progressDialog.dismiss();
+                                    } catch (Exception ignored) {
+                                    }
+                                }
+                            }
+                        });
+
+
+
+
                     }
                 });
                 dialog.show();
@@ -178,45 +207,7 @@ public class SettingsSlidingDialog extends SlidingDialog {
                 final ProgressDialog progressDialog = new ProgressDialog(getContext());
                 progressDialog.setMessage(getString(R.string.downloading_data));
                 progressDialog.show();
-                SharedPreferences sharedPreferences = getContext().getSharedPreferences("SupervisorId", Context.MODE_PRIVATE);
-                UUID userModel = UUID.fromString(sharedPreferences.getString("SupervisorIduniqueId", null));
-                SupervisorApi supervisorApi=new SupervisorApi(getContext());
-                supervisorApi.runWebRequest(supervisorApi.tourreceived(userModel), new WebCallBack<String>() {
-                    @Override
-                    protected void onFinish() {
 
-                    }
-
-                    @Override
-                    protected void onSuccess(String result, Request request) {
-
-                    }
-
-                    @Override
-                    protected void onApiFailure(ApiError error, Request request) {
-                        String err = WebApiErrorBody.log(error, getContext());
-                        showError(err);
-                        if (progressDialog != null && progressDialog.isShowing()) {
-                            try {
-                                progressDialog.dismiss();
-                            } catch (Exception ignored) {
-
-                            }
-                        }
-                    }
-
-                    @Override
-                    protected void onNetworkFailure(Throwable t, Request request) {
-                        showError(getContext().getString(R.string.error_connecting_to_server));
-                        if (progressDialog != null && progressDialog.isShowing()) {
-                            try {
-                                progressDialog.dismiss();
-                            } catch (Exception ignored) {
-
-                            }
-                        }
-                    }
-                });
 
             }
         });
@@ -226,17 +217,18 @@ public class SettingsSlidingDialog extends SlidingDialog {
                 final ProgressDialog progressDialog = new ProgressDialog(getContext());
                 progressDialog.setMessage(getString(R.string.downloading_data));
                 progressDialog.show();
-                DataManager.getVisitor(getContext(), new DataManager.Callback() {
+                DataManager dataManager=new DataManager(getContext());
+                dataManager.getUpdate(new DataManager.Callback() {
                     @Override
                     public void onSuccess() {
                         if (progressDialog != null && progressDialog.isShowing()) {
-                            try {
-                                progressDialog.dismiss();
-                                dismissAllowingStateLoss();
-                            } catch (Exception ignored) {
+                                    try {
+                                        progressDialog.dismiss();
+                                        dismissAllowingStateLoss();
+                                    } catch (Exception ignored) {
 
-                            }
-                        }
+                                    }
+                                }
                     }
 
                     @Override
@@ -246,11 +238,36 @@ public class SettingsSlidingDialog extends SlidingDialog {
                             try {
                                 progressDialog.dismiss();
                             } catch (Exception ignored) {
-
                             }
                         }
                     }
                 });
+
+//                        DataManager.getVisitor(getContext(), new DataManager.Callback() {
+//                            @Override
+//                            public void onSuccess() {
+//                                if (progressDialog != null && progressDialog.isShowing()) {
+//                                    try {
+//                                        progressDialog.dismiss();
+//                                        dismissAllowingStateLoss();
+//                                    } catch (Exception ignored) {
+//
+//                                    }
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void onError(String error) {
+//                                showError(error);
+//                                if (progressDialog != null && progressDialog.isShowing()) {
+//                                    try {
+//                                        progressDialog.dismiss();
+//                                    } catch (Exception ignored) {
+//
+//                                    }
+//                                }
+//                            }
+//                        });
 
             }
         });

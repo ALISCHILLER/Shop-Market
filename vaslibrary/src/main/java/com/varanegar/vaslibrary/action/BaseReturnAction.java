@@ -74,6 +74,16 @@ public class BaseReturnAction extends CheckDistanceAction {
         if (canNotEditOperationAfterPrint())
             return getActivity().getString(R.string.can_not_edit_customer_operation_after_print);
 
+        if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+            SysConfigManager sysConfigManager = new SysConfigManager(getActivity());
+            SysConfigModel inactiveCustomers = sysConfigManager.read(ConfigKey.SendInactiveCustomers, SysConfigManager.cloud);
+            SysConfigModel TakeOrderFromInactiveCustomers = sysConfigManager.read(ConfigKey.TakeOrderFromInactiveCustomers, SysConfigManager.cloud);
+            if (!getCustomer().IsActive && (SysConfigManager.compare(inactiveCustomers, true)) && SysConfigManager.compare(TakeOrderFromInactiveCustomers, false))
+                return getActivity().getString(R.string.the_customer_is_disabled_t);
+        } else {
+            if (!getCustomer().IsActive && !(getCustomer().IsNewCustomer) && checkCloudConfig(ConfigKey.ScientificVisit, false))
+                return getActivity().getString(R.string.the_customer_is_disabled_t);
+        }
         List<UUID> enabledReturnTypes = new CustomerCallReturnManager(getActivity()).getEnabledReturnTypes(getSelectedId());
 
         if (enabledReturnTypes.size() == 0) {
