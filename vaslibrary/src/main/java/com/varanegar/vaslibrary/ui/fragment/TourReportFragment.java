@@ -877,7 +877,7 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
         List<LocationModel> last= Collections.singletonList(locationManager.getLastPointLocation());
         List<LocationModel> list=new ArrayList<>();
         List<LocationModel> listnot=new ArrayList<>();
-       if (locationModels.get(0)!=null) {
+       if (locationModels.size()>0) {
 
            for (LocationModel locationModel : locationModels
            ) {
