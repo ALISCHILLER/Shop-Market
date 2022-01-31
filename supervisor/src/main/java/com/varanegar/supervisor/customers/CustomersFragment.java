@@ -152,35 +152,7 @@ public class CustomersFragment extends IMainPageFragment {
         view.findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final ProgressDialog progressDialog = new ProgressDialog(getContext());
-                progressDialog.setMessage(getString(R.string.downloading_data));
-                progressDialog.show();
-                DataManager dataManager=new DataManager(getContext());
-                dataManager.getNewCustomers2(new DataManager.Callback() {
-                    @Override
-                    public void onSuccess() {
-                        if (progressDialog != null && progressDialog.isShowing()) {
-                            try {
-                                progressDialog.dismiss();
-                                refreshAdapter();
-                            } catch (Exception ignored) {
-
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onError(String error) {
-                        if (progressDialog != null && progressDialog.isShowing()) {
-                            try {
-                                progressDialog.dismiss();
-                            } catch (Exception ignored) {
-
-                            }
-                        }
-                    }
-                });
-
+                TourResat();
             }
         });
         return view;
@@ -514,7 +486,9 @@ public class CustomersFragment extends IMainPageFragment {
         final ProgressDialog progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage(getString(R.string.downloading_data));
         progressDialog.show();
-        DataManager.getVisitor(getContext(), new DataManager.Callback() {
+
+        DataManager dataManager=new DataManager(getContext());
+        dataManager.getNewCustomers2(new DataManager.Callback() {
             @Override
             public void onSuccess() {
                 if (progressDialog != null && progressDialog.isShowing()) {
@@ -539,6 +513,31 @@ public class CustomersFragment extends IMainPageFragment {
                 }
             }
         });
+//        DataManager.getVisitor(getContext(), new DataManager.Callback() {
+//            @Override
+//            public void onSuccess() {
+//                if (progressDialog != null && progressDialog.isShowing()) {
+//                    try {
+//                        progressDialog.dismiss();
+//                        refreshAdapter();
+//                    } catch (Exception ignored) {
+//
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onError(String error) {
+//                showError(error);
+//                if (progressDialog != null && progressDialog.isShowing()) {
+//                    try {
+//                        progressDialog.dismiss();
+//                    } catch (Exception ignored) {
+//
+//                    }
+//                }
+//            }
+//        });
 
     }
     
