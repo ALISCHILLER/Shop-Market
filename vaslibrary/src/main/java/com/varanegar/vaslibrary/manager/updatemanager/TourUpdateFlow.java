@@ -62,6 +62,7 @@ import com.varanegar.vaslibrary.manager.image.ImageManager;
 import com.varanegar.vaslibrary.manager.image.LogoManager;
 import com.varanegar.vaslibrary.manager.picture.PictureCustomerHistoryManager;
 import com.varanegar.vaslibrary.manager.picture.PictureSubjectManager;
+
 import com.varanegar.vaslibrary.manager.picture.PictureTemplateManager;
 import com.varanegar.vaslibrary.manager.productUnit.ProductUnitManager;
 import com.varanegar.vaslibrary.manager.questionnaire.QuestionnaireHistoryManager;
