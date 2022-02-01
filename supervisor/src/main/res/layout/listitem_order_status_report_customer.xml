@@ -60,8 +60,20 @@
             android:layout_height="match_parent"
             android:background="#AFAFAF" />
 
+<!--        <androidx.appcompat.widget.AppCompatTextView-->
+<!--            android:id="@+id/txt_customerItems_pendingOrderWeight"-->
+<!--            android:layout_width="230dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="18dp"-->
+<!--            android:padding="2dp" />-->
+
+<!--        <View-->
+<!--            android:layout_width="1dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:background="#AFAFAF" />-->
+
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/txt_customerItems_pendingOrderWeight"
+            android:id="@+id/txt_customerItems_inProgressOrderWeight"
             android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
@@ -72,29 +84,17 @@
             android:layout_height="match_parent"
             android:background="#AFAFAF" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/txt_customerItems_inProgressOrderWeight"
-            android:layout_width="190dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:padding="2dp" />
+<!--        <androidx.appcompat.widget.AppCompatTextView-->
+<!--            android:id="@+id/txt_customerItems_undeliverdOrderWeight"-->
+<!--            android:layout_width="190dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="18dp"-->
+<!--            android:padding="2dp" />-->
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="#AFAFAF" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/txt_customerItems_undeliverdOrderWeight"
-            android:layout_width="190dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:padding="2dp" />
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="#AFAFAF" />
+<!--        <View-->
+<!--            android:layout_width="1dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:background="#AFAFAF" />-->
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/txt_customerItems_finalWeight"
@@ -169,27 +169,27 @@
             android:layout_height="wrap_content"
             android:background="#AFAFAF" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:id="@+id/txt_sum_pendingOrderWeight"
-            android:layout_width="230dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:padding="3dp"
-            app:layout_constraintStart_toEndOf="@+id/txtorderWeight"
-            app:layout_constraintTop_toTopOf="parent" />
+<!--        <androidx.appcompat.widget.AppCompatTextView-->
+<!--            android:layout_gravity="center"-->
+<!--            android:gravity="center"-->
+<!--            android:id="@+id/txt_sum_pendingOrderWeight"-->
+<!--            android:layout_width="230dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="18dp"-->
+<!--            android:padding="3dp"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/txtorderWeight"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="wrap_content"
-            android:background="#AFAFAF" />
+<!--        <View-->
+<!--            android:layout_width="1dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="#AFAFAF" />-->
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_gravity="center"
             android:gravity="center"
             android:id="@+id/txt_sum_inProgressOrderWeight"
-            android:layout_width="190dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:padding="3dp"
@@ -201,23 +201,23 @@
             android:layout_height="wrap_content"
             android:background="#AFAFAF" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:id="@+id/txt_sum_undeliverdOrderWeight"
-            android:layout_width="190dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:padding="3dp"
-            app:layout_constraintStart_toEndOf="@+id/txtinProgressOrderWeight"
-            app:layout_constraintTop_toTopOf="parent" />
+<!--        <androidx.appcompat.widget.AppCompatTextView-->
+<!--            android:layout_gravity="center"-->
+<!--            android:gravity="center"-->
+<!--            android:id="@+id/txt_sum_undeliverdOrderWeight"-->
+<!--            android:layout_width="190dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="18dp"-->
+<!--            android:padding="3dp"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/txtinProgressOrderWeight"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="wrap_content"
-            android:background="#AFAFAF"
+<!--        <View-->
+<!--            android:layout_width="1dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="#AFAFAF"-->
 
-            />
+<!--            />-->
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_gravity="center"

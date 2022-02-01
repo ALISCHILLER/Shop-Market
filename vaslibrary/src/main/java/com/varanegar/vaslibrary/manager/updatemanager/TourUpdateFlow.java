@@ -63,6 +63,7 @@ import com.varanegar.vaslibrary.manager.image.LogoManager;
 import com.varanegar.vaslibrary.manager.picture.PictureCustomerHistoryManager;
 import com.varanegar.vaslibrary.manager.picture.PictureSubjectManager;
 
+import com.varanegar.vaslibrary.manager.picture.PictureSubjectZarManager;
 import com.varanegar.vaslibrary.manager.picture.PictureTemplateManager;
 import com.varanegar.vaslibrary.manager.productUnit.ProductUnitManager;
 import com.varanegar.vaslibrary.manager.questionnaire.QuestionnaireHistoryManager;
@@ -1200,28 +1201,50 @@ public abstract class TourUpdateFlow extends UpdateFlow {
 //                }
 //            });
             if (!isSimpleMode)
-                tasks.add(new SimpleTourAsyncTask() {
-                    @Override
-                    public void run(UpdateCall call) {
-                        PictureSubjectManager manager = new PictureSubjectManager(getContext());
-                        manager.sync(call);
-                    }
+//                tasks.add(new SimpleTourAsyncTask() {
+//                    @Override
+//                    public void run(UpdateCall call) {
+//                        PictureSubjectManager manager = new PictureSubjectManager(getContext());
+//                        manager.sync(call);
+//                    }
+//
+//                    @Override
+//                    public String name() {
+//                        return "PictureSubject";
+//                    }
+//
+//                    @Override
+//                    public int group() {
+//                        return R.string.customer_picture_subjects;
+//                    }
+//
+//                    @Override
+//                    public int queueId() {
+//                        return 3;
+//                    }
+//                });
+            tasks.add(new SimpleTourAsyncTask() {
+                @Override
+                public void run(UpdateCall call) {
+                    PictureSubjectZarManager manager = new PictureSubjectZarManager(getContext());
+                    manager.sync(call);
+                }
 
-                    @Override
-                    public String name() {
-                        return "PictureSubject";
-                    }
+                @Override
+                public String name() {
+                    return "PictureSubject";
+                }
 
-                    @Override
-                    public int group() {
-                        return R.string.customer_picture_subjects;
-                    }
+                @Override
+                public int group() {
+                    return R.string.customer_picture_subjects;
+                }
 
-                    @Override
-                    public int queueId() {
-                        return 3;
-                    }
-                });
+                @Override
+                public int queueId() {
+                    return 3;
+                }
+            });
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {

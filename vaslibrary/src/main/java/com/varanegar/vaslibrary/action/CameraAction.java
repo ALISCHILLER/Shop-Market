@@ -5,10 +5,14 @@ import androidx.annotation.Nullable;
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.util.fragment.extendedlist.ActionsAdapter;
 import com.varanegar.vaslibrary.R;
+import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.customercallmanager.CustomerCallManager;
 import com.varanegar.vaslibrary.manager.picture.PictureCustomerManager;
 import com.varanegar.vaslibrary.manager.picture.PictureCustomerViewManager;
+import com.varanegar.vaslibrary.manager.picture.PictureSubjectZarManager;
+import com.varanegar.vaslibrary.manager.picture.PictureSubjectZarModel;
 import com.varanegar.vaslibrary.manager.picture.PictureTemplateManager;
+import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.model.customercall.TaskPriorityModel;
 import com.varanegar.vaslibrary.model.picturesubject.PictureCustomerModel;
 import com.varanegar.vaslibrary.ui.fragment.picturecustomer.CameraFragment;
@@ -74,19 +78,28 @@ public class CameraAction extends CheckDistanceAction {
     @Override
     public void run() {
         PictureTemplateManager pictureTemplateManager = new PictureTemplateManager(getActivity());
+        PictureSubjectZarManager pictureSubjectZarManager=new PictureSubjectZarManager(getActivity());
         try {
-            pictureTemplateManager.calculateCustomerPictures(getSelectedId(), getCalls());
-            PictureCustomerManager pictureCustomerManager = new PictureCustomerManager(getActivity());
-            List<PictureCustomerModel> subjects = pictureCustomerManager.getCustomerSubjects(getSelectedId());
+         //   pictureTemplateManager.calculateCustomerPictures(getSelectedId(), getCalls());
+            pictureSubjectZarManager.calculateCustomerPictures(getSelectedId(), getCalls());
+
+            PictureCustomerManager pictureCustomerManager =
+                    new PictureCustomerManager(getActivity());
+
+            List<PictureCustomerModel> subjects =
+                    pictureCustomerManager.getCustomerSubjects(getSelectedId());
+
             if (subjects.size() == 0)
-                getActivity().showSnackBar(R.string.no_subject_to_take_picture, MainVaranegarActivity.Duration.Short);
+                getActivity().showSnackBar(R.string.no_subject_to_take_picture,
+                        MainVaranegarActivity.Duration.Short);
             else {
                 CameraFragment fragment = new CameraFragment();
                 fragment.setCustomerId(getSelectedId());
                 getActivity().pushFragment(fragment);
             }
         } catch (Exception ex) {
-            getActivity().showSnackBar(R.string.calculating_pictures_failed, MainVaranegarActivity.Duration.Short);
+            getActivity().showSnackBar(R.string.calculating_pictures_failed,
+                    MainVaranegarActivity.Duration.Short);
         }
 
     }

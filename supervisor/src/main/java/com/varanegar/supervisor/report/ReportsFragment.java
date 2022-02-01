@@ -66,7 +66,7 @@ public class ReportsFragment extends IMainPageFragment {
     private ReportView reportView;
     private TabLayout reportsTabLayout;
     private int product;
-
+    SimpleReportAdapter adapter = null;
     private TextView errorTextView;
 
     @Override
@@ -189,13 +189,19 @@ public class ReportsFragment extends IMainPageFragment {
 
                                 List<ProductInvoiveBalanceReportModel>list
                                         =new ArrayList<>();
-                                for ( Object item:result){
-                                    list.add ((ProductInvoiveBalanceReportModel)item);
-                                }
 
-                                productModelRepository.deleteAll();
-                                productModelRepository.
-                                        insert(list);
+                                if (result.size()>0) {
+                                    for (Object item : result) {
+                                        list.add((ProductInvoiveBalanceReportModel) item);
+                                    }
+
+                                    productModelRepository.deleteAll();
+                                    productModelRepository.
+                                            insert(list);
+
+                                }else {
+                                    productModelRepository.deleteAll();
+                                }
                                 refresh_report(tabPosition);
                             } else if (tabPosition == 1) {
                                 ProductCustomerGroupSalesSummaryModelRepository productModelRepository=
@@ -203,13 +209,19 @@ public class ReportsFragment extends IMainPageFragment {
 
                                 List<ProductCustomerGroupSalesSummaryModel>list
                                         =new ArrayList<>();
-                                for ( Object item:result){
-                                    list.add ((ProductCustomerGroupSalesSummaryModel)item);
-                                }
 
-                                productModelRepository.deleteAll();
-                                productModelRepository.
-                                        insert(list);
+
+                                if (result.size()>0) {
+                                    for (Object item : result) {
+                                        list.add((ProductCustomerGroupSalesSummaryModel) item);
+                                    }
+
+                                    productModelRepository.deleteAll();
+                                    productModelRepository.
+                                            insert(list);
+                                }else {
+                                    productModelRepository.deleteAll();
+                                }
                                 refresh_report(tabPosition);
                             }else if(tabPosition == 2){
                                 TProductsPurchaseHistoryReportModelRepository productModelRepository=
@@ -217,13 +229,18 @@ public class ReportsFragment extends IMainPageFragment {
 
                                 List<TProductsPurchaseHistoryReportModel>list
                                         =new ArrayList<>();
-                                for ( Object item:result){
-                                    list.add ((TProductsPurchaseHistoryReportModel)item);
-                                }
 
-                                productModelRepository.deleteAll();
-                                productModelRepository.
-                                        insert(list);
+                                if (result.size()>0) {
+                                    for (Object item : result) {
+                                        list.add((TProductsPurchaseHistoryReportModel) item);
+                                    }
+
+                                    productModelRepository.deleteAll();
+                                    productModelRepository.
+                                            insert(list);
+                                }else {
+                                    productModelRepository.deleteAll();
+                                }
                                 refresh_report(tabPosition);
                             }else if(tabPosition == 3){
 
@@ -234,14 +251,18 @@ public class ReportsFragment extends IMainPageFragment {
                                         =new ArrayList<>();
 
                                 CustomerNoSaleModel customerNoSaleModel=new CustomerNoSaleModel();
-                                for ( Object item:result){
-                                    list.add ((CustomerNoSaleModel)item);
+                                if (result.size()>0) {
+                                    for (Object item : result) {
+                                        list.add((CustomerNoSaleModel) item);
 
+                                    }
+
+                                    noSaleModelRepository.deleteAll();
+                                    noSaleModelRepository.
+                                            insert(list);
+                                }else {
+                                    noSaleModelRepository.deleteAll();
                                 }
-
-                                noSaleModelRepository.deleteAll();
-                                noSaleModelRepository.
-                                        insert(list);
                                 refresh_report(tabPosition);
                             }
 
@@ -285,7 +306,7 @@ public class ReportsFragment extends IMainPageFragment {
         if (isResumed()) {
             Activity activity = getActivity();
             if (activity != null && !activity.isFinishing()) {
-                SimpleReportAdapter adapter = null;
+
                 Query query = null;
                 List<? extends ReviewReportViewModel> result = null;
                 if (tabPosition == 0) {
@@ -349,5 +370,9 @@ public class ReportsFragment extends IMainPageFragment {
        refresh_report(reportsTabLayout.getSelectedTabPosition());
     }
 
-
+//    @Override
+//    public void onSaveInstanceState(@NonNull Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        adapter.saveInstanceState(outState);
+//    }
 }

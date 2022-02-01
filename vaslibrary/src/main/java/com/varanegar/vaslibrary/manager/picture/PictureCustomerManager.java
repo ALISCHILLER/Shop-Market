@@ -54,12 +54,60 @@ public class PictureCustomerManager extends BaseManager<PictureCustomerModel> {
         return getItem(query);
     }
 
+
+    public void savePictureTemplatesZar(final UUID customerId, final List<PictureSubjectZarModel> pictures, @Nullable List<CustomerCallModel> customerCalls)throws ValidationException, DbException{
+        if (customerCalls == null)
+            customerCalls = new ArrayList<>();
+        // fetch all picture subjects that have been already calculated for this customer
+        final List<PictureCustomerModel> existingPictures = getCustomerSubjects(customerId);
+
+        deleteSubjects(customerId);
+        // iterate over templates and insert(update) customer picture subjects
+        for (final PictureSubjectZarModel p :
+                pictures) {
+            PictureCustomerModel pictureCustomerModel = Linq.findFirst(existingPictures,
+                    new Linq.Criteria<PictureCustomerModel>() {
+                @Override
+                public boolean run(PictureCustomerModel item) {
+                    return item.PictureSubjectId.equals(p.UniqueId);
+                }
+            });
+            if (pictureCustomerModel == null) {
+                pictureCustomerModel = new PictureCustomerModel();
+                pictureCustomerModel.UniqueId = UUID.randomUUID();
+                pictureCustomerModel.CustomerId = customerId;
+                pictureCustomerModel.PictureSubjectId = p.UniqueId;
+                pictureCustomerModel.Title = p.subjectTitle;
+            }
+
+            pictureCustomerModel.DemandTypeUniqueId = p.demandTypeUniqueId;
+            if (p.demandTypeUniqueId.equals(PictureDemandTypeId.Mandatory) || p.demandTypeUniqueId.equals(PictureDemandTypeId.JustOnce))
+                pictureCustomerModel.DemandType = PictureDemandType.Mandatory;
+            else if (p.demandTypeUniqueId.equals(PictureDemandTypeId.Optional))
+                pictureCustomerModel.DemandType = PictureDemandType.Optional;
+            else if (p.demandTypeUniqueId.equals(PictureDemandTypeId.NoSaleMandatory)) {
+                CustomerCallManager customerCallManager = new CustomerCallManager(getContext());
+                if(!VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
+                    if (customerCallManager.isNeedImage(customerCalls))
+                        pictureCustomerModel.DemandType = PictureDemandType.Mandatory;
+                }
+            } else
+                pictureCustomerModel.DemandType = PictureDemandType.Optional;
+
+
+            // insert or update item
+            insertOrUpdate(pictureCustomerModel);
+        }
+        Timber.i("Picture subjects calculated for customer");
+
+    }
+
     public void savePictureTemplates(final UUID customerId, final List<PictureTemplateDetailModel> pictures, @Nullable List<CustomerCallModel> customerCalls) throws ValidationException, DbException {
         if (customerCalls == null)
             customerCalls = new ArrayList<>();
         // fetch all picture subjects that have been already calculated for this customer
         final List<PictureCustomerModel> existingPictures = getCustomerSubjects(customerId);
-        // delete all these pictures for the customer
+        // delete all these pictures for the custoFmer
         deleteSubjects(customerId);
         // iterate over templates and insert(update) customer picture subjects
         for (final PictureTemplateDetailModel p :

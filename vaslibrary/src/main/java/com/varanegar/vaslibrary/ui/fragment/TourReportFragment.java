@@ -877,13 +877,16 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
         List<LocationModel> last= Collections.singletonList(locationManager.getLastPointLocation());
         List<LocationModel> list=new ArrayList<>();
         List<LocationModel> listnot=new ArrayList<>();
+        List<LocationModel> listall=new ArrayList<>();
+        String newDateStr ;
        if (locationModels.size()>0) {
 
            for (LocationModel locationModel : locationModels
            ) {
                if (locationModel.Date!=null) {
-                   String newDateStr = postFormater.format(locationModel.Date);
+                  newDateStr = postFormater.format(locationModel.Date);
                    if (newDateStr.equals(d)) {
+                       listall.add(locationModel);
                        if (locationModel.IsSend == true) {
                            list.add(locationModel);
                        }else{
@@ -892,14 +895,16 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
                    }
                }
            }
-
-           String newTimeLast = df.format(last.get(0).Date);
-           String newTimeIsLast = df.format(lastISSend.get(0).Date);
-           notsend_point.setValue(String.valueOf(listnot.size()));
-           all_point.setValue(String.valueOf(locationModels.size()));
-           send_point.setValue(String.valueOf(list.size()));
-           last_send_point.setValue(newTimeIsLast);
-           last_point.setValue(newTimeLast);
+           newDateStr = postFormater.format(last.get(0).Date);
+           if (newDateStr.equals(d)) {
+               String newTimeLast = df.format(last.get(0).Date);
+               String newTimeIsLast = df.format(lastISSend.get(0).Date);
+               notsend_point.setValue(String.valueOf(listnot.size()));
+               all_point.setValue(String.valueOf(listall.size()));
+               send_point.setValue(String.valueOf(list.size()));
+               last_send_point.setValue(newTimeIsLast);
+               last_point.setValue(newTimeLast);
+           }
        }
 
         CustomerManager customerManager=new CustomerManager(getContext());

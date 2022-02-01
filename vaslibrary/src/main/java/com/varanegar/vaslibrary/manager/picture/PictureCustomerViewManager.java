@@ -98,7 +98,7 @@ public class PictureCustomerViewManager extends BaseManager<PictureCustomerViewM
         }
         if (lakOfVisit && !isLackOfVisitAndNeedImage)
             return null;
-        PictureTemplateManager pictureTemplateManager = new PictureTemplateManager(getContext());
+        PictureSubjectZarManager pictureTemplateManager = new PictureSubjectZarManager(getContext());
         try {
             pictureTemplateManager.calculateCustomerPictures(customerId, customerCalls);
             PictureCustomerViewManager pictureCustomerViewManager = new PictureCustomerViewManager(getContext());

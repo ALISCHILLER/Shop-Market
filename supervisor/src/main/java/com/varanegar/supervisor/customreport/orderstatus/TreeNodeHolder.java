@@ -63,21 +63,21 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
         txt_customerItems_customerName = itemView.findViewById(R.id.txt_customerItems_customerName);
         txt_customerItems_customerCode = itemView.findViewById(R.id.txt_customerItems_customerCode);
         txt_customerItems_orderWeight = itemView.findViewById(R.id.txt_customerItems_orderWeight);
-        txt_customerItems_pendingOrderWeight = itemView.findViewById(R.id.txt_customerItems_pendingOrderWeight);
+      //  txt_customerItems_pendingOrderWeight = itemView.findViewById(R.id.txt_customerItems_pendingOrderWeight);
         txt_customerItems_inProgressOrderWeight = itemView.findViewById(R.id.txt_customerItems_inProgressOrderWeight);
-        txt_customerItems_undeliverdOrderWeight = itemView.findViewById(R.id.txt_customerItems_undeliverdOrderWeight);
+    //    txt_customerItems_undeliverdOrderWeight = itemView.findViewById(R.id.txt_customerItems_undeliverdOrderWeight);
         txt_customerItems_finalWeight = itemView.findViewById(R.id.txt_customerItems_finalWeight);
 
         txt_customerItems_customerName.setText(String.valueOf(customer.getCustomerName()));
         txt_customerItems_customerCode.setText(customer.getCustomerCode());
 
         txt_customerItems_orderWeight.setText(df.format(customer.getOrderWeight()));
-        txt_customerItems_pendingOrderWeight
-                .setText(df.format( customer.getPendingOrderWeight()));
+      //  txt_customerItems_pendingOrderWeight
+       //         .setText(df.format( customer.getPendingOrderWeight()));
         txt_customerItems_inProgressOrderWeight
                 .setText(df.format(customer.getInProgressOrderWeight()));
-        txt_customerItems_undeliverdOrderWeight
-                .setText(df.format( customer.getUndeliverdOrderWeight()));
+      //  txt_customerItems_undeliverdOrderWeight
+               // .setText(df.format( customer.getUndeliverdOrderWeight()));
         txt_customerItems_finalWeight
                 .setText(df.format( customer.getFinalWeight()));
 
@@ -91,9 +91,9 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
         LinearLayout layout_footer_order;
 
         txt_sum_orderWeight = itemView.findViewById(R.id.txt_sum_orderWeight);
-        txt_sum_pendingOrderWeight = itemView.findViewById(R.id.txt_sum_pendingOrderWeight);
+      //  txt_sum_pendingOrderWeight = itemView.findViewById(R.id.txt_sum_pendingOrderWeight);
         txt_sum_inProgressOrderWeight = itemView.findViewById(R.id.txt_sum_inProgressOrderWeight);
-        txt_sum_undeliverdOrderWeight = itemView.findViewById(R.id.txt_sum_undeliverdOrderWeight);
+      //  txt_sum_undeliverdOrderWeight = itemView.findViewById(R.id.txt_sum_undeliverdOrderWeight);
         txt_sum_finalWeight = itemView.findViewById(R.id.txt_sum_finalWeight);
         layout_footer_order= itemView.findViewById(R.id.layout_footer_order);
 
@@ -114,9 +114,9 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
 
             }
             txt_sum_orderWeight.setText(df.format(sum_orderWeight));
-            txt_sum_pendingOrderWeight.setText(df.format(sum_pendingOrderWeightt));
+          //  txt_sum_pendingOrderWeight.setText(df.format(sum_pendingOrderWeightt));
             txt_sum_inProgressOrderWeight.setText(df.format(sum_inProgressOrderWeight));
-            txt_sum_undeliverdOrderWeight.setText(df.format(sum_undeliverdOrderWeight));
+           // txt_sum_undeliverdOrderWeight.setText(df.format(sum_undeliverdOrderWeight));
             txt_sum_finalWeight.setText(df.format(sum_finalWeight));
             layout_footer_order.setVisibility(View.VISIBLE);
         }else {
@@ -135,16 +135,16 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
         AppCompatTextView txt_orderWeight;
         AppCompatTextView txt_pendingOrderWeight;
         AppCompatTextView txt_inProgressOrderWeight;
-        AppCompatTextView txt_undeliverdOrderWeight;
+       // AppCompatTextView txt_undeliverdOrderWeight;
         AppCompatTextView txt_deliverdOrderWeight;
 
 
         txt_dealerName = itemView.findViewById(R.id.txt_dealerName);
         txt_dealerCode = itemView.findViewById(R.id.txt_dealerCode);
         txt_orderWeight = itemView.findViewById(R.id.txt_orderWeight);
-        txt_pendingOrderWeight = itemView.findViewById(R.id.txt_pendingOrderWeight);
+      //  txt_pendingOrderWeight = itemView.findViewById(R.id.txt_pendingOrderWeight);
         txt_inProgressOrderWeight = itemView.findViewById(R.id.txt_inProgressOrderWeight);
-        txt_undeliverdOrderWeight = itemView.findViewById(R.id.txt_undeliverdOrderWeight);
+       // txt_undeliverdOrderWeight = itemView.findViewById(R.id.txt_undeliverdOrderWeight);
         txt_deliverdOrderWeight = itemView.findViewById(R.id.txt_deliverdOrderWeight);
 
 
@@ -155,14 +155,14 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
         txt_orderWeight
                 .setText(String.valueOf(df.format(dealersItem.getOrderWeight())));
 
-        txt_pendingOrderWeight
-                .setText(String.valueOf(df.format(dealersItem.getPendingOrderWeight())));
+      //  txt_pendingOrderWeight
+       //         .setText(String.valueOf(df.format(dealersItem.getPendingOrderWeight())));
 
         txt_inProgressOrderWeight
                 .setText(String.valueOf(df.format(dealersItem.getInProgressOrderWeight())));
 
-        txt_undeliverdOrderWeight
-                .setText(String.valueOf(df.format(dealersItem.getUndeliverdOrderWeight())));
+       // txt_undeliverdOrderWeight
+        //        .setText(String.valueOf(df.format(dealersItem.getUndeliverdOrderWeight())));
 
         txt_deliverdOrderWeight
                 .setText(String.valueOf(df.format(dealersItem.getDeliverdOrderWeight())));
@@ -176,9 +176,9 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
         LinearLayout layout_footer_order;
 
         txt_sum_orderWeight = itemView.findViewById(R.id.txt_sum_orderWeight);
-        txt_sum_pendingOrderWeight = itemView.findViewById(R.id.txt_sum_pendingOrderWeight);
+      //  txt_sum_pendingOrderWeight = itemView.findViewById(R.id.txt_sum_pendingOrderWeight);
         txt_sum_inProgressOrderWeight = itemView.findViewById(R.id.txt_sum_inProgressOrderWeight);
-        txt_sum_undeliverdOrderWeight = itemView.findViewById(R.id.txt_sum_undeliverdOrderWeight);
+    //    txt_sum_undeliverdOrderWeight = itemView.findViewById(R.id.txt_sum_undeliverdOrderWeight);
         txt_sum_finalWeight = itemView.findViewById(R.id.txt_sum_finalWeight);
 
         layout_footer_order= itemView.findViewById(R.id.layout_footer_order);
@@ -198,9 +198,9 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
 
             }
             txt_sum_orderWeight.setText(df.format(sum_orderWeight));
-            txt_sum_pendingOrderWeight.setText(df.format(sum_pendingOrderWeightt));
+          //  txt_sum_pendingOrderWeight.setText(df.format(sum_pendingOrderWeightt));
             txt_sum_inProgressOrderWeight.setText(df.format(sum_inProgressOrderWeight));
-            txt_sum_undeliverdOrderWeight.setText(df.format(sum_undeliverdOrderWeight));
+          //  txt_sum_undeliverdOrderWeight.setText(df.format(sum_undeliverdOrderWeight));
             txt_sum_finalWeight.setText(df.format(sum_finalWeight));
             layout_footer_order.setVisibility(View.VISIBLE);
         }else {
@@ -221,9 +221,9 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
 
         AppCompatTextView date;
         AppCompatTextView orderWeight;
-        AppCompatTextView pendingOrderWeight;
+       // AppCompatTextView pendingOrderWeight;
         AppCompatTextView inProgressOrderWeight;
-        AppCompatTextView undeliverdOrderWeight;
+      //  AppCompatTextView undeliverdOrderWeight;
         AppCompatTextView finalWeight;
 
         AppCompatTextView txt_reportCode;
@@ -231,9 +231,9 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
 
         date = itemView.findViewById(R.id.txtDate);
         orderWeight = itemView.findViewById(R.id.txtorderWeight);
-        pendingOrderWeight = itemView.findViewById(R.id.txtpendingOrderWeight);
+       // pendingOrderWeight = itemView.findViewById(R.id.txtpendingOrderWeight);
         inProgressOrderWeight = itemView.findViewById(R.id.txtinProgressOrderWeight);
-        undeliverdOrderWeight = itemView.findViewById(R.id.txtundeliverdOrderWeight);
+       // undeliverdOrderWeight = itemView.findViewById(R.id.txtundeliverdOrderWeight);
         finalWeight = itemView.findViewById(R.id.finalWeight);
         txt_reportCode= itemView.findViewById(R.id.txt_reportCode);
 
@@ -243,14 +243,14 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
 
         orderWeight.setText(String.valueOf(df.format(item.getOrderWeight())));
 
-        pendingOrderWeight.setText(String.valueOf(df.format(item
-                .getPendingOrderWeight())));
+       /// pendingOrderWeight.setText(String.valueOf(df.format(item
+            //    .getPendingOrderWeight())));
 
         inProgressOrderWeight.setText(String.valueOf(df.format(item
                 .getInProgressOrderWeight())));
 
-        undeliverdOrderWeight.setText(String.valueOf(df.format(item
-                .getUndeliverdOrderWeight())));
+       // undeliverdOrderWeight.setText(String.valueOf(df.format(item
+            //    .getUndeliverdOrderWeight())));
 
         finalWeight.setText(String.valueOf(df.format(item.getFinalWeight())));
 
@@ -264,9 +264,9 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
         LinearLayout layout_footer_order;
 
         txt_sum_orderWeight = itemView.findViewById(R.id.txt_sum_orderWeight);
-        txt_sum_pendingOrderWeight = itemView.findViewById(R.id.txt_sum_pendingOrderWeight);
+      //  txt_sum_pendingOrderWeight = itemView.findViewById(R.id.txt_sum_pendingOrderWeight);
         txt_sum_inProgressOrderWeight = itemView.findViewById(R.id.txt_sum_inProgressOrderWeight);
-        txt_sum_undeliverdOrderWeight = itemView.findViewById(R.id.txt_sum_undeliverdOrderWeight);
+      //  txt_sum_undeliverdOrderWeight = itemView.findViewById(R.id.txt_sum_undeliverdOrderWeight);
         txt_sum_finalWeight = itemView.findViewById(R.id.txt_sum_finalWeight);
 
         layout_footer_order= itemView.findViewById(R.id.layout_footer_order);
@@ -286,9 +286,9 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
 
             }
             txt_sum_orderWeight.setText(df.format(sum_orderWeight));
-            txt_sum_pendingOrderWeight.setText(df.format(sum_pendingOrderWeightt));
+           // txt_sum_pendingOrderWeight.setText(df.format(sum_pendingOrderWeightt));
             txt_sum_inProgressOrderWeight.setText(df.format(sum_inProgressOrderWeight));
-            txt_sum_undeliverdOrderWeight.setText(df.format(sum_undeliverdOrderWeight));
+          //  txt_sum_undeliverdOrderWeight.setText(df.format(sum_undeliverdOrderWeight));
             txt_sum_finalWeight.setText(df.format(sum_finalWeight));
 
 

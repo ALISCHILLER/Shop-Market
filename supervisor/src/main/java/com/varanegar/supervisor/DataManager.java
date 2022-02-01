@@ -222,11 +222,14 @@ public class DataManager {
             @Override
             protected void onSuccess(List<SupervisorCustomerModel> result, Request request) {
                 try {
+                    SupervisorCustomerModelRepository repository =
+                            new SupervisorCustomerModelRepository();
                     if (result != null && result.size() > 0) {
-                        SupervisorCustomerModelRepository repository =
-                                new SupervisorCustomerModelRepository();
+
                         repository.deleteAll();
                         repository.insert(result);
+                    }else {
+                        repository.deleteAll();
                     }
                     callback.onSuccess();
                 } catch (Exception e) {
@@ -503,10 +506,12 @@ public class DataManager {
             @Override
             protected void onSuccess(List<SupervisorCustomerModel> result, Request request) {
                 try {
+                    SupervisorCustomerModelRepository repository = new SupervisorCustomerModelRepository();
                     if (result != null && result.size() > 0) {
-                        SupervisorCustomerModelRepository repository = new SupervisorCustomerModelRepository();
                         repository.deleteAll();
                         repository.insert(result);
+                    }else {
+                        repository.deleteAll();
                     }
                     //  getProductGroup(callback,context);
                     getSupervisorId(userModel, visitorModel, callback, context);

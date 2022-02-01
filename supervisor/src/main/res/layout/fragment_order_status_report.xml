@@ -122,6 +122,22 @@
                         android:layout_height="wrap_content"
                         android:background="#AFAFAF" />
 
+<!--                    <androidx.appcompat.widget.AppCompatTextView-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:gravity="center"-->
+<!--                        android:layout_width="230dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginStart="18dp"-->
+<!--                        android:padding="3dp"-->
+<!--                        android:text="سفارش بدون وضعیت"-->
+<!--                        app:layout_constraintStart_toEndOf="@+id/txtorderWeight"-->
+<!--                        app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--                    <View-->
+<!--                        android:layout_width="1dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:background="#AFAFAF" />-->
+
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_gravity="center"
                         android:gravity="center"
@@ -129,23 +145,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="18dp"
                         android:padding="3dp"
-                        android:text="سفارش بدون وضعیت"
-                        app:layout_constraintStart_toEndOf="@+id/txtorderWeight"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="wrap_content"
-                        android:background="#AFAFAF" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:layout_width="190dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="18dp"
-                        android:padding="3dp"
-                        android:text="سفارشات ستل نشده"
+                        android:text="سفارش در راه"
                         app:layout_constraintStart_toEndOf="@+id/txtpendingOrderWeight"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -154,31 +154,30 @@
                         android:layout_height="wrap_content"
                         android:background="#AFAFAF" />
 
+<!--                    <androidx.appcompat.widget.AppCompatTextView-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:gravity="center"-->
+<!--                        android:layout_width="190dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginStart="18dp"-->
+<!--                        android:padding="3dp"-->
+<!--                        android:text="سفارشات برگشتی"-->
+<!--                        app:layout_constraintStart_toEndOf="@+id/txtinProgressOrderWeight"-->
+<!--                        app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--                    <View-->
+<!--                        android:layout_width="1dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:background="#AFAFAF"-->
+
+<!--                        />-->
+
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:layout_width="190dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="18dp"
-                        android:padding="3dp"
-                        android:text="سفارشات برگشتی"
-                        app:layout_constraintStart_toEndOf="@+id/txtinProgressOrderWeight"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="wrap_content"
-                        android:background="#AFAFAF"
-
-                        />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:layout_width="190dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="18dp"
-
                         android:padding="3dp"
                         android:text="سفارشات فاکتور شده"
                         app:layout_constraintStart_toEndOf="@+id/txtundeliverdOrderWeight"

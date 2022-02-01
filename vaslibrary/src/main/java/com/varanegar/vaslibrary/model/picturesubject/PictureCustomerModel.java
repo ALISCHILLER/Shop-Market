@@ -24,4 +24,6 @@ public class PictureCustomerModel extends BaseModel {
     public String NoPictureReason;
     @Column
     public UUID FileId;
+    @Column
+    public String Title;
 }
