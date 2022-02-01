@@ -78,7 +78,7 @@ public class BaseReturnAction extends CheckDistanceAction {
             SysConfigManager sysConfigManager = new SysConfigManager(getActivity());
             SysConfigModel inactiveCustomers = sysConfigManager.read(ConfigKey.SendInactiveCustomers, SysConfigManager.cloud);
             SysConfigModel TakeOrderFromInactiveCustomers = sysConfigManager.read(ConfigKey.TakeOrderFromInactiveCustomers, SysConfigManager.cloud);
-            if (!getCustomer().IsActive && (SysConfigManager.compare(inactiveCustomers, true)) && SysConfigManager.compare(TakeOrderFromInactiveCustomers, false))
+            if (!getCustomer().IsActive)
                 return getActivity().getString(R.string.the_customer_is_disabled_t);
         } else {
             if (!getCustomer().IsActive && !(getCustomer().IsNewCustomer) && checkCloudConfig(ConfigKey.ScientificVisit, false))

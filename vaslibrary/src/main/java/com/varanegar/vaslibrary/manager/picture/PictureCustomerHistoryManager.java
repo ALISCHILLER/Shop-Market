@@ -53,6 +53,7 @@ public class PictureCustomerHistoryManager extends BaseManager<PictureCustomerHi
             call.failure(getContext().getString(R.string.user_not_found));
             return;
         }
+
         String dealerId = userModel.UniqueId.toString();
         SysConfigManager sysConfigManager = new SysConfigManager(getContext());
         SysConfigModel settingsId = sysConfigManager.read(ConfigKey.SettingsId, SysConfigManager.local);

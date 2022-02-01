@@ -15,6 +15,7 @@ import com.varanegar.framework.util.fragment.extendedlist.ActionsAdapter;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.customercallmanager.CustomerCallManager;
+import com.varanegar.vaslibrary.manager.locationmanager.LocationManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.manager.tourmanager.TourManager;
@@ -106,6 +107,7 @@ public class SendOperationAction extends CheckPathAction {
             }
     }
 
+
     private void sendCustomerCalls() {
         if (!Connectivity.isConnected(getActivity())) {
             ConnectionSettingDialog connectionSettingDialog =
@@ -181,6 +183,7 @@ public class SendOperationAction extends CheckPathAction {
                                             dialog.setPositiveButton(R.string.ok, null);
                                             dialog.show();
                                             runActionCallBack();
+                                            sendpoint();
                                         });
                                     }
 
@@ -206,6 +209,15 @@ public class SendOperationAction extends CheckPathAction {
         });
     }
 
+    public void sendpoint(){
+        LocationManager locationManager = new LocationManager(getActivity());
+        locationManager.tryToSendAll(new LocationManager.SendLocationListener() {
+            @Override
+            public void onSendFailed() {
+                //send log to server
+            }
+        });
+    }
     void showProgressDialog() {
         MainVaranegarActivity activity = getActivity();
         if (activity != null && !activity.isFinishing()) {

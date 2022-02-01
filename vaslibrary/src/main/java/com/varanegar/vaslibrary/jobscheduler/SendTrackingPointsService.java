@@ -44,7 +44,7 @@ public class SendTrackingPointsService extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
         pool.execute(() -> {
             LocationManager locationManager = new LocationManager(SendTrackingPointsService.this);
-            locationManager.tryToSendAll();
+            locationManager.tryToSendAll(null);
         });
     }
 

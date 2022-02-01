@@ -701,8 +701,11 @@ public class LocationManager extends BaseManager<LocationModel> {
             lastOn = item.Date.getTime();
         return super.insert(item);
     }
+    public interface SendLocationListener{
+        void onSendFailed();
+    }
 
-    public synchronized void tryToSendAll() {
+    public synchronized void tryToSendAll(@Nullable SendLocationListener callback) {
         if (hasSemaphore())
             return;
         setSemaphore();
@@ -785,6 +788,8 @@ public class LocationManager extends BaseManager<LocationModel> {
                     } catch (Exception e) {
                         Timber.e(e);
                     }
+                    if(callback!=null)
+                        callback.onSendFailed();
                 }
 
                 @Override

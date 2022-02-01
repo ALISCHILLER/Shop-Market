@@ -57,3 +57,13 @@ LEFT JOIN PictureCustomerHistory ON PictureCustomerHistory.CustomerId = PictureC
 AND PictureCustomerHistory.PictureSubjectId = PictureCustomer.PictureSubjectId
 GROUP BY
 	PictureCustomer.UniqueId;
+-- ----------------------------
+-- Table structure for PictureCustomerHistory
+-- ----------------------------
+DROP TABLE IF EXISTS "main"."PictureCustomerHistory";
+CREATE TABLE "PictureCustomerHistory" (
+"UniqueId"  TEXT NOT NULL,
+"PictureSubjectId"  TEXT,
+"CustomerId"  TEXT,
+PRIMARY KEY ("UniqueId" ASC)
+);

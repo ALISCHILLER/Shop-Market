@@ -25,6 +25,7 @@ import com.varanegar.supervisor.webapi.SupervisorApi;
 import com.varanegar.supervisor.webapi.TourCustomerSummaryView;
 import com.varanegar.supervisor.webapi.TourCustomerSummaryViewModel;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
+import com.varanegar.vaslibrary.manager.locationmanager.LocationManager;
 import com.varanegar.vaslibrary.webapi.tour.TourStatus;
 import com.varanegar.supervisor.webapi.TourStatusSummaryViewModel;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
@@ -104,6 +105,9 @@ class TourStatusSummaryContextView extends ItemContextView<TourStatusSummaryView
                                         });
                                         dialog1.setTitle(R.string.tour_sent);
                                         dialog1.show();
+
+                                        sendpoint();
+
                                     }
 
                                     @Override
@@ -186,6 +190,7 @@ class TourStatusSummaryContextView extends ItemContextView<TourStatusSummaryView
                 dialog.show();
             }
         });
+
         tourNoTextView.setText(String.valueOf(tourStatusSummaryViewModel.TourNo));
         visitorNameTextView.setText(tourStatusSummaryViewModel.AgentName);
         progressView.start();
@@ -249,7 +254,15 @@ class TourStatusSummaryContextView extends ItemContextView<TourStatusSummaryView
     private void onTourChanged() {
         onTourChanged.run();
     }
-
+    public void sendpoint(){
+        LocationManager locationManager = new LocationManager(getContext());
+        locationManager.tryToSendAll(new LocationManager.SendLocationListener() {
+            @Override
+            public void onSendFailed() {
+                //send log to server
+            }
+        });
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, int position) {
         View view = inflater.inflate(R.layout.fragment_supervisor_tour_status_context_layout, viewGroup, false);

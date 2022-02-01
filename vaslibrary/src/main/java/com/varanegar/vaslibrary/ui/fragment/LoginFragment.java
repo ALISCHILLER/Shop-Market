@@ -44,7 +44,9 @@ import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.base.BackupManager;
 import com.varanegar.vaslibrary.base.LocalModel;
 import com.varanegar.vaslibrary.base.SelectLanguageDialog;
+import com.varanegar.vaslibrary.jobscheduler.SendTrackingPointsService;
 import com.varanegar.vaslibrary.manager.UserManager;
+import com.varanegar.vaslibrary.manager.locationmanager.LocationManager;
 import com.varanegar.vaslibrary.manager.locationmanager.LogLevel;
 import com.varanegar.vaslibrary.manager.locationmanager.LogType;
 import com.varanegar.vaslibrary.manager.locationmanager.TrackingLicense;
@@ -244,6 +246,13 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
 //                intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/download/" + "Sepehr_varanegar.apk")), "application/vnd.android.package-archive");
 //                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                startActivity(intent);
+            LocationManager locationManager = new LocationManager(getContext());
+            locationManager.tryToSendAll(new LocationManager.SendLocationListener() {
+                @Override
+                public void onSendFailed() {
+
+                }
+            });
             userNameEditText.setError(null);
             passwordEditText.setError(null);
             validator.validate(LoginFragment.this);
