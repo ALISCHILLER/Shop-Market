@@ -10,6 +10,7 @@ CREATE TABLE "PictureSubjectZar" (
 "customerCategoryUniqueIds"  TEXT  ,
 "customerActivityUniqueIds"  TEXT ,
 "demandTypeUniqueId" TEXT COLLATE NOCASE,
+"subjectUniqueId" TEXT COLLATE NOCASE,
 PRIMARY KEY ("UniqueId" ASC)
 );
 -- ----------------------------

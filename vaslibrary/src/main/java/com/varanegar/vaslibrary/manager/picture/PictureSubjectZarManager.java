@@ -33,10 +33,9 @@ import okhttp3.Request;
 import timber.log.Timber;
 
 public class PictureSubjectZarManager extends BaseManager<PictureSubjectZarModel> {
-    Context context;
+
     public PictureSubjectZarManager(@NonNull Context context) {
         super(context, new PictureSubjectZarModelRepository());
-           this.context = context;
     }
 
     public List<PictureSubjectZarModel> getPictureSubjectZarModels(CustomerModel customerModel) {
@@ -64,7 +63,6 @@ public class PictureSubjectZarManager extends BaseManager<PictureSubjectZarModel
         try {
             deleteAll();
             PictureSubjectApi api = new PictureSubjectApi(getContext());
-
             api.runWebRequest(api.getTemplate(VaranegarApplication.getInstance().getAppId()), new WebCallBack<List<PictureSubjectZarModel>>() {
                 @Override
                 protected void onFinish() {
@@ -114,7 +112,7 @@ public class PictureSubjectZarManager extends BaseManager<PictureSubjectZarModel
 
     public void calculateCustomerPictures(final UUID customerId, @Nullable List<CustomerCallModel> customerCalls) throws ValidationException, DbException {
         CustomerModel customerModel = new
-                CustomerManager(context).getItem(customerId);
+                CustomerManager(getContext()).getItem(customerId);
 
         List<PictureSubjectZarModel> subjectZarModelsus = getPictureSubjectZarModelsUser(customerModel);
 

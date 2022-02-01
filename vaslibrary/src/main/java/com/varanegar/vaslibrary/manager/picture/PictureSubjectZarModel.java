@@ -15,9 +15,13 @@ public class PictureSubjectZarModel extends BaseModel {
     @SerializedName("subSystemTypeUniqueId")
     public UUID subSystemTypeUniqueId ;
 
+
     @Column
     @SerializedName("demandTypeUniqueId")
     public UUID demandTypeUniqueId ;
+    @Column
+    @SerializedName("subjectUniqueId")
+    public UUID subjectUniqueId ;
     @Column
     @SerializedName("subjectTitle")
     public String subjectTitle;

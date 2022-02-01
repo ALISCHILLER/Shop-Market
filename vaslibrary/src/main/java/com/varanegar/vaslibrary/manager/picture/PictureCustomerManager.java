@@ -76,7 +76,7 @@ public class PictureCustomerManager extends BaseManager<PictureCustomerModel> {
                 pictureCustomerModel = new PictureCustomerModel();
                 pictureCustomerModel.UniqueId = UUID.randomUUID();
                 pictureCustomerModel.CustomerId = customerId;
-                pictureCustomerModel.PictureSubjectId = p.UniqueId;
+                pictureCustomerModel.PictureSubjectId = p.subjectUniqueId;
                 pictureCustomerModel.Title = p.subjectTitle;
             }
 
