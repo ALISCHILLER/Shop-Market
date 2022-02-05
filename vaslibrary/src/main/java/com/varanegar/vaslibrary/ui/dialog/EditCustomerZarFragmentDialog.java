@@ -29,6 +29,7 @@ import com.varanegar.framework.validation.annotations.LengthChecker;
 import com.varanegar.framework.validation.annotations.NotEmptyChecker;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.manager.DataForRegisterManager;
+import com.varanegar.vaslibrary.manager.canvertType.ConvertFaNumType;
 import com.varanegar.vaslibrary.manager.city.CityManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.customercallmanager.CustomerCallManager;
@@ -529,7 +530,8 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
             syncGetNewCustomerViewModel.Street3 = street3PairedItem.getValue();
             syncGetNewCustomerViewModel.Street4 = street4PairedItem.getValue();
             syncGetNewCustomerViewModel.Street5 = street5PairedItem.getValue();
-            syncGetNewCustomerViewModel.PostalCode = postalCodePairedItem.getValue();
+            String convertPostalCode= ConvertFaNumType.convert(postalCodePairedItem.getValue());
+            syncGetNewCustomerViewModel.PostalCode = convertPostalCode;
             syncGetNewCustomerViewModel.CityId = cityNamePairedItem.getValue();
             syncGetNewCustomerViewModel.Tel = telPairedItem.getValue();
             syncGetNewCustomerViewModel.Mobile = mobilePairedItem.getValue();
