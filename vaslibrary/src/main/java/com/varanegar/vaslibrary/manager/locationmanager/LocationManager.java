@@ -819,7 +819,7 @@ public class LocationManager extends BaseManager<LocationModel> {
         List<LocationModel> locations = getLocations(DeviceReportLocationViewModel.class);
         UserModel userModel = UserManager.readFromFile(getContext());
         if (locations.size() > 0 && userModel != null) {
-            tryToSendItems(locations, TrackingApi.getReportServer(), false);
+            tryToSendItems(locations, TrackingApi.getDefaultServer(getContext()), false);
         }
     }
 
