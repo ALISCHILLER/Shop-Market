@@ -1,23 +1,33 @@
 package com.varanegar.vaslibrary.ui.fragment;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.VpnService;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,12 +60,20 @@ import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
 import com.varanegar.vaslibrary.ui.dialog.InsertPinDialog;
 import com.varanegar.vaslibrary.ui.fragment.picturecustomer.NoPictureReasonDialog;
+import com.varanegar.vaslibrary.util.vpn_openvpn.CheckInternetConnection;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.personnel.UserApi;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 
+import de.blinkt.openvpn.OpenVpnApi;
+import de.blinkt.openvpn.core.OpenVPNService;
+import de.blinkt.openvpn.core.OpenVPNThread;
 import okhttp3.Request;
 import timber.log.Timber;
 
@@ -77,7 +95,12 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
     private Spinner secondExternalSpinner;
     private Spinner localSpinner;
     private int pluss;
+    boolean vpnStart = false;
+    private CheckInternetConnection connection;
+    private ConstraintLayout vpn_profile;
 
+    private OpenVPNThread vpnThread = new OpenVPNThread();
+    private OpenVPNService vpnService = new OpenVPNService();
     @Override
     public void onPause() {
         super.onPause();
@@ -87,6 +110,7 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
     public void setConfigListener(SettingsUpdateListener listener) {
         this.updateListener = listener;
     }
+
 
     @Override
     public View onCreateDialogView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -158,12 +182,37 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
         localIpEditText = view.findViewById(R.id.local_ip_edit_text);
         idPairedItemsEditable = (PairedItemsEditable) view.findViewById(R.id.idEditText);
         sysConfigManager = new SysConfigManager(getContext());
-
+        vpn_profile=view.findViewById(R.id.vpn_profile);
 
         firstExternalIpEditText.setEnabled(false);
         localIpEditText.setEnabled(false);
         firstExternalIpEditText.setText("192.168.50.110:8080");
         localIpEditText.setText("192.168.50.110:8080");
+        connection = new CheckInternetConnection();
+        Button coonect_vpn=view.findViewById(R.id.coonect_vpn);
+        coonect_vpn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (vpnStart) {
+                    confirmDisconnect();
+                }else {
+                    prepareVpn();
+                }
+            }
+        });
+        RadioGroup  radioGroup = (RadioGroup) view.findViewById(R.id.radioGroup);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if(checkedId == R.id.radio_lan) {
+                   vpn_profile.setVisibility(View.GONE);
+                } else if(checkedId == R.id.radio_wan) {
+                    vpn_profile.setVisibility(View.VISIBLE);
+                } else {
+                    vpn_profile.setVisibility(View.GONE);
+                }
+            }
+        });
 
         SysConfigModel serverAddress = sysConfigManager.read(ConfigKey.ValidServerAddress, SysConfigManager.local);
         if (serverAddress != null && !serverAddress.Value.isEmpty()) {
@@ -584,4 +633,210 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
     private String removeHttp(String ip) {
         return ip.replaceAll(getString(R.string.http), "").replaceAll(getString(R.string.https), "");
     }
+    /**
+     * Internet connection status.
+     */
+    public boolean getInternetStatus() {
+        return connection.netCheck(getContext());
+    }
+    /**
+     * Prepare for vpn connect with required permission
+     */
+    private void prepareVpn() {
+        if (!vpnStart) {
+            if (getInternetStatus()) {
+
+                // Checking permission for network monitor
+                Intent intent = VpnService.prepare(getContext());
+
+                if (intent != null) {
+                    startActivityForResult(intent, 1);
+                } else startVpn();//have already permission
+
+                // Update confection status
+                status("connecting");
+
+            } else {
+
+                // No internet connection available
+                showToast("you have no internet connection !!");
+            }
+
+        } else if (stopVpn()) {
+
+            // VPN is stopped, show a Toast message.
+            showToast("Disconnect Successfully");
+        }
+    }
+    /**
+     * Show toast message
+     * @param message: toast message
+     */
+    public void showToast(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+    /**
+     * Start the VPN
+     */
+    private void startVpn() {
+        try {
+            // .ovpn file
+            InputStream conf = getActivity().getAssets().open("zar.ovpn");
+            InputStreamReader isr = new InputStreamReader(conf);
+            BufferedReader br = new BufferedReader(isr);
+            String config = "";
+            String line;
+
+            while (true) {
+                line = br.readLine();
+                if (line == null) break;
+                config += line + "\n";
+            }
+
+            br.readLine();
+            OpenVpnApi.startVpn(getContext(), config, "ظشق", "Attar-vpn", "e5ur1o8s");
+
+            // Update log
+
+            vpnStart = true;
+
+        } catch (IOException | RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Stop vpn
+     * @return boolean: VPN status
+     */
+    public boolean stopVpn() {
+        try {
+            vpnThread.stop();
+
+            status("connect");
+            vpnStart = false;
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+
+
+
+    /**
+     * Show show disconnect confirm dialog
+     */
+    public void confirmDisconnect(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("قطع کردن اتصال وی پی ان");
+
+        builder.setPositiveButton(getActivity().getString(R.string.yes), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                stopVpn();
+            }
+        });
+        builder.setNegativeButton(getActivity().getString(R.string.no), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
+            }
+        });
+
+        // Create the AlertDialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+    /**
+     * Status change with corresponding vpn connection status
+     * @param connectionState
+     */
+    public void setStatus(String connectionState) {
+        if (connectionState!= null)
+            switch (connectionState) {
+                case "DISCONNECTED":
+                    status("connect");
+                    vpnStart = false;
+
+                    break;
+                case "CONNECTED":
+                    vpnStart = true;// it will use after restart this activity
+                    status("connected");
+
+                    break;
+                case "WAIT":
+
+                    break;
+                case "AUTH":
+
+                    break;
+                case "RECONNECTING":
+                    status("connecting");
+
+                    break;
+                case "NONETWORK":
+
+                    break;
+            }
+
+    }
+
+    /**
+     * Change button background color and text
+     * @param status: VPN current status
+     */
+    public void status(String status) {
+
+        if (status.equals("connect")) {
+
+        } else if (status.equals("connecting")) {
+
+        } else if (status.equals("connected")) {
+
+
+
+        } else if (status.equals("tryDifferentServer")) {
+
+
+        } else if (status.equals("loading")) {
+
+        } else if (status.equals("invalidDevice")) {
+
+        } else if (status.equals("authenticationCheck")) {
+
+        }
+    }
+
+
+    /**
+     * Receive broadcast message
+     */
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try {
+                setStatus(intent.getStringExtra("state"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+
+                String duration = intent.getStringExtra("duration");
+                String lastPacketReceive = intent.getStringExtra("lastPacketReceive");
+                String byteIn = intent.getStringExtra("byteIn");
+                String byteOut = intent.getStringExtra("byteOut");
+
+                if (duration == null) duration = "00:00:00";
+                if (lastPacketReceive == null) lastPacketReceive = "0";
+                if (byteIn == null) byteIn = " ";
+                if (byteOut == null) byteOut = " ";
+               // updateConnectionStatus(duration, lastPacketReceive, byteIn, byteOut);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    };
 }

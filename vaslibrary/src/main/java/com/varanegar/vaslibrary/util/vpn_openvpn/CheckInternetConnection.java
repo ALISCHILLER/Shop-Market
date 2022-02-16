@@ -1,4 +1,4 @@
-package com.lazycoder.cakevpn;
+package com.varanegar.vaslibrary.util.vpn_openvpn;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

@@ -11,4 +11,5 @@ include ':hotsales'
 include ':supervisor'
 include ':contractor'
 include ':trackingViewer'
+include ':vpnLib'
 rootProject.name = "VaranegarTablet"
