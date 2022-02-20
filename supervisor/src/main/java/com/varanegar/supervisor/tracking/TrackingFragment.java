@@ -43,15 +43,15 @@ public class TrackingFragment extends IMainPageFragment {
                     @Override
                     public void onChanged() {
                         TrackingConfig trackingConfig = new TrackingConfig(getContext());
-                        if (trackingConfig.isMap())
-                        {
-                            if (tabsViewPager.getCurrentItem() == 1)
-                                tabsViewPager.setCurrentItem(0);
-                            else
-                                mapFragment.showMarkers();
-                        }
-                        else
-                            tabsViewPager.setCurrentItem(1);
+//                        if (trackingConfig.isMap())
+//                        {
+//                            if (tabsViewPager.getCurrentItem() == 1)
+//                                tabsViewPager.setCurrentItem(0);
+//                            else
+                        mapFragment.showMarkers();
+                        //}
+//                        else
+//                            tabsViewPager.setCurrentItem(1);
                     }
                 };
                 dialog.show(getChildFragmentManager(), "TrackingConfigDialog");
