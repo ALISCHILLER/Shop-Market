@@ -15,6 +15,7 @@ import java.io.StringReader;
 import de.blinkt.openvpn.core.ConfigParser;
 import de.blinkt.openvpn.core.ProfileManager;
 import de.blinkt.openvpn.core.VPNLaunchHelper;
+import timber.log.Timber;
 
 public class OpenVpnApi {
 
@@ -32,8 +33,10 @@ public class OpenVpnApi {
             VpnProfile vp = cp.convertProfile();// Analysis.ovpn
             Log.d(TAG, "startVpnInternal: =============="+cp+"\n" +
                     vp);
+
             vp.mName = sCountry;
             if (vp.checkProfile(context) != de.blinkt.openvpn.R.string.no_error_found){
+                Timber.e(context.getString(vp.checkProfile(context)));
                 throw new RemoteException(context.getString(vp.checkProfile(context)));
             }
             vp.mProfileCreator = context.getPackageName();
@@ -43,6 +46,7 @@ public class OpenVpnApi {
             ProfileManager.setTemporaryProfile(context, vp);
             VPNLaunchHelper.startOpenVpn(vp, context);
         } catch (IOException | ConfigParser.ConfigParseError e) {
+            Timber.e(e.getMessage());
             throw new RemoteException(e.getMessage());
         }
     }

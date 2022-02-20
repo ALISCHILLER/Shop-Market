@@ -750,6 +750,7 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
             vpnStart = true;
 
         } catch (IOException | RemoteException e) {
+            Timber.e(e);
             e.printStackTrace();
         }
     }
@@ -766,6 +767,7 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
             vpnStart = false;
             return true;
         } catch (Exception e) {
+            Timber.e(e);
             e.printStackTrace();
         }
 

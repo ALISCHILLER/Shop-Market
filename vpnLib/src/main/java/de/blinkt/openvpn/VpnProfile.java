@@ -29,6 +29,8 @@ import de.blinkt.openvpn.core.OpenVPNService;
 import de.blinkt.openvpn.core.VPNLaunchHelper;
 import de.blinkt.openvpn.core.VpnStatus;
 import de.blinkt.openvpn.core.X509Utils;
+import timber.log.Timber;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -1156,6 +1158,7 @@ public class VpnProfile implements Serializable, Cloneable {
         try {
             return ExtAuthHelper.signData(c, mExternalAuthenticator, mAlias, data);
         } catch (KeyChainException | InterruptedException e) {
+            Timber.e(e);
             VpnStatus.logError(R.string.error_extapp_sign, mExternalAuthenticator, e.getClass().toString(), e.getLocalizedMessage());
             return null;
         }
@@ -1201,6 +1204,7 @@ public class VpnProfile implements Serializable, Cloneable {
             return signed_bytes;
         } catch (NoSuchAlgorithmException | InvalidKeyException | IllegalBlockSizeException
                 | BadPaddingException | NoSuchPaddingException | SignatureException e) {
+            Timber.e(e.getMessage());
             VpnStatus.logError(R.string.error_rsa_sign, e.getClass().toString(), e.getLocalizedMessage());
             return null;
         }
