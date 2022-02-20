@@ -247,7 +247,59 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
                     loginButton.setProgress(0);
                     return;
                 }
+                userManager.login(username, password
+                        , new OnTokenAcquired() {
+                            @Override
+                            public void run(Token token) {
+                                try {
+                                    AccountManager accountManager = new AccountManager();
+                                    accountManager.writeToFile(token, getContext(), "user.token");
+                                    final UserModel user = userManager.getUser(username);
+                                    user.LoginDate = new Date();
+                                    UserManager.writeToFile(user, getContext());
+                                    VaranegarApplication.getInstance().getDbHandler().emptyAllTablesExcept(User.UserTbl, SysConfig.SysConfigTbl);
+                                    MainVaranegarActivity activity = getVaranegarActvity();
+                                    if (activity != null && !activity.isFinishing() && isResumed())
+                                        activity.putFragment(new Get_Tour_Fragment());
+                                    setEnabled(true);
+                                    loginButton.setProgress(0);
+                                    getTrackingLicense();
+                                    SysConfigManager sysConfigManager = new SysConfigManager(getContext());
+                                    sysConfigManager.sync(new UpdateCall() {
+                                        @Override
+                                        protected void onFinish() {
+                                        }
+                                    });
+                                } catch (Exception e) {
+                                    Timber.e(e);
+                                    if (isResumed()) {
+                                        setEnabled(true);
+                                        loginButton.setProgress(0);
+                                        MainVaranegarActivity activity = getVaranegarActvity();
+                                        if (activity != null && !activity.isFinishing())
+                                            activity.showSnackBar(getContext().getString(R.string.login_failed), MainVaranegarActivity.Duration.Short);
+                                    }
+                                }
+                            }
+                        }, new OnError() {
+                            @Override
+                            public void onAuthenticationFailure(String error, String description) {
+                                MainVaranegarActivity activity = getVaranegarActvity();
+                                if (activity != null && !activity.isFinishing() && isResumed())
+                                    activity.showSnackBar(description, MainVaranegarActivity.Duration.Short);
+                                setEnabled(true);
+                                loginButton.setProgress(0);
+                            }
 
+                            @Override
+                            public void onNetworkFailure(Throwable t) {
+                                MainVaranegarActivity activity = getVaranegarActvity();
+                                if (activity != null && !activity.isFinishing() && isResumed())
+                                    activity.showSnackBar(R.string.connection_to_server_failed, MainVaranegarActivity.Duration.Short);
+                                setEnabled(true);
+                                loginButton.setProgress(0);
+                            }
+                        });
 
                 String deviceId = getDeviceId();
 //                if (deviceId == null) {
@@ -256,101 +308,101 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
 //                    loginButton.setProgress(0);
 //                    return;
 //                }
-
-                DeviceApi deviceApi = new DeviceApi(getContext());
-                CompanyDeviceAppData data = new CompanyDeviceAppData();
-                data.DeviceModelName = Build.MODEL;
-                data.IMEI = deviceId;
-                data.UserName = username;
-                data.IsSupervisor = true;
-                LicenseRequestBody body = new LicenseRequestBody();
-                body.companyDeviceAppData = data;
-                deviceApi.runWebRequest(deviceApi.checkLicense(body), new WebCallBack<CompanyDeviceAppResult>() {
-                    @Override
-                    protected void onFinish() {
-
-                    }
-
-                    @Override
-                    protected void onSuccess(CompanyDeviceAppResult result, Request request) {
-//                        if (result.Type == 200)
-                            userManager.login(username, password
-                                    , new OnTokenAcquired() {
-                                        @Override
-                                        public void run(Token token) {
-                                            try {
-                                                AccountManager accountManager = new AccountManager();
-                                                accountManager.writeToFile(token, getContext(), "user.token");
-                                                final UserModel user = userManager.getUser(username);
-                                                user.LoginDate = new Date();
-                                                UserManager.writeToFile(user, getContext());
-                                                VaranegarApplication.getInstance().getDbHandler().emptyAllTablesExcept(User.UserTbl, SysConfig.SysConfigTbl);
-                                                MainVaranegarActivity activity = getVaranegarActvity();
-                                                if (activity != null && !activity.isFinishing() && isResumed())
-                                                    activity.putFragment(new Get_Tour_Fragment());
-                                                setEnabled(true);
-                                                loginButton.setProgress(0);
-                                                getTrackingLicense();
-                                                SysConfigManager sysConfigManager = new SysConfigManager(getContext());
-                                                sysConfigManager.sync(new UpdateCall() {
-                                                    @Override
-                                                    protected void onFinish() {
-                                                    }
-                                                });
-                                            } catch (Exception e) {
-                                                Timber.e(e);
-                                                if (isResumed()) {
-                                                    setEnabled(true);
-                                                    loginButton.setProgress(0);
-                                                    MainVaranegarActivity activity = getVaranegarActvity();
-                                                    if (activity != null && !activity.isFinishing())
-                                                        activity.showSnackBar(getContext().getString(R.string.login_failed), MainVaranegarActivity.Duration.Short);
-                                                }
-                                            }
-                                        }
-                                    }, new OnError() {
-                                        @Override
-                                        public void onAuthenticationFailure(String error, String description) {
-                                            MainVaranegarActivity activity = getVaranegarActvity();
-                                            if (activity != null && !activity.isFinishing() && isResumed())
-                                                activity.showSnackBar(description, MainVaranegarActivity.Duration.Short);
-                                            setEnabled(true);
-                                            loginButton.setProgress(0);
-                                        }
-
-                                        @Override
-                                        public void onNetworkFailure(Throwable t) {
-                                            MainVaranegarActivity activity = getVaranegarActvity();
-                                            if (activity != null && !activity.isFinishing() && isResumed())
-                                                activity.showSnackBar(R.string.connection_to_server_failed, MainVaranegarActivity.Duration.Short);
-                                            setEnabled(true);
-                                            loginButton.setProgress(0);
-                                        }
-                                    });
-//                        else {
-//                            showErrorMessage(result.Message);
-//                            setEnabled(true);
-//                            loginButton.setProgress(0);
-//                        }
-
-                    }
-
-                    @Override
-                    protected void onApiFailure(ApiError error, Request request) {
-                        String e = WebApiErrorBody.log(error, getContext());
-                        setEnabled(true);
-                        showErrorMessage(e);
-                        loginButton.setProgress(0);
-                    }
-
-                    @Override
-                    protected void onNetworkFailure(Throwable t, Request request) {
-                        setEnabled(true);
-                        loginButton.setProgress(0);
-                        Timber.e(t);
-                        showErrorMessage(R.string.network_error);
-                    }
-                });
+//
+//                DeviceApi deviceApi = new DeviceApi(getContext());
+//                CompanyDeviceAppData data = new CompanyDeviceAppData();
+//                data.DeviceModelName = Build.MODEL;
+//                data.IMEI = deviceId;
+//                data.UserName = username;
+//                data.IsSupervisor = true;
+//                LicenseRequestBody body = new LicenseRequestBody();
+//                body.companyDeviceAppData = data;
+//                deviceApi.runWebRequest(deviceApi.checkLicense(body), new WebCallBack<CompanyDeviceAppResult>() {
+//                    @Override
+//                    protected void onFinish() {
+//
+//                    }
+//
+//                    @Override
+//                    protected void onSuccess(CompanyDeviceAppResult result, Request request) {
+////                        if (result.Type == 200)
+//                            userManager.login(username, password
+//                                    , new OnTokenAcquired() {
+//                                        @Override
+//                                        public void run(Token token) {
+//                                            try {
+//                                                AccountManager accountManager = new AccountManager();
+//                                                accountManager.writeToFile(token, getContext(), "user.token");
+//                                                final UserModel user = userManager.getUser(username);
+//                                                user.LoginDate = new Date();
+//                                                UserManager.writeToFile(user, getContext());
+//                                                VaranegarApplication.getInstance().getDbHandler().emptyAllTablesExcept(User.UserTbl, SysConfig.SysConfigTbl);
+//                                                MainVaranegarActivity activity = getVaranegarActvity();
+//                                                if (activity != null && !activity.isFinishing() && isResumed())
+//                                                    activity.putFragment(new Get_Tour_Fragment());
+//                                                setEnabled(true);
+//                                                loginButton.setProgress(0);
+//                                                getTrackingLicense();
+//                                                SysConfigManager sysConfigManager = new SysConfigManager(getContext());
+//                                                sysConfigManager.sync(new UpdateCall() {
+//                                                    @Override
+//                                                    protected void onFinish() {
+//                                                    }
+//                                                });
+//                                            } catch (Exception e) {
+//                                                Timber.e(e);
+//                                                if (isResumed()) {
+//                                                    setEnabled(true);
+//                                                    loginButton.setProgress(0);
+//                                                    MainVaranegarActivity activity = getVaranegarActvity();
+//                                                    if (activity != null && !activity.isFinishing())
+//                                                        activity.showSnackBar(getContext().getString(R.string.login_failed), MainVaranegarActivity.Duration.Short);
+//                                                }
+//                                            }
+//                                        }
+//                                    }, new OnError() {
+//                                        @Override
+//                                        public void onAuthenticationFailure(String error, String description) {
+//                                            MainVaranegarActivity activity = getVaranegarActvity();
+//                                            if (activity != null && !activity.isFinishing() && isResumed())
+//                                                activity.showSnackBar(description, MainVaranegarActivity.Duration.Short);
+//                                            setEnabled(true);
+//                                            loginButton.setProgress(0);
+//                                        }
+//
+//                                        @Override
+//                                        public void onNetworkFailure(Throwable t) {
+//                                            MainVaranegarActivity activity = getVaranegarActvity();
+//                                            if (activity != null && !activity.isFinishing() && isResumed())
+//                                                activity.showSnackBar(R.string.connection_to_server_failed, MainVaranegarActivity.Duration.Short);
+//                                            setEnabled(true);
+//                                            loginButton.setProgress(0);
+//                                        }
+//                                    });
+////                        else {
+////                            showErrorMessage(result.Message);
+////                            setEnabled(true);
+////                            loginButton.setProgress(0);
+////                        }
+//
+//                    }
+//
+//                    @Override
+//                    protected void onApiFailure(ApiError error, Request request) {
+//                        String e = WebApiErrorBody.log(error, getContext());
+//                        setEnabled(true);
+//                        showErrorMessage(e);
+//                        loginButton.setProgress(0);
+//                    }
+//
+//                    @Override
+//                    protected void onNetworkFailure(Throwable t, Request request) {
+//                        setEnabled(true);
+//                        loginButton.setProgress(0);
+//                        Timber.e(t);
+//                        showErrorMessage(R.string.network_error);
+//                    }
+//                });
             }
 
             @Override
