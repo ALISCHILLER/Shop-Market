@@ -50,6 +50,7 @@ import com.varanegar.vaslibrary.action.BaseAction;
 import com.varanegar.vaslibrary.action.BaseReturnAction;
 import com.varanegar.vaslibrary.action.CameraAction;
 import com.varanegar.vaslibrary.action.SendOperationAction;
+import com.varanegar.vaslibrary.action.VpnAction;
 import com.varanegar.vaslibrary.action.confirm.ConfirmAction;
 import com.varanegar.vaslibrary.action.CustomerInventoryAction;
 import com.varanegar.vaslibrary.action.CustomerQuestionnaireAction;
@@ -825,6 +826,17 @@ public class CustomersContentFragment extends VaranegarFragment {
             updateCustomer();
         });
         actions.add(sendOperationAction);
+        VpnAction vpnAction=new VpnAction(
+                getVaranegarActvity(),
+                actionsAdapter,
+                getSelectedId());
+        vpnAction.setActionCallBack(new Action.ActionCallBack() {
+            @Override
+            public void done() {
+
+            }
+        });
+        actions.add(vpnAction);
     }
 
     private void sortActions(List<Action> actions) {

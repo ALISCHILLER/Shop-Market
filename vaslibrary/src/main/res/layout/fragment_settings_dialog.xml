@@ -270,6 +270,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/vpn_profile"
             android:layout_width="match_parent"
+            android:visibility="gone"
             android:layout_height="wrap_content">
 
             <TextView
