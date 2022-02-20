@@ -94,6 +94,7 @@ import com.varanegar.vaslibrary.ui.dialog.InsertPinDialog;
 import com.varanegar.vaslibrary.ui.dialog.InsertTourNoSendRest;
 import com.varanegar.vaslibrary.ui.dialog.TrackingLicenseFragment;
 import com.varanegar.vaslibrary.ui.dialog.VirtualTourDialog;
+import com.varanegar.vaslibrary.ui.fragment.vpnfragment.VpnDialogFragment;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.appversion.ApkDownloadCallBack;
 import com.varanegar.vaslibrary.webapi.appversion.AppVersionApi;
@@ -131,6 +132,7 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
     private ImageView backupImageView;
     private ImageView downloadApk;
     private ImageView refreshtour;
+    private ImageView open_vpn;
     private ImageView logoutImageView;
     private ImageView trackingLicenseImageView;
     private RecordButton cancelTourRecordBtn;
@@ -834,6 +836,7 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
         backupImageView = view.findViewById(R.id.backup_image_view);
         downloadApk = view.findViewById(R.id.download_apk);
         refreshtour= view.findViewById(R.id.refresh_tour);
+        open_vpn= view.findViewById(R.id.open_vpn);
         LinearLayout refreshtourlin=view.findViewById(R.id.refresh_tour_lin);
         logoutImageView = view.findViewById(R.id.log_out_image_view);
         trackingLicenseImageView = view.findViewById(R.id.tracking_license_image_view);
@@ -862,11 +865,17 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
             return view;
         }
 
+        open_vpn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                VpnDialogFragment vpnDialogFragment = new VpnDialogFragment();
+                vpnDialogFragment.show(getChildFragmentManager(), "SettingDialogFragment");
+            }
+        });
 
         /**
          * دریافت point
          */
-
         Date date =new Date();
         SimpleDateFormat postFormater = new SimpleDateFormat("MMMM dd, yyyy");
        SimpleDateFormat df = new SimpleDateFormat("HH:mm");
@@ -898,11 +907,14 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
            newDateStr = postFormater.format(last.get(0).Date);
            if (newDateStr.equals(d)) {
                String newTimeLast = df.format(last.get(0).Date);
-               String newTimeIsLast = df.format(lastISSend.get(0).Date);
+               if (lastISSend.get(0) != null) {
+                   String newTimeIsLast = df.format(lastISSend.get(0).Date);
+                   last_send_point.setValue(newTimeIsLast);
+               }
                notsend_point.setValue(String.valueOf(listnot.size()));
                all_point.setValue(String.valueOf(listall.size()));
                send_point.setValue(String.valueOf(list.size()));
-               last_send_point.setValue(newTimeIsLast);
+
                last_point.setValue(newTimeLast);
            }
        }

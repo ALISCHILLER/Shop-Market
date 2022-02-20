@@ -255,7 +255,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/vpn_profile"
-
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 

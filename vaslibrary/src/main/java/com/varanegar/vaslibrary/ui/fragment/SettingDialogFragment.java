@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.VpnService;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.RemoteException;
@@ -74,6 +76,7 @@ import java.util.List;
 import de.blinkt.openvpn.OpenVpnApi;
 import de.blinkt.openvpn.core.OpenVPNService;
 import de.blinkt.openvpn.core.OpenVPNThread;
+import de.blinkt.openvpn.core.VpnStatus;
 import okhttp3.Request;
 import timber.log.Timber;
 
@@ -99,12 +102,34 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
     private CheckInternetConnection connection;
     private ConstraintLayout vpn_profile;
 
+    private Button coonect_vpn;
+    private EditText user_name_vpn;
+    private EditText password_vpn;
+    private String usernameVpn,  passwordVpn;
+    private SharedPreferences sharedconditionCustomer;
     private OpenVPNThread vpnThread = new OpenVPNThread();
     private OpenVPNService vpnService = new OpenVPNService();
     @Override
     public void onPause() {
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
         super.onPause();
         dismissAllowingStateLoss();
+    }
+
+    @Override
+    public void onResume() {
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver,
+                new IntentFilter("connectionState"));
+
+
+        super.onResume();
+    }
+    /**
+     * Save current selected server on local shared preference
+     */
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 
     public void setConfigListener(SettingsUpdateListener listener) {
@@ -119,7 +144,6 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
         view = inflater.inflate(R.layout.fragment_settings_dialog, container, false);
         getButton = (ActionProcessButton) view.findViewById(R.id.getSettingsButton);
         getButton.setMode(ActionProcessButton.Mode.ENDLESS);
-
         firstExternalSpinner = view.findViewById(R.id.first_external_spinner);
         secondExternalSpinner = view.findViewById(R.id.second_external_spinner);
         localSpinner = view.findViewById(R.id.local_spinner);
@@ -131,6 +155,8 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
                 return view;
             }
         };
+        sharedconditionCustomer = getActivity().getSharedPreferences("OpenVPN", Context.MODE_PRIVATE);
+
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         firstExternalSpinner.setAdapter(spinnerAdapter);
         secondExternalSpinner.setAdapter(spinnerAdapter);
@@ -189,17 +215,39 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
         firstExternalIpEditText.setText("192.168.50.110:8080");
         localIpEditText.setText("192.168.50.110:8080");
         connection = new CheckInternetConnection();
-        Button coonect_vpn=view.findViewById(R.id.coonect_vpn);
+        coonect_vpn=view.findViewById(R.id.coonect_vpn);
+
+        usernameVpn=sharedconditionCustomer.getString("usernameVpn","");
+        passwordVpn=sharedconditionCustomer.getString("passwordVpn","");
+
+        user_name_vpn=view.findViewById(R.id.user_name_vpn);
+        password_vpn=view.findViewById(R.id.password_vpn);
+
+        if (!usernameVpn.isEmpty() && usernameVpn!=null  &&!passwordVpn.isEmpty() &&
+                passwordVpn!=null ) {
+            user_name_vpn.setText(usernameVpn);
+            password_vpn.setText(passwordVpn);
+        }
         coonect_vpn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+               usernameVpn=user_name_vpn.getText().toString();
+               passwordVpn=password_vpn.getText().toString();
                 if (vpnStart) {
                     confirmDisconnect();
                 }else {
-                    prepareVpn();
+                    if (!usernameVpn.isEmpty() && usernameVpn!=null  &&!passwordVpn.isEmpty() &&
+                            passwordVpn!=null ) {
+                        prepareVpn();
+                    }else {
+                        Toast.makeText(getActivity(),"لطفا نام کاربری و پسورد را وارد کنید",
+                                Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });
+        isServiceRunning();
+        VpnStatus.initLogCache(getActivity().getCacheDir());
         RadioGroup  radioGroup = (RadioGroup) view.findViewById(R.id.radioGroup);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -692,9 +740,10 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
                 if (line == null) break;
                 config += line + "\n";
             }
-
+            sharedconditionCustomer.edit().putString("usernameVpn",usernameVpn).apply();
+            sharedconditionCustomer.edit().putString("passwordVpn",passwordVpn).apply();
             br.readLine();
-            OpenVpnApi.startVpn(getContext(), config, "ظشق", "Attar-vpn", "e5ur1o8s");
+            OpenVpnApi.startVpn(getContext(), config, "زرماکارون", usernameVpn, passwordVpn);
 
             // Update log
 
@@ -789,26 +838,31 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
     public void status(String status) {
 
         if (status.equals("connect")) {
-
+            coonect_vpn.setText("اتصال");
         } else if (status.equals("connecting")) {
-
+            coonect_vpn.setText("درحال اتصال");
         } else if (status.equals("connected")) {
-
+            coonect_vpn.setText("متصل شد");
 
 
         } else if (status.equals("tryDifferentServer")) {
 
 
         } else if (status.equals("loading")) {
-
+            coonect_vpn.setText("Loading Server..");
         } else if (status.equals("invalidDevice")) {
-
+            coonect_vpn.setText("Invalid Device");
         } else if (status.equals("authenticationCheck")) {
 
         }
     }
 
-
+    /**
+     * Get service status
+     */
+    public void isServiceRunning() {
+        setStatus(vpnService.getStatus());
+    }
     /**
      * Receive broadcast message
      */
@@ -839,4 +893,7 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
 
         }
     };
+
+
+
 }
