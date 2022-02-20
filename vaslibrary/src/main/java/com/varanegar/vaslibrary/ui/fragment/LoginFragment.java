@@ -35,6 +35,7 @@ import com.varanegar.framework.util.LocaleHelper;
 import com.varanegar.framework.util.component.SearchBox;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
+import com.varanegar.framework.util.prefs.Preferences;
 import com.varanegar.framework.validation.ValidationError;
 import com.varanegar.framework.validation.ValidationListener;
 import com.varanegar.framework.validation.Validator;
@@ -49,22 +50,28 @@ import com.varanegar.vaslibrary.manager.UserManager;
 import com.varanegar.vaslibrary.manager.locationmanager.LocationManager;
 import com.varanegar.vaslibrary.manager.locationmanager.LogLevel;
 import com.varanegar.vaslibrary.manager.locationmanager.LogType;
+import com.varanegar.vaslibrary.manager.locationmanager.OnSaveLocation;
 import com.varanegar.vaslibrary.manager.locationmanager.TrackingLicense;
 import com.varanegar.vaslibrary.manager.locationmanager.TrackingLogManager;
+import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.SendTourEventViewModel;
+import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.SendTourLocationViewModel;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.messaging.VasInstanceIdService;
 import com.varanegar.vaslibrary.model.TrackingLog;
 import com.varanegar.vaslibrary.model.location.Location;
+import com.varanegar.vaslibrary.model.location.LocationModel;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfig;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.model.user.User;
 import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.model.user.UserModelRepository;
+import com.varanegar.vaslibrary.print.SentTourInfoPrint.TourInfo;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
 import com.varanegar.vaslibrary.ui.dialog.ImportDialogFragment;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -246,11 +253,12 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
 //                intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/download/" + "Sepehr_varanegar.apk")), "application/vnd.android.package-archive");
 //                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                startActivity(intent);
+
             LocationManager locationManager = new LocationManager(getContext());
             locationManager.tryToSendAll(new LocationManager.SendLocationListener() {
                 @Override
                 public void onSendFailed() {
-
+                    Timber.e("not Send Point");
                 }
             });
             userNameEditText.setError(null);

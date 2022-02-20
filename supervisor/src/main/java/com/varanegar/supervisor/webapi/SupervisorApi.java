@@ -16,6 +16,8 @@ import com.varanegar.supervisor.model.StatusConfigModel;
 import com.varanegar.supervisor.model.SupervisorTourId;
 import com.varanegar.supervisor.model.changeOrdersStatus.ChangeOrdersStatusmModel;
 import com.varanegar.supervisor.model.reviewreport.ReviewreportModel;
+import com.varanegar.supervisor.model.tracking.RouteMapModel;
+import com.varanegar.supervisor.model.tracking.RouteMapPostModel;
 import com.varanegar.vaslibrary.model.CheckCustomerCreditsModel;
 import com.varanegar.vaslibrary.model.customer.SupervisorCustomerModel;
 import com.varanegar.supervisor.model.VisitorModel;
@@ -112,6 +114,11 @@ public class SupervisorApi extends BaseApi implements ISupervisorApi {
     @Override
     public Call<List<CheckCustomerCreditsModel>> CheckCustomerCredits(List<String> customerCode) {
         return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).CheckCustomerCredits(customerCode);
+    }
+
+    @Override
+    public Call<List<RouteMapModel>> RouteMap(RouteMapPostModel routeMapPostModel) {
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).RouteMap(routeMapPostModel);
     }
 
     @Override

@@ -12,6 +12,8 @@ import com.varanegar.supervisor.model.SupervisorTourId;
 import com.varanegar.supervisor.model.changeOrdersStatus.ChangeOrdersStatusmModel;
 import com.varanegar.supervisor.model.reviewreport.ReviewreportModel;
 import com.varanegar.supervisor.model.sendAnswersQustion.SyncGetTourModel;
+import com.varanegar.supervisor.model.tracking.RouteMapModel;
+import com.varanegar.supervisor.model.tracking.RouteMapPostModel;
 import com.varanegar.vaslibrary.model.CheckCustomerCreditsModel;
 import com.varanegar.vaslibrary.model.customer.SupervisorCustomerModel;
 import com.varanegar.supervisor.model.VisitorModel;
@@ -162,4 +164,9 @@ public interface ISupervisorApi {
     @GET("api/v2/ngt/customer/CheckCustomerCredits")
     Call<List<CheckCustomerCreditsModel>>CheckCustomerCredits (
             @Query("CustomersId") List<String> customerCode);
+
+
+    @POST("api/dsd/tracking/ldprsactsv2")
+    Call<List<RouteMapModel>>RouteMap (
+            @Body RouteMapPostModel routeMapPostModel);
 }

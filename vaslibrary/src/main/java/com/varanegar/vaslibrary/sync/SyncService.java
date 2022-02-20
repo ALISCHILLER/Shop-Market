@@ -151,7 +151,7 @@ public abstract class SyncService extends Service {
                                             locationManager.addTrackingPoint(reportLocationViewModel, new OnSaveLocation() {
                                                 @Override
                                                 public void onSaved(LocationModel location) {
-                                                    locationManager.tryToSendItem(location, TrackingApi.getReportServer(), false);
+                                                    locationManager.tryToSendItem(location, TrackingApi.getDefaultServer(SyncService.this), false);
                                                 }
 
                                                 @Override

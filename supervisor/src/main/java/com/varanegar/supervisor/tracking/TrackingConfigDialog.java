@@ -126,7 +126,7 @@ public class TrackingConfigDialog extends SlidingDialog {
 //                if (position == 0)
 //                    return new VisitorsPathConfigTabFragment();
 //                else
-                    return new LastStatusConfigTabFragment();
+                return new LastStatusConfigTabFragment();
             }
 
             @Override
@@ -136,7 +136,7 @@ public class TrackingConfigDialog extends SlidingDialog {
         });
         trackingTypeTab = view.findViewById(R.id.tracking_type_tabs);
         trackingTypeTab.setupWithViewPager(tabsViewPager);
-     //   trackingTypeTab.getTabAt(0).setIcon(R.drawable.ic_tracking_cyan_24dp);
+        //   trackingTypeTab.getTabAt(0).setIcon(R.drawable.ic_tracking_cyan_24dp);
         trackingTypeTab.getTabAt(0).setIcon(R.drawable.ic_location_on_cyan_24dp);
 
         t = view.findViewById(R.id.view_type_tab_layout);
@@ -144,7 +144,7 @@ public class TrackingConfigDialog extends SlidingDialog {
 //        if (trackingConfig.isMap())
 //            t.getTabAt(0).select();
 //        else
-            t.getTabAt(0).select();
+        t.getTabAt(0).select();
         return view;
     }
 

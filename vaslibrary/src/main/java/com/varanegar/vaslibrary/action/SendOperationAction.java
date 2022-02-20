@@ -214,7 +214,7 @@ public class SendOperationAction extends CheckPathAction {
         locationManager.tryToSendAll(new LocationManager.SendLocationListener() {
             @Override
             public void onSendFailed() {
-                //send log to server
+                Timber.e("not Send Point");
             }
         });
     }

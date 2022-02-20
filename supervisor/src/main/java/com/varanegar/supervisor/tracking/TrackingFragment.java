@@ -48,7 +48,7 @@ public class TrackingFragment extends IMainPageFragment {
 //                            if (tabsViewPager.getCurrentItem() == 1)
 //                                tabsViewPager.setCurrentItem(0);
 //                            else
-                                mapFragment.showMarkers();
+                        mapFragment.showMarkers();
                         //}
 //                        else
 //                            tabsViewPager.setCurrentItem(1);
