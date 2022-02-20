@@ -17,7 +17,7 @@ public class VpnAction  extends CheckPathAction{
 
     @Override
     public String getName() {
-        return "وی پن";
+        return "درگاه اتصال";
     }
 
     @Override

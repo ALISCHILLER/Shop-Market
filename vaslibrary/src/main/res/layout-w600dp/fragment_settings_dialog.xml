@@ -245,12 +245,12 @@
                 android:id="@+id/radio_lan"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Lan"/>
+                android:text="داخلی"/>
             <RadioButton
                 android:id="@+id/radio_wan"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="wan"/>
+                android:text="حارجی "/>
         </RadioGroup>
 
         <androidx.constraintlayout.widget.ConstraintLayout
