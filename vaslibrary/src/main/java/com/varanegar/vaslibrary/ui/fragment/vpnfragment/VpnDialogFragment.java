@@ -136,7 +136,7 @@ public class VpnDialogFragment extends CuteDialogWithToolbar {
     private void startVpn() {
         try {
             // .ovpn file
-            InputStream conf = getActivity().getAssets().open("zar.ovpn");
+            InputStream conf = getActivity().getAssets().open("zarpakhsh.ovpn");
             InputStreamReader isr = new InputStreamReader(conf);
             BufferedReader br = new BufferedReader(isr);
             String config = "";

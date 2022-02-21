@@ -18,7 +18,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.RemoteException;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +27,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -48,7 +46,6 @@ import com.varanegar.framework.util.recycler.BaseRecyclerAdapter;
 import com.varanegar.framework.util.recycler.BaseRecyclerView;
 import com.varanegar.framework.util.recycler.BaseViewHolder;
 import com.varanegar.vaslibrary.R;
-import com.varanegar.vaslibrary.base.BackupManager;
 import com.varanegar.vaslibrary.enums.PreUrl;
 import com.varanegar.vaslibrary.manager.UserManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.CenterSysConfigModel;
@@ -61,7 +58,6 @@ import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
 import com.varanegar.vaslibrary.ui.dialog.InsertPinDialog;
-import com.varanegar.vaslibrary.ui.fragment.picturecustomer.NoPictureReasonDialog;
 import com.varanegar.vaslibrary.util.vpn_openvpn.CheckInternetConnection;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.personnel.UserApi;
@@ -98,10 +94,10 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
     private Spinner secondExternalSpinner;
     private Spinner localSpinner;
     private int pluss;
+
     boolean vpnStart = false;
     private CheckInternetConnection connection;
     private ConstraintLayout vpn_profile;
-
     private Button coonect_vpn;
     private EditText user_name_vpn;
     private EditText password_vpn;
@@ -109,6 +105,7 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
     private SharedPreferences sharedconditionCustomer;
     private OpenVPNThread vpnThread = new OpenVPNThread();
     private OpenVPNService vpnService = new OpenVPNService();
+
     @Override
     public void onPause() {
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
@@ -155,7 +152,7 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
                 return view;
             }
         };
-        sharedconditionCustomer = getActivity().getSharedPreferences("OpenVPN", Context.MODE_PRIVATE);
+
 
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         firstExternalSpinner.setAdapter(spinnerAdapter);
@@ -208,15 +205,15 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
         localIpEditText = view.findViewById(R.id.local_ip_edit_text);
         idPairedItemsEditable = (PairedItemsEditable) view.findViewById(R.id.idEditText);
         sysConfigManager = new SysConfigManager(getContext());
-        vpn_profile=view.findViewById(R.id.vpn_profile);
-
         firstExternalIpEditText.setEnabled(false);
         localIpEditText.setEnabled(false);
         firstExternalIpEditText.setText("192.168.50.110:8080");
         localIpEditText.setText("192.168.50.110:8080");
+
+        sharedconditionCustomer = getActivity().getSharedPreferences("OpenVPN", Context.MODE_PRIVATE);
+        vpn_profile=view.findViewById(R.id.vpn_profile);
         connection = new CheckInternetConnection();
         coonect_vpn=view.findViewById(R.id.coonect_vpn);
-
         usernameVpn=sharedconditionCustomer.getString("usernameVpn","");
         passwordVpn=sharedconditionCustomer.getString("passwordVpn","");
 
@@ -729,7 +726,7 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
     private void startVpn() {
         try {
             // .ovpn file
-            InputStream conf = getActivity().getAssets().open("zar.ovpn");
+            InputStream conf = getActivity().getAssets().open("zarpakhsh.ovpn");
             InputStreamReader isr = new InputStreamReader(conf);
             BufferedReader br = new BufferedReader(isr);
             String config = "";
