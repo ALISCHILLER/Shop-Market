@@ -898,11 +898,14 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
            newDateStr = postFormater.format(last.get(0).Date);
            if (newDateStr.equals(d)) {
                String newTimeLast = df.format(last.get(0).Date);
-               String newTimeIsLast = df.format(lastISSend.get(0).Date);
+               if (lastISSend.get(0)!=null) {
+                   String newTimeIsLast = df.format(lastISSend.get(0).Date);
+                   last_send_point.setValue(newTimeIsLast);
+               }
                notsend_point.setValue(String.valueOf(listnot.size()));
                all_point.setValue(String.valueOf(listall.size()));
                send_point.setValue(String.valueOf(list.size()));
-               last_send_point.setValue(newTimeIsLast);
+
                last_point.setValue(newTimeLast);
            }
        }
