@@ -52,6 +52,8 @@ public class CustomerApi extends BaseApi implements ICustomerApi {
         return api.get(tourId);
     }
 
+
+    
     @Override
     public Call<SyncGuidViewModel> registerNewCustomer(
             @Body SyncGetNewCustomerViewModel syncGetNewCustomerViewModel) {
