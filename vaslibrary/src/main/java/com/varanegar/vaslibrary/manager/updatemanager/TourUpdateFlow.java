@@ -40,6 +40,7 @@ import com.varanegar.vaslibrary.manager.UnitManager;
 import com.varanegar.vaslibrary.manager.ValidPayTypeManager;
 import com.varanegar.vaslibrary.manager.VisitTemplatePathCustomerManager;
 import com.varanegar.vaslibrary.manager.bank.BankManager;
+import com.varanegar.vaslibrary.manager.c_shipToparty.CustomerShipToPartyManager;
 import com.varanegar.vaslibrary.manager.catalogmanager.CatalogManager;
 import com.varanegar.vaslibrary.manager.city.CityManager;
 import com.varanegar.vaslibrary.manager.contractpricemanager.ContractPriceManager;
@@ -847,6 +848,37 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                 public void cancel() {
                     if (customerManager != null)
                         customerManager.cancelSync();
+                }
+            });
+
+            tasks.add(new TourAsyncTask() {
+                CustomerShipToPartyManager shipToPartyManager = new
+                        CustomerShipToPartyManager(getContext());
+
+                @Override
+                public void run(UpdateCall call) {
+                    shipToPartyManager.sync(call, true);
+                }
+
+                @Override
+                public String name() {
+                    return "shipToPartyManager";
+                }
+
+                @Override
+                public int group() {
+                    return R.string.customer_info;
+                }
+
+                @Override
+                public int queueId() {
+                    return 1;
+                }
+
+                @Override
+                public void cancel() {
+                    if (shipToPartyManager != null)
+                        shipToPartyManager.cancelSync();
                 }
             });
             tasks.add(new TourAsyncTask() {

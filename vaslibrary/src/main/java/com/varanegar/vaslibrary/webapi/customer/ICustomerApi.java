@@ -1,5 +1,6 @@
 package com.varanegar.vaslibrary.webapi.customer;
 
+import com.varanegar.vaslibrary.manager.c_shipToparty.CustomerShipToPartyModel;
 import com.varanegar.vaslibrary.model.customer.CustomerActivityModel;
 import com.varanegar.vaslibrary.model.customer.CustomerBarcodeModel;
 import com.varanegar.vaslibrary.model.customer.CustomerCategoryModel;
@@ -34,6 +35,16 @@ public interface ICustomerApi {
 
     @GET("api/v2/ngt/customer/DistributionCustomers")
     Call<List<CustomerModel>> get(@Query("TourId") String tourId);
+
+    @GET("api/v2/ngt/customer/shiptoparty/sync/loaddata")
+    Call<List<CustomerShipToPartyModel>> getShipToParty(
+            @Query("Date") String dateAfter,
+            @Query("dealerId") String dealerId,
+            @Query("customerId") String customerId,
+            @Query("DeviceSettingNo") String DeviceSettingNo);
+    @GET("api/v2/ngt/customer/shiptoparty/DistributionCustomers")
+    Call<List<CustomerShipToPartyModel>> getShipToParty(@Query("TourId") String tourId);
+
 
     @POST("api/v2/ngt/customer/registernewcustomer")
     Call<SyncGuidViewModel> registerNewCustomer(

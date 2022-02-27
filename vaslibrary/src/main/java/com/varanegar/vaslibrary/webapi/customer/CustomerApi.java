@@ -2,6 +2,7 @@ package com.varanegar.vaslibrary.webapi.customer;
 
 import android.content.Context;
 
+import com.varanegar.vaslibrary.manager.c_shipToparty.CustomerShipToPartyModel;
 import com.varanegar.vaslibrary.manager.picture.ImageViewModel;
 import com.varanegar.vaslibrary.model.customer.CustomerActivityModel;
 import com.varanegar.vaslibrary.model.customer.CustomerBarcodeModel;
@@ -52,7 +53,23 @@ public class CustomerApi extends BaseApi implements ICustomerApi {
         return api.get(tourId);
     }
 
+    @Override
+    public Call<List<CustomerShipToPartyModel>> getShipToParty(
+            @Query("Date") String dateAfter,
+            @Query("dealerId") String dealerId,
+            @Query("customerId") String customerId,
+            @Query("DeviceSettingNo") String DeviceSettingNo) {
+        ICustomerApi api = getRetrofitBuilder(TokenType.UserToken)
+                .build().create(ICustomerApi.class);
+        return api.getShipToParty(dateAfter, dealerId, customerId, DeviceSettingNo);
+    }
 
+    @Override
+    public Call<List<CustomerShipToPartyModel>> getShipToParty(String tourId) {
+        ICustomerApi api = getRetrofitBuilder(TokenType.UserToken)
+                .build().create(ICustomerApi.class);
+        return api.getShipToParty(tourId);
+    }
     
     @Override
     public Call<SyncGuidViewModel> registerNewCustomer(

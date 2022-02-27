@@ -31,14 +31,19 @@ import java.util.List;
 import java.util.Locale;
 
 import okhttp3.Request;
+import retrofit2.Call;
 import timber.log.Timber;
 
 public class CustomerShipToPartyManager extends BaseManager<CustomerShipToPartyModel> {
+
+    private CustomerShipToPartyModel  shipToPartyModel;
+    private Call<List<CustomerShipToPartyModel>> call;
+
     public CustomerShipToPartyManager(@NonNull Context context) {
         super(context, new CustomerShipToPartyModelRepository());
     }
     public void sync(@NonNull final UpdateCall updateCall, final boolean isTourUpdateFlow) {
-        clearCache();
+     //   clearCache();
         UpdateManager updateManager = new UpdateManager(getContext());
         Date date = updateManager.getLog(UpdateKey.Customer);
         String dateString = DateHelper.toString(date, DateFormat.MicrosoftDateTime, Locale.US);
