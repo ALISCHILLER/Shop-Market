@@ -61,7 +61,6 @@ public class CustomerShipToPartyManager extends BaseManager<CustomerShipToPartyM
     }
 
     public void sync(@NonNull final UpdateCall updateCall, final boolean isTourUpdateFlow) {
-     //   clearCache();
         UpdateManager updateManager = new UpdateManager(getContext());
         Date date = updateManager.getLog(UpdateKey.Customer);
         String dateString = DateHelper.toString(date, DateFormat.MicrosoftDateTime, Locale.US);
@@ -144,5 +143,6 @@ public class CustomerShipToPartyManager extends BaseManager<CustomerShipToPartyM
         if (call != null && !call.isCanceled() && call.isExecuted())
             call.cancel();
     }
+
 
 }

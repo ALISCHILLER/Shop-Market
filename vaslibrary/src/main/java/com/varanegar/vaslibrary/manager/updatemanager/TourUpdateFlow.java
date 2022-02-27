@@ -850,7 +850,6 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                         customerManager.cancelSync();
                 }
             });
-
             tasks.add(new TourAsyncTask() {
                 CustomerShipToPartyManager shipToPartyManager = new
                         CustomerShipToPartyManager(getContext());
