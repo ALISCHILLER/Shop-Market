@@ -1521,7 +1521,8 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
 //                });
             if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
                 SysConfigManager sysConfigManager = new SysConfigManager(getContext());
-                SysConfigModel sendPromotionPreview = sysConfigManager.read(ConfigKey.SendPromotionPreview, SysConfigManager.cloud);
+                SysConfigModel sendPromotionPreview = sysConfigManager.read(ConfigKey.
+                        SendPromotionPreview, SysConfigManager.cloud);
                 if (SysConfigManager.compare(sendPromotionPreview, true)) {
                     UUID customerIdOrderPreview = VaranegarApplication.getInstance().tryRetrieve("CUSTOMER_ID_ORDER_PREVIEW", false);
                     if (!customerId.equals(customerIdOrderPreview)) {
