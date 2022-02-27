@@ -7,6 +7,8 @@ import androidx.annotation.NonNull;
 import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.database.BaseManager;
 import com.varanegar.framework.database.DbException;
+import com.varanegar.framework.database.querybuilder.Query;
+import com.varanegar.framework.database.querybuilder.criteria.Criteria;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.util.datetime.DateFormat;
@@ -29,6 +31,7 @@ import com.varanegar.vaslibrary.webapi.customer.CustomerApi;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import okhttp3.Request;
 import retrofit2.Call;
@@ -42,6 +45,21 @@ public class CustomerShipToPartyManager extends BaseManager<CustomerShipToPartyM
     public CustomerShipToPartyManager(@NonNull Context context) {
         super(context, new CustomerShipToPartyModelRepository());
     }
+
+
+    public List<CustomerShipToPartyModel> getItems() {
+        Query q = new Query();
+        q.from(CustomerShipToParty.CustomerShipToPartyTbl);
+        return getItems(q);
+    }
+
+    public List<CustomerShipToPartyModel> getItems(UUID customerid) {
+        Query q = new Query();
+        q.from(CustomerShipToParty.CustomerShipToPartyTbl)
+                .whereAnd(Criteria.equals(CustomerShipToParty.CustomerUniqueId, customerid));
+        return getItems(q);
+    }
+
     public void sync(@NonNull final UpdateCall updateCall, final boolean isTourUpdateFlow) {
      //   clearCache();
         UpdateManager updateManager = new UpdateManager(getContext());

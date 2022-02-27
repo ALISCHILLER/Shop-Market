@@ -85,6 +85,8 @@ import com.varanegar.vaslibrary.manager.ProductType;
 import com.varanegar.vaslibrary.manager.ProductUnitViewManager;
 import com.varanegar.vaslibrary.manager.ProductUnitsViewManager;
 import com.varanegar.vaslibrary.manager.ValidPayTypeManager;
+import com.varanegar.vaslibrary.manager.c_shipToparty.CustomerShipToPartyManager;
+import com.varanegar.vaslibrary.manager.c_shipToparty.CustomerShipToPartyModel;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.customeractiontimemanager.CustomerActionTimeManager;
 import com.varanegar.vaslibrary.manager.customeractiontimemanager.CustomerActions;
@@ -189,6 +191,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -250,6 +253,7 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
     private PairedItemsSpinner<CustomerPaymentTypesViewModel> paymentTypesSpinner;
     private PairedItemsSpinner<CustomerOrderTypeModel> orderTypesSpinner;
     private PairedItemsSpinner<PriceClassVnLiteModel> priceClassSpinner;
+    private PairedItemsSpinner<CustomerShipToPartyModel> shipPairedItemsSpinner;
     private boolean persistCustomizedPrices = true;
     private Currency maxValu;
     private boolean percentType;
@@ -967,6 +971,31 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
                     }
                 }));
             }
+
+            // Get ship Types and Show to User
+            shipPairedItemsSpinner=view.findViewById(R.id.ship_types_spinner);
+            CustomerShipToPartyManager shipManager=new CustomerShipToPartyManager(getContext());
+            List<CustomerShipToPartyModel> ships=shipManager.getItems(customerId);
+            Collections.sort(ships, (o1, o2) -> {
+                Integer a1 = o1.UniqueId == o1.CustomerUniqueId?0:1;
+                Integer b1 = o2.UniqueId == o2.CustomerUniqueId?0:1;
+                return a1.compareTo(b1);
+            });
+            shipPairedItemsSpinner.setVisibility(View.VISIBLE);
+            shipPairedItemsSpinner.setup(getChildFragmentManager(),ships, (item, text) -> {
+                String str = HelperMethods.persian2Arabic(text);
+                if (str == null)
+                    return true;
+                str = str.toLowerCase();
+                return item.toString().toLowerCase().contains(str);
+            });
+            shipPairedItemsSpinner.selectItem(0);
+
+            shipPairedItemsSpinner.setOnItemSelectedListener((position, item) -> {
+
+            });
+
+
 
             // Get Order Types and Show to User
             CustomerOrderTypesManager customerOrderTypesManager = new CustomerOrderTypesManager(context);
