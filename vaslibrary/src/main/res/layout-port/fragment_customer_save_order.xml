@@ -531,7 +531,15 @@
                             android:visibility="gone"
                             app:textSize="12sp"
                             app:title="@string/order_type" />
-
+                        <com.varanegar.framework.util.component.PairedItemsSpinner
+                            android:id="@+id/ship_types_spinner"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/padding_xxsmall"
+                            android:layout_marginRight="@dimen/padding_xxsmall"
+                            android:visibility="gone"
+                            app:textSize="12sp"
+                            app:title="آدرس تحویل"/>
                         <com.varanegar.framework.util.component.PairedItemsSpinner
                             android:id="@+id/price_class_spinner"
                             android:layout_width="match_parent"
