@@ -115,11 +115,15 @@ public class CustomerShipToPartyManager extends BaseManager<CustomerShipToPartyM
                                 insert(result);
                             }else
                                 insertOrUpdate(result);
-                        } else
-                        if (isTourUpdateFlow) {
-                            sync(result);
-                        }else
-                            insertOrUpdate(result);
+                        } else {
+                            if (isTourUpdateFlow) {
+                                deleteAll();
+                                sync(result);
+                            } else {
+                                insertOrUpdate(result);
+                            }
+                        }
+
                         updateCall.success();
                     } catch (ValidationException e) {
                         Timber.e(e);

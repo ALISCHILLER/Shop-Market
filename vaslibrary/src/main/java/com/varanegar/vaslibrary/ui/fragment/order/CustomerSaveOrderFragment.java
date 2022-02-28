@@ -1523,6 +1523,10 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
 //                    }
 //                });
             if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+             SharedPreferences sharedPreferences = context.getSharedPreferences("ReportConfig",
+                     Context.MODE_PRIVATE);
+                sharedPreferences.edit().putString(customerId.toString(),shipPairedItemsSpinner
+                        .getSelectedItem().UniqueId.toString()).apply();
                 SysConfigManager sysConfigManager = new SysConfigManager(getContext());
                 SysConfigModel sendPromotionPreview = sysConfigManager.read(ConfigKey.
                         SendPromotionPreview, SysConfigManager.cloud);
