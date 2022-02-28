@@ -982,7 +982,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
 
                 @Override
                 public int queueId() {
-                    return 1;
+                    return 2;
                 }
 
                 @Override

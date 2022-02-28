@@ -95,67 +95,69 @@ public class CustomerShipToPartyManager extends BaseManager<CustomerShipToPartyM
         final String dealerId = userModel.UniqueId.toString();
         TourModel tourModel = new TourManager(getContext()).loadTour();
         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist))
-            call = customerApi.getShipToParty(tourModel.UniqueId.toString());
-        else
+            updateCall.success();
+        else {
             call = customerApi.getShipToParty(dateString, dealerId, null, settingsId.Value);
 
-        customerApi.runWebRequest(call, new WebCallBack<List<CustomerShipToPartyModel>>() {
-            @Override
-            protected void onFinish() {
+            customerApi.runWebRequest(call, new WebCallBack<List<CustomerShipToPartyModel>>() {
+                @Override
+                protected void onFinish() {
 
-            }
-            @Override
-            protected void onSuccess(List<CustomerShipToPartyModel> result, Request request) {
-                if (result.size() > 0) {
+                }
 
-                    try {
-                        if (VaranegarApplication.is(VaranegarApplication.AppId.Dist) && isTourUpdateFlow) {
-                            if (isTourUpdateFlow) {
-                                deleteAll();
-                                insert(result);
-                            }else
-                                insertOrUpdate(result);
-                        } else {
-                            if (isTourUpdateFlow) {
-                                deleteAll();
-                                sync(result);
+                @Override
+                protected void onSuccess(List<CustomerShipToPartyModel> result, Request request) {
+                    if (result.size() > 0) {
+
+                        try {
+                            if (VaranegarApplication.is(VaranegarApplication.AppId.Dist) && isTourUpdateFlow) {
+                                if (isTourUpdateFlow) {
+                                    deleteAll();
+                                    insert(result);
+                                } else
+                                    insertOrUpdate(result);
                             } else {
-                                insertOrUpdate(result);
+                                if (isTourUpdateFlow) {
+                                    deleteAll();
+                                    sync(result);
+                                } else {
+                                    insertOrUpdate(result);
+                                }
                             }
+
+                            updateCall.success();
+                        } catch (ValidationException e) {
+                            Timber.e(e);
+                            updateCall.failure(getContext().getString(R.string.data_validation_failed));
+                        } catch (DbException e) {
+                            Timber.e(e);
+                            updateCall.failure(getContext().getString(R.string.data_error));
                         }
 
+                    } else {
                         updateCall.success();
-                    } catch (ValidationException e) {
-                        Timber.e(e);
-                        updateCall.failure(getContext().getString(R.string.data_validation_failed));
-                    } catch (DbException e) {
-                        Timber.e(e);
-                        updateCall.failure(getContext().getString(R.string.data_error));
                     }
-
-                }else {
-                    updateCall.success();
                 }
-            }
 
-            @Override
-            protected void onApiFailure(ApiError error, Request request) {
-                String err = WebApiErrorBody.log(error, getContext());
-                updateCall.failure(err);
-            }
+                @Override
+                protected void onApiFailure(ApiError error, Request request) {
+                    String err = WebApiErrorBody.log(error, getContext());
+                    updateCall.failure(err);
+                }
 
-            @Override
-            protected void onNetworkFailure(Throwable t, Request request) {
-                Timber.e(t);
-                updateCall.failure(getContext().getString(R.string.network_error));
-            }
+                @Override
+                protected void onNetworkFailure(Throwable t, Request request) {
+                    Timber.e(t);
+                    updateCall.failure(getContext().getString(R.string.network_error));
+                }
 
-            @Override
-            public void onCancel(Request request) {
-                super.onCancel(request);
-                updateCall.failure(getContext().getString(R.string.request_canceled));
-            }
-        });
+                @Override
+                public void onCancel(Request request) {
+                    super.onCancel(request);
+                    updateCall.failure(getContext().getString(R.string.request_canceled));
+                }
+            });
+        }
 
     }
 

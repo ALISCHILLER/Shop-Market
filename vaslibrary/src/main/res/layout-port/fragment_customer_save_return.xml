@@ -85,6 +85,15 @@
                         android:orientation="vertical"
                         android:visibility="gone"
                         app:title="@string/sell_return_discount_amount" />
+                    <com.varanegar.framework.util.component.PairedItemsSpinner
+                        android:id="@+id/ship_return_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/padding_xxsmall"
+                        android:layout_marginRight="@dimen/padding_xxsmall"
+                        android:visibility="gone"
+                        app:textSize="12sp"
+                        app:title="آدرس تحویل"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -101,10 +110,10 @@
                     android:imeOptions="actionDone"
                     android:inputType="text"
                     android:lines="1"
-                    android:paddingBottom="@dimen/padding_default"
                     android:paddingLeft="50dp"
-                    android:paddingRight="50dp"
                     android:paddingTop="@dimen/padding_default"
+                    android:paddingRight="50dp"
+                    android:paddingBottom="@dimen/padding_default"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
                 <ImageView

@@ -20,3 +20,13 @@ CREATE TABLE "CustomerShipToParty" (
 "IgnoreLocation" INTEGER,
 PRIMARY KEY ("UniqueId" ASC)
 );
+
+
+
+-- ----------------------------
+--  Alter CustomerModel related to issue: NGT-3836
+-- ----------------------------
+alter table CustomerCallInvoice add column ShipToPartyUniqueId TEXT;
+alter table CustomerCallOrder add column ShipToPartyUniqueId TEXT;
+alter table CustomerCallInvoice add column ShipToPartyCode TEXT;
+alter table CustomerCallOrder add column ShipToPartyCode TEXT;

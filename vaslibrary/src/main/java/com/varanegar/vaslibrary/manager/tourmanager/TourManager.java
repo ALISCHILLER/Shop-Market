@@ -2552,9 +2552,15 @@ public class TourManager {
             syncGetCustomerCallReturnViewModel.OperationDate = customerCallReturnModel.StartTime;
             syncGetCustomerCallReturnViewModel.DealerUniqueId = customerCallReturnModel.DealerUniqueId;
             //syncGetCustomerCallReturnViewModel.TotalReturnCharge = HelperMethods.currencyToDouble(customerCallReturnModel.TotalReturnCharge);
-            if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales))
+            if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
                 syncGetCustomerCallReturnViewModel.CustomerCallReturnTypeUniqueId = UUID.fromString("1EB2235D-54D2-40C1-B84C-6BE1AAC7ED7C");
-            else
+                SharedPreferences sharedPreferences = context.getSharedPreferences("Ship_Addres_return", MODE_PRIVATE);
+                String shpid_str=sharedPreferences.getString(customerId.toString(),"");
+                UUID shipun= UUID.fromString(shpid_str);
+                CustomerShipToPartyModel shipList=new CustomerShipToPartyManager(context).getItem(shipun);
+                syncGetCustomerCallReturnViewModel.ShipToPartyUniqueId=shipList.UniqueId;
+                syncGetCustomerCallReturnViewModel.ShipToPartyCode=shipList.BackOfficeId;
+            }else
                 syncGetCustomerCallReturnViewModel.CustomerCallReturnTypeUniqueId = UUID.fromString("40E5F33E-EE5B-4EF0-AEF4-E98C376785AC");
             syncGetCustomerCallReturnViewModel.BackOfficeInvoiceNo = customerCallReturnModel.BackOfficeInvoiceNo;
             //syncGetCustomerCallReturnViewModel.BackOfficeInvoiceRef = customerCallReturnModel.BackOfficeInvoiceId;
