@@ -333,6 +333,8 @@ public class CustomerManager extends BaseManager<CustomerModel> {
                                     return item.UniqueId;
                                 }
                             });
+
+
                             for (CustomerModel sever :
                                     result) {
                                 if (sever.Longitude == 0 && sever.Latitude == 0) {
@@ -342,28 +344,31 @@ public class CustomerManager extends BaseManager<CustomerModel> {
                                         sever.Longitude = oldCustomerModel.Longitude;
                                     }
                                 }
-                                CustomerShipToPartyManager shipToPartyManager=new
-                                        CustomerShipToPartyManager(getContext());
-                               CustomerShipToPartyModel customerShipToPartyModel =new CustomerShipToPartyModel();
-
-                               customerShipToPartyModel.CustomerName=sever.CustomerName;
-                               customerShipToPartyModel.BackOfficeId=sever.BackOfficeId;
-                               customerShipToPartyModel.Latitude=sever.Latitude;
-                                customerShipToPartyModel.Longitude=sever.Latitude;
-                                customerShipToPartyModel.Address=sever.Address;
-                                customerShipToPartyModel.SoldToPartyUniqueId=sever.UniqueId;
-                                customerShipToPartyModel.UniqueId=sever.UniqueId;
-                                customerShipToPartyModel.Mobile=sever.Mobile;
-                                customerShipToPartyModel.Phone=sever.Phone;
-                                customerShipToPartyModel.StoreName=sever.StoreName;
-                                customerShipToPartyModel.PostCode=sever.CustomerPostalCode;
-                                customerShipToPartyModel.IgnoreLocation=sever.IgnoreLocation;
-                                customerShipToPartyModel.NationalCode=sever.NationalCode;
-                                customerShipToPartyModel.EconomicCode=sever.EconomicCode;
-                                customerShipToPartyModel.IsActive=sever.IsActive;
-                                shipToPartyManager.insert(customerShipToPartyModel);
                             }
                         }
+                        CustomerShipToPartyManager shipToPartyManager=new
+                                CustomerShipToPartyManager(getContext());
+                        for (CustomerModel sever :
+                                result) {
+                            CustomerShipToPartyModel customerShipToPartyModel =new CustomerShipToPartyModel();
+                            customerShipToPartyModel.CustomerName=sever.CustomerName;
+                            customerShipToPartyModel.BackOfficeId=sever.BackOfficeId;
+                            customerShipToPartyModel.Latitude=sever.Latitude;
+                            customerShipToPartyModel.Longitude=sever.Latitude;
+                            customerShipToPartyModel.Address=sever.Address;
+                            customerShipToPartyModel.SoldToPartyUniqueId=sever.UniqueId;
+                            customerShipToPartyModel.UniqueId=sever.UniqueId;
+                            customerShipToPartyModel.Mobile=sever.Mobile;
+                            customerShipToPartyModel.Phone=sever.Phone;
+                            customerShipToPartyModel.StoreName=sever.StoreName;
+                            customerShipToPartyModel.PostCode=sever.CustomerPostalCode;
+                            customerShipToPartyModel.IgnoreLocation=sever.IgnoreLocation;
+                            customerShipToPartyModel.NationalCode=sever.NationalCode;
+                            customerShipToPartyModel.EconomicCode=sever.EconomicCode;
+                            customerShipToPartyModel.IsActive=sever.IsActive;
+                            shipToPartyManager.insert(customerShipToPartyModel);
+                        }
+
                         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist) && isTourUpdateFlow) {
                             deleteAll();
                             insert(result);

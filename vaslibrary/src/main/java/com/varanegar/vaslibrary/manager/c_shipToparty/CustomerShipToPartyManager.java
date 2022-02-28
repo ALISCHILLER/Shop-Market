@@ -98,19 +98,12 @@ public class CustomerShipToPartyManager extends BaseManager<CustomerShipToPartyM
             call = customerApi.getShipToParty(tourModel.UniqueId.toString());
         else
             call = customerApi.getShipToParty(dateString, dealerId, null, settingsId.Value);
-      if (isTourUpdateFlow) {
-          try {
-              deleteAll();
-          } catch (DbException e) {
-              e.printStackTrace();
-          }
-      }
+
         customerApi.runWebRequest(call, new WebCallBack<List<CustomerShipToPartyModel>>() {
             @Override
             protected void onFinish() {
 
             }
-
             @Override
             protected void onSuccess(List<CustomerShipToPartyModel> result, Request request) {
                 if (result.size() > 0) {
@@ -124,7 +117,6 @@ public class CustomerShipToPartyManager extends BaseManager<CustomerShipToPartyM
                                 insertOrUpdate(result);
                         } else
                         if (isTourUpdateFlow) {
-                            deleteAll();
                             sync(result);
                         }else
                             insertOrUpdate(result);

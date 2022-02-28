@@ -976,11 +976,13 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
             shipPairedItemsSpinner=view.findViewById(R.id.ship_types_spinner);
             CustomerShipToPartyManager shipManager=new CustomerShipToPartyManager(getContext());
             List<CustomerShipToPartyModel> ships=shipManager.getItems(customerId);
+
             Collections.sort(ships, (o1, o2) -> {
                 Integer a1 = o1.UniqueId == o1.SoldToPartyUniqueId?0:1;
                 Integer b1 = o2.UniqueId == o2.SoldToPartyUniqueId?0:1;
                 return a1.compareTo(b1);
             });
+
             shipPairedItemsSpinner.setVisibility(View.VISIBLE);
             shipPairedItemsSpinner.setup(getChildFragmentManager(),ships, (item, text) -> {
                 String str = HelperMethods.persian2Arabic(text);

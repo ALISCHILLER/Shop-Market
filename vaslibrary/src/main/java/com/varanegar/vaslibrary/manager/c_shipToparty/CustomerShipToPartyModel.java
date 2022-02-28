@@ -38,4 +38,11 @@ public class CustomerShipToPartyModel extends BaseModel {
     public boolean IsActive;
     @Column
     public int IgnoreLocation;
+
+    @Override
+    public String toString() {
+        return BackOfficeId+"-"+Address+"-"+CustomerName;
+    }
 }
+
+
