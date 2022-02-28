@@ -10,7 +10,7 @@ import java.util.UUID;
 @Table
 public class CustomerShipToPartyModel extends BaseModel {
     @Column
-    public UUID CustomerUniqueId;
+    public UUID SoldToPartyUniqueId;
     @Column
     public int BackOfficeId;
     @Column
@@ -37,5 +37,5 @@ public class CustomerShipToPartyModel extends BaseModel {
     @Column
     public boolean IsActive;
     @Column
-    public boolean IgnoreLocation;
+    public int IgnoreLocation;
 }

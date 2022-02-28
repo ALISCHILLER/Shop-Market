@@ -28,6 +28,8 @@ import com.varanegar.vaslibrary.manager.CustomerDataForRegisterManager;
 import com.varanegar.vaslibrary.manager.CustomerPathViewManager;
 import com.varanegar.vaslibrary.manager.UserManager;
 import com.varanegar.vaslibrary.manager.VisitTemplatePathCustomerManager;
+import com.varanegar.vaslibrary.manager.c_shipToparty.CustomerShipToPartyManager;
+import com.varanegar.vaslibrary.manager.c_shipToparty.CustomerShipToPartyModel;
 import com.varanegar.vaslibrary.manager.customercallmanager.CustomerCallManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.OwnerKeysWrapper;
@@ -165,6 +167,27 @@ public class CustomerManager extends BaseManager<CustomerModel> {
                         for (CustomerModel item: result
                              ) {
                             item.Barcode = item.CustomerCode;
+
+                            CustomerShipToPartyManager shipToPartyManager=new
+                                    CustomerShipToPartyManager(getContext());
+                            CustomerShipToPartyModel customerShipToPartyModel =new CustomerShipToPartyModel();
+
+                            customerShipToPartyModel.CustomerName=item.CustomerName;
+                            customerShipToPartyModel.BackOfficeId=item.BackOfficeId;
+                            customerShipToPartyModel.Latitude=item.Latitude;
+                            customerShipToPartyModel.Longitude=item.Latitude;
+                            customerShipToPartyModel.Address=item.Address;
+                            customerShipToPartyModel.SoldToPartyUniqueId=item.UniqueId;
+                            customerShipToPartyModel.UniqueId=item.UniqueId;
+                            customerShipToPartyModel.Mobile=item.Mobile;
+                            customerShipToPartyModel.Phone=item.Phone;
+                            customerShipToPartyModel.StoreName=item.StoreName;
+                            customerShipToPartyModel.PostCode=item.CustomerPostalCode;
+                            customerShipToPartyModel.IgnoreLocation=item.IgnoreLocation;
+                            customerShipToPartyModel.NationalCode=item.NationalCode;
+                            customerShipToPartyModel.EconomicCode=item.EconomicCode;
+                            customerShipToPartyModel.IsActive=item.IsActive;
+                            shipToPartyManager. insertOrUpdate(customerShipToPartyModel);
                         }
 
                         insertOrUpdate(result);
@@ -319,6 +342,26 @@ public class CustomerManager extends BaseManager<CustomerModel> {
                                         sever.Longitude = oldCustomerModel.Longitude;
                                     }
                                 }
+                                CustomerShipToPartyManager shipToPartyManager=new
+                                        CustomerShipToPartyManager(getContext());
+                               CustomerShipToPartyModel customerShipToPartyModel =new CustomerShipToPartyModel();
+
+                               customerShipToPartyModel.CustomerName=sever.CustomerName;
+                               customerShipToPartyModel.BackOfficeId=sever.BackOfficeId;
+                               customerShipToPartyModel.Latitude=sever.Latitude;
+                                customerShipToPartyModel.Longitude=sever.Latitude;
+                                customerShipToPartyModel.Address=sever.Address;
+                                customerShipToPartyModel.SoldToPartyUniqueId=sever.UniqueId;
+                                customerShipToPartyModel.UniqueId=sever.UniqueId;
+                                customerShipToPartyModel.Mobile=sever.Mobile;
+                                customerShipToPartyModel.Phone=sever.Phone;
+                                customerShipToPartyModel.StoreName=sever.StoreName;
+                                customerShipToPartyModel.PostCode=sever.CustomerPostalCode;
+                                customerShipToPartyModel.IgnoreLocation=sever.IgnoreLocation;
+                                customerShipToPartyModel.NationalCode=sever.NationalCode;
+                                customerShipToPartyModel.EconomicCode=sever.EconomicCode;
+                                customerShipToPartyModel.IsActive=sever.IsActive;
+                                shipToPartyManager.insert(customerShipToPartyModel);
                             }
                         }
                         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist) && isTourUpdateFlow) {

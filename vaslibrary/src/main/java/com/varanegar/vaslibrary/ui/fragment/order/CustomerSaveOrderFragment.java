@@ -977,8 +977,8 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
             CustomerShipToPartyManager shipManager=new CustomerShipToPartyManager(getContext());
             List<CustomerShipToPartyModel> ships=shipManager.getItems(customerId);
             Collections.sort(ships, (o1, o2) -> {
-                Integer a1 = o1.UniqueId == o1.CustomerUniqueId?0:1;
-                Integer b1 = o2.UniqueId == o2.CustomerUniqueId?0:1;
+                Integer a1 = o1.UniqueId == o1.SoldToPartyUniqueId?0:1;
+                Integer b1 = o2.UniqueId == o2.SoldToPartyUniqueId?0:1;
                 return a1.compareTo(b1);
             });
             shipPairedItemsSpinner.setVisibility(View.VISIBLE);
@@ -989,8 +989,9 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
                 str = str.toLowerCase();
                 return item.toString().toLowerCase().contains(str);
             });
-            shipPairedItemsSpinner.selectItem(0);
-
+            if(ships.size()>0) {
+                shipPairedItemsSpinner.selectItem(0);
+            }
             shipPairedItemsSpinner.setOnItemSelectedListener((position, item) -> {
 
             });

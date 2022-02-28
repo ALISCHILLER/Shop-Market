@@ -42,6 +42,32 @@ public class CustomersUpdateFlow extends UpdateFlow {
 
     @Override
     protected void addAsyncTasks(List<TourAsyncTask> tasks, UpdateCall call) {
+
+
+        tasks.add(new SimpleTourAsyncTask() {
+            @Override
+            public void run(UpdateCall call) {
+                CustomerShipToPartyManager shipToPartyManager = new
+                        CustomerShipToPartyManager(getContext());
+                if (customerId == null)
+                    shipToPartyManager.sync(call, false);
+            }
+
+            @Override
+            public String name() {
+                return "shipToPartyManager";
+            }
+
+            @Override
+            public int group() {
+                return R.string.customer_info;
+            }
+
+            @Override
+            public int queueId() {
+                return 0;
+            }
+        });
         tasks.add(new SimpleTourAsyncTask() {
             @Override
             public void run(UpdateCall call) {
@@ -64,35 +90,11 @@ public class CustomersUpdateFlow extends UpdateFlow {
 
             @Override
             public int queueId() {
-                return 0;
+                return 1;
             }
         });
 
-        tasks.add(new SimpleTourAsyncTask() {
-            @Override
-            public void run(UpdateCall call) {
-                CustomerShipToPartyManager shipToPartyManager = new
-                        CustomerShipToPartyManager(getContext());
-                CustomerManager customerManager = new CustomerManager(getContext());
-                if (customerId == null)
-                    shipToPartyManager.sync(call, false);
-            }
 
-            @Override
-            public String name() {
-                return "shipToPartyManager";
-            }
-
-            @Override
-            public int group() {
-                return R.string.customer_info;
-            }
-
-            @Override
-            public int queueId() {
-                return 0;
-            }
-        });
 
         tasks.add(new SimpleTourAsyncTask() {
             @Override

@@ -1,8 +1,10 @@
 package com.varanegar.vaslibrary.manager.c_shipToparty;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.database.BaseManager;
@@ -16,17 +18,22 @@ import com.varanegar.framework.util.datetime.DateHelper;
 import com.varanegar.framework.validation.ValidationException;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.manager.UserManager;
+import com.varanegar.vaslibrary.manager.customercallmanager.CustomerCallManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.manager.tourmanager.TourManager;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateCall;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateManager;
 import com.varanegar.vaslibrary.model.UpdateKey;
+import com.varanegar.vaslibrary.model.customer.CustomerModel;
+import com.varanegar.vaslibrary.model.customercall.CustomerCallModel;
+import com.varanegar.vaslibrary.model.customercall.CustomerCallType;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.model.tour.TourModel;
 import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.customer.CustomerApi;
+import com.varanegar.vaslibrary.webapi.tour.SyncGetCustomerUpdateLocationViewModel;
 
 import java.util.Date;
 import java.util.List;
@@ -38,7 +45,6 @@ import retrofit2.Call;
 import timber.log.Timber;
 
 public class CustomerShipToPartyManager extends BaseManager<CustomerShipToPartyModel> {
-
     private CustomerShipToPartyModel  shipToPartyModel;
     private Call<List<CustomerShipToPartyModel>> call;
 
@@ -46,21 +52,30 @@ public class CustomerShipToPartyManager extends BaseManager<CustomerShipToPartyM
         super(context, new CustomerShipToPartyModelRepository());
     }
 
-
     public List<CustomerShipToPartyModel> getItems() {
         Query q = new Query();
         q.from(CustomerShipToParty.CustomerShipToPartyTbl);
         return getItems(q);
     }
-
     public List<CustomerShipToPartyModel> getItems(UUID customerid) {
         Query q = new Query();
         q.from(CustomerShipToParty.CustomerShipToPartyTbl)
-                .whereAnd(Criteria.equals(CustomerShipToParty.CustomerUniqueId, customerid));
+                .whereAnd(Criteria.equals(CustomerShipToParty.SoldToPartyUniqueId, customerid));
         return getItems(q);
     }
 
+
+    public void clearCache() {
+        try {
+            SharedPreferences sharedPreferences = getContext().getSharedPreferences
+                    ("Ship_Addres", Context.MODE_PRIVATE);
+            sharedPreferences.edit().clear().apply();
+        } catch (Error error) {
+            Timber.e(error);
+        }
+    }
     public void sync(@NonNull final UpdateCall updateCall, final boolean isTourUpdateFlow) {
+        clearCache();
         UpdateManager updateManager = new UpdateManager(getContext());
         Date date = updateManager.getLog(UpdateKey.Customer);
         String dateString = DateHelper.toString(date, DateFormat.MicrosoftDateTime, Locale.US);
@@ -83,11 +98,13 @@ public class CustomerShipToPartyManager extends BaseManager<CustomerShipToPartyM
             call = customerApi.getShipToParty(tourModel.UniqueId.toString());
         else
             call = customerApi.getShipToParty(dateString, dealerId, null, settingsId.Value);
-        try {
-            deleteAll();
-        } catch (DbException e) {
-            e.printStackTrace();
-        }
+      if (isTourUpdateFlow) {
+          try {
+              deleteAll();
+          } catch (DbException e) {
+              e.printStackTrace();
+          }
+      }
         customerApi.runWebRequest(call, new WebCallBack<List<CustomerShipToPartyModel>>() {
             @Override
             protected void onFinish() {
@@ -100,10 +117,17 @@ public class CustomerShipToPartyManager extends BaseManager<CustomerShipToPartyM
 
                     try {
                         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist) && isTourUpdateFlow) {
-                            deleteAll();
-                            insert(result);
+                            if (isTourUpdateFlow) {
+                                deleteAll();
+                                insert(result);
+                            }else
+                                insertOrUpdate(result);
                         } else
+                        if (isTourUpdateFlow) {
+                            deleteAll();
                             sync(result);
+                        }else
+                            insertOrUpdate(result);
                         updateCall.success();
                     } catch (ValidationException e) {
                         Timber.e(e);
@@ -114,7 +138,7 @@ public class CustomerShipToPartyManager extends BaseManager<CustomerShipToPartyM
                     }
 
                 }else {
-                    updateCall.failure("خطا در اطلاعات موقعیت مشتری");
+                    updateCall.success();
                 }
             }
 
@@ -143,6 +167,6 @@ public class CustomerShipToPartyManager extends BaseManager<CustomerShipToPartyM
         if (call != null && !call.isCanceled() && call.isExecuted())
             call.cancel();
     }
-
-
 }
+
+

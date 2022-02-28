@@ -821,6 +821,36 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 1;
                 }
             });
+
+            tasks.add(new TourAsyncTask() {
+                CustomerShipToPartyManager shipToPartyManager = new
+                        CustomerShipToPartyManager(getContext());
+                @Override
+                public void run(UpdateCall call) {
+                    shipToPartyManager.sync(call, true);
+                }
+
+                @Override
+                public String name() {
+                    return "shipToPartyManager";
+                }
+
+                @Override
+                public int group() {
+                    return R.string.customer_info;
+                }
+
+                @Override
+                public int queueId() {
+                    return 0;
+                }
+
+                @Override
+                public void cancel() {
+                    if (shipToPartyManager != null)
+                        shipToPartyManager.cancelSync();
+                }
+            });
             tasks.add(new TourAsyncTask() {
                 CustomerManager customerManager = new CustomerManager(getContext());
 
@@ -841,7 +871,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
 
                 @Override
                 public int queueId() {
-                    return 0;
+                    return 1;
                 }
 
                 @Override
@@ -850,36 +880,8 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                         customerManager.cancelSync();
                 }
             });
-            tasks.add(new TourAsyncTask() {
-                CustomerShipToPartyManager shipToPartyManager = new
-                        CustomerShipToPartyManager(getContext());
 
-                @Override
-                public void run(UpdateCall call) {
-                    shipToPartyManager.sync(call, true);
-                }
 
-                @Override
-                public String name() {
-                    return "shipToPartyManager";
-                }
-
-                @Override
-                public int group() {
-                    return R.string.customer_info;
-                }
-
-                @Override
-                public int queueId() {
-                    return 1;
-                }
-
-                @Override
-                public void cancel() {
-                    if (shipToPartyManager != null)
-                        shipToPartyManager.cancelSync();
-                }
-            });
             tasks.add(new TourAsyncTask() {
                 ProductGroupManager productGroupManager = new ProductGroupManager(getContext());
 

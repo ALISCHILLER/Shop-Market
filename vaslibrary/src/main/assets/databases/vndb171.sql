@@ -4,7 +4,7 @@
 DROP TABLE IF EXISTS "main"."CustomerShipToParty";
 CREATE TABLE "CustomerShipToParty" (
 "UniqueId"  TEXT NOT NULL COLLATE NOCASE ,
-"CustomerUniqueId" TEXT,
+"SoldToPartyUniqueId" TEXT,
 "BackOfficeId"  TEXT,
 "CustomerName"  TEXT,
 "Address"  TEXT,
