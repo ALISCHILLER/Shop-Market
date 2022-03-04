@@ -704,6 +704,7 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
         ((TextView) view.findViewById(R.id.debit_balance_text_view)).setText(HelperMethods.currencyToString(customer.RemainDebit));
         ((TextView) view.findViewById(R.id.credit_balance_text_view)).setText(HelperMethods.currencyToString(customer.RemainCredit));
 
+
         orderOptions = new ArrayList<>();
         orderOptions.add(new OrderOption<CustomerCallOrderOrderViewModel>(context).setProjection(ProductName).setName(R.string.product_name));
         orderOptions.add(new OrderOption<CustomerCallOrderOrderViewModel>(context).setProjection(SortId).setName(R.string.sort_request));
@@ -784,6 +785,8 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
         orderRecyclerView.addItemDecoration(new DividerItemDecoration(context, R.color.grey_light, 1));
         orderRecyclerView.setAdapter(orderAdapter);
         setupToolbarButtons(view);
+
+
 
         dealerNameTextView.setText(customerCallOrderModel.DealerName);
         dealerMobileTextView.setText(customerCallOrderModel.DealerMobile);
@@ -983,6 +986,9 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
                 return a1.compareTo(b1);
             });
 
+
+
+
             shipPairedItemsSpinner.setVisibility(View.VISIBLE);
             shipPairedItemsSpinner.setup(getChildFragmentManager(),ships, (item, text) -> {
                 String str = HelperMethods.persian2Arabic(text);
@@ -991,7 +997,15 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
                 str = str.toLowerCase();
                 return item.toString().toLowerCase().contains(str);
             });
-            if(ships.size()>0) {
+
+            UUID shipid=customerCallOrderModel.ShipToPartyUniqueId;
+            if (shipid!=null){
+                for (int i=0;i<ships.size();i++){
+                    if (shipid.equals(ships.get(i).UniqueId)){
+                        shipPairedItemsSpinner.selectItem(i);
+                    }
+                }
+            }else if(ships.get(0)!=null) {
                 shipPairedItemsSpinner.selectItem(0);
             }
             shipPairedItemsSpinner.setOnItemSelectedListener((position, item) -> {
@@ -1318,6 +1332,10 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
         customerCallOrderModel.Comment = commentEditText.getText().toString();
         customerCallOrderModel.RoundOrderOtherDiscount = otherDiscount;
         customerCallOrderModel.EndTime = new Date();
+        if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+            customerCallOrderModel.ShipToPartyUniqueId = shipPairedItemsSpinner.getSelectedItem().UniqueId;
+            customerCallOrderModel.ShipToPartyCode = shipPairedItemsSpinner.getSelectedItem().BackOfficeId;
+        }
         try {
             long affectedRows = customerCallOrderManager.update(customerCallOrderModel);
             Timber.e("update customer call order ", affectedRows);
@@ -1523,6 +1541,9 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
 //                    }
 //                });
             if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+
+
+
              SharedPreferences sharedPreferences = context.getSharedPreferences("ReportConfig",
                      Context.MODE_PRIVATE);
                 sharedPreferences.edit().putString(customerId.toString(),shipPairedItemsSpinner

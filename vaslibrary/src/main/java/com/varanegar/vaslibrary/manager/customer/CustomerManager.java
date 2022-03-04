@@ -166,34 +166,36 @@ public class CustomerManager extends BaseManager<CustomerModel> {
 
             @Override
             protected void onSuccess(List<CustomerModel> result, Request request) {
+
                 if (result.size() > 0) {
                     try {
-                        for (CustomerModel item: result
-                             ) {
-                            item.Barcode = item.CustomerCode;
+                        if(VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+                            for (CustomerModel item : result
+                            ) {
+                                item.Barcode = item.CustomerCode;
 
-                            CustomerShipToPartyManager shipToPartyManager=new
-                                    CustomerShipToPartyManager(getContext());
-                            CustomerShipToPartyModel customerShipToPartyModel =new CustomerShipToPartyModel();
+                                CustomerShipToPartyManager shipToPartyManager = new
+                                        CustomerShipToPartyManager(getContext());
+                                CustomerShipToPartyModel customerShipToPartyModel = new CustomerShipToPartyModel();
 
-                            customerShipToPartyModel.CustomerName=item.CustomerName;
-                            customerShipToPartyModel.BackOfficeId=item.BackOfficeId;
-                            customerShipToPartyModel.Latitude=item.Latitude;
-                            customerShipToPartyModel.Longitude=item.Latitude;
-                            customerShipToPartyModel.Address=item.Address;
-                            customerShipToPartyModel.SoldToPartyUniqueId=item.UniqueId;
-                            customerShipToPartyModel.UniqueId=item.UniqueId;
-                            customerShipToPartyModel.Mobile=item.Mobile;
-                            customerShipToPartyModel.Phone=item.Phone;
-                            customerShipToPartyModel.StoreName=item.StoreName;
-                            customerShipToPartyModel.PostCode=item.CustomerPostalCode;
-                            customerShipToPartyModel.IgnoreLocation=item.IgnoreLocation;
-                            customerShipToPartyModel.NationalCode=item.NationalCode;
-                            customerShipToPartyModel.EconomicCode=item.EconomicCode;
-                            customerShipToPartyModel.IsActive=item.IsActive;
-                            shipToPartyManager. insertOrUpdate(customerShipToPartyModel);
+                                customerShipToPartyModel.CustomerName = item.CustomerName;
+                                customerShipToPartyModel.BackOfficeId = item.CustomerCode;
+                                customerShipToPartyModel.Latitude = item.Latitude;
+                                customerShipToPartyModel.Longitude = item.Latitude;
+                                customerShipToPartyModel.Address = item.Address;
+                                customerShipToPartyModel.SoldToPartyUniqueId = item.UniqueId;
+                                customerShipToPartyModel.UniqueId = item.UniqueId;
+                                customerShipToPartyModel.Mobile = item.Mobile;
+                                customerShipToPartyModel.Phone = item.Phone;
+                                customerShipToPartyModel.StoreName = item.StoreName;
+                                customerShipToPartyModel.PostCode = item.CustomerPostalCode;
+                                customerShipToPartyModel.IgnoreLocation = item.IgnoreLocation;
+                                customerShipToPartyModel.NationalCode = item.NationalCode;
+                                customerShipToPartyModel.EconomicCode = item.EconomicCode;
+                                customerShipToPartyModel.IsActive = item.IsActive;
+                                shipToPartyManager.insertOrUpdate(customerShipToPartyModel);
+                            }
                         }
-
                         insertOrUpdate(result);
                         updateFinanceData(new UpdateCall() {
                             @Override
@@ -370,7 +372,7 @@ public class CustomerManager extends BaseManager<CustomerModel> {
                                     customerModels) {
                                 CustomerShipToPartyModel customerShipToPartyModel =new CustomerShipToPartyModel();
                                 customerShipToPartyModel.CustomerName=sever.CustomerName;
-                                customerShipToPartyModel.BackOfficeId=sever.BackOfficeId;
+                                customerShipToPartyModel.BackOfficeId= sever.CustomerCode;
                                 customerShipToPartyModel.Latitude=sever.Latitude;
                                 customerShipToPartyModel.Longitude=sever.Latitude;
                                 customerShipToPartyModel.Address=sever.Address;
@@ -384,7 +386,10 @@ public class CustomerManager extends BaseManager<CustomerModel> {
                                 customerShipToPartyModel.NationalCode=sever.NationalCode;
                                 customerShipToPartyModel.EconomicCode=sever.EconomicCode;
                                 customerShipToPartyModel.IsActive=sever.IsActive;
+                                if (isTourUpdateFlow)
                                 shipToPartyManager.insert(customerShipToPartyModel);
+                                else
+                                    shipToPartyManager.insertOrUpdate(customerShipToPartyModel);
                             }
 
                         }
@@ -432,7 +437,7 @@ public class CustomerManager extends BaseManager<CustomerModel> {
                 customerModels) {
             CustomerShipToPartyModel customerShipToPartyModel =new CustomerShipToPartyModel();
             customerShipToPartyModel.CustomerName=sever.CustomerName;
-            customerShipToPartyModel.BackOfficeId=sever.BackOfficeId;
+            customerShipToPartyModel.BackOfficeId= sever.CustomerCode;
             customerShipToPartyModel.Latitude=sever.Latitude;
             customerShipToPartyModel.Longitude=sever.Latitude;
             customerShipToPartyModel.Address=sever.Address;

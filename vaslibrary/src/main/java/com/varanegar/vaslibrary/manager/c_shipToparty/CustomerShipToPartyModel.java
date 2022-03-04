@@ -12,7 +12,7 @@ public class CustomerShipToPartyModel extends BaseModel {
     @Column
     public UUID SoldToPartyUniqueId;
     @Column
-    public int BackOfficeId;
+    public String BackOfficeId;
     @Column
     @NotNull
     public String CustomerName;

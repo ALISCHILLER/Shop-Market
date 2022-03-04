@@ -25,6 +25,10 @@ public class ReturnBaseModel extends BaseModel {
     @NotNull
     public UUID PersonnelUniqueId;
     @Column
+    public UUID ShipToPartyUniqueId;
+    @Column
+    public String ShipToPartyCode;
+    @Column
     public String LocalPaperNo;
     @Column
     public String BackOfficeDistId;

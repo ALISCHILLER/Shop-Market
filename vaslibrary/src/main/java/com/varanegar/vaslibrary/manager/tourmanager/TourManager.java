@@ -232,6 +232,7 @@ public class TourManager {
     private static SyncService.ServiceBinder receiveTourServiceBinder;
     private static SendTourService.ServiceBinder sendTourServiceBinder;
     private String tourNo = null;
+
     private ServiceConnection receiveTourServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
@@ -2258,13 +2259,10 @@ public class TourManager {
                     syncGetCustomerCallOrderViewModel.OrderTypeUniqueId = customerCallOrderModel.OrderTypeUniqueId;
                     if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
                         syncGetCustomerCallOrderViewModel.OrderPaymentTypeUniqueId = customerCallOrderModel.OrderPaymentTypeUniqueId;
-                        SharedPreferences sharedPreferences = context.getSharedPreferences("ReportConfig",
-                                Context.MODE_PRIVATE);
-                        String shpid_str=sharedPreferences.getString(customerId.toString(),"");
-                        UUID shipun= UUID.fromString(shpid_str);
-                        CustomerShipToPartyModel shipList=new CustomerShipToPartyManager(context).getItem(shipun);
-                        syncGetCustomerCallOrderViewModel.ShipToPartyUniqueId=shipList.UniqueId;
-                        syncGetCustomerCallOrderViewModel.ShipToPartyCode=shipList.BackOfficeId;
+
+
+                        syncGetCustomerCallOrderViewModel.ShipToPartyUniqueId=customerCallOrderModel.ShipToPartyUniqueId;
+                        syncGetCustomerCallOrderViewModel.ShipToPartyCode=customerCallOrderModel.ShipToPartyCode;
                     } else if (VaranegarApplication.is(VaranegarApplication.AppId.HotSales))
                         syncGetCustomerCallOrderViewModel.InvoicePaymentTypeUniqueId = customerCallOrderModel.OrderPaymentTypeUniqueId;
 
@@ -2554,12 +2552,9 @@ public class TourManager {
             //syncGetCustomerCallReturnViewModel.TotalReturnCharge = HelperMethods.currencyToDouble(customerCallReturnModel.TotalReturnCharge);
             if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
                 syncGetCustomerCallReturnViewModel.CustomerCallReturnTypeUniqueId = UUID.fromString("1EB2235D-54D2-40C1-B84C-6BE1AAC7ED7C");
-                SharedPreferences sharedPreferences = context.getSharedPreferences("Ship_Addres_return", MODE_PRIVATE);
-                String shpid_str=sharedPreferences.getString(customerId.toString(),"");
-                UUID shipun= UUID.fromString(shpid_str);
-                CustomerShipToPartyModel shipList=new CustomerShipToPartyManager(context).getItem(shipun);
-                syncGetCustomerCallReturnViewModel.ShipToPartyUniqueId=shipList.UniqueId;
-                syncGetCustomerCallReturnViewModel.ShipToPartyCode=shipList.BackOfficeId;
+
+                syncGetCustomerCallReturnViewModel.ShipToPartyUniqueId=customerCallReturnModel.ShipToPartyUniqueId;
+                syncGetCustomerCallReturnViewModel.ShipToPartyCode=customerCallReturnModel.ShipToPartyCode;
             }else
                 syncGetCustomerCallReturnViewModel.CustomerCallReturnTypeUniqueId = UUID.fromString("40E5F33E-EE5B-4EF0-AEF4-E98C376785AC");
             syncGetCustomerCallReturnViewModel.BackOfficeInvoiceNo = customerCallReturnModel.BackOfficeInvoiceNo;

@@ -70,6 +70,7 @@ import com.varanegar.vaslibrary.manager.sysconfigmanager.BackOfficeType;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.UnknownBackOfficeException;
+import com.varanegar.vaslibrary.model.call.CustomerCallReturn;
 import com.varanegar.vaslibrary.model.call.CustomerCallReturnModel;
 import com.varanegar.vaslibrary.model.call.ReturnLineQtyModel;
 import com.varanegar.vaslibrary.model.call.ReturnLinesModel;
@@ -277,7 +278,19 @@ public class CustomerSaveReturnFragment extends VisitFragment {
                 str = str.toLowerCase();
                 return item.toString().toLowerCase().contains(str);
             });
-            shipPairedItemsSpinner.selectItem(0);
+
+            CustomerCallReturnModel customerCallReturnModel=new CustomerCallReturnManager(getContext()).getItem(customerId);
+            if (customerCallReturnModel!=null){
+                UUID shipid=customerCallReturnModel.ShipToPartyUniqueId;
+                if (shipid!=null){
+                    for (int i=0;i<ships.size();i++){
+                        if (shipid.equals(ships.get(i).UniqueId)){
+                            shipPairedItemsSpinner.selectItem(i);
+                        }
+                    }
+                }
+            }else if(ships.get(0)!=null)
+                shipPairedItemsSpinner.selectItem(0);
 
             shipPairedItemsSpinner.setOnItemSelectedListener((position, item) -> {
 
@@ -829,6 +842,10 @@ public class CustomerSaveReturnFragment extends VisitFragment {
                 if (!backOfficeType.equals(BackOfficeType.ThirdParty))
                     returnModel.Comment = commentEditText.getText().toString();
                 returnModel.EndTime = new Date();
+                if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+                    returnModel.ShipToPartyUniqueId = shipPairedItemsSpinner.getSelectedItem().UniqueId;
+                    returnModel.ShipToPartyCode = shipPairedItemsSpinner.getSelectedItem().BackOfficeId;
+                }
                 if (!VaranegarApplication.is(VaranegarApplication.AppId.PreSales) && withRef && !isFromRequest()) {
                     if (returnModel.BackOfficeInvoiceId != null) {
                         CustomerOldInvoiceHeaderModel invoice = oldInvoiceHeaderManager.getItem(returnModel.BackOfficeInvoiceId);
@@ -1112,10 +1129,7 @@ public class CustomerSaveReturnFragment extends VisitFragment {
                 update();
             } else {
                 if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
-                    SharedPreferences sharedPreferences = getContext().getSharedPreferences
-                            ("Ship_Addres_return", Context.MODE_PRIVATE);
-                    String shipid = String.valueOf(shipPairedItemsSpinner.getSelectedItem().UniqueId);
-                    sharedPreferences.edit().putString(customerId.toString(), shipid).apply();
+
                     update();
                 }
                 update();

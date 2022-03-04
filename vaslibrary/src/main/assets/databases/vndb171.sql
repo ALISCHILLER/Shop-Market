@@ -24,9 +24,24 @@ PRIMARY KEY ("UniqueId" ASC)
 
 
 -- ----------------------------
---  Alter CustomerModel related to issue: NGT-3836
+--  Alter CustomerCallInvoice related to issue: CustomerCallInvoice
 -- ----------------------------
 alter table CustomerCallInvoice add column ShipToPartyUniqueId TEXT;
 alter table CustomerCallOrder add column ShipToPartyUniqueId TEXT;
 alter table CustomerCallInvoice add column ShipToPartyCode TEXT;
 alter table CustomerCallOrder add column ShipToPartyCode TEXT;
+
+
+-- ----------------------------
+--  Alter view CustomerCallReturn and CustomerCallReturnRequest related to issue: NGT-3419
+-- ----------------------------
+alter table CustomerCallReturn add column ShipToPartyUniqueId TEXT;
+
+alter table CustomerCallReturn add column ShipToPartyCode TEXT;
+
+
+-- ----------------------------
+--  Alter view CustomerCallReturn and CustomerCallReturnRequest related to issue: NGT-3419
+-- ----------------------------
+alter table CustomerCallReturnRequest add column ShipToPartyUniqueId TEXT;
+alter table CustomerCallReturnRequest add column ShipToPartyCode TEXT;

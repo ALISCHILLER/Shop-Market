@@ -25,7 +25,7 @@ public class SyncGetCustomerCallReturnViewModel
     public String Comment;
 
     public UUID ShipToPartyUniqueId;
-    public int ShipToPartyCode;
+    public String ShipToPartyCode;
 //    public double TotalReturnAmount;
 //    public double TotalReturnOtherDiscount;
 //    public double TotalReturnDis1;

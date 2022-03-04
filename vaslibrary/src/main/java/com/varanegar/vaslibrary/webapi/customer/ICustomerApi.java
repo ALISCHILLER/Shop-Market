@@ -42,6 +42,10 @@ public interface ICustomerApi {
             @Query("dealerId") String dealerId,
             @Query("customerId") String customerId,
             @Query("DeviceSettingNo") String DeviceSettingNo);
+
+
+
+
     @GET("api/v2/ngt/customer/shiptoparty/DistributionCustomers")
     Call<List<CustomerShipToPartyModel>> getShipToParty(@Query("TourId") String tourId);
 
