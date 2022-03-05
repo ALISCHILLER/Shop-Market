@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "563735304062",
+    "project_id": "supervisor-b903b",
+    "storage_bucket": "supervisor-b903b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:563735304062:android:c586cf012aeb5b4ccb052f",
+        "android_client_info": {
+          "package_name": "com.varanegar.supervisor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "563735304062-s8b33agntm7nvpkfm421751o9ma6uptb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.varanegar.supervisor",
+            "certificate_hash": "7a623203e52ab8b2ea12cc22adf801ca44fe8cf9"
+          }
+        },
+        {
+          "client_id": "563735304062-m3dahjro3b1fifl2atf34nqm8aql1tlr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB86ev2hF5fvBA7YGYPg_DLO8RXpXMnJ7Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "563735304062-m3dahjro3b1fifl2atf34nqm8aql1tlr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
