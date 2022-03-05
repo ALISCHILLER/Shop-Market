@@ -85,7 +85,11 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
     private ActionProcessButton loginButton;
     private ImageView settingsImageView;
     private ImageView usersImageView;
-
+    private String getDeviceid() {
+        String deviceID = Settings.Secure.getString(getActivity()
+                .getContentResolver(),Settings.Secure.ANDROID_ID);
+        return deviceID;
+    }
     private void setEnabled(boolean enabled) {
         loginButton.setEnabled(enabled);
         settingsImageView.setEnabled(enabled);
@@ -265,6 +269,7 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
                 data.IsSupervisor = true;
                 LicenseRequestBody body = new LicenseRequestBody();
                 body.companyDeviceAppData = data;
+                String deviceIdSuper=getDeviceid();
                 deviceApi.runWebRequest(deviceApi.checkLicense(body), new WebCallBack<CompanyDeviceAppResult>() {
                     @Override
                     protected void onFinish() {
@@ -274,7 +279,7 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
                     @Override
                     protected void onSuccess(CompanyDeviceAppResult result, Request request) {
 //                        if (result.Type == 200)
-                            userManager.login(username, password
+                            userManager.login(username, password,deviceIdSuper
                                     , new OnTokenAcquired() {
                                         @Override
                                         public void run(Token token) {

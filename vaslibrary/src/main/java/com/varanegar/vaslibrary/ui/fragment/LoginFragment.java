@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,6 +99,13 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
     @DrawableRes
     protected abstract int getAppIconId();
 
+
+    private String getDeviceid() {
+        String deviceID = Settings.Secure.getString(getActivity()
+                .getContentResolver(),Settings.Secure.ANDROID_ID);
+        return deviceID;
+    }
+
     private void setEnabled(boolean enabled) {
         loginButton.setEnabled(enabled);
         settingsImageView.setEnabled(enabled);
@@ -131,7 +139,8 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
-
+        String deviceIdSuper=getDeviceid();
+        Toast.makeText(getContext(),deviceIdSuper,Toast.LENGTH_LONG).show();
         TextView localeTextView = (TextView) view.findViewById(R.id.language_text_view);
         final Locale locale = LocaleHelper.getPreferredLocal(getContext());
         if (locale != null)
@@ -316,9 +325,10 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
                 final UserManager userManager = new UserManager(getContext());
                 final String username = userNameEditText.getText().toString().trim();
                 final UserModel user = userManager.getUsers(username);
+                String deviceId=getDeviceid();
                 final String password = HelperMethods.convertToEnglishNumbers(passwordEditText.getText().toString().trim());
                 if (user != null) {
-                    userManager.login(user.UserName, password
+                    userManager.login(user.UserName, password,deviceId
                             , new OnTokenAcquired() {
                                 @Override
                                 public void run(Token token) {
@@ -328,7 +338,9 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
                                         accountManager.writeToFile(token, getContext(), "user.token");
                                         user.LoginDate = new Date();
                                         UserManager.writeToFile(user, getContext());
-                                        VaranegarApplication.getInstance().getDbHandler().emptyAllTablesExcept(User.UserTbl, SysConfig.SysConfigTbl, Location.LocationTbl, TrackingLog.TrackingLogTbl);
+                                        VaranegarApplication.getInstance().getDbHandler()
+                                                .emptyAllTablesExcept(User.UserTbl, SysConfig.SysConfigTbl,
+                                                        Location.LocationTbl, TrackingLog.TrackingLogTbl);
                                         MainVaranegarActivity activity = getVaranegarActvity();
                                         if (activity != null && !activity.isFinishing() && isResumed())
                                             activity.putFragment(getTourReportFragment());
