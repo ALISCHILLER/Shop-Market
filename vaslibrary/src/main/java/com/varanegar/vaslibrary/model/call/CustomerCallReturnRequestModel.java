@@ -29,6 +29,8 @@ public class CustomerCallReturnRequestModel extends ReturnBaseModel {
         returnModel.EndTime = this.EndTime;
         returnModel.DealerUniqueId = this.DealerUniqueId;
         returnModel.IsFromRequest = this.IsFromRequest;
+        returnModel.ShipToPartyCode=this.ShipToPartyCode;
+        returnModel.ShipToPartyUniqueId=this.ShipToPartyUniqueId;
         return returnModel;
     }
 }

@@ -25,6 +25,8 @@ public class SyncGetCustomerCallOrderViewModel {
     public UUID InvoicePaymentTypeUniqueId;
     public String BackOfficeOrderNo;
     public int BackOfficeInvoiceNo;
+    public UUID ShipToPartyUniqueId;
+    public String ShipToPartyCode;
     //    public double RoundInvoiceAmount;
 //    public double RoundInvoiceOtherDiscount;
 //    public double RoundInvoiceTax;

@@ -907,7 +907,8 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
            newDateStr = postFormater.format(last.get(0).Date);
            if (newDateStr.equals(d)) {
                String newTimeLast = df.format(last.get(0).Date);
-               if (lastISSend.get(0) != null) {
+
+               if (lastISSend.get(0)!=null) {
                    String newTimeIsLast = df.format(lastISSend.get(0).Date);
                    last_send_point.setValue(newTimeIsLast);
                }

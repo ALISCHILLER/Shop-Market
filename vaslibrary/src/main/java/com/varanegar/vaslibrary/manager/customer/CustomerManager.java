@@ -28,6 +28,8 @@ import com.varanegar.vaslibrary.manager.CustomerDataForRegisterManager;
 import com.varanegar.vaslibrary.manager.CustomerPathViewManager;
 import com.varanegar.vaslibrary.manager.UserManager;
 import com.varanegar.vaslibrary.manager.VisitTemplatePathCustomerManager;
+import com.varanegar.vaslibrary.manager.c_shipToparty.CustomerShipToPartyManager;
+import com.varanegar.vaslibrary.manager.c_shipToparty.CustomerShipToPartyModel;
 import com.varanegar.vaslibrary.manager.customercallmanager.CustomerCallManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.OwnerKeysWrapper;
@@ -84,7 +86,11 @@ public class CustomerManager extends BaseManager<CustomerModel> {
         query.from(Customer.CustomerTbl).orderByAscending(Customer.rowIndex);
         return getItems(query);
     }
-
+    public List<CustomerModel> getAllTb() {
+        Query query = new Query();
+        query.from(Customer.CustomerTbl);
+        return getItems(query);
+    }
     public List<CustomerModel> getCustomersWithCustomerCalls() {
         Query query = new Query();
         query.from(From.table(Customer.CustomerTbl).innerJoin(CustomerCall.CustomerCallTbl)
@@ -160,13 +166,36 @@ public class CustomerManager extends BaseManager<CustomerModel> {
 
             @Override
             protected void onSuccess(List<CustomerModel> result, Request request) {
+
                 if (result.size() > 0) {
                     try {
-                        for (CustomerModel item: result
-                             ) {
-                            item.Barcode = item.CustomerCode;
-                        }
+                        if(VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+                            for (CustomerModel item : result
+                            ) {
+                                item.Barcode = item.CustomerCode;
 
+                                CustomerShipToPartyManager shipToPartyManager = new
+                                        CustomerShipToPartyManager(getContext());
+                                CustomerShipToPartyModel customerShipToPartyModel = new CustomerShipToPartyModel();
+
+                                customerShipToPartyModel.CustomerName = item.CustomerName;
+                                customerShipToPartyModel.BackOfficeId = item.CustomerCode;
+                                customerShipToPartyModel.Latitude = item.Latitude;
+                                customerShipToPartyModel.Longitude = item.Latitude;
+                                customerShipToPartyModel.Address = item.Address;
+                                customerShipToPartyModel.SoldToPartyUniqueId = item.UniqueId;
+                                customerShipToPartyModel.UniqueId = item.UniqueId;
+                                customerShipToPartyModel.Mobile = item.Mobile;
+                                customerShipToPartyModel.Phone = item.Phone;
+                                customerShipToPartyModel.StoreName = item.StoreName;
+                                customerShipToPartyModel.PostCode = item.CustomerPostalCode;
+                                customerShipToPartyModel.IgnoreLocation = item.IgnoreLocation;
+                                customerShipToPartyModel.NationalCode = item.NationalCode;
+                                customerShipToPartyModel.EconomicCode = item.EconomicCode;
+                                customerShipToPartyModel.IsActive = item.IsActive;
+                                shipToPartyManager.insertOrUpdate(customerShipToPartyModel);
+                            }
+                        }
                         insertOrUpdate(result);
                         updateFinanceData(new UpdateCall() {
                             @Override
@@ -301,7 +330,13 @@ public class CustomerManager extends BaseManager<CustomerModel> {
             public void onSuccess(List<CustomerModel> result, Request request) {
                 if (result.size() > 0) {
                     try {
-                        List<CustomerModel> oldCustomerModels = getItems(new Query().select(Customer.CustomerAll).from(From.table(Customer.CustomerTbl).innerJoin(CustomerCall.CustomerCallTbl).on(Customer.UniqueId, CustomerCall.CustomerId)).whereAnd(Criteria.equals(CustomerCall.CallType, CustomerCallType.ChangeLocation.ordinal())));
+                        List<CustomerModel> oldCustomerModels = getItems(new Query()
+                                .select(Customer.CustomerAll)
+                                .from(From.table(Customer.CustomerTbl)
+                                        .innerJoin(CustomerCall.CustomerCallTbl)
+                                        .on(Customer.UniqueId, CustomerCall.CustomerId))
+                                .whereAnd(Criteria.equals(CustomerCall.CallType,
+                                        CustomerCallType.ChangeLocation.ordinal())));
                         HashMap<UUID, CustomerModel> hasMap = new HashMap<>();
                         if (oldCustomerModels.size() > 0) {
                             hasMap = Linq.toHashMap(oldCustomerModels, new Linq.Map<CustomerModel, UUID>() {
@@ -310,6 +345,8 @@ public class CustomerManager extends BaseManager<CustomerModel> {
                                     return item.UniqueId;
                                 }
                             });
+
+
                             for (CustomerModel sever :
                                     result) {
                                 if (sever.Longitude == 0 && sever.Latitude == 0) {
@@ -321,11 +358,41 @@ public class CustomerManager extends BaseManager<CustomerModel> {
                                 }
                             }
                         }
+
+
                         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist) && isTourUpdateFlow) {
                             deleteAll();
                             insert(result);
-                        } else
+                        } else {
                             sync(result);
+                            CustomerShipToPartyManager shipToPartyManager=new
+                                    CustomerShipToPartyManager(getContext());
+                            List<CustomerModel> customerModels=getAllTb();
+                            for (CustomerModel sever :
+                                    customerModels) {
+                                CustomerShipToPartyModel customerShipToPartyModel =new CustomerShipToPartyModel();
+                                customerShipToPartyModel.CustomerName=sever.CustomerName;
+                                customerShipToPartyModel.BackOfficeId= sever.CustomerCode;
+                                customerShipToPartyModel.Latitude=sever.Latitude;
+                                customerShipToPartyModel.Longitude=sever.Latitude;
+                                customerShipToPartyModel.Address=sever.Address;
+                                customerShipToPartyModel.SoldToPartyUniqueId=sever.UniqueId;
+                                customerShipToPartyModel.UniqueId=sever.UniqueId;
+                                customerShipToPartyModel.Mobile=sever.Mobile;
+                                customerShipToPartyModel.Phone=sever.Phone;
+                                customerShipToPartyModel.StoreName=sever.StoreName;
+                                customerShipToPartyModel.PostCode=sever.CustomerPostalCode;
+                                customerShipToPartyModel.IgnoreLocation=sever.IgnoreLocation;
+                                customerShipToPartyModel.NationalCode=sever.NationalCode;
+                                customerShipToPartyModel.EconomicCode=sever.EconomicCode;
+                                customerShipToPartyModel.IsActive=sever.IsActive;
+                                if (isTourUpdateFlow)
+                                shipToPartyManager.insert(customerShipToPartyModel);
+                                else
+                                    shipToPartyManager.insertOrUpdate(customerShipToPartyModel);
+                            }
+
+                        }
                         updateFinanceData(updateCall, customerApi, dealerId, settingsId.Value, null);
                         new UpdateManager(getContext()).addLog(UpdateKey.Customer);
                         Timber.i("Updating customers completed");
@@ -337,6 +404,7 @@ public class CustomerManager extends BaseManager<CustomerModel> {
                         updateCall.failure(getContext().getString(R.string.data_error));
                     }
                 } else {
+                    setcustomertoship();
                     updateFinanceData(updateCall, customerApi, dealerId, settingsId.Value, null);
                 }
             }
@@ -361,6 +429,37 @@ public class CustomerManager extends BaseManager<CustomerModel> {
         });
     }
 
+    public void setcustomertoship(){
+        CustomerShipToPartyManager shipToPartyManager=new
+                CustomerShipToPartyManager(getContext());
+        List<CustomerModel> customerModels=getAllTb();
+        for (CustomerModel sever :
+                customerModels) {
+            CustomerShipToPartyModel customerShipToPartyModel =new CustomerShipToPartyModel();
+            customerShipToPartyModel.CustomerName=sever.CustomerName;
+            customerShipToPartyModel.BackOfficeId= sever.CustomerCode;
+            customerShipToPartyModel.Latitude=sever.Latitude;
+            customerShipToPartyModel.Longitude=sever.Latitude;
+            customerShipToPartyModel.Address=sever.Address;
+            customerShipToPartyModel.SoldToPartyUniqueId=sever.UniqueId;
+            customerShipToPartyModel.UniqueId=sever.UniqueId;
+            customerShipToPartyModel.Mobile=sever.Mobile;
+            customerShipToPartyModel.Phone=sever.Phone;
+            customerShipToPartyModel.StoreName=sever.StoreName;
+            customerShipToPartyModel.PostCode=sever.CustomerPostalCode;
+            customerShipToPartyModel.IgnoreLocation=sever.IgnoreLocation;
+            customerShipToPartyModel.NationalCode=sever.NationalCode;
+            customerShipToPartyModel.EconomicCode=sever.EconomicCode;
+            customerShipToPartyModel.IsActive=sever.IsActive;
+            try {
+                shipToPartyManager.insert(customerShipToPartyModel);
+            } catch (ValidationException e) {
+                e.printStackTrace();
+            } catch (DbException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     public void cancelSync() {
         if (call != null && !call.isCanceled() && call.isExecuted())
             call.cancel();

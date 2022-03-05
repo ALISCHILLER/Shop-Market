@@ -17,6 +17,10 @@ public class OrderBaseModel extends BaseModel {
     public UUID CustomerCallUniqueId;
     @Column
     public int RowNo;
+    @Column
+    public UUID ShipToPartyUniqueId;
+    @Column
+    public String ShipToPartyCode;
     @NotNull
     @Column
     public UUID CustomerUniqueId;

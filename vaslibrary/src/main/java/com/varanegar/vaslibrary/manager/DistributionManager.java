@@ -115,7 +115,9 @@ public class DistributionManager {
                         if (result.DistributionCustomerCallOrders != null && result.DistributionCustomerCallOrders.size() > 0) {
                             for (final CustomerCallInvoiceModel customerCallInvoiceModel :
                                     result.DistributionCustomerCallOrders) {
-                                DistributionCustomerCallModel customerCallModel = Linq.findFirst(result.DistributionCustomerCalls, item -> item.UniqueId != null && item.UniqueId.equals(customerCallInvoiceModel.CustomerCallUniqueId));
+                                DistributionCustomerCallModel customerCallModel =
+                                        Linq.findFirst(result.DistributionCustomerCalls, item -> item.UniqueId
+                                                != null && item.UniqueId.equals(customerCallInvoiceModel.CustomerCallUniqueId));
                                 if (customerCallModel != null)
                                     customerCallInvoiceModel.CustomerUniqueId = customerCallModel.CustomerUniqueId;
                             }

@@ -9,6 +9,7 @@ import com.varanegar.vaslibrary.base.VasActivity;
 import com.varanegar.vaslibrary.manager.CustomerRemainPerLineManager;
 import com.varanegar.vaslibrary.manager.PaymentOrderTypeManager;
 import com.varanegar.vaslibrary.manager.VisitTemplatePathCustomerManager;
+import com.varanegar.vaslibrary.manager.c_shipToparty.CustomerShipToPartyManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerBarcodeManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.BackOfficeType;
@@ -41,6 +42,32 @@ public class CustomersUpdateFlow extends UpdateFlow {
 
     @Override
     protected void addAsyncTasks(List<TourAsyncTask> tasks, UpdateCall call) {
+
+
+        tasks.add(new SimpleTourAsyncTask() {
+            @Override
+            public void run(UpdateCall call) {
+                CustomerShipToPartyManager shipToPartyManager = new
+                        CustomerShipToPartyManager(getContext());
+                if (customerId == null)
+                    shipToPartyManager.sync(call, false);
+            }
+
+            @Override
+            public String name() {
+                return "shipToPartyManager";
+            }
+
+            @Override
+            public int group() {
+                return R.string.customer_info;
+            }
+
+            @Override
+            public int queueId() {
+                return 0;
+            }
+        });
         tasks.add(new SimpleTourAsyncTask() {
             @Override
             public void run(UpdateCall call) {
@@ -63,9 +90,12 @@ public class CustomersUpdateFlow extends UpdateFlow {
 
             @Override
             public int queueId() {
-                return 0;
+                return 1;
             }
         });
+
+
+
         tasks.add(new SimpleTourAsyncTask() {
             @Override
             public void run(UpdateCall call) {

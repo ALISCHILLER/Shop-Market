@@ -16,6 +16,8 @@ public class CustomerCallInvoiceModel extends OrderBaseModel {
         customerCallOrderModel.RowNo = this.RowNo;
         customerCallOrderModel.CustomerUniqueId = this.CustomerUniqueId;
         customerCallOrderModel.DistBackOfficeId = this.DistBackOfficeId;
+        customerCallOrderModel.ShipToPartyUniqueId =this.ShipToPartyUniqueId;
+        customerCallOrderModel.ShipToPartyCode =this.ShipToPartyCode;
         customerCallOrderModel.DisType = DisType;
 //        customerCallOrderModel.Comment = Comment;
         customerCallOrderModel.LocalPaperNo = LocalPaperNo;

@@ -44,6 +44,8 @@ import com.varanegar.vaslibrary.manager.ProductManager;
 import com.varanegar.vaslibrary.manager.RequestReportViewManager;
 import com.varanegar.vaslibrary.manager.UserManager;
 import com.varanegar.vaslibrary.manager.VisitTemplatePathCustomerManager;
+import com.varanegar.vaslibrary.manager.c_shipToparty.CustomerShipToPartyManager;
+import com.varanegar.vaslibrary.manager.c_shipToparty.CustomerShipToPartyModel;
 import com.varanegar.vaslibrary.manager.cataloguelog.CatalogueLogManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.customeractiontimemanager.CustomerActionTimeManager;
@@ -230,6 +232,7 @@ public class TourManager {
     private static SyncService.ServiceBinder receiveTourServiceBinder;
     private static SendTourService.ServiceBinder sendTourServiceBinder;
     private String tourNo = null;
+
     private ServiceConnection receiveTourServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
@@ -1970,7 +1973,9 @@ public class TourManager {
                 });
                 if (customerCallOrderModel == null)
                     customerCallOrderModel = customerCallInvoiceModel.convertInvoiceToOrderModel();
+
                 SyncGetCustomerCallOrderViewModel syncGetCustomerCallOrderViewModel = new SyncGetCustomerCallOrderViewModel();
+
                 syncGetCustomerCallOrderViewModel.UniqueId = customerCallOrderModel.UniqueId;
                 syncGetCustomerCallOrderViewModel.PriceClassUniqueId = customerCallOrderModel.PriceClassId;
                 syncGetCustomerCallOrderViewModel.SubSystemTypeUniqueId = VaranegarApplication.getInstance().getAppId();
@@ -2252,9 +2257,13 @@ public class TourManager {
                     syncGetCustomerCallOrderViewModel.PriceClassUniqueId = customerCallOrderModel.PriceClassId;
                     syncGetCustomerCallOrderViewModel.SubSystemTypeUniqueId = VaranegarApplication.getInstance().getAppId();
                     syncGetCustomerCallOrderViewModel.OrderTypeUniqueId = customerCallOrderModel.OrderTypeUniqueId;
-                    if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales))
+                    if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
                         syncGetCustomerCallOrderViewModel.OrderPaymentTypeUniqueId = customerCallOrderModel.OrderPaymentTypeUniqueId;
-                    else if (VaranegarApplication.is(VaranegarApplication.AppId.HotSales))
+
+
+                        syncGetCustomerCallOrderViewModel.ShipToPartyUniqueId=customerCallOrderModel.ShipToPartyUniqueId;
+                        syncGetCustomerCallOrderViewModel.ShipToPartyCode=customerCallOrderModel.ShipToPartyCode;
+                    } else if (VaranegarApplication.is(VaranegarApplication.AppId.HotSales))
                         syncGetCustomerCallOrderViewModel.InvoicePaymentTypeUniqueId = customerCallOrderModel.OrderPaymentTypeUniqueId;
 
                     syncGetCustomerCallOrderViewModel.Comment = customerCallOrderModel.Comment;
@@ -2314,6 +2323,8 @@ public class TourManager {
                                 syncGetCustomerCallOrderLineViewModel.UnitPrice = HelperMethods.currencyToDouble(orderOrderViewModel.UnitPrice);
                                 syncGetCustomerCallOrderLineViewModel.RequestAmount = HelperMethods.currencyToDouble(orderOrderViewModel.RequestAmount);
                             }
+
+
                             syncGetCustomerCallOrderLineViewModel.RequestAdd1Amount = HelperMethods.currencyToDouble(orderOrderViewModel.RequestAdd1Amount);
                             syncGetCustomerCallOrderLineViewModel.RequestAdd2Amount = HelperMethods.currencyToDouble(orderOrderViewModel.RequestAdd2Amount);
                             syncGetCustomerCallOrderLineViewModel.RequestTaxAmount = HelperMethods.currencyToDouble(orderOrderViewModel.RequestTaxAmount);
@@ -2375,6 +2386,7 @@ public class TourManager {
                                 syncGetCustomerCallOrderLinePromotionViewModel.DiscountRef = evcItemStatuesCustomersModel.DisRef;
                                 syncGetCustomerCallOrderLinePromotionViewModel.SupAmount = evcItemStatuesCustomersModel.SupAmount;
                                 syncGetCustomerCallOrderLinePromotionViewModels.add(syncGetCustomerCallOrderLinePromotionViewModel);
+
                             }
                         }
 
@@ -2404,9 +2416,10 @@ public class TourManager {
                                 }
                             }
                         }
-                        if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales))
+                        if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
                             syncGetCustomerCallOrderLineViewModel.CustomerCallOrderLineOrderQtyDetails = syncGetCustomerQtyDetailViewModels;
-                        else {
+
+                        }else {
                             syncGetCustomerCallOrderLineViewModel.CustomerCallOrderLineInvoiceQtyDetails = syncGetCustomerQtyDetailViewModels;
                             syncGetCustomerCallOrderLineViewModel.CustomerCallOrderLinePromotions = syncGetCustomerCallOrderLinePromotionViewModels;
                         }
@@ -2443,6 +2456,7 @@ public class TourManager {
                         if (callOrderLinesTemp.size() > 0) {
                             for (CallOrderLinesTempModel callOrderLineTemp :
                                     callOrderLinesTemp) {
+
                                 SyncGetCustomerCallOrderLineViewModel promotionPreviewLine = new SyncGetCustomerCallOrderLineViewModel();
                                 promotionPreviewLine.Description = callOrderLineTemp.Description;
                                 promotionPreviewLine.UniqueId = callOrderLineTemp.UniqueId;
@@ -2536,9 +2550,12 @@ public class TourManager {
             syncGetCustomerCallReturnViewModel.OperationDate = customerCallReturnModel.StartTime;
             syncGetCustomerCallReturnViewModel.DealerUniqueId = customerCallReturnModel.DealerUniqueId;
             //syncGetCustomerCallReturnViewModel.TotalReturnCharge = HelperMethods.currencyToDouble(customerCallReturnModel.TotalReturnCharge);
-            if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales))
+            if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
                 syncGetCustomerCallReturnViewModel.CustomerCallReturnTypeUniqueId = UUID.fromString("1EB2235D-54D2-40C1-B84C-6BE1AAC7ED7C");
-            else
+
+                syncGetCustomerCallReturnViewModel.ShipToPartyUniqueId=customerCallReturnModel.ShipToPartyUniqueId;
+                syncGetCustomerCallReturnViewModel.ShipToPartyCode=customerCallReturnModel.ShipToPartyCode;
+            }else
                 syncGetCustomerCallReturnViewModel.CustomerCallReturnTypeUniqueId = UUID.fromString("40E5F33E-EE5B-4EF0-AEF4-E98C376785AC");
             syncGetCustomerCallReturnViewModel.BackOfficeInvoiceNo = customerCallReturnModel.BackOfficeInvoiceNo;
             //syncGetCustomerCallReturnViewModel.BackOfficeInvoiceRef = customerCallReturnModel.BackOfficeInvoiceId;

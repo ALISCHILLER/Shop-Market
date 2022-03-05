@@ -85,6 +85,8 @@ import com.varanegar.vaslibrary.manager.ProductType;
 import com.varanegar.vaslibrary.manager.ProductUnitViewManager;
 import com.varanegar.vaslibrary.manager.ProductUnitsViewManager;
 import com.varanegar.vaslibrary.manager.ValidPayTypeManager;
+import com.varanegar.vaslibrary.manager.c_shipToparty.CustomerShipToPartyManager;
+import com.varanegar.vaslibrary.manager.c_shipToparty.CustomerShipToPartyModel;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.customeractiontimemanager.CustomerActionTimeManager;
 import com.varanegar.vaslibrary.manager.customeractiontimemanager.CustomerActions;
@@ -189,6 +191,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -250,6 +253,7 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
     private PairedItemsSpinner<CustomerPaymentTypesViewModel> paymentTypesSpinner;
     private PairedItemsSpinner<CustomerOrderTypeModel> orderTypesSpinner;
     private PairedItemsSpinner<PriceClassVnLiteModel> priceClassSpinner;
+    private PairedItemsSpinner<CustomerShipToPartyModel> shipPairedItemsSpinner;
     private boolean persistCustomizedPrices = true;
     private Currency maxValu;
     private boolean percentType;
@@ -700,6 +704,7 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
         ((TextView) view.findViewById(R.id.debit_balance_text_view)).setText(HelperMethods.currencyToString(customer.RemainDebit));
         ((TextView) view.findViewById(R.id.credit_balance_text_view)).setText(HelperMethods.currencyToString(customer.RemainCredit));
 
+
         orderOptions = new ArrayList<>();
         orderOptions.add(new OrderOption<CustomerCallOrderOrderViewModel>(context).setProjection(ProductName).setName(R.string.product_name));
         orderOptions.add(new OrderOption<CustomerCallOrderOrderViewModel>(context).setProjection(SortId).setName(R.string.sort_request));
@@ -780,6 +785,8 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
         orderRecyclerView.addItemDecoration(new DividerItemDecoration(context, R.color.grey_light, 1));
         orderRecyclerView.setAdapter(orderAdapter);
         setupToolbarButtons(view);
+
+
 
         dealerNameTextView.setText(customerCallOrderModel.DealerName);
         dealerMobileTextView.setText(customerCallOrderModel.DealerMobile);
@@ -967,6 +974,45 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
                     }
                 }));
             }
+
+            // Get ship Types and Show to User|
+            shipPairedItemsSpinner=view.findViewById(R.id.ship_types_spinner);
+            CustomerShipToPartyManager shipManager=new CustomerShipToPartyManager(getContext());
+            List<CustomerShipToPartyModel> ships=shipManager.getItems(customerId);
+
+            Collections.sort(ships, (o1, o2) -> {
+                Integer a1 = o1.UniqueId.equals(o1.SoldToPartyUniqueId)?0:1;
+                Integer b1 = o2.UniqueId.equals( o2.SoldToPartyUniqueId)?0:1;
+                return a1.compareTo(b1);
+            });
+
+
+
+
+            shipPairedItemsSpinner.setVisibility(View.VISIBLE);
+            shipPairedItemsSpinner.setup(getChildFragmentManager(),ships, (item, text) -> {
+                String str = HelperMethods.persian2Arabic(text);
+                if (str == null)
+                    return true;
+                str = str.toLowerCase();
+                return item.toString().toLowerCase().contains(str);
+            });
+
+            UUID shipid=customerCallOrderModel.ShipToPartyUniqueId;
+            if (shipid!=null){
+                for (int i=0;i<ships.size();i++){
+                    if (shipid.equals(ships.get(i).UniqueId)){
+                        shipPairedItemsSpinner.selectItem(i);
+                    }
+                }
+            }else if(ships.get(0)!=null) {
+                shipPairedItemsSpinner.selectItem(0);
+            }
+            shipPairedItemsSpinner.setOnItemSelectedListener((position, item) -> {
+
+            });
+
+
 
             // Get Order Types and Show to User
             CustomerOrderTypesManager customerOrderTypesManager = new CustomerOrderTypesManager(context);
@@ -1286,6 +1332,10 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
         customerCallOrderModel.Comment = commentEditText.getText().toString();
         customerCallOrderModel.RoundOrderOtherDiscount = otherDiscount;
         customerCallOrderModel.EndTime = new Date();
+        if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+            customerCallOrderModel.ShipToPartyUniqueId = shipPairedItemsSpinner.getSelectedItem().UniqueId;
+            customerCallOrderModel.ShipToPartyCode = shipPairedItemsSpinner.getSelectedItem().BackOfficeId;
+        }
         try {
             long affectedRows = customerCallOrderManager.update(customerCallOrderModel);
             Timber.e("update customer call order ", affectedRows);
@@ -1491,8 +1541,16 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
 //                    }
 //                });
             if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+
+
+
+             SharedPreferences sharedPreferences = context.getSharedPreferences("ReportConfig",
+                     Context.MODE_PRIVATE);
+                sharedPreferences.edit().putString(customerId.toString(),shipPairedItemsSpinner
+                        .getSelectedItem().UniqueId.toString()).apply();
                 SysConfigManager sysConfigManager = new SysConfigManager(getContext());
-                SysConfigModel sendPromotionPreview = sysConfigManager.read(ConfigKey.SendPromotionPreview, SysConfigManager.cloud);
+                SysConfigModel sendPromotionPreview = sysConfigManager.read(ConfigKey.
+                        SendPromotionPreview, SysConfigManager.cloud);
                 if (SysConfigManager.compare(sendPromotionPreview, true)) {
                     UUID customerIdOrderPreview = VaranegarApplication.getInstance().tryRetrieve("CUSTOMER_ID_ORDER_PREVIEW", false);
                     if (!customerId.equals(customerIdOrderPreview)) {

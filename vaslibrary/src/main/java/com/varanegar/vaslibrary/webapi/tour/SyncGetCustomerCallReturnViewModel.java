@@ -23,6 +23,9 @@ public class SyncGetCustomerCallReturnViewModel
     public UUID SubSystemTypeUniqueId;
     public UUID ReturnRequestRejectReasonUniqueId;
     public String Comment;
+
+    public UUID ShipToPartyUniqueId;
+    public String ShipToPartyCode;
 //    public double TotalReturnAmount;
 //    public double TotalReturnOtherDiscount;
 //    public double TotalReturnDis1;
