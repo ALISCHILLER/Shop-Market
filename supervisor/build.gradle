@@ -86,6 +86,17 @@ dependencies {
     implementation 'com.github.bmelnychuk:atv:1.2.+'
 
     implementation platform('com.google.firebase:firebase-bom:29.1.0')
+
+    // Firebase Cloud Messaging (Java)
+    implementation 'com.google.firebase:firebase-messaging'
+
+    // For an optimal experience using FCM, add the Firebase SDK
+    // for Google Analytics. This is recommended, but not required.
+    implementation 'com.google.firebase:firebase-analytics'
+
+    implementation 'com.google.firebase:firebase-installations-ktx:17.0.0'
+
+    implementation 'androidx.work:work-runtime:2.5.0'
 }
 
 tasks.whenTaskAdded { task ->

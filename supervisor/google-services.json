@@ -7,18 +7,26 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:563735304062:android:c586cf012aeb5b4ccb052f",
+        "mobilesdk_app_id": "1:563735304062:android:43b17893a21b70b5cb052f",
         "android_client_info": {
           "package_name": "com.varanegar.supervisor"
         }
       },
       "oauth_client": [
         {
-          "client_id": "563735304062-s8b33agntm7nvpkfm421751o9ma6uptb.apps.googleusercontent.com",
+          "client_id": "563735304062-pfoc5e7ma9pobjscd9atgb6uin02mld2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.varanegar.supervisor",
             "certificate_hash": "7a623203e52ab8b2ea12cc22adf801ca44fe8cf9"
+          }
+        },
+        {
+          "client_id": "563735304062-pm3e8qm87fvdf3ncsqp5tfjds5ccha8e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.varanegar.supervisor",
+            "certificate_hash": "e0190dba24a603667a6f59d9d60757fee280796d"
           }
         },
         {
