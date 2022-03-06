@@ -29,7 +29,8 @@ public class AccountManager implements IAccountManager {
 
     private String baseUrl;
 
-    public void getAuthToken(final Account account, String scope, final OnTokenAcquired onTokenAcquired, final OnError onError) {
+    public void getAuthToken(final Account account, String scope,
+                             final OnTokenAcquired onTokenAcquired, final OnError onError) {
 
         getToken(account.username, account.password, "password", scope)
                 .enqueue(new Callback<Token>() {
@@ -42,7 +43,8 @@ public class AccountManager implements IAccountManager {
                             try {
                                 String str = response.errorBody().string();
                                 ErrorBody errorBody = new Gson().fromJson(str, ErrorBody.class);
-                                Timber.d("Login Failed. error = %s, description = %s", errorBody.error, errorBody.description);
+                                Timber.d("Login Failed. error = %s, description = %s",
+                                        errorBody.error, errorBody.description);
                                 onError.onAuthenticationFailure(errorBody.error, errorBody.description);
                             } catch (Exception e) {
                                 Timber.e(e,"Login Failed. Unknown error.");
@@ -77,7 +79,8 @@ public class AccountManager implements IAccountManager {
     public void writeToFile(Token token, Context context, String fileName) {
         String json = new Gson().toJson(token);
         try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(fileName, Context.MODE_PRIVATE));
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
+                    context.openFileOutput(fileName, Context.MODE_PRIVATE));
             String text = SecurityUtils.encrypt(json);
             outputStreamWriter.write(text);
             outputStreamWriter.close();

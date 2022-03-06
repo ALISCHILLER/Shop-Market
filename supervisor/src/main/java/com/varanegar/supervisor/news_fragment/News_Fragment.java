@@ -18,7 +18,6 @@ public class News_Fragment extends IMainPageFragment {
     protected View onCreateContentView(@NonNull LayoutInflater inflater,@Nullable ViewGroup container
             ,@Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_news_layout,container,false);
-
         return view;
     }
 }
