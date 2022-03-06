@@ -31,7 +31,7 @@ public class AccountManager implements IAccountManager {
 
     public void getAuthToken(final Account account, String scope, final OnTokenAcquired onTokenAcquired, final OnError onError) {
 
-        getToken(account.username, account.password, "password", scope)
+        getToken(account.username, account.password,"password", scope,account.deviceId,account.token)
                 .enqueue(new Callback<Token>() {
                     @Override
                     public void onResponse(Call<Token> call, Response<Token> response) {
@@ -63,7 +63,10 @@ public class AccountManager implements IAccountManager {
     public Call<Token> getToken(@Field("username") String username,
                                 @Field("password") String password,
                                 @Field("grant_type") String grantType,
-                                @Field("scope") String scope) {
+                                @Field("scope") String scope,
+                                @Field("deviceId") String deviceId,
+                                @Field("token") String token
+                                ) {
         if (baseUrl == null || baseUrl.isEmpty())
             throw new RuntimeException("Base Url has not been set.");
         Retrofit retrofit = new Retrofit.Builder()
@@ -71,7 +74,7 @@ public class AccountManager implements IAccountManager {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         IAccountManager iAccountManager = retrofit.create(IAccountManager.class);
-        return iAccountManager.getToken(username, password, grantType, scope);
+        return iAccountManager.getToken(username, password, grantType, scope,deviceId,token);
     }
 
     public void writeToFile(Token token, Context context, String fileName) {

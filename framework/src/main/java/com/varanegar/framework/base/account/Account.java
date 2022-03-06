@@ -5,12 +5,14 @@ package com.varanegar.framework.base.account;
  */
 
 public class Account {
-    public Account(String username, String password,String deviceId){
+    public Account(String username, String password,String deviceId,String token){
         this.username = username;
         this.password = password;
         this.deviceId = deviceId;
+        this.token = token;
     }
     public String username;
     public String password;
-    public String deviceId;
+    public String deviceId ;
+    public String token ;
 }

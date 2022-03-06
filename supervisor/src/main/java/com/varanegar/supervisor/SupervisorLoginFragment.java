@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -264,6 +265,11 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
 //                    loginButton.setProgress(0);
 //                    return;
 //                }
+                SharedPreferences sharedPreferences = getActivity()
+                        .getSharedPreferences("Firebase_Token", Context.MODE_PRIVATE);
+
+                String token=sharedPreferences.getString("172F4321-16BB-4415-85D1-DD88FF04234C"
+                        ,"");
 
                 DeviceApi deviceApi = new DeviceApi(getContext());
                 CompanyDeviceAppData data = new CompanyDeviceAppData();
@@ -274,6 +280,7 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
                 LicenseRequestBody body = new LicenseRequestBody();
                 body.companyDeviceAppData = data;
                 String deviceIdSuper=getDeviceid();
+
                 deviceApi.runWebRequest(deviceApi.checkLicense(body), new WebCallBack<CompanyDeviceAppResult>() {
                     @Override
                     protected void onFinish() {
@@ -283,7 +290,7 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
                     @Override
                     protected void onSuccess(CompanyDeviceAppResult result, Request request) {
 //                        if (result.Type == 200)
-                            userManager.login(username, password,deviceIdSuper
+                            userManager.login(username, password,deviceIdSuper,token
                                     , new OnTokenAcquired() {
                                         @Override
                                         public void run(Token token) {

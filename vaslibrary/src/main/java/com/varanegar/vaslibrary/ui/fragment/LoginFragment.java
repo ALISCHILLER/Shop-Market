@@ -4,6 +4,7 @@ package com.varanegar.vaslibrary.ui.fragment;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -322,13 +323,19 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
             @Override
             public void done(String ipAddress) {
                 //try{
+
+                SharedPreferences sharedPreferences = getActivity()
+                        .getSharedPreferences("Firebase_Token", Context.MODE_PRIVATE);
+
+                String token=sharedPreferences.getString("172F4321-16BB-4415-85D1-DD88FF04234C"
+                        ,"");
                 final UserManager userManager = new UserManager(getContext());
                 final String username = userNameEditText.getText().toString().trim();
                 final UserModel user = userManager.getUsers(username);
                 String deviceId=getDeviceid();
                 final String password = HelperMethods.convertToEnglishNumbers(passwordEditText.getText().toString().trim());
                 if (user != null) {
-                    userManager.login(user.UserName, password,deviceId
+                    userManager.login(user.UserName, password,deviceId,token
                             , new OnTokenAcquired() {
                                 @Override
                                 public void run(Token token) {

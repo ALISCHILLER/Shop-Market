@@ -16,5 +16,8 @@ public interface IAccountManager {
             @Field("username") String username,
             @Field("password") String password,
             @Field("grant_type") String grantType,
-            @Field("scope") String scope);
+            @Field("scope") String scope,
+            @Field("DeviceId") String deviceId,
+            @Field("Token") String token
+    );
 }

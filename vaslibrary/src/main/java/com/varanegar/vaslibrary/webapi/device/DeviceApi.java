@@ -33,7 +33,9 @@ public class DeviceApi extends BaseApi implements IDeviceApi {
 
     @Override
     public Call<CompanyDeviceAppResult> checkLicense(LicenseRequestBody info) {
-        IDeviceApi api = getRetrofitBuilder(getDefaultServer(getContext()), getClient(DEFAULT_CONNECT_TIMEOUT, DEFAULT_READ_TIMEOUT, DEFAULT_WRITE_TIMEOUT)).build().create(IDeviceApi.class);
+        IDeviceApi api = getRetrofitBuilder(getDefaultServer(getContext()),
+                getClient(DEFAULT_CONNECT_TIMEOUT, DEFAULT_READ_TIMEOUT, DEFAULT_WRITE_TIMEOUT))
+                .build().create(IDeviceApi.class);
         return api.checkLicense(info);
     }
 
