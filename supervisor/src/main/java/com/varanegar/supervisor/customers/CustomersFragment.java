@@ -287,13 +287,17 @@ public class CustomersFragment extends IMainPageFragment {
                         imageView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                QuestionnaireManager questionnaireManager = new QuestionnaireManager(getContext());
+                                QuestionnaireManager questionnaireManager = new
+                                        QuestionnaireManager(getContext());
                                 try {
                                     questionnaireManager.calculateCustomerQuestionnaire(entity.UniqueId);
-                                    QuestionnaireCustomerViewManager questionnaireCustomerViewManager = new QuestionnaireCustomerViewManager(getContext());
-                                    List<QuestionnaireCustomerViewModel> questionnaireCustomerViewModels = questionnaireCustomerViewManager.getQuestionnaires(entity.UniqueId);
+                                    QuestionnaireCustomerViewManager questionnaireCustomerViewManager
+                                            = new QuestionnaireCustomerViewManager(getContext());
+                                    List<QuestionnaireCustomerViewModel> questionnaireCustomerViewModels
+                                            = questionnaireCustomerViewManager.getQuestionnaires(entity.UniqueId);
                                     if (questionnaireCustomerViewModels.size() == 0) {
-                                        getVaranegarActvity().showSnackBar(com.varanegar.vaslibrary.R.string.no_questionnaire_for_this_customer, MainVaranegarActivity.Duration.Short);
+                                        getVaranegarActvity().showSnackBar(com.varanegar.vaslibrary.R.string.no_questionnaire_for_this_customer,
+                                                MainVaranegarActivity.Duration.Short);
                                     } else {
                                         QuestionnaireFragment fragment = new QuestionnaireFragment();
                                         fragment.setCustomerId(entity.UniqueId);
@@ -301,7 +305,8 @@ public class CustomersFragment extends IMainPageFragment {
                                     }
                                 } catch (Exception e) {
                                     Timber.e(e);
-                                    getVaranegarActvity().showSnackBar(com.varanegar.vaslibrary.R.string.calculating_questionnaire_failed, MainVaranegarActivity.Duration.Short);
+                                    getVaranegarActvity().showSnackBar(com.varanegar.vaslibrary.R.string.calculating_questionnaire_failed,
+                                            MainVaranegarActivity.Duration.Short);
                                 }
                             }
                         });
@@ -311,7 +316,8 @@ public class CustomersFragment extends IMainPageFragment {
 
                     @Override
                     public View onCreateView(LayoutInflater inflater, ViewGroup parent) {
-                        View view = inflater.inflate(R.layout.supervisor_report_phone_layput, parent, false);
+                        View view = inflater.inflate(R.layout.supervisor_report_phone_layput,
+                                parent, false);
 
                         return view;
                     }
@@ -347,7 +353,8 @@ public class CustomersFragment extends IMainPageFragment {
 
                 @Override
                 protected ItemContextView<SupervisorCustomerModel> onCreateContextView() {
-                    CustomerSummaryContextView contextView = new CustomerSummaryContextView(getAdapter(), getContext());
+                    CustomerSummaryContextView contextView = new
+                            CustomerSummaryContextView(getAdapter(), getContext());
                     return contextView;
                 }
             };
