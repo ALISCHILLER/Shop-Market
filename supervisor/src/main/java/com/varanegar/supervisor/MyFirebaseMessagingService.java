@@ -37,6 +37,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "onMessageReceived: remoteMessage.getData() = " + remoteMessage.getNotification().getBody());
         Log.d(TAG, "onMessageReceived: remoteMessage.getData() = " + remoteMessage.getNotification().getTitle());
         String message=remoteMessage.getNotification().getBody();
+
         sendNotification(message);
     }
 

@@ -64,8 +64,8 @@ public class AccountManager implements IAccountManager {
                                 @Field("password") String password,
                                 @Field("grant_type") String grantType,
                                 @Field("scope") String scope,
-                                @Field("deviceId") String deviceId,
-                                @Field("token") String token
+                                @Field("DeviceId") String deviceId,
+                                @Field("Token") String token
                                 ) {
         if (baseUrl == null || baseUrl.isEmpty())
             throw new RuntimeException("Base Url has not been set.");
