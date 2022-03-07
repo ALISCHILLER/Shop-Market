@@ -10,4 +10,10 @@
     <dimen name="rtable_row_content_textSize"></dimen>
 
     <integer name="rtable_rowsPerPage">10</integer>
+
+
+    <dimen name="recycler_view_left_offset">9dp</dimen>
+    <dimen name="left_offset">61dp</dimen>
+    <dimen name="card_width">148dp</dimen>
+    <dimen name="card_corner_radius">10dp</dimen>
 </resources>

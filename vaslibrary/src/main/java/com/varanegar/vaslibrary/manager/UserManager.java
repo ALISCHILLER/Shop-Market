@@ -85,7 +85,9 @@ public class UserManager extends BaseManager<UserModel> {
         }
     }
 
-    public synchronized void login(String username, String password,String deviceId,String token, final OnTokenAcquired onTokenAcquired, final OnError onError) {
+
+    public synchronized void login(String username, String password,String deviceId,String token,
+                                   final OnTokenAcquired onTokenAcquired, final OnError onError) {
         final Account account = new Account(username, password,deviceId,token);
         PingApi pingApi = new PingApi();
         Timber.d("Ping before login.");
@@ -97,7 +99,8 @@ public class UserManager extends BaseManager<UserModel> {
                 OwnerKeysWrapper ownerKeys = sysConfigManager.readOwnerKeys();
                 AccountManager manager = new AccountManager();
                 manager.setBaseUrl(ipAddress);
-                manager.getAuthToken(account, ownerKeys.OwnerKey + "," + ownerKeys.DataOwnerKey + "," + ownerKeys.DataOwnerCenterKey, onTokenAcquired, onError);
+                manager.getAuthToken(account, ownerKeys.OwnerKey + "," + ownerKeys.DataOwnerKey + "," +
+                        ownerKeys.DataOwnerCenterKey, onTokenAcquired, onError);
             }
 
             @Override
@@ -112,7 +115,8 @@ public class UserManager extends BaseManager<UserModel> {
         Timber.d("Writing user to file");
         try {
             String json = VaranegarGsonBuilder.build().create().toJson(user);
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(USER_FILE_NAME, Context.MODE_PRIVATE));
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
+                    context.openFileOutput(USER_FILE_NAME, Context.MODE_PRIVATE));
             String text = SecurityUtils.encrypt(json);
             outputStreamWriter.write(text);
             outputStreamWriter.close();
