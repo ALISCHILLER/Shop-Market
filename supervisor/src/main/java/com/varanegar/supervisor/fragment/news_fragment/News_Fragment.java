@@ -1,4 +1,4 @@
-package com.varanegar.supervisor.news_fragment;
+package com.varanegar.supervisor.fragment.news_fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

@@ -7,7 +7,7 @@ import com.google.android.material.tabs.TabLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +17,8 @@ import com.varanegar.framework.base.VaranegarFragment;
 import com.varanegar.supervisor.customers.CustomersFragment;
 import com.varanegar.supervisor.customers.CustomersFullFragment;
 import com.varanegar.supervisor.customreport.orderstatus.OrderReportFragment;
+import com.varanegar.supervisor.fragment.menuTools_Fragment.MenuTools_Fragmnet;
 import com.varanegar.supervisor.menu.MenuFragment;
-import com.varanegar.supervisor.news_fragment.News_Fragment;
 import com.varanegar.supervisor.report.ReportsFragment;
 import com.varanegar.supervisor.status.ToursStatusFragment;
 import com.varanegar.supervisor.tracking.TrackingFragment;
@@ -77,7 +77,7 @@ public class MainFragment extends VaranegarFragment {
         TrackingFragment trackingFragment = new TrackingFragment();
         OrderReportFragment orderReportFragment =new OrderReportFragment();
         CustomersFullFragment customersFullFragment=new CustomersFullFragment();
-        News_Fragment news_fragment=new News_Fragment();
+        MenuTools_Fragmnet menuToolsFragmnet=new MenuTools_Fragmnet();
         MenuFragment menuFragment = new MenuFragment();
 
         public TabsPagerAdapter(FragmentManager fm) {
@@ -101,7 +101,7 @@ public class MainFragment extends VaranegarFragment {
             else if (position == 6)
                 return customersFullFragment;
             else if (position==7)
-                return news_fragment;
+                return menuToolsFragmnet;
 //                return menuFragment;
                 //else return menuFragment;
             else  return statusFragment;

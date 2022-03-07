@@ -1,4 +1,4 @@
-package com.varanegar.supervisor.news_fragment.cards;
+package com.varanegar.supervisor.fragment.news_fragment.cards;
 
 import android.os.Build;
 import android.view.View;
