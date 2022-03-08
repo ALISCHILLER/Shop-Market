@@ -1,4 +1,4 @@
-package com.yarolegovich.discretescrollview;
+package com.varanegar.framework.ui.scrollercard;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -10,14 +10,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.yarolegovich.discretescrollview.transform.DiscreteScrollItemTransformer;
-import com.yarolegovich.discretescrollview.util.ScrollListenerAdapter;
+
+import com.varanegar.framework.R;
+import com.varanegar.framework.ui.scrollercard.transform.DiscreteScrollItemTransformer;
+import com.varanegar.framework.ui.scrollercard.util.ScrollListenerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by yarolegovich on 18.02.2017.
+ Created by MsA on 2022.
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class DiscreteScrollView extends RecyclerView {

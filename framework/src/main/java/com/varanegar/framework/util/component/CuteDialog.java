@@ -37,8 +37,9 @@ public abstract class CuteDialog extends DialogFragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+       // getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onViewCreated(view, savedInstanceState);
-        getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
+
     }
 
     @Override

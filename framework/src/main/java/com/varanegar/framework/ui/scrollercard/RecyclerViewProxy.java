@@ -1,4 +1,4 @@
-package com.yarolegovich.discretescrollview;
+package com.varanegar.framework.ui.scrollercard;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
- * Created by yarolegovich on 10/25/17.
+ Created by MsA on 2022.
  */
 public class RecyclerViewProxy {
 

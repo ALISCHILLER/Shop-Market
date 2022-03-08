@@ -1,5 +1,7 @@
-package com.yarolegovich.discretescrollview;
-
+package com.varanegar.framework.ui.scrollercard;
+/**
+ Created by MsA on 2022.
+ */
 public enum DSVScrollConfig {
     ENABLED {
         @Override

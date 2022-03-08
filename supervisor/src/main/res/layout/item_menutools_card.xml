@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="100dp"
-    android:layout_height="116dp"
+    android:layout_width="240dp"
+    android:layout_height="280dp"
     android:id="@+id/card_item"
     android:layout_gravity="center"
-    android:layout_margin="4dp">
+    android:layout_margin="4dp"
+    tools:ignore="MissingDefaultResource">
 
     <FrameLayout
         android:id="@+id/container"
@@ -37,8 +39,7 @@
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
             android:scaleType="centerInside"
-            android:tint="@color/grayIconTint"
-            tools:src="@drawable/washington"
+            android:tint="@color/gray_icon_tint_menu"
             tools:ignore="ContentDescription" />
 
     </FrameLayout>

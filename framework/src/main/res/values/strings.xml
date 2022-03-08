@@ -84,4 +84,6 @@
     <string name="varanegar_tracking_service">سرویس ردیابی ورانگر</string>
     <string name="value_is_not_valid">مقدار نامعتبر است</string>
     <string name="background_location_permission_denied">دسترسی به موقعیت جغرافیایی در پس زمینه رد شد</string>
+    <string name="dsv_ex_msg_dont_set_lm">You should not set LayoutManager on DiscreteScrollView.class instance. Library uses a special one. Just don\'t call the method.</string>
+    <string name="dsv_ex_msg_adapter_wrong_recycler">InfiniteScrollAdapter is supposed to work only with DiscreteScrollView</string>
 </resources>

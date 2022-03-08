@@ -81,4 +81,11 @@
         <!-- ViewUpdater implementation class. If not set, DefaultViewUpdater class is used. -->
         <attr name="viewUpdater" format="string"/>
     </declare-styleable>
+    <declare-styleable name="DiscreteScrollView">
+        <attr name="dsv_orientation" format="enum">
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
+        </attr>
+    </declare-styleable>
+
 </resources>

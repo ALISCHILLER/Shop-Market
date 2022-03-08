@@ -1,14 +1,15 @@
-package com.yarolegovich.discretescrollview.util;
+package com.varanegar.framework.ui.scrollercard.util;
 
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.yarolegovich.discretescrollview.DiscreteScrollView;
+import com.varanegar.framework.ui.scrollercard.DiscreteScrollView;
+
 
 /**
- * Created by yarolegovich on 16.03.2017.
+ * Created by MsA on 2022.
  */
 public class ScrollListenerAdapter<T extends RecyclerView.ViewHolder> implements DiscreteScrollView.ScrollStateChangeListener<T> {
 

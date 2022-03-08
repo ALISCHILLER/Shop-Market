@@ -1,14 +1,16 @@
-package com.yarolegovich.discretescrollview;
+package com.varanegar.framework.ui.scrollercard;
 
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.varanegar.framework.R;
+
 import java.util.Locale;
 
 /**
- * Created by yarolegovich on 28-Apr-17.
+ Created by MsA on 2022.
  */
 
 public class InfiniteScrollAdapter<T extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<T>

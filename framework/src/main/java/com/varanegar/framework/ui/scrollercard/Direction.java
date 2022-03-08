@@ -1,7 +1,7 @@
-package com.yarolegovich.discretescrollview;
+package com.varanegar.framework.ui.scrollercard;
 
 /**
- * Created by yarolegovich on 16.03.2017.
+ * Created by MsA on 2022.
  */
 enum Direction {
 

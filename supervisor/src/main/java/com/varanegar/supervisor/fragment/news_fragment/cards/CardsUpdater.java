@@ -7,8 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.view.ViewCompat;
 
-import com.varanegar.framework.card_slider.CardSliderLayoutManager;
-import com.varanegar.framework.card_slider.DefaultViewUpdater;
+import com.varanegar.framework.ui.card_slider.CardSliderLayoutManager;
+import com.varanegar.framework.ui.card_slider.DefaultViewUpdater;
 
 
 public class CardsUpdater extends DefaultViewUpdater {

@@ -95,11 +95,10 @@ dependencies {
     // for Google Analytics. This is recommended, but not required.
     implementation 'com.google.firebase:firebase-analytics'
 
-    implementation 'com.google.firebase:firebase-installations-ktx:17.0.0'
 
     implementation 'androidx.work:work-runtime:2.5.0'
 
-
+    implementation 'com.github.bumptech.glide:glide:4.13.0'
 }
 
 tasks.whenTaskAdded { task ->

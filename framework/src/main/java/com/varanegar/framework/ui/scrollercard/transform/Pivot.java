@@ -1,4 +1,4 @@
-package com.yarolegovich.discretescrollview.transform;
+package com.varanegar.framework.ui.scrollercard.transform;
 
 import android.view.View;
 
@@ -8,7 +8,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * Created by yarolegovich on 03.03.2017.
+ * Created by MsA on 2022.
  */
 
 public class Pivot {

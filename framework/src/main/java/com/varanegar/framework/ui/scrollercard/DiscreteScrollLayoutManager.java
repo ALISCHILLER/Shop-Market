@@ -1,4 +1,4 @@
-package com.yarolegovich.discretescrollview;
+package com.varanegar.framework.ui.scrollercard;
 
 import android.content.Context;
 import android.graphics.Point;
@@ -15,12 +15,12 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.yarolegovich.discretescrollview.transform.DiscreteScrollItemTransformer;
+
+import com.varanegar.framework.ui.scrollercard.transform.DiscreteScrollItemTransformer;
 
 import java.util.Locale;
-
 /**
- * Created by yarolegovich on 17.02.2017.
+ Created by MsA on 2022.
  */
 public class DiscreteScrollLayoutManager extends RecyclerView.LayoutManager {
 

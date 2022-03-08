@@ -63,7 +63,7 @@
         android:layout_height="210dp"
         android:clipChildren="false"
         android:overScrollMode="never"
-        app:layoutManager="com.varanegar.framework.card_slider.CardSliderLayoutManager"
+        app:layoutManager="com.varanegar.framework.ui.card_slider.CardSliderLayoutManager"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
         app:viewUpdater="com.varanegar.supervisor.fragment.news_fragment.cards.CardsUpdater"
         tools:layout_editor_absoluteX="9dp" />

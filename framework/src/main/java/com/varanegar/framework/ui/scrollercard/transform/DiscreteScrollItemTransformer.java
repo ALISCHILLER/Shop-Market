@@ -1,9 +1,9 @@
-package com.yarolegovich.discretescrollview.transform;
+package com.varanegar.framework.ui.scrollercard.transform;
 
 import android.view.View;
 
 /**
- * Created by yarolegovich on 02.03.2017.
+ * Created by MsA on 2022.
  */
 
 public interface DiscreteScrollItemTransformer {

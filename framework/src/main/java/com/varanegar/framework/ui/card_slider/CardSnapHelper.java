@@ -1,4 +1,4 @@
-package com.varanegar.framework.card_slider;
+package com.varanegar.framework.ui.card_slider;
 
 import android.graphics.PointF;
 import android.view.View;

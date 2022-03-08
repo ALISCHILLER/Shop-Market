@@ -1,10 +1,10 @@
-package com.yarolegovich.discretescrollview;
+package com.varanegar.framework.ui.scrollercard;
 
 import android.graphics.Point;
 import android.view.View;
 
 /**
- * Created by yarolegovich on 16.03.2017.
+Created by MsA on 2022.
  */
 public enum DSVOrientation {
 
