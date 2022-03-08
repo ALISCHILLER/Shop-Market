@@ -387,7 +387,7 @@ public class CustomerManager extends BaseManager<CustomerModel> {
                                 customerShipToPartyModel.EconomicCode=sever.EconomicCode;
                                 customerShipToPartyModel.IsActive=sever.IsActive;
                                 if (isTourUpdateFlow)
-                                shipToPartyManager.insert(customerShipToPartyModel);
+                                    shipToPartyManager.insertOrUpdate(customerShipToPartyModel);
                                 else
                                     shipToPartyManager.insertOrUpdate(customerShipToPartyModel);
                             }
