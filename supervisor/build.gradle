@@ -86,19 +86,22 @@ dependencies {
     annotationProcessor project(':processor')
     implementation 'com.github.bmelnychuk:atv:1.2.+'
 
+
+
+    // Firebase Cloud Messaging (Java)Firebase dependencies
     implementation platform('com.google.firebase:firebase-bom:29.1.0')
-
-    // Firebase Cloud Messaging (Java)
     implementation 'com.google.firebase:firebase-messaging'
-
-    // For an optimal experience using FCM, add the Firebase SDK
-    // for Google Analytics. This is recommended, but not required.
     implementation 'com.google.firebase:firebase-analytics'
-
+    implementation 'com.google.firebase:firebase-core:16.0.8'
+    implementation 'com.google.firebase:firebase-auth:16.0.1'
+    implementation 'com.firebaseui:firebase-ui-auth:2.1.0'
+    implementation 'com.google.firebase:firebase-firestore:18.1.0'
 
     implementation 'androidx.work:work-runtime:2.5.0'
-
     implementation 'com.github.bumptech.glide:glide:4.13.0'
+
+
+
 }
 
 tasks.whenTaskAdded { task ->

@@ -78,12 +78,7 @@ public class MenuTools_Fragmnet extends IMainPageFragment implements
                          @Nullable MenuToolsAdapter.ViewHolder currentHolder,
                          @Nullable MenuToolsAdapter.ViewHolder newCurrent) {
 
-            Item current = items.get(currentPosition);
-            RecyclerView.Adapter<?> adapter = cityPicker.getAdapter();
-            int itemCount = adapter != null ? adapter.getItemCount() : 0;
-            if (newPosition >= 0 && newPosition < itemCount) {
-                Item next = items.get(newPosition);
-            }
+
     }
     @Override
     public void onCurrentItemChanged(@Nullable MenuToolsAdapter.ViewHolder viewHolder, int adapterPosition) {
