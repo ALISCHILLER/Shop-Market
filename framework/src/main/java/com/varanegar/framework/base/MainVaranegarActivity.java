@@ -203,7 +203,8 @@ public abstract class MainVaranegarActivity extends VaranegarActivity {
             if ((fragment.getClass().getName().equals(curr.getClass().getName())) && !force) {
                 return;
             }
-            ((VaranegarFragment) curr).addArgument("097b873b-98b3-4733-b2c4-a95053dcdc1e", false);
+            ((VaranegarFragment) curr).addArgument("097b873b-98b3-4733-b2c4-a95053dcdc1e",
+                    false);
         }
         fragment.addArgument("097b873b-98b3-4733-b2c4-a95053dcdc1e", true);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

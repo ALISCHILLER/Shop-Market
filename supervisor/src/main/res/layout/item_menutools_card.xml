@@ -35,11 +35,9 @@
 
         <ImageView
             android:id="@+id/city_image"
+            android:scaleType="centerCrop"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:scaleType="centerInside"
-            android:tint="@color/gray_icon_tint_menu"
             tools:ignore="ContentDescription" />
 
     </FrameLayout>

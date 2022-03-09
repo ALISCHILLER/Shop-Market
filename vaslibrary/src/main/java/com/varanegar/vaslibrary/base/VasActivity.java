@@ -88,7 +88,8 @@ import static ir.ikccc.externalpayment.Library.REQUEST_CODE;
  * Created by A.Jafarzadeh on 11/8/2017.
  */
 
-public abstract class VasActivity extends MainVaranegarActivity implements EasyHelper.Receiver {
+public abstract class VasActivity extends MainVaranegarActivity
+        implements EasyHelper.Receiver {
 
     private GoogleApiClient client;
     private static final int GPS_SETTiNGS_REQUEST_CODE = 9234;
@@ -171,18 +172,19 @@ public abstract class VasActivity extends MainVaranegarActivity implements EasyH
             }
         }
 
-        if (UserManager.readFromFile(this) != null)
-            VasInstanceIdService.refreshToken(this, new VasInstanceIdService.TokenRefreshCallBack() {
-                @Override
-                public void onSuccess(@NonNull String token) {
-                    Timber.d("Token update succeeded. Token = " + token);
-                }
-
-                @Override
-                public void onFailure(@Nullable String token, String error) {
-                    Timber.d("Token update failed. Error=" + error + "  Token=" + token);
-                }
-            });
+//        if (UserManager.readFromFile(this) != null)
+//            VasInstanceIdService.refreshToken(this,
+//            new VasInstanceIdService.TokenRefreshCallBack() {
+//                @Override
+//                public void onSuccess(@NonNull String token) {
+//                    Timber.d("Token update succeeded. Token = " + token);
+//                }
+//
+//                @Override
+//                public void onFailure(@Nullable String token, String error) {
+//                    Timber.d("Token update failed. Error=" + error + "  Token=" + token);
+//                }
+//            });
 
         checkLocationSettings();
         LocationManager locationManager1 = ((LocationManager) getSystemService(LOCATION_SERVICE));

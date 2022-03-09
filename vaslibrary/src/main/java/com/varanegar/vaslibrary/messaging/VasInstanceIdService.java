@@ -40,7 +40,9 @@ public class VasInstanceIdService extends FirebaseInstanceIdService {
             registerTokenToServer(this, token, getToken(this), null);
     }
 
-    public static void registerTokenToServer(final Context context, String newToken, final String oldToken, @Nullable final TokenRefreshCallBack refreshCallBack) {
+    public static void registerTokenToServer(final Context context, String newToken,
+                                             final String oldToken,
+                                             @Nullable final TokenRefreshCallBack refreshCallBack) {
         if (newToken == null)
             return;
         newToken = newToken.trim().replace(" ", "");
@@ -82,7 +84,10 @@ public class VasInstanceIdService extends FirebaseInstanceIdService {
                 Timber.e(e);
             }
 
-            userDeviceTokenApi.runWebRequest(userDeviceTokenApi.registerDeviceToken(userDeviceTokenViewModel), new WebCallBack<Void>() {
+            userDeviceTokenApi.
+                    runWebRequest(userDeviceTokenApi.
+                            registerDeviceToken(userDeviceTokenViewModel),
+                            new WebCallBack<Void>() {
                 @Override
                 protected void onFinish() {
 

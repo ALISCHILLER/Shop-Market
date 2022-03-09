@@ -17,6 +17,7 @@ import com.varanegar.supervisor.IMainPageFragment;
 import com.varanegar.supervisor.R;
 import com.varanegar.supervisor.fragment.menuTools_Fragment.model.Item;
 import com.varanegar.supervisor.fragment.menuTools_Fragment.model.ItemStation;
+import com.varanegar.supervisor.fragment.news_fragment.News_Fragment;
 
 import java.util.List;
 
@@ -26,9 +27,11 @@ public class MenuTools_Fragmnet extends IMainPageFragment implements
         View.OnClickListener {
     private List<Item> items;
 
+
    private TextView item_name;
     private DiscreteScrollView cityPicker;
     private InfiniteScrollAdapter<?> infiniteAdapter;
+    private MenuToolsAdapter.Listener listener;
     @Override
     protected View onCreateContentView(@NonNull LayoutInflater inflater,
                                        @Nullable ViewGroup container,
@@ -39,15 +42,23 @@ public class MenuTools_Fragmnet extends IMainPageFragment implements
         items= ItemStation.get().getItem();
         cityPicker =view.findViewById(R.id.item_cards);
         cityPicker.setSlideOnFling(true);
-        infiniteAdapter = InfiniteScrollAdapter.wrap(new MenuToolsAdapter(items));
-        cityPicker.setAdapter(infiniteAdapter);
+
+        infiniteAdapter = InfiniteScrollAdapter.wrap(new MenuToolsAdapter(getActivity(),listener,items));
+        cityPicker.setAdapter(new MenuToolsAdapter(getActivity(),listener,items));
         cityPicker.addOnItemChangedListener(this);
         cityPicker.addScrollStateChangeListener(this);
         cityPicker.scrollToPosition(2);
-        cityPicker.setItemTransitionTimeMillis(10);
+        cityPicker.setItemTransitionTimeMillis(110);
         cityPicker.setItemTransformer(new ScaleTransformer.Builder()
                 .setMinScale(0.8f)
                 .build());
+        listener=new MenuToolsAdapter.Listener() {
+            @Override
+            public void onItemClicked(int numberitem) {
+                News_Fragment news_fragment=new News_Fragment();
+                getVaranegarActvity().pushFragment(news_fragment);
+            }
+        };
         return view;
     }
 
@@ -88,6 +99,5 @@ public class MenuTools_Fragmnet extends IMainPageFragment implements
 
     private void onItemChanged(Item item) {
         item_name.setText(item.getNameItem());
-
     }
 }
