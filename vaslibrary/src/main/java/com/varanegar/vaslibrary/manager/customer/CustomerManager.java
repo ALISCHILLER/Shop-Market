@@ -452,7 +452,7 @@ public class CustomerManager extends BaseManager<CustomerModel> {
             customerShipToPartyModel.EconomicCode=sever.EconomicCode;
             customerShipToPartyModel.IsActive=sever.IsActive;
             try {
-                shipToPartyManager.insert(customerShipToPartyModel);
+                shipToPartyManager.insertOrUpdate(customerShipToPartyModel);
             } catch (ValidationException e) {
                 e.printStackTrace();
             } catch (DbException e) {
