@@ -10,6 +10,7 @@
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="38dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintBottom_toTopOf="@+id/recycler_view"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -61,6 +62,7 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="210dp"
+        android:layout_marginTop="10dp"
         android:clipChildren="false"
         android:overScrollMode="never"
         app:layoutManager="com.varanegar.framework.ui.card_slider.CardSliderLayoutManager"
