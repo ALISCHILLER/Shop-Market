@@ -7,10 +7,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.VpnService;
+import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
@@ -68,6 +70,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Objects;
 
 import de.blinkt.openvpn.OpenVpnApi;
 import de.blinkt.openvpn.core.OpenVPNService;
@@ -838,12 +841,19 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
 
         if (status.equals("connect")) {
             coonect_vpn.setText("اتصال");
+            coonect_vpn.setBackgroundColor(Objects.requireNonNull(getActivity())
+                    .getResources().getColor(R.color.grey));
+            coonect_vpn.setTextColor(getActivity().getResources().getColor(R.color.black));
         } else if (status.equals("connecting")) {
             coonect_vpn.setText("درحال اتصال");
+            coonect_vpn.setBackgroundColor(Objects.requireNonNull(getActivity())
+                    .getResources().getColor(R.color.red));
+            coonect_vpn.setTextColor(getActivity().getResources().getColor(R.color.white));
         } else if (status.equals("connected")) {
             coonect_vpn.setText("متصل شد");
-
-
+            coonect_vpn.setBackgroundColor(Objects.requireNonNull(getActivity())
+                    .getResources().getColor(R.color.green));
+            coonect_vpn.setTextColor(getActivity().getResources().getColor(R.color.white));
         } else if (status.equals("tryDifferentServer")) {
 
 

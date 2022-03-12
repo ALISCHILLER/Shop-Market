@@ -59,6 +59,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Objects;
 
 import de.blinkt.openvpn.OpenVpnApi;
 import de.blinkt.openvpn.core.OpenVPNService;
@@ -630,12 +631,22 @@ public class SupervisorSettingDialogFragment extends CuteDialogWithToolbar {
 
         if (status.equals("connect")) {
             coonect_vpn.setText("اتصال");
+            coonect_vpn.setBackgroundColor(Objects.requireNonNull(getActivity())
+                    .getResources().getColor(com.varanegar.vaslibrary.R.color.grey));
+            coonect_vpn.setTextColor(getActivity().getResources()
+                    .getColor(com.varanegar.vaslibrary.R.color.black));
         } else if (status.equals("connecting")) {
             coonect_vpn.setText("درحال اتصال");
+            coonect_vpn.setBackgroundColor(Objects.requireNonNull(getActivity())
+                    .getResources().getColor(com.varanegar.vaslibrary.R.color.red));
+            coonect_vpn.setTextColor(getActivity().getResources()
+                    .getColor(com.varanegar.vaslibrary.R.color.white));
         } else if (status.equals("connected")) {
             coonect_vpn.setText("متصل شد");
-
-
+            coonect_vpn.setBackgroundColor(Objects.requireNonNull(getActivity())
+                    .getResources().getColor(com.varanegar.vaslibrary.R.color.green));
+            coonect_vpn.setTextColor(getActivity().getResources()
+                    .getColor(com.varanegar.vaslibrary.R.color.white));
         } else if (status.equals("tryDifferentServer")) {
 
 
