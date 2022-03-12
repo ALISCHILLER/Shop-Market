@@ -48,7 +48,7 @@ public class MainFragment extends VaranegarFragment {
 
         tl.getTabAt(5).setIcon(R.drawable.ic_view_list_cyan_48dp);
         tl.getTabAt(6).setIcon(R.drawable.ic_baseline_format_quote_24);
-        tl.getTabAt(7).setIcon(R.drawable.ic_baseline_assignment_24);
+     //   tl.getTabAt(7).setIcon(R.drawable.ic_baseline_assignment_24);
         return view;
     }
 
@@ -100,8 +100,8 @@ public class MainFragment extends VaranegarFragment {
                 return orderReportFragment;
             else if (position == 6)
                 return customersFullFragment;
-            else if (position==7)
-                return news_fragment;
+           // else if (position==7)
+              //  return news_fragment;
 //                return menuFragment;
             //else return menuFragment;
             else  return statusFragment;
@@ -110,7 +110,7 @@ public class MainFragment extends VaranegarFragment {
 
         @Override
         public int getCount() {
-            return 8;
+            return 7;
         }
     }
 

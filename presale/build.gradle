@@ -7,7 +7,7 @@ ext.versionVariant = null // for example : nestle
 ext.versionMajor = 3
 ext.versionMinor = 1
 ext.versionPatch = 1
-ext.versionBuild = 156
+ext.versionBuild = 157
 // VersionReplaceEndTag
 ext.versionType = null // stable(null), beta, snapshot, ...
 
