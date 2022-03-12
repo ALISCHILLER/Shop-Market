@@ -173,7 +173,7 @@ public class News_Fragment extends IMainPageFragment {
 
     }
 
-    
+
     private class OnCardClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
