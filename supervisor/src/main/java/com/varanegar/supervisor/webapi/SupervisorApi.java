@@ -164,7 +164,8 @@ public class SupervisorApi extends BaseApi implements ISupervisorApi {
 
     @Override
     public Call<List<EventViewModel>> loadLastPoints(LastPointsParam parameter) {
-        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).loadLastPoints(parameter);
+        return getRetrofitBuilder(TokenType.UserToken,
+                getBaseUrl()).build().create(ISupervisorApi.class).loadLastPoints(parameter);
     }
 
     @Override

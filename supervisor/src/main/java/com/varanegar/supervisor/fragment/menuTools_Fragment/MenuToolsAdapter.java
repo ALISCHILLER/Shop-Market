@@ -26,14 +26,13 @@ public class MenuToolsAdapter  extends RecyclerView.Adapter<MenuToolsAdapter.Vie
     private RecyclerView parentRecycler;
     private List<Item> data;
     private Context mcontext;
-      public interface Listener {
-        void onItemClicked(int numberitem);
-    }
-    private Listener listener;
-    public MenuToolsAdapter(Context context,Listener listener,List<Item> data) {
+
+    private ItemClickListener mItemClickListener;
+
+    public MenuToolsAdapter(Context context,List<Item> data) {
         this.data = data;
         this.mcontext=context;
-        this.listener = listener;
+
     }
 
 
@@ -44,7 +43,9 @@ public class MenuToolsAdapter  extends RecyclerView.Adapter<MenuToolsAdapter.Vie
         View v = inflater.inflate(R.layout.item_menutools_card, parent, false);
         return new ViewHolder(v);
     }
-
+    public void addItemClickListener(ItemClickListener listener) {
+        mItemClickListener = listener;
+    }
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Glide.with(holder.itemView.getContext())
@@ -76,8 +77,16 @@ public class MenuToolsAdapter  extends RecyclerView.Adapter<MenuToolsAdapter.Vie
         public void onClick(View v) {
            // parentRecycler.smoothScrollToPosition(getAdapterPosition());
             Log.e("TAG", "onClick:"+getAdapterPosition());
-            listener.onItemClicked(getAdapterPosition());
+            int position=getAdapterPosition();
+            if (mItemClickListener != null) {
+                mItemClickListener.onItemClick(position);
+            }
 
         }
     }
+    //Define your Interface method here
+    public interface ItemClickListener {
+        void onItemClick(int position);
+    }
+
 }

@@ -53,7 +53,8 @@ public abstract class BaseApi extends WebRequest {
 
     protected String getBaseUrl() {
         SysConfigManager sysConfigManager = new SysConfigManager(context);
-        SysConfigModel serverAddress = sysConfigManager.read(ConfigKey.BaseAddress, SysConfigManager.local);
+        SysConfigModel serverAddress =
+                sysConfigManager.read(ConfigKey.BaseAddress, SysConfigManager.local);
         if (serverAddress == null)
             return "http://localhost";
         if (serverAddress.Value.endsWith("/"))
@@ -61,7 +62,8 @@ public abstract class BaseApi extends WebRequest {
         return serverAddress.Value;
     }
 
-    protected OkHttpClient getClient(TokenType tokenType, long connectTimeout, long readTimeOut, long writeTimeout) {
+    protected OkHttpClient getClient(TokenType tokenType, long connectTimeout,
+                                     long readTimeOut, long writeTimeout) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.connectTimeout(connectTimeout, TimeUnit.SECONDS);
         builder.readTimeout(readTimeOut, TimeUnit.SECONDS);
@@ -72,7 +74,8 @@ public abstract class BaseApi extends WebRequest {
         return builder.build();
     }
 
-    protected OkHttpClient getClient(long connectTimeout, long readTimeOut, long writeTimeout) {
+    protected OkHttpClient getClient(long connectTimeout,
+                                     long readTimeOut, long writeTimeout) {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.connectTimeout(connectTimeout, TimeUnit.SECONDS);
         builder.readTimeout(readTimeOut, TimeUnit.SECONDS);

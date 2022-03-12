@@ -45,7 +45,10 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
     private BackOfficeType backOfficeType;
     //private ImageView customerImageView;
 
-    public CustomerSummaryMultipanViewHolder(View itemView, BaseRecyclerAdapter<CustomerPathViewModel> recyclerAdapter, BackOfficeType backOfficeType) {
+    public CustomerSummaryMultipanViewHolder(View itemView,
+                                             BaseRecyclerAdapter<CustomerPathViewModel>
+                                                     recyclerAdapter,
+                                             BackOfficeType backOfficeType) {
         super(itemView, recyclerAdapter, recyclerAdapter.getActivity());
         customerNameTextView = (TextView) itemView.findViewById(R.id.customer_name_text_view);
         customerAddressTextView = (TextView) itemView.findViewById(R.id.customer_address_text_view);
@@ -71,7 +74,8 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
         customerMobileTextView.setText(customerModel.Mobile);
         customerTelTextView.setText(customerModel.Phone);
         storeNameTextView.setText(customerModel.StoreName);
-        List<CustomerCallModel> customerCalls = Linq.findAll(calls, new Linq.Criteria<CustomerCallModel>() {
+        List<CustomerCallModel> customerCalls = Linq.findAll(calls,
+                new Linq.Criteria<CustomerCallModel>() {
             @Override
             public boolean run(CustomerCallModel item) {
                 return item.CustomerId.equals(customerModel.UniqueId);
@@ -80,7 +84,10 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
 
         setStatus(customerCalls);
         if (descriptionLayout != null) {
-            if (backOfficeType == BackOfficeType.ThirdParty && VaranegarApplication.is(VaranegarApplication.AppId.Dist) && customerModel.InvoiceComments != null && !customerModel.InvoiceComments.isEmpty()) {
+            if (backOfficeType == BackOfficeType.ThirdParty &&
+                    VaranegarApplication.is(VaranegarApplication.AppId.Dist) &&
+                    customerModel.InvoiceComments != null && !
+                    customerModel.InvoiceComments.isEmpty()) {
                 descriptionLayout.setVisibility(View.VISIBLE);
                 descriptionTextView.setText(customerModel.InvoiceComments);
             } else {

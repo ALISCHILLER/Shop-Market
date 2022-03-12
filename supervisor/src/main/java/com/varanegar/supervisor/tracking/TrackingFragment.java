@@ -26,8 +26,11 @@ public class TrackingFragment extends IMainPageFragment {
 //    TableFragment tableFragment = new TableFragment();
 
     @Override
-    protected View onCreateContentView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_supervisor_tracking_layout, container, false);
+    protected View onCreateContentView(@NonNull LayoutInflater inflater,
+                                       @Nullable ViewGroup container,
+                                       @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_supervisor_tracking_layout,
+                container, false);
 
 
         final ViewPager tabsViewPager = view.findViewById(R.id.tabs_view_pager);
@@ -39,7 +42,8 @@ public class TrackingFragment extends IMainPageFragment {
             @Override
             public void onClick(View view) {
                 TrackingConfigDialog dialog = new TrackingConfigDialog();
-                dialog.onTrackingConfigChanged = new TrackingConfigDialog.IOnTrackingConfigChanged() {
+                dialog.onTrackingConfigChanged = new TrackingConfigDialog.
+                        IOnTrackingConfigChanged() {
                     @Override
                     public void onChanged() {
                         TrackingConfig trackingConfig = new TrackingConfig(getContext());

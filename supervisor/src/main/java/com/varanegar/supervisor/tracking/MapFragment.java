@@ -218,7 +218,8 @@ public class MapFragment extends ProgressFragment {
                             }
                         }
                     });
-                    googleMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+                    googleMap.setOnMyLocationButtonClickListener(
+                            new GoogleMap.OnMyLocationButtonClickListener() {
                         @Override
                         public boolean onMyLocationButtonClick() {
                             myLocationClicked = true;
@@ -290,7 +291,9 @@ public class MapFragment extends ProgressFragment {
                                     LocationRequest request = LocationRequest.create();
                                     request.setInterval(1000);
                                     request.setSmallestDisplacement(1);
-                                    LocationServices.FusedLocationApi.requestLocationUpdates(client, request, new LocationListener() {
+                                    LocationServices.FusedLocationApi.
+                                            requestLocationUpdates(client,
+                                                    request, new LocationListener() {
                                         @Override
                                         public void onLocationChanged(Location location) {
                                             lastLocation = location;

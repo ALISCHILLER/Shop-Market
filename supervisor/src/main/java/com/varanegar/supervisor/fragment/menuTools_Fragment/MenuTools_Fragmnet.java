@@ -24,6 +24,7 @@ import java.util.List;
 public class MenuTools_Fragmnet extends IMainPageFragment implements
         DiscreteScrollView.ScrollStateChangeListener<MenuToolsAdapter.ViewHolder>,
         DiscreteScrollView.OnItemChangedListener<MenuToolsAdapter.ViewHolder>,
+        MenuToolsAdapter.ItemClickListener,
         View.OnClickListener {
     private List<Item> items;
 
@@ -31,7 +32,7 @@ public class MenuTools_Fragmnet extends IMainPageFragment implements
    private TextView item_name;
     private DiscreteScrollView cityPicker;
     private InfiniteScrollAdapter<?> infiniteAdapter;
-    private MenuToolsAdapter.Listener listener;
+
     @Override
     protected View onCreateContentView(@NonNull LayoutInflater inflater,
                                        @Nullable ViewGroup container,
@@ -42,26 +43,24 @@ public class MenuTools_Fragmnet extends IMainPageFragment implements
         items= ItemStation.get().getItem();
         cityPicker =view.findViewById(R.id.item_cards);
         cityPicker.setSlideOnFling(true);
-
-        infiniteAdapter = InfiniteScrollAdapter.wrap(new MenuToolsAdapter(getActivity(),listener,items));
-        cityPicker.setAdapter(new MenuToolsAdapter(getActivity(),listener,items));
+        MenuToolsAdapter menuToolsAdapter=new MenuToolsAdapter(getActivity(),items);
+        infiniteAdapter = InfiniteScrollAdapter.wrap(menuToolsAdapter);
+        cityPicker.setAdapter(menuToolsAdapter);
         cityPicker.addOnItemChangedListener(this);
+        menuToolsAdapter.addItemClickListener(this);
         cityPicker.addScrollStateChangeListener(this);
         cityPicker.scrollToPosition(2);
         cityPicker.setItemTransitionTimeMillis(110);
         cityPicker.setItemTransformer(new ScaleTransformer.Builder()
                 .setMinScale(0.8f)
                 .build());
-        listener=new MenuToolsAdapter.Listener() {
-            @Override
-            public void onItemClicked(int numberitem) {
-                News_Fragment news_fragment=new News_Fragment();
-                getVaranegarActvity().pushFragment(news_fragment);
-            }
-        };
         return view;
     }
-
+    @Override
+    public void onItemClick(int position) {
+        News_Fragment news_fragment=new News_Fragment();
+        getVaranegarActvity().pushFragment(news_fragment);
+    }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,4 +99,6 @@ public class MenuTools_Fragmnet extends IMainPageFragment implements
     private void onItemChanged(Item item) {
         item_name.setText(item.getNameItem());
     }
+
+
 }
