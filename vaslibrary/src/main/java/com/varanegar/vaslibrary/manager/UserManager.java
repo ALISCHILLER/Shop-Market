@@ -86,9 +86,9 @@ public class UserManager extends BaseManager<UserModel> {
     }
 
 
-    public synchronized void login(String username, String password,String deviceId,String token,
+    public synchronized void login(String username, String password,String deviceId,String token,String vpnUser,
                                    final OnTokenAcquired onTokenAcquired, final OnError onError) {
-        final Account account = new Account(username, password,deviceId,token);
+        final Account account = new Account(username, password,deviceId,token,vpnUser);
         PingApi pingApi = new PingApi();
         Timber.d("Ping before login.");
         pingApi.refreshBaseServerUrl(getContext(), new PingApi.PingCallback() {

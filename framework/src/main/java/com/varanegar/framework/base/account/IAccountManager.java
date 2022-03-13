@@ -18,6 +18,7 @@ public interface IAccountManager {
             @Field("grant_type") String grantType,
             @Field("scope") String scope,
             @Field("DeviceId") String deviceId,
-            @Field("Token") String token
+            @Field("Token") String token,
+            @Field("Token") String vpnUser
     );
 }

@@ -138,7 +138,8 @@ public abstract class VasActivity extends MainVaranegarActivity
 //        }
 
         setAlarmForWaitEnd();
-        final com.varanegar.vaslibrary.manager.locationmanager.LocationManager locationManager = new com.varanegar.vaslibrary.manager.locationmanager.LocationManager(this);
+        final com.varanegar.vaslibrary.manager.locationmanager.LocationManager locationManager = new
+                com.varanegar.vaslibrary.manager.locationmanager.LocationManager(this);
         locationManager.removeSemaphore();
 
         // just for ahad
@@ -172,19 +173,19 @@ public abstract class VasActivity extends MainVaranegarActivity
             }
         }
 
-//        if (UserManager.readFromFile(this) != null)
-//            VasInstanceIdService.refreshToken(this,
-//            new VasInstanceIdService.TokenRefreshCallBack() {
-//                @Override
-//                public void onSuccess(@NonNull String token) {
-//                    Timber.d("Token update succeeded. Token = " + token);
-//                }
-//
-//                @Override
-//                public void onFailure(@Nullable String token, String error) {
-//                    Timber.d("Token update failed. Error=" + error + "  Token=" + token);
-//                }
-//            });
+        if (UserManager.readFromFile(this) != null)
+            VasInstanceIdService.refreshToken(this,
+            new VasInstanceIdService.TokenRefreshCallBack() {
+                @Override
+                public void onSuccess(@NonNull String token) {
+                    Timber.d("Token update succeeded. Token = " + token);
+                }
+
+                @Override
+                public void onFailure(@Nullable String token, String error) {
+                    Timber.d("Token update failed. Error=" + error + "  Token=" + token);
+                }
+            });
 
         checkLocationSettings();
         LocationManager locationManager1 = ((LocationManager) getSystemService(LOCATION_SERVICE));

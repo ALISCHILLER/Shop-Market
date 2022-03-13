@@ -152,7 +152,8 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
         usersImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SysConfigModel serverAddress = new SysConfigManager(getContext()).read(ConfigKey.LocalServerAddress, SysConfigManager.local);
+                SysConfigModel serverAddress = new SysConfigManager(getContext())
+                        .read(ConfigKey.LocalServerAddress, SysConfigManager.local);
                 if (serverAddress == null) {
                     CuteMessageDialog alert = new CuteMessageDialog(getContext());
                     alert.setIcon(Icon.Error);
@@ -186,7 +187,8 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
             public void onClick(View view) {
                 SupervisorSettingDialogFragment settingDialogFragment = new SupervisorSettingDialogFragment();
                 settingDialogFragment.setCancelable(false);
-                settingDialogFragment.setConfigListener(new SupervisorSettingDialogFragment.SettingsUpdateListener() {
+                settingDialogFragment.setConfigListener(new SupervisorSettingDialogFragment
+                        .SettingsUpdateListener() {
                     @Override
                     public void onSettingsUpdated() {
                         Intent intent = getVaranegarActvity().getIntent();

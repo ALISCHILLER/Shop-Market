@@ -1,5 +1,8 @@
 package com.varanegar.supervisor.fragment.news_fragment;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -27,11 +30,19 @@ public class News_Fragment extends IMainPageFragment {
 
     private  SliderAdapter sliderAdapter;
     private CardSliderLayoutManager layoutManger;
-    private int currentPosition;
+
     private TextSwitcher temperatureSwitcher;
     private TextSwitcher placeSwitcher;
     private TextSwitcher clockSwitcher;
     private TextSwitcher descriptionsSwitcher;
+
+    private TextView country1TextView;
+    private TextView country2TextView;
+    private int countryOffset1;
+    private int countryOffset2;
+    private long countryAnimDuration;
+    private int currentPosition;
+
     private View greenDot;
     private final int[] pics = {R.drawable.zar};
     private final int[][] dotCoords = new int[5][2];
@@ -46,6 +57,8 @@ public class News_Fragment extends IMainPageFragment {
     private final String[] temperatures = {"21°C", "19°C", "17°C", "23°C", "20°C"};
     private final String[] times = {"Aug 1 - Dec 15    7:00-18:00", "Sep 5 - Nov 10    8:00-16:00"
             , "Mar 8 - May 21    7:00-18:00"};
+
+
     @Override
     protected View onCreateContentView(@NonNull LayoutInflater inflater,@Nullable ViewGroup container
             ,@Nullable Bundle savedInstanceState) {
@@ -57,29 +70,17 @@ public class News_Fragment extends IMainPageFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         sliderAdapter=new SliderAdapter(pics, 20, new OnCardClickListener());
+
+        initRecyclerView(view);
+        initCountryText(view);
+        initSwitchers(view);
+
+    }
+    private void initRecyclerView(View view) {
+
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         recyclerView.setAdapter(sliderAdapter);
         recyclerView.setHasFixedSize(true);
-
-        temperatureSwitcher = (TextSwitcher)view.findViewById(R.id.ts_temperature);
-        temperatureSwitcher.setFactory(new TextViewFactory(R.style.TemperatureTextView, true));
-        temperatureSwitcher.setCurrentText(temperatures[0]);
-        placeSwitcher = (TextSwitcher) view.findViewById(R.id.ts_place);
-        placeSwitcher.setFactory(new TextViewFactory(R.style.PlaceTextView, false));
-        placeSwitcher.setCurrentText(places[0]);
-
-        clockSwitcher = (TextSwitcher) view.findViewById(R.id.ts_clock);
-        clockSwitcher.setFactory(new TextViewFactory(R.style.ClockTextView, false));
-        clockSwitcher.setCurrentText(times[0]);
-        descriptionsSwitcher = (TextSwitcher) view.findViewById(R.id.ts_description);
-        descriptionsSwitcher.setInAnimation(getActivity(), android.R.anim.fade_in);
-        descriptionsSwitcher.setOutAnimation(getActivity(), android.R.anim.fade_out);
-        descriptionsSwitcher.setFactory(new TextViewFactory(R.style.DescriptionTextView, false));
-        descriptionsSwitcher.setCurrentText(getString(descriptions[0]));
-
-
-    }
-    private void initRecyclerView() {
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -103,7 +104,38 @@ public class News_Fragment extends IMainPageFragment {
         onActiveCardChange(pos);
     }
 
+    private void initCountryText(View view) {
+        countryAnimDuration = getResources().getInteger(R.integer.labels_animation_duration);
+        countryOffset1 = getResources().getDimensionPixelSize(R.dimen.left_offset);
+        countryOffset2 = getResources().getDimensionPixelSize(R.dimen.card_width);
+        country1TextView = (TextView) view.findViewById(R.id.tv_country_1);
+        country2TextView = (TextView) view.findViewById(R.id.tv_country_2);
 
+        country1TextView.setX(countryOffset1);
+        country2TextView.setX(countryOffset2);
+        country1TextView.setText(countries[0]);
+        country2TextView.setAlpha(0f);
+
+
+    }
+
+    private void initSwitchers(View view) {
+        temperatureSwitcher = (TextSwitcher)view.findViewById(R.id.ts_temperature);
+        temperatureSwitcher.setFactory(new TextViewFactory(R.style.TemperatureTextView, true));
+        temperatureSwitcher.setCurrentText(temperatures[0]);
+        placeSwitcher = (TextSwitcher) view.findViewById(R.id.ts_place);
+        placeSwitcher.setFactory(new TextViewFactory(R.style.PlaceTextView, false));
+        placeSwitcher.setCurrentText(places[0]);
+
+        clockSwitcher = (TextSwitcher) view.findViewById(R.id.ts_clock);
+        clockSwitcher.setFactory(new TextViewFactory(R.style.ClockTextView, false));
+        clockSwitcher.setCurrentText(times[0]);
+        descriptionsSwitcher = (TextSwitcher) view.findViewById(R.id.ts_description);
+        descriptionsSwitcher.setInAnimation(getActivity(), android.R.anim.fade_in);
+        descriptionsSwitcher.setOutAnimation(getActivity(), android.R.anim.fade_out);
+        descriptionsSwitcher.setFactory(new TextViewFactory(R.style.DescriptionTextView, false));
+        descriptionsSwitcher.setCurrentText(getString(descriptions[0]));
+    }
     private void onActiveCardChange(int pos) {
         int animH[] = new int[] {R.anim.slide_in_right, R.anim.slide_out_left};
         int animV[] = new int[] {R.anim.slide_in_top, R.anim.slide_out_bottom};
@@ -173,11 +205,44 @@ public class News_Fragment extends IMainPageFragment {
 
     }
 
+    private void setCountryText(String text, boolean left2right) {
+        final TextView invisibleText;
+        final TextView visibleText;
+        if (country1TextView.getAlpha() > country2TextView.getAlpha()) {
+            visibleText = country1TextView;
+            invisibleText = country2TextView;
+        } else {
+            visibleText = country2TextView;
+            invisibleText = country1TextView;
+        }
 
+        final int vOffset;
+        if (left2right) {
+            invisibleText.setX(0);
+            vOffset = countryOffset2;
+        } else {
+            invisibleText.setX(countryOffset2);
+            vOffset = 0;
+        }
+
+        invisibleText.setText(text);
+
+        final ObjectAnimator iAlpha = ObjectAnimator.ofFloat(invisibleText, "alpha", 1f);
+        final ObjectAnimator vAlpha = ObjectAnimator.ofFloat(visibleText, "alpha", 0f);
+        final ObjectAnimator iX = ObjectAnimator.ofFloat(invisibleText, "x", countryOffset1);
+        final ObjectAnimator vX = ObjectAnimator.ofFloat(visibleText, "x", vOffset);
+
+        final AnimatorSet animSet = new AnimatorSet();
+        animSet.playTogether(iAlpha, vAlpha, iX, vX);
+        animSet.setDuration(countryAnimDuration);
+        animSet.start();
+    }
     private class OnCardClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
 
         }
     }
+
+
 }
