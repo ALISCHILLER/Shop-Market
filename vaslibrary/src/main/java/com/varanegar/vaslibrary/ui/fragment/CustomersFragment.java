@@ -74,6 +74,7 @@ import com.varanegar.vaslibrary.model.tour.TourModel;
 import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.model.visitday.VisitDayViewModel;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
+import com.varanegar.vaslibrary.ui.fragment.vpnfragment.VpnDialogFragment;
 import com.varanegar.vaslibrary.ui.viewholders.CustomerSummaryMultipanViewHolder;
 import com.varanegar.vaslibrary.ui.viewholders.CustomerSummaryViewHolder;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
@@ -814,6 +815,19 @@ public abstract class CustomersFragment
                 false,
                 false));
         buttons.add(oldInvoiceBtn);
+
+        CuteButton openVpn = new CuteButton();
+        openVpn.setTitle(R.string.vpn_open);
+        openVpn.setIcon(R.drawable.ic_baseline_vpn_lock_24);
+        openVpn.setEnabled(() -> new TourManager(getContext()).isTourAvailable());
+        openVpn.setOnClickListener(new CuteButton.OnClickListener() {
+            @Override
+            public void onClick() {
+                VpnDialogFragment vpnDialogFragment = new VpnDialogFragment();
+                vpnDialogFragment.show(getChildFragmentManager(), "SettingDialogFragment");
+            }
+        });
+        buttons.add(openVpn);
         return buttons;
     }
 

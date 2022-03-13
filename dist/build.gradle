@@ -7,7 +7,7 @@ ext.versionVariant = null // for example : nestle
 ext.versionMajor = 3
 ext.versionMinor = 1
 ext.versionPatch = 1
-ext.versionBuild = 98
+ext.versionBuild = 100
 
 // VersionReplaceEndTag
 ext.versionType = null // stable(null), beta, snapshot, ...
@@ -74,6 +74,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation project(path: ':vpnLib')
     implementation project(path: ':vaslibrary')
     implementation project(path: ':framework')
     testImplementation 'junit:junit:4.+'

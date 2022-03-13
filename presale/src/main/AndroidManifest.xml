@@ -27,7 +27,13 @@
         <receiver android:name=".jobscheduler.PresalesJobScheduler" />
 
         <service android:name=".PreSalesSyncService" />
-
+        <service
+            android:name="de.blinkt.openvpn.core.OpenVPNService"
+            android:permission="android.permission.BIND_VPN_SERVICE">
+            <intent-filter>
+                <action android:name="android.net.VpnService" />
+            </intent-filter>
+        </service>
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@mipmap/ic_launcher" />

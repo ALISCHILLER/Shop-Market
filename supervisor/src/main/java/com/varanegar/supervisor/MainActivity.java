@@ -16,7 +16,7 @@ import com.varanegar.vaslibrary.model.user.UserModel;
 import java.util.List;
 
 /**
- * Created by A.Torabi on 6/7/2018.
+   * Created by A.Torabi on 6/7/2018.
  */
 
 public class MainActivity extends VasActivity {

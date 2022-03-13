@@ -7,18 +7,19 @@ ext.versionVariant = null // for example : nestle
 ext.versionMajor = 3
 ext.versionMinor = 1
 ext.versionPatch = 1
-ext.versionBuild = 156
+ext.versionBuild = 157
 // VersionReplaceEndTag
 ext.versionType = null // stable(null), beta, snapshot, ...
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
 
-    defaultConfig {
-        applicationId "com.varanegar.presale"
-        minSdkVersion 16
-        targetSdkVersion 30
+        compileSdkVersion 30
+        buildToolsVersion "30.0.3"
+
+        defaultConfig {
+            applicationId "com.varanegar.presale"
+            minSdkVersion 16
+            targetSdkVersion 30
         versionCode generateVersionCode()
         versionName generateVersionName()
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -26,6 +27,7 @@ android {
     }
 
     signingConfigs {
+
         release {
             keyAlias 'presale'
             keyPassword 'hmmAd+V3KMFq@y65'
@@ -75,6 +77,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation project(path: ':vaslibrary')
     implementation project(path: ':framework')
+    implementation project(path: ':vpnLib')
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

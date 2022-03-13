@@ -32,7 +32,98 @@
             android:maxLines="1"
             android:orientation="vertical"
             custom:title="@string/local_server_ip" />
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:checkedButton="@+id/radio_button_1"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+            <RadioButton
+                android:id="@+id/radio_lan"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="داخلی"/>
+            <RadioButton
+                android:id="@+id/radio_wan"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="خارجی"/>
+        </RadioGroup>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/vpn_profile"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="wrap_content">
 
+            <TextView
+                android:id="@+id/textView2"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/item_pair_top_background"
+                android:padding="@dimen/padding_default"
+                android:text="نام کاربری"
+                android:textColor="?attr/colorPrimary"
+                custom:layout_constraintBaseline_toBaselineOf="@+id/textView3"
+                custom:layout_constraintEnd_toStartOf="@+id/textView3"
+                custom:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:id="@+id/user_name_vpn"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="نام کاربری"
+                android:imeOptions="actionNext"
+                android:lines="1"
+                android:longClickable="false"
+                android:padding="@dimen/padding_default"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                custom:layout_constraintBaseline_toBaselineOf="@+id/password_vpn"
+                custom:layout_constraintEnd_toStartOf="@+id/password_vpn"
+                custom:layout_constraintStart_toStartOf="parent" />
+
+
+            <TextView
+                android:id="@+id/textView3"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/item_pair_top_background"
+                android:padding="@dimen/padding_default"
+                android:text="رمز ورود"
+                android:textColor="?attr/colorPrimary"
+                custom:layout_constraintEnd_toEndOf="parent"
+                custom:layout_constraintStart_toEndOf="@+id/textView2" />
+
+            <EditText
+                android:id="@+id/password_vpn"
+                style="@android:style/TextAppearance.DeviceDefault.Small"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="رمز ورود"
+                android:imeOptions="actionNext"
+                android:lines="1"
+                android:longClickable="false"
+                android:padding="@dimen/padding_default"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                custom:layout_constraintEnd_toEndOf="parent"
+                custom:layout_constraintStart_toEndOf="@+id/user_name_vpn"
+                custom:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+            <Button
+                android:id="@+id/coonect_vpn"
+                android:layout_width="wrap_content"
+                android:text="اتصال"
+                android:layout_height="wrap_content"
+                custom:layout_constraintBottom_toBottomOf="parent"
+                custom:layout_constraintEnd_toEndOf="parent"
+                custom:layout_constraintStart_toStartOf="parent"
+                custom:layout_constraintTop_toBottomOf="@+id/password_vpn" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
         <com.dd.processbutton.iml.ActionProcessButton
             android:id="@+id/getSettingsButton"
             android:layout_width="250dp"

@@ -19,6 +19,7 @@ import com.varanegar.supervisor.customers.CustomersFullFragment;
 import com.varanegar.supervisor.customreport.orderstatus.OrderReportFragment;
 import com.varanegar.supervisor.fragment.menuTools_Fragment.MenuTools_Fragmnet;
 import com.varanegar.supervisor.menu.MenuFragment;
+import com.varanegar.supervisor.news_fragment.News_Fragment;
 import com.varanegar.supervisor.report.ReportsFragment;
 import com.varanegar.supervisor.status.ToursStatusFragment;
 import com.varanegar.supervisor.tracking.TrackingFragment;
@@ -49,6 +50,7 @@ public class MainFragment extends VaranegarFragment {
         tl.getTabAt(5).setIcon(R.drawable.ic_view_list_cyan_48dp);
         tl.getTabAt(6).setIcon(R.drawable.ic_baseline_format_quote_24);
         tl.getTabAt(7).setIcon(R.drawable.ic_baseline_assignment_24);
+
         return view;
     }
 
@@ -78,6 +80,7 @@ public class MainFragment extends VaranegarFragment {
         OrderReportFragment orderReportFragment =new OrderReportFragment();
         CustomersFullFragment customersFullFragment=new CustomersFullFragment();
         MenuTools_Fragmnet menuToolsFragmnet=new MenuTools_Fragmnet();
+
         MenuFragment menuFragment = new MenuFragment();
 
         public TabsPagerAdapter(FragmentManager fm) {
@@ -102,6 +105,7 @@ public class MainFragment extends VaranegarFragment {
                 return customersFullFragment;
             else if (position==7)
                 return menuToolsFragmnet;
+
 //                return menuFragment;
                 //else return menuFragment;
             else  return statusFragment;
@@ -111,6 +115,7 @@ public class MainFragment extends VaranegarFragment {
         @Override
         public int getCount() {
             return 8;
+
         }
     }
 

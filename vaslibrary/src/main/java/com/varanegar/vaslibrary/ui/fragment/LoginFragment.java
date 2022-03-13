@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.VpnService;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -142,6 +143,12 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         String deviceIdSuper=getDeviceid();
         Toast.makeText(getContext(),deviceIdSuper,Toast.LENGTH_LONG).show();
+        // Checking permission for network monitor
+        Intent intent = VpnService.prepare(getContext());
+        if (intent != null) {
+            startActivityForResult(intent, 1);
+        }
+
         TextView localeTextView = (TextView) view.findViewById(R.id.language_text_view);
         final Locale locale = LocaleHelper.getPreferredLocal(getContext());
         if (locale != null)
@@ -417,11 +424,13 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 12456) {
             if (permissions[0].equals(Manifest.permission_group.PHONE) && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 getTrackingLicense();
         }
+
     }
 
     private void getTrackingLicense() {

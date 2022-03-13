@@ -32,6 +32,7 @@ import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.ui.dialog.TrackingLicenseFragment;
+import com.varanegar.vaslibrary.ui.fragment.vpnfragment.VpnDialogFragment;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 
 import java.util.UUID;
@@ -91,6 +92,13 @@ public class Get_Tour_Fragment extends VaranegarFragment {
             }
         });
 
+        view.findViewById(R.id.vpn_image_view).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                VpnDialogFragment vpnDialogFragment = new VpnDialogFragment();
+                vpnDialogFragment.show(getChildFragmentManager(), "SettingDialogFragment");
+            }
+        });
 
         view.findViewById(R.id.backup_image_view).setOnClickListener(new View.OnClickListener() {
             @Override

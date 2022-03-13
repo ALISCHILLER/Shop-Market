@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.VpnService;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -114,7 +115,11 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_supervisor_login, container, false);
-
+        // Checking permission for network monitor
+        Intent intent = VpnService.prepare(getContext());
+        if (intent != null) {
+            startActivityForResult(intent, 1);
+        }
         // region apk name and version
         try {
             String packageName = getContext().getApplicationInfo().packageName;
@@ -258,7 +263,59 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
                     loginButton.setProgress(0);
                     return;
                 }
+                userManager.login(username, password
+                        , new OnTokenAcquired() {
+                            @Override
+                            public void run(Token token) {
+                                try {
+                                    AccountManager accountManager = new AccountManager();
+                                    accountManager.writeToFile(token, getContext(), "user.token");
+                                    final UserModel user = userManager.getUser(username);
+                                    user.LoginDate = new Date();
+                                    UserManager.writeToFile(user, getContext());
+                                    VaranegarApplication.getInstance().getDbHandler().emptyAllTablesExcept(User.UserTbl, SysConfig.SysConfigTbl);
+                                    MainVaranegarActivity activity = getVaranegarActvity();
+                                    if (activity != null && !activity.isFinishing() && isResumed())
+                                        activity.putFragment(new Get_Tour_Fragment());
+                                    setEnabled(true);
+                                    loginButton.setProgress(0);
+                                    getTrackingLicense();
+                                    SysConfigManager sysConfigManager = new SysConfigManager(getContext());
+                                    sysConfigManager.sync(new UpdateCall() {
+                                        @Override
+                                        protected void onFinish() {
+                                        }
+                                    });
+                                } catch (Exception e) {
+                                    Timber.e(e);
+                                    if (isResumed()) {
+                                        setEnabled(true);
+                                        loginButton.setProgress(0);
+                                        MainVaranegarActivity activity = getVaranegarActvity();
+                                        if (activity != null && !activity.isFinishing())
+                                            activity.showSnackBar(getContext().getString(R.string.login_failed), MainVaranegarActivity.Duration.Short);
+                                    }
+                                }
+                            }
+                        }, new OnError() {
+                            @Override
+                            public void onAuthenticationFailure(String error, String description) {
+                                MainVaranegarActivity activity = getVaranegarActvity();
+                                if (activity != null && !activity.isFinishing() && isResumed())
+                                    activity.showSnackBar(description, MainVaranegarActivity.Duration.Short);
+                                setEnabled(true);
+                                loginButton.setProgress(0);
+                            }
 
+                            @Override
+                            public void onNetworkFailure(Throwable t) {
+                                MainVaranegarActivity activity = getVaranegarActvity();
+                                if (activity != null && !activity.isFinishing() && isResumed())
+                                    activity.showSnackBar(R.string.connection_to_server_failed, MainVaranegarActivity.Duration.Short);
+                                setEnabled(true);
+                                loginButton.setProgress(0);
+                            }
+                        });
 
                 String deviceId = getDeviceId();
 //                if (deviceId == null) {
@@ -267,6 +324,7 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
 //                    loginButton.setProgress(0);
 //                    return;
 //                }
+
                 SharedPreferences sharedPreferences = getActivity()
                         .getSharedPreferences("Firebase_Token", Context.MODE_PRIVATE);
 
@@ -497,6 +555,7 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 12456) {
             if (permissions[0].equals(Manifest.permission_group.PHONE) && grantResults[0] == PackageManager.PERMISSION_GRANTED)

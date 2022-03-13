@@ -86,11 +86,13 @@ public class CustomerManager extends BaseManager<CustomerModel> {
         query.from(Customer.CustomerTbl).orderByAscending(Customer.rowIndex);
         return getItems(query);
     }
+
     public List<CustomerModel> getAllTb() {
         Query query = new Query();
         query.from(Customer.CustomerTbl);
         return getItems(query);
     }
+
     public List<CustomerModel> getCustomersWithCustomerCalls() {
         Query query = new Query();
         query.from(From.table(Customer.CustomerTbl).innerJoin(CustomerCall.CustomerCallTbl)
@@ -169,7 +171,7 @@ public class CustomerManager extends BaseManager<CustomerModel> {
 
                 if (result.size() > 0) {
                     try {
-                        if(VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+                        if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
                             for (CustomerModel item : result
                             ) {
                                 item.Barcode = item.CustomerCode;
@@ -365,29 +367,29 @@ public class CustomerManager extends BaseManager<CustomerModel> {
                             insert(result);
                         } else {
                             sync(result);
-                            CustomerShipToPartyManager shipToPartyManager=new
+                            CustomerShipToPartyManager shipToPartyManager = new
                                     CustomerShipToPartyManager(getContext());
-                            List<CustomerModel> customerModels=getAllTb();
+                            List<CustomerModel> customerModels = getAllTb();
                             for (CustomerModel sever :
                                     customerModels) {
-                                CustomerShipToPartyModel customerShipToPartyModel =new CustomerShipToPartyModel();
-                                customerShipToPartyModel.CustomerName=sever.CustomerName;
-                                customerShipToPartyModel.BackOfficeId= sever.CustomerCode;
-                                customerShipToPartyModel.Latitude=sever.Latitude;
-                                customerShipToPartyModel.Longitude=sever.Latitude;
-                                customerShipToPartyModel.Address=sever.Address;
-                                customerShipToPartyModel.SoldToPartyUniqueId=sever.UniqueId;
-                                customerShipToPartyModel.UniqueId=sever.UniqueId;
-                                customerShipToPartyModel.Mobile=sever.Mobile;
-                                customerShipToPartyModel.Phone=sever.Phone;
-                                customerShipToPartyModel.StoreName=sever.StoreName;
-                                customerShipToPartyModel.PostCode=sever.CustomerPostalCode;
-                                customerShipToPartyModel.IgnoreLocation=sever.IgnoreLocation;
-                                customerShipToPartyModel.NationalCode=sever.NationalCode;
-                                customerShipToPartyModel.EconomicCode=sever.EconomicCode;
-                                customerShipToPartyModel.IsActive=sever.IsActive;
+                                CustomerShipToPartyModel customerShipToPartyModel = new CustomerShipToPartyModel();
+                                customerShipToPartyModel.CustomerName = sever.CustomerName;
+                                customerShipToPartyModel.BackOfficeId = sever.CustomerCode;
+                                customerShipToPartyModel.Latitude = sever.Latitude;
+                                customerShipToPartyModel.Longitude = sever.Latitude;
+                                customerShipToPartyModel.Address = sever.Address;
+                                customerShipToPartyModel.SoldToPartyUniqueId = sever.UniqueId;
+                                customerShipToPartyModel.UniqueId = sever.UniqueId;
+                                customerShipToPartyModel.Mobile = sever.Mobile;
+                                customerShipToPartyModel.Phone = sever.Phone;
+                                customerShipToPartyModel.StoreName = sever.StoreName;
+                                customerShipToPartyModel.PostCode = sever.CustomerPostalCode;
+                                customerShipToPartyModel.IgnoreLocation = sever.IgnoreLocation;
+                                customerShipToPartyModel.NationalCode = sever.NationalCode;
+                                customerShipToPartyModel.EconomicCode = sever.EconomicCode;
+                                customerShipToPartyModel.IsActive = sever.IsActive;
                                 if (isTourUpdateFlow)
-                                shipToPartyManager.insertOrUpdate(customerShipToPartyModel);
+                                    shipToPartyManager.insertOrUpdate(customerShipToPartyModel);
                                 else
                                     shipToPartyManager.insertOrUpdate(customerShipToPartyModel);
                             }
@@ -429,28 +431,28 @@ public class CustomerManager extends BaseManager<CustomerModel> {
         });
     }
 
-    public void setcustomertoship(){
-        CustomerShipToPartyManager shipToPartyManager=new
+    public void setcustomertoship() {
+        CustomerShipToPartyManager shipToPartyManager = new
                 CustomerShipToPartyManager(getContext());
-        List<CustomerModel> customerModels=getAllTb();
+        List<CustomerModel> customerModels = getAllTb();
         for (CustomerModel sever :
                 customerModels) {
-            CustomerShipToPartyModel customerShipToPartyModel =new CustomerShipToPartyModel();
-            customerShipToPartyModel.CustomerName=sever.CustomerName;
-            customerShipToPartyModel.BackOfficeId= sever.CustomerCode;
-            customerShipToPartyModel.Latitude=sever.Latitude;
-            customerShipToPartyModel.Longitude=sever.Latitude;
-            customerShipToPartyModel.Address=sever.Address;
-            customerShipToPartyModel.SoldToPartyUniqueId=sever.UniqueId;
-            customerShipToPartyModel.UniqueId=sever.UniqueId;
-            customerShipToPartyModel.Mobile=sever.Mobile;
-            customerShipToPartyModel.Phone=sever.Phone;
-            customerShipToPartyModel.StoreName=sever.StoreName;
-            customerShipToPartyModel.PostCode=sever.CustomerPostalCode;
-            customerShipToPartyModel.IgnoreLocation=sever.IgnoreLocation;
-            customerShipToPartyModel.NationalCode=sever.NationalCode;
-            customerShipToPartyModel.EconomicCode=sever.EconomicCode;
-            customerShipToPartyModel.IsActive=sever.IsActive;
+            CustomerShipToPartyModel customerShipToPartyModel = new CustomerShipToPartyModel();
+            customerShipToPartyModel.CustomerName = sever.CustomerName;
+            customerShipToPartyModel.BackOfficeId = sever.CustomerCode;
+            customerShipToPartyModel.Latitude = sever.Latitude;
+            customerShipToPartyModel.Longitude = sever.Latitude;
+            customerShipToPartyModel.Address = sever.Address;
+            customerShipToPartyModel.SoldToPartyUniqueId = sever.UniqueId;
+            customerShipToPartyModel.UniqueId = sever.UniqueId;
+            customerShipToPartyModel.Mobile = sever.Mobile;
+            customerShipToPartyModel.Phone = sever.Phone;
+            customerShipToPartyModel.StoreName = sever.StoreName;
+            customerShipToPartyModel.PostCode = sever.CustomerPostalCode;
+            customerShipToPartyModel.IgnoreLocation = sever.IgnoreLocation;
+            customerShipToPartyModel.NationalCode = sever.NationalCode;
+            customerShipToPartyModel.EconomicCode = sever.EconomicCode;
+            customerShipToPartyModel.IsActive = sever.IsActive;
             try {
                 shipToPartyManager.insertOrUpdate(customerShipToPartyModel);
             } catch (ValidationException e) {
@@ -460,6 +462,7 @@ public class CustomerManager extends BaseManager<CustomerModel> {
             }
         }
     }
+
     public void cancelSync() {
         if (call != null && !call.isCanceled() && call.isExecuted())
             call.cancel();
@@ -753,7 +756,7 @@ public class CustomerManager extends BaseManager<CustomerModel> {
         return Linq.findAll(getAll(), item -> item.Latitude != 0 && item.Longitude != 0);
     }
 
-    public void updateOPathIds(List<CustomerModel> customerModels ,@NonNull List<LatLng> points) throws ValidationException, DbException {
+    public void updateOPathIds(List<CustomerModel> customerModels, @NonNull List<LatLng> points) throws ValidationException, DbException {
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("OPTIMIZED_PATH", Context.MODE_PRIVATE);
         sharedPreferences.edit().clear().commit();
         List<String> l = Linq.map(points, (Linq.Map<LatLng, String>) item -> item.latitude + "," + item.longitude);
