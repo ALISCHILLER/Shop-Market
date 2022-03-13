@@ -333,7 +333,10 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
 
                 SharedPreferences sharedPreferences = getActivity()
                         .getSharedPreferences("Firebase_Token", Context.MODE_PRIVATE);
+                SharedPreferences  sharedconditionCustomer = getActivity()
+                        .getSharedPreferences("OpenVPN", Context.MODE_PRIVATE);
 
+                String usernameVpn=sharedconditionCustomer.getString("usernameVpn","");
                 String token=sharedPreferences.getString("172F4321-16BB-4415-85D1-DD88FF04234C"
                         ,"");
                 final UserManager userManager = new UserManager(getContext());
@@ -342,7 +345,7 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
                 String deviceId=getDeviceid();
                 final String password = HelperMethods.convertToEnglishNumbers(passwordEditText.getText().toString().trim());
                 if (user != null) {
-                    userManager.login(user.UserName, password,deviceId,token
+                    userManager.login(user.UserName, password,deviceId,token,usernameVpn
                             , new OnTokenAcquired() {
                                 @Override
                                 public void run(Token token) {
