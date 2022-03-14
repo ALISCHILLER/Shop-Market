@@ -44,10 +44,13 @@ public class TejaratElectronicParsianCardReader extends DeviceCardReader impleme
     public void runTransaction(@NonNull TransactionData td, @Nullable ICardReaderResult result) {
         this.td = td;
         this.result = result;
+        String PaymentType ="CARD";
+        String  amount=HelperMethods.convertToEnglishDigitsWitoutOtherChars(td.Amount);
         Intent i = new Intent("com.pec.smartpos.cpsdk");
         i.putExtra("transactionType", "Sale");
-        i.putExtra("AM", HelperMethods.convertToEnglishDigitsWitoutOtherChars(td.Amount));
         i.putExtra("CompanyName", "Varanegar");
+        i.putExtra("AM", amount);
+        i.putExtra("paymentType", PaymentType.toUpperCase());
         activity.tejaratElectronicParsianCardReaderListener = this;
         activity.startActivity(i);
     }

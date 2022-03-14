@@ -110,6 +110,7 @@ public class EditCustomerAction extends CheckBarcodeAction {
                 dialog.setCancelable(false);
                 dialog.setClosable(false);
                 dialog.setValues(pin);
+                dialog.setValuesRequst("pin4",getSelectedId(),null);
                 dialog.setOnResult(new InsertPinDialog.OnResult() {
                     @Override
                     public void done() {

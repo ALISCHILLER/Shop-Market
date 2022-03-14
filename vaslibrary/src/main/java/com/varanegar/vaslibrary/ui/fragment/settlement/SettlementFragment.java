@@ -38,6 +38,7 @@ import com.varanegar.vaslibrary.manager.PaymentOrderTypeManager;
 import com.varanegar.vaslibrary.manager.UserManager;
 import com.varanegar.vaslibrary.manager.ValidPayTypeManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
+import com.varanegar.vaslibrary.manager.customercall.CustomerCallInvoiceManager;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallOrderManager;
 import com.varanegar.vaslibrary.manager.customercall.SaveOrderUtility;
 import com.varanegar.vaslibrary.manager.customercallmanager.CustomerCallManager;
@@ -51,6 +52,7 @@ import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigMap;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.UnknownBackOfficeException;
+import com.varanegar.vaslibrary.model.call.CustomerCallInvoiceModel;
 import com.varanegar.vaslibrary.model.call.CustomerCallOrderModel;
 import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.model.customercall.CustomerCallModel;
@@ -209,7 +211,7 @@ public class SettlementFragment extends VisitFragment {
                             Timber.e(e);
                             showErrorDialog();
                         } catch (ThirdPartyControlPaymentChangedException e) {
-                            thirdPartyControlPayments(e.getMessage(), e.getThirdPartyPaymentType(), e.getPinCode(), true);
+                            thirdPartyControlPayments(e.getMessage(), e.getThirdPartyPaymentType(), e.getPinCode(),e.getPinType(), true);
                         }
                     }
                 }
@@ -288,7 +290,7 @@ public class SettlementFragment extends VisitFragment {
                 } catch (UnknownBackOfficeException e) {
                     showErrorDialog();
                 } catch (ThirdPartyControlPaymentChangedException e) {
-                    thirdPartyControlPayments(e.getMessage(), e.getThirdPartyPaymentType(), e.getPinCode(), false);
+                    thirdPartyControlPayments(e.getMessage(), e.getThirdPartyPaymentType(), e.getPinCode(),e.getPinType(), false);
                 } catch (DbException e) {
                     showErrorDialog();
                 } catch (ValidationException e) {
@@ -307,7 +309,11 @@ public class SettlementFragment extends VisitFragment {
         }
     }
 
-    void thirdPartyControlPayments(String errorMessage, @Nullable ThirdPartyPaymentTypes paymentType, @Nullable String pinCode, boolean print) {
+    void thirdPartyControlPayments(String errorMessage, @Nullable ThirdPartyPaymentTypes paymentType,
+                                   @Nullable String pinCode,@Nullable String pinType, boolean print) {
+        CustomerCallInvoiceManager customerCallOrderManager = new CustomerCallInvoiceManager(getActivity());
+        List<CustomerCallInvoiceModel>  customerCallOrderModels = customerCallOrderManager
+                .getCustomerCallInvoices(getCustomerId());
         if (paymentType == null) {
             showErrorDialog(errorMessage);
         } else {
@@ -318,6 +324,8 @@ public class SettlementFragment extends VisitFragment {
                 dialog.setCancelable(false);
                 dialog.setClosable(false);
                 dialog.setValues(pinCode);
+                dialog.setValuesRequst(pinType,getCustomerId(),customerCallOrderModels
+                        .get(0).UniqueId);
                 dialog.setOnResult(new InsertPinDialog.OnResult() {
                     @Override
                     public void done() {
@@ -512,7 +520,9 @@ public class SettlementFragment extends VisitFragment {
         poseButton.setOnClickListener(() -> {
             CardReaderDialog dialog = new CardReaderDialog();
             Currency totalPayment = paymentManager.getTotalPaid(customerId);
-            dialog.setArguments(customerId, customerPayment.getTotalAmount(false), customerPayment.getTotalAmount(false).subtract(totalPayment), null, null);
+            dialog.setArguments(customerId, customerPayment.getTotalAmount(false),
+                    customerPayment.getTotalAmount(false).subtract(totalPayment),
+                    null, null);
             dialog.preSetRemainedAmount();
             dialog.show(getChildFragmentManager(), "b20d52e2-5b3b-42d0-b3c7-e9060cf24b74");
             dialog.setCallBack(() -> refreshSettlement());

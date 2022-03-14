@@ -614,7 +614,8 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
             dialog.setPositiveButton(R.string.ok, null);
             dialog.show();
         }
-    } private void showResaltDialog(String err) {
+    }
+    private void showResaltDialog(String err) {
         Context context = getContext();
         if (context != null) {
             CuteMessageDialog dialog = new CuteMessageDialog(context);

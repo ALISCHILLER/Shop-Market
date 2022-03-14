@@ -2643,6 +2643,7 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
         dialog.setCancelable(false);
         dialog.setClosable(false);
         dialog.setValues(customerCallOrderModels.get(0).PinCode3);
+        dialog.setValuesRequst("pin3",customerId,customerCallOrderModels.get(0).UniqueId);
         dialog.setOnResult(new InsertPinDialog.OnResult() {
             @Override
             public void done() {
@@ -2670,6 +2671,7 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
         dialog.setCancelable(false);
         dialog.setClosable(false);
         dialog.setValues(customerCallOrderModels.get(0).PinCode3);
+        dialog.setValuesRequst("pin3",customerId,customerCallOrderModels.get(0).UniqueId);
         dialog.setOnResult(new InsertPinDialog.OnResult() {
             @Override
             public void done() {

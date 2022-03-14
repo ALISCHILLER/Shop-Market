@@ -1,4 +1,4 @@
-package com.varanegar.supervisor;
+package com.varanegar.presale;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -9,19 +9,13 @@ import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
-
-import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.varanegar.supervisor.firebase.MyWorker;
-
-
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -75,8 +69,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void sendNotification(String messageBody) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                0 /* Request code */, intent,
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
         String channelId = getString(R.string.default_notification_channel_id);

@@ -75,17 +75,22 @@ public class CardReaderDialog extends PaymentDialog {
     @Override
     protected void onCreateContentView(LayoutInflater inflater, ViewGroup viewGroup, @Nullable Bundle savedInstanceState) {
         if (getCustomerRemainAmount() != null)
-            setTitle(getString(R.string.total_remained) + VasHelperMethods.currencyToString(getRemainedAmount()) + "  -  " + getString(R.string.old_remain_amount) + getCustomerRemainAmount());
+            setTitle(getString(R.string.total_remained) + VasHelperMethods.currencyToString(getRemainedAmount()) + "  -  "
+                    + getString(R.string.old_remain_amount) + getCustomerRemainAmount());
         else
             setTitle(getString(R.string.total_remained) + VasHelperMethods.currencyToString(getRemainedAmount()));
         View view = inflater.inflate(R.layout.card_reader_dialog, viewGroup, true);
-        SysConfigModel settlementAllocation = new SysConfigManager(getContext()).read(ConfigKey.SettlementAllocation, SysConfigManager.cloud);
+        SysConfigModel settlementAllocation = new SysConfigManager(getContext())
+                .read(ConfigKey.SettlementAllocation, SysConfigManager.cloud);
         invoicePaymentInfoLayout = view.findViewById(R.id.invoices_info_layout);
-        int count = invoicePaymentInfoLayout.setArguments(getVaranegarActvity(), getCustomerId(), PaymentType.Card, getPaymentId());
+        int count = invoicePaymentInfoLayout.setArguments(getVaranegarActvity(),
+                getCustomerId(), PaymentType.Card, getPaymentId());
         if (count <= 1 || !SysConfigManager.compare(settlementAllocation, true))
             invoicePaymentInfoLayout.setVisibility(View.GONE);
-        refNumberPairedItemsEditable = (PairedItemsEditable) view.findViewById(R.id.ref_number_paired_items_editable);
-        amountPairedItemsEditable = (PairedItemsEditable) view.findViewById(R.id.amount_paired_items_editable);
+        refNumberPairedItemsEditable = (PairedItemsEditable)
+                view.findViewById(R.id.ref_number_paired_items_editable);
+        amountPairedItemsEditable = (PairedItemsEditable)
+                view.findViewById(R.id.amount_paired_items_editable);
 
         datePairedItems = (PairedItems) view.findViewById(R.id.date_paired_items);
 
@@ -228,9 +233,11 @@ public class CardReaderDialog extends PaymentDialog {
 
     private void setTransactionData(TransactionData td) {
         String json = VaranegarGsonBuilder.build().create().toJson(td);
-        getContext().getSharedPreferences("CARD_READER_DIALOG", Context.MODE_PRIVATE).edit().putString("TR_DATA", json).apply();
+        getContext().getSharedPreferences("CARD_READER_DIALOG", Context.MODE_PRIVATE).edit()
+                .putString("TR_DATA", json).apply();
         amountPairedItemsEditable.setValue(HelperMethods.currencyToString(td.PaidAmount));
-        datePairedItems.setValue(DateHelper.toString(td.PaymentTime, DateFormat.Complete, VasHelperMethods.getSysConfigLocale(getContext())));
+        datePairedItems.setValue(DateHelper.toString(td.PaymentTime, DateFormat.Complete,
+                VasHelperMethods.getSysConfigLocale(getContext())));
         date = td.PaymentTime;
         refNumberPairedItemsEditable.setValue(td.TransactionNo);
         amountPairedItemsEditable.setEnabled(false);

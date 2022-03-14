@@ -4,7 +4,17 @@
     package="com.varanegar.dist">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <meta-data
+        android:name="com.google.firebase.messaging.default_notification_icon"
+        android:resource="@drawable/zar" />
 
+    <meta-data
+        android:name="com.google.firebase.messaging.default_notification_color"
+        android:resource="@color/colorAccent" />
+
+    <meta-data
+        android:name="com.google.firebase.messaging.default_notification_channel_id"
+        android:value="@string/default_notification_channel_id" />
     <application
         android:name=".DistApplication"
         android:allowBackup="true"
@@ -45,11 +55,6 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".messaging.DistInstanceIdService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
         <service android:name=".messaging.DistMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

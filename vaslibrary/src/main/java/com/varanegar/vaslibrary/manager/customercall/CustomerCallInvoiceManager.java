@@ -25,7 +25,8 @@ public class CustomerCallInvoiceManager extends BaseManager<CustomerCallInvoiceM
 
     public List<CustomerCallInvoiceModel> getCustomerCallInvoices(UUID customerUniqueId) {
         Query query = new Query();
-        query.from(CustomerCallInvoice.CustomerCallInvoiceTbl).whereAnd(Criteria.equals(CustomerCallInvoice.CustomerUniqueId, customerUniqueId.toString()));
+        query.from(CustomerCallInvoice.CustomerCallInvoiceTbl).
+                whereAnd(Criteria.equals(CustomerCallInvoice.CustomerUniqueId, customerUniqueId.toString()));
         return getItems(query);
     }
 

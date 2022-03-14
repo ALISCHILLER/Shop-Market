@@ -173,19 +173,19 @@ public abstract class VasActivity extends MainVaranegarActivity
             }
         }
 
-        if (UserManager.readFromFile(this) != null)
-            VasInstanceIdService.refreshToken(this,
-            new VasInstanceIdService.TokenRefreshCallBack() {
-                @Override
-                public void onSuccess(@NonNull String token) {
-                    Timber.d("Token update succeeded. Token = " + token);
-                }
-
-                @Override
-                public void onFailure(@Nullable String token, String error) {
-                    Timber.d("Token update failed. Error=" + error + "  Token=" + token);
-                }
-            });
+//        if (UserManager.readFromFile(this) != null)
+//            VasInstanceIdService.refreshToken(this,
+//            new VasInstanceIdService.TokenRefreshCallBack() {
+//                @Override
+//                public void onSuccess(@NonNull String token) {
+//                    Timber.d("Token update succeeded. Token = " + token);
+//                }
+//
+//                @Override
+//                public void onFailure(@Nullable String token, String error) {
+//                    Timber.d("Token update failed. Error=" + error + "  Token=" + token);
+//                }
+//            });
 
         checkLocationSettings();
         LocationManager locationManager1 = ((LocationManager) getSystemService(LOCATION_SERVICE));
@@ -203,7 +203,8 @@ public abstract class VasActivity extends MainVaranegarActivity
             tepBroadCast.setOnReceivedListener(new TEPBroadCast.OnReceivedListener() {
                 @Override
                 public void onReceived(Intent intent) {
-                    tejaratElectronicParsianCardReaderListener.onReceiveResult(VasActivity.this, 0, 0, intent, null);
+                    tejaratElectronicParsianCardReaderListener.onReceiveResult(VasActivity.this,
+                            0, 0, intent, null);
                 }
             });
             registerReceiver(tepBroadCast, intentFilter);

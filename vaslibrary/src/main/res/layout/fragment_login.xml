@@ -101,5 +101,9 @@
         android:padding="@dimen/padding_large"
         android:text="@string/app_language"
         android:textColor="@color/white" />
-
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/map_view"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="250dp" />
 </RelativeLayout>

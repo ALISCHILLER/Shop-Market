@@ -19,7 +19,7 @@ import com.varanegar.supervisor.customers.CustomersFullFragment;
 import com.varanegar.supervisor.customreport.orderstatus.OrderReportFragment;
 import com.varanegar.supervisor.fragment.menuTools_Fragment.MenuTools_Fragmnet;
 import com.varanegar.supervisor.menu.MenuFragment;
-import com.varanegar.supervisor.news_fragment.News_Fragment;
+
 import com.varanegar.supervisor.report.ReportsFragment;
 import com.varanegar.supervisor.status.ToursStatusFragment;
 import com.varanegar.supervisor.tracking.TrackingFragment;

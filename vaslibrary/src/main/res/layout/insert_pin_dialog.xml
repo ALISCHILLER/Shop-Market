@@ -49,5 +49,25 @@
             android:textColor="?attr/colorPrimaryDark" />
 
     </LinearLayout>
+    <LinearLayout
+        android:elevation="@dimen/elevation_default"
+        android:id="@+id/layout_requst"
+        android:layoutDirection="ltr"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbarSize"
+        android:layout_marginTop="@dimen/padding_default">
+
+        <TextView
+            android:id="@+id/requst_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.30"
+            android:gravity="center"
+            android:padding="@dimen/padding_default"
+            android:text="درخواست پین کد"
+            android:textColor="?attr/colorPrimaryDark" />
+
+    </LinearLayout>
 
 </LinearLayout>

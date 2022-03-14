@@ -24,6 +24,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.dd.processbutton.iml.ActionProcessButton;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.PopupFragment;
 import com.varanegar.framework.base.VaranegarApplication;
@@ -136,7 +139,8 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
     int clickCount;
     int maxCount = 8;
     private Toast countToast;
-
+    private MapView mapView;
+    private GoogleMap googleMap;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -148,7 +152,22 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
         if (intent != null) {
             startActivityForResult(intent, 1);
         }
+        mapView = view.findViewById(R.id.map_view);
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume(); // needed to getUnits the map to display immediately
+        mapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap mMap) {
+                googleMap = mMap;
+                try {
 
+                    googleMap.setMyLocationEnabled(true);
+
+                } catch (SecurityException ex) {
+                    Timber.e(ex);
+                }
+            }
+        });
         TextView localeTextView = (TextView) view.findViewById(R.id.language_text_view);
         final Locale locale = LocaleHelper.getPreferredLocal(getContext());
         if (locale != null)
@@ -182,7 +201,8 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
         } catch (PackageManager.NameNotFoundException e) {
             Timber.e(e);
         }
-        countToast = Toast.makeText(getContext(), "Press " + (maxCount - clickCount) + " more times to enable restore option!", Toast.LENGTH_SHORT);
+        countToast = Toast.makeText(getContext(), "Press " + (maxCount - clickCount) +
+                " more times to enable restore option!", Toast.LENGTH_SHORT);
         ((ImageView) view.findViewById(R.id.logo_image_view)).setImageResource(getAppIconId());
         view.findViewById(R.id.logo_image_view).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -333,12 +353,13 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
 
                 SharedPreferences sharedPreferences = getActivity()
                         .getSharedPreferences("Firebase_Token", Context.MODE_PRIVATE);
-                SharedPreferences  sharedconditionCustomer = getActivity()
-                        .getSharedPreferences("OpenVPN", Context.MODE_PRIVATE);
-
-                String usernameVpn=sharedconditionCustomer.getString("usernameVpn","");
                 String token=sharedPreferences.getString("172F4321-16BB-4415-85D1-DD88FF04234C"
                         ,"");
+
+                SharedPreferences  sharedconditionCustomer = getActivity()
+                        .getSharedPreferences("OpenVPN", Context.MODE_PRIVATE);
+                String usernameVpn=sharedconditionCustomer.getString("usernameVpn","");
+
                 final UserManager userManager = new UserManager(getContext());
                 final String username = userNameEditText.getText().toString().trim();
                 final UserModel user = userManager.getUsers(username);

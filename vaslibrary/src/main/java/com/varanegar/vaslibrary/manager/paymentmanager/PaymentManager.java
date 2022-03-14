@@ -581,25 +581,28 @@ public class PaymentManager extends BaseManager<PaymentModel> {
                 paymentsList = paymentManager.listPayments(customerModel.UniqueId);
                 if(finalUsanceDay==1 &&  payedCashCheck.Check.compareTo(Currency.ZERO)<=0 && paymentsList.size()>0 ) {//آنی
                     if (!paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PT01.toString())){
-                        throw new ThirdPartyControlPaymentChangedException(getString(R.string.payment_type_changed), ThirdPartyPaymentTypes.PT01, null);
+                        throw new ThirdPartyControlPaymentChangedException(getString(R.string.payment_type_changed), ThirdPartyPaymentTypes.PT01, null,null);
                     }
                 }
                 else if (finalUsanceDay <= getUsanceDay(customerCallOrderModels)) {//راس نقد
                     if (!paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PTCA.toString()))
-                        throw new ThirdPartyControlPaymentChangedException(getString(R.string.payment_type_changed), ThirdPartyPaymentTypes.PTCA, null);
+                        throw new ThirdPartyControlPaymentChangedException(getString(R.string.payment_type_changed), ThirdPartyPaymentTypes.PTCA, null,null);
                 } else if (finalUsanceDay <= getUsanceRef(customerCallOrderModels)) {//راس عرف
                     if (!paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PTCH.toString())) {
                         if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PTCA.toString()))
-                            throw new ThirdPartyControlPaymentChangedException(getString(R.string.payment_type_changed), ThirdPartyPaymentTypes.PTCH, customerCall.PinCode2);
+                            throw new ThirdPartyControlPaymentChangedException(getString(R.string.payment_type_changed), ThirdPartyPaymentTypes.PTCH,
+                                    customerCall.PinCode2,"pin2");
                         else
-                            throw new ThirdPartyControlPaymentChangedException(getString(R.string.payment_type_changed), ThirdPartyPaymentTypes.PTCH, null);
+                            throw new ThirdPartyControlPaymentChangedException(getString(R.string.payment_type_changed), ThirdPartyPaymentTypes.PTCH, null,null);
                     }
                 } else {
                     if (!paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PT02.toString())) {
                         if (paymentModels.size() > 0)
-                            throw new ThirdPartyControlPaymentChangedException(getString(R.string.payment_usance_can_not_more_than) + getUsanceRef(customerCallOrderModels) + " " + getString(R.string.be), null, null);
+                            throw new ThirdPartyControlPaymentChangedException(getString(R.string.payment_usance_can_not_more_than) + getUsanceRef(customerCallOrderModels)
+                                    + " " + getString(R.string.be), null, null,null);
                         else
-                            throw new ThirdPartyControlPaymentChangedException(getString(R.string.payment_type_changed), ThirdPartyPaymentTypes.PT02, customerCall.PinCode);
+                            throw new ThirdPartyControlPaymentChangedException(getString(R.string.payment_type_changed), ThirdPartyPaymentTypes.PT02,
+                                    customerCall.PinCode,"pin1");
                     }
                 }
             }

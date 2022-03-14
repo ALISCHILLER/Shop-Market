@@ -68,7 +68,7 @@ public class AccountManager implements IAccountManager {
                                 @Field("scope") String scope,
                                 @Field("DeviceId") String deviceId,
                                 @Field("Token") String token,
-                                @Field("Token") String vpnUser
+                                @Field("vpnUser") String vpnUser
                                 ) {
         if (baseUrl == null || baseUrl.isEmpty())
             throw new RuntimeException("Base Url has not been set.");

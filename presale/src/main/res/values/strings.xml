@@ -73,4 +73,6 @@
     <string name="batch_no">شماره بچ</string>
     <string name="notifications">پیام ها</string>
     <string name="default_notifications">پیام های پیش فرض</string>
+
+    <string name="default_notification_channel_id" translatable="false">پیام های دریافتی</string>
 </resources>
