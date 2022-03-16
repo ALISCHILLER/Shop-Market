@@ -53,9 +53,7 @@ import com.varanegar.vaslibrary.manager.locationmanager.TrackingLicense;
 import com.varanegar.vaslibrary.manager.locationmanager.TrackingLogManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
-import com.varanegar.vaslibrary.messaging.VasInstanceIdService;
-import com.varanegar.vaslibrary.model.product.Product;
-import com.varanegar.vaslibrary.model.product.ProductModel;
+
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.print.PrinterManager;
 import com.varanegar.vaslibrary.ui.fragment.settlement.PdaDeviceCardReader.EasyHelper;

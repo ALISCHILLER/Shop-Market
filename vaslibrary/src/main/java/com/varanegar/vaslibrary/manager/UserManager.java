@@ -16,7 +16,7 @@ import com.varanegar.framework.network.gson.VaranegarGsonBuilder;
 import com.varanegar.framework.util.SecurityUtils;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.OwnerKeysWrapper;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
-import com.varanegar.vaslibrary.messaging.VasInstanceIdService;
+
 import com.varanegar.vaslibrary.model.user.User;
 import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.model.user.UserModelRepository;

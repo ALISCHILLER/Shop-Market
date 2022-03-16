@@ -33,7 +33,7 @@ import com.varanegar.vaslibrary.manager.tourmanager.TourManager;
 import com.varanegar.vaslibrary.manager.updatemanager.TourUpdateFlow;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateCall;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateManager;
-import com.varanegar.vaslibrary.messaging.VasInstanceIdService;
+
 import com.varanegar.vaslibrary.model.UpdateKey;
 import com.varanegar.vaslibrary.model.location.LocationModel;
 import com.varanegar.vaslibrary.model.tour.TourModel;
@@ -147,7 +147,7 @@ public abstract class SyncService extends Service {
                                             reportLocationViewModel.eventData.PersonnelName = userModel.UserName;
                                             reportLocationViewModel.eventData.TourId = tourModel.UniqueId;
                                             reportLocationViewModel.eventData.TourNo = tourModel.TourNo;
-                                            reportLocationViewModel.eventData.FirebaseToken = VasInstanceIdService.getToken(SyncService.this);
+//                                            reportLocationViewModel.eventData.FirebaseToken = VasInstanceIdService.getToken(SyncService.this);
                                             locationManager.addTrackingPoint(reportLocationViewModel, new OnSaveLocation() {
                                                 @Override
                                                 public void onSaved(LocationModel location) {

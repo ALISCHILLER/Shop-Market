@@ -40,6 +40,12 @@
             </intent-filter>
 
         </activity>
+
+        <service android:name=".MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
         <receiver android:name=".jobscheduler.DistJobScheduler" />
         <service android:name=".DistSyncService" />
         <service
@@ -55,10 +61,5 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".messaging.DistMessagingService">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
     </application>
 </manifest>

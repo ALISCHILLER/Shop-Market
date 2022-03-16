@@ -58,8 +58,19 @@ public class MenuTools_Fragmnet extends IMainPageFragment implements
     }
     @Override
     public void onItemClick(int position) {
-        News_Fragment news_fragment=new News_Fragment();
-        getVaranegarActvity().pushFragment(news_fragment);
+        switch (position){
+            case 0:
+                News_Fragment news_fragment=new News_Fragment();
+                getVaranegarActvity().pushFragment(news_fragment);
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            default:
+                break;
+        }
+
     }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

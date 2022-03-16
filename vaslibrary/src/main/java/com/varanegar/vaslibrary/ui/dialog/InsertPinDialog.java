@@ -82,6 +82,7 @@ public class InsertPinDialog extends CuteDialogWithToolbar {
                 PinRequestViewModel pinRequestViewModel=new PinRequestViewModel();
                 pinRequestViewModel.CustomerId=mCustomerId;
                 pinRequestViewModel.PinType=mtypePinCode;
+                pinRequestViewModel.CustomerCallOrderId=mcustomerOrderId;
                 ApiNew apiNew=new ApiNew(getActivity());
                 call=apiNew.sendPinCode(pinRequestViewModel);
                 startProgressDialog();

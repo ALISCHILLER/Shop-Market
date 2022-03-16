@@ -63,7 +63,7 @@ import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.SendTourEventV
 import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.SendTourLocationViewModel;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
-import com.varanegar.vaslibrary.messaging.VasInstanceIdService;
+
 import com.varanegar.vaslibrary.model.TrackingLog;
 import com.varanegar.vaslibrary.model.location.Location;
 import com.varanegar.vaslibrary.model.location.LocationModel;
@@ -385,7 +385,7 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
                                         setEnabled(true);
                                         loginButton.setProgress(0);
                                         getTrackingLicense();
-                                        VasInstanceIdService.refreshToken(getContext(), new VasInstanceIdService.TokenRefreshCallBack() {
+                                        /*VasInstanceIdService.refreshToken(getContext(), new VasInstanceIdService.TokenRefreshCallBack() {
                                             @Override
                                             public void onSuccess(@NonNull String token) {
                                                 Timber.d("Token update succeeded. Token = " + token);
@@ -395,7 +395,7 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
                                             public void onFailure(@Nullable String token, String error) {
                                                 Timber.d("Token update failed. Error=" + error + "  Token=" + token);
                                             }
-                                        });
+                                        });*/
                                     } catch (Exception e) {
                                         Timber.e(e);
                                         if (isResumed()) {

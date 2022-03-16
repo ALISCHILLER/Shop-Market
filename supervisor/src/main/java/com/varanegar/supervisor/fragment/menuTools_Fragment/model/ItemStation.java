@@ -17,6 +17,7 @@ public class ItemStation {
 
     public List<Item> getItem() {
         return Arrays.asList(
+                new Item("لیست پبن کدها مشتریان", R.drawable.news),
                 new Item("لیست درخواست ها", R.drawable.news),
                 new Item("خبرنامه زرماکارون", R.drawable.news)
                );

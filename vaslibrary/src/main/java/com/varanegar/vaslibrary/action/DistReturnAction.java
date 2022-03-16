@@ -146,7 +146,8 @@ public class DistReturnAction extends CheckDistanceAction {
         dialog.setCancelable(false);
         dialog.setClosable(false);
         dialog.setValues(customerCallOrderModels.get(0).PinCode3);
-        dialog.setValuesRequst("pin3",getSelectedId(),customerCallOrderModels.get(0).UniqueId);
+        dialog.setValuesRequst("pin3",getSelectedId(),
+                customerCallOrderModels.get(0).UniqueId);
         dialog.setOnResult(new InsertPinDialog.OnResult() {
             @Override
             public void done() {
