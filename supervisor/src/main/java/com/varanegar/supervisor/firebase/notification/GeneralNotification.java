@@ -15,15 +15,23 @@ import androidx.core.content.ContextCompat;
 import com.varanegar.supervisor.MainActivity;
 import com.varanegar.supervisor.R;
 
-public class GeneralNotification {
+public abstract class GeneralNotification {
+    public static final String ZAR_CHANNEL_ID = "ZAR_CHANNEL";
+    protected Context mContext;
+
+    public GeneralNotification(Context context) {
+        mContext = context;
+        createNotificationChannel(context);
+    }
+
     public static void createNotificationChannel(Context context){
         if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
             NotificationManager notificationManager =
                     context.getSystemService(NotificationManager.class);
 
-            if (notificationManager.getNotificationChannel("ZAR_CHANNEL") == null) {
+            if (notificationManager.getNotificationChannel(ZAR_CHANNEL_ID) == null) {
                 NotificationChannel channel = new NotificationChannel(
-                        "ZAR_CHANNEL", "Zar Notification", NotificationManager.IMPORTANCE_HIGH);
+                        ZAR_CHANNEL_ID, "Zar Notification", NotificationManager.IMPORTANCE_HIGH);
                 channel.setDescription("Zar Notification");
                 channel.setVibrationPattern(new long[]{1000, 1000});
                 channel.enableVibration(true);

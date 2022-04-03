@@ -26,7 +26,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (type != null && !type.isEmpty()) {
             switch (type) {
                 case "request_pin":
-                    new RequestPin(this, remoteMessage).send();
+                    new RequestPin(this, remoteMessage).sendNotification();
                     break;
                 default:
                     break;

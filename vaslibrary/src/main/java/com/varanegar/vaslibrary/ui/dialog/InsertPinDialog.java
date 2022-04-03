@@ -42,16 +42,19 @@ public class InsertPinDialog extends CuteDialogWithToolbar {
     private String pinCode;
     private String mtypePinCode;
     private UUID mCustomerId;
+    private String _dealercode;
     private UUID mcustomerOrderId;
     private ProgressDialog progressDialog;
     private Call<String> call;
     public void setValues(String pinCode) {
         this.pinCode = pinCode;
     }
-    public void setValuesRequst(String typePinCode,UUID customerId ,UUID customerOrderId) {
+    public void setValuesRequst(String typePinCode,UUID customerId ,
+                                UUID customerOrderId,String dealercode) {
         this.mtypePinCode = typePinCode;
         this.mCustomerId=customerId;
         this.mcustomerOrderId=customerOrderId;
+        this._dealercode=dealercode;
     }
     @Override
     public View onCreateDialogView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -83,6 +86,7 @@ public class InsertPinDialog extends CuteDialogWithToolbar {
                 pinRequestViewModel.CustomerId=mCustomerId;
                 pinRequestViewModel.PinType=mtypePinCode;
                 pinRequestViewModel.CustomerCallOrderId=mcustomerOrderId;
+                pinRequestViewModel.DealerCode=_dealercode;
                 ApiNew apiNew=new ApiNew(getActivity());
                 call=apiNew.sendPinCode(pinRequestViewModel);
                 startProgressDialog();

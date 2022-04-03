@@ -9,5 +9,6 @@ CREATE TABLE "PinRequest_" (
 "dealerId" TEXT ,
 "customerName"  TEXT ,
 "dealerName" TEXT,
-"date" DATE
+"date" DATE,
+"customer_call_order" TEXT
 );

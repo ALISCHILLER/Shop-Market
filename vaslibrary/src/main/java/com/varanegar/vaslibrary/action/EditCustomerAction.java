@@ -100,17 +100,19 @@ public class EditCustomerAction extends CheckBarcodeAction {
             /**
              * گرفتن pincode4 برای ویرایش مشتری در presale
              */
+            String dealercode;
             final TourModel tourModel = new TourManager(getActivity()).loadTour();
             for (int i = 0; i < tourModel.Pins.size(); i++) {
-                if(getSelectedId().equals(tourModel.Pins.get(i).CustomerId))
-                    pin=tourModel.Pins.get(i).PinCode4;
+                if(getSelectedId().equals(tourModel.Pins.get(i).CustomerId)) {
+                    pin = tourModel.Pins.get(i).PinCode4;
+                }
             }
             if (!pin.isEmpty() && pin!=null) {
                 InsertPinDialog dialog = new InsertPinDialog();
                 dialog.setCancelable(false);
                 dialog.setClosable(false);
                 dialog.setValues(pin);
-                dialog.setValuesRequst("pin4",getSelectedId(),null);
+                dialog.setValuesRequst("pin4",getSelectedId(),null,null);
                 dialog.setOnResult(new InsertPinDialog.OnResult() {
                     @Override
                     public void done() {

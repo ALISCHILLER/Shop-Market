@@ -154,4 +154,10 @@
     <string name="text4">The Temple of Heaven is an imperial complex of religious buildings situated in the southeastern part…</string>
     <string name="text5">The Aegean Islands are within the sea and some bound it on its southern periphery…</string>
 
+    <string name="pin1">پین رسیدی</string>
+    <string name="pin2">پین چک</string>
+    <string name="pin3">پین کل مرجوع</string>
+    <string name="pin4">پین ویرایش مشتری</string>
+    <string name="request_pin">%s درخواست %s برای مشتری با نام %s را دارد.</string>
+
 </resources>

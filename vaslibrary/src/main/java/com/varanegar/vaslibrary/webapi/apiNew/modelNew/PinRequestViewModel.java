@@ -6,5 +6,5 @@ public class PinRequestViewModel {
     public UUID CustomerId;
     public String PinType;
     public UUID CustomerCallOrderId;
-
+    public String DealerCode;
 }
