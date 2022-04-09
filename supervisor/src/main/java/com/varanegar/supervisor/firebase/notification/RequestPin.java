@@ -95,6 +95,7 @@ public class RequestPin extends GeneralNotification {
         PinRequest_Model pinRequest_model = new PinRequest_Model();
         pinRequest_model.customerId = _customerId;
         pinRequest_model.pinType = _pinType;
+        pinRequest_model.pinName = pinName;
         pinRequest_model.customerName = _customerName;
         pinRequest_model.dealerName = _dealerName;
         pinRequest_model.dealerId = _dealerId;

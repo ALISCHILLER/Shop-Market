@@ -6,6 +6,9 @@ import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
 
 /**
+ Created by MsA on 2022.
+ */
+/**
  * Default implementation of {@link CardSliderLayoutManager.ViewUpdater}
  */
 public class DefaultViewUpdater implements CardSliderLayoutManager.ViewUpdater {

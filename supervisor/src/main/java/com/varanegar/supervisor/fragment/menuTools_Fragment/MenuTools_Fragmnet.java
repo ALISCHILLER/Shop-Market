@@ -15,6 +15,7 @@ import com.varanegar.framework.ui.scrollercard.InfiniteScrollAdapter;
 import com.varanegar.framework.ui.scrollercard.transform.ScaleTransformer;
 import com.varanegar.supervisor.IMainPageFragment;
 import com.varanegar.supervisor.R;
+import com.varanegar.supervisor.fragment.list_notification_Fragment.ListNotification_Fragment;
 import com.varanegar.supervisor.fragment.menuTools_Fragment.model.Item;
 import com.varanegar.supervisor.fragment.menuTools_Fragment.model.ItemStation;
 import com.varanegar.supervisor.fragment.news_fragment.News_Fragment;
@@ -64,6 +65,8 @@ public class MenuTools_Fragmnet extends IMainPageFragment implements
                 getVaranegarActvity().pushFragment(news_fragment);
                 break;
             case 1:
+                ListNotification_Fragment notification_fragment=new ListNotification_Fragment();
+                getVaranegarActvity().pushFragment(notification_fragment);
                 break;
             case 2:
                 break;

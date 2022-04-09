@@ -17,6 +17,8 @@ public class PinRequest_Model extends BaseModel {
     @Column
     public String pinType;//key = pin
     @Column
+    public String pinName;//key = pinname
+    @Column
     public UUID dealerId;//key = user
     @Column
     public String customerName;//key = custoemrName

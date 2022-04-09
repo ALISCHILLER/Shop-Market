@@ -60,8 +60,9 @@ public class News_Fragment extends IMainPageFragment {
 
 
     @Override
-    protected View onCreateContentView(@NonNull LayoutInflater inflater,@Nullable ViewGroup container
-            ,@Nullable Bundle savedInstanceState) {
+    protected View onCreateContentView(@NonNull LayoutInflater inflater,
+                                       @Nullable ViewGroup container,
+                                       @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_news_layout,container,false);
         return view;
     }

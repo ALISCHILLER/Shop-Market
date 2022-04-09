@@ -11,7 +11,9 @@ import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.security.InvalidParameterException;
-
+/**
+ Created by MsA on 2022.
+ */
 /**
  * Extended {@link LinearSnapHelper} that works <b>only</b> with {@link CardSliderLayoutManager}.
  */

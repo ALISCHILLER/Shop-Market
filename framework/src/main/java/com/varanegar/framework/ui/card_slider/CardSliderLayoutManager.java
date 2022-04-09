@@ -22,7 +22,9 @@ import com.varanegar.framework.R;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
-
+/**
+ Created by MsA on 2022.
+ */
 /**
  * A {@link RecyclerView.LayoutManager} implementation.
  */
