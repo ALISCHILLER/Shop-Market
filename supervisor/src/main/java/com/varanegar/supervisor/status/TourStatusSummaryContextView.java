@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.varanegar.framework.base.MainVaranegarActivity;
@@ -22,12 +21,12 @@ import com.varanegar.framework.util.report.ReportView;
 import com.varanegar.framework.util.report.SimpleReportAdapter;
 import com.varanegar.supervisor.R;
 import com.varanegar.supervisor.webapi.SupervisorApi;
-import com.varanegar.supervisor.webapi.TourCustomerSummaryView;
-import com.varanegar.supervisor.webapi.TourCustomerSummaryViewModel;
+import com.varanegar.supervisor.webapi.model_old.TourCustomerSummaryView;
+import com.varanegar.supervisor.webapi.model_old.TourCustomerSummaryViewModel;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
 import com.varanegar.vaslibrary.manager.locationmanager.LocationManager;
 import com.varanegar.vaslibrary.webapi.tour.TourStatus;
-import com.varanegar.supervisor.webapi.TourStatusSummaryViewModel;
+import com.varanegar.supervisor.webapi.model_old.TourStatusSummaryViewModel;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 
 import java.util.List;

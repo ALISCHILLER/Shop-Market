@@ -9,8 +9,8 @@ import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.util.recycler.BaseRecyclerAdapter;
 import com.varanegar.framework.util.recycler.BaseViewHolder;
 import com.varanegar.supervisor.R;
-import com.varanegar.supervisor.webapi.CustomerCallOrderLineOrderQtyDetailViewModel;
-import com.varanegar.supervisor.webapi.CustomerCallOrderLineViewModel;
+import com.varanegar.supervisor.webapi.model_old.CustomerCallOrderLineOrderQtyDetailViewModel;
+import com.varanegar.supervisor.webapi.model_old.CustomerCallOrderLineViewModel;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
 
 import java.math.BigDecimal;

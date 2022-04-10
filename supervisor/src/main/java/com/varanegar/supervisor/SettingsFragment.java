@@ -37,7 +37,7 @@ import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.supervisor.model.VisitorManager;
 import com.varanegar.supervisor.model.VisitorModel;
 import com.varanegar.supervisor.webapi.SupervisorApi;
-import com.varanegar.supervisor.webapi.VisitorVisitInfoViewModel;
+import com.varanegar.supervisor.webapi.model_old.VisitorVisitInfoViewModel;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
 import com.varanegar.vaslibrary.manager.UserManager;
 import com.varanegar.vaslibrary.manager.updatemanager.QuestionnaireUpdateFlow;

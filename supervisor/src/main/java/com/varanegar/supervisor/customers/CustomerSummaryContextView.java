@@ -40,7 +40,7 @@ import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.framework.util.recycler.BaseRecyclerAdapter;
 import com.varanegar.framework.util.recycler.ItemContextView;
 import com.varanegar.supervisor.R;
-import com.varanegar.supervisor.webapi.CustomerSummaryViewModel;
+import com.varanegar.supervisor.webapi.model_old.CustomerSummaryViewModel;
 import com.varanegar.supervisor.webapi.SupervisorApi;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;

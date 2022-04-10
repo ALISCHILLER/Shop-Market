@@ -3,7 +3,6 @@ package com.varanegar.supervisor.webapi;
 import androidx.annotation.Nullable;
 
 import com.varanegar.supervisor.customreport.orderreturn.model.ReturnDealerModel;
-import com.varanegar.supervisor.customreport.orderstatus.model.DealersItem;
 import com.varanegar.supervisor.customreport.orderstatus.model.OrderStatusReport;
 import com.varanegar.supervisor.customreport.orderstatus.model.orderStatusModel;
 import com.varanegar.supervisor.model.ProductModel;
@@ -11,9 +10,19 @@ import com.varanegar.supervisor.model.StatusConfigModel;
 import com.varanegar.supervisor.model.SupervisorTourId;
 import com.varanegar.supervisor.model.changeOrdersStatus.ChangeOrdersStatusmModel;
 import com.varanegar.supervisor.model.reviewreport.ReviewreportModel;
-import com.varanegar.supervisor.model.sendAnswersQustion.SyncGetTourModel;
 import com.varanegar.supervisor.model.tracking.RouteMapModel;
 import com.varanegar.supervisor.model.tracking.RouteMapPostModel;
+import com.varanegar.supervisor.webapi.model_new.send_pincode.PinRequestViewModel;
+import com.varanegar.supervisor.webapi.model_old.CustomerCallViewModel;
+import com.varanegar.supervisor.webapi.model_old.CustomerSummaryViewModel;
+import com.varanegar.supervisor.webapi.model_old.EventViewModel;
+import com.varanegar.supervisor.webapi.model_old.LastPointsParam;
+import com.varanegar.supervisor.webapi.model_old.MasterEventViewModel;
+import com.varanegar.supervisor.webapi.model_old.OnHandQtyReportViewModel;
+import com.varanegar.supervisor.webapi.model_old.PersonnelPointsParam;
+import com.varanegar.supervisor.webapi.model_old.TourCustomerSummaryViewModel;
+import com.varanegar.supervisor.webapi.model_old.TourStatusSummaryViewModel;
+import com.varanegar.supervisor.webapi.model_old.VisitorVisitInfoViewModel;
 import com.varanegar.vaslibrary.model.CheckCustomerCreditsModel;
 import com.varanegar.vaslibrary.model.customer.SupervisorCustomerModel;
 import com.varanegar.supervisor.model.VisitorModel;
@@ -169,4 +178,9 @@ public interface ISupervisorApi {
     @POST("api/dsd/tracking/ldprsactsv2")
     Call<List<RouteMapModel>>RouteMap (
             @Body RouteMapPostModel routeMapPostModel);
+
+
+    @POST("api/v2/ngt/customer/pinrapprove")
+    Call<String>SendPinrapprove (
+            @Body PinRequestViewModel pinRequestViewModel);
 }

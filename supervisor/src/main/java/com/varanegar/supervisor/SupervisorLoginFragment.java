@@ -349,7 +349,8 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
                                     public void onNetworkFailure(Throwable t) {
                                         MainVaranegarActivity activity = getVaranegarActvity();
                                         if (activity != null && !activity.isFinishing() && isResumed())
-                                            activity.showSnackBar(R.string.connection_to_server_failed, MainVaranegarActivity.Duration.Short);
+                                            activity.showSnackBar(R.string.connection_to_server_failed,
+                                                    MainVaranegarActivity.Duration.Short);
                                         setEnabled(true);
                                         loginButton.setProgress(0);
                                     }

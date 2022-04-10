@@ -1,9 +1,11 @@
-package com.varanegar.supervisor.webapi;
+package com.varanegar.supervisor.webapi.model_old;
 
 import com.varanegar.framework.database.model.BaseModel;
 import com.varanegar.java.util.Currency;
 import com.varanegar.processor.annotations.Column;
 import com.varanegar.processor.annotations.Table;
+import com.varanegar.supervisor.webapi.model_old.CustomerCallOrderViewModel;
+import com.varanegar.supervisor.webapi.model_old.CustomerCallReturnViewModel;
 
 import java.util.Date;
 import java.util.List;

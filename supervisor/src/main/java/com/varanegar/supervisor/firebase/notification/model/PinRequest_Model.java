@@ -25,7 +25,9 @@ public class PinRequest_Model extends BaseModel {
     @Column
     public String dealerName;//key = userName
     @Column
-    public Date date;
+    public String date;
+    @Column
+    public String Status;
     @Column
     public UUID customer_call_order;
 }

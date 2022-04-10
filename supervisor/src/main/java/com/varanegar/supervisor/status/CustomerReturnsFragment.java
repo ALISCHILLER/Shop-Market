@@ -12,21 +12,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.varanegar.framework.util.HelperMethods;
 import com.varanegar.framework.util.component.PairedItems;
 import com.varanegar.framework.util.recycler.BaseRecyclerAdapter;
 import com.varanegar.framework.util.recycler.BaseRecyclerView;
 import com.varanegar.framework.util.recycler.BaseViewHolder;
-import com.varanegar.framework.util.recycler.DividerItemDecoration;
 import com.varanegar.framework.util.recycler.selectionlistadapter.BaseSelectionRecyclerAdapter;
 import com.varanegar.framework.util.report.ReportColumns;
 import com.varanegar.framework.util.report.ReportView;
 import com.varanegar.framework.util.report.SimpleReportAdapter;
 import com.varanegar.supervisor.R;
-import com.varanegar.supervisor.webapi.CustomerCallReturnLineView;
-import com.varanegar.supervisor.webapi.CustomerCallReturnLineViewModel;
-import com.varanegar.supervisor.webapi.CustomerCallReturnViewModel;
-import com.varanegar.supervisor.webapi.CustomerCallViewModel;
+import com.varanegar.supervisor.webapi.model_old.CustomerCallReturnLineView;
+import com.varanegar.supervisor.webapi.model_old.CustomerCallReturnLineViewModel;
+import com.varanegar.supervisor.webapi.model_old.CustomerCallReturnViewModel;
+import com.varanegar.supervisor.webapi.model_old.CustomerCallViewModel;
 import com.varanegar.vaslibrary.model.returnType.ReturnType;
 
 import java.util.ArrayList;

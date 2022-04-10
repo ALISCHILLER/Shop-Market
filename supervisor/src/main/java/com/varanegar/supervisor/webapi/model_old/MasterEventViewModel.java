@@ -1,4 +1,6 @@
-package com.varanegar.supervisor.webapi;
+package com.varanegar.supervisor.webapi.model_old;
+
+import com.varanegar.supervisor.webapi.model_old.EventViewModel;
 
 import java.util.List;
 import java.util.UUID;

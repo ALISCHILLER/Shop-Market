@@ -8,7 +8,6 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.varanegar.framework.network.gson.VaranegarGsonBuilder;
 import com.varanegar.supervisor.customreport.orderreturn.model.ReturnDealerModel;
-import com.varanegar.supervisor.customreport.orderstatus.model.DealersItem;
 import com.varanegar.supervisor.customreport.orderstatus.model.OrderStatusReport;
 import com.varanegar.supervisor.customreport.orderstatus.model.orderStatusModel;
 import com.varanegar.supervisor.model.ProductModel;
@@ -18,6 +17,17 @@ import com.varanegar.supervisor.model.changeOrdersStatus.ChangeOrdersStatusmMode
 import com.varanegar.supervisor.model.reviewreport.ReviewreportModel;
 import com.varanegar.supervisor.model.tracking.RouteMapModel;
 import com.varanegar.supervisor.model.tracking.RouteMapPostModel;
+import com.varanegar.supervisor.webapi.model_new.send_pincode.PinRequestViewModel;
+import com.varanegar.supervisor.webapi.model_old.CustomerCallViewModel;
+import com.varanegar.supervisor.webapi.model_old.CustomerSummaryViewModel;
+import com.varanegar.supervisor.webapi.model_old.EventViewModel;
+import com.varanegar.supervisor.webapi.model_old.LastPointsParam;
+import com.varanegar.supervisor.webapi.model_old.MasterEventViewModel;
+import com.varanegar.supervisor.webapi.model_old.OnHandQtyReportViewModel;
+import com.varanegar.supervisor.webapi.model_old.PersonnelPointsParam;
+import com.varanegar.supervisor.webapi.model_old.TourCustomerSummaryViewModel;
+import com.varanegar.supervisor.webapi.model_old.TourStatusSummaryViewModel;
+import com.varanegar.supervisor.webapi.model_old.VisitorVisitInfoViewModel;
 import com.varanegar.vaslibrary.model.CheckCustomerCreditsModel;
 import com.varanegar.vaslibrary.model.customer.SupervisorCustomerModel;
 import com.varanegar.supervisor.model.VisitorModel;
@@ -41,7 +51,6 @@ import java.util.UUID;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.http.Body;
 import timber.log.Timber;
 
 /**
@@ -54,8 +63,16 @@ public class SupervisorApi extends BaseApi implements ISupervisorApi {
     }
 
     @Override
-    public Call<List<TourStatusSummaryViewModel>> tour(int tourViewType, boolean Show_ReadyToSend, boolean Show_Sent, boolean Show_InProgress, boolean Show_Received, boolean Show_Finished, boolean Show_Canceled, boolean Show_Deactivated, String from_date, String to_date, UUID agentUniqueId) {
-        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).tour(tourViewType, Show_ReadyToSend, Show_Sent, Show_InProgress, Show_Received, Show_Finished, Show_Canceled, Show_Deactivated, from_date, to_date, agentUniqueId);
+    public Call<List<TourStatusSummaryViewModel>> tour(int tourViewType,
+                                                       boolean Show_ReadyToSend, boolean Show_Sent,
+                                                       boolean Show_InProgress, boolean Show_Received,
+                                                       boolean Show_Finished, boolean Show_Canceled,
+                                                       boolean Show_Deactivated, String from_date,
+                                                       String to_date, UUID agentUniqueId) {
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).tour(tourViewType, Show_ReadyToSend, Show_Sent,
+                        Show_InProgress, Show_Received, Show_Finished, Show_Canceled,
+                        Show_Deactivated, from_date, to_date, agentUniqueId);
     }
 
     @Override
@@ -83,47 +100,62 @@ public class SupervisorApi extends BaseApi implements ISupervisorApi {
 
     @Override
     public Call<List<SupervisorFullCustomerModel>> getsupervisorCustomers(List<String> DealersId) {
-        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).getsupervisorCustomers(DealersId);
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).getsupervisorCustomers(DealersId);
     }
 
     @Override
     public Call<SupervisorTourId> getTourBySupervisorId(UUID supervisorId) {
-        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).getTourBySupervisorId(supervisorId);
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).getTourBySupervisorId(supervisorId);
     }
 
     @Override
     public Call<Void> supervisor_tour_sent(UUID id) {
-        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).supervisor_tour_sent(id);
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).supervisor_tour_sent(id);
     }
 
     @Override
     public Call<Void> tourreceived(UUID id) {
-        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).tourreceived(id);
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).tourreceived(id);
     }
 
     @Override
     public Call<List<OrderStatusReport>> OrderStatusReport(orderStatusModel orderStatusModel) {
-        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).OrderStatusReport(orderStatusModel);
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).OrderStatusReport(orderStatusModel);
     }
 
     @Override
     public Call<List<ReturnDealerModel>> GetReturnReport(orderStatusModel param) {
-        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).GetReturnReport(param);
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).GetReturnReport(param);
     }
 
     @Override
     public Call<List<CheckCustomerCreditsModel>> CheckCustomerCredits(List<String> customerCode) {
-        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).CheckCustomerCredits(customerCode);
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).CheckCustomerCredits(customerCode);
     }
 
     @Override
     public Call<List<RouteMapModel>> RouteMap(RouteMapPostModel routeMapPostModel) {
-        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).RouteMap(routeMapPostModel);
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).RouteMap(routeMapPostModel);
+    }
+
+    @Override
+    public Call<String> SendPinrapprove(PinRequestViewModel pinRequestViewModel) {
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).SendPinrapprove(pinRequestViewModel);
     }
 
     @Override
     public Call<List<SupervisorCustomerModel>> getCustomers(UUID supervisorId) {
-        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).getCustomers(supervisorId);
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).getCustomers(supervisorId);
     }
 
     @Override
@@ -145,21 +177,31 @@ public class SupervisorApi extends BaseApi implements ISupervisorApi {
     }
 
     @Override
-    public Call<ResponseBody> putCustomerCall(UUID customerCallId, UUID dealerId, CustomerCallViewModel customerCallViewModel) {
+    public Call<ResponseBody> putCustomerCall(UUID customerCallId, UUID dealerId,
+                                              CustomerCallViewModel customerCallViewModel) {
         return getRetrofitBuilder(TokenType.UserToken, getBaseUrl())
-                .build().create(ISupervisorApi.class).putCustomerCall(customerCallId, dealerId, customerCallViewModel);
+                .build().create(ISupervisorApi.class).putCustomerCall(customerCallId,
+                        dealerId, customerCallViewModel);
     }
 
     @Override
-    public Call<CustomerCallViewModel> customerCalls(String customerCallUniqueId, UUID subsystemTypeId) {
+    public Call<CustomerCallViewModel> customerCalls(String customerCallUniqueId,
+                                                     UUID subsystemTypeId) {
         return getRetrofitBuilder(TokenType.UserToken, getBaseUrl())
-                .build().create(ISupervisorApi.class).customerCalls(customerCallUniqueId, subsystemTypeId);
+                .build().create(ISupervisorApi.class).customerCalls(customerCallUniqueId,
+                        subsystemTypeId);
     }
 
     @Override
-    public Call<List<CustomerCallViewModel>> customerCalls(boolean showConfirmed, boolean showUnconfirmed, boolean showCanceled, String startDate, String endDate , UUID agentUniqueId) {
+    public Call<List<CustomerCallViewModel>> customerCalls(boolean showConfirmed,
+                                                           boolean showUnconfirmed,
+                                                           boolean showCanceled,
+                                                           String startDate,
+                                                           String endDate ,
+                                                           UUID agentUniqueId) {
         return getRetrofitBuilder(TokenType.UserToken, getBaseUrl())
-                .build().create(ISupervisorApi.class).customerCalls(showConfirmed, showUnconfirmed, showCanceled, startDate, endDate , agentUniqueId);
+                .build().create(ISupervisorApi.class).customerCalls(showConfirmed,
+                        showUnconfirmed, showCanceled, startDate, endDate , agentUniqueId);
     }
 
     @Override
@@ -170,74 +212,99 @@ public class SupervisorApi extends BaseApi implements ISupervisorApi {
 
     @Override
     public Call<List<EventViewModel>> loadPersonnelEvents(PersonnelPointsParam parameter) {
-        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).loadPersonnelEvents(parameter);
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).loadPersonnelEvents(parameter);
     }
 
     @Override
     public Call<List<MasterEventViewModel>> loadPersonnelPath(PersonnelPointsParam parameter) {
-        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).loadPersonnelPath(parameter);
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).loadPersonnelPath(parameter);
     }
 
     @Override
     public Call<List<VisitorModel>> getVisitors(String supervisorId) {
-        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).getVisitors(supervisorId);
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).getVisitors(supervisorId);
     }
 
     @Override
-    public Call<List<OrderReviewReportViewModel>> order(String dealerId, String startDate, String endDate) {
-        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).order(dealerId, startDate, endDate);
+    public Call<List<OrderReviewReportViewModel>> order(String dealerId, String startDate,
+                                                        String endDate) {
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).order(dealerId, startDate, endDate);
     }
 
     @Override
     public Call<List<ReviewreportModel>> Reviewreport(StatusConfigModel statusConfigModel) {
-        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).Reviewreport(statusConfigModel);
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).Reviewreport(statusConfigModel);
     }
 
     @Override
-    public Call<List<SellReviewReportViewModel>> sell(String dealerId, String startDate, String endDate) {
-        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).sell(dealerId, startDate, endDate);
+    public Call<List<SellReviewReportViewModel>> sell(String dealerId, String startDate,
+                                                      String endDate) {
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).sell(dealerId, startDate, endDate);
     }
 
     @Override
-    public Call<List<SellReturnReviewReportViewModel>> sellReturn(String dealerId, String startDate, String endDate) {
-        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).sellReturn(dealerId, startDate, endDate);
+    public Call<List<SellReturnReviewReportViewModel>> sellReturn(String dealerId, String startDate,
+                                                                  String endDate) {
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).sellReturn(dealerId, startDate, endDate);
     }
 
     @Override
-    public Call<List<ProductReviewReportViewModel>> product(String dealerId, String startDate, String endDate) {
-        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).product(dealerId, startDate, endDate);
+    public Call<List<ProductReviewReportViewModel>> product(String dealerId, String startDate,
+                                                            String endDate) {
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).product(dealerId, startDate, endDate);
     }
 
     @Override
     public Call<OnHandQtyReportViewModel> onHandQty(UUID supervisorId, int deviceSettingNo) {
-        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).onHandQty(supervisorId, deviceSettingNo);
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).onHandQty(supervisorId, deviceSettingNo);
     }
 
     @Override
-    public Call<List<ProductGroupReviewReportViewModel>> productGroup(String dealerId, String startDate, String endDate) {
-        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).productGroup(dealerId, startDate, endDate);
+    public Call<List<ProductGroupReviewReportViewModel>> productGroup(String dealerId,
+                                                                      String startDate,
+                                                                      String endDate) {
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).productGroup(dealerId, startDate, endDate);
     }
 
     @Override
     public Call<List<ProductModel>> getProducts(@Nullable String searchText) {
-        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).getProducts(searchText);
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).getProducts(searchText);
     }
 
 
 
     @Override
-    public Call<List<CustomerSummaryViewModel>> getCustomerFinanceData(UUID customerId, UUID dealerId, UUID subsystemTypeId, int deviceSettingNo) {
-        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).getCustomerFinanceData(customerId, dealerId, subsystemTypeId, deviceSettingNo);
+    public Call<List<CustomerSummaryViewModel>> getCustomerFinanceData(UUID customerId,
+                                                                       UUID dealerId,
+                                                                       UUID subsystemTypeId,
+                                                                       int deviceSettingNo) {
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).getCustomerFinanceData(customerId,
+                        dealerId, subsystemTypeId, deviceSettingNo);
     }
 
     @Override
     public Call<OrderSummaryResultViewModel> getOrderPreview(OrderSummaryRequestViewModel requestViewModel) {
-        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).getOrderPreview(requestViewModel);
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).getOrderPreview(requestViewModel);
     }
 
     @Override
-    public Call<List<VisitorVisitInfoViewModel>> getVisitorsVisitInfo(String supervisorId, List<String> dealerId) {
-        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).getVisitorsVisitInfo(supervisorId, dealerId);
+    public Call<List<VisitorVisitInfoViewModel>> getVisitorsVisitInfo(String supervisorId,
+                                                                      List<String> dealerId) {
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).getVisitorsVisitInfo(supervisorId, dealerId);
     }
 
     @Nullable
@@ -257,7 +324,8 @@ public class SupervisorApi extends BaseApi implements ISupervisorApi {
         } else {
             Gson gson = VaranegarGsonBuilder.build(false).create();
             try {
-                JsonReader reader = new JsonReader(new StringReader("{\"eventData\":" + eventViewModel.JData + "}"));
+                JsonReader reader = new JsonReader(new StringReader("{\"eventData\":" +
+                        eventViewModel.JData + "}"));
                 reader.setLenient(true);
                 Object obj = gson.fromJson(reader, EventTypeId.getClass(eventViewModel.PointType));
                 BaseEventLocationViewModel locationViewModel = (BaseEventLocationViewModel) obj;

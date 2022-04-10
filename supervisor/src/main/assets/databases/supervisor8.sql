@@ -3,13 +3,14 @@
 -- ----------------------------
 
 CREATE TABLE "PinRequest_" (
-"UniqueId" INTEGER PRIMARY KEY AUTOINCREMENT ,
+"UniqueId" TEXT PRIMARY KEY  ,
 "customerId"  TEXT ,
 "pinType"  TEXT  COLLATE NOCASE ,
 "pinName"  TEXT  COLLATE NOCASE ,
 "dealerId" TEXT ,
 "customerName"  TEXT ,
 "dealerName" TEXT,
-"date" DATE,
+"date" TEXT,
+"Status" TEXT,
 "customer_call_order" TEXT
 );

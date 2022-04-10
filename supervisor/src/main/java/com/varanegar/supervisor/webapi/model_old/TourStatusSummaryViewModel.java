@@ -1,4 +1,4 @@
-package com.varanegar.supervisor.webapi;
+package com.varanegar.supervisor.webapi.model_old;
 
 import com.varanegar.framework.database.model.BaseModel;
 import com.varanegar.java.util.Currency;

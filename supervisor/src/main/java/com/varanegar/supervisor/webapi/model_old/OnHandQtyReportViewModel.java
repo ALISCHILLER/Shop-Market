@@ -1,6 +1,4 @@
-package com.varanegar.supervisor.webapi;
-
-import com.varanegar.framework.database.model.BaseModel;
+package com.varanegar.supervisor.webapi.model_old;
 
 import java.util.List;
 

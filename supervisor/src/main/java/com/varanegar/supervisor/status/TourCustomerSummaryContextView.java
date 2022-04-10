@@ -20,9 +20,9 @@ import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.framework.util.recycler.BaseRecyclerAdapter;
 import com.varanegar.framework.util.recycler.ItemContextView;
 import com.varanegar.supervisor.R;
-import com.varanegar.supervisor.webapi.CustomerCallViewModel;
+import com.varanegar.supervisor.webapi.model_old.CustomerCallViewModel;
 import com.varanegar.supervisor.webapi.SupervisorApi;
-import com.varanegar.supervisor.webapi.TourCustomerSummaryViewModel;
+import com.varanegar.supervisor.webapi.model_old.TourCustomerSummaryViewModel;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 
 import okhttp3.Request;

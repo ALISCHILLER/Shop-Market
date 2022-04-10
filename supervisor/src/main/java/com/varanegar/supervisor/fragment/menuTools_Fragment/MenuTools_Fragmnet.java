@@ -16,6 +16,7 @@ import com.varanegar.framework.ui.scrollercard.transform.ScaleTransformer;
 import com.varanegar.supervisor.IMainPageFragment;
 import com.varanegar.supervisor.R;
 import com.varanegar.supervisor.fragment.list_notification_Fragment.ListNotification_Fragment;
+import com.varanegar.supervisor.fragment.list_pincode_Fragment.ListPinCode_Fragment;
 import com.varanegar.supervisor.fragment.menuTools_Fragment.model.Item;
 import com.varanegar.supervisor.fragment.menuTools_Fragment.model.ItemStation;
 import com.varanegar.supervisor.fragment.news_fragment.News_Fragment;
@@ -60,7 +61,7 @@ public class MenuTools_Fragmnet extends IMainPageFragment implements
     @Override
     public void onItemClick(int position) {
         switch (position){
-            case 0:
+            case 2:
                 News_Fragment news_fragment=new News_Fragment();
                 getVaranegarActvity().pushFragment(news_fragment);
                 break;
@@ -68,7 +69,9 @@ public class MenuTools_Fragmnet extends IMainPageFragment implements
                 ListNotification_Fragment notification_fragment=new ListNotification_Fragment();
                 getVaranegarActvity().pushFragment(notification_fragment);
                 break;
-            case 2:
+            case 0:
+                ListPinCode_Fragment listPinCode_fragment=new ListPinCode_Fragment();
+                getVaranegarActvity().pushFragment(listPinCode_fragment);
                 break;
             default:
                 break;

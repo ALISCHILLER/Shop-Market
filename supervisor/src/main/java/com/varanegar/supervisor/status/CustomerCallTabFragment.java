@@ -3,7 +3,7 @@ package com.varanegar.supervisor.status;
 import androidx.annotation.CallSuper;
 
 import com.varanegar.framework.base.VaranegarFragment;
-import com.varanegar.supervisor.webapi.CustomerCallViewModel;
+import com.varanegar.supervisor.webapi.model_old.CustomerCallViewModel;
 
 /**
  * Created by A.Torabi on 7/10/2018.

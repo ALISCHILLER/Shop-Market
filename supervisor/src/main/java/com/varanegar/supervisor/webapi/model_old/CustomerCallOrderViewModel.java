@@ -1,6 +1,7 @@
-package com.varanegar.supervisor.webapi;
+package com.varanegar.supervisor.webapi.model_old;
 
 import com.varanegar.java.util.Currency;
+import com.varanegar.supervisor.webapi.model_old.CustomerCallOrderLineViewModel;
 
 import java.util.Date;
 import java.util.List;

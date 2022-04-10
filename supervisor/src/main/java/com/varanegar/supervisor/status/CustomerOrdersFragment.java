@@ -26,10 +26,10 @@ import com.varanegar.framework.util.recycler.selectionlistadapter.BaseSelectionR
 import com.varanegar.java.util.Currency;
 import com.varanegar.supervisor.R;
 import com.varanegar.supervisor.model.ProductModel;
-import com.varanegar.supervisor.webapi.CustomerCallOrderLineOrderQtyDetailViewModel;
-import com.varanegar.supervisor.webapi.CustomerCallOrderLineViewModel;
-import com.varanegar.supervisor.webapi.CustomerCallOrderViewModel;
-import com.varanegar.supervisor.webapi.CustomerCallViewModel;
+import com.varanegar.supervisor.webapi.model_old.CustomerCallOrderLineOrderQtyDetailViewModel;
+import com.varanegar.supervisor.webapi.model_old.CustomerCallOrderLineViewModel;
+import com.varanegar.supervisor.webapi.model_old.CustomerCallOrderViewModel;
+import com.varanegar.supervisor.webapi.model_old.CustomerCallViewModel;
 import com.varanegar.supervisor.webapi.SupervisorApi;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;

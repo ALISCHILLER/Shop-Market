@@ -7,6 +7,6 @@
     <string name="retuned_from_dist">برگشت از توزیع</string>
     <string name="well_returned">برگشتی سالم</string>
     <string name="waste_returned">برگشتی ضایعاتی</string>
-
+    <string name="pin_approved">پین درخواست شده برای مشتری با نام %s برابر است با: %s</string>
     <string name="default_notification_channel_id" translatable="false">پیام های دریافتی</string>
 </resources>

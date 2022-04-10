@@ -1,4 +1,4 @@
-package com.varanegar.supervisor.webapi;
+package com.varanegar.supervisor.webapi.model_old;
 
 import java.util.Date;
 import java.util.UUID;

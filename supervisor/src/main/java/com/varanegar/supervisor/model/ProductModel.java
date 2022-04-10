@@ -1,6 +1,6 @@
 package com.varanegar.supervisor.model;
 
-import com.varanegar.supervisor.webapi.CustomerCallOrderLineOrderQtyDetailViewModel;
+import com.varanegar.supervisor.webapi.model_old.CustomerCallOrderLineOrderQtyDetailViewModel;
 
 import java.util.List;
 import java.util.UUID;

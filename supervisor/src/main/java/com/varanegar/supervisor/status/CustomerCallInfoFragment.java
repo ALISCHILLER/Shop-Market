@@ -11,10 +11,8 @@ import com.varanegar.framework.util.component.PairedItems;
 import com.varanegar.framework.util.datetime.DateFormat;
 import com.varanegar.framework.util.datetime.DateHelper;
 import com.varanegar.supervisor.R;
-import com.varanegar.supervisor.webapi.CustomerCallViewModel;
+import com.varanegar.supervisor.webapi.model_old.CustomerCallViewModel;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
-
-import java.util.Locale;
 
 /**
  * Created by A.Torabi on 7/10/2018.

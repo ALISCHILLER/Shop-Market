@@ -9,84 +9,83 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <com.varanegar.framework.util.component.PairedItemsSpinner
-            android:id="@+id/visitor_name_paired_items"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/customer_condition_paired_spinner"
-            app:title="@string/visitor_name_label" />
+            <com.varanegar.framework.util.component.PairedItemsSpinner
+                android:id="@+id/visitor_name_paired_items"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/customer_condition_paired_spinner"
+                app:title="@string/visitor_name_label" />
 
-        <com.varanegar.framework.util.component.PairedItemsSpinner
-            android:id="@+id/customer_condition_paired_spinner"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toStartOf="@+id/visitor_name_paired_items"
-            app:layout_constraintStart_toStartOf="parent"
-            app:title="@string/Customer_black_label" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            <com.varanegar.framework.util.component.PairedItemsSpinner
+                android:id="@+id/customer_condition_paired_spinner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@+id/visitor_name_paired_items"
+                app:layout_constraintStart_toStartOf="parent"
+                app:title="@string/Customer_black_label" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
 
-        <EditText
-            android:id="@+id/search_edit_text"
+            <EditText
+                android:id="@+id/search_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/padding_xsmall"
+                android:layout_marginLeft="@dimen/padding_xsmall"
+                android:layout_marginTop="@dimen/padding_xsmall"
+                android:layout_marginEnd="@dimen/padding_xsmall"
+                android:layout_marginRight="@dimen/padding_xsmall"
+                android:layout_marginBottom="@dimen/padding_xsmall"
+                android:background="@android:drawable/editbox_background"
+                android:hint="@string/search"
+                android:imeActionLabel="@string/search"
+                android:imeOptions="actionDone"
+                android:lines="1"
+                android:paddingLeft="@dimen/padding_xxlarge"
+                android:paddingTop="@dimen/padding_default"
+                android:paddingRight="@dimen/padding_xxlarge"
+                android:paddingBottom="@dimen/padding_default"
+                android:singleLine="true" />
+
+
+            <ImageView
+                android:id="@+id/clear_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:paddingLeft="@dimen/padding_default"
+                android:paddingRight="@dimen/padding_default"
+                android:src="@drawable/ic_clear_red_900_24dp"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/error_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/padding_xsmall"
-            android:layout_marginLeft="@dimen/padding_xsmall"
-            android:layout_marginTop="@dimen/padding_xsmall"
-            android:layout_marginEnd="@dimen/padding_xsmall"
-            android:layout_marginRight="@dimen/padding_xsmall"
-            android:layout_marginBottom="@dimen/padding_xsmall"
-            android:background="@android:drawable/editbox_background"
-            android:hint="@string/search"
-            android:imeActionLabel="@string/search"
-            android:imeOptions="actionDone"
-            android:lines="1"
-            android:paddingLeft="@dimen/padding_xxlarge"
-            android:paddingTop="@dimen/padding_default"
-            android:paddingRight="@dimen/padding_xxlarge"
-            android:paddingBottom="@dimen/padding_default"
-            android:singleLine="true" />
-
-
-        <ImageView
-            android:id="@+id/clear_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:paddingLeft="@dimen/padding_default"
-            android:paddingRight="@dimen/padding_default"
-            android:src="@drawable/ic_clear_red_900_24dp"
+            android:gravity="center"
+            android:padding="@dimen/padding_large"
+            android:text="@string/there_is_no_customer"
+            android:textColor="@color/red_error"
             android:visibility="gone" />
 
-    </RelativeLayout>
-
-    <TextView
-        android:id="@+id/error_text_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="@dimen/padding_large"
-        android:text="@string/there_is_no_customer"
-        android:textColor="@color/red_error"
-        android:visibility="gone" />
-
-    <com.varanegar.framework.util.report.ReportView
-        android:id="@+id/customers_report_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/padding_xsmall" />
+        <com.varanegar.framework.util.report.ReportView
+            android:id="@+id/customers_report_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_xsmall" />
     </LinearLayout>
 
 
