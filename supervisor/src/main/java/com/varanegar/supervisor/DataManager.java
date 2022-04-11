@@ -15,6 +15,8 @@ import com.varanegar.framework.util.datetime.DateFormat;
 import com.varanegar.framework.util.datetime.DateHelper;
 import com.varanegar.framework.validation.ValidationException;
 import com.varanegar.supervisor.model.SupervisorTourId;
+import com.varanegar.supervisor.webapi.model_new.datamanager.CustomerPinModel;
+import com.varanegar.supervisor.webapi.model_new.datamanager.CustomerPinModelRepository;
 import com.varanegar.vaslibrary.manager.updatemanager.ProductUpdateFlow;
 import com.varanegar.vaslibrary.manager.updatemanager.QuestionnaireUpdateFlow;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateManager;
@@ -129,7 +131,40 @@ public class DataManager {
     }
 
 
+    public void getCustomerPin2(final Callback callback){
+        _api.runWebRequest(_api.GetPinCodes(), new WebCallBack<List<CustomerPinModel>>() {
+            @Override
+            protected void onFinish() {
 
+            }
+
+            @Override
+            protected void onSuccess(List<CustomerPinModel> result, Request request) {
+             try {
+                if (result != null && result.size() > 0) {
+                    CustomerPinModelRepository pinModelRepository=new CustomerPinModelRepository();
+                    pinModelRepository.deleteAll();
+                    pinModelRepository.insertOrUpdate(result);
+                }
+
+                callback.onSuccess();
+            } catch (Exception e) {
+                callback.onError(_context.getString(R.string.error_saving_request));
+            }
+            }
+
+            @Override
+            protected void onApiFailure(ApiError error, Request request) {
+                String err = WebApiErrorBody.log(error, _context);
+                callback.onError(err);
+            }
+
+            @Override
+            protected void onNetworkFailure(Throwable t, Request request) {
+                callback.onError(_context.getString(R.string.connection_to_server_failed));
+            }
+        });
+    }
     public void getVisitor2(final Callback callback, final AfterCallback afterCallback) {
         visitorIds = new ArrayList<>();
         if (_userModel != null && _userModel.UniqueId!=null) {
@@ -689,8 +724,8 @@ public class DataManager {
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.clear();
                     editor.apply();
+                    getCustomerPin(callback, context);
 
-                    supervisor_tour_sent(callback, context);
 
                 } catch (Exception e) {
                     callback.onError(context.getString(R.string.error_saving_request));
@@ -710,7 +745,45 @@ public class DataManager {
             }
         });
     }
+    public static void getCustomerPin(final Callback callback, final Context context) {
+        SupervisorApi api = new SupervisorApi(context);
+        api.runWebRequest(api.GetPinCodes(), new WebCallBack<List<CustomerPinModel>>() {
+            @Override
+            protected void onFinish() {
 
+            }
+
+            @Override
+            protected void onSuccess(List<CustomerPinModel> result, Request request) {
+                try {
+
+                    if (result != null && result.size() > 0) {
+                        CustomerPinModelRepository pinModelRepository=new
+                                CustomerPinModelRepository();
+
+                        pinModelRepository.deleteAll();
+                        pinModelRepository.insertOrUpdate(result);
+                    }
+                    supervisor_tour_sent(callback, context);
+                } catch (Exception e) {
+                    Timber.e(e);
+                    callback.onError(context.getString(R.string.error_saving_request));
+            }
+            }
+
+            @Override
+            protected void onApiFailure(ApiError error, Request request) {
+                String err = WebApiErrorBody.log(error, context);
+                callback.onError(err);
+            }
+
+            @Override
+            protected void onNetworkFailure(Throwable t, Request request) {
+                callback.onError(context.getString(R.string.connection_to_server_failed));
+            }
+        });
+
+    }
     public static void supervisor_tour_sent(final Callback callback, final Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("SupervisorId", Context.MODE_PRIVATE);
         UUID userModel = UUID.fromString(sharedPreferences.getString("SupervisorIduniqueId", null));

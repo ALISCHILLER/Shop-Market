@@ -12,6 +12,7 @@ import com.varanegar.supervisor.model.changeOrdersStatus.ChangeOrdersStatusmMode
 import com.varanegar.supervisor.model.reviewreport.ReviewreportModel;
 import com.varanegar.supervisor.model.tracking.RouteMapModel;
 import com.varanegar.supervisor.model.tracking.RouteMapPostModel;
+import com.varanegar.supervisor.webapi.model_new.datamanager.CustomerPinModel;
 import com.varanegar.supervisor.webapi.model_new.send_pincode.PinRequestViewModel;
 import com.varanegar.supervisor.webapi.model_old.CustomerCallViewModel;
 import com.varanegar.supervisor.webapi.model_old.CustomerSummaryViewModel;
@@ -183,4 +184,8 @@ public interface ISupervisorApi {
     @POST("api/v2/ngt/customer/pinrapprove")
     Call<String>SendPinrapprove (
             @Body PinRequestViewModel pinRequestViewModel);
+
+
+    @GET("api/v2/ngt/supervisor/GetPinCodes")
+    Call<List<CustomerPinModel>>GetPinCodes();
 }

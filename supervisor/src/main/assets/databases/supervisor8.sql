@@ -14,3 +14,17 @@ CREATE TABLE "PinRequest_" (
 "Status" TEXT,
 "customer_call_order" TEXT
 );
+CREATE TABLE "CustomerPin" (
+"UniqueId"  TEXT NOT NULL COLLATE NOCASE ,
+"CustomerUniqueId"TEXT,
+"CustomerCode" TEXT,
+"CustomerName"  TEXT,
+"PinDate"  DATE,
+"PinPDate"  TEXT,
+"DealerName"  TEXT,
+"Pin1"  TEXT,
+"Pin2"  TEXT,
+"Pin3"  TEXT,
+"Pin4"  TEXT,
+PRIMARY KEY ("UniqueId" ASC)
+);

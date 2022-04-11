@@ -17,6 +17,7 @@ import com.varanegar.supervisor.model.changeOrdersStatus.ChangeOrdersStatusmMode
 import com.varanegar.supervisor.model.reviewreport.ReviewreportModel;
 import com.varanegar.supervisor.model.tracking.RouteMapModel;
 import com.varanegar.supervisor.model.tracking.RouteMapPostModel;
+import com.varanegar.supervisor.webapi.model_new.datamanager.CustomerPinModel;
 import com.varanegar.supervisor.webapi.model_new.send_pincode.PinRequestViewModel;
 import com.varanegar.supervisor.webapi.model_old.CustomerCallViewModel;
 import com.varanegar.supervisor.webapi.model_old.CustomerSummaryViewModel;
@@ -150,6 +151,12 @@ public class SupervisorApi extends BaseApi implements ISupervisorApi {
     public Call<String> SendPinrapprove(PinRequestViewModel pinRequestViewModel) {
         return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
                 .create(ISupervisorApi.class).SendPinrapprove(pinRequestViewModel);
+    }
+
+    @Override
+    public Call<List<CustomerPinModel>> GetPinCodes() {
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).GetPinCodes();
     }
 
     @Override
