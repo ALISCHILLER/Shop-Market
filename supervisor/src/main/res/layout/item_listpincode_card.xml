@@ -157,7 +157,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:layout_alignParentLeft="true"
-                            android:text="پین کد1" />
+                            android:text="@string/pin1" />
 
                         <TextView
                             android:id="@+id/txt_pincod1"
@@ -177,7 +177,7 @@
                             android:layout_below="@id/txt_pincod1"
                             android:layout_alignStart="@id/txt_pincod1"
                             android:layout_alignLeft="@id/txt_pincod1"
-                            android:text="@string/pin1"
+                            android:text=""
                             android:textColor="@color/mainTextColor"
                             android:textSize="14sp" />
 
@@ -195,7 +195,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:layout_alignParentLeft="true"
-                            android:text="پین کد2" />
+                            android:text=" @string/pin2" />
 
                         <TextView
                             android:id="@+id/txt_pincod2"
@@ -215,7 +215,7 @@
                             android:layout_below="@id/txt_pincod2"
                             android:layout_alignStart="@id/txt_pincod2"
                             android:layout_alignLeft="@id/txt_pincod2"
-                            android:text="@string/pin2"
+                            android:text=""
                             android:textColor="@color/mainTextColor"
                             android:textSize="14sp" />
 
@@ -251,7 +251,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:layout_alignParentLeft="true"
-                            android:text="پین کد3" />
+                            android:text="@string/pin3" />
 
                         <TextView
                             android:id="@+id/txt_pincod3"
@@ -271,7 +271,7 @@
                             android:layout_below="@id/txt_pincod3"
                             android:layout_alignStart="@id/txt_pincod3"
                             android:layout_alignLeft="@id/txt_pincod3"
-                            android:text="@string/pin3"
+                            android:text=""
                             android:textColor="@color/mainTextColor"
                             android:textSize="14sp" />
 
@@ -289,7 +289,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:layout_alignParentLeft="true"
-                            android:text="پین کد4" />
+                            android:text="@string/pin4" />
 
                         <TextView
                             android:id="@+id/txt_pincod4"
@@ -309,7 +309,7 @@
                             android:layout_below="@id/txt_pincod4"
                             android:layout_alignStart="@id/txt_pincod4"
                             android:layout_alignLeft="@id/txt_pincod4"
-                            android:text="@string/pin4"
+                            android:text=""
                             android:textColor="@color/mainTextColor"
                             android:textSize="14sp" />
                     </RelativeLayout>
@@ -423,12 +423,13 @@
                     android:paddingRight="20dp"
                     android:paddingStart="15dp"
                     android:paddingTop="20dp">
+
                     <ImageView
                         android:id="@+id/title_from_to_dots"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
                         android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"
                         android:src="@drawable/from_to_purple" />
@@ -450,8 +451,8 @@
                         android:id="@+id/txt_customer_code"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="23dp"
                         android:layout_alignTop="@+id/title_from_to_dots"
+                        android:layout_marginLeft="10dp"
                         android:layout_marginTop="-5dp"
                         android:layout_toEndOf="@+id/txt_name_customer_header"
                         android:layout_toRightOf="@+id/txt_name_customer_header"
@@ -499,6 +500,7 @@
                         style="@style/TitleBadgeTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
                         android:layout_above="@id/txt_date"
                         android:layout_alignStart="@id/txt_date"
                         android:layout_alignLeft="@id/txt_date"

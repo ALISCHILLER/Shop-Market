@@ -29,6 +29,7 @@ public class CustomerPinModel extends BaseModel {
     public String Pin2;
     @Column
     public String Pin3;
+    @Column
     public String Pin4;
 
 }
