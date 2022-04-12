@@ -72,6 +72,7 @@ public class PinApprove extends GeneralNotification {
                 .setAutoCancel(true)
                 .setColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
                 .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+                .setContentTitle("زر ماکارون")
                 .setContentText(mContext.getString(R.string.pin_approved, _customerName, _pin))
                 .setContentIntent(pendingIntent);
 

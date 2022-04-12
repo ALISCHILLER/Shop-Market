@@ -16,6 +16,7 @@ import com.varanegar.supervisor.MainActivity;
 import com.varanegar.supervisor.R;
 import com.varanegar.supervisor.firebase.notification.model.PinRequest_Model;
 import com.varanegar.supervisor.firebase.notification.model.PinRequest_ModelRepository;
+import com.varanegar.supervisor.fragment.list_notification_Fragment.ListNotification_Fragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -113,7 +114,7 @@ public class RequestPin extends GeneralNotification {
         PinRequest_ModelRepository pinRequest_modelRepository = new PinRequest_ModelRepository();
         pinRequest_modelRepository.insertOrUpdate(pinRequest_model);
 
-        Intent intent = new Intent(mContext, MainActivity.class);
+        Intent intent = new Intent(mContext, ListNotification_Fragment.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         PendingIntent pendingIntent;
@@ -135,6 +136,7 @@ public class RequestPin extends GeneralNotification {
                 .setAutoCancel(true)
                 .setColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
                 .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+                .setContentTitle("زر ماکارون")
                 .setContentText(mContext.getString(R.string.request_pin, _dealerName, pinName, _customerName))
                 .setContentIntent(pendingIntent);
 

@@ -53,7 +53,7 @@ public abstract class GeneralNotification {
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(context, channelId)
                         .setSmallIcon(R.drawable.zar)
-                        .setContentTitle("zar")
+                        .setContentTitle("زر ماکارون ")
                         .setContentText(messageBody)
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
