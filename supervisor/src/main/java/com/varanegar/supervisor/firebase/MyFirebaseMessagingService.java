@@ -40,14 +40,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         super.onNewToken(token);
         saveToken(token);
         FirebaseMessaging.getInstance().subscribeToTopic(getPackageName());
-        FirebaseMessaging.getInstance().subscribeToTopic("version" + BuildConfig.VERSION_CODE);
+        FirebaseMessaging.getInstance().subscribeToTopic("version" +
+                BuildConfig.VERSION_CODE);
         Log.d(TAG, "onNewToken: token = " + token);
     }
 
     private void saveToken(String token) {
         SharedPreferences sharedPreferences = getApplicationContext()
                 .getSharedPreferences("Firebase_Token", Context.MODE_PRIVATE);
-        String oldToken = sharedPreferences.getString("172F4321-16BB-4415-85D1-DD88FF04234C", "");
+        String oldToken = sharedPreferences
+                .getString("172F4321-16BB-4415-85D1-DD88FF04234C", "");
 
         if (oldToken.isEmpty()) {
             sharedPreferences.edit().putString("172F4321-16BB-4415-85D1-DD88FF04234C", token).apply();
@@ -55,5 +57,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             sharedPreferences.edit().putString("172F4321-16BB-4415-85D1-DD88FF04234C", token).apply();
             sharedPreferences.edit().putString("172F4321-16BB-4415-85D1-DD88FF04234C__old", oldToken).apply();
         }
+    }
+
+   public static void refreshToken(Context context,Callback callback ){
+       String token =FirebaseMessaging.getInstance().getToken().getResult();
+   }
+
+    public interface Callback {
+        void onSuccess();
+
+        void onError(String error);
     }
 }

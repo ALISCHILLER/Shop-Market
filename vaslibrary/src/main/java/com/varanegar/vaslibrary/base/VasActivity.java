@@ -39,6 +39,7 @@ import com.varanegar.framework.util.LocaleHelper;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.framework.validation.ValidationException;
+import com.varanegar.supervisor.firebase.MyFirebaseMessagingService;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.broadcasts.ConnectivityReceiver;
 import com.varanegar.vaslibrary.broadcasts.GpsReceiver;
@@ -186,6 +187,7 @@ public abstract class VasActivity extends MainVaranegarActivity
 //                    Timber.d("Token update failed. Error=" + error + "  Token=" + token);
 //                }
 //            });
+     
 
         checkLocationSettings();
         LocationManager locationManager1 = ((LocationManager) getSystemService(LOCATION_SERVICE));

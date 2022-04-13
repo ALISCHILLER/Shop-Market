@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.varanegar.framework.network.gson.VaranegarGsonBuilder;
 import com.varanegar.framework.util.jobscheduler.JobSchedulerService;
+import com.varanegar.supervisor.firebase.MyFirebaseMessagingService;
 import com.varanegar.supervisor.getTour_fragment.Get_Tour_Fragment;
 import com.varanegar.supervisor.model.VisitorManager;
 import com.varanegar.supervisor.model.VisitorModel;
@@ -48,6 +49,24 @@ public class MainActivity extends VasActivity {
                 pushFragment(mainFragment);
             }
         }
+
+        SharedPreferences sharedPreferences = getApplicationContext()
+                .getSharedPreferences("Firebase_Token", Context.MODE_PRIVATE);
+        String oldToken = sharedPreferences
+                .getString("172F4321-16BB-4415-85D1-DD88FF04234C", "");
+        if (oldToken.isEmpty())
+            MyFirebaseMessagingService.refreshToken(this,
+                    new MyFirebaseMessagingService.Callback() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onError(String error) {
+
+                        }
+                    });
     }
 
     @Override
