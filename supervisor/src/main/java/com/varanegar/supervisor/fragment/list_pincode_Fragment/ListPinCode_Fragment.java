@@ -1,5 +1,7 @@
 package com.varanegar.supervisor.fragment.list_pincode_Fragment;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.varanegar.framework.database.querybuilder.Query;
+import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
+import com.varanegar.framework.util.component.cutemessagedialog.Icon;
+import com.varanegar.supervisor.DataManager;
 import com.varanegar.supervisor.IMainPageFragment;
 import com.varanegar.supervisor.R;
 import com.varanegar.supervisor.firebase.notification.model.PinRequest_;
@@ -71,4 +76,47 @@ public class ListPinCode_Fragment extends IMainPageFragment {
         list_request.setAdapter(listPinCodeAdapter);
     }
 
+    public void restData(){
+        final ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage(getString(R.string.downloading_data));
+        progressDialog.show();
+        DataManager dataManager=new DataManager(getContext());
+        dataManager.getCustomerPin2(new DataManager.Callback() {
+            @Override
+            public void onSuccess() {
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    try {
+                        getDataPinRequest();
+                        listsetdata();
+                    } catch (Exception ignored) {
+
+                    }
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                showError(error);
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    try {
+                        progressDialog.dismiss();
+                    } catch (Exception ignored) {
+
+                    }
+                }
+            }
+        });
+    }
+
+    private void showError(String error) {
+        Context context = getContext();
+        if (isResumed() && context != null) {
+            CuteMessageDialog dialog = new CuteMessageDialog(context);
+            dialog.setTitle(R.string.error);
+            dialog.setMessage(error);
+            dialog.setIcon(Icon.Error);
+            dialog.setPositiveButton(R.string.ok, null);
+            dialog.show();
+        }
+    }
 }

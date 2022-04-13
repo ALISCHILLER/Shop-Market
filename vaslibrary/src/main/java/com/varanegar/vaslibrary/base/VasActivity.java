@@ -122,7 +122,8 @@ public abstract class VasActivity extends MainVaranegarActivity
 
 
 //        ProductManager productManager = new ProductManager(this);
-//        List<ProductModel> productModels = productManager.getItems(new Query().from(Product.ProductTbl));
+//        List<ProductModel> productModels = productManager.getItems(new Query().
+//        rom(Product.ProductTbl));
 //        for (ProductModel product :
 //                productModels) {
 //            product.IsForSale = true;
@@ -148,7 +149,8 @@ public abstract class VasActivity extends MainVaranegarActivity
                     public void run() {
                         try {
                             File file = BackupManager.getLast(VasActivity.this);
-                            if (file == null || file.lastModified() < (new Date().getTime() - (8 * 1000 * 3600))) {
+                            if (file == null || file.lastModified() < (new Date().getTime() -
+                                    (8 * 1000 * 3600))) {
                                 BackupManager.exportData(VasActivity.this, true);
                             }
 
@@ -189,9 +191,11 @@ public abstract class VasActivity extends MainVaranegarActivity
         LocationManager locationManager1 = ((LocationManager) getSystemService(LOCATION_SERVICE));
         if (locationManager1 != null) {
             boolean isOn = locationManager1.isProviderEnabled(LocationManager.GPS_PROVIDER);
-            Boolean isOnFromPoints = new com.varanegar.vaslibrary.manager.locationmanager.LocationManager(this).getGpsStatus(new Date().getTime());
+            Boolean isOnFromPoints = new com.varanegar.vaslibrary.manager.locationmanager
+                    .LocationManager(this).getGpsStatus(new Date().getTime());
             if (isOnFromPoints != null && isOnFromPoints != isOn) {
-                com.varanegar.vaslibrary.manager.locationmanager.LocationManager.checkGpsProvider(this);
+                com.varanegar.vaslibrary.manager.locationmanager.LocationManager
+                        .checkGpsProvider(this);
             }
         }
         if (Build.MODEL.equals("P1000")) {
@@ -225,14 +229,19 @@ public abstract class VasActivity extends MainVaranegarActivity
     }
 
     private void checkLocationSettings() {
-        if (TrackingLicense.getLicensePolicy(this) == 1 || !TrackingLicense.isValid(this) || !SysConfigManager.hasTracking(this))
+        if (TrackingLicense.getLicensePolicy(this) == 1 ||
+                !TrackingLicense.isValid(this) ||
+                !SysConfigManager.hasTracking(this))
             return;
         GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
         int result = googleApiAvailability.isGooglePlayServicesAvailable(this);
         if (result == ConnectionResult.SUCCESS) {
-            TrackingLogManager.addLog(this, LogType.LOCATION_SETTINGS, LogLevel.Info, "Google api client is available");
-            LocationRequest locationRequest = com.varanegar.vaslibrary.manager.locationmanager.LocationManager.getLocationRequest(this);
-            LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
+            TrackingLogManager.addLog(this, LogType.LOCATION_SETTINGS, LogLevel.Info,
+                    "Google api client is available");
+            LocationRequest locationRequest = com.varanegar.vaslibrary.manager.locationmanager
+                    .LocationManager.getLocationRequest(this);
+            LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                    .addLocationRequest(locationRequest);
             SettingsClient settingsClient = LocationServices.getSettingsClient(this);
             settingsClient.checkLocationSettings(builder.build()).addOnSuccessListener(new OnSuccessListener<LocationSettingsResponse>() {
                 @Override
@@ -248,7 +257,8 @@ public abstract class VasActivity extends MainVaranegarActivity
                             // Show the dialog by calling startResolutionForResult(),
                             // and check the result in onActivityResult().
                             ResolvableApiException resolvable = (ResolvableApiException) e;
-                            resolvable.startResolutionForResult(VasActivity.this, GPS_SETTiNGS_REQUEST_CODE);
+                            resolvable.startResolutionForResult(VasActivity.this,
+                                    GPS_SETTiNGS_REQUEST_CODE);
                         } catch (IntentSender.SendIntentException sendEx) {
                             // Ignore the error.
                         }
@@ -260,19 +270,24 @@ public abstract class VasActivity extends MainVaranegarActivity
             errorDialog.setIcon(Icon.Error);
             errorDialog.setTitle(R.string.error);
             if (result == ConnectionResult.API_UNAVAILABLE) {
-                TrackingLogManager.addLog(this, LogType.LOCATION_SETTINGS, LogLevel.Error, "Google api client is not available");
+                TrackingLogManager.addLog(this, LogType.LOCATION_SETTINGS, LogLevel.Error,
+                        "Google api client is not available");
                 errorDialog.setMessage(R.string.google_api_client_is_not_available);
             } else if (result == ConnectionResult.SERVICE_DISABLED) {
-                TrackingLogManager.addLog(this, LogType.LOCATION_SETTINGS, LogLevel.Error, "Google api client is disabled");
+                TrackingLogManager.addLog(this, LogType.LOCATION_SETTINGS, LogLevel.Error,
+                        "Google api client is disabled");
                 errorDialog.setMessage(R.string.google_api_client_is_disabled);
             } else if (result == ConnectionResult.SERVICE_MISSING) {
-                TrackingLogManager.addLog(this, LogType.LOCATION_SETTINGS, LogLevel.Error, "Google api client is not installed");
+                TrackingLogManager.addLog(this, LogType.LOCATION_SETTINGS, LogLevel.Error,
+                        "Google api client is not installed");
                 errorDialog.setMessage(R.string.google_api_client_is_not_installed);
             } else if (result == ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED) {
-                TrackingLogManager.addLog(this, LogType.LOCATION_SETTINGS, LogLevel.Error, "Google api client version is old. update is needed");
+                TrackingLogManager.addLog(this, LogType.LOCATION_SETTINGS, LogLevel.Error,
+                        "Google api client version is old. update is needed");
                 errorDialog.setMessage(R.string.google_api_client_is_not_updated);
             } else {
-                TrackingLogManager.addLog(this, LogType.LOCATION_SETTINGS, LogLevel.Error, "Google api client error code = " + result);
+                TrackingLogManager.addLog(this, LogType.LOCATION_SETTINGS, LogLevel.Error,
+                        "Google api client error code = " + result);
                 errorDialog.setMessage(R.string.google_api_client_error_occured);
             }
             errorDialog.setPositiveButton(R.string.ok, null);
@@ -301,7 +316,8 @@ public abstract class VasActivity extends MainVaranegarActivity
         if (preferredLocale != null)
             return preferredLocale;
         SysConfigManager sysConfigManager = new SysConfigManager(context);
-        SysConfigModel languageConfig = sysConfigManager.read(ConfigKey.ServerLanguage, SysConfigManager.cloud);
+        SysConfigModel languageConfig = sysConfigManager.read(ConfigKey.ServerLanguage,
+                SysConfigManager.cloud);
         UUID languageId = SysConfigManager.getUUIDValue(languageConfig);
         if (languageId == null)
             return Locale.getDefault();
@@ -340,7 +356,8 @@ public abstract class VasActivity extends MainVaranegarActivity
             @Override
             public void onReceive(Context context, Intent intent) {
                 VaranegarActivity activity = VasActivity.this;
-                final android.location.LocationManager manager = (android.location.LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+                final android.location.LocationManager manager =
+                        (android.location.LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
                 if (manager != null) {
                     if (manager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER))
                         startLocationUpdate();
@@ -367,7 +384,9 @@ public abstract class VasActivity extends MainVaranegarActivity
     }
 
     private void checkTime() {
-        if (TrackingLicense.getLicensePolicy(this) == 1 || !TrackingLicense.isValid(this) || !SysConfigManager.hasTracking(this))
+        if (TrackingLicense.getLicensePolicy(this) == 1 ||
+                !TrackingLicense.isValid(this) ||
+                !SysConfigManager.hasTracking(this))
             return;
         TimeApi timeApi = new TimeApi(VasActivity.this);
         timeApi.checkTime(this::changeTimeSettings);
@@ -379,7 +398,8 @@ public abstract class VasActivity extends MainVaranegarActivity
         dialog.setIcon(Icon.Error);
         dialog.setMessage(R.string.time_settings_is_wrong);
         dialog.setTitle(R.string.error);
-        dialog.setPositiveButton(R.string.settings, v -> startActivityForResult(new Intent(android.provider.Settings.ACTION_DATE_SETTINGS), TIME_SETTiNGS_REQUEST_CODE));
+        dialog.setPositiveButton(R.string.settings, v -> startActivityForResult(new
+                Intent(android.provider.Settings.ACTION_DATE_SETTINGS), TIME_SETTiNGS_REQUEST_CODE));
         dialog.setNegativeButton(R.string.close, v -> checkTime());
         dialog.show();
     }
@@ -403,7 +423,8 @@ public abstract class VasActivity extends MainVaranegarActivity
                                 request.setInterval(5000);
                                 request.setSmallestDisplacement(5);
                                 if (client.isConnected())
-                                    LocationServices.FusedLocationApi.requestLocationUpdates(client, request, new LocationListener() {
+                                    LocationServices.FusedLocationApi.requestLocationUpdates(client,
+                                            request, new LocationListener() {
                                         @Override
                                         public void onLocationChanged(Location location) {
                                             if (location == null)
@@ -413,7 +434,10 @@ public abstract class VasActivity extends MainVaranegarActivity
                                                     lastLocation = location;
                                                 else {
                                                     lastLocation = null;
-                                                    Timber.e("Mock location received! latitude = " + location.getLatitude() + " longitude = " + location.getLongitude());
+                                                    Timber.e("Mock location received! latitude " +
+                                                            "= " + location.getLatitude() +
+                                                            " longitude = "
+                                                            + location.getLongitude());
                                                 }
                                             } else
                                                 lastLocation = location;
@@ -481,14 +505,19 @@ public abstract class VasActivity extends MainVaranegarActivity
             checkLocationSettings();
         if (requestCode == I9000SCardReader.i9000S_requestCode && i9000sCardReaderListener != null)
             i9000sCardReaderListener.onReceiveResult(this, requestCode, resultCode, data, null);
-        else if (requestCode == CustomerBarcodeManager.barcodeRequestCode && customerBarcodeManagerListener != null)
-            customerBarcodeManagerListener.onReceiveResult(this, requestCode, resultCode, data, null);
+        else if (requestCode == CustomerBarcodeManager.barcodeRequestCode &&
+                customerBarcodeManagerListener != null)
+            customerBarcodeManagerListener.onReceiveResult(this, requestCode, resultCode,
+                    data, null);
         else if (requestCode == REQUEST_CODE && a910CardReaderListener != null)
-            a910CardReaderListener.onReceiveResult(this, requestCode, resultCode, data, null);
+            a910CardReaderListener.onReceiveResult(this, requestCode, resultCode,
+                    data, null);
         else if (requestCode == N910CardReader.requestCode && n910CardReader != null)
-            n910CardReader.onReceiveResult(this, requestCode, resultCode, data, null);
+            n910CardReader.onReceiveResult(this, requestCode, resultCode,
+                    data, null);
         else if (requestCode == SepehrCardReader.requestCode)
-            sepehrCardReader.onReceiveResult(this, requestCode, resultCode, data, null);
+            sepehrCardReader.onReceiveResult(this, requestCode, resultCode,
+                    data, null);
         else if (requestCode == TIME_SETTiNGS_REQUEST_CODE)
             checkTime();
     }
@@ -512,7 +541,8 @@ public abstract class VasActivity extends MainVaranegarActivity
                 }
             }
         } else if (samanKishCardReader != null)
-            samanKishCardReader.onReceiveResult(this, serviceId, resultCode, null, resultData);
+            samanKishCardReader.onReceiveResult(this, serviceId, resultCode,
+                    null, resultData);
     }
 
     public SamanKishCardReader samanKishCardReader;

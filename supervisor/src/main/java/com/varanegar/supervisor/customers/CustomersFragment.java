@@ -88,8 +88,11 @@ public class CustomersFragment extends IMainPageFragment {
     private ProgressView progressView;
     private Boolean message;
     @Override
-    protected View onCreateContentView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_supervisor_customer_list_layout, container, false);
+    protected View onCreateContentView(@NonNull LayoutInflater inflater,
+                                       @Nullable ViewGroup container,
+                                       @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_supervisor_customer_list_layout,
+                container, false);
         visitorNameSpinner = view.findViewById(R.id.visitor_name_paired_items);
 
         conditionCustomerSpinner=view.findViewById(R.id.customer_condition_paired_spinner);
@@ -164,7 +167,8 @@ public class CustomersFragment extends IMainPageFragment {
             String key = VasHelperMethods.convertToEnglishNumbers(keyWord);
             key = VasHelperMethods.persian2Arabic(key);
             final String finalKey = key;
-            query = new Query().from(SupervisorCustomer.SupervisorCustomerTbl).whereAnd(Criteria.contains(SupervisorCustomer.CustomerCode, finalKey)
+            query = new Query().from(SupervisorCustomer.SupervisorCustomerTbl)
+                    .whereAnd(Criteria.contains(SupervisorCustomer.CustomerCode, finalKey)
                     .or(Criteria.contains(SupervisorCustomer.CustomerName, finalKey))
                     .or(Criteria.contains(SupervisorCustomer.StoreName, finalKey)));
         }
@@ -179,7 +183,8 @@ public class CustomersFragment extends IMainPageFragment {
             query = query.whereAnd(Criteria.equals(SupervisorCustomer.isActive,true));
         }
         if (errorTextView != null) {
-            adapter = new SimpleReportAdapter<SupervisorCustomerModel>(this, SupervisorCustomerModel.class) {
+            adapter = new SimpleReportAdapter<SupervisorCustomerModel>(this,
+                    SupervisorCustomerModel.class) {
                 class PhoneCustomerViewHoder extends CustomViewHolder<SupervisorCustomerModel> {
 
                     @Override

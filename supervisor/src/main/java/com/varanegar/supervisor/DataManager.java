@@ -141,10 +141,12 @@ public class DataManager {
             @Override
             protected void onSuccess(List<CustomerPinModel> result, Request request) {
              try {
+                 CustomerPinModelRepository pinModelRepository=new CustomerPinModelRepository();
                 if (result != null && result.size() > 0) {
-                    CustomerPinModelRepository pinModelRepository=new CustomerPinModelRepository();
                     pinModelRepository.deleteAll();
                     pinModelRepository.insertOrUpdate(result);
+                }else {
+                    pinModelRepository.deleteAll();
                 }
 
                 callback.onSuccess();
@@ -756,13 +758,13 @@ public class DataManager {
             @Override
             protected void onSuccess(List<CustomerPinModel> result, Request request) {
                 try {
-
+                    CustomerPinModelRepository pinModelRepository=new
+                            CustomerPinModelRepository();
                     if (result != null && result.size() > 0) {
-                        CustomerPinModelRepository pinModelRepository=new
-                                CustomerPinModelRepository();
-
                         pinModelRepository.deleteAll();
                         pinModelRepository.insertOrUpdate(result);
+                    }else {
+                        pinModelRepository.deleteAll();
                     }
                     supervisor_tour_sent(callback, context);
                 } catch (Exception e) {

@@ -50,8 +50,10 @@ public abstract class VaranegarActivity extends AppCompatActivity {
             if (checkLocationPermission()) {
                 locationPermission = checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
                 if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.Q ||
-                        (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.Q && locationPermission == PackageManager.PERMISSION_GRANTED))
-                    bgLocationPermission = checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+                        (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.Q &&
+                                locationPermission == PackageManager.PERMISSION_GRANTED))
+                    bgLocationPermission = checkSelfPermission(
+                            Manifest.permission.ACCESS_BACKGROUND_LOCATION);
 
             }
             if (storagePermission != PackageManager.PERMISSION_GRANTED
@@ -68,7 +70,8 @@ public abstract class VaranegarActivity extends AppCompatActivity {
                     permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
                     if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.Q)
                         permissions.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
-                    else if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.Q && locationPermission == PackageManager.PERMISSION_GRANTED)
+                    else if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.Q &&
+                            locationPermission == PackageManager.PERMISSION_GRANTED)
                         permissions.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
                 }
                 String[] p = new String[permissions.size()];
@@ -79,7 +82,8 @@ public abstract class VaranegarActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         switch (requestCode) {
             case REQUEST_CODE_ASK_PERMISSIONS:
                 boolean granted = true;
@@ -90,26 +94,34 @@ public abstract class VaranegarActivity extends AppCompatActivity {
                     if (p.equals(Manifest.permission.WRITE_EXTERNAL_STORAGE) && checkStoragePermission()) {
                         if (grant == PackageManager.PERMISSION_DENIED) {
                             granted = false;
-                            Toast.makeText(VaranegarActivity.this, getString(R.string.storage_permission_denied), Toast.LENGTH_SHORT)
+                            Toast.makeText(VaranegarActivity.this,
+                                    getString(R.string.storage_permission_denied),
+                                    Toast.LENGTH_SHORT)
                                     .show();
                             finish();
                         }
                     } else if (p.equals(Manifest.permission.CAMERA) && checkCameraPermission()) {
                         if (grant == PackageManager.PERMISSION_DENIED) {
                             granted = false;
-                            Toast.makeText(VaranegarActivity.this, getString(R.string.camera_permission_denied), Toast.LENGTH_SHORT)
+                            Toast.makeText(VaranegarActivity.this,
+                                    getString(R.string.camera_permission_denied),
+                                    Toast.LENGTH_SHORT)
                                     .show();
                             finish();
                         }
-                    } else if (p.equals(Manifest.permission.ACCESS_FINE_LOCATION) && checkLocationPermission()) {
+                    } else if (p.equals(Manifest.permission.ACCESS_FINE_LOCATION) &&
+                            checkLocationPermission()) {
                         if (grant == PackageManager.PERMISSION_DENIED) {
                             granted = false;
-                            Toast.makeText(VaranegarActivity.this, getString(R.string.location_permission_denied), Toast.LENGTH_SHORT)
+                            Toast.makeText(VaranegarActivity.this,
+                                    getString(R.string.location_permission_denied),
+                                    Toast.LENGTH_SHORT)
                                     .show();
                             finish();
                         } else
                             checkPermissions();
-                    } else if (p.equals(Manifest.permission.ACCESS_BACKGROUND_LOCATION) && checkLocationPermission()) {
+                    } else if (p.equals(Manifest.permission.ACCESS_BACKGROUND_LOCATION) &&
+                            checkLocationPermission()) {
                         if (grant == PackageManager.PERMISSION_DENIED) {
                             granted = false;
                             Timber.e(getString(R.string.background_location_permission_denied));

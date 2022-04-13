@@ -44,7 +44,8 @@ public abstract class MainVaranegarActivity extends VaranegarActivity {
     protected void setToolbarTransparent() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window w = getWindow(); // in Activity's onCreate() for instance
-            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
             findViewById(R.id.fake_status_bar).setVisibility(View.VISIBLE);
         }
     }
@@ -74,7 +75,8 @@ public abstract class MainVaranegarActivity extends VaranegarActivity {
     }
 
     /**
-     * provides a custom view for drawerAdapter menu. This method can be used if you want to create a very custom layout for drawerAdapter menu
+     * provides a custom view for drawerAdapter menu. This method can be used
+     * if you want to create a very custom layout for drawerAdapter menu
      *
      * @param layout the custom layout that you have created
      * @return returns the view from the layout.
@@ -133,7 +135,8 @@ public abstract class MainVaranegarActivity extends VaranegarActivity {
     }
 
     /**
-     * opens drawer after a delay. Use this method if you need to open the drawer automatically after fragment started
+     * opens drawer after a delay. Use this method if you need to open the drawer automatically
+     * after fragment started
      *
      * @param delay milliseconds
      */
@@ -232,7 +235,8 @@ public abstract class MainVaranegarActivity extends VaranegarActivity {
                     finish();
                 } else {
                     finish = true;
-                    Toast.makeText(this, R.string.press_back_again_to_exit, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.press_back_again_to_exit,
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -243,7 +247,8 @@ public abstract class MainVaranegarActivity extends VaranegarActivity {
     }
 
     public void showSnackBar(@StringRes int string, Duration duration) {
-        Snackbar snackbar = Snackbar.make(findViewById(R.id.content_frame), string, Snackbar.LENGTH_SHORT);
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.content_frame),
+                string, Snackbar.LENGTH_SHORT);
         View view = snackbar.getView();
         TextView tv = (TextView) view.findViewById(com.google.android.material.R.id.snackbar_text);
         tv.setTextColor(Color.WHITE);

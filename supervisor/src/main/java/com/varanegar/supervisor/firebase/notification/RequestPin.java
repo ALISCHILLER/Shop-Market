@@ -135,9 +135,12 @@ public class RequestPin extends GeneralNotification {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true)
                 .setColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
-                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+//                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
                 .setContentTitle("زر ماکارون")
                 .setContentText(mContext.getString(R.string.request_pin, _dealerName, pinName, _customerName))
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(mContext.getString
+                                (R.string.request_pin, _dealerName, pinName, _customerName)))
                 .setContentIntent(pendingIntent);
 
         NotificationManager notificationManager =

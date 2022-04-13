@@ -44,6 +44,7 @@ public abstract class GeneralNotification {
     public static void sendNotification(Context context, String messageBody) {
         Intent intent = new Intent(context, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context,
                 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
