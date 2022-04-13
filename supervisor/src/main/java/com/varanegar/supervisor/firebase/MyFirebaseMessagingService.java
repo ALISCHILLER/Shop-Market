@@ -6,6 +6,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -59,8 +60,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
     }
 
-   public static void refreshToken(Context context,Callback callback ){
-       String token =FirebaseMessaging.getInstance().getToken().getResult();
+   public static void refreshToken(Context context, Callback callback){
+       FirebaseMessaging.getInstance().getToken()
+               .addOnSuccessListener(new OnSuccessListener<String>() {
+           @Override
+           public void onSuccess(String s) {
+
+           }
+       });
    }
 
     public interface Callback {
