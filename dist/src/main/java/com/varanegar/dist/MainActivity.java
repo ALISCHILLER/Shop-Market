@@ -1,7 +1,10 @@
 package com.varanegar.dist;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import com.varanegar.dist.firebase.MyFirebaseMessagingService;
 import com.varanegar.dist.fragment.DistCustomersFragment;
 import com.varanegar.dist.fragment.DistLoginFragment;
 import com.varanegar.dist.fragment.DistSendTourFragment;
@@ -42,6 +45,24 @@ public class MainActivity extends VasActivity {
                 pushFragment(profileFragment);
             }
         }
+
+        SharedPreferences sharedPreferences = getApplicationContext()
+                .getSharedPreferences("Firebase_Token", Context.MODE_PRIVATE);
+        String oldToken = sharedPreferences
+                .getString("172F4321-16BB-4415-85D1-DD88FF04234C", "");
+        if (oldToken.isEmpty())
+            MyFirebaseMessagingService.refreshToken(this,
+                    new MyFirebaseMessagingService.Callback() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onError(String error) {
+
+                        }
+                    });
     }
 
     @Override

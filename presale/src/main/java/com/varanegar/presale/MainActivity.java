@@ -1,8 +1,11 @@
 package com.varanegar.presale;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.varanegar.framework.util.jobscheduler.JobSchedulerService;
+import com.varanegar.presale.firebase.MyFirebaseMessagingService;
 import com.varanegar.presale.fragment.PreSalesCustomersFragment;
 import com.varanegar.presale.fragment.PreSalesSendTourFragment;
 import com.varanegar.presale.fragment.PresalesLoginFragment;
@@ -44,6 +47,25 @@ public class MainActivity extends VasActivity {
                 pushFragment(tourReportFragment);
             }
         }
+
+
+        SharedPreferences sharedPreferences = getApplicationContext()
+                .getSharedPreferences("Firebase_Token", Context.MODE_PRIVATE);
+        String oldToken = sharedPreferences
+                .getString("172F4321-16BB-4415-85D1-DD88FF04234C", "");
+        if (oldToken.isEmpty())
+            MyFirebaseMessagingService.refreshToken(this,
+                    new MyFirebaseMessagingService.Callback() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onError(String error) {
+
+                        }
+                    });
     }
 
     @Override

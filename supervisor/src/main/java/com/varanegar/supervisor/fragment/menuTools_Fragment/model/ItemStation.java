@@ -17,9 +17,9 @@ public class ItemStation {
 
     public List<Item> getItem() {
         return Arrays.asList(
-                new Item("لیست پین کدها مشتریان", R.drawable.pin_code),
-                new Item("لیست درخواست ها", R.drawable.request_not),
-                new Item("خبرنامه زرماکارون", R.drawable.news)
+                new Item("لیست پین کدها مشتریان", R.drawable.pincode),
+                new Item("لیست درخواست ها", R.drawable.request),
+                new Item("خبرنامه زرماکارون", R.drawable.mail)
                );
     }
 }

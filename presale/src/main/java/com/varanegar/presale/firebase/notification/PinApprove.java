@@ -1,9 +1,8 @@
-package com.varanegar.dist.firebase.notification;
+package com.varanegar.presale.firebase.notification;
 
 import static android.app.Notification.EXTRA_NOTIFICATION_ID;
 
 import android.annotation.SuppressLint;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -14,8 +13,9 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.firebase.messaging.RemoteMessage;
-import com.varanegar.dist.MainActivity;
-import com.varanegar.dist.R;
+import com.varanegar.presale.MainActivity;
+import com.varanegar.presale.R;
+
 
 import java.util.Map;
 import java.util.UUID;
@@ -68,6 +68,7 @@ public class PinApprove extends GeneralNotification {
                     PendingIntent.FLAG_ONE_SHOT);
         }
         Intent snoozeIntent = new Intent(mContext, MyBroadcastReceiver.class);
+        snoozeIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
         snoozeIntent.putExtra("pin_code", _pin);
         PendingIntent snoozePendingIntent =
                 PendingIntent.getBroadcast(mContext, 0, snoozeIntent, 0);
@@ -77,19 +78,17 @@ public class PinApprove extends GeneralNotification {
                 .setSmallIcon(R.drawable.zar)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true)
-
+                .addAction(R.drawable.ic_copy_black," کپی پین کد",
+                        snoozePendingIntent)
                 .setColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
-                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+               // .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
                 .setContentTitle("زر ماکارون")
                 .setContentText(mContext.getString(R.string.pin_approved, _customerName,
                         _pin))
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(mContext.getString
                                 (R.string.pin_approved, _customerName, _pin)))
-                .addAction(R.drawable.ic_copy_black," کپی پین کد",
-                        snoozePendingIntent)
                 .setContentIntent(pendingIntent);
-
 
         NotificationManager notificationManager =
                 (NotificationManager) mContext

@@ -100,7 +100,7 @@ public class EditCustomerAction extends CheckBarcodeAction {
             /**
              * گرفتن pincode4 برای ویرایش مشتری در presale
              */
-            String dealercode;
+
             final TourModel tourModel = new TourManager(getActivity()).loadTour();
             for (int i = 0; i < tourModel.Pins.size(); i++) {
                 if(getSelectedId().equals(tourModel.Pins.get(i).CustomerId)) {

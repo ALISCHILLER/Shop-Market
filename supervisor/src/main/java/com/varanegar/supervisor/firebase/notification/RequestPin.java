@@ -34,7 +34,7 @@ public class RequestPin extends GeneralNotification {
     private boolean isValid = true;
 
     public RequestPin(Context context, RemoteMessage remoteMessage) {
-        super(context);
+        super(context,remoteMessage);
         Map<String, String> map = remoteMessage.getData();
         String customerId = map.get("customer");
         String pinType = map.get("pin");
@@ -135,7 +135,7 @@ public class RequestPin extends GeneralNotification {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true)
                 .setColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
-//                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
                 .setContentTitle("زر ماکارون")
                 .setContentText(mContext.getString(R.string.request_pin, _dealerName, pinName, _customerName))
                 .setStyle(new NotificationCompat.BigTextStyle()
@@ -148,7 +148,7 @@ public class RequestPin extends GeneralNotification {
 
         int notifId = Integer.parseInt(_dealerId.toString()
                 .replaceAll("-", "")
-                .substring(0, 8), 16);
+                .substring(0, 4), 16);
 
         notificationManager.notify(notifId, mBuilder.build());
     }
