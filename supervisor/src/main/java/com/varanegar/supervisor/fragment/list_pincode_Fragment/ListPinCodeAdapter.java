@@ -43,7 +43,6 @@ public class ListPinCodeAdapter extends  RecyclerView.Adapter<ListPinCodeAdapter
         holder.txt_name_customer.setText(_customerPinModel.get(position).CustomerName);
         holder.txt_customer_code.setText(_customerPinModel.get(position).CustomerCode);
         holder.txt_date.setText(_customerPinModel.get(position).PinPDate);
-        holder.txt_date.setText(_customerPinModel.get(position).PinPDate);
         holder.txt_delear_name.setText(_customerPinModel.get(position).DealerName);
 
         //sub layout

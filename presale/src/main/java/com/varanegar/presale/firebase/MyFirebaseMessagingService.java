@@ -22,6 +22,7 @@ import com.varanegar.presale.BuildConfig;
 import com.varanegar.presale.MainActivity;
 import com.varanegar.presale.R;
 import com.varanegar.presale.firebase.notification.PinApprove;
+import com.varanegar.presale.firebase.notification.PublicNotification;
 
 import java.util.Map;
 
@@ -42,6 +43,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         new PinApprove(this, remoteMessage).sendNotification();
                         break;
                     default:
+                        new PublicNotification(this,remoteMessage).sendNotification();
                         break;
                 }
             }

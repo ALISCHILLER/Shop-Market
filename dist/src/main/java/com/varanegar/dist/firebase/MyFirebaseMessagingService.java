@@ -12,6 +12,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.varanegar.dist.BuildConfig;
 import com.varanegar.dist.firebase.notification.PinApprove;
+import com.varanegar.dist.firebase.notification.PublicNotification;
 
 import java.util.Map;
 
@@ -30,6 +31,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     new PinApprove(this, remoteMessage).sendNotification();
                     break;
                 default:
+                    new PublicNotification(this,remoteMessage).sendNotification();
                     break;
             }
         }

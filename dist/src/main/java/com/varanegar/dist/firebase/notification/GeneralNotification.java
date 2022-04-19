@@ -1,5 +1,6 @@
 package com.varanegar.dist.firebase.notification;
 
+import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,20 +13,23 @@ import android.os.Build;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.firebase.messaging.RemoteMessage;
 import com.varanegar.dist.MainActivity;
 import com.varanegar.dist.R;
 
 public abstract class GeneralNotification {
     public static final String ZAR_CHANNEL_ID = "ZAR_CHANNEL";
     protected Context mContext;
+    protected RemoteMessage mRemoteMessage;
 
-    public GeneralNotification(Context context) {
+    public GeneralNotification(Context context, RemoteMessage remoteMessage) {
         mContext = context;
+        mRemoteMessage = remoteMessage;
         createNotificationChannel(context);
     }
 
-    public static void createNotificationChannel(Context context){
-        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+    public static void createNotificationChannel(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManager notificationManager =
                     context.getSystemService(NotificationManager.class);
 
@@ -41,26 +45,39 @@ public abstract class GeneralNotification {
         }
     }
 
-    public static void sendNotification(Context context, String messageBody) {
-        Intent intent = new Intent(context, MainActivity.class);
+    @SuppressLint("UnspecifiedImmutableFlag")
+    public void sendNotification() {
+        Intent intent = new Intent(mContext, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context,
-                0 /* Request code */, intent,
-                PendingIntent.FLAG_ONE_SHOT);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            pendingIntent = PendingIntent.getActivity(mContext,
+                    0, intent,
+                    PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE);
+        } else {
 
-        String channelId = context.getString(R.string.default_notification_channel_id);
+            pendingIntent = PendingIntent.getActivity(mContext,
+                    0, intent,
+                    PendingIntent.FLAG_ONE_SHOT);
+        }
+
+        String channelId = mContext.getString(R.string.default_notification_channel_id);
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        if (mRemoteMessage.getNotification() == null) return;
         NotificationCompat.Builder notificationBuilder =
-                new NotificationCompat.Builder(context, channelId)
+                new NotificationCompat.Builder(mContext, channelId)
                         .setSmallIcon(R.drawable.zar)
-                        .setContentTitle("zar")
-                        .setContentText(messageBody)
+                        .setContentTitle(mRemoteMessage.getNotification().getTitle())
+                        .setContentText(mRemoteMessage.getNotification().getBody())
                         .setAutoCancel(true)
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText(mRemoteMessage.getNotification().getBody()))
                         .setSound(defaultSoundUri)
                         .setContentIntent(pendingIntent);
 
         NotificationManager notificationManager =
-                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
         // Since android Oreo notification channel is needed.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -70,6 +87,6 @@ public abstract class GeneralNotification {
             notificationManager.createNotificationChannel(channel);
         }
 
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        notificationManager.notify(0, notificationBuilder.build());
     }
 }

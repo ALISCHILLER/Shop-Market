@@ -1,12 +1,16 @@
 package com.varanegar.supervisor;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.varanegar.framework.network.gson.VaranegarGsonBuilder;
 import com.varanegar.framework.util.jobscheduler.JobSchedulerService;
 import com.varanegar.supervisor.firebase.MyFirebaseMessagingService;
+import com.varanegar.supervisor.fragment.list_notification_Fragment.ListNotification_Fragment;
+import com.varanegar.supervisor.fragment.menuTools_Fragment.MenuTools_Fragmnet;
+import com.varanegar.supervisor.fragment.news_fragment.News_Fragment;
 import com.varanegar.supervisor.getTour_fragment.Get_Tour_Fragment;
 import com.varanegar.supervisor.model.VisitorManager;
 import com.varanegar.supervisor.model.VisitorModel;
@@ -50,6 +54,26 @@ public class MainActivity extends VasActivity {
             }
         }
 
+        String newString;
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                newString= null;
+            } else {
+                newString= extras.getString("pin_code");
+            }
+        } else {
+            newString= (String) savedInstanceState.getSerializable("pin_code");
+        }
+
+
+        if (newString!=null){
+            if (newString.equals("pin_layout")){
+                ListNotification_Fragment notification_fragment=new ListNotification_Fragment();
+                pushFragment(notification_fragment);
+            }
+        }
+
         SharedPreferences sharedPreferences = getApplicationContext()
                 .getSharedPreferences("Firebase_Token", Context.MODE_PRIVATE);
         String oldToken = sharedPreferences
@@ -69,10 +93,12 @@ public class MainActivity extends VasActivity {
                     });
     }
 
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean("firstCreation", true);
+
     }
 
     @Override
@@ -82,4 +108,5 @@ public class MainActivity extends VasActivity {
         editor.edit().putString("visitorBoolData", json).commit();
         super.onDestroy();
     }
+
 }

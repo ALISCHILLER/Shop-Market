@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.varanegar.framework.database.querybuilder.Query;
+import com.varanegar.framework.database.querybuilder.criteria.Criteria;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
@@ -120,7 +121,8 @@ public class ListNotification_Fragment  extends IMainPageFragment
         PinRequest_ModelRepository pinRequest_modelRepository = new PinRequest_ModelRepository();
 
         Query q = new Query();
-        q.from(PinRequest_.PinRequest_Tbl);
+
+        q.from(PinRequest_.PinRequest_Tbl).whereAnd(Criteria.equals(PinRequest_.date,date));
         pinRequestModels=pinRequest_modelRepository.getItems(q);
     }
 

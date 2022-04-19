@@ -55,7 +55,7 @@ public class ListPinCode_Fragment extends IMainPageFragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                restData();
             }
         });
     }
@@ -88,6 +88,7 @@ public class ListPinCode_Fragment extends IMainPageFragment {
                     try {
                         getDataPinRequest();
                         listsetdata();
+                        progressDialog.dismiss();
                     } catch (Exception ignored) {
 
                     }

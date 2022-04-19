@@ -17,11 +17,13 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.varanegar.framework.ui.gradientlayout.GradientRelativeLayout;
+import com.varanegar.framework.util.datetime.JalaliCalendar;
 import com.varanegar.supervisor.R;
 import com.varanegar.supervisor.firebase.notification.model.PinRequest_Model;
 import com.varanegar.supervisor.fragment.menuTools_Fragment.MenuToolsAdapter;
 import com.varanegar.vaslibrary.webapi.freereason.IFreeReasonApi;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class ListNotificationAdapter extends
@@ -52,7 +54,12 @@ public class ListNotificationAdapter extends
         holder.text_customerName.setText(_pinRequestModels.get(position).customerName);
         holder.text_dealerName.setText(_pinRequestModels.get(position).dealerName);
         holder.text_pinName.setText(_pinRequestModels.get(position).pinName);
-        holder.text_date.setText(_pinRequestModels.get(position).date.toString());
+        JalaliCalendar calendar = new JalaliCalendar();
+        String YEAR = String.valueOf(calendar.get(Calendar.YEAR));
+        int MONTH = calendar.get(Calendar.MONTH)+1;
+        int DAY = calendar.get(Calendar.DAY_OF_MONTH);
+        String Startdata=YEAR+"/"+MONTH+"/"+DAY;
+        holder.text_date.setText(Startdata);
 
         holder.btn_true_request.setOnClickListener(new View.OnClickListener() {
             @Override

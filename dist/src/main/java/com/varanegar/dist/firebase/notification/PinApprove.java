@@ -28,7 +28,7 @@ public class PinApprove extends GeneralNotification {
     private boolean isValid = true;
 
     public PinApprove(Context context, RemoteMessage remoteMessage) {
-        super(context);
+        super(context,remoteMessage);
         Map<String, String> map = remoteMessage.getData();
         _customerName = map.get("customer");
         _pin = map.get("pin");

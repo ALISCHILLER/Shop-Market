@@ -12,6 +12,8 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.firebase.messaging.RemoteMessage;
+import com.varanegar.framework.util.datetime.DateFormat;
+import com.varanegar.framework.util.datetime.DateHelper;
 import com.varanegar.supervisor.MainActivity;
 import com.varanegar.supervisor.R;
 import com.varanegar.supervisor.firebase.notification.model.PinRequest_Model;
@@ -62,7 +64,8 @@ public class RequestPin extends GeneralNotification {
             isValid = false;
             return;
         }
-        if (customer_call_order == null || customer_call_order.isEmpty()) {
+        if ((customer_call_order == null || customer_call_order.isEmpty())
+                && !pinType.equals("pin4")) {
             isValid = false;
             return;
         }
@@ -71,6 +74,7 @@ public class RequestPin extends GeneralNotification {
         this._dealerId = UUID.fromString(dealerId);
         this._customerName = customerName;
         this._dealerName = delaerName;
+        if (customer_call_order != null )
         this._customer_call_order=UUID.fromString(customer_call_order);
     }
 
@@ -114,9 +118,9 @@ public class RequestPin extends GeneralNotification {
         PinRequest_ModelRepository pinRequest_modelRepository = new PinRequest_ModelRepository();
         pinRequest_modelRepository.insertOrUpdate(pinRequest_model);
 
-        Intent intent = new Intent(mContext, ListNotification_Fragment.class);
+        Intent intent = new Intent(mContext, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
+        intent.putExtra("pin_code","pin_layout");
         PendingIntent pendingIntent;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             pendingIntent = PendingIntent.getActivity(mContext,
