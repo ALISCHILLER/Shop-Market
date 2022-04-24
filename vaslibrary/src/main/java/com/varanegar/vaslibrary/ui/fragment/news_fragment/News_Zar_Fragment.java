@@ -77,8 +77,10 @@ public class News_Zar_Fragment extends VaranegarFragment {
         getdata();
         sliderAdapter=new SliderAdapter(pics, newsData_list.size(), new OnCardClickListener());
         initRecyclerView(view);
-        initCountryText(view);
-        initSwitchers(view);
+        if (newsData_list.size()>0) {
+            initCountryText(view);
+            initSwitchers(view);
+        }
         layout_sub=(CardView) view.findViewById(R.id.layout_sub);
         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
             layout_sub.setCardBackgroundColor(getContext().getResources()
