@@ -10,6 +10,7 @@ import com.varanegar.framework.network.gson.VaranegarGsonBuilder;
 import com.varanegar.supervisor.customreport.orderreturn.model.ReturnDealerModel;
 import com.varanegar.supervisor.customreport.orderstatus.model.OrderStatusReport;
 import com.varanegar.supervisor.customreport.orderstatus.model.orderStatusModel;
+import com.varanegar.supervisor.fragment.news_fragment.model.NewsData_Model;
 import com.varanegar.supervisor.model.ProductModel;
 import com.varanegar.supervisor.model.StatusConfigModel;
 import com.varanegar.supervisor.model.SupervisorTourId;
@@ -47,6 +48,7 @@ import com.varanegar.vaslibrary.webapi.reviewreport.SellReturnReviewReportViewMo
 import com.varanegar.vaslibrary.webapi.reviewreport.SellReviewReportViewModel;
 
 import java.io.StringReader;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -157,6 +159,12 @@ public class SupervisorApi extends BaseApi implements ISupervisorApi {
     public Call<List<CustomerPinModel>> GetPinCodes() {
         return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
                 .create(ISupervisorApi.class).GetPinCodes();
+    }
+
+    @Override
+    public Call<List<NewsData_Model>> getNewsData() {
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).getNewsData();
     }
 
     @Override

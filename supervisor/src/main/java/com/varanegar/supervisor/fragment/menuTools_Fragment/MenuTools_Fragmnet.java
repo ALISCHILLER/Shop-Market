@@ -1,6 +1,7 @@
 package com.varanegar.supervisor.fragment.menuTools_Fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,13 @@ import com.varanegar.framework.ui.scrollercard.InfiniteScrollAdapter;
 import com.varanegar.framework.ui.scrollercard.transform.ScaleTransformer;
 import com.varanegar.supervisor.IMainPageFragment;
 import com.varanegar.supervisor.R;
+import com.varanegar.supervisor.customers.CustomersFullFragment;
 import com.varanegar.supervisor.fragment.list_notification_Fragment.ListNotification_Fragment;
 import com.varanegar.supervisor.fragment.list_pincode_Fragment.ListPinCode_Fragment;
 import com.varanegar.supervisor.fragment.menuTools_Fragment.model.Item;
 import com.varanegar.supervisor.fragment.menuTools_Fragment.model.ItemStation;
 import com.varanegar.supervisor.fragment.news_fragment.News_Fragment;
+import com.varanegar.supervisor.report.ReportsFragment;
 
 import java.util.List;
 
@@ -61,6 +64,14 @@ public class MenuTools_Fragmnet extends IMainPageFragment implements
     @Override
     public void onItemClick(int position) {
         switch (position){
+            case 4:
+                CustomersFullFragment questionnaire=new CustomersFullFragment();
+                getVaranegarActvity().pushFragment(questionnaire);
+                break;
+            case 3:
+                ReportsFragment reportsFragment=new ReportsFragment();
+                getVaranegarActvity().pushFragment(reportsFragment);
+                break;
             case 2:
                 News_Fragment news_fragment=new News_Fragment();
                 getVaranegarActvity().pushFragment(news_fragment);
@@ -108,9 +119,9 @@ public class MenuTools_Fragmnet extends IMainPageFragment implements
 
     }
     @Override
-    public void onCurrentItemChanged(@Nullable MenuToolsAdapter.ViewHolder viewHolder, int adapterPosition) {
-        int positionInDataSet = infiniteAdapter.getRealPosition(adapterPosition);
-        onItemChanged(items.get(positionInDataSet));
+    public void onCurrentItemChanged(@Nullable MenuToolsAdapter.ViewHolder viewHolder,
+                                     int adapterPosition) {
+        onItemChanged(items.get(adapterPosition));
     }
 
     private void onItemChanged(Item item) {

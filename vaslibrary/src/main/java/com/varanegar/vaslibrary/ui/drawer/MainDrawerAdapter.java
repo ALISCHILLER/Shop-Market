@@ -37,6 +37,7 @@ import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
 import com.varanegar.vaslibrary.ui.dialog.TrackingLicenseFragment;
 import com.varanegar.vaslibrary.ui.fragment.CustomersFragment;
+import com.varanegar.vaslibrary.ui.fragment.news_fragment.News_Zar_Fragment;
 import com.varanegar.vaslibrary.ui.report.ProductReportFragment;
 import com.varanegar.vaslibrary.ui.report.ReturnReportFragment;
 import com.varanegar.vaslibrary.ui.report.report_new.customerNoSaleReport.CustomerNoSaleReportFragment;
@@ -106,6 +107,18 @@ public class MainDrawerAdapter extends DrawerAdapter {
                 activity.pushFragment(trackingLicenseFragment);
             }
         }));
+        add(new DrawerItem(activity, R.string.news_zar, R.drawable.ic_baseline_newspaper_24)
+                .setClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.closeDrawer();
+                News_Zar_Fragment trackingLicenseFragment = new News_Zar_Fragment();
+                activity.pushFragment(trackingLicenseFragment);
+
+            }
+        }));
+
+
         if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
             add(new DrawerItem(activity, R.string.recommended_products_configs, R.drawable.ic_recommender_system_black_24dp).setClickListener(new View.OnClickListener() {
                 @Override

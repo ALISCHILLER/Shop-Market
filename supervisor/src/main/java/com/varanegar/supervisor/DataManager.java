@@ -14,6 +14,8 @@ import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.framework.util.datetime.DateFormat;
 import com.varanegar.framework.util.datetime.DateHelper;
 import com.varanegar.framework.validation.ValidationException;
+import com.varanegar.supervisor.fragment.news_fragment.model.NewsData_Model;
+import com.varanegar.supervisor.fragment.news_fragment.model.NewsData_ModelRepository;
 import com.varanegar.supervisor.model.SupervisorTourId;
 import com.varanegar.supervisor.webapi.model_new.datamanager.CustomerPinModel;
 import com.varanegar.supervisor.webapi.model_new.datamanager.CustomerPinModelRepository;
@@ -39,6 +41,7 @@ import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
 import com.varanegar.vaslibrary.webapi.product.ProductGroupApi;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -721,14 +724,11 @@ public class DataManager {
             @Override
             protected void onSuccess() {
                 try {
-
                     SharedPreferences preferences =context.getSharedPreferences("QuestionCustomer",Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.clear();
                     editor.apply();
-                    getCustomerPin(callback, context);
-
-
+                    getNewsData(callback, context);
                 } catch (Exception e) {
                     callback.onError(context.getString(R.string.error_saving_request));
                 }
@@ -744,6 +744,48 @@ public class DataManager {
             protected void onError(String error) {
                 String err = error;
                 callback.onError(err);
+            }
+        });
+    }
+
+
+
+        public static void getNewsData(final Callback callback, final Context context){
+
+        SupervisorApi api = new SupervisorApi(context);
+        api.runWebRequest(api.getNewsData(), new WebCallBack<List<NewsData_Model>>() {
+            @Override
+            protected void onFinish() {
+
+            }
+
+            @Override
+            protected void onSuccess(List<NewsData_Model> result, Request request) {
+                try {
+                    NewsData_ModelRepository repository=new
+                            NewsData_ModelRepository();
+                    if (result != null && result.size() > 0) {
+                        repository.deleteAll();
+                        repository.insertOrUpdate(result);
+                    }else {
+                        repository.deleteAll();
+                    }
+                    supervisor_tour_sent(callback, context);
+                } catch (Exception e) {
+                    Timber.e(e);
+                    callback.onError(context.getString(R.string.error_saving_request));
+                }
+            }
+
+            @Override
+            protected void onApiFailure(ApiError error, Request request) {
+                String err = WebApiErrorBody.log(error, context);
+                callback.onError(err);
+            }
+
+            @Override
+            protected void onNetworkFailure(Throwable t, Request request) {
+                callback.onError(context.getString(R.string.connection_to_server_failed));
             }
         });
     }
@@ -786,6 +828,9 @@ public class DataManager {
         });
 
     }
+
+
+
     public static void supervisor_tour_sent(final Callback callback, final Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("SupervisorId", Context.MODE_PRIVATE);
         UUID userModel = UUID.fromString(sharedPreferences.getString("SupervisorIduniqueId", null));

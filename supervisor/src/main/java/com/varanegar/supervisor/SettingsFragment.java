@@ -25,6 +25,7 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.varanegar.framework.base.MainVaranegarActivity;
+import com.varanegar.framework.database.querybuilder.Query;
 import com.varanegar.framework.network.Connectivity;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
@@ -34,8 +35,12 @@ import com.varanegar.framework.util.component.PairedItemsSpinner;
 import com.varanegar.framework.util.component.SearchBox;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
+import com.varanegar.supervisor.fragment.news_fragment.model.NewsData_;
+import com.varanegar.supervisor.fragment.news_fragment.model.NewsData_Model;
+import com.varanegar.supervisor.fragment.news_fragment.model.NewsData_ModelRepository;
 import com.varanegar.supervisor.model.VisitorManager;
 import com.varanegar.supervisor.model.VisitorModel;
+import com.varanegar.supervisor.utill.dialog.BackMessageDialog;
 import com.varanegar.supervisor.webapi.SupervisorApi;
 import com.varanegar.supervisor.webapi.model_old.VisitorVisitInfoViewModel;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
@@ -76,9 +81,13 @@ public class SettingsFragment extends IMainPageFragment {
     private PairedItems returnCountPairedItems;
     private ConstraintLayout updatingQuestionnaire;
     private List<VisitorModel> visitorModels;
+    private List<NewsData_Model> newsData_list;
     @Override
-    protected View onCreateContentView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_supervisor_settings_layout, container, false);
+    protected View onCreateContentView(@NonNull LayoutInflater inflater,
+                                       @Nullable ViewGroup container,
+                                       @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_supervisor_settings_layout, container,
+                false);
 
         view.findViewById(R.id.menu_fab).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,6 +97,22 @@ public class SettingsFragment extends IMainPageFragment {
             }
         });
 
+//        getNewsdata();
+//        if (newsData_list.size()>0) {
+//            BackMessageDialog builder = new BackMessageDialog(getActivity());
+//            builder.setTitle("خبرنامه");
+//            String messageback = newsData_list.get(0).body;
+//            builder.setData(newsData_list.get(0).title + " \n " + messageback);
+//            builder.setPositiveButton(com.varanegar.vaslibrary.R.string.ok,
+//                    new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//
+//
+//                }
+//            });
+//            builder.show();
+//        }
         pieChart = view.findViewById(R.id.pie_chart);
         errorLayout = view.findViewById(R.id.error_layout);
         loadingLayout = view.findViewById(R.id.loading_layout);
@@ -393,7 +418,12 @@ public class SettingsFragment extends IMainPageFragment {
             dialog.show();
         }
     }
-
+    private void getNewsdata(){
+        NewsData_ModelRepository repository=new NewsData_ModelRepository();
+        Query query=new Query();
+        query.from(NewsData_.NewsData_Tbl);
+        newsData_list=repository.getItems(query);
+    }
 
 
 }

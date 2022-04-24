@@ -1,5 +1,5 @@
 -- ----------------------------
--- Table PinRequest_ for Customer
+-- Table PinRequest_ for PinRequest_
 -- ----------------------------
 
 CREATE TABLE "PinRequest_" (
@@ -14,6 +14,9 @@ CREATE TABLE "PinRequest_" (
 "Status" TEXT,
 "customer_call_order" TEXT
 );
+-- ----------------------------
+-- Table PinRequest_ for CustomerPin
+-- ----------------------------
 CREATE TABLE "CustomerPin" (
 "UniqueId"  TEXT NOT NULL COLLATE NOCASE ,
 "CustomerUniqueId"TEXT,
@@ -26,5 +29,18 @@ CREATE TABLE "CustomerPin" (
 "Pin2"  TEXT,
 "Pin3"  TEXT,
 "Pin4"  TEXT,
+PRIMARY KEY ("UniqueId" ASC)
+);
+-- ----------------------------
+-- Table PinRequest_ for NewsData_
+-- ----------------------------
+CREATE TABLE "NewsData_" (
+"UniqueId"  TEXT NOT NULL COLLATE NOCASE ,
+"title" TEXT,
+"body" TEXT,
+"subSystemType"  TEXT,
+"centerUniqueIds"  TEXT,
+"publishDate"  TEXT,
+"publishPDate"  TEXT,
 PRIMARY KEY ("UniqueId" ASC)
 );

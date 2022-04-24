@@ -9,4 +9,8 @@
     <color name="color_list_hedear">#c5cae8</color>
     <color name="color_list_footer">#9DD9F1</color>
     <color name="stroke_border">#D7D7D7</color>
+
+    <color name="blue">#348af7</color>
+    <color name="temperature_background">@color/blue</color>
+    <color name="temperature_text">@android:color/white</color>
 </resources>

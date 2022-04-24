@@ -1,9 +1,7 @@
-package com.varanegar.supervisor.fragment.news_fragment;
+package com.varanegar.vaslibrary.ui.fragment.news_fragment;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -17,33 +15,35 @@ import android.widget.ViewSwitcher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
+import androidx.cardview.widget.CardView;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.varanegar.framework.base.VaranegarApplication;
+import com.varanegar.framework.base.VaranegarFragment;
 import com.varanegar.framework.database.querybuilder.Query;
 import com.varanegar.framework.ui.card_slider.CardSliderLayoutManager;
 import com.varanegar.framework.ui.card_slider.CardSnapHelper;
-import com.varanegar.supervisor.IMainPageFragment;
-import com.varanegar.supervisor.R;
-import com.varanegar.supervisor.firebase.notification.model.PinRequest_;
-import com.varanegar.supervisor.fragment.news_fragment.cards.SliderAdapter;
-import com.varanegar.supervisor.fragment.news_fragment.model.NewsData_;
-import com.varanegar.supervisor.fragment.news_fragment.model.NewsData_Model;
-import com.varanegar.supervisor.fragment.news_fragment.model.NewsData_ModelRepository;
+import com.varanegar.vaslibrary.R;
+import com.varanegar.vaslibrary.ui.fragment.news_fragment.cards.SliderAdapter;
+import com.varanegar.vaslibrary.ui.fragment.news_fragment.model.NewsData_;
+import com.varanegar.vaslibrary.ui.fragment.news_fragment.model.NewsData_Model;
+import com.varanegar.vaslibrary.ui.fragment.news_fragment.model.NewsData_ModelRepository;
+
 
 import java.util.List;
 
-public class News_Fragment extends IMainPageFragment {
+public class News_Zar_Fragment extends VaranegarFragment {
     private RecyclerView recyclerView;
 
-    private  SliderAdapter sliderAdapter;
+    private SliderAdapter sliderAdapter;
     private CardSliderLayoutManager layoutManger;
 
     private TextSwitcher temperatureSwitcher;
     private TextSwitcher placeSwitcher;
     private TextSwitcher clockSwitcher;
     private TextSwitcher descriptionsSwitcher;
-
+    private CardView layout_sub;
     private TextView country1TextView;
     private TextView country2TextView;
     private int countryOffset1;
@@ -56,14 +56,20 @@ public class News_Fragment extends IMainPageFragment {
     private final int[][] dotCoords = new int[5][2];
 
 
+
+
     private List<NewsData_Model> newsData_list;
+
+    @Nullable
     @Override
-    protected View onCreateContentView(@NonNull LayoutInflater inflater,
-                                       @Nullable ViewGroup container,
-                                       @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_news_layout,container,false);
         return view;
     }
+
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -73,6 +79,12 @@ public class News_Fragment extends IMainPageFragment {
         initRecyclerView(view);
         initCountryText(view);
         initSwitchers(view);
+        layout_sub=(CardView) view.findViewById(R.id.layout_sub);
+        if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
+            layout_sub.setCardBackgroundColor(getContext().getResources()
+                    .getColor(R.color.green));
+        }
+
 
     }
     private void getdata(){
@@ -133,7 +145,6 @@ public class News_Fragment extends IMainPageFragment {
         temperatureSwitcher.setFactory(new TextViewFactory(R.style.TemperatureTextView, true));
         temperatureSwitcher.setCurrentText("0");
         placeSwitcher = (TextSwitcher) view.findViewById(R.id.ts_place);
-
         placeSwitcher.setFactory(new TextViewFactory(R.style.PlaceTextView, false));
         placeSwitcher.setCurrentText(newsData_list.get(0).title);
 
@@ -237,10 +248,14 @@ public class News_Fragment extends IMainPageFragment {
 
         invisibleText.setText(text);
 
-        final ObjectAnimator iAlpha = ObjectAnimator.ofFloat(invisibleText, "alpha", 1f);
-        final ObjectAnimator vAlpha = ObjectAnimator.ofFloat(visibleText, "alpha", 0f);
-        final ObjectAnimator iX = ObjectAnimator.ofFloat(invisibleText, "x", countryOffset1);
-        final ObjectAnimator vX = ObjectAnimator.ofFloat(visibleText, "x", vOffset);
+        final ObjectAnimator iAlpha = ObjectAnimator.ofFloat(invisibleText,
+                "alpha", 1f);
+        final ObjectAnimator vAlpha = ObjectAnimator.ofFloat(visibleText,
+                "alpha", 0f);
+        final ObjectAnimator iX = ObjectAnimator.ofFloat(invisibleText,
+                "x", countryOffset1);
+        final ObjectAnimator vX = ObjectAnimator.ofFloat(visibleText,
+                "x", vOffset);
 
         final AnimatorSet animSet = new AnimatorSet();
         animSet.playTogether(iAlpha, vAlpha, iX, vX);

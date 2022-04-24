@@ -79,6 +79,7 @@ import com.varanegar.vaslibrary.model.product.ProductModel;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.promotion.V3.DiscountInitializeHandler;
 import com.varanegar.vaslibrary.promotion.V3.DiscountInitializeHandlerV3;
+import com.varanegar.vaslibrary.ui.fragment.news_fragment.NewsZarManager;
 
 import java.util.List;
 
@@ -1013,6 +1014,29 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 1;
                 }
             });
+
+                tasks.add(new SimpleTourAsyncTask() {
+                    @Override
+                    public void run(UpdateCall call) {
+                        NewsZarManager newsZarManager = new NewsZarManager(getContext());
+                        newsZarManager.sync(call);
+                    }
+
+                    @Override
+                    public String name() {
+                        return "Questionnaire";
+                    }
+
+                    @Override
+                    public int group() {
+                        return R.string.questionnairie_info;
+                    }
+
+                    @Override
+                    public int queueId() {
+                        return 1;
+                    }
+                });
             if (!isSimpleMode)
                 tasks.add(new SimpleTourAsyncTask() {
                     @Override
@@ -1036,6 +1060,8 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                         return 2;
                     }
                 });
+
+
             tasks.add(new TourAsyncTask() {
                 ProductManager productManager = new ProductManager(getContext());
 

@@ -52,6 +52,8 @@ public class MenuToolsAdapter  extends RecyclerView.Adapter<MenuToolsAdapter.Vie
                 .load(data.get(position).getItemIcon())
                 .into(holder.imageView);
         holder.textView.setText(data.get(position).getNameItem());
+        Log.e("TAG", "onClick:"+data.get(position).getNameItem());
+        Log.e("TAG", "number:"+position);
     }
 
     @Override

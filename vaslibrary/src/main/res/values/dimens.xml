@@ -10,4 +10,11 @@
 
     <dimen name="margin_basic_25">0.25dp</dimen>
     <dimen name="font_size">15sp</dimen>
+
+
+    <dimen name="recycler_view_left_offset">9dp</dimen>
+    <dimen name="left_offset">61dp</dimen>
+    <dimen name="left_offsett">72dp</dimen>
+    <dimen name="card_width">148dp</dimen>
+    <dimen name="card_corner_radius">10dp</dimen>
 </resources>

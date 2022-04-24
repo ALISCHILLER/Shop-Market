@@ -19,7 +19,9 @@ public class ItemStation {
         return Arrays.asList(
                 new Item("لیست پین کدها مشتریان", R.drawable.pincode),
                 new Item("لیست درخواست ها", R.drawable.request),
-                new Item("خبرنامه زرماکارون", R.drawable.mail)
+                new Item("خبرنامه زرماکارون", R.drawable.mail),
+                new Item("گزارشات", R.drawable.report),
+                new Item("پرسشنامه", R.drawable.questionnaire)
                );
     }
 }

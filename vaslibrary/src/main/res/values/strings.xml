@@ -367,6 +367,7 @@
     <string name="rem_invoice_amount">مانده فاکتور</string>
     <string name="downloading_license_file_failed">دانلود فایل لایسنس با خطا مواجه شد</string>
     <string name="tracking_license">لایسنس ردیابی</string>
+    <string name="news_zar">خبرنامه زر</string>
     <string name="downloading_license_file">دریافت لایسنس</string>
     <string name="save_device_id">ثبت دستگاه</string>
     <string name="device_id_is_not_available">آیدی دستگاه در دسترس قرار ندارد</string>

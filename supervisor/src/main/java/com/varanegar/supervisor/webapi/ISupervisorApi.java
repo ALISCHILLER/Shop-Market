@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import com.varanegar.supervisor.customreport.orderreturn.model.ReturnDealerModel;
 import com.varanegar.supervisor.customreport.orderstatus.model.OrderStatusReport;
 import com.varanegar.supervisor.customreport.orderstatus.model.orderStatusModel;
+import com.varanegar.supervisor.fragment.news_fragment.model.NewsData_Model;
 import com.varanegar.supervisor.model.ProductModel;
 import com.varanegar.supervisor.model.StatusConfigModel;
 import com.varanegar.supervisor.model.SupervisorTourId;
@@ -36,6 +37,7 @@ import com.varanegar.vaslibrary.webapi.reviewreport.ProductReviewReportViewModel
 import com.varanegar.vaslibrary.webapi.reviewreport.SellReturnReviewReportViewModel;
 import com.varanegar.vaslibrary.webapi.reviewreport.SellReviewReportViewModel;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -188,4 +190,7 @@ public interface ISupervisorApi {
 
     @GET("api/v2/ngt/supervisor/GetPinCodes")
     Call<List<CustomerPinModel>>GetPinCodes();
+
+    @GET("api/v2/ngt/newsletter/sync/loaddata")
+    Call<List<NewsData_Model>>getNewsData();
 }
