@@ -133,7 +133,43 @@ public class DataManager {
         supervisorTourSent2(callbackInner);
     }
 
+    public void getNewsZar2(final Callback callback){
+        _api.runWebRequest(_api.getNewsData(), new WebCallBack<List<NewsData_Model>>() {
+            @Override
+            protected void onFinish() {
 
+            }
+
+            @Override
+            protected void onSuccess(List<NewsData_Model> result, Request request) {
+                try {
+                    NewsData_ModelRepository repository=new
+                            NewsData_ModelRepository();
+                    if (result != null && result.size() > 0) {
+                        repository.deleteAll();
+                        repository.insertOrUpdate(result);
+                    }else {
+                        repository.deleteAll();
+                    }
+                    callback.onSuccess();
+                } catch (Exception e) {
+                    Timber.e(e);
+                    callback.onError(_context.getString(R.string.error_saving_request));
+                }
+            }
+
+            @Override
+            protected void onApiFailure(ApiError error, Request request) {
+                String err = WebApiErrorBody.log(error, _context);
+                callback.onError(err);
+            }
+
+            @Override
+            protected void onNetworkFailure(Throwable t, Request request) {
+                callback.onError(_context.getString(R.string.connection_to_server_failed));
+            }
+        });
+    }
     public void getCustomerPin2(final Callback callback){
         _api.runWebRequest(_api.GetPinCodes(), new WebCallBack<List<CustomerPinModel>>() {
             @Override

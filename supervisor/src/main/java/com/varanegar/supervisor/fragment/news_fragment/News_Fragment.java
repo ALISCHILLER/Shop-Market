@@ -2,6 +2,8 @@ package com.varanegar.supervisor.fragment.news_fragment;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -20,9 +22,13 @@ import androidx.annotation.StyleRes;
 import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.varanegar.framework.database.querybuilder.Query;
 import com.varanegar.framework.ui.card_slider.CardSliderLayoutManager;
 import com.varanegar.framework.ui.card_slider.CardSnapHelper;
+import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
+import com.varanegar.framework.util.component.cutemessagedialog.Icon;
+import com.varanegar.supervisor.DataManager;
 import com.varanegar.supervisor.IMainPageFragment;
 import com.varanegar.supervisor.R;
 import com.varanegar.supervisor.firebase.notification.model.PinRequest_;
@@ -38,7 +44,7 @@ public class News_Fragment extends IMainPageFragment {
 
     private  SliderAdapter sliderAdapter;
     private CardSliderLayoutManager layoutManger;
-
+    private FloatingActionButton fab;
     private TextSwitcher temperatureSwitcher;
     private TextSwitcher placeSwitcher;
     private TextSwitcher clockSwitcher;
@@ -62,18 +68,28 @@ public class News_Fragment extends IMainPageFragment {
                                        @Nullable ViewGroup container,
                                        @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_news_layout,container,false);
+
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         getdata();
         sliderAdapter=new SliderAdapter(pics, newsData_list.size(), new OnCardClickListener());
-        initRecyclerView(view);
-        initCountryText(view);
-        initSwitchers(view);
-
+        initRecyclerView();
+        if (newsData_list.size()>0) {
+            initCountryText(view);
+            initSwitchers(view);
+        }
+        fab=view.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                restData();
+            }
+        });
     }
     private void getdata(){
         NewsData_ModelRepository repository=new NewsData_ModelRepository();
@@ -85,9 +101,9 @@ public class News_Fragment extends IMainPageFragment {
 
 
     }
-    private void initRecyclerView(View view) {
+    private void initRecyclerView() {
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+
         recyclerView.setAdapter(sliderAdapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -253,6 +269,49 @@ public class News_Fragment extends IMainPageFragment {
 
         }
     }
+    public void restData(){
+        final ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage(getString(R.string.downloading_data));
+        progressDialog.show();
+        DataManager dataManager=new DataManager(getContext());
+        dataManager.getNewsZar2(new DataManager.Callback() {
+            @Override
+            public void onSuccess() {
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    try {
+                        progressDialog.dismiss();
+                        getdata();
+                        sliderAdapter=new SliderAdapter(pics, newsData_list.size(),
+                                new OnCardClickListener());
+                        initRecyclerView();
+                    } catch (Exception ignored) {
+                        progressDialog.dismiss();
+                    }
+                }
+            }
 
-
+            @Override
+            public void onError(String error) {
+                showError(error);
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    try {
+                        progressDialog.dismiss();
+                    } catch (Exception ignored) {
+                        progressDialog.dismiss();
+                    }
+                }
+            }
+        });
+    }
+    private void showError(String error) {
+        Context context = getContext();
+        if (isResumed() && context != null) {
+            CuteMessageDialog dialog = new CuteMessageDialog(context);
+            dialog.setTitle(R.string.error);
+            dialog.setMessage(error);
+            dialog.setIcon(Icon.Error);
+            dialog.setPositiveButton(R.string.ok, null);
+            dialog.show();
+        }
+    }
 }
