@@ -104,6 +104,7 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
     private PairedItemsEditable street2PairedItem;
     private PairedItemsEditable street3PairedItem;
     private PairedItemsEditable street4PairedItem;
+    private PairedItemsEditable code_naghsh_paired_item;
     private PairedItemsEditable street5PairedItem;
     private PairedItemsEditable postalCodePairedItem;
     private PairedItemsSpinner<DataForRegisterModel> stateSpinner;
@@ -260,6 +261,10 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
         postalCodePairedItem = view.findViewById(R.id.postal_code_paired_item);
         validator.addField(postalCodePairedItem, getString(R.string.postal_code_label),
                 new LengthChecker(10, 10, false));
+
+        code_naghsh_paired_item = view.findViewById(R.id.code_naghsh_paired_item);
+        validator.addField(code_naghsh_paired_item, getString(R.string.code_naghsh),
+                new LengthChecker(0, 100, false));
 
         stateSpinner = view.findViewById(R.id.state_spinner);
         stateSpinner.setup(getFragmentManager(), dataMap.get("BLAND"), (item, text) -> {
@@ -584,6 +589,7 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
         syncGetNewCustomerViewModel.EconomicCode = economicCodePairedItem.getValue();
         syncGetNewCustomerViewModel.NationalCode = nationalCodePairedItem.getValue();
         syncGetNewCustomerViewModel.CityId = cityNamePairedItem.getValue();
+        syncGetNewCustomerViewModel.CodeNaghsh = code_naghsh_paired_item.getValue();
 
         DataForRegisterModel ktokd = customerAccountGroupSpinner.getSelectedItem();
         if (ktokd != null)

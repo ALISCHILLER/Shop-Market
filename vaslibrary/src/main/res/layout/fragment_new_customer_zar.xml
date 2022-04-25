@@ -133,6 +133,15 @@
                 app:singleLine="true"
                 app:title="@string/city_name" />
 
+            <com.varanegar.framework.util.component.PairedItemsEditable
+                android:id="@+id/code_naghsh_paired_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:orientation="horizontal"
+                app:singleLine="true"
+                app:title="@string/code_naghsh" />
+
             <com.varanegar.framework.util.component.PairedItemsSpinner
                 android:id="@+id/degree_spinner"
                 android:layout_width="match_parent"

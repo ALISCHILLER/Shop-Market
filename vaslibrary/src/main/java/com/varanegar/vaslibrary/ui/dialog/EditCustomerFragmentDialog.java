@@ -101,16 +101,19 @@ public class EditCustomerFragmentDialog extends CuteAlertDialog implements Valid
     }
 
     @Override
-    protected void onCreateContentView(LayoutInflater inflater, ViewGroup viewGroup, @Nullable Bundle savedInstanceState) {
+    protected void onCreateContentView(LayoutInflater inflater, ViewGroup viewGroup,
+                                       @Nullable Bundle savedInstanceState) {
         SysConfigManager sysConfigManager = new SysConfigManager(getContext());
         try {
             BackOfficeType backOfficeType = sysConfigManager.getBackOfficeType();
             validator = new Validator();
             if (savedInstanceState != null)
-                customerUniqueId = UUID.fromString(savedInstanceState.getString("68565e5e-d407-4858-bc5f-fd52b9318734"));
+                customerUniqueId = UUID.fromString(savedInstanceState
+                        .getString("68565e5e-d407-4858-bc5f-fd52b9318734"));
             else {
                 Bundle bundle = getArguments();
-                customerUniqueId = UUID.fromString(bundle.getString("68565e5e-d407-4858-bc5f-fd52b9318734"));
+                customerUniqueId = UUID.fromString(bundle
+                        .getString("68565e5e-d407-4858-bc5f-fd52b9318734"));
             }
 
             CustomerManager manager = new CustomerManager(getContext());
@@ -140,9 +143,12 @@ public class EditCustomerFragmentDialog extends CuteAlertDialog implements Valid
                 customerLevelSpinner.setTitle(getString(R.string.sub_group_1));
                 customerCategorySpinner.setTitle(getString(R.string.customer_group));
             }
-            CustomerActivityManager customerActivityManager = new CustomerActivityManager(getContext());
-            List<CustomerActivityModel> customerActivityModels = customerActivityManager.getItems(new Query().from(CustomerActivity.CustomerActivityTbl));
-            customerActivitySpinner.setup(getFragmentManager(), customerActivityModels, new SearchBox.SearchMethod<CustomerActivityModel>() {
+            CustomerActivityManager customerActivityManager = new
+                    CustomerActivityManager(getContext());
+            List<CustomerActivityModel> customerActivityModels =
+                    customerActivityManager.getItems(new Query().from(CustomerActivity.CustomerActivityTbl));
+            customerActivitySpinner.setup(getFragmentManager(),
+                    customerActivityModels, new SearchBox.SearchMethod<CustomerActivityModel>() {
                 @Override
                 public boolean onSearch(CustomerActivityModel item, String text) {
                     String str = HelperMethods.persian2Arabic(text);
@@ -158,8 +164,10 @@ public class EditCustomerFragmentDialog extends CuteAlertDialog implements Valid
             }
 
             CustomerLevelManager customerLevelManager = new CustomerLevelManager(getContext());
-            List<CustomerLevelModel> customerLevelModels = customerLevelManager.getItems(new Query().from(CustomerLevel.CustomerLevelTbl));
-            customerLevelSpinner.setup(getFragmentManager(), customerLevelModels, new SearchBox.SearchMethod<CustomerLevelModel>() {
+            List<CustomerLevelModel> customerLevelModels =
+                    customerLevelManager.getItems(new Query().from(CustomerLevel.CustomerLevelTbl));
+            customerLevelSpinner.setup(getFragmentManager(),
+                    customerLevelModels, new SearchBox.SearchMethod<CustomerLevelModel>() {
                 @Override
                 public boolean onSearch(CustomerLevelModel item, String text) {
                     String str = HelperMethods.persian2Arabic(text);
@@ -174,9 +182,13 @@ public class EditCustomerFragmentDialog extends CuteAlertDialog implements Valid
                     customerLevelSpinner.selectItem(i);
             }
 
-            CustomerCategoryManager customerCategoryManager = new CustomerCategoryManager(getContext());
-            List<CustomerCategoryModel> customerCategoryModels = customerCategoryManager.getItems(new Query().from(CustomerCategory.CustomerCategoryTbl));
-            customerCategorySpinner.setup(getFragmentManager(), customerCategoryModels, new SearchBox.SearchMethod<CustomerCategoryModel>() {
+            CustomerCategoryManager customerCategoryManager = new
+                    CustomerCategoryManager(getContext());
+            List<CustomerCategoryModel> customerCategoryModels =
+                    customerCategoryManager.getItems(new
+                            Query().from(CustomerCategory.CustomerCategoryTbl));
+            customerCategorySpinner.setup(getFragmentManager(),
+                    customerCategoryModels, new SearchBox.SearchMethod<CustomerCategoryModel>() {
                 @Override
                 public boolean onSearch(CustomerCategoryModel item, String text) {
                     String str = HelperMethods.persian2Arabic(text);
@@ -193,7 +205,8 @@ public class EditCustomerFragmentDialog extends CuteAlertDialog implements Valid
 
             StateManager stateManager = new StateManager(getContext());
             List<StateModel> stateModels = stateManager.getAll();
-            satesSpinner.setup(getFragmentManager(), stateModels, new SearchBox.SearchMethod<StateModel>() {
+            satesSpinner.setup(getFragmentManager(), stateModels,
+                    new SearchBox.SearchMethod<StateModel>() {
                 @Override
                 public boolean onSearch(StateModel item, String text) {
                     String str = HelperMethods.persian2Arabic(text);
@@ -207,8 +220,10 @@ public class EditCustomerFragmentDialog extends CuteAlertDialog implements Valid
                 if (stateModels.get(i).UniqueId.equals(customer.StateId)) {
                     satesSpinner.selectItem(i);
                     CityManager cityManager = new CityManager(getContext());
-                    List<CityModel> cityModels = cityManager.getSatesCities(stateModels.get(i).UniqueId);
-                    cityPairedItemSpinner.setup(getFragmentManager(), cityModels, new SearchBox.SearchMethod<CityModel>() {
+                    List<CityModel> cityModels = cityManager
+                            .getSatesCities(stateModels.get(i).UniqueId);
+                    cityPairedItemSpinner.setup(getFragmentManager(),
+                            cityModels, new SearchBox.SearchMethod<CityModel>() {
                         @Override
                         public boolean onSearch(CityModel item, String text) {
                             String str = HelperMethods.persian2Arabic(text);
@@ -226,8 +241,10 @@ public class EditCustomerFragmentDialog extends CuteAlertDialog implements Valid
             }
 
             CustomerOwnerTypeManager customerOwnerTypeManager = new CustomerOwnerTypeManager(getContext());
-            List<CustomerOwnerTypeModel> customerOwnerTypeModels = customerOwnerTypeManager.getItems(new Query().from(CustomerOwnerType.CustomerOwnerTypeTbl));
-            customerOwnerTypesSpinner.setup(getFragmentManager(), customerOwnerTypeModels, new SearchBox.SearchMethod<CustomerOwnerTypeModel>() {
+            List<CustomerOwnerTypeModel> customerOwnerTypeModels =
+                    customerOwnerTypeManager.getItems(new Query().from(CustomerOwnerType.CustomerOwnerTypeTbl));
+            customerOwnerTypesSpinner.setup(getFragmentManager(),
+                    customerOwnerTypeModels, new SearchBox.SearchMethod<CustomerOwnerTypeModel>() {
                 @Override
                 public boolean onSearch(CustomerOwnerTypeModel item, String text) {
                     String str = HelperMethods.persian2Arabic(text);
@@ -269,7 +286,8 @@ public class EditCustomerFragmentDialog extends CuteAlertDialog implements Valid
             if (configMap.compare(ConfigKey.EditCustomerCity, false))
                 cityPairedItemSpinner.setEnabled(false);
             else
-                cityPairedItemSpinner.setOnItemSelectedListener(new PairedItemsSpinner.OnItemSelectedListener<CityModel>() {
+                cityPairedItemSpinner.setOnItemSelectedListener(
+                        new PairedItemsSpinner.OnItemSelectedListener<CityModel>() {
                     @Override
                     public void onItemSelected(int position, CityModel item) {
                         customer.CityId = item.UniqueId;
@@ -278,7 +296,8 @@ public class EditCustomerFragmentDialog extends CuteAlertDialog implements Valid
 //            if (configMap.compare(ConfigKey.EditCustomerCounty, false))
 //                countiesSpinner.setEnabled(false);
 //            else
-//                countiesSpinner.setOnItemSelectedListener(new PairedItemsSpinner.OnItemSelectedListener<CountyModel>() {
+//                countiesSpinner.setOnItemSelectedListener(
+//                new PairedItemsSpinner.OnItemSelectedListener<CountyModel>() {
 //                    @Override
 //                    public void onItemSelected(int position, CountyModel item) {
 //                        customer.CountyId = item.UniqueId;
@@ -287,13 +306,15 @@ public class EditCustomerFragmentDialog extends CuteAlertDialog implements Valid
             if (configMap.compare(ConfigKey.EditCustomerState, false))
                 satesSpinner.setEnabled(false);
             else
-                satesSpinner.setOnItemSelectedListener(new PairedItemsSpinner.OnItemSelectedListener<StateModel>() {
+                satesSpinner.setOnItemSelectedListener(
+                        new PairedItemsSpinner.OnItemSelectedListener<StateModel>() {
                     @Override
                     public void onItemSelected(int position, StateModel item) {
                         customer.StateId = item.UniqueId;
                         CityManager cityManager = new CityManager(getContext());
                         List<CityModel> cityModels = cityManager.getSatesCities(item.UniqueId);
-                        cityPairedItemSpinner.setup(getFragmentManager(), cityModels, new SearchBox.SearchMethod<CityModel>() {
+                        cityPairedItemSpinner.setup(getFragmentManager(), cityModels,
+                                new SearchBox.SearchMethod<CityModel>() {
                             @Override
                             public boolean onSearch(CityModel item, String text) {
                                 String str = HelperMethods.persian2Arabic(text);
@@ -310,7 +331,8 @@ public class EditCustomerFragmentDialog extends CuteAlertDialog implements Valid
             if (configMap.compare(ConfigKey.EditCustomerOwnerType, false))
                 customerOwnerTypesSpinner.setEnabled(false);
             else
-                customerOwnerTypesSpinner.setOnItemSelectedListener(new PairedItemsSpinner.OnItemSelectedListener<CustomerOwnerTypeModel>() {
+                customerOwnerTypesSpinner.setOnItemSelectedListener(
+                        new PairedItemsSpinner.OnItemSelectedListener<CustomerOwnerTypeModel>() {
                     @Override
                     public void onItemSelected(int position, CustomerOwnerTypeModel item) {
                         customer.OwnerTypeRef = item.BackOfficeId;
@@ -319,7 +341,8 @@ public class EditCustomerFragmentDialog extends CuteAlertDialog implements Valid
             if (configMap.compare(ConfigKey.EditCustomerActivity, false))
                 customerActivitySpinner.setEnabled(false);
             else
-                customerActivitySpinner.setOnItemSelectedListener(new PairedItemsSpinner.OnItemSelectedListener<CustomerActivityModel>() {
+                customerActivitySpinner.setOnItemSelectedListener(
+                        new PairedItemsSpinner.OnItemSelectedListener<CustomerActivityModel>() {
                     @Override
                     public void onItemSelected(int position, CustomerActivityModel item) {
                         customer.CustomerActivityId = item.UniqueId;
@@ -329,7 +352,8 @@ public class EditCustomerFragmentDialog extends CuteAlertDialog implements Valid
             if (configMap.compare(ConfigKey.EditCustomerLevel, false))
                 customerLevelSpinner.setEnabled(false);
             else
-                customerLevelSpinner.setOnItemSelectedListener(new PairedItemsSpinner.OnItemSelectedListener<CustomerLevelModel>() {
+                customerLevelSpinner.setOnItemSelectedListener(
+                        new PairedItemsSpinner.OnItemSelectedListener<CustomerLevelModel>() {
                     @Override
                     public void onItemSelected(int position, CustomerLevelModel item) {
                         customer.CustomerLevelId = item.UniqueId;
@@ -339,7 +363,8 @@ public class EditCustomerFragmentDialog extends CuteAlertDialog implements Valid
             if (configMap.compare(ConfigKey.EditCustomerCategory, false))
                 customerCategorySpinner.setEnabled(false);
             else
-                customerCategorySpinner.setOnItemSelectedListener(new PairedItemsSpinner.OnItemSelectedListener<CustomerCategoryModel>() {
+                customerCategorySpinner.setOnItemSelectedListener(
+                        new PairedItemsSpinner.OnItemSelectedListener<CustomerCategoryModel>() {
                     @Override
                     public void onItemSelected(int position, CustomerCategoryModel item) {
                         customer.CustomerCategoryId = item.UniqueId;
@@ -367,7 +392,8 @@ public class EditCustomerFragmentDialog extends CuteAlertDialog implements Valid
     @Override
     public void onValidationSucceeded() {
         String errMsg = "";
-        if (!(VaranegarApplication.is(VaranegarApplication.AppId.Contractor)) && (customerStoreName.getValue() == null || customerStoreName.getValue().isEmpty()))
+        if (!(VaranegarApplication.is(VaranegarApplication.AppId.Contractor)) &&
+                (customerStoreName.getValue() == null || customerStoreName.getValue().isEmpty()))
             errMsg = errMsg + getString(R.string.store_name_cannot_be_empty) + "\n";
         if (errMsg.equals("")) {
             customer.Phone = customerPhone.getValue();

@@ -44,4 +44,5 @@ public class SyncZarGetNewCustomerViewModel {
     public String StateId;
     @SerializedName("KUKLA")
     public String KUKLA;
+    public String CodeNaghsh;
 }

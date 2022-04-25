@@ -136,7 +136,13 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             app:title="@string/customer_code" />
-
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/code_naghsh_paired_item"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:visibility="gone"
+                            app:title="@string/code_naghsh" />
 
                         <com.varanegar.framework.util.component.PairedItems
                             android:id="@+id/customer_tel_paired_item"

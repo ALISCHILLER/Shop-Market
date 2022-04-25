@@ -79,7 +79,8 @@ public class SaveOrderAction extends CheckDistanceAction {
             return error;
 
         boolean dataSent = getCallManager().isDataSent(getCalls(), null);
-        List<CustomerCallOrderPreviewModel> orderModels = new CustomerCallOrderPreviewManager(getActivity()).getCustomerCallOrders(getSelectedId());
+        List<CustomerCallOrderPreviewModel> orderModels = new
+                CustomerCallOrderPreviewManager(getActivity()).getCustomerCallOrders(getSelectedId());
         if (dataSent && orderModels.size() == 0)
                 return getActivity().getString(R.string.no_order_and_data_is_sent);
 
@@ -88,22 +89,33 @@ public class SaveOrderAction extends CheckDistanceAction {
 
         if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
             SysConfigManager sysConfigManager = new SysConfigManager(getActivity());
-            SysConfigModel inactiveCustomers = sysConfigManager.read(ConfigKey.SendInactiveCustomers, SysConfigManager.cloud);
-            SysConfigModel TakeOrderFromInactiveCustomers = sysConfigManager.read(ConfigKey.TakeOrderFromInactiveCustomers, SysConfigManager.cloud);
+            SysConfigModel inactiveCustomers = sysConfigManager
+                    .read(ConfigKey.SendInactiveCustomers, SysConfigManager.cloud);
+            SysConfigModel TakeOrderFromInactiveCustomers = sysConfigManager
+                    .read(ConfigKey.TakeOrderFromInactiveCustomers, SysConfigManager.cloud);
+            if(getCustomer().CodeNaghsh ==null){
+                return getActivity().getString(R.string.the_customer_not_code);
+            }
             if (!getCustomer().IsActive)
                 return getActivity().getString(R.string.the_customer_is_disabled);
         } else {
-            if (!getCustomer().IsActive && !(getCustomer().IsNewCustomer) && checkCloudConfig(ConfigKey.ScientificVisit, false))
+            if (!getCustomer().IsActive && !(getCustomer().IsNewCustomer) &&
+                    checkCloudConfig(ConfigKey.ScientificVisit, false))
                 return getActivity().getString(R.string.the_customer_is_disabled);
         }
         SysConfigManager sysConfigManager = new SysConfigManager(getActivity());
-        SysConfigModel advancedCreditControlConfig = sysConfigManager.read(ConfigKey.AdvancedCreditControl, SysConfigManager.cloud);
+        SysConfigModel advancedCreditControlConfig = sysConfigManager
+                .read(ConfigKey.AdvancedCreditControl, SysConfigManager.cloud);
         if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
-            if (SysConfigManager.compare(advancedCreditControlConfig, true) && getCustomer().ErrorMessage != null && !getCustomer().ErrorMessage.isEmpty())
+            if (SysConfigManager.compare(advancedCreditControlConfig, true) &&
+                    getCustomer().ErrorMessage != null && !getCustomer().ErrorMessage.isEmpty())
                 return getCustomer().ErrorMessage;
         } else {
-            SysConfigModel sysConfigModel = sysConfigManager.read(ConfigKey.AllowCashWithoutAdvancedCreditControl, SysConfigManager.cloud);
-            if (SysConfigManager.compare(sysConfigModel, false) && SysConfigManager.compare(advancedCreditControlConfig, true) && getCustomer().ErrorMessage != null && !getCustomer().ErrorMessage.isEmpty())
+            SysConfigModel sysConfigModel = sysConfigManager.
+                    read(ConfigKey.AllowCashWithoutAdvancedCreditControl, SysConfigManager.cloud);
+            if (SysConfigManager.compare(sysConfigModel, false) &&
+                    SysConfigManager.compare(advancedCreditControlConfig, true) &&
+                    getCustomer().ErrorMessage != null && !getCustomer().ErrorMessage.isEmpty())
                 return getCustomer().ErrorMessage;
         }
 
@@ -114,13 +126,15 @@ public class SaveOrderAction extends CheckDistanceAction {
     public boolean isDone() {
         CustomerCallOrderManager callOrderManager = new CustomerCallOrderManager(getActivity());
         List<CustomerCallOrderModel> callOrderModels = callOrderManager.getCustomerCallOrders(getSelectedId());
-        List<CustomerCallOrderModel> confirmedCallOrders = Linq.findAll(callOrderModels, new Linq.Criteria<CustomerCallOrderModel>() {
+        List<CustomerCallOrderModel> confirmedCallOrders = Linq.findAll(callOrderModels,
+                new Linq.Criteria<CustomerCallOrderModel>() {
             @Override
             public boolean run(final CustomerCallOrderModel customerCallOrderModel) {
                 return Linq.exists(getCalls(), new Linq.Criteria<CustomerCallModel>() {
                     @Override
                     public boolean run(CustomerCallModel customerCallModel) {
-                        return customerCallOrderModel.UniqueId.toString().equals(customerCallModel.ExtraField1);
+                        return customerCallOrderModel.UniqueId.toString()
+                                .equals(customerCallModel.ExtraField1);
                     }
                 });
             }
@@ -135,7 +149,8 @@ public class SaveOrderAction extends CheckDistanceAction {
         List<CustomerOrderTypeModel> customerOrderTypeModels = customerOrderTypesManager.getItems();
         CustomerPaymentTypesViewManager customerPaymentTypesViewManager = new CustomerPaymentTypesViewManager(getActivity());
         try {
-            List<CustomerPaymentTypesViewModel> customerPaymentTypes = customerPaymentTypesViewManager.getCustomerPaymentType(getSelectedId());
+            List<CustomerPaymentTypesViewModel> customerPaymentTypes =
+                    customerPaymentTypesViewManager.getCustomerPaymentType(getSelectedId());
             if (customerOrderTypeModels.size() > 0 && customerPaymentTypes.size() > 0)
                 gotoOrder();
             else {
@@ -171,7 +186,8 @@ public class SaveOrderAction extends CheckDistanceAction {
     private void gotoOrder() {
         try {
             calculateEmphaticItems(getSelectedId());
-            CustomerEmphaticProductManager customerEmphaticProductManager = new CustomerEmphaticProductManager(getActivity());
+            CustomerEmphaticProductManager customerEmphaticProductManager =
+                    new CustomerEmphaticProductManager(getActivity());
             customerEmphaticProductManager.checkCustomerEmphaticItems(getSelectedId());
             CustomerCallOrderPreviewManager orderManager = new CustomerCallOrderPreviewManager(getActivity());
             if (checkCloudConfig(ConfigKey.DoubleRequestIsEnabled, true)) {

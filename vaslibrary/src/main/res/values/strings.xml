@@ -24,6 +24,7 @@
     <string name="chq_branch_name">نام شعبه</string>
     <string name="bank_name">نام بانک</string>
     <string name="city_name">نام شهر</string>
+    <string name="code_naghsh">کدنقش</string>
     <string name="chq_date">تاریخ چک</string>
     <string name="chq_no">شماره چک</string>
     <string name="cash_discount">تخفیف تسویه</string>
@@ -971,6 +972,7 @@
     <string name="discount_module_initialized">ماژول تخفیفات و جوایز مقداردهی شد</string>
     <string name="backing_up_database">در حال پشتیبان گیری از داده ها</string>
     <string name="the_customer_is_disabled">امکان ثبت سفارش برای مشتری غیرفعال وجود ندارد</string>
+    <string name="the_customer_not_code">امکان ثبت سفارش برای مشتری بدون کد نقش وجود ندارد لطفا به صفحه ویرایش مشتری بروید</string>
     <string name="the_customer_is_disabled_t">امکان ثبت برگشتی برای مشتری غیرفعال وجود ندارد</string>
     <string name="open_invoice_no">شماره فاکتور باز</string>
     <string name="batch_numbers">سری ساخت</string>

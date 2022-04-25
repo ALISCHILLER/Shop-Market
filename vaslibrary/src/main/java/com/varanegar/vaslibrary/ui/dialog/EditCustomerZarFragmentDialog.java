@@ -65,6 +65,7 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
     private PairedItemsEditable street3PairedItem;
     private PairedItemsEditable street4PairedItem;
     private PairedItemsEditable street5PairedItem;
+    private PairedItemsEditable code_naghsh_paired_item;
     private PairedItemsEditable postalCodePairedItem;
     //    private PairedItemsSpinner<CityModel> citySpinner;
     private PairedItemsSpinner<DataForRegisterModel> deliveryZoneSpinner;
@@ -99,13 +100,17 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
     }
 
     @Override
-    protected void onCreateContentView(LayoutInflater inflater, ViewGroup viewGroup, @Nullable Bundle savedInstanceState) {
+    protected void onCreateContentView(LayoutInflater inflater,
+                                       ViewGroup viewGroup,
+                                       @Nullable Bundle savedInstanceState) {
 
         if (savedInstanceState != null)
-            customerUniqueId = UUID.fromString(savedInstanceState.getString("68565e5e-d407-4858-bc5f-fd52b9318734"));
+            customerUniqueId = UUID.fromString(savedInstanceState
+                    .getString("68565e5e-d407-4858-bc5f-fd52b9318734"));
         else {
             Bundle bundle = getArguments();
-            customerUniqueId = UUID.fromString(bundle.getString("68565e5e-d407-4858-bc5f-fd52b9318734"));
+            customerUniqueId = UUID.fromString(bundle
+                    .getString("68565e5e-d407-4858-bc5f-fd52b9318734"));
         }
 
         CustomerManager manager = new CustomerManager(getContext());
@@ -120,22 +125,32 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
         tabloNamePairedItem = view.findViewById(R.id.tablo_name_paired_item);
 
         addressPairedItem = view.findViewById(R.id.address_paired_item);
-        validator.addField(addressPairedItem, getString(R.string.address), new LengthChecker(0, 35, false));
+        validator.addField(addressPairedItem, getString(R.string.address), new LengthChecker(0, 35,
+                false));
 
         street2PairedItem = view.findViewById(R.id.street2_paired_item);
-        validator.addField(street2PairedItem, getString(R.string.street2_label), new LengthChecker(0, 35, false));
+        validator.addField(street2PairedItem, getString(R.string.street2_label), new LengthChecker(0, 35,
+                false));
 
         street3PairedItem = view.findViewById(R.id.street3_paired_item);
-        validator.addField(street3PairedItem, getString(R.string.street3_label), new LengthChecker(0, 35, false));
+        validator.addField(street3PairedItem, getString(R.string.street3_label), new LengthChecker(0, 35,
+                false));
 
         street4PairedItem = view.findViewById(R.id.street4_paired_item);
-        validator.addField(street4PairedItem, getString(R.string.street4_label), new LengthChecker(0, 35, false));
+        validator.addField(street4PairedItem, getString(R.string.street4_label), new LengthChecker(0, 35,
+                false));
 
         street5PairedItem = view.findViewById(R.id.street5_paired_item);
-        validator.addField(street5PairedItem, getString(R.string.street5_label), new LengthChecker(0, 35, false));
+        validator.addField(street5PairedItem, getString(R.string.street5_label),
+                new LengthChecker(0, 35, false));
+
+        code_naghsh_paired_item = view.findViewById(R.id.code_naghsh_paired_item);
+        validator.addField(code_naghsh_paired_item, getString(R.string.code_naghsh),
+                new LengthChecker(0, 100, false));
 
         postalCodePairedItem = view.findViewById(R.id.postal_code_paired_item);
-        validator.addField(postalCodePairedItem, getString(R.string.postal_code_label), new LengthChecker(10, 10, false));
+        validator.addField(postalCodePairedItem, getString(R.string.postal_code_label), new LengthChecker(10, 10,
+                false));
 
         cityNamePairedItem = view.findViewById(R.id.city_name_paired_item);
 
@@ -286,10 +301,15 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
 
         if (customerInfo.CityId != null)
             cityNamePairedItem.setValue(customerInfo.CityId);
+        if (customerInfo.CodeNaghsh != null)
+            code_naghsh_paired_item.setValue(customerInfo.CodeNaghsh);
+
+
 
         CityManager cityManager = new CityManager(getContext());
         List<CityModel> cityModels = cityManager.getAllCities();
-//        citySpinner.setup(getFragmentManager(), cityModels, new SearchBox.SearchMethod<CityModel>() {
+//        citySpinner.setup(getFragmentManager(), cityModels,
+//        new SearchBox.SearchMethod<CityModel>() {
 //            @Override
 //            public boolean onSearch(CityModel item, String text) {
 //                String str = HelperMethods.persian2Arabic(text);
@@ -300,7 +320,8 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
 //            }
 //        });
 //        if (customerInfo.CityId != null) {
-//            int selectedItemPosition = Linq.findFirstIndex(cityModels, new Linq.Criteria<CityModel>() {
+//            int selectedItemPosition = Linq.findFirstIndex(cityModels,
+//            new Linq.Criteria<CityModel>() {
 //                @Override
 //                public boolean run(CityModel item) {
 //                    return item.UniqueId.equals(customerInfo.CityId);
@@ -313,14 +334,16 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
 
         List<DataForRegisterModel> deliveryZones = dataMap.get("ZONE1");
         if (deliveryZones != null) {
-            deliveryZoneSpinner.setup(getChildFragmentManager(), deliveryZones, new SearchBox.SearchMethod<DataForRegisterModel>() {
+            deliveryZoneSpinner.setup(getChildFragmentManager(), deliveryZones,
+                    new SearchBox.SearchMethod<DataForRegisterModel>() {
                 @Override
                 public boolean onSearch(DataForRegisterModel item, String text) {
                     return item.FieldValue != null && item.FieldValue.contains(text);
                 }
             });
             if (customerInfo.transportationZone != null) {
-                int selectedItemPosition = Linq.findFirstIndex(deliveryZones, new Linq.Criteria<DataForRegisterModel>() {
+                int selectedItemPosition = Linq.findFirstIndex(deliveryZones,
+                        new Linq.Criteria<DataForRegisterModel>() {
                     @Override
                     public boolean run(DataForRegisterModel item) {
                         return item.FieldKey.equals(customerInfo.transportationZone);
@@ -345,14 +368,16 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
 
         List<DataForRegisterModel> KUKLAs = dataMap.get("KUKLA");
         if (KUKLAs != null) {
-            customerDegreeSpinner.setup(getChildFragmentManager(), KUKLAs, new SearchBox.SearchMethod<DataForRegisterModel>() {
+            customerDegreeSpinner.setup(getChildFragmentManager(), KUKLAs,
+                    new SearchBox.SearchMethod<DataForRegisterModel>() {
                 @Override
                 public boolean onSearch(DataForRegisterModel item, String text) {
                     return item.FieldValue != null && item.FieldValue.contains(text);
                 }
             });
             if (customerInfo.kukla != null) {
-                int selectedItemPosition = Linq.findFirstIndex(KUKLAs, new Linq.Criteria<DataForRegisterModel>() {
+                int selectedItemPosition = Linq.findFirstIndex(KUKLAs,
+                        new Linq.Criteria<DataForRegisterModel>() {
                     @Override
                     public boolean run(DataForRegisterModel item) {
                         return item.FieldKey.equals(customerInfo.kukla);
@@ -365,14 +390,16 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
 
         List<DataForRegisterModel> BZIRKs = dataMap.get("BZIRK");
         if (BZIRKs != null) {
-            saleZonesSpinner.setup(getChildFragmentManager(), BZIRKs, new SearchBox.SearchMethod<DataForRegisterModel>() {
+            saleZonesSpinner.setup(getChildFragmentManager(), BZIRKs,
+                    new SearchBox.SearchMethod<DataForRegisterModel>() {
                 @Override
                 public boolean onSearch(DataForRegisterModel item, String text) {
                     return item.FieldValue != null && item.FieldValue.contains(text);
                 }
             });
             if (customerInfo.bzirk != null) {
-                int selectedItemPosition = Linq.findFirstIndex(BZIRKs, new Linq.Criteria<DataForRegisterModel>() {
+                int selectedItemPosition = Linq.findFirstIndex(BZIRKs,
+                        new Linq.Criteria<DataForRegisterModel>() {
                     @Override
                     public boolean run(DataForRegisterModel item) {
                         return item.FieldKey.equals(customerInfo.bzirk);
@@ -386,14 +413,16 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
 //        customerGroupSpinner.setEnabled(false);
 //        List<DataForRegisterModel> KDGRPs = dataMap.get("KDGRP");
 //        if (KDGRPs != null) {
-//            customerGroupSpinner.setup(getChildFragmentManager(), KDGRPs, new SearchBox.SearchMethod<DataForRegisterModel>() {
+//            customerGroupSpinner.setup(getChildFragmentManager(), KDGRPs,
+//            new SearchBox.SearchMethod<DataForRegisterModel>() {
 //                @Override
 //                public boolean onSearch(DataForRegisterModel item, String text) {
 //                    return item.FieldValue != null && item.FieldValue.contains(text);
 //                }
 //            });
 //            if (customerInfo.kdgrp != null) {
-//                int selectedItemPosition = Linq.findFirstIndex(KDGRPs, new Linq.Criteria<DataForRegisterModel>() {
+//                int selectedItemPosition = Linq.findFirstIndex(KDGRPs,
+//                new Linq.Criteria<DataForRegisterModel>() {
 //                    @Override
 //                    public boolean run(DataForRegisterModel item) {
 //                        return item.FieldKey.equals(customerInfo.kdgrp);
@@ -407,14 +436,16 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
         customerGroup1Spinner.setEnabled(false);
         List<DataForRegisterModel> KVGR1s = dataMap.get("KVGR1");
         if (KVGR1s != null) {
-            customerGroup1Spinner.setup(getChildFragmentManager(), KVGR1s, new SearchBox.SearchMethod<DataForRegisterModel>() {
+            customerGroup1Spinner.setup(getChildFragmentManager(), KVGR1s,
+                    new SearchBox.SearchMethod<DataForRegisterModel>() {
                 @Override
                 public boolean onSearch(DataForRegisterModel item, String text) {
                     return item.FieldValue != null && item.FieldValue.contains(text);
                 }
             });
             if (customerInfo.kvgR1 != null) {
-                int selectedItemPosition = Linq.findFirstIndex(KVGR1s, new Linq.Criteria<DataForRegisterModel>() {
+                int selectedItemPosition = Linq.findFirstIndex(KVGR1s,
+                        new Linq.Criteria<DataForRegisterModel>() {
                     @Override
                     public boolean run(DataForRegisterModel item) {
                         return item.FieldKey.equals(customerInfo.kvgR1);
@@ -428,14 +459,16 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
         customerGroup2Spinner.setEnabled(false);
         List<DataForRegisterModel> KVGR2s = dataMap.get("KVGR2");
         if (KVGR2s != null) {
-            customerGroup2Spinner.setup(getChildFragmentManager(), KVGR2s, new SearchBox.SearchMethod<DataForRegisterModel>() {
+            customerGroup2Spinner.setup(getChildFragmentManager(), KVGR2s,
+                    new SearchBox.SearchMethod<DataForRegisterModel>() {
                 @Override
                 public boolean onSearch(DataForRegisterModel item, String text) {
                     return item.FieldValue != null && item.FieldValue.contains(text);
                 }
             });
             if (customerInfo.kvgR2 != null) {
-                int selectedItemPosition = Linq.findFirstIndex(KVGR2s, new Linq.Criteria<DataForRegisterModel>() {
+                int selectedItemPosition = Linq.findFirstIndex(KVGR2s,
+                        new Linq.Criteria<DataForRegisterModel>() {
                     @Override
                     public boolean run(DataForRegisterModel item) {
                         return item.FieldKey.equals(customerInfo.kvgR2);
@@ -463,7 +496,8 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
         syncGetNewCustomerViewModel.customerUniqueId=customerUniqueId;
         startProgressDialog();
         CustomerApi customerApi = new CustomerApi(getContext());
-        customerApi.runWebRequest(customerApi.postCustomerZarCustomerInfo(syncGetNewCustomerViewModel), new WebCallBack<String>() {
+        customerApi.runWebRequest(customerApi.postCustomerZarCustomerInfo(syncGetNewCustomerViewModel),
+                new WebCallBack<String>() {
             @Override
             protected void onFinish() {
                 stopProgressDialog();
@@ -520,7 +554,9 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
     private void createSyncViewModel() {
 
         String postcode=postalCodePairedItem.getValue();
-        if (postcode !=null && !postcode.equals("") && !postcode.isEmpty()) {
+        String codenaghsh=code_naghsh_paired_item.getValue();
+        if (postcode !=null && !postcode.equals("") && !postcode.isEmpty()
+                &&!codenaghsh.isEmpty() &&codenaghsh !=null) {
             syncGetNewCustomerViewModel = new SyncZarGetNewCustomerViewModel();
             syncGetNewCustomerViewModel.CustomerCode = customerInfo.customerCode;
             syncGetNewCustomerViewModel.PersonName = personNamePairedItem.getValue();
@@ -535,7 +571,7 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
             syncGetNewCustomerViewModel.CityId = cityNamePairedItem.getValue();
             syncGetNewCustomerViewModel.Tel = telPairedItem.getValue();
             syncGetNewCustomerViewModel.Mobile = mobilePairedItem.getValue();
-
+            syncGetNewCustomerViewModel.CodeNaghsh=code_naghsh_paired_item.getValue();
 //        CityModel city = citySpinner.getSelectedItem();
 //        if (city != null)
 //            syncGetNewCustomerViewModel.CityId = city.UniqueId;
@@ -567,7 +603,7 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
 
             validator.validate(this);
         }else {
-            showErrorDialog("کد پستی را وارد کنید");
+            showErrorDialog("کد پستی  و کدنقش را وارد کنید ");
         }
     }
 

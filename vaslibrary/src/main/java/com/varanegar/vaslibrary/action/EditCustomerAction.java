@@ -94,8 +94,10 @@ public class EditCustomerAction extends CheckBarcodeAction {
         SysConfigManager sysConfigManager = new SysConfigManager(getActivity());
         OwnerKeysWrapper ownerKeysWrapper = sysConfigManager.readOwnerKeys();
         if (ownerKeysWrapper.isZarMakaron()) {
-            CustomerCallInvoiceManager customerCallOrderManager = new CustomerCallInvoiceManager(getActivity());
-            List<CustomerCallInvoiceModel> customerCallOrderModels = customerCallOrderManager.getCustomerCallInvoices(getSelectedId());
+            CustomerCallInvoiceManager customerCallOrderManager = new
+                    CustomerCallInvoiceManager(getActivity());
+            List<CustomerCallInvoiceModel> customerCallOrderModels =
+                    customerCallOrderManager.getCustomerCallInvoices(getSelectedId());
 
             /**
              * گرفتن pincode4 برای ویرایش مشتری در presale
@@ -112,7 +114,8 @@ public class EditCustomerAction extends CheckBarcodeAction {
                 dialog.setCancelable(false);
                 dialog.setClosable(false);
                 dialog.setValues(pin);
-                dialog.setValuesRequst("pin4",getSelectedId(),null,null);
+                dialog.setValuesRequst("pin4",getSelectedId(),
+                        null,null);
                 dialog.setOnResult(new InsertPinDialog.OnResult() {
                     @Override
                     public void done() {
@@ -138,7 +141,8 @@ public class EditCustomerAction extends CheckBarcodeAction {
             Bundle bundle = new Bundle();
             bundle.putString("68565e5e-d407-4858-bc5f-fd52b9318734", getSelectedId().toString());
             editCustomerFragmentDialog.setArguments(bundle);
-            editCustomerFragmentDialog.show(getActivity().getSupportFragmentManager(), "EditCustomerFragmentDialog");
+            editCustomerFragmentDialog.show(getActivity().getSupportFragmentManager(),
+                    "EditCustomerFragmentDialog");
         }
     }
 
@@ -148,7 +152,8 @@ public class EditCustomerAction extends CheckBarcodeAction {
         Bundle bundle = new Bundle();
         bundle.putString("68565e5e-d407-4858-bc5f-fd52b9318734", getSelectedId().toString());
         editCustomerFragmentDialog.setArguments(bundle);
-        editCustomerFragmentDialog.show(getActivity().getSupportFragmentManager(), "EditCustomerFragmentDialog");
+        editCustomerFragmentDialog.show(getActivity().getSupportFragmentManager(),
+                "EditCustomerFragmentDialog");
     }
 
     private void printFailed(Context context, String error) {

@@ -119,7 +119,7 @@ public class CustomersContentFragment extends VaranegarFragment {
     private VasActionsAdapter actionsAdapter;
     private SimpleToolbar simpleToolbar;
     private MapView mapView;
-
+    private PairedItems code_naghsh_paired_item;
     protected VasActionsAdapter getActionsAdapter() {
         return actionsAdapter;
     }
@@ -516,6 +516,14 @@ public class CustomersContentFragment extends VaranegarFragment {
                                 ((PairedItems) view
                                         .findViewById(R.id.customer_code_paired_item))
                                         .setValue(customer.CustomerCode);
+
+                                if(VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+                                        code_naghsh_paired_item= view.
+                                                findViewById(R.id.code_naghsh_paired_item);
+                                    code_naghsh_paired_item.setVisibility(View.VISIBLE);
+                                    if (customer.CodeNaghsh != null)
+                                    code_naghsh_paired_item.setValue(customer.CodeNaghsh);
+                                }
                                 ((PairedItems) view
                                         .findViewById(R.id.customer_address_paired_item))
                                         .setValue(customer.Address);
@@ -705,6 +713,10 @@ public class CustomersContentFragment extends VaranegarFragment {
                 getVaranegarActvity(),
                 getActionsAdapter(),
                 getSelectedId()));
+
+        /**
+         * دکمه ثبت سفارش و تحوبل سفارش
+         */
         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist))
             actions.add(new InvoiceAction(
                     getVaranegarActvity(),

@@ -23,4 +23,5 @@ public class ZarCustomerInfoViewModel {
     public Double latitude;
     public Double longitude;
     public String kukla;
+    public String CodeNaghsh;
 }

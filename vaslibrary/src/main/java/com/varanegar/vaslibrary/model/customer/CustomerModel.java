@@ -192,6 +192,8 @@ public class CustomerModel extends BaseModel {
     public int OPathId;
     @Column
     public String Description;
+    @Column
+    public String CodeNaghsh;
 
     @Nullable
     public LocationModel getLocation() {
