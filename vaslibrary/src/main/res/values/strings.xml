@@ -1517,4 +1517,14 @@
     <string name="string_item_name">Item Name</string>
     <string name="not_found">Not Found!</string>
     <string name="emailSubject">\"My Android device ID is:\"</string>
+
+
+    <string-array name="choice_items">
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+        <item>Four</item>
+        <item>Five</item>
+        <item>Six</item>
+    </string-array>
 </resources>

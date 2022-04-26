@@ -269,7 +269,8 @@ public class MainDrawerAdapter extends DrawerAdapter {
             @Nullable
             private String getDeviceId() {
                 String deviceId = "";
-                TelephonyManager telephonyManager = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
+                TelephonyManager telephonyManager = (TelephonyManager)
+                        getActivity().getSystemService(Context.TELEPHONY_SERVICE);
                 try {
                     if (Build.VERSION.SDK_INT >= 29) {
                         deviceId = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);

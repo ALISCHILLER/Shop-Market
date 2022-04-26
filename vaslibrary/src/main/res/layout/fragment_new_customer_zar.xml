@@ -132,8 +132,14 @@
                 android:orientation="horizontal"
                 app:singleLine="true"
                 app:title="@string/city_name" />
-
-            <com.varanegar.framework.util.component.PairedItemsEditable
+            <Button
+                android:id="@+id/request_codenaghsh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="درخواست کد نقَش"
+                />
+            <com.varanegar.framework.util.component.PairedItems
                 android:id="@+id/code_naghsh_paired_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

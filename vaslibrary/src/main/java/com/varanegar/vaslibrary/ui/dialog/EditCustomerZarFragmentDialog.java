@@ -7,9 +7,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.fragment.app.DialogFragment;
 
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
@@ -38,7 +40,11 @@ import com.varanegar.vaslibrary.manager.updatemanager.UpdateCall;
 import com.varanegar.vaslibrary.model.city.CityModel;
 import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.model.dataforregister.DataForRegisterModel;
+import com.varanegar.vaslibrary.ui.dialog.new_dialog.SingleChoiceDialog;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
+import com.varanegar.vaslibrary.webapi.apiNew.ApiNew;
+import com.varanegar.vaslibrary.webapi.apiNew.modelNew.RoleCodeCustomerRequestViewModel;
+import com.varanegar.vaslibrary.webapi.apiNew.modelNew.RoleCodeViewModel;
 import com.varanegar.vaslibrary.webapi.customer.CustomerApi;
 import com.varanegar.vaslibrary.webapi.customer.SyncZarGetNewCustomerViewModel;
 import com.varanegar.vaslibrary.webapi.customer.ZarCustomerInfoViewModel;
@@ -53,7 +59,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 
-public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements ValidationListener {
+public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements ValidationListener
+        ,SingleChoiceDialog.SingleChoiceListener {
     CustomerModel customer;
     public OnCustomerEditedCallBack onCustomerEditedCallBack;
     UUID customerUniqueId;
@@ -65,14 +72,15 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
     private PairedItemsEditable street3PairedItem;
     private PairedItemsEditable street4PairedItem;
     private PairedItemsEditable street5PairedItem;
-    private PairedItemsEditable code_naghsh_paired_item;
     private PairedItemsEditable postalCodePairedItem;
+    private PairedItemsEditable code_naghsh_paired_item;
+    private Button request_codenaghsh;
     //    private PairedItemsSpinner<CityModel> citySpinner;
     private PairedItemsSpinner<DataForRegisterModel> deliveryZoneSpinner;
     private PairedItemsEditable telPairedItem;
     private PairedItemsEditable mobilePairedItem;
-    private PairedItems economicCodePairedItem;
-    private PairedItems nationalCodePairedItem;
+    private PairedItemsEditable economicCodePairedItem;
+    private PairedItemsEditable nationalCodePairedItem;
     private PairedItemsSpinner<DataForRegisterModel> customerDegreeSpinner;
     private PairedItemsSpinner<DataForRegisterModel> saleZonesSpinner;
     //    private PairedItemsSpinner<DataForRegisterModel> customerGroupSpinner;
@@ -84,7 +92,8 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
     private boolean isEnabled;
     private FormValidator validator;
     private SyncZarGetNewCustomerViewModel syncGetNewCustomerViewModel;
-
+    private List<RoleCodeViewModel> roleCodeViewModels;
+    private RoleCodeCustomerRequestViewModel roleCodeCustomerViewModel ;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -147,6 +156,11 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
         code_naghsh_paired_item = view.findViewById(R.id.code_naghsh_paired_item);
         validator.addField(code_naghsh_paired_item, getString(R.string.code_naghsh),
                 new LengthChecker(0, 100, false));
+        code_naghsh_paired_item.setEnabled(false);
+        code_naghsh_paired_item.setFocusable(false);
+        code_naghsh_paired_item.setFocusableInTouchMode(false);
+
+        request_codenaghsh= view.findViewById(R.id.request_codenaghsh);
 
         postalCodePairedItem = view.findViewById(R.id.postal_code_paired_item);
         validator.addField(postalCodePairedItem, getString(R.string.postal_code_label), new LengthChecker(10, 10,
@@ -162,6 +176,9 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
         mobilePairedItem = view.findViewById(R.id.mobile_paired_item);
 
         economicCodePairedItem = view.findViewById(R.id.economic_code_paired_item);
+        validator.addField(economicCodePairedItem, getString(R.string.customer_economic_code),
+                new LengthChecker(10, 50,
+                false));
 
         nationalCodePairedItem = view.findViewById(R.id.national_code_paired_item);
         validator.addField(nationalCodePairedItem, getString(R.string.customer_national_code), new IraniNationalCodeChecker());
@@ -178,6 +195,14 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
         validator.addField(customerGroup1Spinner, getString(R.string.customer_group_1), new NotEmptyChecker());
 
         customerGroup2Spinner = view.findViewById(R.id.customer_group2_spinner);
+
+
+        request_codenaghsh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getDataCodeNaghsh();
+            }
+        });
     }
 
     @Override
@@ -301,10 +326,11 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
 
         if (customerInfo.CityId != null)
             cityNamePairedItem.setValue(customerInfo.CityId);
-        if (customerInfo.CodeNaghsh != null)
+        if (customerInfo.CodeNaghsh != null) {
             code_naghsh_paired_item.setValue(customerInfo.CodeNaghsh);
-
-
+        }else {
+            request_codenaghsh.setVisibility(View.VISIBLE);
+        }
 
         CityManager cityManager = new CityManager(getContext());
         List<CityModel> cityModels = cityManager.getAllCities();
@@ -360,12 +386,18 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
         if (customerInfo.Mobile != null)
             mobilePairedItem.setValue(customerInfo.Mobile);
 
-        if (customerInfo.EconomicCode != null)
+        if (!customerInfo.EconomicCode.isEmpty()) {
             economicCodePairedItem.setValue(customerInfo.EconomicCode);
-
-        if (customerInfo.NationalCode != null)
+            economicCodePairedItem.setEnabled(false);
+            economicCodePairedItem.setFocusable(false);
+            economicCodePairedItem.setFocusableInTouchMode(false);
+        }
+        if (!customerInfo.NationalCode.isEmpty()) {
             nationalCodePairedItem.setValue(customerInfo.NationalCode);
-
+            nationalCodePairedItem.setEnabled(false);
+            nationalCodePairedItem.setFocusable(false);
+            nationalCodePairedItem.setFocusableInTouchMode(false);
+        }
         List<DataForRegisterModel> KUKLAs = dataMap.get("KUKLA");
         if (KUKLAs != null) {
             customerDegreeSpinner.setup(getChildFragmentManager(), KUKLAs,
@@ -551,6 +583,7 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
     }
 
 
+
     private void createSyncViewModel() {
 
         String postcode=postalCodePairedItem.getValue();
@@ -603,9 +636,10 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
 
             validator.validate(this);
         }else {
-            showErrorDialog("کد پستی  و کدنقش را وارد کنید ");
+            showErrorDialog("کد پستی و کدنقش مشتری را ثبت کنید ");
         }
     }
+
 
     @Override
     public void onValidationSucceeded() {
@@ -616,6 +650,8 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
     public void onValidationFailed(List<ValidationError> errors) {
         validator.showErrors(errors);
     }
+
+
 
 
     public interface OnCustomerEditedCallBack {
@@ -677,5 +713,91 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
             } catch (Exception ignored) {
 
             }
+    }
+
+    //send request get code naghsh
+
+    private void  getDataCodeNaghsh(){
+
+
+        String economicCode=economicCodePairedItem.getValue();
+        String nationalCode=nationalCodePairedItem.getValue();
+
+        roleCodeCustomerViewModel=new RoleCodeCustomerRequestViewModel();
+        roleCodeCustomerViewModel.CustomerId=customerUniqueId;
+        roleCodeCustomerViewModel.NationalCode=nationalCode;
+        roleCodeCustomerViewModel.EconomicCode=economicCode;
+
+        if (economicCode!=null||nationalCode!=null){
+
+            ApiNew apiNew=new ApiNew(getContext());
+          Call<List<RoleCodeViewModel>> calll=apiNew.getCodeNaghsh(roleCodeCustomerViewModel);
+            startProgressDialog();
+
+            apiNew.runWebRequest(calll, new WebCallBack<List<RoleCodeViewModel>>() {
+                @Override
+                protected void onFinish() {
+                    stopProgressDialog();
+                }
+
+                @Override
+                protected void onSuccess(List<RoleCodeViewModel> result, Request request) {
+
+                    if (result.size()>0){
+                        if (result.size()==1){
+                            code_naghsh_paired_item.setValue(result.get(0).Code);
+                            request_codenaghsh.setVisibility(View.GONE);
+                        }else {
+                            dialogShow(result);
+                        }
+                    }
+                }
+
+                @Override
+                protected void onApiFailure(ApiError error, Request request) {
+                    String err = WebApiErrorBody.log(error, getContext());
+                    if (isResumed()) {
+                        showErrorDialog(err);
+
+                    }
+                }
+
+                @Override
+                protected void onNetworkFailure(Throwable t, Request request) {
+                    if (isResumed()) {
+                        showErrorDialog(getString(R.string.network_error));
+
+                    }
+                }
+            });
+
+        }else {
+            showErrorDialog("کد ملی و کداقتصادی مشتری را ثبت کنید ");
+        }
+    }
+
+
+    private void dialogShow(List<RoleCodeViewModel> roleCodeViewModel){
+        String[] data = new String[roleCodeViewModel.size()];
+        roleCodeViewModels=roleCodeViewModel;
+        for (int i=0;i<roleCodeViewModel.size();i++){
+            data[i]=roleCodeViewModel.get(i).Title+roleCodeViewModel.get(i).Code;
+        }
+        SingleChoiceDialog singleChoiceDialog = new
+                SingleChoiceDialog(getContext(),"کد نقش مورد نظر را انتخاب کنید",data);
+        singleChoiceDialog.setCancelable(false);
+        singleChoiceDialog.addItemClickListener(this);
+        singleChoiceDialog.show(getActivity().getSupportFragmentManager(),
+                "Single Choice Dialog");
+    }
+    @Override
+    public void onPositiveButtonClicked(String[] list, int position) {
+        code_naghsh_paired_item.setValue(roleCodeViewModels.get(position).Code);
+        request_codenaghsh.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onNegativeButtonClicked() {
+
     }
 }

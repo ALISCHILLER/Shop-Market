@@ -6,9 +6,12 @@ import com.varanegar.vaslibrary.ui.fragment.news_fragment.model.NewsData_Model;
 import com.varanegar.vaslibrary.webapi.BaseApi;
 import com.varanegar.vaslibrary.webapi.TokenType;
 import com.varanegar.vaslibrary.webapi.apiNew.modelNew.PinRequestViewModel;
+import com.varanegar.vaslibrary.webapi.apiNew.modelNew.RoleCodeCustomerRequestViewModel;
+import com.varanegar.vaslibrary.webapi.apiNew.modelNew.RoleCodeViewModel;
 import com.varanegar.vaslibrary.webapi.customer.ICustomerApi;
 
 import java.util.List;
+import java.util.UUID;
 
 import retrofit2.Call;
 
@@ -29,5 +32,12 @@ public class ApiNew extends BaseApi implements InApiNew {
         InApiNew api = getRetrofitBuilder(TokenType.UserToken)
                 .build().create(InApiNew.class);
         return api.getNewsData();
+    }
+
+    @Override
+    public Call<List<RoleCodeViewModel>> getCodeNaghsh(RoleCodeCustomerRequestViewModel roleCodeCustomerViewModel) {
+        InApiNew api = getRetrofitBuilder(TokenType.UserToken)
+                .build().create(InApiNew.class);
+        return api.getCodeNaghsh(roleCodeCustomerViewModel);
     }
 }

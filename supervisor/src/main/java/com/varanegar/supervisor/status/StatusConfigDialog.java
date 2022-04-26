@@ -70,8 +70,11 @@ public class StatusConfigDialog extends SlidingDialog {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_supervisor_status_config_layout, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.fragment_supervisor_status_config_layout,
+                container, false);
 
 
 
@@ -86,7 +89,8 @@ public class StatusConfigDialog extends SlidingDialog {
             visitorModel.Name = getString(R.string.all_visitors);
             visitorModels.add(0, visitorModel);
             visitorNameSpinner = view.findViewById(R.id.visitor_name_paired_items);
-            visitorNameSpinner.setup(getChildFragmentManager(), visitorModels, new SearchBox.SearchMethod<VisitorModel>() {
+            visitorNameSpinner.setup(getChildFragmentManager(), visitorModels, new
+                    SearchBox.SearchMethod<VisitorModel>() {
                 @Override
                 public boolean onSearch(VisitorModel item, String text) {
                     String searchKey = VasHelperMethods.persian2Arabic(text);
@@ -106,7 +110,8 @@ public class StatusConfigDialog extends SlidingDialog {
                 if (index >= 0)
                     visitorNameSpinner.selectItem(index);
             }
-            visitorNameSpinner.setOnItemSelectedListener(new PairedItemsSpinner.OnItemSelectedListener<VisitorModel>() {
+            visitorNameSpinner.setOnItemSelectedListener(new PairedItemsSpinner
+                    .OnItemSelectedListener<VisitorModel>() {
                 @Override
                 public void onItemSelected(int position, VisitorModel item) {
                     VisitorFilter.save(getContext(), item);
@@ -117,7 +122,8 @@ public class StatusConfigDialog extends SlidingDialog {
             /**
              *لیست ویزیتورها
              */
-            MultiSpinnerSearch multiSelectSpinnerWithSearch = view.findViewById(R.id.multipleItemSelectionSpinner);
+            MultiSpinnerSearch multiSelectSpinnerWithSearch = view
+                    .findViewById(R.id.multipleItemSelectionSpinner);
 
             // Pass true If you want searchView above the list. Otherwise false. default = true.
             multiSelectSpinnerWithSearch.setSearchEnabled(true);
@@ -152,7 +158,8 @@ public class StatusConfigDialog extends SlidingDialog {
                 public void onItemsSelected(List<KeyPairBoolData> selectedItems) {
                     //The followings are selected items.
                     for (int i = 0; i < selectedItems.size(); i++) {
-                        Log.e(TAG, i + " : " + selectedItems.get(i).getName() + " : " +selectedItems.get(i).getId());
+                        Log.e(TAG, i + " : " + selectedItems.get(i).getName() + " : "
+                                +selectedItems.get(i).getId());
                         list.add(String.valueOf(selectedItems.get(i).getId()));
                     }
                     VisitorFilter.setSaveVisitor(getContext(),list);
@@ -192,17 +199,20 @@ public class StatusConfigDialog extends SlidingDialog {
             toDateImageView = view.findViewById(R.id.to_date_image_view);
 
             if (config.getFromDate() != null) {
-                fromdatePairedItems.setValue(DateHelper.toString(config.getFromDate(), DateFormat.Date, Locale.getDefault()));
+                fromdatePairedItems.setValue(DateHelper.toString(config.getFromDate(),
+                        DateFormat.Date, Locale.getDefault()));
             } else {
                 Date from = new Date();
                 from.setHours(0);
                 from.setMinutes(0);
                 from.setSeconds(0);
-                fromdatePairedItems.setValue(DateHelper.toString(from, DateFormat.Date, Locale.getDefault()));
+                fromdatePairedItems.setValue(DateHelper.toString(from, DateFormat.Date,
+                        Locale.getDefault()));
             }
 
             if (config.getToDate() != null) {
-                todatePairedItems.setValue(DateHelper.toString(config.getToDate(), DateFormat.Date, Locale.getDefault()));
+                todatePairedItems.setValue(DateHelper.toString(config.getToDate(), DateFormat.Date,
+                        Locale.getDefault()));
             } else {
                 Date to = new Date();
                 to.setHours(23);
@@ -214,11 +224,13 @@ public class StatusConfigDialog extends SlidingDialog {
             fromDateImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    DateHelper.showDatePicker(getVaranegarActvity(), null, new DateHelper.OnDateSelected() {
+                    DateHelper.showDatePicker(getVaranegarActvity(), null,
+                            new DateHelper.OnDateSelected() {
                         @Override
                         public void run(Calendar calendar) {
                             config.setFromDate(calendar.getTime());
-                            fromdatePairedItems.setValue(DateHelper.toString(calendar, DateFormat.Date));
+                            fromdatePairedItems.setValue(DateHelper.toString(calendar,
+                                    DateFormat.Date));
                         }
                     });
                 }
@@ -227,7 +239,8 @@ public class StatusConfigDialog extends SlidingDialog {
             toDateImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    DateHelper.showDatePicker(getVaranegarActvity(), null, new DateHelper.OnDateSelected() {
+                    DateHelper.showDatePicker(getVaranegarActvity(), null,
+                            new DateHelper.OnDateSelected() {
                         @Override
                         public void run(Calendar calendar) {
                             config.setToDate(calendar.getTime());
@@ -272,14 +285,16 @@ public class StatusConfigDialog extends SlidingDialog {
         if (type.equals("Tour")) {
             final List<TourStatusOption> options = config.getTourStatusOptions();
 
-            SelectionRecyclerAdapter optionRecyclerAdapter = new SelectionRecyclerAdapter<>(getVaranegarActvity(), options, true);
+            SelectionRecyclerAdapter optionRecyclerAdapter = new
+                    SelectionRecyclerAdapter<>(getVaranegarActvity(), options, true);
             List<Integer> selectedPositions = Linq.findAllIndexes(options, new Linq.Criteria<TourStatusOption>() {
                 @Override
                 public boolean run(TourStatusOption item) {
                     return item.value;
                 }
             });
-            optionRecyclerAdapter.setOnItemSelectedListener(new BaseSelectionRecyclerAdapter.OnItemSelectedListener() {
+            optionRecyclerAdapter.setOnItemSelectedListener(new BaseSelectionRecyclerAdapter
+                    .OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(int position, boolean selected) {
                     options.get(position).value = selected;
@@ -295,14 +310,16 @@ public class StatusConfigDialog extends SlidingDialog {
 
         } else {
             final List<RequestStatusOption> options = config.getRequestStatusOptions();
-            SelectionRecyclerAdapter optionRecyclerAdapter = new SelectionRecyclerAdapter<>(getVaranegarActvity(), options, true);
+            SelectionRecyclerAdapter optionRecyclerAdapter = new
+                    SelectionRecyclerAdapter<>(getVaranegarActvity(), options, true);
             List<Integer> selectedPositions = Linq.findAllIndexes(options, new Linq.Criteria<RequestStatusOption>() {
                 @Override
                 public boolean run(RequestStatusOption item) {
                     return item.value;
                 }
             });
-            optionRecyclerAdapter.setOnItemSelectedListener(new BaseSelectionRecyclerAdapter.OnItemSelectedListener() {
+            optionRecyclerAdapter.setOnItemSelectedListener(new BaseSelectionRecyclerAdapter
+                    .OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(int position, boolean selected) {
                     options.get(position).value = selected;

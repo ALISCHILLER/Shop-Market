@@ -505,8 +505,9 @@ public abstract class CustomersFragment
         final SysConfigManager sysConfigManager = new SysConfigManager(getContext());
         SysConfigModel allowAddNewCustomer = sysConfigManager
                 .read(ConfigKey.AllowRegisterNewCustomer, SysConfigManager.cloud);
-        if (SysConfigManager.compare(allowAddNewCustomer, true) &&
-                !VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
+       // SysConfigManager.compare(allowAddNewCustomer, true) &&
+        if (SysConfigManager.compare(allowAddNewCustomer, true)
+                &&!VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
             CuteButton addCustomerBtn = new CuteButton();
             addCustomerBtn.setTitle(R.string.register_new_customer);
             addCustomerBtn.setIcon(R.drawable.ic_person_add_black_36dp);
