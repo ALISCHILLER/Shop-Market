@@ -596,7 +596,7 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
     private void createSyncViewModel() {
 
         String codenaghsh=code_naghsh_paired_item.getValue();
-        if (!codenaghsh.isEmpty() &&codenaghsh !=null) {
+        if (codenaghsh !=null&&!codenaghsh.equals("")) {
             syncGetNewCustomerViewModel = new SyncZarGetNewCustomerViewModel();
             syncGetNewCustomerViewModel.PersonName = personNamePairedItem.getValue();
             syncGetNewCustomerViewModel.StoreName = tabloNamePairedItem.getValue();
