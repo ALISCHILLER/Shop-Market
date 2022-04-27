@@ -589,7 +589,7 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
         String postcode=postalCodePairedItem.getValue();
         String codenaghsh=code_naghsh_paired_item.getValue();
         if (postcode !=null && !postcode.equals("") && !postcode.isEmpty()
-                &&!codenaghsh.isEmpty() &&codenaghsh !=null) {
+                &&!codenaghsh.isEmpty() &&codenaghsh !=null&&!codenaghsh.equals("")) {
             syncGetNewCustomerViewModel = new SyncZarGetNewCustomerViewModel();
             syncGetNewCustomerViewModel.CustomerCode = customerInfo.customerCode;
             syncGetNewCustomerViewModel.PersonName = personNamePairedItem.getValue();
@@ -728,7 +728,7 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
         roleCodeCustomerViewModel.NationalCode=nationalCode;
         roleCodeCustomerViewModel.EconomicCode=economicCode;
 
-        if (economicCode!=null||nationalCode!=null){
+        if (economicCode!=null&&!economicCode.equals("")||nationalCode!=null&&!nationalCode.equals("")){
 
             ApiNew apiNew=new ApiNew(getContext());
           Call<List<RoleCodeViewModel>> calll=apiNew.getCodeNaghsh(roleCodeCustomerViewModel);
