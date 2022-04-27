@@ -58,6 +58,8 @@ import com.varanegar.vaslibrary.manager.locationmanager.TrackingLogManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateCall;
+import com.varanegar.vaslibrary.model.TrackingLog;
+import com.varanegar.vaslibrary.model.location.Location;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfig;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.model.user.User;
@@ -251,134 +253,90 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
         pingApi.refreshBaseServerUrl(getContext(), new PingApi.PingCallback() {
             @Override
             public void done(String ipAddress) {
+                //try{
 
-                final UserManager userManager = new UserManager(getContext());
-                final String username = userNameEditText.getText().toString().trim();
-                final String password = HelperMethods.convertToEnglishNumbers(passwordEditText.getText().toString().trim());
-
-                if (username == null || username.isEmpty() || password == null || password.isEmpty())
-                {
-                    showErrorMessage(R.string.please_enter_user_name_and_password);
-                    setEnabled(true);
-                    loginButton.setProgress(0);
-                    return;
-                }
-
-
-                String deviceId = getDeviceId();
-//                if (deviceId == null) {
-//                    showErrorMessage(R.string.device_id_is_not_available);
-//                    setEnabled(true);
-//                    loginButton.setProgress(0);
-//                    return;
-//                }
                 SharedPreferences sharedPreferences = getActivity()
                         .getSharedPreferences("Firebase_Token", Context.MODE_PRIVATE);
-                SharedPreferences  sharedconditionCustomer = getActivity()
-                        .getSharedPreferences("OpenVPN", Context.MODE_PRIVATE);
-
-              String usernameVpn=sharedconditionCustomer.getString("usernameVpn","");
-
                 String token=sharedPreferences.getString("172F4321-16BB-4415-85D1-DD88FF04234C"
                         ,"");
 
-                DeviceApi deviceApi = new DeviceApi(getContext());
-                CompanyDeviceAppData data = new CompanyDeviceAppData();
-                data.DeviceModelName = Build.MODEL;
-                data.IMEI = deviceId;
-                data.UserName = username;
-                data.IsSupervisor = true;
-                LicenseRequestBody body = new LicenseRequestBody();
-                body.companyDeviceAppData = data;
-                String deviceIdSuper=getDeviceid();
+                SharedPreferences  sharedconditionCustomer = getActivity()
+                        .getSharedPreferences("OpenVPN", Context.MODE_PRIVATE);
+                String usernameVpn=sharedconditionCustomer.getString("usernameVpn","");
 
-                deviceApi.runWebRequest(deviceApi.checkLicense(body), new WebCallBack<CompanyDeviceAppResult>() {
-                    @Override
-                    protected void onFinish() {
+                final UserManager userManager = new UserManager(getContext());
+                final String username = userNameEditText.getText().toString().trim();
+                final UserModel user = userManager.getUsers(username);
+                String deviceId=getDeviceid();
+                final String password = HelperMethods.convertToEnglishNumbers(passwordEditText.getText().toString().trim());
+                if (user != null) {
+                    userManager.login(user.UserName, password,deviceId,token,usernameVpn
+                            , new OnTokenAcquired() {
+                                @Override
+                                public void run(Token token) {
+                                    try {
+                                        BackupManager.exportData(getContext(), true);
+                                        AccountManager accountManager = new AccountManager();
+                                        accountManager.writeToFile(token, getContext(), "user.token");
+                                        user.LoginDate = new Date();
+                                        UserManager.writeToFile(user, getContext());
+                                        VaranegarApplication.getInstance().getDbHandler()
+                                                .emptyAllTablesExcept(User.UserTbl, SysConfig.SysConfigTbl,
+                                                        Location.LocationTbl, TrackingLog.TrackingLogTbl);
+                                        MainVaranegarActivity activity = getVaranegarActvity();
+                                        if (activity != null && !activity.isFinishing() && isResumed())
+                                            activity.putFragment(new Get_Tour_Fragment());
+                                        setEnabled(true);
+                                        loginButton.setProgress(0);
+                                        getTrackingLicense();
+                                        /*VasInstanceIdService.refreshToken(getContext(), new VasInstanceIdService.TokenRefreshCallBack() {
+                                            @Override
+                                            public void onSuccess(@NonNull String token) {
+                                                Timber.d("Token update succeeded. Token = " + token);
+                                            }
 
-                    }
-
-                    @Override
-                    protected void onSuccess(CompanyDeviceAppResult result, Request request) {
-//                        if (result.Type == 200)
-                        userManager.login(username, password,deviceIdSuper,token,usernameVpn
-                                , new OnTokenAcquired() {
-                                    @Override
-                                    public void run(Token token) {
-                                        try {
-                                            AccountManager accountManager = new AccountManager();
-                                            accountManager.writeToFile(token, getContext(), "user.token");
-                                            final UserModel user = userManager.getUser(username);
-                                            user.LoginDate = new Date();
-                                            UserManager.writeToFile(user, getContext());
-                                            VaranegarApplication.getInstance().getDbHandler().emptyAllTablesExcept(User.UserTbl, SysConfig.SysConfigTbl);
-                                            MainVaranegarActivity activity = getVaranegarActvity();
-                                            if (activity != null && !activity.isFinishing() && isResumed())
-                                                activity.putFragment(new Get_Tour_Fragment());
+                                            @Override
+                                            public void onFailure(@Nullable String token, String error) {
+                                                Timber.d("Token update failed. Error=" + error + "  Token=" + token);
+                                            }
+                                        });*/
+                                    } catch (Exception e) {
+                                        Timber.e(e);
+                                        if (isResumed()) {
                                             setEnabled(true);
                                             loginButton.setProgress(0);
-                                            getTrackingLicense();
-                                            SysConfigManager sysConfigManager = new SysConfigManager(getContext());
-                                            sysConfigManager.sync(new UpdateCall() {
-                                                @Override
-                                                protected void onFinish() {
-                                                }
-                                            });
-                                        } catch (Exception e) {
-                                            Timber.e(e);
-                                            if (isResumed()) {
-                                                setEnabled(true);
-                                                loginButton.setProgress(0);
-                                                MainVaranegarActivity activity = getVaranegarActvity();
-                                                if (activity != null && !activity.isFinishing())
-                                                    activity.showSnackBar(getContext().getString(R.string.login_failed), MainVaranegarActivity.Duration.Short);
-                                            }
+                                            MainVaranegarActivity activity = getVaranegarActvity();
+                                            if (activity != null && !activity.isFinishing())
+                                                activity.showSnackBar(getContext().getString(com.varanegar.vaslibrary.R.string.login_failed), MainVaranegarActivity.Duration.Short);
                                         }
                                     }
-                                }, new OnError() {
-                                    @Override
-                                    public void onAuthenticationFailure(String error, String description) {
-                                        MainVaranegarActivity activity = getVaranegarActvity();
-                                        if (activity != null && !activity.isFinishing() && isResumed())
-                                            activity.showSnackBar(description, MainVaranegarActivity.Duration.Short);
-                                        setEnabled(true);
-                                        loginButton.setProgress(0);
-                                    }
+                                }
+                            }, new OnError() {
+                                @Override
+                                public void onAuthenticationFailure(String error, String description) {
+                                    MainVaranegarActivity activity = getVaranegarActvity();
+                                    if (activity != null && !activity.isFinishing() && isResumed())
+                                        activity.showSnackBar(description, MainVaranegarActivity.Duration.Short);
+                                    setEnabled(true);
+                                    loginButton.setProgress(0);
+                                }
 
-                                    @Override
-                                    public void onNetworkFailure(Throwable t) {
-                                        MainVaranegarActivity activity = getVaranegarActvity();
-                                        if (activity != null && !activity.isFinishing() && isResumed())
-                                            activity.showSnackBar(R.string.connection_to_server_failed,
-                                                    MainVaranegarActivity.Duration.Short);
-                                        setEnabled(true);
-                                        loginButton.setProgress(0);
-                                    }
-                                });
-//                        else {
-//                            showErrorMessage(result.Message);
-//                            setEnabled(true);
-//                            loginButton.setProgress(0);
-//                        }
-
-                    }
-
-                    @Override
-                    protected void onApiFailure(ApiError error, Request request) {
-                        String e = WebApiErrorBody.log(error, getContext());
-                        setEnabled(true);
-                        showErrorMessage(e);
-                        loginButton.setProgress(0);
-                    }
-
-                    @Override
-                    protected void onNetworkFailure(Throwable t, Request request) {
-                        setEnabled(true);
-                        loginButton.setProgress(0);
-                        Timber.e(t);
-                        showErrorMessage(R.string.network_error);
-                    }
-                });
+                                @Override
+                                public void onNetworkFailure(Throwable t) {
+                                    MainVaranegarActivity activity = getVaranegarActvity();
+                                    if (activity != null && !activity.isFinishing() && isResumed())
+                                        activity.showSnackBar(com.varanegar.vaslibrary.R.string.connection_to_server_failed, MainVaranegarActivity.Duration.Short);
+                                    setEnabled(true);
+                                    loginButton.setProgress(0);
+                                }
+                            });
+                } else {
+                    MainVaranegarActivity activity = getVaranegarActvity();
+                    if (activity != null && !activity.isFinishing() && isResumed())
+                        activity.showSnackBar(com.varanegar.vaslibrary.R.string.user_not_found, MainVaranegarActivity.Duration.Short);
+                    setEnabled(true);
+                    loginButton.setProgress(0);
+                }
             }
 
             @Override
@@ -386,7 +344,7 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
                 if (isResumed()) {
                     setEnabled(true);
                     loginButton.setProgress(-1);
-                    loginButton.setText(R.string.ip_addresses_are_not_found);
+                    loginButton.setText(com.varanegar.vaslibrary.R.string.ip_addresses_are_not_found);
                 }
             }
         });

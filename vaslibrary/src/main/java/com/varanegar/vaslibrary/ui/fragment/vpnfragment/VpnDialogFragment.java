@@ -76,7 +76,8 @@ public class VpnDialogFragment extends CuteDialogWithToolbar {
         view = inflater.inflate(R.layout.fragment_vpn_dialog, container, false);
         connection = new CheckInternetConnection();
         coonect_vpn=view.findViewById(R.id.coonect_vpn);
-        sharedconditionCustomer = getActivity().getSharedPreferences("OpenVPN", Context.MODE_PRIVATE);
+        sharedconditionCustomer = getActivity().getSharedPreferences("OpenVPN",
+                Context.MODE_PRIVATE);
         usernameVpn=sharedconditionCustomer.getString("usernameVpn","");
         passwordVpn=sharedconditionCustomer.getString("passwordVpn","");
 
