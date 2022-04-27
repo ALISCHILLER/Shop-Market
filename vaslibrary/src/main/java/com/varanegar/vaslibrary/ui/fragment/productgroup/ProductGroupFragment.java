@@ -209,15 +209,20 @@ public class ProductGroupFragment extends VisitFragment {
 
     private boolean isContractor() {
         return VaranegarApplication.is(VaranegarApplication.AppId.Contractor);
-//        SysConfigModel sysConfigModel = new SysConfigManager(getContext()).read(ConfigKey.SimplePresale, SysConfigManager.cloud);
+//        SysConfigModel sysConfigModel = new SysConfigManager(getContext())
+//        .read(ConfigKey.SimplePresale, SysConfigManager.cloud);
 //        return SysConfigManager.compare(sysConfigModel, true);
     }
 
-    void onAdd(final int position, final UUID productId, final List<DiscreteUnit> discreteUnits, final BaseUnit bulkUnit, @Nullable final FreeReasonModel freeReason, @Nullable final List<BatchQty> batchQtyList) {
+    void onAdd(final int position, final UUID productId, final List<DiscreteUnit> discreteUnits,
+               final BaseUnit bulkUnit, @Nullable final FreeReasonModel freeReason,
+               @Nullable final List<BatchQty> batchQtyList) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                ProductOrderViewModel productOrderViewModel = productOrderViewManager.getItem(ProductOrderViewManager.get(productId, customerId, callOrderId, freeReason != null));
+                ProductOrderViewModel productOrderViewModel = productOrderViewManager
+                        .getItem(ProductOrderViewManager.get(productId, customerId, callOrderId,
+                                freeReason != null));
                 if (productOrderViewModel == null) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -314,8 +319,11 @@ public class ProductGroupFragment extends VisitFragment {
 
             private void add() throws ValidationException, DbException {
                 CallOrderLineManager callOrderLineManager = new CallOrderLineManager(getContext());
-                callOrderLineManager.addOrUpdateQty(productId, discreteUnits, bulkUnit, callOrderId, freeReason, batchQtyList, false);
-                final ProductOrderViewModel updatedProductOrderViewModel = productOrderViewManager.getItem(ProductOrderViewManager.get(productId, customerId, callOrderId, freeReason != null));
+                callOrderLineManager.addOrUpdateQty(productId, discreteUnits, bulkUnit, callOrderId,
+                        freeReason, batchQtyList, false);
+                final ProductOrderViewModel updatedProductOrderViewModel = productOrderViewManager
+                        .getItem(ProductOrderViewManager.get(productId, customerId, callOrderId,
+                                freeReason != null));
                 VaranegarApplication.getInstance().printElapsedTime("save order line");
                 getActivity().runOnUiThread(new Runnable() {
                     @Override

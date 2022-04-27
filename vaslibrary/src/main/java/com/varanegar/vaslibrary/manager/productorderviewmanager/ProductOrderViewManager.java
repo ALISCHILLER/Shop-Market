@@ -63,7 +63,9 @@ public class ProductOrderViewManager extends BaseManager<ProductOrderViewModel> 
         super(context, new ProductOrderViewModelRepository());
     }
 
-    public static void checkOnHandQty(Context context, OnHandQtyStock onHandQtyStock, List<DiscreteUnit> discreteUnits, BaseUnit bulkUnit) throws InventoryError, AllocationError, OnHandQtyWarning {
+    public static void checkOnHandQty(Context context, OnHandQtyStock onHandQtyStock,
+                                      List<DiscreteUnit> discreteUnits, BaseUnit bulkUnit)
+            throws InventoryError, AllocationError, OnHandQtyWarning {
         BigDecimal total = BigDecimal.ZERO;
         if (discreteUnits.size() > 0) {
             for (DiscreteUnit discreteUnit :
@@ -119,7 +121,9 @@ public class ProductOrderViewManager extends BaseManager<ProductOrderViewModel> 
 
     }
 
-    private static Query baseQuery(@NonNull UUID customerId, @Nullable UUID orderId, @Nullable OrderBy orderBy, boolean freeRequestItems, @Nullable Boolean inStock) {
+    private static Query baseQuery(@NonNull UUID customerId, @Nullable
+            UUID orderId, @Nullable OrderBy orderBy, boolean freeRequestItems,
+                                   @Nullable Boolean inStock) {
         Query subQuery = new Query();
         Projection p = Projection.subtract(
                 Projection.add(
@@ -130,7 +134,8 @@ public class ProductOrderViewManager extends BaseManager<ProductOrderViewModel> 
                 ),
                 Projection.column(CustomerEmphaticProduct.ProductCount));
 
-        Projection remainedQty = Projection.add(Projection.column(OrderView.TotalQty), Projection.subtract(Projection.column(OnHandQty.OnHandQty), Projection.column(TotalProductOrderQtyView.TotalQty))).castAsReal();
+        Projection remainedQty = Projection.add(Projection.column(OrderView.TotalQty),
+                Projection.subtract(Projection.column(OnHandQty.OnHandQty), Projection.column(TotalProductOrderQtyView.TotalQty))).castAsReal();
         subQuery.select(
                 Projection.add(
                         Projection.multiply(CustomerEmphaticProduct.Type, 10),
@@ -275,7 +280,10 @@ public class ProductOrderViewManager extends BaseManager<ProductOrderViewModel> 
         return query;
     }
 
-    public static Query getAll(@Nullable String productNameOrCode, @NonNull UUID customerId, @Nullable UUID orderId, @Nullable UUID[] groupIds, @Nullable Boolean inStock, boolean freeRequestItems, @Nullable OrderBy orderBy) {
+    public static Query getAll(@Nullable String productNameOrCode, @NonNull UUID customerId,
+                               @Nullable UUID orderId, @Nullable UUID[] groupIds,
+                               @Nullable Boolean inStock, boolean freeRequestItems,
+                               @Nullable OrderBy orderBy) {
         Query query = baseQuery(customerId, orderId, orderBy, freeRequestItems, inStock);
 
         if (productNameOrCode != null && !productNameOrCode.isEmpty()) {
@@ -317,11 +325,16 @@ public class ProductOrderViewManager extends BaseManager<ProductOrderViewModel> 
         return query;
     }
 
-    public static Query getAllFreeItems(@Nullable String productNameOrCode, @NonNull UUID customerId, @Nullable UUID orderId, @Nullable UUID[] groupIds, @Nullable Boolean inStock, @Nullable OrderBy orderBy) {
+    public static Query getAllFreeItems(@Nullable String productNameOrCode,
+                                        @NonNull UUID customerId, @Nullable UUID orderId,
+                                        @Nullable UUID[] groupIds, @Nullable Boolean inStock,
+                                        @Nullable OrderBy orderBy) {
         return getAll(productNameOrCode, customerId, orderId, groupIds, inStock, true, orderBy);
     }
 
-    public static Query getAllEmphaticItems(@Nullable String productNameOrCode, @NonNull UUID customerId, @Nullable UUID orderId, @Nullable UUID[] groupIds, @Nullable Boolean inStock, @Nullable OrderBy orderBy) {
+    public static Query getAllEmphaticItems(@Nullable String productNameOrCode, @NonNull UUID customerId,
+                                            @Nullable UUID orderId, @Nullable UUID[] groupIds,
+                                            @Nullable Boolean inStock, @Nullable OrderBy orderBy) {
         Query query = getAll(productNameOrCode, customerId, orderId, groupIds, inStock, false, orderBy);
         query.whereAnd(Criteria.notEquals(ProductOrderView.EmphaticType, EmphasisType.NotEmphatic));
         return query;
@@ -568,7 +581,9 @@ public class ProductOrderViewManager extends BaseManager<ProductOrderViewModel> 
         boolean spd = true;
         for (CustomerModel customer :
                 customerModels) {
-            List<ProductOrderViewModel> productOrderViewModels = getItems(ProductOrderViewManager.getAllEmphaticItems(null, customer.UniqueId, null, new UUID[0], null, null));
+            List<ProductOrderViewModel> productOrderViewModels = getItems(ProductOrderViewManager
+                    .getAllEmphaticItems(null, customer.UniqueId,
+                            null, new UUID[0], null, null));
             for (ProductOrderViewModel productOrderViewModel :
                     productOrderViewModels) {
                 double wQty = HelperMethods.bigDecimalToDouble(productOrderViewModel.WarningQty);

@@ -77,7 +77,7 @@ public class News_Fragment extends IMainPageFragment {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         getdata();
-        sliderAdapter=new SliderAdapter(pics, newsData_list.size(), new OnCardClickListener());
+
         initRecyclerView();
         if (newsData_list.size()>0) {
             initCountryText(view);
@@ -95,30 +95,20 @@ public class News_Fragment extends IMainPageFragment {
         NewsData_ModelRepository repository=new NewsData_ModelRepository();
         Query query=new Query();
         query.from(NewsData_.NewsData_Tbl);
-       newsData_list=repository.getItems(query);
+       List<NewsData_Model> items=repository.getItems(query);
+       if(items.size()>10){
+           for (int i=0;i<10;i++){
+               newsData_list.add(items.get(i));
+           }
+       }else {
+           newsData_list=items;
+       }
     }
     private void setNewsData_list(){
 
 
     }
-    private void initRecyclerView() {
 
-
-        recyclerView.setAdapter(sliderAdapter);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    onActiveCardChange();
-                }
-            }
-        });
-
-        layoutManger = (CardSliderLayoutManager) recyclerView.getLayoutManager();
-
-        new CardSnapHelper().attachToRecyclerView(recyclerView);
-    }
 
     private void onActiveCardChange() {
         final int pos = layoutManger.getActiveCardPosition();
@@ -281,8 +271,7 @@ public class News_Fragment extends IMainPageFragment {
                     try {
                         progressDialog.dismiss();
                         getdata();
-                        sliderAdapter=new SliderAdapter(pics, newsData_list.size(),
-                                new OnCardClickListener());
+
                         initRecyclerView();
                     } catch (Exception ignored) {
                         progressDialog.dismiss();
@@ -313,5 +302,24 @@ public class News_Fragment extends IMainPageFragment {
             dialog.setPositiveButton(R.string.ok, null);
             dialog.show();
         }
+    }
+
+    private void initRecyclerView() {
+
+        sliderAdapter=new SliderAdapter(pics, newsData_list.size(), new OnCardClickListener());
+        recyclerView.setAdapter(sliderAdapter);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    onActiveCardChange();
+                }
+            }
+        });
+
+        layoutManger = (CardSliderLayoutManager) recyclerView.getLayoutManager();
+
+        new CardSnapHelper().attachToRecyclerView(recyclerView);
     }
 }
