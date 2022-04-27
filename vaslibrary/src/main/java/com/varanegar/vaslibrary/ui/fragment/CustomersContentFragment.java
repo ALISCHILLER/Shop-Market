@@ -521,8 +521,14 @@ public class CustomersContentFragment extends VaranegarFragment {
                                         code_naghsh_paired_item= view.
                                                 findViewById(R.id.code_naghsh_paired_item);
                                     code_naghsh_paired_item.setVisibility(View.VISIBLE);
-                                    if (customer.CodeNaghsh != null)
-                                    code_naghsh_paired_item.setValue(customer.CodeNaghsh);
+                                    if (customer.CodeNaghsh != null) {
+                                        code_naghsh_paired_item.setValue(customer.CodeNaghsh);
+                                    }else {
+                                        code_naghsh_paired_item.
+                                                setBackgroundColor(getContext()
+                                                        .getResources().getColor(R.color.red));
+
+                                    }
                                 }
                                 ((PairedItems) view
                                         .findViewById(R.id.customer_address_paired_item))
@@ -824,6 +830,10 @@ public class CustomersContentFragment extends VaranegarFragment {
         });
         actions.add(deleteAction);
 
+        /**
+         * درخواست برگشتی
+         * ثبت برگشتی
+         */
         actions.add(new BaseReturnAction(
                 getVaranegarActvity(),
                 getActionsAdapter(),

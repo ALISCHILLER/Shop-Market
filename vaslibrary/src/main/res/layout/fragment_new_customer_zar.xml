@@ -12,7 +12,17 @@
         android:background="?attr/colorPrimary"
         android:elevation="@dimen/elevation_default"
         tools:targetApi="lollipop">
-
+        <Button
+            android:id="@+id/request_codenaghsh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/selected_option_item_background"
+            android:text="درخواست کد نقش"
+            />
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -132,21 +142,7 @@
                 android:orientation="horizontal"
                 app:singleLine="true"
                 app:title="@string/city_name" />
-            <Button
-                android:id="@+id/request_codenaghsh"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="درخواست کد نقَش"
-                />
-            <com.varanegar.framework.util.component.PairedItems
-                android:id="@+id/code_naghsh_paired_item"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:orientation="horizontal"
-                app:singleLine="true"
-                app:title="@string/code_naghsh" />
+
 
             <com.varanegar.framework.util.component.PairedItemsSpinner
                 android:id="@+id/degree_spinner"
@@ -180,6 +176,14 @@
                 android:inputType="phone"
                 app:singleLine="true"
                 app:title="@string/mobile_label" />
+            <com.varanegar.framework.util.component.PairedItems
+                android:id="@+id/code_naghsh_paired_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:orientation="horizontal"
+                app:singleLine="true"
+                app:title="@string/code_naghsh" />
 
             <com.varanegar.framework.util.component.PairedItemsEditable
                 android:id="@+id/economic_code_paired_item"

@@ -605,6 +605,8 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
             syncGetNewCustomerViewModel.Tel = telPairedItem.getValue();
             syncGetNewCustomerViewModel.Mobile = mobilePairedItem.getValue();
             syncGetNewCustomerViewModel.CodeNaghsh=code_naghsh_paired_item.getValue();
+            syncGetNewCustomerViewModel.EconomicCode=economicCodePairedItem.getValue();
+            syncGetNewCustomerViewModel.NationalCode=nationalCodePairedItem.getValue();
 //        CityModel city = citySpinner.getSelectedItem();
 //        if (city != null)
 //            syncGetNewCustomerViewModel.CityId = city.UniqueId;
@@ -728,7 +730,8 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
         roleCodeCustomerViewModel.NationalCode=nationalCode;
         roleCodeCustomerViewModel.EconomicCode=economicCode;
 
-        if (economicCode!=null&&!economicCode.equals("")||nationalCode!=null&&!nationalCode.equals("")){
+        if (economicCode!=null&&!economicCode.equals("")||
+                nationalCode!=null&&!nationalCode.equals("")){
 
             ApiNew apiNew=new ApiNew(getContext());
           Call<List<RoleCodeViewModel>> calll=apiNew.getCodeNaghsh(roleCodeCustomerViewModel);
@@ -750,6 +753,8 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
                         }else {
                             dialogShow(result);
                         }
+                    }else {
+                        showErrorDialog("یرای این کد ملی کد نقش ثبت نشده است ");
                     }
                 }
 

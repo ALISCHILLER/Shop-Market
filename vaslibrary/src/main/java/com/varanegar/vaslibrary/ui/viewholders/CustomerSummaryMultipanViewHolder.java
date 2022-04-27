@@ -35,14 +35,17 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
     private final TextView customerTelTextView;
     private final TextView customerMobileTextView;
     private final TextView totalTextView;
+
     public static List<CustomerCallModel> calls;
     private TextView storeNameTextView;
     private TextView customerNameTextView;
     private TextView customerAddressTextView;
     private TextView customerStatusTextView;
+    private TextView codenaghsh_text_view,codenaghsh_text;
     private LinearLayout descriptionLayout;
     private TextView descriptionTextView;
     private BackOfficeType backOfficeType;
+    private LinearLayout codenaghsh_layout;
     //private ImageView customerImageView;
 
     public CustomerSummaryMultipanViewHolder(View itemView,
@@ -60,6 +63,9 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
         customerTelTextView = (TextView) itemView.findViewById(R.id.customer_tel_text_view);
         customerMobileTextView = (TextView) itemView.findViewById(R.id.customer_mobile_text_view);
         totalTextView = (TextView) itemView.findViewById(R.id.customer_total_order_text_view);
+        codenaghsh_text_view = (TextView) itemView.findViewById(R.id.codenaghsh_text_view);
+        codenaghsh_text = (TextView) itemView.findViewById(R.id.codenaghsh_text);
+        codenaghsh_layout = (LinearLayout) itemView.findViewById(R.id.codenaghsh_layout);
         descriptionLayout = itemView.findViewById(R.id.description_layout);
         descriptionTextView = itemView.findViewById(R.id.order_description_text_view);
         this.backOfficeType = backOfficeType;
@@ -67,6 +73,7 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
 
     @Override
     public void bindView(final int position) {
+
         final CustomerPathViewModel customerModel = recyclerAdapter.get(position);
         customerNameTextView.setText(customerModel.IsNewCustomer ? customerModel.CustomerName + " " + getContext().getString(R.string.new_customer) : customerModel.CustomerName);
         customerAddressTextView.setText(customerModel.Address);
@@ -74,6 +81,15 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
         customerMobileTextView.setText(customerModel.Mobile);
         customerTelTextView.setText(customerModel.Phone);
         storeNameTextView.setText(customerModel.StoreName);
+        if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)){
+            codenaghsh_layout.setVisibility(View.VISIBLE);
+            if (customerModel.CodeNaghsh!=null){
+                codenaghsh_text_view.setText(customerModel.CodeNaghsh);
+            }else {
+                codenaghsh_text.setTextColor(getContext().getResources().getColor(R.color.red));
+            }
+        }
+
         List<CustomerCallModel> customerCalls = Linq.findAll(calls,
                 new Linq.Criteria<CustomerCallModel>() {
             @Override

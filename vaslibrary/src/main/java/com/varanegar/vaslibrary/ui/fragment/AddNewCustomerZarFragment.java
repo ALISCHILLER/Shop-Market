@@ -766,7 +766,8 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
         roleCodeCustomerViewModel.NationalCode=nationalCode;
         roleCodeCustomerViewModel.EconomicCode=economicCode;
 
-        if (economicCode!=null||nationalCode!=null){
+        if (economicCode!=null&&!economicCode.equals("")||
+                nationalCode!=null&&!nationalCode.equals("")){
 
             ApiNew apiNew=new ApiNew(getContext());
             Call<List<RoleCodeViewModel>> calll=apiNew.getCodeNaghsh(roleCodeCustomerViewModel);
@@ -787,6 +788,8 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
                         }else {
                             dialogShow(result);
                         }
+                    }else {
+                        showErrorDialog("یرای این کد ملی کد نقش ثبت نشده است ");
                     }
                 }
 
