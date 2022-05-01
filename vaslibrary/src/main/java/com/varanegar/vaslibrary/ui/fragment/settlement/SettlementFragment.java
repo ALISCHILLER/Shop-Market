@@ -325,7 +325,8 @@ public class SettlementFragment extends VisitFragment {
                 dialog.setClosable(false);
                 dialog.setValues(pinCode);
                 dialog.setValuesRequst(pinType,getCustomerId(),customerCallOrderModels
-                        .get(0).UniqueId,customerCallOrderModels.get(0).DealerCodeSDS);
+                        .get(0).UniqueId,customerCallOrderModels.get(0).DealerCodeSDS,getActivity()
+                        .getString(R.string.please_insert_pin_code));
                 dialog.setOnResult(new InsertPinDialog.OnResult() {
                     @Override
                     public void done() {

@@ -80,6 +80,7 @@ import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.promotion.V3.DiscountInitializeHandler;
 import com.varanegar.vaslibrary.promotion.V3.DiscountInitializeHandlerV3;
 import com.varanegar.vaslibrary.ui.fragment.news_fragment.NewsZarManager;
+import com.varanegar.vaslibrary.webapi.apiNew.modelNew.customer_not_allowed_product.CustomerNotAllowProductManager;
 
 import java.util.List;
 
@@ -882,7 +883,36 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                 }
             });
 
+            tasks.add(new TourAsyncTask() {
+                CustomerNotAllowProductManager notAllowProductManager = new
+                        CustomerNotAllowProductManager(getContext());
 
+                @Override
+                public void run(UpdateCall call) {
+                    notAllowProductManager.sync(call);
+                }
+
+                @Override
+                public String name() {
+                    return "ProductGroup";
+                }
+
+                @Override
+                public int group() {
+                    return R.string.product_info;
+                }
+
+                @Override
+                public int queueId() {
+                    return 2;
+                }
+
+                @Override
+                public void cancel() {
+                    if (notAllowProductManager != null)
+                        notAllowProductManager.cancelSync();
+                }
+            });
             tasks.add(new TourAsyncTask() {
                 ProductGroupManager productGroupManager = new ProductGroupManager(getContext());
 

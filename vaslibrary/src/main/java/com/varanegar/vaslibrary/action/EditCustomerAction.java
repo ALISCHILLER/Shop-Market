@@ -115,7 +115,7 @@ public class EditCustomerAction extends CheckBarcodeAction {
                 dialog.setClosable(false);
                 dialog.setValues(pin);
                 dialog.setValuesRequst("pin4",getSelectedId(),
-                        null,null);
+                        null,null,getActivity().getString(R.string.please_insert_pin_code));
                 dialog.setOnResult(new InsertPinDialog.OnResult() {
                     @Override
                     public void done() {
@@ -126,7 +126,8 @@ public class EditCustomerAction extends CheckBarcodeAction {
                     public void failed(String error) {
                         Timber.e(error);
                         setRunning(false);
-                        if (error.equals(getActivity().getString(R.string.pin_code_in_not_correct))) {
+                        if (error.equals(getActivity()
+                                .getString(R.string.pin_code_in_not_correct))) {
                             printFailed(getActivity(), error);
                         } else {
                             //saveSettlementFailed(getContext(), error);

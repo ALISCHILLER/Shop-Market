@@ -65,6 +65,7 @@ import com.varanegar.vaslibrary.ui.calculator.ordercalculator.CalculatorBatchUni
 import com.varanegar.vaslibrary.ui.calculator.ordercalculator.OrderCalculatorForm;
 import com.varanegar.vaslibrary.ui.dialog.ProductOrderInfoDialog;
 import com.varanegar.vaslibrary.ui.viewholders.CatalogViewHolder;
+import com.varanegar.vaslibrary.webapi.apiNew.modelNew.customer_not_allowed_product.CustomerNotAllowProductManager;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -384,7 +385,9 @@ public class AlbumFragment extends ProgressFragment {
                 final int position = mainViewPager.getCurrentItem();
                 CatalogModel catalogModel = mainPagerAdapter.getItem(position);
                 if (catalogModel != null && callOrderId != null && customerId != null) {
-                    final ProductOrderViewModel productOrderViewModel = new ProductOrderViewManager(getContext()).getItem(ProductOrderViewManager.get(catalogModel.ProductId, customerId, callOrderId, false));
+                    final ProductOrderViewModel productOrderViewModel = new ProductOrderViewManager
+                            (getContext()).getItem(ProductOrderViewManager
+                            .get(catalogModel.ProductId, customerId, callOrderId, false));
                     if (productOrderViewModel == null) {
                         Timber.wtf("Product order view model is null");
                         CuteMessageDialog dialog = new CuteMessageDialog(requireContext());
@@ -445,6 +448,9 @@ public class AlbumFragment extends ProgressFragment {
                             orderCalculatorForm.onCalcFinish = (discreteUnits, bulkUnit1, batchQtyList) -> {
                                 try {
                                     ProductOrderViewManager.checkOnHandQty(getContext(), onHandQtyStock, discreteUnits, bulkUnit1);
+                                    //manager customerid productid
+                                    CustomerNotAllowProductManager.checkNotAllowed(getContext()
+                                            ,customerId,catalogModel.ProductId);
                                     onAdd(productOrderViewModel, discreteUnits, bulkUnit1, position, batchQtyList);
                                 } catch (OnHandQtyWarning e) {
                                     Timber.e(e);

@@ -684,7 +684,8 @@ public class SaveOrderUtility {
         });
     }
 
-    private void checkFinalOnHandQty(UUID customerId, UUID callOrderId, CustomerCallOrderPromotion customerCallOrderPromotion) throws InventoryError {
+    private void checkFinalOnHandQty(UUID customerId, UUID callOrderId,
+                                     CustomerCallOrderPromotion customerCallOrderPromotion) throws InventoryError {
         HashMap<String, BigDecimal> products = new HashMap<>();
         List<CallOrderLineModel> lines = new CallOrderLineManager(context).getOrderLines(callOrderId);
         HashMap<UUID, CallOrderLineModel> linesMap = new HashMap<>();

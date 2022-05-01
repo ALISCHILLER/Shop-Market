@@ -8,6 +8,7 @@ import com.varanegar.vaslibrary.webapi.TokenType;
 import com.varanegar.vaslibrary.webapi.apiNew.modelNew.PinRequestViewModel;
 import com.varanegar.vaslibrary.webapi.apiNew.modelNew.RoleCodeCustomerRequestViewModel;
 import com.varanegar.vaslibrary.webapi.apiNew.modelNew.RoleCodeViewModel;
+import com.varanegar.vaslibrary.webapi.apiNew.modelNew.customer_not_allowed_product.CustomerNotAllowProductModel;
 import com.varanegar.vaslibrary.webapi.customer.ICustomerApi;
 
 import java.util.List;
@@ -39,5 +40,12 @@ public class ApiNew extends BaseApi implements InApiNew {
         InApiNew api = getRetrofitBuilder(TokenType.UserToken)
                 .build().create(InApiNew.class);
         return api.getCodeNaghsh(roleCodeCustomerViewModel);
+    }
+
+    @Override
+    public Call<List<CustomerNotAllowProductModel>> getProductNotAllowed(List<String> customerId) {
+        InApiNew api = getRetrofitBuilder(TokenType.UserToken)
+                .build().create(InApiNew.class);
+        return api.getProductNotAllowed(customerId);
     }
 }

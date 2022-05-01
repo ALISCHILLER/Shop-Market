@@ -43,6 +43,7 @@ public class InsertPinDialog extends CuteDialogWithToolbar {
     private String mtypePinCode;
     private UUID mCustomerId;
     private String _dealercode;
+    private String  _title;
     private UUID mcustomerOrderId;
     private ProgressDialog progressDialog;
     private Call<String> call;
@@ -50,17 +51,18 @@ public class InsertPinDialog extends CuteDialogWithToolbar {
         this.pinCode = pinCode;
     }
     public void setValuesRequst(String typePinCode,UUID customerId ,
-                                UUID customerOrderId,String dealercode) {
+                                UUID customerOrderId,String dealercode,String title) {
         this.mtypePinCode = typePinCode;
         this.mCustomerId=customerId;
         this.mcustomerOrderId=customerOrderId;
         this._dealercode=dealercode;
+        this._title=title;
     }
     @Override
     public View onCreateDialogView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                                    @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.insert_pin_dialog, container, false);
-        setTitle(R.string.please_insert_pin_code);
+        setTitle(_title);
         final PairedItemsEditable pinCodePairItem = view.findViewById(R.id.pin_paired_items);
         TextView okTv = view.findViewById(R.id.ok_text_view);
         TextView cancelTv = view.findViewById(R.id.cancel_text_view);

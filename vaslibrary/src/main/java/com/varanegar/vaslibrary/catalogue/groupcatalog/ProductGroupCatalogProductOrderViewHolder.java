@@ -250,7 +250,10 @@ public class ProductGroupCatalogProductOrderViewHolder extends BaseViewHolder<Pr
 
     }
 
-    private void onAdd(final ProductOrderViewModel productOrderViewModel, final List<DiscreteUnit> discreteUnits, final BaseUnit bulkUnit, @Nullable final List<BatchQty> batchQtyList, @NonNull OnHandQtyStock onHandQtyStock) {
+    private void onAdd(final ProductOrderViewModel productOrderViewModel,
+                       final List<DiscreteUnit> discreteUnits, final BaseUnit bulkUnit,
+                       @Nullable final List<BatchQty> batchQtyList,
+                       @NonNull OnHandQtyStock onHandQtyStock) {
 
         try {
             ProductOrderViewManager.checkOnHandQty(getContext(), onHandQtyStock, discreteUnits, bulkUnit);

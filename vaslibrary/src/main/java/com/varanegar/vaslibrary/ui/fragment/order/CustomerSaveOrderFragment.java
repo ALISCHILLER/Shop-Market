@@ -184,6 +184,7 @@ import com.varanegar.vaslibrary.ui.fragment.settlement.CardReaderDialog;
 import com.varanegar.vaslibrary.ui.fragment.settlement.CashPaymentDialog;
 import com.varanegar.vaslibrary.ui.fragment.settlement.CustomerPayment;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
+import com.varanegar.vaslibrary.webapi.apiNew.modelNew.customer_not_allowed_product.CustomerNotAllowProductManager;
 import com.varanegar.vaslibrary.webapi.customer.CustomerApi;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
 
@@ -478,6 +479,9 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
                 onHandQtyStock.TotalQty = orderLine.TotalQtyBulk == null ? BigDecimal.ZERO : orderLine.TotalQtyBulk;
             onHandQtyStock.HasAllocation = orderLine.HasAllocation;
             ProductOrderViewManager.checkOnHandQty(getContext(), onHandQtyStock, change.discreteUnits, null);
+            //manager customerid productid
+            CustomerNotAllowProductManager.checkNotAllowed(getContext()
+                    ,customerId,orderLine.ProductId);
             add(orderLine, change, editReasonId);
             refresh(true, false, true);
             VaranegarApplication.getInstance().printElapsedTime("refresh order view");
@@ -1991,6 +1995,9 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
         onHandQtyStock.HasAllocation = productOrderViewModel.HasAllocation;
         try {
             ProductOrderViewManager.checkOnHandQty(context, onHandQtyStock, discreteUnits, bulkUnit);
+            //manager customerid productid
+            CustomerNotAllowProductManager.checkNotAllowed(getContext()
+                    ,customerId,productOrderViewModel.UniqueId);
             add(productOrderViewModel, discreteUnits, bulkUnit, batchQtyList);
         } catch (OnHandQtyWarning e) {
             Timber.e(e);
@@ -2100,6 +2107,7 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
                 onHandQtyStock.TotalQty = customerCallOrderOrderViewModel.TotalQtyBulk == null ? BigDecimal.ZERO : customerCallOrderOrderViewModel.TotalQtyBulk;
             onHandQtyStock.HasAllocation = customerCallOrderOrderViewModel.HasAllocation;
             ProductOrderViewManager.checkOnHandQty(context, onHandQtyStock, discreteUnits, bulkUnit);
+
             add(customerCallOrderOrderViewModel, discreteUnits, bulkUnit, batchQtyList, returnReasonId);
         } catch (OnHandQtyWarning e) {
             Timber.e(e);
@@ -2644,7 +2652,7 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
         dialog.setClosable(false);
         dialog.setValues(customerCallOrderModels.get(0).PinCode3);
         dialog.setValuesRequst("pin3",customerId,customerCallOrderModels.get(0).UniqueId
-        ,customerCallOrderModels.get(0).DealerCodeSDS);
+        ,customerCallOrderModels.get(0).DealerCodeSDS,getActivity().getString(R.string.please_insert_pin_code));
         dialog.setOnResult(new InsertPinDialog.OnResult() {
             @Override
             public void done() {
@@ -2673,7 +2681,7 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
         dialog.setClosable(false);
         dialog.setValues(customerCallOrderModels.get(0).PinCode3);
         dialog.setValuesRequst("pin3",customerId,customerCallOrderModels.get(0).UniqueId,
-                customerCallOrderModels.get(0).DealerCodeSDS);
+                customerCallOrderModels.get(0).DealerCodeSDS,getActivity().getString(R.string.please_insert_pin_code));
         dialog.setOnResult(new InsertPinDialog.OnResult() {
             @Override
             public void done() {

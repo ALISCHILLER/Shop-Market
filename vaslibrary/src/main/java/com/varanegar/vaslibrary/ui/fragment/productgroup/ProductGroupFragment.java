@@ -121,6 +121,7 @@ import com.varanegar.vaslibrary.ui.fragment.VisitFragment;
 import com.varanegar.vaslibrary.ui.viewholders.ChildProductGroupViewHolder;
 import com.varanegar.vaslibrary.ui.viewholders.ProductGroupViewHolder;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
+import com.varanegar.vaslibrary.webapi.apiNew.modelNew.customer_not_allowed_product.CustomerNotAllowProductManager;
 import com.varanegar.vaslibrary.webapi.device.CompanyDeviceAppResult;
 import com.varanegar.vaslibrary.webapi.device.DeviceApi;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
@@ -252,7 +253,13 @@ public class ProductGroupFragment extends VisitFragment {
                 onHandQtyStock.HasAllocation = productOrderViewModel.HasAllocation;
 
                 try {
-                    ProductOrderViewManager.checkOnHandQty(getContext(), onHandQtyStock, discreteUnits, bulkUnit);
+                    ProductOrderViewManager.checkOnHandQty(getContext(), onHandQtyStock,
+                            discreteUnits, bulkUnit);
+
+                    //manager customerid productid
+                    CustomerNotAllowProductManager.checkNotAllowed(getContext()
+                            ,customerId,productId);
+
                     add();
                 } catch (final OnHandQtyWarning e) {
                     getActivity().runOnUiThread(new Runnable() {
@@ -388,6 +395,9 @@ public class ProductGroupFragment extends VisitFragment {
                         onHandQtyStock.TotalQty = productOrderViewModel.TotalQtyBulk == null ? BigDecimal.ZERO : productOrderViewModel.TotalQtyBulk;
                     onHandQtyStock.HasAllocation = productOrderViewModel.HasAllocation;
                     ProductOrderViewManager.checkOnHandQty(getContext(), onHandQtyStock, change.discreteUnits, null);
+                    //manager customerid productid
+                    CustomerNotAllowProductManager.checkNotAllowed(getContext()
+                            ,customerId,productOrderViewModel.UniqueId);
                     add(productOrderViewModel, change);
                     return true;
                 } catch (OnHandQtyWarning e) {
@@ -1027,12 +1037,17 @@ public class ProductGroupFragment extends VisitFragment {
 
                 if (selectedFilter == FilterType.Emphatic) {
                     if (inStock)
-                        productsList = productOrderViewManager.getItems(ProductOrderViewManager.getAllEmphaticItems(null, customerId, callOrderId, null, inStock, null));
+                        productsList = productOrderViewManager
+                                .getItems(ProductOrderViewManager
+                                        .getAllEmphaticItems(null, customerId, callOrderId, null, inStock, null));
                     else
-                        productsList = productOrderViewManager.getItems(ProductOrderViewManager.getAllEmphaticItems(null, customerId, callOrderId, null, null, null));
+                        productsList = productOrderViewManager.getItems(ProductOrderViewManager
+                                .getAllEmphaticItems(null, customerId, callOrderId,
+                                        null, null, null));
                 } else if (selectedFilter == FilterType.Free) {
                     if (inStock)
-                        productsList = productOrderViewManager.getItems(ProductOrderViewManager.getAllFreeItems(null, customerId, callOrderId, null, inStock, null));
+                        productsList = productOrderViewManager.getItems(ProductOrderViewManager
+                                .getAllFreeItems(null, customerId, callOrderId, null, inStock, null));
                     else
                         productsList = productOrderViewManager.getItems(ProductOrderViewManager.getAllFreeItems(null, customerId, callOrderId, null, null, null));
                 } else if (selectedFilter == FilterType.UnSold) {
@@ -1051,17 +1066,26 @@ public class ProductGroupFragment extends VisitFragment {
                         productsList.clear();
                     } else {
                         if (inStock)
-                            productsList = productOrderViewManager.getItems(ProductOrderViewManager.getAllUnSoldItems(null, customerId, callOrderId, null, inStock, null));
+                            productsList = productOrderViewManager.getItems(ProductOrderViewManager
+                                    .getAllUnSoldItems(null, customerId, callOrderId,
+                                            null, inStock, null));
                         else
-                            productsList = productOrderViewManager.getItems(ProductOrderViewManager.getAllUnSoldItems(null, customerId, callOrderId, null, null, null));
+                            productsList = productOrderViewManager.getItems(ProductOrderViewManager
+                                    .getAllUnSoldItems(null, customerId, callOrderId,
+                                            null, null, null));
                     }
                 } else {
                     if (inStock)
-                        productsList = productOrderViewManager.getItems(ProductOrderViewManager.getAll(null, customerId, callOrderId, null, inStock, false, null));
+                        productsList = productOrderViewManager.getItems(ProductOrderViewManager
+                                .getAll(null, customerId, callOrderId,
+                                        null, inStock, false, null));
                     else
-                        productsList = productOrderViewManager.getItems(ProductOrderViewManager.getAll(null, customerId, callOrderId, null, null, false, null));
+                        productsList = productOrderViewManager.getItems(ProductOrderViewManager
+                                .getAll(null, customerId, callOrderId, null,
+                                        null, false, null));
                 }
-                final HashMap<UUID, ProductUnitViewManager.ProductUnits> unitSet = new ProductUnitViewManager(getContext()).getUnitSet(ProductType.isForSale);
+                final HashMap<UUID, ProductUnitViewManager.ProductUnits> unitSet = new
+                        ProductUnitViewManager(getContext()).getUnitSet(ProductType.isForSale);
                 if (productsList != null && productsList.size() > 0)
                     Timber.d(productsList.size() + " products fetched from db");
                 else
@@ -1168,7 +1192,8 @@ public class ProductGroupFragment extends VisitFragment {
                                     if (position < 0)
                                         return false;
                                     ProductOrderViewModel orderViewModel = productsAdapter.get(position);
-                                    return orderViewModel != null && orderViewModel.TotalQty != null && orderViewModel.TotalQty.compareTo(BigDecimal.ZERO) != 0;
+                                    return orderViewModel != null && orderViewModel.TotalQty != null &&
+                                            orderViewModel.TotalQty.compareTo(BigDecimal.ZERO) != 0;
                                 }
 
                                 @Override
@@ -1188,8 +1213,11 @@ public class ProductGroupFragment extends VisitFragment {
                                     ProductOrderViewModel productOrderViewModel = productsAdapter.get(position);
                                     CallOrderLineManager callOrderLineManager = new CallOrderLineManager(getContext());
                                     try {
-                                        callOrderLineManager.deleteProduct(callOrderId, productOrderViewModel.UniqueId, productOrderViewModel.IsRequestFreeItem);
-                                        ProductOrderViewModel updatedProductOrderViewModel = productOrderViewManager.getLine(customerId, callOrderId, productOrderViewModel.UniqueId, productOrderViewModel.IsRequestFreeItem);
+                                        callOrderLineManager.deleteProduct(callOrderId, productOrderViewModel.UniqueId,
+                                                productOrderViewModel.IsRequestFreeItem);
+                                        ProductOrderViewModel updatedProductOrderViewModel =
+                                                productOrderViewManager.getLine(customerId, callOrderId,
+                                                        productOrderViewModel.UniqueId, productOrderViewModel.IsRequestFreeItem);
                                         refreshAdapter(position, updatedProductOrderViewModel, true);
                                         refreshTotalPrice();
                                     } catch (Exception ex) {
@@ -1208,7 +1236,8 @@ public class ProductGroupFragment extends VisitFragment {
                                 @Override
                                 protected View onCreateView(int position, View convertView, ViewGroup parent) {
                                     ProductOrderViewModel productOrderViewModel = productsAdapter.get(position);
-                                    View view = LayoutInflater.from(convertView.getContext()).inflate(R.layout.order_line_description, parent, false);
+                                    View view = LayoutInflater.from(convertView.getContext())
+                                            .inflate(R.layout.order_line_description, parent, false);
                                     EditText editText = view.findViewById(R.id.edit_text);
                                     editText.setText(productOrderViewModel.Description);
                                     editText.setOnEditorActionListener((v, actionId, event) -> {
@@ -1217,7 +1246,8 @@ public class ProductGroupFragment extends VisitFragment {
                                         }
                                         return false;
                                     });
-                                    view.findViewById(R.id.save_btn).setOnClickListener(v -> save(productOrderViewModel, editText.getText().toString(), position));
+                                    view.findViewById(R.id.save_btn).setOnClickListener(v ->
+                                            save(productOrderViewModel, editText.getText().toString(), position));
                                     return view;
                                 }
 
@@ -1362,7 +1392,8 @@ public class ProductGroupFragment extends VisitFragment {
         filteredProductsList.clear();
         for (int j = 0; j < productsList.size(); j++) {
             ProductOrderViewModel item = productsList.get(j);
-            if (checkFilterType(item) && filterProductOrName(item) && checkInStock(item) && checkGroup(item)) {
+            if (checkFilterType(item) && filterProductOrName(item)
+                    && checkInStock(item) && checkGroup(item)) {
                 filteredProductsList.add(item);
                 map.put(i, j);
                 i++;

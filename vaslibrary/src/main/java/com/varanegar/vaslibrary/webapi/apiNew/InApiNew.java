@@ -4,6 +4,7 @@ import com.varanegar.vaslibrary.ui.fragment.news_fragment.model.NewsData_Model;
 import com.varanegar.vaslibrary.webapi.apiNew.modelNew.PinRequestViewModel;
 import com.varanegar.vaslibrary.webapi.apiNew.modelNew.RoleCodeCustomerRequestViewModel;
 import com.varanegar.vaslibrary.webapi.apiNew.modelNew.RoleCodeViewModel;
+import com.varanegar.vaslibrary.webapi.apiNew.modelNew.customer_not_allowed_product.CustomerNotAllowProductModel;
 
 import java.util.List;
 import java.util.UUID;
@@ -28,5 +29,10 @@ public interface InApiNew {
     @POST("api/v2/ngt/customer/getrolecode")
     Call<List<RoleCodeViewModel>>getCodeNaghsh(
             @Body RoleCodeCustomerRequestViewModel roleCodeCustomerViewModel
+    );
+
+    @POST("api/v2/ngt/customer/GetCustomerProductBlackList")
+    Call<List<CustomerNotAllowProductModel>>getProductNotAllowed(
+            @Body List<String> customerId
     );
 }

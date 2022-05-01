@@ -82,6 +82,7 @@ import com.varanegar.vaslibrary.manager.sysconfigmanager.BackOfficeType;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.UnknownBackOfficeException;
+import com.varanegar.vaslibrary.manager.tourmanager.TourManager;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateManager;
 import com.varanegar.vaslibrary.model.call.CustomerCallOrderPreviewModel;
 import com.varanegar.vaslibrary.model.customer.CustomerActivityModel;
@@ -92,6 +93,9 @@ import com.varanegar.vaslibrary.model.customercall.CustomerCallModel;
 import com.varanegar.vaslibrary.model.customercall.TaskPriorityModel;
 import com.varanegar.vaslibrary.model.customeroldInvoice.CustomerOldInvoiceHeaderModel;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
+import com.varanegar.vaslibrary.model.tour.TourModel;
+import com.varanegar.vaslibrary.ui.dialog.EditCustomerZarFragmentDialog;
+import com.varanegar.vaslibrary.ui.dialog.InsertPinDialog;
 import com.varanegar.vaslibrary.ui.drawer.CustomerReportsDrawerAdapter;
 
 import java.text.ParseException;
@@ -527,7 +531,7 @@ public class CustomersContentFragment extends VaranegarFragment {
                                         code_naghsh_paired_item.
                                                 setBackgroundColor(getContext()
                                                         .getResources().getColor(R.color.red));
-
+                                        toeditFragment();
                                     }
                                 }
                                 ((PairedItems) view
@@ -893,7 +897,78 @@ public class CustomersContentFragment extends VaranegarFragment {
         void run();
     }
 
+
     public void addOnItemUpdateListener(OnItemUpdateListener onItemUpdateListener) {
         onItemUpdateListeners.add(onItemUpdateListener);
+    }
+
+
+
+    private String pin ;
+
+    public void toeditFragment() {
+
+        /**
+         * گرفتن pincode4 برای ویرایش مشتری در presale
+         */
+
+        final TourModel tourModel = new TourManager(getActivity()).loadTour();
+        for (int i = 0; i < tourModel.Pins.size(); i++) {
+            if (getSelectedId().equals(tourModel.Pins.get(i).CustomerId)) {
+                pin = tourModel.Pins.get(i).PinCode4;
+            }
+        }
+        if ( pin != null) {
+            InsertPinDialog dialog = new InsertPinDialog();
+            dialog.setCancelable(false);
+            dialog.setClosable(false);
+            dialog.setValues(pin);
+            dialog.setValuesRequst("pin4", getSelectedId(),
+                    null, null,
+                    "لظفا پین را وارد کنید و وارد صفحه ویراش مشتری شود برای گرفتن کدنقش");
+            dialog.setOnResult(new InsertPinDialog.OnResult() {
+                @Override
+                public void done() {
+                    showEditDialog();
+                }
+
+                @Override
+                public void failed(String error) {
+                    Timber.e(error);
+                    if (error.equals(getActivity()
+                            .getString(R.string.pin_code_in_not_correct))) {
+                        printFailed(getActivity(), error);
+                    } else {
+                        //saveSettlementFailed(getContext(), error);
+                    }
+                }
+            });
+            dialog.show(getActivity().getSupportFragmentManager(), "InsertPinDialog");
+        }
+    }
+
+
+    private void showEditDialog(){
+        EditCustomerZarFragmentDialog editCustomerFragmentDialog =
+                new EditCustomerZarFragmentDialog();
+       // editCustomerFragmentDialog.onCustomerEditedCallBack = this::runActionCallBack;
+        Bundle bundle = new Bundle();
+        bundle.putString("68565e5e-d407-4858-bc5f-fd52b9318734", getSelectedId().toString());
+        editCustomerFragmentDialog.setArguments(bundle);
+        editCustomerFragmentDialog.show(getActivity().getSupportFragmentManager(),
+                "EditCustomerFragmentDialog");
+    }
+
+    private void printFailed(Context context, String error) {
+        try {
+            CuteMessageDialog dialog = new CuteMessageDialog(context);
+            dialog.setIcon(Icon.Warning);
+            dialog.setTitle(R.string.DeliveryReasons);
+            dialog.setMessage(error);
+            dialog.setPositiveButton(R.string.ok, null);
+            dialog.show();
+        } catch (Exception e1) {
+            Timber.e(e1);
+        }
     }
 }

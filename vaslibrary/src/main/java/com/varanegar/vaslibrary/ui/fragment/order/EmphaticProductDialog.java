@@ -238,7 +238,10 @@ public class EmphaticProductDialog extends CuteAlertDialog {
         packagesRcyclerView.setAdapter(packagesAdapter);
     }
 
-    void onAddOrUpdateItem(final ProductOrderViewModel productOrderViewModel, final List<DiscreteUnit> discreteUnits, final BaseUnit bulkUnit, @Nullable final List<BatchQty> batchQtyList) {
+    void onAddOrUpdateItem(final ProductOrderViewModel productOrderViewModel,
+                           final List<DiscreteUnit> discreteUnits,
+                           final BaseUnit bulkUnit,
+                           @Nullable final List<BatchQty> batchQtyList) {
         final OnHandQtyStock onHandQtyStock = new OnHandQtyStock();
         onHandQtyStock.ConvertFactors = productOrderViewModel.ConvertFactor;
         ProductUnitsViewManager productUnitsViewManager = new ProductUnitsViewManager(getContext());

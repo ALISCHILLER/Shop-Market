@@ -462,7 +462,11 @@ public class ProductSimpleOrderViewHolder extends BaseViewHolder<ProductOrderVie
         }
     }
 
-    private synchronized void deleteItem(@Nullable DiscreteUnit unit, @Nullable DiscreteUnit otherUnit, TextView qtyTextView, ProductOrderViewModel productOrderViewModel, int position) {
+    private synchronized void deleteItem(@Nullable DiscreteUnit unit,
+                                         @Nullable DiscreteUnit otherUnit,
+                                         TextView qtyTextView,
+                                         ProductOrderViewModel productOrderViewModel,
+                                         int position) {
         if (unit != null && unit.value > 0) {
             unit.value = 0;
             qtyTextView.setText(HelperMethods.doubleToString(unit.value));
@@ -472,7 +476,8 @@ public class ProductSimpleOrderViewHolder extends BaseViewHolder<ProductOrderVie
         }
     }
 
-    private synchronized void addItem(@Nullable DiscreteUnit unit, @Nullable DiscreteUnit otherUnit, TextView qtyTextView, final ProductOrderViewModel productOrderViewModel, int position) {
+    private synchronized void addItem(@Nullable DiscreteUnit unit, @Nullable DiscreteUnit otherUnit,
+                                      TextView qtyTextView, final ProductOrderViewModel productOrderViewModel, int position) {
         if (unit != null) {
             unit.value++;
             qtyTextView.setText(HelperMethods.doubleToString(unit.value));

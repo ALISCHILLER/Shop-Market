@@ -95,15 +95,18 @@ public class ProductOrderViewManager extends BaseManager<ProductOrderViewModel> 
             }
         } else if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
 
-            SysConfigModel sysConfigModel = sysConfigManager.read(ConfigKey.InventoryControl, SysConfigManager.cloud);
-            if (SysConfigManager.compare(sysConfigModel, true) && onHandQtyStock.OnHandQty.subtract(total).compareTo(onHandQtyStock.OrderPoint) < 0) {
+            SysConfigModel sysConfigModel = sysConfigManager.read(ConfigKey.InventoryControl,
+                    SysConfigManager.cloud);
+            if (SysConfigManager.compare(sysConfigModel, true) &&
+                    onHandQtyStock.OnHandQty.subtract(total).compareTo(onHandQtyStock.OrderPoint) < 0) {
                 throw new InventoryError(context.getString(R.string.stock_level_is_not_enough));
             }
             if (onHandQtyStock.HasAllocation && onHandQtyStock.OnHandQty.subtract(total).compareTo(BigDecimal.ZERO) < 0) {
                 throw new AllocationError(context.getString(R.string.dealer_qty_error) + " " + onHandQtyStock.OnHandQty);
             }
 
-            SysConfigModel showInventoryMinusUnconfirmedRequests = sysConfigManager.read(ConfigKey.ShowInventoryMinusUnconfirmedRequests, SysConfigManager.cloud);
+            SysConfigModel showInventoryMinusUnconfirmedRequests = sysConfigManager.read(ConfigKey.ShowInventoryMinusUnconfirmedRequests,
+                    SysConfigManager.cloud);
             if (SysConfigManager.compare(sysConfigModel, true) && SysConfigManager.compare(showInventoryMinusUnconfirmedRequests, true)) {
                 if (onHandQtyStock.RemainedAfterReservedQty.subtract(total).compareTo(onHandQtyStock.OrderPoint) < 0) {
                     throw new OnHandQtyWarning(context.getString(R.string.reserved_qty_error) + "\n" + context.getString(R.string.onhand_qty) + " " + context.getString(R.string.onhand_qty_after_reserve) + " = " + VasHelperMethods.bigDecimalToString(onHandQtyStock.RemainedAfterReservedQty));
