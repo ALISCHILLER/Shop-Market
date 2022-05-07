@@ -212,9 +212,11 @@ public class CustomersFragment extends IMainPageFragment {
                                String messageback= getTextBackMessage(entity);
                                 builder.setData("داده های ویرایش شده" + " \n "+messageback);
                                 if (entity.isActive) {
-                                    builder.setMessage(getActivity().getString(com.varanegar.vaslibrary.R.string.dialog_black ));
+                                    builder.setMessage(getActivity()
+                                            .getString(com.varanegar.vaslibrary.R.string.dialog_black ));
                                 } else if (!entity.isActive){
-                                    builder.setMessage(getActivity().getString(com.varanegar.vaslibrary.R.string.dialog_unblack));
+                                    builder.setMessage(getActivity()
+                                            .getString(com.varanegar.vaslibrary.R.string.dialog_unblack));
                                 }
                                     builder.setPositiveButton(com.varanegar.vaslibrary.R.string.yes, new View.OnClickListener() {
                                     @Override

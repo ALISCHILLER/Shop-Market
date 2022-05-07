@@ -525,7 +525,7 @@ public class CustomersContentFragment extends VaranegarFragment {
                                         code_naghsh_paired_item= view.
                                                 findViewById(R.id.code_naghsh_paired_item);
                                     code_naghsh_paired_item.setVisibility(View.VISIBLE);
-                                    if (customer.CodeNaghsh != null) {
+                                    if (customer.CodeNaghsh != null && !customer.CodeNaghsh.isEmpty()) {
                                         code_naghsh_paired_item.setValue(customer.CodeNaghsh);
                                     }else {
                                         code_naghsh_paired_item.
@@ -926,6 +926,33 @@ public class CustomersContentFragment extends VaranegarFragment {
             dialog.setValuesRequst("pin4", getSelectedId(),
                     null, null,
                     "لظفا پین را وارد کنید و وارد صفحه ویراش مشتری شود برای گرفتن کدنقش");
+            dialog.setOnResult(new InsertPinDialog.OnResult() {
+                @Override
+                public void done() {
+                    showEditDialog();
+                }
+
+                @Override
+                public void failed(String error) {
+                    Timber.e(error);
+                    if (error.equals(getActivity()
+                            .getString(R.string.pin_code_in_not_correct))) {
+                        printFailed(getActivity(), error);
+                    } else {
+                        //saveSettlementFailed(getContext(), error);
+                    }
+                }
+            });
+            dialog.show(getActivity().getSupportFragmentManager(), "InsertPinDialog");
+        }else {
+            pin="1111";
+            InsertPinDialog dialog = new InsertPinDialog();
+            dialog.setCancelable(false);
+            dialog.setClosable(false);
+            dialog.setValues(pin);
+            dialog.settype("true");
+            dialog.setValuesRequst("pin4",getSelectedId(),
+                    null,null,getActivity().getString(R.string.please_insert_pin_code));
             dialog.setOnResult(new InsertPinDialog.OnResult() {
                 @Override
                 public void done() {

@@ -83,7 +83,7 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
         storeNameTextView.setText(customerModel.StoreName);
         if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)){
             codenaghsh_layout.setVisibility(View.VISIBLE);
-            if (customerModel.CodeNaghsh!=null){
+            if (customerModel.CodeNaghsh!=null && !customerModel.CodeNaghsh.isEmpty()){
                 codenaghsh_text_view.setText(customerModel.CodeNaghsh);
             }else {
                 codenaghsh_text.setTextColor(getContext().getResources().getColor(R.color.red));

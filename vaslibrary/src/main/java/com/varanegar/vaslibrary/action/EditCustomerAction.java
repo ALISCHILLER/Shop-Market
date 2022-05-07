@@ -109,7 +109,7 @@ public class EditCustomerAction extends CheckBarcodeAction {
                     pin = tourModel.Pins.get(i).PinCode4;
                 }
             }
-            if (!pin.isEmpty() && pin!=null) {
+            if (pin!=null) {
                 InsertPinDialog dialog = new InsertPinDialog();
                 dialog.setCancelable(false);
                 dialog.setClosable(false);
@@ -135,6 +135,35 @@ public class EditCustomerAction extends CheckBarcodeAction {
                     }
                 });
                 dialog.show(getActivity().getSupportFragmentManager(), "InsertPinDialog");
+            }else {
+                pin="1111";
+                    InsertPinDialog dialog = new InsertPinDialog();
+                    dialog.setCancelable(false);
+                    dialog.setClosable(false);
+                    dialog.setValues(pin);
+                    dialog.settype("true");
+                    dialog.setValuesRequst("pin4",getSelectedId(),
+                            null,null,getActivity().getString(R.string.please_insert_pin_code));
+                    dialog.setOnResult(new InsertPinDialog.OnResult() {
+                        @Override
+                        public void done() {
+                            showEditDialog();
+                        }
+
+                        @Override
+                        public void failed(String error) {
+                            Timber.e(error);
+                            setRunning(false);
+                            if (error.equals(getActivity()
+                                    .getString(R.string.pin_code_in_not_correct))) {
+                                printFailed(getActivity(), error);
+                            } else {
+                                //saveSettlementFailed(getContext(), error);
+                            }
+                        }
+                    });
+                    dialog.show(getActivity().getSupportFragmentManager(), "InsertPinDialog");
+
             }
         } else {
             EditCustomerFragmentDialog editCustomerFragmentDialog = new EditCustomerFragmentDialog();
