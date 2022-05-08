@@ -122,7 +122,8 @@ public class ListNotification_Fragment  extends IMainPageFragment
 
         Query q = new Query();
 
-        q.from(PinRequest_.PinRequest_Tbl).whereAnd(Criteria.equals(PinRequest_.date,date));
+        q.from(PinRequest_.PinRequest_Tbl).whereAnd(Criteria.equals(PinRequest_.date,date))
+                .whereAnd(Criteria.equals(PinRequest_.Status,""));
         pinRequestModels=pinRequest_modelRepository.getItems(q);
     }
 
