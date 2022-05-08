@@ -531,7 +531,7 @@ public class CustomersContentFragment extends VaranegarFragment {
                                         code_naghsh_paired_item.
                                                 setBackgroundColor(getContext()
                                                         .getResources().getColor(R.color.red));
-                                        toeditFragment();
+                                        showEditDialog();
                                     }
                                 }
                                 ((PairedItems) view
