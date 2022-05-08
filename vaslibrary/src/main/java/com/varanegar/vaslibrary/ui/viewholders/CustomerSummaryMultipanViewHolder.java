@@ -82,13 +82,9 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
         customerMobileTextView.setText(customerModel.Mobile);
         customerTelTextView.setText(customerModel.Phone);
         storeNameTextView.setText(customerModel.StoreName);
+        String codeNagesh_Str=customerModel.CodeNaghsh;
         if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)){
             codenaghsh_layout.setVisibility(View.VISIBLE);
-            if (customerModel.CodeNaghsh!=null && !customerModel.CodeNaghsh.isEmpty()){
-                codenaghsh_text_view.setText(customerModel.CodeNaghsh);
-            }else if(customerModel.CodeNaghsh==null && customerModel.CodeNaghsh.isEmpty()){
-                codenaghsh_text.setTextColor(getContext().getResources().getColor(R.color.red));
-            }
         }
 
         List<CustomerCallModel> customerCalls = Linq.findAll(calls,
@@ -98,6 +94,14 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
                 return item.CustomerId.equals(customerModel.UniqueId);
             }
         });
+
+        if (codeNagesh_Str!=null&&!codeNagesh_Str.isEmpty()&&!codeNagesh_Str.equals("")){
+            codenaghsh_text_view.setText(customerModel.CodeNaghsh);
+            codenaghsh_text.setTextColor(getContext().getResources().getColor(R.color.blue));
+        }else if(codeNagesh_Str==null){
+            codenaghsh_text.setTextColor(getContext().getResources().getColor(R.color.red));
+        }
+
 
         setStatus(customerCalls);
         if (descriptionLayout != null) {
