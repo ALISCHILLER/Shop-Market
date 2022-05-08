@@ -75,7 +75,8 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
     public void bindView(final int position) {
 
         final CustomerPathViewModel customerModel = recyclerAdapter.get(position);
-        customerNameTextView.setText(customerModel.IsNewCustomer ? customerModel.CustomerName + " " + getContext().getString(R.string.new_customer) : customerModel.CustomerName);
+        customerNameTextView.setText(customerModel.IsNewCustomer ? customerModel.CustomerName
+                + " " + getContext().getString(R.string.new_customer) : customerModel.CustomerName);
         customerAddressTextView.setText(customerModel.Address);
         customerCodeTextView.setText(customerModel.CustomerCode);
         customerMobileTextView.setText(customerModel.Mobile);
@@ -85,7 +86,7 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
             codenaghsh_layout.setVisibility(View.VISIBLE);
             if (customerModel.CodeNaghsh!=null && !customerModel.CodeNaghsh.isEmpty()){
                 codenaghsh_text_view.setText(customerModel.CodeNaghsh);
-            }else {
+            }else if(customerModel.CodeNaghsh==null && customerModel.CodeNaghsh.isEmpty()){
                 codenaghsh_text.setTextColor(getContext().getResources().getColor(R.color.red));
             }
         }
