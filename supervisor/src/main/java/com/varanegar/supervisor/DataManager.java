@@ -571,9 +571,11 @@ public class DataManager {
         }
     }
 
-    public static void getCustomers(UserModel userModel, List<String> visitorModel, final Callback callback, final Context context) {
+    public static void getCustomers(UserModel userModel, List<String> visitorModel,
+                                    final Callback callback, final Context context) {
         SupervisorApi api = new SupervisorApi(context);
-        api.runWebRequest(api.getCustomers(userModel.UniqueId), new WebCallBack<List<SupervisorCustomerModel>>() {
+        api.runWebRequest(api.getCustomers(userModel.UniqueId), new
+                WebCallBack<List<SupervisorCustomerModel>>() {
             @Override
             protected void onFinish() {
 
@@ -585,7 +587,7 @@ public class DataManager {
                     SupervisorCustomerModelRepository repository = new SupervisorCustomerModelRepository();
                     if (result != null && result.size() > 0) {
                         repository.deleteAll();
-                        repository.insert(result);
+                        repository.insertOrUpdate(result);
                     }else {
                         repository.deleteAll();
                     }

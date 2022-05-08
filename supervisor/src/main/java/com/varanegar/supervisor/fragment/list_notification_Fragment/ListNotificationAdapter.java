@@ -49,18 +49,18 @@ public class ListNotificationAdapter extends
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView")
             int position) {
-
-        holder.text_customerId.setText(_pinRequestModels.get(position).customerId.toString());
-        holder.text_customerName.setText(_pinRequestModels.get(position).customerName);
-        holder.text_dealerName.setText(_pinRequestModels.get(position).dealerName);
-        holder.text_pinName.setText(_pinRequestModels.get(position).pinName);
-        JalaliCalendar calendar = new JalaliCalendar();
-        String YEAR = String.valueOf(calendar.get(Calendar.YEAR));
-        int MONTH = calendar.get(Calendar.MONTH)+1;
-        int DAY = calendar.get(Calendar.DAY_OF_MONTH);
-        String Startdata=YEAR+"/"+MONTH+"/"+DAY;
-        holder.text_date.setText(Startdata);
-
+        if (!_pinRequestModels.get(position).Status.equals("Visible")) {
+            holder.text_customerId.setText(_pinRequestModels.get(position).customerId.toString());
+            holder.text_customerName.setText(_pinRequestModels.get(position).customerName);
+            holder.text_dealerName.setText(_pinRequestModels.get(position).dealerName);
+            holder.text_pinName.setText(_pinRequestModels.get(position).pinName);
+            JalaliCalendar calendar = new JalaliCalendar();
+            String YEAR = String.valueOf(calendar.get(Calendar.YEAR));
+            int MONTH = calendar.get(Calendar.MONTH) + 1;
+            int DAY = calendar.get(Calendar.DAY_OF_MONTH);
+            String Startdata = YEAR + "/" + MONTH + "/" + DAY;
+            holder.text_date.setText(Startdata);
+        }
         holder.btn_true_request.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,7 +79,7 @@ public class ListNotificationAdapter extends
             }
         });
         if (_pinRequestModels.get(position).Status.equals("Visible")){
-            setviewonclick(holder);
+          //  setviewonclick(holder);
         }else {
             int start_color = ContextCompat.getColor(_context, R.color.gradientLightGreen);
             int end_color = ContextCompat.getColor(_context, R.color.gradientLightBlue);

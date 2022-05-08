@@ -698,6 +698,7 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
             dialog.setMessage(err);
             dialog.setPositiveButton(R.string.ok, null);
             dialog.show();
+            dismiss();
         }
     }
 
@@ -750,6 +751,9 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
                         if (result.size()==1){
                             code_naghsh_paired_item.setValue(result.get(0).Code);
                             request_codenaghsh.setVisibility(View.GONE);
+                            nationalCodePairedItem.setEnabled(false);
+                            nationalCodePairedItem.setFocusable(false);
+                            nationalCodePairedItem.setFocusableInTouchMode(false);
                         }else {
                             dialogShow(result);
                         }
@@ -799,6 +803,9 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
     public void onPositiveButtonClicked(String[] list, int position) {
         code_naghsh_paired_item.setValue(roleCodeViewModels.get(position).Code);
         request_codenaghsh.setVisibility(View.GONE);
+        nationalCodePairedItem.setEnabled(false);
+        nationalCodePairedItem.setFocusable(false);
+        nationalCodePairedItem.setFocusableInTouchMode(false);
     }
 
     @Override

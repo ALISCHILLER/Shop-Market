@@ -146,7 +146,7 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         String deviceIdSuper=getDeviceid();
-        Toast.makeText(getContext(),deviceIdSuper,Toast.LENGTH_LONG).show();
+        //Toast.makeText(getContext(),deviceIdSuper,Toast.LENGTH_LONG).show();
         // Checking permission for network monitor
         Intent intent = VpnService.prepare(getContext());
         if (intent != null) {
