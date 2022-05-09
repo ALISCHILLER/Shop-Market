@@ -33,11 +33,17 @@ import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.manager.DataForRegisterManager;
 import com.varanegar.vaslibrary.manager.canvertType.ConvertFaNumType;
 import com.varanegar.vaslibrary.manager.city.CityManager;
+import com.varanegar.vaslibrary.manager.customer.CustomerActivityManager;
+import com.varanegar.vaslibrary.manager.customer.CustomerCategoryManager;
+import com.varanegar.vaslibrary.manager.customer.CustomerLevelManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.customercallmanager.CustomerCallManager;
 import com.varanegar.vaslibrary.manager.updatemanager.CustomersUpdateFlow;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateCall;
 import com.varanegar.vaslibrary.model.city.CityModel;
+import com.varanegar.vaslibrary.model.customer.CustomerActivityModel;
+import com.varanegar.vaslibrary.model.customer.CustomerCategoryModel;
+import com.varanegar.vaslibrary.model.customer.CustomerLevelModel;
 import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.model.dataforregister.DataForRegisterModel;
 import com.varanegar.vaslibrary.ui.dialog.new_dialog.SingleChoiceDialog;
@@ -134,7 +140,7 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
         tabloNamePairedItem = view.findViewById(R.id.tablo_name_paired_item);
 
         addressPairedItem = view.findViewById(R.id.address_paired_item);
-        validator.addField(addressPairedItem, getString(R.string.address), new LengthChecker(0, 35,
+        validator.addField(addressPairedItem, getString(R.string.address), new LengthChecker(0, 150,
                 false));
 
         street2PairedItem = view.findViewById(R.id.street2_paired_item);
@@ -170,6 +176,7 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
 
         deliveryZoneSpinner = view.findViewById(R.id.delivery_zone_spinner);
         validator.addField(deliveryZoneSpinner, getString(R.string.delivery_zone), new NotEmptyChecker());
+
 
         telPairedItem = view.findViewById(R.id.tel_paired_item);
 
@@ -208,48 +215,52 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
     @Override
     public void onStart() {
         super.onStart();
-        CustomerApi customerApi = new CustomerApi(getContext());
-        call = customerApi.getCustomerZarCustomerInfo(customer.CustomerCode);
-        startProgressDialog();
-        customerApi.runWebRequest(call, new WebCallBack<ZarCustomerInfoViewModel>() {
-            @Override
-            protected void onFinish() {
-                stopProgressDialog();
-            }
-
-            @Override
-            protected void onSuccess(ZarCustomerInfoViewModel result, Request request) {
-                if (isResumed()) {
-                    customerInfo = result;
-                    prepareFields();
-                    enableForm(true);
-                }
-            }
-
-            @Override
-            protected void onApiFailure(ApiError error, Request request) {
-                String err = WebApiErrorBody.log(error, getContext());
-                if (isResumed()) {
-                    showErrorDialog(err);
-                    enableForm(false);
-                }
-            }
-
-            @Override
-            protected void onNetworkFailure(Throwable t, Request request) {
-                if (isResumed()) {
-                    showErrorDialog(getString(R.string.network_error));
-                    enableForm(false);
-                }
-            }
-
-            @Override
-            public void onCancel(Request request) {
-                super.onCancel(request);
-                if (getActivity() != null)
-                    stopProgressDialog();
-            }
-        });
+        if (customer.CustomerCode!=null) {
+            prepareFields();
+            enableForm(true);
+        }
+//        CustomerApi customerApi = new CustomerApi(getContext());
+//        call = customerApi.getCustomerZarCustomerInfo(customer.CustomerCode);
+//        startProgressDialog();
+//        customerApi.runWebRequest(call, new WebCallBack<ZarCustomerInfoViewModel>() {
+//            @Override
+//            protected void onFinish() {
+//                stopProgressDialog();
+//            }
+//
+//            @Override
+//            protected void onSuccess(ZarCustomerInfoViewModel result, Request request) {
+//                if (isResumed()) {
+//                    customerInfo = result;
+//                    prepareFields();
+//                    enableForm(true);
+//                }
+//            }
+//
+//            @Override
+//            protected void onApiFailure(ApiError error, Request request) {
+//                String err = WebApiErrorBody.log(error, getContext());
+//                if (isResumed()) {
+//                    showErrorDialog(err);
+//                    enableForm(false);
+//                }
+//            }
+//
+//            @Override
+//            protected void onNetworkFailure(Throwable t, Request request) {
+//                if (isResumed()) {
+//                    showErrorDialog(getString(R.string.network_error));
+//                    enableForm(false);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancel(Request request) {
+//                super.onCancel(request);
+//                if (getActivity() != null)
+//                    stopProgressDialog();
+//            }
+//        });
     }
 
 
@@ -267,8 +278,8 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
         mobilePairedItem.setEnabled(enabled);
 
 //        citySpinner.setEnabled(enabled);
-        deliveryZoneSpinner.setEnabled(enabled);
-        saleZonesSpinner.setEnabled(enabled);
+        deliveryZoneSpinner.setEnabled(false);
+        saleZonesSpinner.setEnabled(false);
         customerDegreeSpinner.setEnabled(enabled);
 //        customerGroupSpinner.setEnabled(enabled);
         customerGroup1Spinner.setEnabled(enabled);
@@ -300,37 +311,33 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
             }
         }
 
-        if (customerInfo.PersonName != null)
-            personNamePairedItem.setValue(customerInfo.PersonName);
+        if (customer.CustomerName != null)
+            personNamePairedItem.setValue(customer.CustomerName);
 
-        if (customerInfo.StoreName != null)
-            tabloNamePairedItem.setValue(customerInfo.StoreName);
+        if (customer.StoreName != null)
+            tabloNamePairedItem.setValue(customer.StoreName);
 
-        if (customerInfo.Street != null)
-            addressPairedItem.setValue(customerInfo.Street);
+        if (customer.Address != null)
+            addressPairedItem.setValue(customer.Address);
 
-        if (customerInfo.Street2 != null)
-            street2PairedItem.setValue(customerInfo.Street2);
+//        if (customerInfo.Street2 != null)
+//            street2PairedItem.setValue(customerInfo.Street2);
+//
+//        if (customerInfo.Street3 != null)
+//            street3PairedItem.setValue(customerInfo.Street3);
+//
+//        if (customerInfo.Street4 != null)
+//            street4PairedItem.setValue(customerInfo.Street4);
+//
+//        if (customerInfo.Street5 != null)
+//            street5PairedItem.setValue(customerInfo.Street5);
 
-        if (customerInfo.Street3 != null)
-            street3PairedItem.setValue(customerInfo.Street3);
+        if (customer.CustomerPostalCode != null)
+            postalCodePairedItem.setValue(customer.CustomerPostalCode );
 
-        if (customerInfo.Street4 != null)
-            street4PairedItem.setValue(customerInfo.Street4);
+//        if (customer.CityId != null)
+//            cityNamePairedItem.setValue(String.valueOf(customer.CityArea));
 
-        if (customerInfo.Street5 != null)
-            street5PairedItem.setValue(customerInfo.Street5);
-
-        if (customerInfo.PostalCode != null)
-            postalCodePairedItem.setValue(customerInfo.PostalCode);
-
-        if (customerInfo.CityId != null)
-            cityNamePairedItem.setValue(customerInfo.CityId);
-        if (customerInfo.CodeNaghsh != null) {
-            code_naghsh_paired_item.setValue(customerInfo.CodeNaghsh);
-        }else {
-            request_codenaghsh.setVisibility(View.VISIBLE);
-        }
 
         CityManager cityManager = new CityManager(getContext());
         List<CityModel> cityModels = cityManager.getAllCities();
@@ -357,47 +364,66 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
 //                citySpinner.selectItem(selectedItemPosition);
 //        }
 
+        /**
+         * محدود فروش
+         */
 
-        List<DataForRegisterModel> deliveryZones = dataMap.get("ZONE1");
-        if (deliveryZones != null) {
-            deliveryZoneSpinner.setup(getChildFragmentManager(), deliveryZones,
-                    new SearchBox.SearchMethod<DataForRegisterModel>() {
-                @Override
-                public boolean onSearch(DataForRegisterModel item, String text) {
-                    return item.FieldValue != null && item.FieldValue.contains(text);
-                }
-            });
-            if (customerInfo.transportationZone != null) {
-                int selectedItemPosition = Linq.findFirstIndex(deliveryZones,
-                        new Linq.Criteria<DataForRegisterModel>() {
-                    @Override
-                    public boolean run(DataForRegisterModel item) {
-                        return item.FieldKey.equals(customerInfo.transportationZone);
-                    }
-                });
-                if (selectedItemPosition >= 0)
-                    deliveryZoneSpinner.selectItem(selectedItemPosition);
-            }
-        }
+//        List<DataForRegisterModel> deliveryZones = dataMap.get("ZONE1");
+//        if (deliveryZones != null) {
+//            deliveryZoneSpinner.setup(getChildFragmentManager(), deliveryZones,
+//                    new SearchBox.SearchMethod<DataForRegisterModel>() {
+//                @Override
+//                public boolean onSearch(DataForRegisterModel item, String text) {
+//                    return item.FieldValue != null && item.FieldValue.contains(text);
+//                }
+//            });
+//            if (customerInfo.transportationZone != null) {
+//                int selectedItemPosition = Linq.findFirstIndex(deliveryZones,
+//                        new Linq.Criteria<DataForRegisterModel>() {
+//                    @Override
+//                    public boolean run(DataForRegisterModel item) {
+//                        return item.FieldKey.equals(customerInfo.transportationZone);
+//                    }
+//                });
+//                if (selectedItemPosition >= 0)
+//                    deliveryZoneSpinner.selectItem(selectedItemPosition);
+//            }
+//        }
 
-        if (customerInfo.Tel != null)
-            telPairedItem.setValue(customerInfo.Tel);
+        if (customer.Phone != null)
+            telPairedItem.setValue(customer.Phone );
 
-        if (customerInfo.Mobile != null)
-            mobilePairedItem.setValue(customerInfo.Mobile);
+        if (customer.Mobile != null)
+            mobilePairedItem.setValue(customer.Mobile);
 
-        if (!customerInfo.EconomicCode.isEmpty()) {
-            economicCodePairedItem.setValue(customerInfo.EconomicCode);
+
+
+        if (customer.CodeNaghsh != null) {
+            code_naghsh_paired_item.setValue(customer.CodeNaghsh);
             economicCodePairedItem.setEnabled(false);
             economicCodePairedItem.setFocusable(false);
             economicCodePairedItem.setFocusableInTouchMode(false);
-        }
-        if (!customerInfo.NationalCode.isEmpty()) {
-            nationalCodePairedItem.setValue(customerInfo.NationalCode);
             nationalCodePairedItem.setEnabled(false);
             nationalCodePairedItem.setFocusable(false);
             nationalCodePairedItem.setFocusableInTouchMode(false);
+        }else {
+            request_codenaghsh.setVisibility(View.VISIBLE);
         }
+        if (!customer.EconomicCode.isEmpty()) {
+            economicCodePairedItem.setValue(customer.EconomicCode);
+
+        }
+        if (!customer.NationalCode.isEmpty()) {
+            nationalCodePairedItem.setValue(customer.NationalCode);
+
+        }
+
+
+
+        /**
+         * درجه مشتری
+         * گروه مشتری
+         */
         List<DataForRegisterModel> KUKLAs = dataMap.get("KUKLA");
         if (KUKLAs != null) {
             customerDegreeSpinner.setup(getChildFragmentManager(), KUKLAs,
@@ -407,12 +433,16 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
                     return item.FieldValue != null && item.FieldValue.contains(text);
                 }
             });
-            if (customerInfo.kukla != null) {
+            CustomerLevelManager customerLevelManager =
+                    new CustomerLevelManager(getContext());
+            final CustomerLevelModel customerLevel =
+                    customerLevelManager.getItem(customer.CustomerLevelId);
+            if (customerLevel != null) {
                 int selectedItemPosition = Linq.findFirstIndex(KUKLAs,
                         new Linq.Criteria<DataForRegisterModel>() {
                     @Override
                     public boolean run(DataForRegisterModel item) {
-                        return item.FieldKey.equals(customerInfo.kukla);
+                        return item.FieldKey.equals(customerLevel.CustomerLevelName);
                     }
                 });
                 if (selectedItemPosition >= 0)
@@ -420,27 +450,30 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
             }
         }
 
-        List<DataForRegisterModel> BZIRKs = dataMap.get("BZIRK");
-        if (BZIRKs != null) {
-            saleZonesSpinner.setup(getChildFragmentManager(), BZIRKs,
-                    new SearchBox.SearchMethod<DataForRegisterModel>() {
-                @Override
-                public boolean onSearch(DataForRegisterModel item, String text) {
-                    return item.FieldValue != null && item.FieldValue.contains(text);
-                }
-            });
-            if (customerInfo.bzirk != null) {
-                int selectedItemPosition = Linq.findFirstIndex(BZIRKs,
-                        new Linq.Criteria<DataForRegisterModel>() {
-                    @Override
-                    public boolean run(DataForRegisterModel item) {
-                        return item.FieldKey.equals(customerInfo.bzirk);
-                    }
-                });
-                if (selectedItemPosition >= 0)
-                    saleZonesSpinner.selectItem(selectedItemPosition);
-            }
-        }
+        /**
+         * منطقه فروش
+         */
+//        List<DataForRegisterModel> BZIRKs = dataMap.get("BZIRK");
+//        if (BZIRKs != null) {
+//            saleZonesSpinner.setup(getChildFragmentManager(), BZIRKs,
+//                    new SearchBox.SearchMethod<DataForRegisterModel>() {
+//                @Override
+//                public boolean onSearch(DataForRegisterModel item, String text) {
+//                    return item.FieldValue != null && item.FieldValue.contains(text);
+//                }
+//            });
+//            if (customerInfo.bzirk != null) {
+//                int selectedItemPosition = Linq.findFirstIndex(BZIRKs,
+//                        new Linq.Criteria<DataForRegisterModel>() {
+//                    @Override
+//                    public boolean run(DataForRegisterModel item) {
+//                        return item.FieldKey.equals(customerInfo.bzirk);
+//                    }
+//                });
+//                if (selectedItemPosition >= 0)
+//                    saleZonesSpinner.selectItem(selectedItemPosition);
+//            }
+//        }
 
 //        customerGroupSpinner.setEnabled(false);
 //        List<DataForRegisterModel> KDGRPs = dataMap.get("KDGRP");
@@ -465,6 +498,9 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
 //            }
 //        }
 
+        /**
+         * گروه مشتری
+         */
         customerGroup1Spinner.setEnabled(false);
         List<DataForRegisterModel> KVGR1s = dataMap.get("KVGR1");
         if (KVGR1s != null) {
@@ -475,39 +511,59 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
                     return item.FieldValue != null && item.FieldValue.contains(text);
                 }
             });
-            if (customerInfo.kvgR1 != null) {
-                int selectedItemPosition = Linq.findFirstIndex(KVGR1s,
-                        new Linq.Criteria<DataForRegisterModel>() {
-                    @Override
-                    public boolean run(DataForRegisterModel item) {
-                        return item.FieldKey.equals(customerInfo.kvgR1);
-                    }
-                });
-                if (selectedItemPosition >= 0)
-                    customerGroup1Spinner.selectItem(selectedItemPosition);
+            if (customer.CustomerCategoryId!=null) {
+                CustomerCategoryManager customerCategoryManager =
+                        new CustomerCategoryManager(getContext());
+                final CustomerCategoryModel customerCategory =
+                        customerCategoryManager.getItem(customer.CustomerCategoryId);
+
+                if (customerCategory != null) {
+                    int selectedItemPosition = Linq.findFirstIndex(KVGR1s,
+                            new Linq.Criteria<DataForRegisterModel>() {
+                                @Override
+                                public boolean run(DataForRegisterModel item) {
+                                    return item.FieldKey.equals(customerCategory.CustomerCategoryName);
+                                }
+                            });
+                    if (selectedItemPosition >= 0)
+                        customerGroup1Spinner.selectItem(selectedItemPosition);
+                }
             }
         }
 
+        /**
+         * گزوه مشتری 2
+         * فعالیت مشتری
+         */
         customerGroup2Spinner.setEnabled(false);
         List<DataForRegisterModel> KVGR2s = dataMap.get("KVGR2");
         if (KVGR2s != null) {
             customerGroup2Spinner.setup(getChildFragmentManager(), KVGR2s,
                     new SearchBox.SearchMethod<DataForRegisterModel>() {
-                @Override
-                public boolean onSearch(DataForRegisterModel item, String text) {
-                    return item.FieldValue != null && item.FieldValue.contains(text);
+                        @Override
+                        public boolean onSearch(DataForRegisterModel item, String text) {
+                            return item.FieldValue != null && item.FieldValue.contains(text);
+                        }
+                    });
+
+
+            if (customer.CustomerActivityId != null) {
+                CustomerActivityManager customerActivityManager =
+                        new CustomerActivityManager(getContext());
+                final CustomerActivityModel customerActivity =
+                        customerActivityManager
+                                .getItem(customer.CustomerActivityId);
+                if (customerActivity != null) {
+                    int selectedItemPosition = Linq.findFirstIndex(KVGR2s,
+                            new Linq.Criteria<DataForRegisterModel>() {
+                                @Override
+                                public boolean run(DataForRegisterModel item) {
+                                    return item.FieldKey.equals(customerActivity.CustomerActivityName);
+                                }
+                            });
+                    if (selectedItemPosition >= 0)
+                        customerGroup2Spinner.selectItem(selectedItemPosition);
                 }
-            });
-            if (customerInfo.kvgR2 != null) {
-                int selectedItemPosition = Linq.findFirstIndex(KVGR2s,
-                        new Linq.Criteria<DataForRegisterModel>() {
-                    @Override
-                    public boolean run(DataForRegisterModel item) {
-                        return item.FieldKey.equals(customerInfo.kvgR2);
-                    }
-                });
-                if (selectedItemPosition >= 0)
-                    customerGroup2Spinner.selectItem(selectedItemPosition);
             }
         }
 
@@ -585,58 +641,67 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
 
 
     private void createSyncViewModel() {
-
+       // syncGetNewCustomerViewModel.CityId = cityNamePairedItem.getValue();
         String postcode=postalCodePairedItem.getValue();
         String codenaghsh=code_naghsh_paired_item.getValue();
+        DataForRegisterModel group1 = customerGroup1Spinner.getSelectedItem();
+        DataForRegisterModel group2 = customerGroup2Spinner.getSelectedItem();
+        DataForRegisterModel degree = customerDegreeSpinner.getSelectedItem();
         if (postcode !=null && !postcode.equals("") && !postcode.isEmpty()
                 &&!codenaghsh.isEmpty() &&codenaghsh !=null&&!codenaghsh.equals("")) {
-            syncGetNewCustomerViewModel = new SyncZarGetNewCustomerViewModel();
-            syncGetNewCustomerViewModel.CustomerCode = customerInfo.customerCode;
-            syncGetNewCustomerViewModel.PersonName = personNamePairedItem.getValue();
-            syncGetNewCustomerViewModel.StoreName = tabloNamePairedItem.getValue();
-            syncGetNewCustomerViewModel.Street = addressPairedItem.getValue();
-            syncGetNewCustomerViewModel.Street2 = street2PairedItem.getValue();
-            syncGetNewCustomerViewModel.Street3 = street3PairedItem.getValue();
-            syncGetNewCustomerViewModel.Street4 = street4PairedItem.getValue();
-            syncGetNewCustomerViewModel.Street5 = street5PairedItem.getValue();
-            String convertPostalCode= ConvertFaNumType.convert(postalCodePairedItem.getValue());
-            syncGetNewCustomerViewModel.PostalCode = convertPostalCode;
-            syncGetNewCustomerViewModel.CityId = cityNamePairedItem.getValue();
-            syncGetNewCustomerViewModel.Tel = telPairedItem.getValue();
-            syncGetNewCustomerViewModel.Mobile = mobilePairedItem.getValue();
-            syncGetNewCustomerViewModel.CodeNaghsh=code_naghsh_paired_item.getValue();
-            syncGetNewCustomerViewModel.EconomicCode=economicCodePairedItem.getValue();
-            syncGetNewCustomerViewModel.NationalCode=nationalCodePairedItem.getValue();
+
+            if (addressPairedItem!=null&&personNamePairedItem!=null&&group1!=null&&group2!=null) {
+
+                syncGetNewCustomerViewModel = new SyncZarGetNewCustomerViewModel();
+                syncGetNewCustomerViewModel.CustomerCode = customer.CustomerCode;
+                syncGetNewCustomerViewModel.PersonName = personNamePairedItem.getValue();
+                syncGetNewCustomerViewModel.StoreName = tabloNamePairedItem.getValue();
+                syncGetNewCustomerViewModel.Street = addressPairedItem.getValue();
+                syncGetNewCustomerViewModel.Street2 = street2PairedItem.getValue();
+                syncGetNewCustomerViewModel.Street3 = street3PairedItem.getValue();
+                syncGetNewCustomerViewModel.Street4 = street4PairedItem.getValue();
+                syncGetNewCustomerViewModel.Street5 = street5PairedItem.getValue();
+                String convertPostalCode = ConvertFaNumType.convert(postalCodePairedItem.getValue());
+                syncGetNewCustomerViewModel.PostalCode = convertPostalCode;
+
+                syncGetNewCustomerViewModel.Tel = telPairedItem.getValue();
+                syncGetNewCustomerViewModel.Mobile = mobilePairedItem.getValue();
+                syncGetNewCustomerViewModel.CodeNaghsh = code_naghsh_paired_item.getValue();
+                syncGetNewCustomerViewModel.EconomicCode = economicCodePairedItem.getValue();
+                syncGetNewCustomerViewModel.NationalCode = nationalCodePairedItem.getValue();
 //        CityModel city = citySpinner.getSelectedItem();
 //        if (city != null)
 //            syncGetNewCustomerViewModel.CityId = city.UniqueId;
 
-            DataForRegisterModel zone = deliveryZoneSpinner.getSelectedItem();
-            if (zone != null)
-                syncGetNewCustomerViewModel.TRANSPZONE = zone.FieldKey;
+                DataForRegisterModel zone = deliveryZoneSpinner.getSelectedItem();
+                if (zone != null)
+                    syncGetNewCustomerViewModel.TRANSPZONE = zone.FieldKey;
 
-            DataForRegisterModel degree = customerDegreeSpinner.getSelectedItem();
-            if (degree != null)
-                syncGetNewCustomerViewModel.KUKLA = degree.FieldKey;
 
-            DataForRegisterModel sale = saleZonesSpinner.getSelectedItem();
-            if (sale != null)
-                syncGetNewCustomerViewModel.BZIRK = sale.FieldKey;
+                if (degree != null)
+                    syncGetNewCustomerViewModel.KUKLA = degree.FieldKey;
+
+                DataForRegisterModel sale = saleZonesSpinner.getSelectedItem();
+                if (sale != null)
+                    syncGetNewCustomerViewModel.BZIRK = sale.FieldKey;
 
 //        DataForRegisterModel group = customerGroupSpinner.getSelectedItem();
 //        if (group != null)
 //            syncGetNewCustomerViewModel.KDGRP = group.FieldKey;
 
-            DataForRegisterModel group1 = customerGroup1Spinner.getSelectedItem();
-            if (group1 != null) {
-                syncGetNewCustomerViewModel.KVGR1 = group1.FieldKey;
-                syncGetNewCustomerViewModel.KDGRP = group1.FieldKey;
-            }
-            DataForRegisterModel group2 = customerGroup2Spinner.getSelectedItem();
-            if (group2 != null)
-                syncGetNewCustomerViewModel.KVGR2 = group2.FieldKey;
 
-            validator.validate(this);
+                if (group1 != null) {
+                    syncGetNewCustomerViewModel.KVGR1 = group1.FieldKey;
+                    syncGetNewCustomerViewModel.KDGRP = group1.FieldKey;
+                }
+
+                if (group2 != null)
+                    syncGetNewCustomerViewModel.KVGR2 = group2.FieldKey;
+
+                validator.validate(this);
+            }else {
+                showErrorDialog("نام مشتری ,آدرس مشتری ,گروه مشتری1 , گروه مشتری 2و درجه مشتری  را ثیت کنید ");
+            }
         }else {
             showErrorDialog("کد پستی و کدنقش مشتری را ثبت کنید ");
         }
