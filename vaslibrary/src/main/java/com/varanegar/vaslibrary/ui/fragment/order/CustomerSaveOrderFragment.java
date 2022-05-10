@@ -1655,6 +1655,10 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
         searchButton.setIcon(R.drawable.ic_search_white_36dp);
         searchButton.setTitle(R.string.fast_search);
 
+        /**
+         * لیست کالا
+         */
+
         CuteButton listButton = new CuteButton();
         listButton.setTitle(R.string.product_list);
         listButton.setIcon(R.drawable.ic_view_list_white_36dp);
@@ -1959,8 +1963,10 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
             Timber.e("Customer call order canceled");
             loadCalls();
             init();
-            final SharedPreferences sharedPreferences = context.getSharedPreferences("UsanceDaySharedPrefences", Context.MODE_PRIVATE);
-            refresh(true, !(sharedPreferences.getBoolean(callOrderId.toString() + customer.BackOfficeId + "CheckBoxChecked", false)), true);
+            final SharedPreferences sharedPreferences = context
+                    .getSharedPreferences("UsanceDaySharedPrefences", Context.MODE_PRIVATE);
+            refresh(true, !(sharedPreferences.getBoolean(callOrderId.toString() +
+                    customer.BackOfficeId + "CheckBoxChecked", false)), true);
         } catch (Exception ex) {
             showErrorMessage();
             Timber.e(ex);
@@ -2039,17 +2045,22 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
         }
     }
 
-    private void add(ProductOrderViewModel productOrderViewModel, List<DiscreteUnit> discreteUnits, BaseUnit bulkUnit, List<BatchQty> batchQtyList) throws ValidationException, DbException {
+    private void add(ProductOrderViewModel productOrderViewModel, List<DiscreteUnit> discreteUnits,
+                     BaseUnit bulkUnit, List<BatchQty> batchQtyList) throws ValidationException, DbException {
         CallOrderLineManager callOrderLineManager = new CallOrderLineManager(context);
-        callOrderLineManager.addOrUpdateQty(productOrderViewModel.UniqueId, discreteUnits, bulkUnit, callOrderId, null, batchQtyList, false);
-        final SharedPreferences sharedPreferences = context.getSharedPreferences("UsanceDaySharedPrefences", Context.MODE_PRIVATE);
-        refresh(true, !(sharedPreferences.getBoolean(callOrderId.toString() + customer.BackOfficeId + "CheckBoxChecked", false)), true);
+        callOrderLineManager.addOrUpdateQty(productOrderViewModel.UniqueId, discreteUnits,
+                bulkUnit, callOrderId, null, batchQtyList, false);
+        final SharedPreferences sharedPreferences = context
+                .getSharedPreferences("UsanceDaySharedPrefences", Context.MODE_PRIVATE);
+        refresh(true, !(sharedPreferences.getBoolean(callOrderId.toString()
+                + customer.BackOfficeId + "CheckBoxChecked", false)), true);
     }
 
     private void setupOrderAdapter() {
         productUnits = new ProductUnitViewManager(getContext()).getUnitSet(ProductType.isForSale);
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("SortOrders", Context.MODE_PRIVATE);
-        OrderOption<CustomerCallOrderOrderViewModel> item = orderOptions.get(sharedPreferences.getInt("OrderOptionsPosition", 0));
+        OrderOption<CustomerCallOrderOrderViewModel> item = orderOptions
+                .get(sharedPreferences.getInt("OrderOptionsPosition", 0));
         orderAdapter = new OrderAdapter(this, customerCallOrderModel, productUnitsHashMap, productUnits, item, onItemQtyChangedHandler);
     }
 
@@ -2067,7 +2078,8 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
                 total = total.add(BigDecimal.valueOf(discreteUnit.getTotalQty()));
             }
             if (VaranegarApplication.is(VaranegarApplication.AppId.Dist) && backOfficeType == BackOfficeType.ThirdParty) {
-                if (customerCallOrderOrderViewModel.EditReasonId == null && total.compareTo(customerCallOrderOrderViewModel.OriginalTotalQty) < 0) {
+                if (customerCallOrderOrderViewModel.EditReasonId == null && total
+                        .compareTo(customerCallOrderOrderViewModel.OriginalTotalQty) < 0) {
                     OrderReturnReasonDialog editReasonDialog = new OrderReturnReasonDialog();
                     editReasonDialog.onItemSelected = reasonUniqueId -> {
                         onEdit(customerCallOrderOrderViewModel, discreteUnits, bulkUnit, batchQtyList, reasonUniqueId);
@@ -2395,7 +2407,8 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
         new Thread(() -> {
             if (isResumed() && customerId != null && callOrderId != null) {
                 productUnitsHashMap = new ProductUnitsViewManager(context).getProductsUnits();
-                productList = new ProductOrderViewManager(getContext()).getItems(ProductOrderViewManager.getAll("", customerId, callOrderId, null, null, false, null));
+                productList = new ProductOrderViewManager(getContext()).getItems(ProductOrderViewManager.
+                        getAll("", customerId, callOrderId, null, null, false, null));
                 if (getVaranegarActvity() != null) {
                     getVaranegarActvity().runOnUiThread(() -> {
                         if (isResumed() && !isRemoving()) {

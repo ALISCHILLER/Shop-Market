@@ -442,7 +442,7 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
                         new Linq.Criteria<DataForRegisterModel>() {
                     @Override
                     public boolean run(DataForRegisterModel item) {
-                        return item.FieldName.equals(customerLevel.CustomerLevelName);
+                        return item.FieldValue.equals(customerLevel.CustomerLevelName);
                     }
                 });
                 if (selectedItemPosition >= 0)
@@ -522,7 +522,7 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
                             new Linq.Criteria<DataForRegisterModel>() {
                                 @Override
                                 public boolean run(DataForRegisterModel item) {
-                                    return item.FieldName.equals(customerCategory.CustomerCategoryName);
+                                    return item.FieldValue.equals(customerCategory.CustomerCategoryName);
                                 }
                             });
                     if (selectedItemPosition >= 0)
@@ -558,7 +558,7 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
                             new Linq.Criteria<DataForRegisterModel>() {
                                 @Override
                                 public boolean run(DataForRegisterModel item) {
-                                    return item.FieldKey.equals(customerActivity.CustomerActivityName);
+                                    return item.FieldValue.equals(customerActivity.CustomerActivityName);
                                 }
                             });
                     if (selectedItemPosition >= 0)
