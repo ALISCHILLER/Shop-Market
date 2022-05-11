@@ -97,20 +97,28 @@ public class ProductManager extends BaseManager<ProductModel> {
                         final List<ProductModel> returnProductsModels = new ArrayList<>();
                         for (int i = 0; i < result.size(); i++) {
                             if (result.get(i).isRemoved) {
-                                List<CallOrderLineModel> callOrderLineModels = callOrderLineManager.getItems((new Query()).from(CallOrderLine.CallOrderLineTbl).whereAnd(Criteria.equals(CallOrderLine.ProductUniqueId, result.get(i).UniqueId)));
+                                List<CallOrderLineModel> callOrderLineModels = callOrderLineManager
+                                        .getItems((new Query()).from(CallOrderLine.CallOrderLineTbl)
+                                                .whereAnd(Criteria.equals(CallOrderLine.ProductUniqueId, result.get(i).UniqueId)));
                                 if (callOrderLineModels.size() > 0)
                                     orderedProductModels.add(result.get(i));
-                                List<ReturnLinesModel> returnLinesModels = returnLinesManager.getItems((new Query()).from(ReturnLines.ReturnLinesTbl).whereAnd(Criteria.equals(ReturnLines.ProductUniqueId, result.get(i).UniqueId)));
+                                List<ReturnLinesModel> returnLinesModels = returnLinesManager
+                                        .getItems((new Query()).from(ReturnLines.ReturnLinesTbl)
+                                                .whereAnd(Criteria.equals(ReturnLines.ProductUniqueId, result.get(i).UniqueId)));
                                 if (returnLinesModels.size() > 0)
                                     returnProductsModels.add(result.get(i));
                             } else {
                                 if (!(result.get(i).IsForSale)) {
-                                    List<CallOrderLineModel> callOrderLineModels = callOrderLineManager.getItems((new Query()).from(CallOrderLine.CallOrderLineTbl).whereAnd(Criteria.equals(CallOrderLine.ProductUniqueId, result.get(i).UniqueId)));
+                                    List<CallOrderLineModel> callOrderLineModels = callOrderLineManager
+                                            .getItems((new Query()).from(CallOrderLine.CallOrderLineTbl)
+                                                    .whereAnd(Criteria.equals(CallOrderLine.ProductUniqueId, result.get(i).UniqueId)));
                                     if (callOrderLineModels.size() > 0)
                                         orderedProductModels.add(result.get(i));
                                 }
                                 if (!(result.get(i).IsForReturnWithRef) && !(result.get(i).IsForReturnWithOutRef)) {
-                                    List<ReturnLinesModel> returnLinesModels = returnLinesManager.getItems((new Query()).from(ReturnLines.ReturnLinesTbl).whereAnd(Criteria.equals(ReturnLines.ProductUniqueId, result.get(i).UniqueId)));
+                                    List<ReturnLinesModel> returnLinesModels = returnLinesManager
+                                            .getItems((new Query()).from(ReturnLines.ReturnLinesTbl)
+                                                    .whereAnd(Criteria.equals(ReturnLines.ProductUniqueId, result.get(i).UniqueId)));
                                     if (returnLinesModels.size() > 0)
                                         returnProductsModels.add(result.get(i));
                                 }
@@ -164,7 +172,8 @@ public class ProductManager extends BaseManager<ProductModel> {
         });
     }
 
-    private void insertToProductTable(boolean forUpdate, List<ProductModel> result, ProductApi productApi, String dealerId, UpdateCall updateCall) {
+    private void insertToProductTable(boolean forUpdate, List<ProductModel> result,
+                                      ProductApi productApi, String dealerId, UpdateCall updateCall) {
         try {
             sync(result);
             new UpdateManager(getContext()).addLog(UpdateKey.Product);
@@ -186,7 +195,8 @@ public class ProductManager extends BaseManager<ProductModel> {
             call2.cancel();
     }
 
-    private void updatePersonnelProductData(final UpdateCall updateCall, ProductApi productApi, String dealerId, final boolean forUpdate) {
+    private void updatePersonnelProductData(final UpdateCall updateCall,
+                                            ProductApi productApi, String dealerId, final boolean forUpdate) {
         call2 = productApi.getPersonnelProductData(dealerId, VaranegarApplication.getInstance().getAppId().toString());
         productApi.runWebRequest(call2, new WebCallBack<List<PersonnelProductTemplateViewModel>>() {
             @Override
@@ -204,14 +214,18 @@ public class ProductManager extends BaseManager<ProductModel> {
                         final List<ProductModel> returnProductsModels = new ArrayList<>();
                         for (int i = 0; i < result.size(); i++) {
                             if (!(result.get(i).IsForSale)) {
-                                List<CallOrderLineModel> callOrderLineModels = callOrderLineManager.getItems((new Query()).from(CallOrderLine.CallOrderLineTbl).whereAnd(Criteria.equals(CallOrderLine.ProductUniqueId, result.get(i).ProductId)));
+                                List<CallOrderLineModel> callOrderLineModels = callOrderLineManager
+                                        .getItems((new Query()).from(CallOrderLine.CallOrderLineTbl)
+                                                .whereAnd(Criteria.equals(CallOrderLine.ProductUniqueId, result.get(i).ProductId)));
                                 if (callOrderLineModels.size() > 0) {
                                     ProductModel productModel = getItem(result.get(i).ProductId);
                                     orderedProductModels.add(productModel);
                                 }
                             }
                             if (!(result.get(i).IsForReturnWithRef) && !(result.get(i).IsForReturnWithoutRef)) {
-                                List<ReturnLinesModel> returnLinesModels = returnLinesManager.getItems((new Query()).from(ReturnLines.ReturnLinesTbl).whereAnd(Criteria.equals(ReturnLines.ProductUniqueId, result.get(i).ProductId)));
+                                List<ReturnLinesModel> returnLinesModels = returnLinesManager
+                                        .getItems((new Query()).from(ReturnLines.ReturnLinesTbl)
+                                                .whereAnd(Criteria.equals(ReturnLines.ProductUniqueId, result.get(i).ProductId)));
                                 if (returnLinesModels.size() > 0) {
                                     ProductModel productModel = getItem(result.get(i).ProductId);
                                     returnProductsModels.add(productModel);
@@ -261,7 +275,8 @@ public class ProductManager extends BaseManager<ProductModel> {
                 try {
                     long affectedRows = update(new ContentValueMapList<PersonnelProductTemplateViewModel, ProductModel>(result) {
                         @Override
-                        protected ContentValueMap<PersonnelProductTemplateViewModel, ProductModel> getContentValueMap(PersonnelProductTemplateViewModel item) {
+                        protected ContentValueMap<PersonnelProductTemplateViewModel, ProductModel>
+                        getContentValueMap(PersonnelProductTemplateViewModel item) {
                             return new ContentValueMap<PersonnelProductTemplateViewModel, ProductModel>(ProductModel.class)
                                     .map(item.IsForSale, Product.IsForSale)
                                     .map(item.IsForCount, Product.IsForCount)
@@ -343,15 +358,18 @@ public class ProductManager extends BaseManager<ProductModel> {
 
     public List<ProductModel> getAll(ProductType productType) {
         if (productType == ProductType.isForSale)
-            return getItems(new Query().from(Product.ProductTbl).whereAnd(Criteria.equals(Product.IsForSale, true)));
+            return getItems(new Query().from(Product.ProductTbl)
+                    .whereAnd(Criteria.equals(Product.IsForSale, true)));
         else if (productType == ProductType.isForReturn)
-            return getItems(new Query().from(Product.ProductTbl).whereAnd(Criteria.equals(Product.IsForReturnWithOutRef, true)
+            return getItems(new Query().from(Product.ProductTbl)
+                    .whereAnd(Criteria.equals(Product.IsForReturnWithOutRef, true)
                     .or(Criteria.equals(Product.IsForReturnWithRef, true))));
         else
             return getItems(new Query().from(Product.ProductTbl));
     }
 
     public ProductModel getProductByBackOfficeId (int backOfficeId) {
-        return getItem(new Query().from(Product.ProductTbl).whereAnd(Criteria.equals(Product.BackOfficeId, backOfficeId)));
+        return getItem(new Query().from(Product.ProductTbl)
+                .whereAnd(Criteria.equals(Product.BackOfficeId, backOfficeId)));
     }
 }

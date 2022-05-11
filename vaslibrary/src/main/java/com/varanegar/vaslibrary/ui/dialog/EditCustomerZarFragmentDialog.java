@@ -140,7 +140,7 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
         tabloNamePairedItem = view.findViewById(R.id.tablo_name_paired_item);
 
         addressPairedItem = view.findViewById(R.id.address_paired_item);
-        validator.addField(addressPairedItem, getString(R.string.address), new LengthChecker(0, 150,
+        validator.addField(addressPairedItem, getString(R.string.address), new LengthChecker(0, 35,
                 false));
 
         street2PairedItem = view.findViewById(R.id.street2_paired_item);

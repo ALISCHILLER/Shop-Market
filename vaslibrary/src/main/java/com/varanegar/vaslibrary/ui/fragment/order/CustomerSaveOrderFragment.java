@@ -224,7 +224,8 @@ import static varanegar.com.discountcalculatorlib.Global.orderPrize;
  *صفحه تحویل حواله
  * صفحه تحویل سفارش   **
 */
-public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePrizesDialog.choicePrizeDialogListener {
+public class CustomerSaveOrderFragment extends VisitFragment
+        implements ChoicePrizesDialog.choicePrizeDialogListener {
     private OnItemQtyChangedHandler onItemQtyChangedHandler;
     private HashMap<UUID, ProductUnitsViewModel> productUnitsHashMap;
     private ProgressDialog progressDialog;
@@ -314,7 +315,8 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
 
     private void prepareCalculations() {
         if (!hasCallOrder()) {
-            if (UserDialogPreferences.isVisible(context, "a3834f22-fd30-4203-87aa-2e66b065b023") && VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+            if (UserDialogPreferences.isVisible(context, "a3834f22-fd30-4203-87aa-2e66b065b023")
+                    && VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
                 CustomerOrderTypesManager customerOrderTypesManager = new CustomerOrderTypesManager(context);
                 List<CustomerOrderTypeModel> customerOrderTypeModels = customerOrderTypesManager.getItems();
                 if (customerOrderTypeModels.size() > 1) {
@@ -331,7 +333,9 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
                     }
                     orderTypeDialog.setCancelable(false);
                     orderTypeDialog.setClosable(false);
-                    orderTypeDialog.setItems(customerOrderTypeModels, (SearchBox.SearchMethod<CustomerOrderTypeModel>) (item, text) -> item.OrderTypeName.contains(text));
+                    orderTypeDialog.setItems(customerOrderTypeModels,
+                            (SearchBox.SearchMethod<CustomerOrderTypeModel>)
+                                    (item, text) -> item.OrderTypeName.contains(text));
                     orderTypeDialog.show(getVaranegarActvity().getSupportFragmentManager(), "orderTypeDialog");
                     orderTypeDialog.setOnItemSelectedListener((position, selectedOrderType) -> {
                         orderTypeDialog.dismiss();
@@ -341,7 +345,8 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
                             customerCallOrderModel.DeliveryDate = new Date(new Date().getTime() + 24 * 3600 * 1000);
                         if (selectedOrderType.UniqueId.equals(CustomerOrderTypesManager.OrderType48))
                             customerCallOrderModel.DeliveryDate = new Date(new Date().getTime() + 48 * 3600 * 1000);
-                        deliveryDateItem.setValue(DateHelper.toString(customerCallOrderModel.DeliveryDate, DateFormat.Date, VasHelperMethods.getSysConfigLocale(context)));
+                        deliveryDateItem.setValue(DateHelper.toString(customerCallOrderModel.DeliveryDate,
+                                DateFormat.Date, VasHelperMethods.getSysConfigLocale(context)));
 
                         customerCallOrderModel.OrderTypeUniqueId = selectedOrderType.UniqueId;
                         customerCallOrderModel.Comment = commentEditText.getText().toString();
@@ -454,7 +459,8 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
 
     }
 
-    private void addItem(CustomerCallOrderOrderViewModel orderLine, OnItemQtyChangedHandler.QtyChange change, @Nullable UUID editReasonId) {
+    private void addItem(CustomerCallOrderOrderViewModel orderLine,
+                         OnItemQtyChangedHandler.QtyChange change, @Nullable UUID editReasonId) {
         try {
             OnHandQtyStock onHandQtyStock = new OnHandQtyStock();
             ProductUnitsViewManager productUnitsViewManager = new ProductUnitsViewManager(getContext());
@@ -529,12 +535,15 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
     }
 
 
-    private void add(CustomerCallOrderOrderViewModel orderLine, OnItemQtyChangedHandler.QtyChange change, @Nullable UUID editReasonId) throws ValidationException, DbException {
+    private void add(CustomerCallOrderOrderViewModel orderLine, OnItemQtyChangedHandler.QtyChange
+            change, @Nullable UUID editReasonId) throws ValidationException, DbException {
         CallOrderLineManager callOrderLineManager = new CallOrderLineManager(getContext());
         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist))
-            callOrderLineManager.updateQty(orderLine.UniqueId, change.discreteUnits, null, null, true, editReasonId);
+            callOrderLineManager.updateQty(orderLine.UniqueId, change.discreteUnits,
+                    null, null, true, editReasonId);
         else
-            callOrderLineManager.addOrUpdateQty(orderLine.ProductId, change.discreteUnits, null, callOrderId, null, null, true);
+            callOrderLineManager.addOrUpdateQty(orderLine.ProductId, change.discreteUnits,
+                    null, callOrderId, null, null, true);
     }
 
     @Override
@@ -550,7 +559,8 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable final Bundle savedInstanceState) {
         if (savedInstanceState != null) {
             if (savedInstanceState.getBoolean("afc863f4-0694-45df-b513-4fb131338c57"))
                 startTempTablesProgressDialog();
@@ -572,7 +582,9 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
                 try {
                     loadCalls();
                     for (CustomerPaymentTypesViewModel customerPaymentTypesViewModel : customerPaymentTypes) {
-                        if (customerPaymentTypesViewModel.UniqueId != null && customerPaymentTypesViewModel.UniqueId.equals(customerCallOrderModel.OrderPaymentTypeUniqueId))
+                        if (customerPaymentTypesViewModel.UniqueId != null &&
+                                customerPaymentTypesViewModel.UniqueId
+                                        .equals(customerCallOrderModel.OrderPaymentTypeUniqueId))
                             selectedPaymentType = customerPaymentTypesViewModel;
                     }
                     refresh(false, true, false);
@@ -605,7 +617,8 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
             }
 
             @Override
-            public void onAlert(SaveOrderUtility.SaveOrderCallbackType type, String title, String msg, @Nullable SaveOrderUtility.IWarningCallBack callBack) {
+            public void onAlert(SaveOrderUtility.SaveOrderCallbackType type, String title,
+                                String msg, @Nullable SaveOrderUtility.IWarningCallBack callBack) {
                 CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(getContext());
                 cuteMessageDialog.setTitle(title);
                 cuteMessageDialog.setMessage(msg);
@@ -705,15 +718,21 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
             dialog.setArguments(bundle);
             dialog.show(getChildFragmentManager(), "CustomerOtherInfoDialog");
         });
-        ((TextView) view.findViewById(R.id.debit_balance_text_view)).setText(HelperMethods.currencyToString(customer.RemainDebit));
-        ((TextView) view.findViewById(R.id.credit_balance_text_view)).setText(HelperMethods.currencyToString(customer.RemainCredit));
+        ((TextView) view.findViewById(R.id.debit_balance_text_view))
+                .setText(HelperMethods.currencyToString(customer.RemainDebit));
+        ((TextView) view.findViewById(R.id.credit_balance_text_view))
+                .setText(HelperMethods.currencyToString(customer.RemainCredit));
 
 
         orderOptions = new ArrayList<>();
-        orderOptions.add(new OrderOption<CustomerCallOrderOrderViewModel>(context).setProjection(ProductName).setName(R.string.product_name));
-        orderOptions.add(new OrderOption<CustomerCallOrderOrderViewModel>(context).setProjection(SortId).setName(R.string.sort_request));
-        orderOptions.add(new OrderOption<CustomerCallOrderOrderViewModel>(context).setProjection(ProductCode).setName(R.string.product_code));
-        orderOptions.add(new OrderOption<CustomerCallOrderOrderViewModel>(context).setProjection(TotalQty).setName(R.string.total_qty));
+        orderOptions.add(new OrderOption<CustomerCallOrderOrderViewModel>(context)
+                .setProjection(ProductName).setName(R.string.product_name));
+        orderOptions.add(new OrderOption<CustomerCallOrderOrderViewModel>(context)
+                .setProjection(SortId).setName(R.string.sort_request));
+        orderOptions.add(new OrderOption<CustomerCallOrderOrderViewModel>(context)
+                .setProjection(ProductCode).setName(R.string.product_code));
+        orderOptions.add(new OrderOption<CustomerCallOrderOrderViewModel>(context)
+                .setProjection(TotalQty).setName(R.string.total_qty));
 
         view.findViewById(R.id.sort_fab).setOnClickListener(view13 -> {
             final SearchBox<OrderOption<CustomerCallOrderOrderViewModel>> searchBox = new SearchBox<>();
@@ -1779,7 +1798,8 @@ public class CustomerSaveOrderFragment extends VisitFragment implements ChoicePr
                 dialog.setPositiveButton(R.string.yes, view12 -> {
                     CustomerCallOrderManager callOrderManager = new CustomerCallOrderManager(getContext());
                     try {
-                        new CustomerCallManager(getContext()).removeCalls(customerId, CustomerCallType.CompleteLackOfDelivery, CustomerCallType.CompleteReturnDelivery);
+                        new CustomerCallManager(getContext()).removeCalls(customerId,
+                                CustomerCallType.CompleteLackOfDelivery, CustomerCallType.CompleteReturnDelivery);
                         callOrderManager.initCall(callOrderId, false);
                         loadCalls();
                         init();
