@@ -43,6 +43,7 @@ public class IraniNationalCodeChecker extends ValidationChecker<IraniNationalCod
                 return false;
             }
 
+
             int c = Integer.parseInt(String.valueOf(meli_code.charAt(9)));
 
             int n = Integer.parseInt(String.valueOf(meli_code.charAt(0))) * 10 +

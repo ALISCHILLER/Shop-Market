@@ -218,17 +218,19 @@ public class CustomersFragment extends IMainPageFragment {
                                     builder.setMessage(getActivity()
                                             .getString(com.varanegar.vaslibrary.R.string.dialog_unblack));
                                 }
-                                    builder.setPositiveButton(com.varanegar.vaslibrary.R.string.yes, new View.OnClickListener() {
+                                    builder.setPositiveButton(R.string.request_accept, new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
+                                        message=true;
                                         requsttoconditionCustomer(entity);
 
                                     }
                                 });
-                                builder.setNegativeButton(com.varanegar.vaslibrary.R.string.no, new View.OnClickListener() {
+                                builder.setNegativeButton(R.string.request_refuse, new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-
+                                        message=false;
+                                        requsttoconditionCustomer(entity);
                                     }
                                 });
                                 builder.setOnCancelListener(new DialogInterface.OnCancelListener() {

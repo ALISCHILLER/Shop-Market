@@ -1336,6 +1336,7 @@
     <string name="return_control">کنترل برگشتی</string>
     <string name="payable_amount_will_change_check_payments">با ثبت برگشتی ممکن است مقادیر قابل پرداخت تغییر نمایند و عملیات حذف گردد. لطفا فرم تسویه را مجدد کنترل نمایید.</string>
     <string name="customer_economic_code">کد اقتصادی مشتری</string>
+    <string name="customer_id_code"> شناسه ملی</string>
     <string name="company_logo">لوگوی شرکت</string>
     <string name="invoice_title">عنوان فاکتر چاپی</string>
     <string name="dealer_mobile">موبایل فروشنده</string>

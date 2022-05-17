@@ -1209,7 +1209,9 @@ public class CustomerSaveOrderFragment extends VisitFragment
                     UUID oldPaymentType = customerCallOrderModel.OrderPaymentTypeUniqueId;
                     UUID newPaymentType = data.OrderPaymentTypeId;
                     PaymentOrderTypeManager paymentOrderTypeManager = new PaymentOrderTypeManager(context);
-                    PaymentTypeOrderModel paymentTypeOrderModel = paymentOrderTypeManager.getItem(new Query().from(PaymentTypeOrder.PaymentTypeOrderTbl).whereAnd(Criteria.equals(PaymentTypeOrder.UniqueId, data.OrderPaymentTypeId)));
+                    PaymentTypeOrderModel paymentTypeOrderModel = paymentOrderTypeManager
+                            .getItem(new Query().from(PaymentTypeOrder.PaymentTypeOrderTbl)
+                                    .whereAnd(Criteria.equals(PaymentTypeOrder.UniqueId, data.OrderPaymentTypeId)));
                     if (paymentTypeOrderModel != null) {
                         for (CustomerPaymentTypesViewModel customerPaymentTypesViewModel : customerPaymentTypes) {
                             if (customerPaymentTypesViewModel.UniqueId.equals(paymentTypeOrderModel.UniqueId))

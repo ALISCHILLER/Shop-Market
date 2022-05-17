@@ -76,7 +76,7 @@
                 android:id="@+id/postal_code_paired_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
+                android:inputType="number"
                 android:orientation="horizontal"
                 app:singleLine="true"
                 app:title="@string/postal_code_label" />
@@ -152,7 +152,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 app:singleLine="true"
-                app:title="@string/customer_economic_code" />
+                app:title="@string/customer_id_code" />
 
             <com.varanegar.framework.util.component.PairedItemsEditable
                 android:id="@+id/national_code_paired_item"

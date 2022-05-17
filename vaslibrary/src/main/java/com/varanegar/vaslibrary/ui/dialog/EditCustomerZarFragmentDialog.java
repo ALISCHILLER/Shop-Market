@@ -183,8 +183,8 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
         mobilePairedItem = view.findViewById(R.id.mobile_paired_item);
 
         economicCodePairedItem = view.findViewById(R.id.economic_code_paired_item);
-        validator.addField(economicCodePairedItem, getString(R.string.customer_economic_code),
-                new LengthChecker(10, 50,
+        validator.addField(economicCodePairedItem, "شناسه ملی",
+                new LengthChecker(11, 11,
                 false));
 
         nationalCodePairedItem = view.findViewById(R.id.national_code_paired_item);
@@ -407,6 +407,7 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
             nationalCodePairedItem.setFocusable(false);
             nationalCodePairedItem.setFocusableInTouchMode(false);
         }else {
+            code_naghsh_paired_item.setValue("69696596");
             request_codenaghsh.setVisibility(View.VISIBLE);
         }
         if (!customer.EconomicCode.isEmpty()) {
