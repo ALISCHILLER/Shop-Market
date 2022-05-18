@@ -398,7 +398,7 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
 
 
 
-        if (customer.CodeNaghsh != null) {
+        if (customer.CodeNaghsh != null &&!customer.CodeNaghsh.isEmpty() ) {
             code_naghsh_paired_item.setValue(customer.CodeNaghsh);
             economicCodePairedItem.setEnabled(false);
             economicCodePairedItem.setFocusable(false);

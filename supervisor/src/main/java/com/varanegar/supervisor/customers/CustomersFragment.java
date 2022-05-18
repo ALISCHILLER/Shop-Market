@@ -574,8 +574,8 @@ public class CustomersFragment extends IMainPageFragment {
             messageback=messageback+" درجه مشتری قبل از ویرایش:"+ entity.CustomerLevel+ "\n";
             messageback=messageback+" درجه مشتری بعد از ویرایش:"+ entity.newCustomerLevelName+ "\n";
         }if(!entity.NationalCode.equals(entity.newNationalCode)) {
-            messageback=messageback+" کدملی قبل از ویرایش:"+ entity.CustomerLevel+ "\n";
-            messageback=messageback+" کدملی بعد از ویرایش:"+ entity.newCustomerLevelName+ "\n";
+            messageback=messageback+" کدملی قبل از ویرایش:"+ entity.NationalCode+ "\n";
+            messageback=messageback+" کدملی بعد از ویرایش:"+ entity.newNationalCode+ "\n";
         }
         
         
