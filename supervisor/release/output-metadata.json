@@ -4,15 +4,15 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.varanegar.supervisor",
+  "applicationId": "com.varanegar.presale",
   "variantName": "processReleaseResources",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
-      "versionCode": 30001018,
-      "versionName": "3.0.1.18",
-      "outputFile": "varanegar.supervisor_V3.0.1.18_220518.apk"
+      "versionCode": 30101163,
+      "versionName": "3.1.1.163",
+      "outputFile": "varanegar.presale_V3.1.1.163_220518.apk"
     }
   ]
 }
