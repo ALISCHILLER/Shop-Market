@@ -26,6 +26,7 @@ import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.framework.validation.FormValidator;
 import com.varanegar.framework.validation.ValidationError;
 import com.varanegar.framework.validation.ValidationListener;
+import com.varanegar.framework.validation.annotations.IraniIdCodeChecker;
 import com.varanegar.framework.validation.annotations.IraniNationalCodeChecker;
 import com.varanegar.framework.validation.annotations.LengthChecker;
 import com.varanegar.framework.validation.annotations.NotEmptyChecker;
@@ -184,8 +185,7 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
 
         economicCodePairedItem = view.findViewById(R.id.economic_code_paired_item);
         validator.addField(economicCodePairedItem, "شناسه ملی",
-                new LengthChecker(11, 11,
-                false));
+                new IraniIdCodeChecker());
 
         nationalCodePairedItem = view.findViewById(R.id.national_code_paired_item);
         validator.addField(nationalCodePairedItem, getString(R.string.customer_national_code), new IraniNationalCodeChecker());
@@ -407,7 +407,6 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
             nationalCodePairedItem.setFocusable(false);
             nationalCodePairedItem.setFocusableInTouchMode(false);
         }else {
-            code_naghsh_paired_item.setValue("69696596");
             request_codenaghsh.setVisibility(View.VISIBLE);
         }
         if (!customer.EconomicCode.isEmpty()) {
