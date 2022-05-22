@@ -140,26 +140,48 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
 
         tabloNamePairedItem = view.findViewById(R.id.tablo_name_paired_item);
 
+        /**
+         *  آدرس
+         */
         addressPairedItem = view.findViewById(R.id.address_paired_item);
-        validator.addField(addressPairedItem, getString(R.string.address), new LengthChecker(0, 35,
+        validator.addField(addressPairedItem, getString(R.string.address), new LengthChecker(0, 150,
                 false));
-
+        addressPairedItem.setEnabled(false);
+        addressPairedItem.setFocusable(false);
+        addressPairedItem.setFocusableInTouchMode(false);
+        //آدرس 2
         street2PairedItem = view.findViewById(R.id.street2_paired_item);
-        validator.addField(street2PairedItem, getString(R.string.street2_label), new LengthChecker(0, 35,
+        validator.addField(street2PairedItem, getString(R.string.street2_label), new LengthChecker(0, 150,
                 false));
-
+        street2PairedItem.setEnabled(false);
+        street2PairedItem.setFocusable(false);
+        street2PairedItem.setFocusableInTouchMode(false);
+        //آدرس3
         street3PairedItem = view.findViewById(R.id.street3_paired_item);
-        validator.addField(street3PairedItem, getString(R.string.street3_label), new LengthChecker(0, 35,
+        validator.addField(street3PairedItem, getString(R.string.street3_label), new LengthChecker(0, 150,
                 false));
-
+        street3PairedItem.setEnabled(false);
+        street3PairedItem.setFocusable(false);
+        street3PairedItem.setFocusableInTouchMode(false);
+        //  آدرس4
         street4PairedItem = view.findViewById(R.id.street4_paired_item);
-        validator.addField(street4PairedItem, getString(R.string.street4_label), new LengthChecker(0, 35,
+        validator.addField(street4PairedItem, getString(R.string.street4_label), new LengthChecker(0, 150,
                 false));
-
+        street4PairedItem.setEnabled(false);
+        street4PairedItem.setFocusable(false);
+        street4PairedItem.setFocusableInTouchMode(false);
+        //   آدرس5
         street5PairedItem = view.findViewById(R.id.street5_paired_item);
         validator.addField(street5PairedItem, getString(R.string.street5_label),
-                new LengthChecker(0, 35, false));
+                new LengthChecker(0, 150, false));
+        street5PairedItem.setEnabled(false);
+        street5PairedItem.setFocusable(false);
+        street5PairedItem.setFocusableInTouchMode(false);
 
+
+        /**
+         *     کد نقش
+         */
         code_naghsh_paired_item = view.findViewById(R.id.code_naghsh_paired_item);
         validator.addField(code_naghsh_paired_item, getString(R.string.code_naghsh),
                 new LengthChecker(0, 100, false));
@@ -169,6 +191,9 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
 
         request_codenaghsh= view.findViewById(R.id.request_codenaghsh);
 
+        /**
+         *        کدپستی
+         */
         postalCodePairedItem = view.findViewById(R.id.postal_code_paired_item);
         validator.addField(postalCodePairedItem, getString(R.string.postal_code_label), new LengthChecker(10, 10,
                 false));
@@ -183,10 +208,16 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
 
         mobilePairedItem = view.findViewById(R.id.mobile_paired_item);
 
+        /**
+         *    شناسه ملی
+         */
         economicCodePairedItem = view.findViewById(R.id.economic_code_paired_item);
         validator.addField(economicCodePairedItem, "شناسه ملی",
                 new IraniIdCodeChecker());
 
+        /**
+         * کد ملی
+         */
         nationalCodePairedItem = view.findViewById(R.id.national_code_paired_item);
         validator.addField(nationalCodePairedItem, getString(R.string.customer_national_code), new IraniNationalCodeChecker());
 
