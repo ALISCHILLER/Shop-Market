@@ -827,8 +827,8 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
         roleCodeCustomerViewModel.NationalCode=nationalCode;
         roleCodeCustomerViewModel.EconomicCode=economicCode;
 
-        if (economicCode!=null&&!economicCode.equals("")||
-                nationalCode!=null&&!nationalCode.equals("")){
+        if (economicCode!=null&&!economicCode.equals("")&&economicCode.length()==11||
+                nationalCode!=null&&!nationalCode.equals("")&&nationalCode.length()==10){
 
             ApiNew apiNew=new ApiNew(getContext());
           Call<List<RoleCodeViewModel>> calll=apiNew.getCodeNaghsh(roleCodeCustomerViewModel);
@@ -848,8 +848,11 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
                             code_naghsh_paired_item.setValue(result.get(0).Code);
                             request_codenaghsh.setVisibility(View.GONE);
                             nationalCodePairedItem.setEnabled(false);
+                            economicCodePairedItem.setEnabled(false);
                             nationalCodePairedItem.setFocusable(false);
                             nationalCodePairedItem.setFocusableInTouchMode(false);
+                            economicCodePairedItem.setFocusable(false);
+                            economicCodePairedItem.setFocusableInTouchMode(false);
                         }else {
                             dialogShow(result);
                         }
@@ -901,6 +904,9 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
         request_codenaghsh.setVisibility(View.GONE);
         nationalCodePairedItem.setEnabled(false);
         nationalCodePairedItem.setFocusable(false);
+        economicCodePairedItem.setFocusable(false);
+        economicCodePairedItem.setFocusableInTouchMode(false);
+        economicCodePairedItem.setEnabled(false);
         nationalCodePairedItem.setFocusableInTouchMode(false);
     }
 
