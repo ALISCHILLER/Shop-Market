@@ -17,6 +17,8 @@ import com.varanegar.framework.ui.scrollercard.transform.ScaleTransformer;
 import com.varanegar.supervisor.IMainPageFragment;
 import com.varanegar.supervisor.R;
 import com.varanegar.supervisor.customers.CustomersFullFragment;
+import com.varanegar.supervisor.customreport.orderstatus.OrderReportConfig;
+import com.varanegar.supervisor.customreport.orderstatus.OrderReportFragment;
 import com.varanegar.supervisor.fragment.list_notification_Fragment.ListNotification_Fragment;
 import com.varanegar.supervisor.fragment.list_pincode_Fragment.ListPinCode_Fragment;
 import com.varanegar.supervisor.fragment.menuTools_Fragment.model.Item;
@@ -64,6 +66,10 @@ public class MenuTools_Fragmnet extends IMainPageFragment implements
     @Override
     public void onItemClick(int position) {
         switch (position){
+            case 5:
+                OrderReportFragment orderReportFragment=new OrderReportFragment();
+                getVaranegarActvity().pushFragment(orderReportFragment);
+                break;
             case 4:
                 CustomersFullFragment questionnaire=new CustomersFullFragment();
                 getVaranegarActvity().pushFragment(questionnaire);

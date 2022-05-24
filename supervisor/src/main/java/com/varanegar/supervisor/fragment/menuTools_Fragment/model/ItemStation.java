@@ -21,7 +21,8 @@ public class ItemStation {
                 new Item("لیست درخواست ها", R.drawable.request),
                 new Item("خبرنامه زرماکارون", R.drawable.mail),
                 new Item("گزارشات", R.drawable.report),
-                new Item("پرسشنامه", R.drawable.questionnaire)
+                new Item("پرسشنامه", R.drawable.questionnaire),
+                new Item("گزارش برگشتی و وضعیت مشتری", R.drawable.analysis)
                );
     }
 }

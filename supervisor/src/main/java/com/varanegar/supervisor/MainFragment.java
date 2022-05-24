@@ -42,14 +42,16 @@ public class MainFragment extends VaranegarFragment {
         viewPager.setAdapter(tabsPagerAdapter);
         tl = (TabLayout) view.findViewById(R.id.tabs);
         tl.setupWithViewPager(viewPager);
-        tl.getTabAt(0).setIcon(R.drawable.ic_settings_applications_cyan_48dp);
-        tl.getTabAt(1).setIcon(R.drawable.ic_customers_cyan_48dp);
-        tl.getTabAt(2).setIcon(R.drawable.ic_status_cyan_48dp);
+        tl.getTabAt(4).setIcon(R.drawable.ic_settings_applications_cyan_48dp)
+                .setText(R.string.setting_su);
+        tl.getTabAt(1).setIcon(R.drawable.ic_customers_cyan_48dp)
+                .setText(R.string.editcustomer);
+        tl.getTabAt(2).setIcon(R.drawable.ic_status_cyan_48dp).setText(R.string.orrder_block);
 
-        tl.getTabAt(4).setIcon(R.drawable.ic_report_cyan_48dp);
-        tl.getTabAt(3).setIcon(R.drawable.ic_tracking_cyan_48dp);
+       // tl.getTabAt(4).setIcon(R.drawable.ic_report_cyan_48dp);
+        tl.getTabAt(3).setIcon(R.drawable.ic_tracking_cyan_48dp).setText(R.string.map_su);
 
-        tl.getTabAt(5).setIcon(R.drawable.ic_view_list_cyan_48dp);
+        tl.getTabAt(0).setIcon(R.drawable.ic_view_list_cyan_48dp).setText(R.string.menu_su);
 //        tl.getTabAt(6).setIcon(R.drawable.ic_baseline_format_quote_24);
 //        tl.getTabAt(7).setIcon(R.drawable.ic_baseline_assignment_24);
 
@@ -91,7 +93,7 @@ public class MainFragment extends VaranegarFragment {
 
         @Override
         public Fragment getItem(int position) {
-            if (position == 0)
+            if (position == 4)
                 return settingsFragment;
             else if (position == 1)
                 return customersFragment;
@@ -99,9 +101,9 @@ public class MainFragment extends VaranegarFragment {
                 return statusFragment;
             else if (position == 3)
                 return trackingFragment;
-            else if (position == 4)
-                return orderReportFragment;
-            else if (position==5)
+           // else if (position == 4)
+             //   return orderReportFragment;
+            else if (position==0)
                 return menuToolsFragmnet;
 
 //                return menuFragment;
@@ -112,7 +114,7 @@ public class MainFragment extends VaranegarFragment {
 
         @Override
         public int getCount() {
-            return 6;
+            return 5;
 
         }
     }

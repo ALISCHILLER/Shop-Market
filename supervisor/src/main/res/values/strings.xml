@@ -138,7 +138,11 @@
     <string name="onhand_qty_report">گزارش موجودی انبار</string>
     <string name="onhand_qty_report_search_name_or_code">گزارش موجودی کالا (نام یا کد کالا را جستجو کنید ... )</string>
     <string name="updating_questionnaire">بروزرسانی اطلاعات پرسشنامه</string>
-
+    <string name="setting_su">تنظیمات</string>
+    <string name="editcustomer">تایید مشتریان</string>
+    <string name="orrder_block">تایید سفارشات</string>
+    <string name="map_su">رهگیری ویزیتور</string>
+    <string name="menu_su">منو</string>
     <string name="type_to_search">Type to Search</string>
     <string name="string_item_name">Item Name</string>
     <string name="not_found">Not Found!</string>
