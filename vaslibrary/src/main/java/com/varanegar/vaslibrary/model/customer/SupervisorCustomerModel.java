@@ -85,4 +85,11 @@ public class SupervisorCustomerModel extends BaseModel {
     public String newCityName;
     @Column
     public String PostCode;
+    @Column
+    public String EconomicCode;
+    @Column
+    public String CodeNaghsh;
+    @Column
+    public String NewCodeNaghsh;
+
 }

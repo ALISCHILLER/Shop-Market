@@ -570,12 +570,22 @@ public class CustomersFragment extends IMainPageFragment {
 //            messageback=messageback+"شماره تلفن بعد از ویرایش:"+entity.newPhone+ "\n";
 //        }if(!entity.Address.equals(entity.newAddress)) {
 //            messageback=messageback+"ادرس:"+entity.Address+ "\n";
-        }if(!entity.CustomerLevel.equals(entity.newCustomerLevelName)) {
-            messageback=messageback+" درجه مشتری قبل از ویرایش:"+ entity.CustomerLevel+ "\n";
-            messageback=messageback+" درجه مشتری بعد از ویرایش:"+ entity.newCustomerLevelName+ "\n";
-        }if(!entity.NationalCode.equals(entity.newNationalCode)) {
+        }
+//        if(!entity.CustomerLevel.equals(entity.newCustomerLevelName)) {
+//            messageback=messageback+" درجه مشتری قبل از ویرایش:"+ entity.CustomerLevel+ "\n";
+//            messageback=messageback+" درجه مشتری بعد از ویرایش:"+ entity.newCustomerLevelName+ "\n";
+//        }
+        if(!entity.NationalCode.equals(entity.newNationalCode)) {
             messageback=messageback+" کدملی قبل از ویرایش:"+ entity.NationalCode+ "\n";
             messageback=messageback+" کدملی بعد از ویرایش:"+ entity.newNationalCode+ "\n";
+        }if(!entity.EconomicCode.equals(entity.newEconomicCode)) {
+            messageback=messageback+" شناسه ملی قبل از ویرایش:"+ entity.EconomicCode+ "\n";
+            messageback=messageback+" شناسه ملی بعد از ویرایش:"+ entity.newEconomicCode+ "\n";
+        }
+        if (!entity.CodeNaghsh.equals(entity.NewCodeNaghsh)) {
+                messageback = messageback + " کدنقش قبل از ویرایش:" + entity.CodeNaghsh + "\n";
+                messageback = messageback + " کدنقش بعد از ویرایش:" + entity.NewCodeNaghsh + "\n";
+
         }
         
         
