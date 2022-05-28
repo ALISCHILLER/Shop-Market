@@ -21,6 +21,7 @@ import com.varanegar.vaslibrary.model.tour.TourModel;
 import com.varanegar.vaslibrary.ui.dialog.EditCustomerFragmentDialog;
 import com.varanegar.vaslibrary.ui.dialog.EditCustomerZarFragmentDialog;
 import com.varanegar.vaslibrary.ui.dialog.InsertPinDialog;
+import com.varanegar.vaslibrary.ui.fragment.new_fragment.edit_new_zar.Edit_New_Customer_Zar;
 
 import java.util.List;
 import java.util.UUID;
@@ -57,6 +58,9 @@ public class EditCustomerAction extends CheckBarcodeAction {
         if (error != null)
             return error;
 
+        if(getCustomer().CodeNaghsh !=null){
+            return getActivity().getString(R.string.the_customer_have_code);
+        }
         if (getCallManager().isDataSent(getCalls(), null))
             return getActivity().getString(R.string.customer_operation_is_sent_already);
 
@@ -177,13 +181,20 @@ public class EditCustomerAction extends CheckBarcodeAction {
     }
 
     private void showEditDialog(){
-        EditCustomerZarFragmentDialog editCustomerFragmentDialog = new EditCustomerZarFragmentDialog();
-        editCustomerFragmentDialog.onCustomerEditedCallBack = this::runActionCallBack;
-        Bundle bundle = new Bundle();
+
+        Edit_New_Customer_Zar edit_new_customer_zar=new Edit_New_Customer_Zar();
+          Bundle bundle = new Bundle();
         bundle.putString("68565e5e-d407-4858-bc5f-fd52b9318734", getSelectedId().toString());
-        editCustomerFragmentDialog.setArguments(bundle);
-        editCustomerFragmentDialog.show(getActivity().getSupportFragmentManager(),
-                "EditCustomerFragmentDialog");
+        edit_new_customer_zar.setArguments(bundle);
+        getActivity().pushFragment(edit_new_customer_zar);
+
+//        EditCustomerZarFragmentDialog editCustomerFragmentDialog = new EditCustomerZarFragmentDialog();
+//        editCustomerFragmentDialog.onCustomerEditedCallBack = this::runActionCallBack;
+//        Bundle bundle = new Bundle();
+//        bundle.putString("68565e5e-d407-4858-bc5f-fd52b9318734", getSelectedId().toString());
+//        editCustomerFragmentDialog.setArguments(bundle);
+//        editCustomerFragmentDialog.show(getActivity().getSupportFragmentManager(),
+//                "EditCustomerFragmentDialog");
     }
 
     private void printFailed(Context context, String error) {

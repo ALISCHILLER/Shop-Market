@@ -43,7 +43,8 @@ public class CatalogViewHolder extends BaseViewHolder<CatalogModel> {
         String path = new ImageManager(getContext()).getImagePath(catalogModel.CatalogId, ImageType.CatalogSmall);
         if (path != null) {
             catalogImageView.setVisibility(View.VISIBLE);
-            Picasso.with(getContext()).load(new File(path)).memoryPolicy(MemoryPolicy.NO_CACHE).placeholder(R.drawable.product_no_image).into(catalogImageView);
+            Picasso.with(getContext()).load(new File(path)).memoryPolicy(MemoryPolicy.NO_CACHE)
+                    .placeholder(R.drawable.product_no_image).into(catalogImageView);
         }
         else
             catalogImageView.setVisibility(View.INVISIBLE);

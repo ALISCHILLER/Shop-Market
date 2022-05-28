@@ -105,7 +105,8 @@ public class ProductGroupCatalogManager extends BaseManager<ProductGroupCatalogM
         GROUP BY Catalog.CatalogId
         */
 
-        return new Query().select(ProductGroupCatalog.UniqueId, ProductGroupCatalog.ProductMainGroupId, ProductGroupCatalog.CatalogName, ProductGroupCatalog.RowIndex
+        return new Query().select(ProductGroupCatalog.UniqueId, ProductGroupCatalog.ProductMainGroupId,
+                        ProductGroupCatalog.CatalogName, ProductGroupCatalog.RowIndex
         ).from(JoinFrom.table(ProductGroupCatalog.ProductGroupCatalogTbl).innerJoin(Catalog.CatalogTbl)
                 .on(Catalog.CatalogId, ProductGroupCatalog.UniqueId)
                 .innerJoin(Product.ProductTbl).on(Catalog.ProductId, Product.UniqueId)

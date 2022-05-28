@@ -24,7 +24,9 @@ alter table ProductGroup add column OrderOf INTEGER;
 
 DROP VIEW IF EXISTS "main"."ProductGroupCatalogView";
 CREATE VIEW "ProductGroupCatalogView" AS
-SELECT ProductGroup.UniqueId , ProductGroup.ProductGroupParentId , ProductGroup.ProductGroupName, ProductGroup.OrderOf, ProductGroup.LastUpdate , ProductGroupCatalog.RowIndex FROM
+SELECT ProductGroup.UniqueId , ProductGroup.ProductGroupParentId ,
+ProductGroup.ProductGroupName, ProductGroup.OrderOf, ProductGroup.LastUpdate ,
+ProductGroupCatalog.RowIndex FROM
 ProductGroup
 INNER JOIN ProductGroupCatalog ON ProductGroupCatalog.ProductMainGroupId = ProductGroup.UniqueId
 INNER JOIN ProductGroup AS SubProductGroup ON ProductGroup.UniqueId = SubProductGroup.ProductGroupParentId

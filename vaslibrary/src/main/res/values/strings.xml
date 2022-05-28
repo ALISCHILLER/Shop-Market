@@ -973,6 +973,7 @@
     <string name="backing_up_database">در حال پشتیبان گیری از داده ها</string>
     <string name="the_customer_is_disabled">امکان ثبت سفارش برای مشتری غیرفعال وجود ندارد</string>
     <string name="the_customer_not_code">امکان ثبت سفارش برای مشتری بدون کد نقش وجود ندارد لطفا به صفحه ویرایش مشتری بروید</string>
+    <string name="the_customer_have_code">امکان ویرایش مشتری وجود ندارد.</string>
     <string name="the_customer_is_disabled_t">امکان ثبت برگشتی برای مشتری غیرفعال وجود ندارد</string>
     <string name="open_invoice_no">شماره فاکتور باز</string>
     <string name="batch_numbers">سری ساخت</string>

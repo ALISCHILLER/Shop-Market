@@ -47,7 +47,8 @@ public class SaveOrderAction extends CheckDistanceAction {
         return UUID.fromString("c81c3571-6f8f-4a53-bb64-4742fbf64f3a");
     }
 
-    public SaveOrderAction(MainVaranegarActivity activity, ActionsAdapter adapter, UUID selectedId) {
+    public SaveOrderAction(MainVaranegarActivity activity,
+                           ActionsAdapter adapter, UUID selectedId) {
         super(activity, adapter, selectedId);
         icon = R.drawable.ic_thumb_up_white_24dp;
     }

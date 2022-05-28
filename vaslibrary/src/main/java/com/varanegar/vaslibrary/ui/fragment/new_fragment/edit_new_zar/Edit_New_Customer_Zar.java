@@ -1,10 +1,9 @@
-package com.varanegar.vaslibrary.ui.dialog;
+package com.varanegar.vaslibrary.ui.fragment.new_fragment.edit_new_zar;
 
 import static android.app.Activity.RESULT_OK;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -18,17 +17,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.core.content.FileProvider;
-import androidx.fragment.app.DialogFragment;
 
 import com.varanegar.framework.base.MainVaranegarActivity;
+import com.varanegar.framework.base.VaranegarFragment;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.util.Linq;
-import com.varanegar.framework.util.component.CuteAlertDialog;
-import com.varanegar.framework.util.component.PairedItems;
+import com.varanegar.framework.util.component.CuteDialog;
 import com.varanegar.framework.util.component.PairedItemsEditable;
 import com.varanegar.framework.util.component.PairedItemsSpinner;
 import com.varanegar.framework.util.component.SearchBox;
@@ -49,9 +47,7 @@ import com.varanegar.vaslibrary.manager.customer.CustomerActivityManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerCategoryManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerLevelManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
-import com.varanegar.vaslibrary.manager.customercallmanager.CustomerCallManager;
 import com.varanegar.vaslibrary.manager.picture.PictureCustomerViewManager;
-import com.varanegar.vaslibrary.manager.updatemanager.CustomersUpdateFlow;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateCall;
 import com.varanegar.vaslibrary.model.city.CityModel;
 import com.varanegar.vaslibrary.model.customer.CustomerActivityModel;
@@ -59,13 +55,13 @@ import com.varanegar.vaslibrary.model.customer.CustomerCategoryModel;
 import com.varanegar.vaslibrary.model.customer.CustomerLevelModel;
 import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.model.dataforregister.DataForRegisterModel;
+import com.varanegar.vaslibrary.ui.dialog.EditCustomerZarFragmentDialog;
 import com.varanegar.vaslibrary.ui.dialog.new_dialog.SingleChoiceDialog;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.apiNew.ApiNew;
 import com.varanegar.vaslibrary.webapi.apiNew.modelNew.RoleCodeCustomerRequestViewModel;
 import com.varanegar.vaslibrary.webapi.apiNew.modelNew.RoleCodeViewModel;
 import com.varanegar.vaslibrary.webapi.customer.CustomerApi;
-import com.varanegar.vaslibrary.webapi.customer.SyncGuidViewModel;
 import com.varanegar.vaslibrary.webapi.customer.SyncZarGetNewCustomerViewModel;
 import com.varanegar.vaslibrary.webapi.customer.ZarCustomerInfoViewModel;
 
@@ -79,15 +75,14 @@ import java.util.List;
 import java.util.UUID;
 
 import okhttp3.Request;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import timber.log.Timber;
 
-
-public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements ValidationListener
+public class Edit_New_Customer_Zar extends VaranegarFragment  implements ValidationListener
         ,SingleChoiceDialog.SingleChoiceListener {
+
     CustomerModel customer;
-    public OnCustomerEditedCallBack onCustomerEditedCallBack;
+    public EditCustomerZarFragmentDialog.OnCustomerEditedCallBack onCustomerEditedCallBack;
     UUID customerUniqueId;
     private ProgressDialog progressDialog;
     private PairedItemsEditable personNamePairedItem;
@@ -121,24 +116,53 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
     private List<RoleCodeViewModel> roleCodeViewModels;
     private RoleCodeCustomerRequestViewModel roleCodeCustomerViewModel ;
 
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("68565e5e-d407-4858-bc5f-fd52b9318734", customer.UniqueId.toString());
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (customer.CustomerCode != null) {
+            prepareFields();
+            enableForm(true);
+        }
+    }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setSizingPolicy(SizingPolicy.Maximum);
         validator = new FormValidator(getActivity());
+
+        if (savedInstanceState != null)
+            customerUniqueId = UUID.fromString(savedInstanceState
+                    .getString("68565e5e-d407-4858-bc5f-fd52b9318734"));
+        else {
+            Bundle bundle = getArguments();
+            customerUniqueId = UUID.fromString(bundle
+                    .getString("68565e5e-d407-4858-bc5f-fd52b9318734"));
+        }
     }
 
+    @Nullable
     @Override
-    public void onPause() {
-        super.onPause();
-        dismissAllowingStateLoss();
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
+        final View view = inflater.inflate(
+                R.layout.fragment_edit_customer_zar, container, false);
+
+        return view;
     }
 
-    @Override
-    protected void onCreateContentView(LayoutInflater inflater,
-                                       ViewGroup viewGroup,
-                                       @Nullable Bundle savedInstanceState) {
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         if (savedInstanceState != null)
             customerUniqueId = UUID.fromString(savedInstanceState
                     .getString("68565e5e-d407-4858-bc5f-fd52b9318734"));
@@ -151,8 +175,7 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
         CustomerManager manager = new CustomerManager(getContext());
         customer = manager.getItem(customerUniqueId);
         manager.cacheOriginalCustomer(customer.UniqueId);
-        setTitle(R.string.edit_customer_label);
-        View view = inflater.inflate(R.layout.fragment_edit_customer_zar, viewGroup, true);
+
 
         personNamePairedItem = view.findViewById(R.id.person_name_paired_item);
         validator.addField(personNamePairedItem, getString(R.string.person_name_label), new NotEmptyChecker());
@@ -261,7 +284,10 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
 
         customerGroup2Spinner = view.findViewById(R.id.customer_group2_spinner);
 
+        view.findViewById(R.id.save_image_view).setOnClickListener(v -> {
+            createSyncViewModel();
 
+                });
         request_codenaghsh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -271,86 +297,172 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        if (customer.CustomerCode!=null) {
-            prepareFields();
-            enableForm(true);
-        }
-//        CustomerApi customerApi = new CustomerApi(getContext());
-//        call = customerApi.getCustomerZarCustomerInfo(customer.CustomerCode);
-//        startProgressDialog();
-//        customerApi.runWebRequest(call, new WebCallBack<ZarCustomerInfoViewModel>() {
-//            @Override
-//            protected void onFinish() {
-//                stopProgressDialog();
-//            }
-//
-//            @Override
-//            protected void onSuccess(ZarCustomerInfoViewModel result, Request request) {
-//                if (isResumed()) {
-//                    customerInfo = result;
-//                    prepareFields();
-//                    enableForm(true);
-//                }
-//            }
-//
-//            @Override
-//            protected void onApiFailure(ApiError error, Request request) {
-//                String err = WebApiErrorBody.log(error, getContext());
-//                if (isResumed()) {
-//                    showErrorDialog(err);
-//                    enableForm(false);
-//                }
-//            }
-//
-//            @Override
-//            protected void onNetworkFailure(Throwable t, Request request) {
-//                if (isResumed()) {
-//                    showErrorDialog(getString(R.string.network_error));
-//                    enableForm(false);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancel(Request request) {
-//                super.onCancel(request);
-//                if (getActivity() != null)
-//                    stopProgressDialog();
-//            }
-//        });
-    }
-
-
-    private void enableForm(boolean enabled) {
-        isEnabled = enabled;
-        personNamePairedItem.setEnabled(enabled);
-        tabloNamePairedItem.setEnabled(enabled);
-        addressPairedItem.setEnabled(enabled);
-        street2PairedItem.setEnabled(enabled);
-        street3PairedItem.setEnabled(enabled);
-        street4PairedItem.setEnabled(enabled);
-        street5PairedItem.setEnabled(enabled);
-        postalCodePairedItem.setEnabled(enabled);
-        telPairedItem.setEnabled(enabled);
-        mobilePairedItem.setEnabled(enabled);
-
-//        citySpinner.setEnabled(enabled);
-        deliveryZoneSpinner.setEnabled(false);
-        saleZonesSpinner.setEnabled(false);
-        customerDegreeSpinner.setEnabled(enabled);
-//        customerGroupSpinner.setEnabled(enabled);
-        customerGroup1Spinner.setEnabled(enabled);
-        customerGroup2Spinner.setEnabled(enabled);
+    public void onValidationSucceeded() {
+        submit();
     }
 
     @Override
-    public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
-        if (call != null && !call.isCanceled())
-            call.cancel();
+    public void onValidationFailed(List<ValidationError> errors) {
+        validator.showErrors(errors);
     }
 
+    @Override
+    public void onPositiveButtonClicked(String[] list, int position) {
+
+    }
+
+    @Override
+    public void onNegativeButtonClicked() {
+
+    }
+
+
+    /**
+     * ست کردن داده براس ارسال
+     */
+
+    private void createSyncViewModel() {
+        // syncGetNewCustomerViewModel.CityId = cityNamePairedItem.getValue();
+        String postcode=postalCodePairedItem.getValue();
+        String codenaghsh=code_naghsh_paired_item.getValue();
+        DataForRegisterModel group1 = customerGroup1Spinner.getSelectedItem();
+        DataForRegisterModel group2 = customerGroup2Spinner.getSelectedItem();
+        DataForRegisterModel degree = customerDegreeSpinner.getSelectedItem();
+
+        if (file == null) {
+            CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+            dialog.setIcon(Icon.Error);
+            dialog.setTitle(R.string.error);
+            dialog.setMessage(getString(R.string.taking_picture_of) + "کارت ملی " + " " + getString(R.string.is_mandatory));
+            dialog.setPositiveButton(R.string.ok, null);
+            dialog.show();
+            return;
+        }
+
+        if (postcode !=null && !postcode.equals("") && !postcode.isEmpty()
+                &&!codenaghsh.isEmpty() &&codenaghsh !=null&&!codenaghsh.equals("")) {
+            if (addressPairedItem!=null&&personNamePairedItem!=null&&group1!=null&&group2!=null) {
+
+                syncGetNewCustomerViewModel = new SyncZarGetNewCustomerViewModel();
+                syncGetNewCustomerViewModel.CustomerCode = customer.CustomerCode;
+                syncGetNewCustomerViewModel.PersonName = personNamePairedItem.getValue();
+                syncGetNewCustomerViewModel.StoreName = tabloNamePairedItem.getValue();
+                syncGetNewCustomerViewModel.Street = addressPairedItem.getValue();
+                syncGetNewCustomerViewModel.Street2 = street2PairedItem.getValue();
+                syncGetNewCustomerViewModel.Street3 = street3PairedItem.getValue();
+                syncGetNewCustomerViewModel.Street4 = street4PairedItem.getValue();
+                syncGetNewCustomerViewModel.Street5 = street5PairedItem.getValue();
+                String convertPostalCode = ConvertFaNumType.convert(postalCodePairedItem.getValue());
+                syncGetNewCustomerViewModel.PostalCode = convertPostalCode;
+
+                syncGetNewCustomerViewModel.Tel = telPairedItem.getValue();
+                syncGetNewCustomerViewModel.Mobile = mobilePairedItem.getValue();
+                syncGetNewCustomerViewModel.CodeNaghsh = code_naghsh_paired_item.getValue();
+                syncGetNewCustomerViewModel.EconomicCode = economicCodePairedItem.getValue();
+                syncGetNewCustomerViewModel.NationalCode = nationalCodePairedItem.getValue();
+//        CityModel city = citySpinner.getSelectedItem();
+//        if (city != null)
+//            syncGetNewCustomerViewModel.CityId = city.UniqueId;
+
+                DataForRegisterModel zone = deliveryZoneSpinner.getSelectedItem();
+                if (zone != null)
+                    syncGetNewCustomerViewModel.TRANSPZONE = zone.FieldKey;
+
+
+                if (degree != null)
+                    syncGetNewCustomerViewModel.KUKLA = degree.FieldKey;
+
+                DataForRegisterModel sale = saleZonesSpinner.getSelectedItem();
+                if (sale != null)
+                    syncGetNewCustomerViewModel.BZIRK = sale.FieldKey;
+
+//        DataForRegisterModel group = customerGroupSpinner.getSelectedItem();
+//        if (group != null)
+//            syncGetNewCustomerViewModel.KDGRP = group.FieldKey;
+
+
+                if (group1 != null) {
+                    syncGetNewCustomerViewModel.KVGR1 = group1.FieldKey;
+                    syncGetNewCustomerViewModel.KDGRP = group1.FieldKey;
+                }
+
+                if (group2 != null)
+                    syncGetNewCustomerViewModel.KVGR2 = group2.FieldKey;
+
+                validator.validate(this);
+            }else {
+                showErrorDialog("نام مشتری ,آدرس مشتری ,گروه مشتری1 , گروه مشتری 2و درجه مشتری  را ثیت کنید ");
+            }
+        }else {
+            showErrorDialog("کد پستی و کدنقش مشتری را ثبت کنید ");
+        }
+    }
+    /**
+     * دریافت کد نقش
+     * send request get code naghsh
+     */
+    private void  getDataCodeNaghsh(){
+
+
+        String economicCode=economicCodePairedItem.getValue();
+        String nationalCode=nationalCodePairedItem.getValue();
+
+        roleCodeCustomerViewModel=new RoleCodeCustomerRequestViewModel();
+        roleCodeCustomerViewModel.CustomerId=customerUniqueId;
+        roleCodeCustomerViewModel.NationalCode=nationalCode;
+        roleCodeCustomerViewModel.EconomicCode=economicCode;
+
+        if (economicCode!=null&&!economicCode.equals("")&&economicCode.length()==11||
+                nationalCode!=null&&!nationalCode.equals("")&&nationalCode.length()==10){
+
+            ApiNew apiNew=new ApiNew(getContext());
+            Call<List<RoleCodeViewModel>> calll=apiNew.getCodeNaghsh(roleCodeCustomerViewModel);
+            startProgressDialog();
+
+            apiNew.runWebRequest(calll, new WebCallBack<List<RoleCodeViewModel>>() {
+                @Override
+                protected void onFinish() {
+                    stopProgressDialog();
+                }
+
+                @Override
+                protected void onSuccess(List<RoleCodeViewModel> result, Request request) {
+
+                    if (result.size()>0){
+
+                        dialogShow(result);
+
+                    }else {
+                        showErrorDialog("یرای این کد ملی کد نقش ثبت نشده است ");
+                    }
+                }
+
+                @Override
+                protected void onApiFailure(ApiError error, Request request) {
+                    String err = WebApiErrorBody.log(error, getContext());
+                    if (isResumed()) {
+                        showErrorDialog(err);
+
+                    }
+                }
+
+                @Override
+                protected void onNetworkFailure(Throwable t, Request request) {
+                    if (isResumed()) {
+                        showErrorDialog(getString(R.string.network_error));
+
+                    }
+                }
+            });
+
+        }else {
+            showErrorDialog("کد ملی و کداقتصادی مشتری را ثبت کنید ");
+        }
+    }
+
+    /**
+     * ست کردن دادها
+     */
     private void prepareFields() {
         View view = getView();
         if (view == null)
@@ -486,11 +598,11 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
         if (KUKLAs != null) {
             customerDegreeSpinner.setup(getChildFragmentManager(), KUKLAs,
                     new SearchBox.SearchMethod<DataForRegisterModel>() {
-                @Override
-                public boolean onSearch(DataForRegisterModel item, String text) {
-                    return item.FieldValue != null && item.FieldValue.contains(text);
-                }
-            });
+                        @Override
+                        public boolean onSearch(DataForRegisterModel item, String text) {
+                            return item.FieldValue != null && item.FieldValue.contains(text);
+                        }
+                    });
             CustomerLevelManager customerLevelManager =
                     new CustomerLevelManager(getContext());
             final CustomerLevelModel customerLevel =
@@ -498,11 +610,11 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
             if (customerLevel != null) {
                 int selectedItemPosition = Linq.findFirstIndex(KUKLAs,
                         new Linq.Criteria<DataForRegisterModel>() {
-                    @Override
-                    public boolean run(DataForRegisterModel item) {
-                        return item.FieldValue.equals(customerLevel.CustomerLevelName);
-                    }
-                });
+                            @Override
+                            public boolean run(DataForRegisterModel item) {
+                                return item.FieldValue.equals(customerLevel.CustomerLevelName);
+                            }
+                        });
                 if (selectedItemPosition >= 0)
                     customerDegreeSpinner.selectItem(selectedItemPosition);
             }
@@ -564,11 +676,11 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
         if (KVGR1s != null) {
             customerGroup1Spinner.setup(getChildFragmentManager(), KVGR1s,
                     new SearchBox.SearchMethod<DataForRegisterModel>() {
-                @Override
-                public boolean onSearch(DataForRegisterModel item, String text) {
-                    return item.FieldValue != null && item.FieldValue.contains(text);
-                }
-            });
+                        @Override
+                        public boolean onSearch(DataForRegisterModel item, String text) {
+                            return item.FieldValue != null && item.FieldValue.contains(text);
+                        }
+                    });
             if (customer.CustomerCategoryId!=null) {
                 CustomerCategoryManager customerCategoryManager =
                         new CustomerCategoryManager(getContext());
@@ -627,293 +739,51 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
 
     }
 
-    @Override
-    public void ok() {
-        if (isEnabled)
-            createSyncViewModel();
-    }
 
-    @Override
-    public void cancel() {
-
-    }
-
+    /**
+     * ارسال داده
+     */
     public void submit() {
         syncGetNewCustomerViewModel.customerUniqueId=customerUniqueId;
         startProgressDialog();
         CustomerApi customerApi = new CustomerApi(getContext());
         customerApi.runWebRequest(customerApi.postCustomerZarCustomerInfo(syncGetNewCustomerViewModel),
                 new WebCallBack<String>() {
-            @Override
-            protected void onFinish() {
-                stopProgressDialog();
-            }
+                    @Override
+                    protected void onFinish() {
+                        stopProgressDialog();
+                    }
 
-            @Override
-            protected void onSuccess(String result, Request request) {
+                    @Override
+                    protected void onSuccess(String result, Request request) {
 //                if (result != null)
 //                    updateCustomer(result.UniqueId);
 //                else
 //                    showErrorDialog(R.string.error_saving_customer);
-                sendNationalImage(result);
+                        sendNationalImage(result);
 
 
 
-            }
-
-            @Override
-            protected void onApiFailure(ApiError error, Request request) {
-                String err = WebApiErrorBody.log(error, getContext());
-                showErrorDialog(err);
-            }
-
-            @Override
-            protected void onNetworkFailure(Throwable t, Request request) {
-                showErrorDialog(R.string.network_error);
-            }
-        });
-
-    }
-
-    private void updateCustomer(UUID customerId) {
-        CustomersUpdateFlow flow = new CustomersUpdateFlow(getContext(), customerId);
-        flow.syncCustomersAndInitPromotionDb(new UpdateCall() {
-            @Override
-            protected void onSuccess() {
-                try {
-                    new CustomerCallManager(getContext()).saveEditCustomerCall(customerId);
-                    if (onCustomerEditedCallBack != null)
-                        onCustomerEditedCallBack.done();
-                    dismiss();
-                } catch (Exception e) {
-                    showErrorDialog(R.string.error_saving_request);
-                }
-            }
-
-            @Override
-            protected void onFailure(String error) {
-                showErrorDialog(R.string.error_saving_request);
-            }
-        });
-    }
-
-
-
-    private void createSyncViewModel() {
-       // syncGetNewCustomerViewModel.CityId = cityNamePairedItem.getValue();
-        String postcode=postalCodePairedItem.getValue();
-        String codenaghsh=code_naghsh_paired_item.getValue();
-        DataForRegisterModel group1 = customerGroup1Spinner.getSelectedItem();
-        DataForRegisterModel group2 = customerGroup2Spinner.getSelectedItem();
-        DataForRegisterModel degree = customerDegreeSpinner.getSelectedItem();
-
-        if (file == null) {
-            CuteMessageDialog dialog = new CuteMessageDialog(getContext());
-            dialog.setIcon(Icon.Error);
-            dialog.setTitle(R.string.error);
-            dialog.setMessage(getString(R.string.taking_picture_of) + "کارت ملی " + " " + getString(R.string.is_mandatory));
-            dialog.setPositiveButton(R.string.ok, null);
-            dialog.show();
-            return;
-        }
-
-        if (postcode !=null && !postcode.equals("") && !postcode.isEmpty()
-                &&!codenaghsh.isEmpty() &&codenaghsh !=null&&!codenaghsh.equals("")) {
-            if (addressPairedItem!=null&&personNamePairedItem!=null&&group1!=null&&group2!=null) {
-
-                syncGetNewCustomerViewModel = new SyncZarGetNewCustomerViewModel();
-                syncGetNewCustomerViewModel.CustomerCode = customer.CustomerCode;
-                syncGetNewCustomerViewModel.PersonName = personNamePairedItem.getValue();
-                syncGetNewCustomerViewModel.StoreName = tabloNamePairedItem.getValue();
-                syncGetNewCustomerViewModel.Street = addressPairedItem.getValue();
-                syncGetNewCustomerViewModel.Street2 = street2PairedItem.getValue();
-                syncGetNewCustomerViewModel.Street3 = street3PairedItem.getValue();
-                syncGetNewCustomerViewModel.Street4 = street4PairedItem.getValue();
-                syncGetNewCustomerViewModel.Street5 = street5PairedItem.getValue();
-                String convertPostalCode = ConvertFaNumType.convert(postalCodePairedItem.getValue());
-                syncGetNewCustomerViewModel.PostalCode = convertPostalCode;
-
-                syncGetNewCustomerViewModel.Tel = telPairedItem.getValue();
-                syncGetNewCustomerViewModel.Mobile = mobilePairedItem.getValue();
-                syncGetNewCustomerViewModel.CodeNaghsh = code_naghsh_paired_item.getValue();
-                syncGetNewCustomerViewModel.EconomicCode = economicCodePairedItem.getValue();
-                syncGetNewCustomerViewModel.NationalCode = nationalCodePairedItem.getValue();
-//        CityModel city = citySpinner.getSelectedItem();
-//        if (city != null)
-//            syncGetNewCustomerViewModel.CityId = city.UniqueId;
-
-                DataForRegisterModel zone = deliveryZoneSpinner.getSelectedItem();
-                if (zone != null)
-                    syncGetNewCustomerViewModel.TRANSPZONE = zone.FieldKey;
-
-
-                if (degree != null)
-                    syncGetNewCustomerViewModel.KUKLA = degree.FieldKey;
-
-                DataForRegisterModel sale = saleZonesSpinner.getSelectedItem();
-                if (sale != null)
-                    syncGetNewCustomerViewModel.BZIRK = sale.FieldKey;
-
-//        DataForRegisterModel group = customerGroupSpinner.getSelectedItem();
-//        if (group != null)
-//            syncGetNewCustomerViewModel.KDGRP = group.FieldKey;
-
-
-                if (group1 != null) {
-                    syncGetNewCustomerViewModel.KVGR1 = group1.FieldKey;
-                    syncGetNewCustomerViewModel.KDGRP = group1.FieldKey;
-                }
-
-                if (group2 != null)
-                    syncGetNewCustomerViewModel.KVGR2 = group2.FieldKey;
-
-                validator.validate(this);
-            }else {
-                showErrorDialog("نام مشتری ,آدرس مشتری ,گروه مشتری1 , گروه مشتری 2و درجه مشتری  را ثیت کنید ");
-            }
-        }else {
-            showErrorDialog("کد پستی و کدنقش مشتری را ثبت کنید ");
-        }
-    }
-
-
-    @Override
-    public void onValidationSucceeded() {
-        submit();
-    }
-
-    @Override
-    public void onValidationFailed(List<ValidationError> errors) {
-        validator.showErrors(errors);
-    }
-
-
-
-
-    public interface OnCustomerEditedCallBack {
-        void done();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString("68565e5e-d407-4858-bc5f-fd52b9318734", customer.UniqueId.toString());
-    }
-
-    private void showErrorDialog(@StringRes int err) {
-        Context context = getContext();
-        if (context != null) {
-            CuteMessageDialog dialog = new CuteMessageDialog(context);
-            dialog.setTitle(R.string.error);
-            dialog.setIcon(Icon.Error);
-            dialog.setMessage(err);
-            dialog.setPositiveButton(R.string.ok, null);
-            dialog.show();
-        }
-    }
-
-    private void showErrorDialog(String err) {
-        Context context = getContext();
-        if (context != null) {
-            CuteMessageDialog dialog = new CuteMessageDialog(context);
-            dialog.setTitle(R.string.error);
-            dialog.setIcon(Icon.Error);
-            dialog.setMessage(err);
-            dialog.setPositiveButton(R.string.ok, null);
-            dialog.show();
-        }
-    }
-    private void showResaltDialog(String err) {
-        Context context = getContext();
-        if (context != null) {
-            CuteMessageDialog dialog = new CuteMessageDialog(context);
-            dialog.setTitle(R.string.getsettings);
-            dialog.setIcon(Icon.Info);
-            dialog.setMessage(err);
-            dialog.setPositiveButton(R.string.ok, null);
-            dialog.show();
-            dismiss();
-        }
-    }
-
-    private void startProgressDialog() {
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage(getString(R.string.please_wait));
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-    }
-
-    private void stopProgressDialog() {
-        if (getVaranegarActvity() != null && progressDialog != null && progressDialog.isShowing())
-            try {
-                progressDialog.dismiss();
-            } catch (Exception ignored) {
-
-            }
-    }
-
-    //send request get code naghsh
-
-    private void  getDataCodeNaghsh(){
-
-
-        String economicCode=economicCodePairedItem.getValue();
-        String nationalCode=nationalCodePairedItem.getValue();
-
-        roleCodeCustomerViewModel=new RoleCodeCustomerRequestViewModel();
-        roleCodeCustomerViewModel.CustomerId=customerUniqueId;
-        roleCodeCustomerViewModel.NationalCode=nationalCode;
-        roleCodeCustomerViewModel.EconomicCode=economicCode;
-
-        if (economicCode!=null&&!economicCode.equals("")&&economicCode.length()==11||
-                nationalCode!=null&&!nationalCode.equals("")&&nationalCode.length()==10){
-
-            ApiNew apiNew=new ApiNew(getContext());
-          Call<List<RoleCodeViewModel>> calll=apiNew.getCodeNaghsh(roleCodeCustomerViewModel);
-            startProgressDialog();
-
-            apiNew.runWebRequest(calll, new WebCallBack<List<RoleCodeViewModel>>() {
-                @Override
-                protected void onFinish() {
-                    stopProgressDialog();
-                }
-
-                @Override
-                protected void onSuccess(List<RoleCodeViewModel> result, Request request) {
-
-                    if (result.size()>0){
-
-                            dialogShow(result);
-
-                    }else {
-                        showErrorDialog("یرای این کد ملی کد نقش ثبت نشده است ");
                     }
-                }
 
-                @Override
-                protected void onApiFailure(ApiError error, Request request) {
-                    String err = WebApiErrorBody.log(error, getContext());
-                    if (isResumed()) {
+                    @Override
+                    protected void onApiFailure(ApiError error, Request request) {
+                        String err = WebApiErrorBody.log(error, getContext());
                         showErrorDialog(err);
-
                     }
-                }
 
-                @Override
-                protected void onNetworkFailure(Throwable t, Request request) {
-                    if (isResumed()) {
+                    @Override
+                    protected void onNetworkFailure(Throwable t, Request request) {
                         showErrorDialog(getString(R.string.network_error));
-
                     }
-                }
-            });
+                });
 
-        }else {
-            showErrorDialog("کد ملی و کداقتصادی مشتری را ثبت کنید ");
-        }
     }
 
-
+    /**
+     * ارسال عکس
+     * @param result
+     */
     private void sendNationalImage(String result) {
         if (getContext() == null) return;
         progressDialog = new ProgressDialog(getContext());
@@ -956,6 +826,10 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
 
 
 
+    /**
+     * دیالوگ ست کردن کد نقش
+     * @param roleCodeViewModel
+     */
     private void dialogShow(List<RoleCodeViewModel> roleCodeViewModel){
         String[] data = new String[roleCodeViewModel.size()];
         roleCodeViewModels=roleCodeViewModel;
@@ -969,18 +843,10 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
         singleChoiceDialog.show(getActivity().getSupportFragmentManager(),
                 "Single Choice Dialog");
     }
-    @Override
-    public void onPositiveButtonClicked(String[] list, int position) {
-        code_naghsh_paired_item.setValue(roleCodeViewModels.get(position).Code);
-        request_codenaghsh.setVisibility(View.GONE);
-        nationalCodePairedItem.setEnabled(false);
-        nationalCodePairedItem.setFocusable(false);
-        economicCodePairedItem.setFocusable(false);
-        economicCodePairedItem.setFocusableInTouchMode(false);
-        economicCodePairedItem.setEnabled(false);
-        nationalCodePairedItem.setFocusableInTouchMode(false);
-    }
 
+    /**
+     * دوربین عکس
+     */
     //region capture image
     File file = null;
     static final int REQUEST_IMAGE_CAPTURE = 0;
@@ -998,7 +864,9 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
         currentPhotoPath = image.getAbsolutePath();
         return image;
     }
-
+    /**
+     * دوربین عکس
+     */
     Uri photoURI;
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -1014,12 +882,14 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
                         getActivity().getPackageName()+ ".provider",
                         file);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-               startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
         }
     }
 
-
+    /**
+     * دوربین عکس
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
@@ -1035,8 +905,70 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
         }
     }
 
-    @Override
-    public void onNegativeButtonClicked() {
 
+
+
+
+
+    private void stopProgressDialog() {
+        if (getVaranegarActvity() != null && progressDialog != null && progressDialog.isShowing())
+            try {
+                progressDialog.dismiss();
+            } catch (Exception ignored) {
+
+            }
     }
+    private void enableForm(boolean enabled) {
+        isEnabled = enabled;
+        personNamePairedItem.setEnabled(enabled);
+        tabloNamePairedItem.setEnabled(enabled);
+        addressPairedItem.setEnabled(enabled);
+        street2PairedItem.setEnabled(enabled);
+        street3PairedItem.setEnabled(enabled);
+        street4PairedItem.setEnabled(enabled);
+        street5PairedItem.setEnabled(enabled);
+        postalCodePairedItem.setEnabled(enabled);
+        telPairedItem.setEnabled(enabled);
+        mobilePairedItem.setEnabled(enabled);
+
+//        citySpinner.setEnabled(enabled);
+        deliveryZoneSpinner.setEnabled(false);
+        saleZonesSpinner.setEnabled(false);
+        customerDegreeSpinner.setEnabled(enabled);
+//        customerGroupSpinner.setEnabled(enabled);
+        customerGroup1Spinner.setEnabled(enabled);
+        customerGroup2Spinner.setEnabled(enabled);
+    }
+
+    private void showResaltDialog(String err) {
+        Context context = getContext();
+        if (context != null) {
+            CuteMessageDialog dialog = new CuteMessageDialog(context);
+            dialog.setTitle(R.string.getsettings);
+            dialog.setIcon(Icon.Info);
+            dialog.setMessage(err);
+            dialog.setPositiveButton(R.string.ok, null);
+            dialog.show();
+
+        }
+    }
+
+    private void startProgressDialog() {
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage(getString(R.string.please_wait));
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
+    private void showErrorDialog(String err) {
+        Context context = getContext();
+        if (context != null) {
+            CuteMessageDialog dialog = new CuteMessageDialog(context);
+            dialog.setTitle(R.string.error);
+            dialog.setIcon(Icon.Error);
+            dialog.setMessage(err);
+            dialog.setPositiveButton(R.string.ok, null);
+            dialog.show();
+        }
+    }
+
 }

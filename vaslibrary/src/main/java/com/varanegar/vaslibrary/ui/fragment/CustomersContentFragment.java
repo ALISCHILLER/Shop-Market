@@ -531,7 +531,7 @@ public class CustomersContentFragment extends VaranegarFragment {
                                         code_naghsh_paired_item.
                                                 setBackgroundColor(getContext()
                                                         .getResources().getColor(R.color.red));
-                                        showEditDialog();
+                                       // showEditDialog();
                                     }
                                 }
                                 ((PairedItems) view
@@ -929,7 +929,7 @@ public class CustomersContentFragment extends VaranegarFragment {
             dialog.setOnResult(new InsertPinDialog.OnResult() {
                 @Override
                 public void done() {
-                    showEditDialog();
+                    //showEditDialog();
                 }
 
                 @Override
@@ -956,7 +956,7 @@ public class CustomersContentFragment extends VaranegarFragment {
             dialog.setOnResult(new InsertPinDialog.OnResult() {
                 @Override
                 public void done() {
-                    showEditDialog();
+                   // showEditDialog();
                 }
 
                 @Override

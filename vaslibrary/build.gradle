@@ -59,4 +59,5 @@ dependencies {
     implementation 'io.github.inflationx:viewpump:2.0.3'
     implementation 'com.google.maps.android:android-maps-utils:2.2.3'
     implementation 'com.github.bmelnychuk:atv:1.2.+'
+
 }
