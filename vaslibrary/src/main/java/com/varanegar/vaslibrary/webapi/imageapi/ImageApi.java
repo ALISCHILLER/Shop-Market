@@ -40,7 +40,8 @@ public class ImageApi extends BaseApi {
                         imageViewModel.file
                 );
         MultipartBody.Part body =
-                MultipartBody.Part.createFormData(imageViewModel.imageId + ".jpg", imageViewModel.file.getName() + ".jpg", requestFile);
+                MultipartBody.Part.createFormData(imageViewModel.imageId + ".jpg",
+                        imageViewModel.file.getName() + ".jpg", requestFile);
         String auth = getToken(TokenType.UserToken);
         return retrofit.create(IImageApi.class)
                 .postImage(ownerKeysWrapper.OwnerKey,
