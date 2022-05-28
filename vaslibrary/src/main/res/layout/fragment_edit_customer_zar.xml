@@ -10,6 +10,7 @@
         android:layout_height="@dimen/toolbarSize"
         android:background="?attr/colorPrimary"
         android:elevation="@dimen/elevation_default"
+        android:id="@+id/camera_linear_view"
         tools:targetApi="lollipop">
 
         <TextView

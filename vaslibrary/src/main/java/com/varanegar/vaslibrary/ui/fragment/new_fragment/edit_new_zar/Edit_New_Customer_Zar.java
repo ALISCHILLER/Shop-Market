@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -94,6 +95,8 @@ public class Edit_New_Customer_Zar extends VaranegarFragment  implements Validat
     private PairedItemsEditable street5PairedItem;
     private PairedItemsEditable postalCodePairedItem;
     private PairedItemsEditable code_naghsh_paired_item;
+    private LinearLayout camera_linear_view;
+    private ImageView save_customer_image;
     private Button request_codenaghsh;
     //    private PairedItemsSpinner<CityModel> citySpinner;
     private PairedItemsSpinner<DataForRegisterModel> deliveryZoneSpinner;
@@ -283,8 +286,9 @@ public class Edit_New_Customer_Zar extends VaranegarFragment  implements Validat
         validator.addField(customerGroup1Spinner, getString(R.string.customer_group_1), new NotEmptyChecker());
 
         customerGroup2Spinner = view.findViewById(R.id.customer_group2_spinner);
-
-        view.findViewById(R.id.save_image_view).setOnClickListener(v -> {
+        camera_linear_view= view.findViewById(R.id.camera_linear_view);
+        save_customer_image=  view.findViewById(R.id.save_customer_image);
+        save_customer_image.setOnClickListener(v -> {
             createSyncViewModel();
 
                 });
@@ -585,7 +589,9 @@ public class Edit_New_Customer_Zar extends VaranegarFragment  implements Validat
         }
         if (!customer.NationalCode.isEmpty()) {
             nationalCodePairedItem.setValue(customer.NationalCode);
-
+            camera_linear_view.setVisibility(View.GONE);
+        }else {
+            camera_linear_view.setVisibility(View.VISIBLE);
         }
 
 
