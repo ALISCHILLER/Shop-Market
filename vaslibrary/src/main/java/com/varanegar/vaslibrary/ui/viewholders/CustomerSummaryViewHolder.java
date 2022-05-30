@@ -41,7 +41,7 @@ public class CustomerSummaryViewHolder extends BaseViewHolder<CustomerPathViewMo
     private LinearLayout descriptionLayout;
     private TextView descriptionTextView;
     private BackOfficeType backOfficeType;
-    //private ImageView customerImageView;
+    //private ImageUrlViewDialog customerImageView;
 
     public CustomerSummaryViewHolder(View itemView, BaseRecyclerAdapter<CustomerPathViewModel> recyclerAdapter, BackOfficeType backOfficeType) {
         super(itemView, recyclerAdapter, recyclerAdapter.getActivity());
@@ -50,7 +50,7 @@ public class CustomerSummaryViewHolder extends BaseViewHolder<CustomerPathViewMo
         customerNameTextView = (TextView) itemView.findViewById(R.id.customer_name_text_view);
         customerAddressTextView = (TextView) itemView.findViewById(R.id.customer_address_text_view);
         customerStatusTextView = (TextView) itemView.findViewById(R.id.customer_status_text_view);
-        //customerImageView = (ImageView) itemView.findViewById(R.id.customer_image_view);
+        //customerImageView = (ImageUrlViewDialog) itemView.findViewById(R.id.customer_image_view);
         storeNameTextView = (TextView) itemView.findViewById(R.id.store_name_text_view);
         telTextView = (TextView) itemView.findViewById(R.id.tel_text_view);
         mobileTextView = (TextView) itemView.findViewById(R.id.mobile_text_view);

@@ -56,6 +56,7 @@ import com.varanegar.supervisor.model.VisitorModel;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
 import com.varanegar.vaslibrary.model.customer.SupervisorCustomerModelRepository;
 import com.varanegar.vaslibrary.model.questionnaire.QuestionnaireCustomerViewModel;
+import com.varanegar.vaslibrary.ui.dialog.new_dialog.ImageUrlViewDialog;
 import com.varanegar.vaslibrary.ui.fragment.QuestionnaireFragment;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 
@@ -190,6 +191,7 @@ public class CustomersFragment extends IMainPageFragment {
                     @Override
                     public void onBind(View view, final SupervisorCustomerModel entity) {
                         ImageView callImageView = null;
+                        ImageView national_image_view=view.findViewById(R.id.national_image_view);
                         ImageView customercondition=view.findViewById(R.id.customer_condition_image_view);
                         if (entity.isPenddingChange!=null) {
                             if (!entity.isPenddingChange) {
@@ -243,6 +245,18 @@ public class CustomersFragment extends IMainPageFragment {
                             }
                         });
 
+                        national_image_view.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                ImageUrlViewDialog urlViewDialog=new ImageUrlViewDialog();
+                                urlViewDialog.setCancelable(false);
+                                urlViewDialog.setClosable(false);
+                                urlViewDialog.setUrlImage("");
+
+                                urlViewDialog.show(requireActivity().getSupportFragmentManager(), "ImageUrlViewDialog");
+                            }
+                        });
                         view.findViewById(R.id.phone_image_view).setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {

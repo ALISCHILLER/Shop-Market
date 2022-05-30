@@ -46,7 +46,7 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
     private TextView descriptionTextView;
     private BackOfficeType backOfficeType;
     private LinearLayout codenaghsh_layout;
-    //private ImageView customerImageView;
+    //private ImageUrlViewDialog customerImageView;
 
     public CustomerSummaryMultipanViewHolder(View itemView,
                                              BaseRecyclerAdapter<CustomerPathViewModel>
@@ -56,7 +56,7 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
         customerNameTextView = (TextView) itemView.findViewById(R.id.customer_name_text_view);
         customerAddressTextView = (TextView) itemView.findViewById(R.id.customer_address_text_view);
         customerStatusTextView = (TextView) itemView.findViewById(R.id.customer_status_text_view);
-        //customerImageView = (ImageView) itemView.findViewById(R.id.customer_image_view);
+        //customerImageView = (ImageUrlViewDialog) itemView.findViewById(R.id.customer_image_view);
         callImageView = (ImageView) itemView.findViewById(R.id.call_image_view);
         storeNameTextView = (TextView) itemView.findViewById(R.id.store_name_text_view);
         customerCodeTextView = (TextView) itemView.findViewById(R.id.customer_code_text_view);

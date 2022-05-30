@@ -13,7 +13,14 @@
         android:paddingLeft="@dimen/padding_default"
         android:paddingRight="@dimen/padding_default"
         android:src="@drawable/ic_mobile_green_24dp" />
-
+    <ImageView
+        android:id="@+id/national_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_default"
+        android:paddingLeft="@dimen/padding_default"
+        android:paddingRight="@dimen/padding_default"
+        android:src="@drawable/ic_baseline_edit_photo_library_24" />
     <ImageView
         android:id="@+id/phone_image_view"
         android:layout_width="wrap_content"

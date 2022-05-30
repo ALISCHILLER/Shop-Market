@@ -199,7 +199,7 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
 
 
 //                    view.setEnabled(false);
-//                    ((ImageView) view).setColorFilter(ContextCompat.getColor(getContext(), R.color.grey), android.graphics.PorterDuff.Mode.MULTIPLY);
+//                    ((ImageUrlViewDialog) view).setColorFilter(ContextCompat.getColor(getContext(), R.color.grey), android.graphics.PorterDuff.Mode.MULTIPLY);
 //                    secondExternalIpLayout.setVisibility(View.VISIBLE);
 
                 }
