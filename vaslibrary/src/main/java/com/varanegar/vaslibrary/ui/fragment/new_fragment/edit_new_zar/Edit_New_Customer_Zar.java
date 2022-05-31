@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
 
 import com.varanegar.framework.base.MainVaranegarActivity;
@@ -95,7 +96,7 @@ public class Edit_New_Customer_Zar extends VaranegarFragment  implements Validat
     private PairedItemsEditable street5PairedItem;
     private PairedItemsEditable postalCodePairedItem;
     private PairedItemsEditable code_naghsh_paired_item;
-    private LinearLayout camera_linear_view;
+    private ConstraintLayout camera_linear_view;
     private ImageView save_customer_image;
     private Button request_codenaghsh;
     //    private PairedItemsSpinner<CityModel> citySpinner;
@@ -310,10 +311,9 @@ public class Edit_New_Customer_Zar extends VaranegarFragment  implements Validat
         validator.showErrors(errors);
     }
 
-    @Override
-    public void onPositiveButtonClicked(String[] list, int position) {
 
-    }
+
+
 
     @Override
     public void onNegativeButtonClicked() {
@@ -321,6 +321,22 @@ public class Edit_New_Customer_Zar extends VaranegarFragment  implements Validat
     }
 
 
+    /**
+     * ست کردن کد نقش بعد از انتخاب
+     * @param list
+     * @param position
+     */
+    @Override
+    public void onPositiveButtonClicked(String[] list, int position) {
+        code_naghsh_paired_item.setValue(roleCodeViewModels.get(position).Code);
+        request_codenaghsh.setVisibility(View.GONE);
+        nationalCodePairedItem.setEnabled(false);
+        nationalCodePairedItem.setFocusable(false);
+        economicCodePairedItem.setFocusable(false);
+        economicCodePairedItem.setFocusableInTouchMode(false);
+        economicCodePairedItem.setEnabled(false);
+        nationalCodePairedItem.setFocusableInTouchMode(false);
+    }
     /**
      * ست کردن داده براس ارسال
      */
@@ -333,7 +349,7 @@ public class Edit_New_Customer_Zar extends VaranegarFragment  implements Validat
         DataForRegisterModel group2 = customerGroup2Spinner.getSelectedItem();
         DataForRegisterModel degree = customerDegreeSpinner.getSelectedItem();
 
-        if (file == null) {
+        if (file == null&&!customer.HasNationalCodeImage) {
             CuteMessageDialog dialog = new CuteMessageDialog(getContext());
             dialog.setIcon(Icon.Error);
             dialog.setTitle(R.string.error);
@@ -589,6 +605,9 @@ public class Edit_New_Customer_Zar extends VaranegarFragment  implements Validat
         }
         if (!customer.NationalCode.isEmpty()) {
             nationalCodePairedItem.setValue(customer.NationalCode);
+
+        }
+        if (customer.HasNationalCodeImage){
             camera_linear_view.setVisibility(View.GONE);
         }else {
             camera_linear_view.setVisibility(View.VISIBLE);

@@ -194,7 +194,8 @@ public class CustomerModel extends BaseModel {
     public String Description;
     @Column
     public String CodeNaghsh;
-
+    @Column
+    public boolean HasNationalCodeImage;
     @Nullable
     public LocationModel getLocation() {
         if (Latitude == 0 && Longitude == 0)

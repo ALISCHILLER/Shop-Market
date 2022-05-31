@@ -10,7 +10,7 @@
         android:layout_height="@dimen/toolbarSize"
         android:background="?attr/colorPrimary"
         android:elevation="@dimen/elevation_default"
-        android:id="@+id/camera_linear_view"
+
         tools:targetApi="lollipop">
 
         <TextView
@@ -182,6 +182,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
+                android:id="@+id/camera_linear_view"
                 android:layout_height="wrap_content">
 
                 <TextView
