@@ -19,7 +19,7 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:padding="@dimen/padding_default"
-            android:text="@string/register_new_customer"
+            android:text="@string/customer_edit"
             android:textColor="@color/white" />
 
         <ImageView

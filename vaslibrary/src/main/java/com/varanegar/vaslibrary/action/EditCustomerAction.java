@@ -15,13 +15,9 @@ import com.varanegar.vaslibrary.manager.customercall.CustomerCallInvoiceManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.OwnerKeysWrapper;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
-import com.varanegar.vaslibrary.manager.tourmanager.TourManager;
 import com.varanegar.vaslibrary.model.call.CustomerCallInvoiceModel;
-import com.varanegar.vaslibrary.model.tour.TourModel;
 import com.varanegar.vaslibrary.ui.dialog.EditCustomerFragmentDialog;
-import com.varanegar.vaslibrary.ui.dialog.EditCustomerZarFragmentDialog;
-import com.varanegar.vaslibrary.ui.dialog.InsertPinDialog;
-import com.varanegar.vaslibrary.ui.fragment.new_fragment.edit_new_zar.Edit_New_Customer_Zar;
+import com.varanegar.vaslibrary.ui.fragment.new_fragment.edit_new_zar.Edit_New_Customer_ZarFragment;
 
 import java.util.List;
 import java.util.UUID;
@@ -182,7 +178,7 @@ public class EditCustomerAction extends CheckBarcodeAction {
 
     private void showEditDialog(){
 
-        Edit_New_Customer_Zar edit_new_customer_zar=new Edit_New_Customer_Zar();
+        Edit_New_Customer_ZarFragment edit_new_customer_zar=new Edit_New_Customer_ZarFragment();
           Bundle bundle = new Bundle();
         bundle.putString("68565e5e-d407-4858-bc5f-fd52b9318734", getSelectedId().toString());
         edit_new_customer_zar.setArguments(bundle);

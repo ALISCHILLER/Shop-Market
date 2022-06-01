@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 
 /**
  * This class is responsible for internet status checking
+ * Ali Soleymani
  */
 public class CheckInternetConnection {
 

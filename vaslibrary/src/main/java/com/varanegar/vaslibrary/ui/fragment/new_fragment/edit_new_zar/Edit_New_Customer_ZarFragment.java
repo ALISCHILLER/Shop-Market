@@ -5,6 +5,7 @@ import static android.app.Activity.RESULT_OK;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -59,6 +60,7 @@ import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.model.dataforregister.DataForRegisterModel;
 import com.varanegar.vaslibrary.ui.dialog.EditCustomerZarFragmentDialog;
 import com.varanegar.vaslibrary.ui.dialog.new_dialog.SingleChoiceDialog;
+import com.varanegar.vaslibrary.ui.fragment.CustomersContentFragment;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.apiNew.ApiNew;
 import com.varanegar.vaslibrary.webapi.apiNew.modelNew.RoleCodeCustomerRequestViewModel;
@@ -80,7 +82,7 @@ import okhttp3.Request;
 import retrofit2.Call;
 import timber.log.Timber;
 
-public class Edit_New_Customer_Zar extends VaranegarFragment  implements ValidationListener
+public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements ValidationListener
         ,SingleChoiceDialog.SingleChoiceListener {
 
     CustomerModel customer;
@@ -299,6 +301,7 @@ public class Edit_New_Customer_Zar extends VaranegarFragment  implements Validat
                 getDataCodeNaghsh();
             }
         });
+
     }
 
     @Override
@@ -812,7 +815,7 @@ public class Edit_New_Customer_Zar extends VaranegarFragment  implements Validat
     private void sendNationalImage(String result) {
         if (getContext() == null) return;
         progressDialog = new ProgressDialog(getContext());
-        progressDialog.setMessage(getString(R.string.registering_new_customer));
+        progressDialog.setMessage(getString(R.string.please_wait));
         progressDialog.setCancelable(false);
         progressDialog.show();
         new PictureCustomerViewManager(getContext())
@@ -965,6 +968,13 @@ public class Edit_New_Customer_Zar extends VaranegarFragment  implements Validat
         customerGroup2Spinner.setEnabled(enabled);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+
+    }
+
     private void showResaltDialog(String err) {
         Context context = getContext();
         if (context != null) {
@@ -974,7 +984,10 @@ public class Edit_New_Customer_Zar extends VaranegarFragment  implements Validat
             dialog.setMessage(err);
             dialog.setPositiveButton(R.string.ok, null);
             dialog.show();
-
+            CustomersContentFragment contentFragment=new CustomersContentFragment();
+            contentFragment.addArgument("a129ef75-77ce-432a-8982-6bcab0bf7b51", customer.UniqueId.toString());
+            contentFragment.addArgument("a129ef75-77ce-432a-8982-6bcab0bf7b52", true);
+            getVaranegarActvity().pushFragment(contentFragment);
         }
     }
 

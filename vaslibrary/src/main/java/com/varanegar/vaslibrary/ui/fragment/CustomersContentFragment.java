@@ -97,6 +97,7 @@ import com.varanegar.vaslibrary.model.tour.TourModel;
 import com.varanegar.vaslibrary.ui.dialog.EditCustomerZarFragmentDialog;
 import com.varanegar.vaslibrary.ui.dialog.InsertPinDialog;
 import com.varanegar.vaslibrary.ui.drawer.CustomerReportsDrawerAdapter;
+import com.varanegar.vaslibrary.ui.fragment.new_fragment.edit_new_zar.Edit_New_Customer_ZarFragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -123,6 +124,7 @@ public class CustomersContentFragment extends VaranegarFragment {
     private VasActionsAdapter actionsAdapter;
     private SimpleToolbar simpleToolbar;
     private MapView mapView;
+    private Boolean un2;
     private PairedItems code_naghsh_paired_item;
     protected VasActionsAdapter getActionsAdapter() {
         return actionsAdapter;
@@ -136,8 +138,11 @@ public class CustomersContentFragment extends VaranegarFragment {
             if (getArguments() == null)
                 return null;
 
+            un2= getArguments().getBoolean("a129ef75-77ce-432a-8982-6bcab0bf7b52",false);
+
             return UUID.fromString(getArguments()
                     .getString("a129ef75-77ce-432a-8982-6bcab0bf7b51"));
+
         } catch (Exception ex) {
             return null;
         }
@@ -147,6 +152,7 @@ public class CustomersContentFragment extends VaranegarFragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("a129ef75-77ce-432a-8982-6bcab0bf7b51", getSelectedId().toString());
+        un2= getArguments().getBoolean("a129ef75-77ce-432a-8982-6bcab0bf7b52",false);
     }
 
     @Override
@@ -531,7 +537,8 @@ public class CustomersContentFragment extends VaranegarFragment {
                                         code_naghsh_paired_item.
                                                 setBackgroundColor(getContext()
                                                         .getResources().getColor(R.color.red));
-                                       // showEditDialog();
+                                        if (un2!=null&&!un2)
+                                            showEditDialog();
                                     }
                                 }
                                 ((PairedItems) view
@@ -976,14 +983,21 @@ public class CustomersContentFragment extends VaranegarFragment {
 
 
     private void showEditDialog(){
-        EditCustomerZarFragmentDialog editCustomerFragmentDialog =
-                new EditCustomerZarFragmentDialog();
-       // editCustomerFragmentDialog.onCustomerEditedCallBack = this::runActionCallBack;
+//        EditCustomerZarFragmentDialog editCustomerFragmentDialog =
+//                new EditCustomerZarFragmentDialog();
+//       // editCustomerFragmentDialog.onCustomerEditedCallBack = this::runActionCallBack;
+//        Bundle bundle = new Bundle();
+//        bundle.putString("68565e5e-d407-4858-bc5f-fd52b9318734", getSelectedId().toString());
+//        editCustomerFragmentDialog.setArguments(bundle);
+//        editCustomerFragmentDialog.show(getActivity().getSupportFragmentManager(),
+//                "EditCustomerFragmentDialog");
+
+
+        Edit_New_Customer_ZarFragment edit_new_customer_zar=new Edit_New_Customer_ZarFragment();
         Bundle bundle = new Bundle();
         bundle.putString("68565e5e-d407-4858-bc5f-fd52b9318734", getSelectedId().toString());
-        editCustomerFragmentDialog.setArguments(bundle);
-        editCustomerFragmentDialog.show(getActivity().getSupportFragmentManager(),
-                "EditCustomerFragmentDialog");
+        edit_new_customer_zar.setArguments(bundle);
+        getVaranegarActvity().pushFragment(edit_new_customer_zar);
     }
 
     private void printFailed(Context context, String error) {

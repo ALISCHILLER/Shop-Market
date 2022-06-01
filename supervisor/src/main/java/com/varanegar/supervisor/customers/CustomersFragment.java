@@ -56,6 +56,7 @@ import com.varanegar.supervisor.model.VisitorModel;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
 import com.varanegar.vaslibrary.model.customer.SupervisorCustomerModelRepository;
 import com.varanegar.vaslibrary.model.questionnaire.QuestionnaireCustomerViewModel;
+import com.varanegar.vaslibrary.ui.dialog.InsertPinDialog;
 import com.varanegar.vaslibrary.ui.dialog.new_dialog.ImageUrlViewDialog;
 import com.varanegar.vaslibrary.ui.fragment.QuestionnaireFragment;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
@@ -252,9 +253,23 @@ public class CustomersFragment extends IMainPageFragment {
                                 ImageUrlViewDialog urlViewDialog=new ImageUrlViewDialog();
                                 urlViewDialog.setCancelable(false);
                                 urlViewDialog.setClosable(false);
-                                urlViewDialog.setUrlImage("");
 
+                                String imageUrl = "/Content/Images/NationalCard/orginalImage/%1$s/%1$s.jpg";
+                                imageUrl = String.format(imageUrl, entity.UniqueId);
+                                urlViewDialog.setUrlImage(imageUrl);
+                                urlViewDialog.setOnResult(new ImageUrlViewDialog.OnResult() {
+                                    @Override
+                                    public void done() {
+                                        urlViewDialog.dismiss();
+                                    }
+
+                                    @Override
+                                    public void failed(String error) {
+                                        urlViewDialog.dismiss();
+                                    }
+                                });
                                 urlViewDialog.show(requireActivity().getSupportFragmentManager(), "ImageUrlViewDialog");
+
                             }
                         });
                         view.findViewById(R.id.phone_image_view).setOnClickListener(new View.OnClickListener() {
