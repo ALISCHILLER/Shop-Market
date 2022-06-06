@@ -7,6 +7,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -537,7 +538,13 @@ public class CustomersContentFragment extends VaranegarFragment {
                                         code_naghsh_paired_item.
                                                 setBackgroundColor(getContext()
                                                         .getResources().getColor(R.color.red));
-                                        if (un2!=null&&!un2)
+                                        SharedPreferences sharedPreferences = getContext()
+                                                .getSharedPreferences("preferred_local", Context.MODE_PRIVATE);
+                                        String un3=sharedPreferences.getString(customer.UniqueId.toString()
+                                                ,"");
+                                        sharedPreferences.edit()
+                                                .putString(customer.UniqueId.toString(),"").apply();
+                                        if (un3!=null&&un3.isEmpty()&&un3.equals(""))
                                             showEditDialog();
                                     }
                                 }
