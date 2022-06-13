@@ -111,7 +111,9 @@ public interface ISupervisorApi {
     Call<List<VisitorModel>> getVisitors(@Path("supervisorId") String supervisorId);
 
     @GET("api/v2/ngt/reviewreport/Order")
-    Call<List<OrderReviewReportViewModel>> order(@Query("DealerId") String dealerId, @Query("StartDate") String startDate, @Query("EndDate") String endDate);
+    Call<List<OrderReviewReportViewModel>> order(@Query("DealerId") String dealerId,
+                                                 @Query("StartDate") String startDate,
+                                                 @Query("EndDate") String endDate);
 
     @POST("api/v2/ngt/ReviewReport/Order")
     Call<List<ReviewreportModel>> Reviewreport(@Body StatusConfigModel statusConfigModel);
