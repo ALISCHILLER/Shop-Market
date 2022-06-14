@@ -24,7 +24,8 @@ public class DiscountInitializeHandlerV3 {
             if (sysConfigManager.getBackOfficeType().equals(BackOfficeType.Rastak)){
                 return new DiscountInitializeHandlerVnLite(context);
             }else
-            if (sysConfigManager.getBackOfficeType().equals(BackOfficeType.Varanegar) || sysConfigManager.getBackOfficeType().equals(BackOfficeType.ThirdParty))
+            if (sysConfigManager.getBackOfficeType().equals(BackOfficeType.Varanegar) ||
+                    sysConfigManager.getBackOfficeType().equals(BackOfficeType.ThirdParty))
             {
                 return new DiscountInitializeHandlerSDS(context);
             }

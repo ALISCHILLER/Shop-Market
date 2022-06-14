@@ -404,53 +404,60 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
 
                     @Override
                     protected void onSuccess(final SyncGuidViewModel result, Request request) {
-                        CustomersUpdateFlow flow =
-                                new CustomersUpdateFlow(getContext(), result.UniqueId);
-                        flow.syncCustomersAndInitPromotionDb(new UpdateCall() {
-                            @Override
-                            protected void onSuccess() {
-                                final CustomerManager customerManager =
-                                        new CustomerManager(getActivity());
-                                List<CustomerModel> customerModels = customerManager.getAll();
-                                boolean customerAddedToDb = false;
-                                for (final CustomerModel customerModel : customerModels) {
-                                    if (customerModel.UniqueId != null &&
-                                            customerModel.UniqueId.equals(result.UniqueId)) {
-                                        customerModel.IsNewCustomer = true;
-                                        customerAddedToDb = true;
-                                        try {
-                                            customerManager.update(customerModel);
-                                        } catch (Exception e) {
-                                            Timber.e(e);
-                                        }
-                                        break;
-                                    }
-                                }
-                                String messageRes;
-                                if (customerAddedToDb)
-                                    messageRes = String.valueOf(R.string.registering_customer_completed);
-                                else
-                                    messageRes = String.valueOf(R.string.registering_customer_completed_but_not_inserted_in_db);
-                                stopProgressDialog();
-                                sendNationalImage(messageRes, result);
-
-
-                            }
-
-                            @Override
-                            protected void onFailure(String error) {
-                                MainVaranegarActivity activity = getVaranegarActvity();
-                                if (activity != null && !activity.isFinishing()) {
-                                    stopProgressDialog();
-                                    CuteMessageDialog dialog = new CuteMessageDialog(activity);
-                                    dialog.setMessage(error);
-                                    dialog.setTitle(R.string.error);
-                                    dialog.setIcon(Icon.Error);
-                                    dialog.setPositiveButton(R.string.ok, null);
-                                    dialog.show();
-                                }
-                            }
-                        });
+                        stopProgressDialog();
+                        //                        CustomersUpdateFlow flow =
+//                                new CustomersUpdateFlow(getContext(), result.UniqueId);
+//                        flow.syncCustomersAndInitPromotionDb(new UpdateCall() {
+//                            @Override
+//                            protected void onSuccess() {
+//                                final CustomerManager customerManager =
+//                                        new CustomerManager(getActivity());
+//                                List<CustomerModel> customerModels = customerManager.getAll();
+//                                boolean customerAddedToDb = false;
+//                                for (final CustomerModel customerModel : customerModels) {
+//                                    if (customerModel.UniqueId != null &&
+//                                            customerModel.UniqueId.equals(result.UniqueId)) {
+//                                        customerModel.IsNewCustomer = true;
+//                                        customerAddedToDb = true;
+//                                        try {
+//                                            customerManager.update(customerModel);
+//                                        } catch (Exception e) {
+//                                            Timber.e(e);
+//                                        }
+//                                        break;
+//                                    }
+//                                }
+//                                String messageRes;
+//                                if (customerAddedToDb)
+//                                    messageRes = String.valueOf(R.string.registering_customer_completed);
+//                                else
+//                                    messageRes = String.valueOf(R.string.registering_customer_completed_but_not_inserted_in_db);
+//                                stopProgressDialog();
+//                                sendNationalImage(messageRes, result);
+//
+//
+//                            }
+//
+//                            @Override
+//                            protected void onFailure(String error) {
+//                                MainVaranegarActivity activity = getVaranegarActvity();
+//                                if (activity != null && !activity.isFinishing()) {
+//                                    stopProgressDialog();
+//                                    CuteMessageDialog dialog = new CuteMessageDialog(activity);
+//                                    dialog.setMessage(error);
+//                                    dialog.setTitle(R.string.error);
+//                                    dialog.setIcon(Icon.Error);
+//                                    dialog.setPositiveButton(R.string.ok, null);
+//                                    dialog.show();
+//                                }
+//                            }
+//                        });
+                        if (result != null) {
+                            String messageRes;
+                            messageRes = String.valueOf(R.string.registering_customer_completed);
+                           // stopProgressDialog();
+                            sendNationalImage(messageRes, result);
+                        }
                     }
 
                     @Override
@@ -542,8 +549,8 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
                         if (activity != null && !activity.isFinishing()) {
                             stopProgressDialog();
                             CuteMessageDialog dialog = new CuteMessageDialog(activity);
-                            dialog.setMessage(messageRes);
                             dialog.setTitle(R.string.done);
+                            dialog.setMessage("مشتری جدید با موفقیت ثبت شد");
                             dialog.setIcon(Icon.Success);
                             dialog.setPositiveButton(R.string.ok,
                                     v -> activity.popFragment());
