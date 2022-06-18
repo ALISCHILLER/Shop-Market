@@ -89,7 +89,8 @@ public class CameraFragment extends VisitFragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         customerId = UUID.fromString(getArguments().getString("97a0e5da-48c8-44de-8aed-7fb2be8678aa"));
         CustomerCallManager callManager = new CustomerCallManager(getContext());
         try {
