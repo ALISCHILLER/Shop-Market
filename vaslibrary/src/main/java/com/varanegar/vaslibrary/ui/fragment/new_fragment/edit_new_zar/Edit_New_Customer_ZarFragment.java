@@ -992,7 +992,6 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
             setSharedPer();
             CustomersContentFragment contentFragment=new CustomersContentFragment();
             contentFragment.addArgument("a129ef75-77ce-432a-8982-6bcab0bf7b51", customer.UniqueId.toString());
-            contentFragment.addArgument("a129ef75-77ce-432a-8982-6bcab0bf7b52", true);
             getVaranegarActvity().pushFragment(contentFragment);
         }
     }

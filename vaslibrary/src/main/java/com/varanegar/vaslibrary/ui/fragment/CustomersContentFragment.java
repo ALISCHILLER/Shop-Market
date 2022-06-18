@@ -125,7 +125,6 @@ public class CustomersContentFragment extends VaranegarFragment {
     private VasActionsAdapter actionsAdapter;
     private SimpleToolbar simpleToolbar;
     private MapView mapView;
-    private Boolean un2;
     private PairedItems code_naghsh_paired_item;
     protected VasActionsAdapter getActionsAdapter() {
         return actionsAdapter;
@@ -139,8 +138,6 @@ public class CustomersContentFragment extends VaranegarFragment {
             if (getArguments() == null)
                 return null;
 
-            un2= getArguments().getBoolean("a129ef75-77ce-432a-8982-6bcab0bf7b52",false);
-
             return UUID.fromString(getArguments()
                     .getString("a129ef75-77ce-432a-8982-6bcab0bf7b51"));
 
@@ -153,7 +150,6 @@ public class CustomersContentFragment extends VaranegarFragment {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("a129ef75-77ce-432a-8982-6bcab0bf7b51", getSelectedId().toString());
-        un2= getArguments().getBoolean("a129ef75-77ce-432a-8982-6bcab0bf7b52",false);
     }
 
     @Override
