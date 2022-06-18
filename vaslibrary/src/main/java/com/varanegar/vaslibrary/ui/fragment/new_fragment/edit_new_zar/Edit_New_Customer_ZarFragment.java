@@ -3,20 +3,26 @@ package com.varanegar.vaslibrary.ui.fragment.new_fragment.edit_new_zar;
 import static android.app.Activity.RESULT_OK;
 
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,8 +30,13 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.otaliastudios.cameraview.CameraListener;
+import com.otaliastudios.cameraview.CameraUtils;
+import com.otaliastudios.cameraview.CameraView;
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarFragment;
+import com.varanegar.framework.base.questionnaire.controls.AttachImageDialog;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.util.Linq;
@@ -70,7 +81,10 @@ import com.varanegar.vaslibrary.webapi.customer.SyncZarGetNewCustomerViewModel;
 import com.varanegar.vaslibrary.webapi.customer.ZarCustomerInfoViewModel;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -82,8 +96,8 @@ import okhttp3.Request;
 import retrofit2.Call;
 import timber.log.Timber;
 
-public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements ValidationListener
-        ,SingleChoiceDialog.SingleChoiceListener {
+public class Edit_New_Customer_ZarFragment extends VaranegarFragment implements ValidationListener
+        , SingleChoiceDialog.SingleChoiceListener {
 
     CustomerModel customer;
     public EditCustomerZarFragmentDialog.OnCustomerEditedCallBack onCustomerEditedCallBack;
@@ -120,8 +134,12 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
     private FormValidator validator;
     private SyncZarGetNewCustomerViewModel syncGetNewCustomerViewModel;
     private List<RoleCodeViewModel> roleCodeViewModels;
-    private RoleCodeCustomerRequestViewModel roleCodeCustomerViewModel ;
+    private RoleCodeCustomerRequestViewModel roleCodeCustomerViewModel;
 
+    private LinearLayout header_linear_layout;
+    private RelativeLayout main_layout;
+    private CameraView cameraView;
+    private FloatingActionButton take_picture;
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -131,6 +149,31 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
 
 
     @Override
+    public void onResume() {
+        super.onResume();
+        cameraView.start();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        cameraView.stop();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        cameraView.destroy();
+    }
+
+
+    public AttachImageDialog.OnAttachment onAttachment;
+
+    public interface OnAttachment {
+        void onDone();
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         if (customer.CustomerCode != null) {
@@ -138,6 +181,7 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
             enableForm(true);
         }
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -191,13 +235,45 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
 
         /**گرفتن عکس*/
         nationalCardPic = view.findViewById(R.id.national_card_pic);
-
+        main_layout = view.findViewById(R.id.main_layout);
+        header_linear_layout = view.findViewById(R.id.header_linear_layout);
+        take_picture = view.findViewById(R.id.take_picture);
+        cameraView = view.findViewById(R.id.camera_view);
         nationalCardPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dispatchTakePictureIntent();
+              //    dispatchTakePictureIntent();
+                main_layout.setVisibility(View.VISIBLE);
+                header_linear_layout.setVisibility(View.GONE);
             }
         });
+
+
+        cameraView.addCameraListener(new CameraListener() {
+            @Override
+            public void onPictureTaken(byte[] picture) {
+                CameraUtils.decodeBitmap(picture, new CameraUtils.BitmapCallback() {
+                    @Override
+                    public void onBitmapReady(Bitmap bitmap) {
+                        persistImage(bitmap,"fh");
+                        nationalCardPic.setImageBitmap(bitmap);
+                        if (onAttachment != null)
+                            onAttachment.onDone();
+
+                        main_layout.setVisibility(View.GONE);
+                        header_linear_layout.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+        });
+        take_picture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cameraView.capturePicture();
+            }
+        });
+
+
         /**  آدرس*/
         addressPairedItem = view.findViewById(R.id.address_paired_item);
         validator.addField(addressPairedItem, getString(R.string.address), new LengthChecker(0, 150,
@@ -245,7 +321,7 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
         code_naghsh_paired_item.setFocusable(false);
         code_naghsh_paired_item.setFocusableInTouchMode(false);
 
-        request_codenaghsh= view.findViewById(R.id.request_codenaghsh);
+        request_codenaghsh = view.findViewById(R.id.request_codenaghsh);
 
         /**
          *        کدپستی
@@ -289,12 +365,12 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
         validator.addField(customerGroup1Spinner, getString(R.string.customer_group_1), new NotEmptyChecker());
 
         customerGroup2Spinner = view.findViewById(R.id.customer_group2_spinner);
-        camera_linear_view= view.findViewById(R.id.camera_linear_view);
-        save_customer_image=  view.findViewById(R.id.save_customer_image);
+        camera_linear_view = view.findViewById(R.id.camera_linear_view);
+        save_customer_image = view.findViewById(R.id.save_customer_image);
         save_customer_image.setOnClickListener(v -> {
             createSyncViewModel();
 
-                });
+        });
         request_codenaghsh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -315,9 +391,6 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
     }
 
 
-
-
-
     @Override
     public void onNegativeButtonClicked() {
 
@@ -326,6 +399,7 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
 
     /**
      * ست کردن کد نقش بعد از انتخاب
+     *
      * @param list
      * @param position
      */
@@ -340,19 +414,20 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
         economicCodePairedItem.setEnabled(false);
         nationalCodePairedItem.setFocusableInTouchMode(false);
     }
+
     /**
      * ست کردن داده براس ارسال
      */
 
     private void createSyncViewModel() {
         // syncGetNewCustomerViewModel.CityId = cityNamePairedItem.getValue();
-        String postcode=postalCodePairedItem.getValue();
-        String codenaghsh=code_naghsh_paired_item.getValue();
+        String postcode = postalCodePairedItem.getValue();
+        String codenaghsh = code_naghsh_paired_item.getValue();
         DataForRegisterModel group1 = customerGroup1Spinner.getSelectedItem();
         DataForRegisterModel group2 = customerGroup2Spinner.getSelectedItem();
         DataForRegisterModel degree = customerDegreeSpinner.getSelectedItem();
 
-        if (file == null&&!customer.HasNationalCodeImage) {
+        if (file == null && !customer.HasNationalCodeImage) {
             CuteMessageDialog dialog = new CuteMessageDialog(getContext());
             dialog.setIcon(Icon.Error);
             dialog.setTitle(R.string.error);
@@ -362,9 +437,9 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
             return;
         }
 
-        if (postcode !=null && !postcode.equals("") && !postcode.isEmpty()
-                &&!codenaghsh.isEmpty() &&codenaghsh !=null&&!codenaghsh.equals("")) {
-            if (addressPairedItem!=null&&personNamePairedItem!=null&&group1!=null&&group2!=null) {
+        if (postcode != null && !postcode.equals("") && !postcode.isEmpty()
+                && !codenaghsh.isEmpty() && codenaghsh != null && !codenaghsh.equals("")) {
+            if (addressPairedItem != null && personNamePairedItem != null && group1 != null && group2 != null) {
 
                 syncGetNewCustomerViewModel = new SyncZarGetNewCustomerViewModel();
                 syncGetNewCustomerViewModel.CustomerCode = customer.CustomerCode;
@@ -413,33 +488,34 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
                     syncGetNewCustomerViewModel.KVGR2 = group2.FieldKey;
 
                 validator.validate(this);
-            }else {
+            } else {
                 showErrorDialog("نام مشتری ,آدرس مشتری ,گروه مشتری1 , گروه مشتری 2و درجه مشتری  را ثیت کنید ");
             }
-        }else {
+        } else {
             showErrorDialog("کد پستی و کدنقش مشتری را ثبت کنید ");
         }
     }
+
     /**
      * دریافت کد نقش
      * send request get code naghsh
      */
-    private void  getDataCodeNaghsh(){
+    private void getDataCodeNaghsh() {
 
 
-        String economicCode=economicCodePairedItem.getValue();
-        String nationalCode=nationalCodePairedItem.getValue();
+        String economicCode = economicCodePairedItem.getValue();
+        String nationalCode = nationalCodePairedItem.getValue();
 
-        roleCodeCustomerViewModel=new RoleCodeCustomerRequestViewModel();
-        roleCodeCustomerViewModel.CustomerId=customerUniqueId;
-        roleCodeCustomerViewModel.NationalCode=nationalCode;
-        roleCodeCustomerViewModel.EconomicCode=economicCode;
+        roleCodeCustomerViewModel = new RoleCodeCustomerRequestViewModel();
+        roleCodeCustomerViewModel.CustomerId = customerUniqueId;
+        roleCodeCustomerViewModel.NationalCode = nationalCode;
+        roleCodeCustomerViewModel.EconomicCode = economicCode;
 
-        if (economicCode!=null&&!economicCode.equals("")&&economicCode.length()==11||
-                nationalCode!=null&&!nationalCode.equals("")&&nationalCode.length()==10){
+        if (economicCode != null && !economicCode.equals("") && economicCode.length() == 11 ||
+                nationalCode != null && !nationalCode.equals("") && nationalCode.length() == 10) {
 
-            ApiNew apiNew=new ApiNew(getContext());
-            Call<List<RoleCodeViewModel>> calll=apiNew.getCodeNaghsh(roleCodeCustomerViewModel);
+            ApiNew apiNew = new ApiNew(getContext());
+            Call<List<RoleCodeViewModel>> calll = apiNew.getCodeNaghsh(roleCodeCustomerViewModel);
             startProgressDialog();
 
             apiNew.runWebRequest(calll, new WebCallBack<List<RoleCodeViewModel>>() {
@@ -451,11 +527,11 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
                 @Override
                 protected void onSuccess(List<RoleCodeViewModel> result, Request request) {
 
-                    if (result.size()>0){
+                    if (result.size() > 0) {
 
                         dialogShow(result);
 
-                    }else {
+                    } else {
                         showErrorDialog("یرای این کد ملی کد نقش ثبت نشده است ");
                     }
                 }
@@ -478,7 +554,7 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
                 }
             });
 
-        }else {
+        } else {
             showErrorDialog("کد ملی و کداقتصادی مشتری را ثبت کنید ");
         }
     }
@@ -526,7 +602,7 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
 //            street5PairedItem.setValue(customerInfo.Street5);
 
         if (customer.CustomerPostalCode != null)
-            postalCodePairedItem.setValue(customer.CustomerPostalCode );
+            postalCodePairedItem.setValue(customer.CustomerPostalCode);
 
 //        if (customer.CityId != null)
 //            cityNamePairedItem.setValue(String.valueOf(customer.CityArea));
@@ -584,14 +660,13 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
 //        }
 
         if (customer.Phone != null)
-            telPairedItem.setValue(customer.Phone );
+            telPairedItem.setValue(customer.Phone);
 
         if (customer.Mobile != null)
             mobilePairedItem.setValue(customer.Mobile);
 
 
-
-        if (customer.CodeNaghsh != null &&!customer.CodeNaghsh.isEmpty() ) {
+        if (customer.CodeNaghsh != null && !customer.CodeNaghsh.isEmpty()) {
             code_naghsh_paired_item.setValue(customer.CodeNaghsh);
             economicCodePairedItem.setEnabled(false);
             economicCodePairedItem.setFocusable(false);
@@ -599,7 +674,7 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
             nationalCodePairedItem.setEnabled(false);
             nationalCodePairedItem.setFocusable(false);
             nationalCodePairedItem.setFocusableInTouchMode(false);
-        }else {
+        } else {
             request_codenaghsh.setVisibility(View.VISIBLE);
         }
         if (!customer.EconomicCode.isEmpty()) {
@@ -610,12 +685,11 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
             nationalCodePairedItem.setValue(customer.NationalCode);
 
         }
-        if (customer.HasNationalCodeImage){
+        if (customer.HasNationalCodeImage) {
             camera_linear_view.setVisibility(View.GONE);
-        }else {
+        } else {
             camera_linear_view.setVisibility(View.VISIBLE);
         }
-
 
 
         /**
@@ -709,7 +783,7 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
                             return item.FieldValue != null && item.FieldValue.contains(text);
                         }
                     });
-            if (customer.CustomerCategoryId!=null) {
+            if (customer.CustomerCategoryId != null) {
                 CustomerCategoryManager customerCategoryManager =
                         new CustomerCategoryManager(getContext());
                 final CustomerCategoryModel customerCategory =
@@ -772,7 +846,7 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
      * ارسال داده
      */
     public void submit() {
-        syncGetNewCustomerViewModel.customerUniqueId=customerUniqueId;
+        syncGetNewCustomerViewModel.customerUniqueId = customerUniqueId;
         startProgressDialog();
         CustomerApi customerApi = new CustomerApi(getContext());
         customerApi.runWebRequest(customerApi.postCustomerZarCustomerInfo(syncGetNewCustomerViewModel),
@@ -789,7 +863,6 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
 //                else
 //                    showErrorDialog(R.string.error_saving_customer);
                         sendNationalImage(result);
-
 
 
                     }
@@ -810,6 +883,7 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
 
     /**
      * ارسال عکس
+     *
      * @param result
      */
     private void sendNationalImage(String result) {
@@ -851,21 +925,19 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
     }
 
 
-
-
-
     /**
      * دیالوگ ست کردن کد نقش
+     *
      * @param roleCodeViewModel
      */
-    private void dialogShow(List<RoleCodeViewModel> roleCodeViewModel){
+    private void dialogShow(List<RoleCodeViewModel> roleCodeViewModel) {
         String[] data = new String[roleCodeViewModel.size()];
-        roleCodeViewModels=roleCodeViewModel;
-        for (int i=0;i<roleCodeViewModel.size();i++){
-            data[i]=roleCodeViewModel.get(i).Title+roleCodeViewModel.get(i).Code;
+        roleCodeViewModels = roleCodeViewModel;
+        for (int i = 0; i < roleCodeViewModel.size(); i++) {
+            data[i] = roleCodeViewModel.get(i).Title + roleCodeViewModel.get(i).Code;
         }
         SingleChoiceDialog singleChoiceDialog = new
-                SingleChoiceDialog(getContext(),"کد نقش مورد نظر را انتخاب کنید",data);
+                SingleChoiceDialog(getContext(), "کد نقش مورد نظر را انتخاب کنید", data);
         singleChoiceDialog.setCancelable(false);
         singleChoiceDialog.addItemClickListener(this);
         singleChoiceDialog.show(getActivity().getSupportFragmentManager(),
@@ -879,6 +951,7 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
     File file = null;
     static final int REQUEST_IMAGE_CAPTURE = 0;
     String currentPhotoPath;
+
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
@@ -892,10 +965,12 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
         currentPhotoPath = image.getAbsolutePath();
         return image;
     }
+
     /**
      * دوربین عکس
      */
     Uri photoURI;
+
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null) {
@@ -907,7 +982,7 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
 
             if (file != null) {
                 photoURI = FileProvider.getUriForFile(getContext(),
-                        getActivity().getPackageName()+ ".provider",
+                        getActivity().getPackageName() + ".provider",
                         file);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
@@ -934,10 +1009,6 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
     }
 
 
-
-
-
-
     private void stopProgressDialog() {
         if (getVaranegarActvity() != null && progressDialog != null && progressDialog.isShowing())
             try {
@@ -946,6 +1017,7 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
 
             }
     }
+
     private void enableForm(boolean enabled) {
         isEnabled = enabled;
         personNamePairedItem.setEnabled(enabled);
@@ -975,11 +1047,12 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
 
     }
 
-    public void setSharedPer(){
+    public void setSharedPer() {
         SharedPreferences sharedPreferences = getContext()
                 .getSharedPreferences("preferred_local", Context.MODE_PRIVATE);
         sharedPreferences.edit().putString(customer.UniqueId.toString(), "true").apply();
     }
+
     private void showResaltDialog(String err) {
         Context context = getContext();
         if (context != null) {
@@ -990,7 +1063,7 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
             dialog.setPositiveButton(R.string.ok, null);
             dialog.show();
             setSharedPer();
-            CustomersContentFragment contentFragment=new CustomersContentFragment();
+            CustomersContentFragment contentFragment = new CustomersContentFragment();
             contentFragment.addArgument("a129ef75-77ce-432a-8982-6bcab0bf7b51", customer.UniqueId.toString());
             getVaranegarActvity().pushFragment(contentFragment);
         }
@@ -1002,6 +1075,7 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
         progressDialog.setCancelable(false);
         progressDialog.show();
     }
+
     private void showErrorDialog(String err) {
         Context context = getContext();
         if (context != null) {
@@ -1014,4 +1088,46 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment  implements
         }
     }
 
+    public void copy() {
+        try {
+            file = createImageFile();
+        } catch (IOException ex) {
+
+        }
+
+        if (file != null) {
+            photoURI = FileProvider.getUriForFile(getContext(),
+                    getActivity().getPackageName() + ".provider",
+                    file);
+        }
+
+        try (InputStream in = getContext().getContentResolver().openInputStream(photoURI);
+             OutputStream out = new FileOutputStream(file)) {
+            // Transfer bytes from in to out
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = in.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    private void persistImage(Bitmap bitmap, String name) {
+        File filesDir = getContext().getFilesDir();
+        file = new File(filesDir, name + ".jpg");
+
+        OutputStream os;
+        try {
+            os = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
+            os.flush();
+            os.close();
+        } catch (Exception e) {
+            Log.e(getClass().getSimpleName(), "Error writing bitmap", e);
+        }
+    }
 }
