@@ -1062,10 +1062,11 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment implements 
             dialog.setMessage(err);
             dialog.setPositiveButton(R.string.ok, null);
             dialog.show();
-            setSharedPer();
-            CustomersContentFragment contentFragment = new CustomersContentFragment();
-            contentFragment.addArgument("a129ef75-77ce-432a-8982-6bcab0bf7b51", customer.UniqueId.toString());
-            getVaranegarActvity().pushFragment(contentFragment);
+          //  setSharedPer();
+            onBackPressed();
+//            CustomersContentFragment contentFragment = new CustomersContentFragment();
+//            contentFragment.addArgument("a129ef75-77ce-432a-8982-6bcab0bf7b51", customer.UniqueId.toString());
+//            getVaranegarActvity().pushFragment(contentFragment);
         }
     }
 
