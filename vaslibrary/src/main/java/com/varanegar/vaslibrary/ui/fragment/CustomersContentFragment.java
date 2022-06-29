@@ -540,8 +540,11 @@ public class CustomersContentFragment extends VaranegarFragment {
                                                 ,"");
                                         sharedPreferences.edit()
                                                 .putString(customer.UniqueId.toString(),"").apply();
-                                        if (un3!=null&&un3.isEmpty()&&un3.equals(""))
+                                        if (un3!=null&&un3.isEmpty()&&un3.equals("")) {
                                             showEditDialog();
+                                        }else{
+                                            onBackPressed();
+                                        }
                                     }
                                 }
                                 ((PairedItems) view
