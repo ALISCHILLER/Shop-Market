@@ -76,6 +76,7 @@ import com.varanegar.vaslibrary.webapi.apiNew.modelNew.RoleCodeViewModel;
 import com.varanegar.vaslibrary.webapi.customer.CustomerApi;
 import com.varanegar.vaslibrary.webapi.customer.SyncGuidViewModel;
 import com.varanegar.vaslibrary.webapi.customer.SyncZarGetNewCustomerViewModel;
+import com.varanegar.vaslibrary.webapi.ping.PingApi;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -391,21 +392,24 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        final CustomerApi customerApi = new CustomerApi(getContext());
+        PingApi pingApi = new PingApi();
 
+        pingApi.refreshBaseServerUrl(getContext(), new PingApi.PingCallback() {
+            @Override
+            public void done(String ipAddress) {
+                final CustomerApi customerApi = new CustomerApi(getContext());
+                customerApi.runWebRequest(
+                        customerApi.registerNewZarCustomer(syncGetNewCustomerViewModel),
+                        new WebCallBack<SyncGuidViewModel>() {
+                            @Override
+                            protected void onFinish() {
 
-        customerApi.runWebRequest(
-                customerApi.registerNewZarCustomer(syncGetNewCustomerViewModel),
-                new WebCallBack<SyncGuidViewModel>() {
-                    @Override
-                    protected void onFinish() {
+                            }
 
-                    }
-
-                    @Override
-                    protected void onSuccess(final SyncGuidViewModel result, Request request) {
-                        stopProgressDialog();
-                        //                        CustomersUpdateFlow flow =
+                            @Override
+                            protected void onSuccess(final SyncGuidViewModel result, Request request) {
+                                stopProgressDialog();
+                                //                        CustomersUpdateFlow flow =
 //                                new CustomersUpdateFlow(getContext(), result.UniqueId);
 //                        flow.syncCustomersAndInitPromotionDb(new UpdateCall() {
 //                            @Override
@@ -452,42 +456,58 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
 //                                }
 //                            }
 //                        });
-                        if (result != null) {
-                            String messageRes;
-                            messageRes = String.valueOf(R.string.registering_customer_completed);
-                           // stopProgressDialog();
-                            sendNationalImage(messageRes, result);
-                        }
-                    }
+                                if (result != null) {
+                                    String messageRes;
+                                    messageRes = String.valueOf(R.string.registering_customer_completed);
+                                    // stopProgressDialog();
+                                    sendNationalImage(messageRes, result);
+                                }
+                            }
 
-                    @Override
-                    protected void onApiFailure(ApiError error, Request request) {
-                        MainVaranegarActivity activity = getVaranegarActvity();
-                        if (activity != null && !activity.isFinishing()) {
-                            stopProgressDialog();
-                            CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(activity);
-                            cuteMessageDialog.setIcon(Icon.Error);
-                            cuteMessageDialog.setTitle(R.string.error);
-                            cuteMessageDialog.setMessage(WebApiErrorBody.log(error, activity));
-                            cuteMessageDialog.setNeutralButton(R.string.ok, null);
-                            cuteMessageDialog.show();
-                        }
-                    }
+                            @Override
+                            protected void onApiFailure(ApiError error, Request request) {
+                                MainVaranegarActivity activity = getVaranegarActvity();
+                                if (activity != null && !activity.isFinishing()) {
+                                    stopProgressDialog();
+                                    CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(activity);
+                                    cuteMessageDialog.setIcon(Icon.Error);
+                                    cuteMessageDialog.setTitle(R.string.error);
+                                    cuteMessageDialog.setMessage(WebApiErrorBody.log(error, activity));
+                                    cuteMessageDialog.setNeutralButton(R.string.ok, null);
+                                    cuteMessageDialog.show();
+                                }
+                            }
 
-                    @Override
-                    protected void onNetworkFailure(Throwable t, Request request) {
-                        MainVaranegarActivity activity = getVaranegarActvity();
-                        if (activity != null && !activity.isFinishing()) {
-                            stopProgressDialog();
-                            CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(activity);
-                            cuteMessageDialog.setIcon(Icon.Error);
-                            cuteMessageDialog.setTitle(R.string.error);
-                            cuteMessageDialog.setMessage(t.getMessage());
-                            cuteMessageDialog.setNeutralButton(R.string.ok, null);
-                            cuteMessageDialog.show();
-                        }
-                    }
-                });
+                            @Override
+                            protected void onNetworkFailure(Throwable t, Request request) {
+                                MainVaranegarActivity activity = getVaranegarActvity();
+                                if (activity != null && !activity.isFinishing()) {
+                                    stopProgressDialog();
+                                    CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(activity);
+                                    cuteMessageDialog.setIcon(Icon.Error);
+                                    cuteMessageDialog.setTitle(R.string.error);
+                                    cuteMessageDialog.setMessage(t.getMessage());
+                                    cuteMessageDialog.setNeutralButton(R.string.ok, null);
+                                    cuteMessageDialog.show();
+                                }
+                            }
+                        });
+            }
+
+            @Override
+            public void failed() {
+                MainVaranegarActivity activity = getVaranegarActvity();
+                if (activity != null && !activity.isFinishing()) {
+                    stopProgressDialog();
+                    CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(activity);
+                    cuteMessageDialog.setIcon(Icon.Error);
+                    cuteMessageDialog.setTitle(R.string.error);
+                    cuteMessageDialog.setMessage(R.string.network_error);
+                    cuteMessageDialog.setNeutralButton(R.string.ok, null);
+                    cuteMessageDialog.show();
+                }
+            }
+        });
     }
 
     private void sendNationalImage(String messageRes, SyncGuidViewModel result) {
@@ -773,50 +793,71 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
         roleCodeCustomerViewModel.NationalCode=nationalCode;
         roleCodeCustomerViewModel.EconomicCode=economicCode;
 
-        if (economicCode!=null&&!economicCode.equals("")||
-                nationalCode!=null&&!nationalCode.equals("")){
+        if (economicCode != null && !economicCode.equals("") && economicCode.length() == 11 ||
+                nationalCode != null && !nationalCode.equals("") && nationalCode.length() == 10) {
 
-            ApiNew apiNew=new ApiNew(getContext());
-            Call<List<RoleCodeViewModel>> calll=apiNew.getCodeNaghsh(roleCodeCustomerViewModel);
+         PingApi pingApi = new PingApi();
             startProgressDialog();
-            apiNew.runWebRequest(calll, new WebCallBack<List<RoleCodeViewModel>>() {
-                @Override
-                protected void onFinish() {
-                    stopProgressDialog();
-                }
+         pingApi.refreshBaseServerUrl(getContext(), new PingApi.PingCallback() {
+             @Override
+             public void done(String ipAddress) {
+                 ApiNew apiNew=new ApiNew(getContext());
+                 Call<List<RoleCodeViewModel>> calll=apiNew.getCodeNaghsh(roleCodeCustomerViewModel);
 
-                @Override
-                protected void onSuccess(List<RoleCodeViewModel> result, Request request) {
+                 apiNew.runWebRequest(calll, new WebCallBack<List<RoleCodeViewModel>>() {
+                     @Override
+                     protected void onFinish() {
+                         stopProgressDialog();
+                     }
 
-                    if (result.size()>0){
-                        if (result.size()==1){
-                            code_naghsh_paired_item.setValue(result.get(0).Code);
-                            request_codenaghsh.setVisibility(View.GONE);
-                        }else {
-                            dialogShow(result);
-                        }
-                    }else {
-                        showErrorDialog("یرای این کد ملی کد نقش ثبت نشده است ");
-                    }
-                }
+                     @Override
+                     protected void onSuccess(List<RoleCodeViewModel> result, Request request) {
 
-                @Override
-                protected void onApiFailure(ApiError error, Request request) {
-                    String err = WebApiErrorBody.log(error, getContext());
-                    if (isResumed()) {
-                        showErrorDialog(err);
+                         if (result.size()>0){
+                             if (result.size()==1){
+                                 code_naghsh_paired_item.setValue(result.get(0).Code);
+                                 request_codenaghsh.setVisibility(View.GONE);
+                             }else {
+                                 dialogShow(result);
+                             }
+                         }else {
+                             showErrorDialog("یرای این کد ملی کد نقش ثبت نشده است ");
+                         }
+                     }
 
-                    }
-                }
+                     @Override
+                     protected void onApiFailure(ApiError error, Request request) {
+                         String err = WebApiErrorBody.log(error, getContext());
+                         if (isResumed()) {
+                             showErrorDialog(err);
 
-                @Override
-                protected void onNetworkFailure(Throwable t, Request request) {
-                    if (isResumed()) {
-                        showErrorDialog(getString(R.string.network_error));
+                         }
+                     }
 
-                    }
-                }
-            });
+                     @Override
+                     protected void onNetworkFailure(Throwable t, Request request) {
+                         if (isResumed()) {
+                             showErrorDialog(getString(R.string.network_error));
+
+                         }
+                     }
+                 });
+             }
+
+             @Override
+             public void failed() {
+                 MainVaranegarActivity activity = getVaranegarActvity();
+                 if (activity != null && !activity.isFinishing()) {
+                     stopProgressDialog();
+                     CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(activity);
+                     cuteMessageDialog.setIcon(Icon.Error);
+                     cuteMessageDialog.setTitle(R.string.error);
+                     cuteMessageDialog.setMessage(R.string.network_error);
+                     cuteMessageDialog.setNeutralButton(R.string.ok, null);
+                     cuteMessageDialog.show();
+                 }
+             }
+         });
 
         }else {
             showErrorDialog("کد ملی و کداقتصادی مشتری را ثبت کنید ");

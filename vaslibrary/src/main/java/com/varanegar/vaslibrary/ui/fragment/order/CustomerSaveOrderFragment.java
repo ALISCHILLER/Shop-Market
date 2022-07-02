@@ -2450,6 +2450,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
                         if (tempTablesProgressDialog != null && tempTablesProgressDialog.isShowing()) {
                             tempTablesProgressDialog.dismiss();
                         }
+                        toolbar.setVisibility(View.VISIBLE);
                     });
                 }
             }
@@ -2457,7 +2458,8 @@ public class CustomerSaveOrderFragment extends VisitFragment
     }
 
     private void showPaymentTypeDialogAndSave() {
-        if ((UserDialogPreferences.isVisible(context, "3f73e0a8-4e2e-4c9b-ac8a-b9467cc5b8cd") && !VaranegarApplication.is(VaranegarApplication.AppId.Dist)) && defaultPayment == -1) {
+        if ((UserDialogPreferences.isVisible(context, "3f73e0a8-4e2e-4c9b-ac8a-b9467cc5b8cd") &&
+                !VaranegarApplication.is(VaranegarApplication.AppId.Dist)) && defaultPayment == -1) {
             CustomerPaymentTypesViewManager customerPaymentTypesViewManager = new CustomerPaymentTypesViewManager(context);
             try {
                 customerPaymentTypes.clear();

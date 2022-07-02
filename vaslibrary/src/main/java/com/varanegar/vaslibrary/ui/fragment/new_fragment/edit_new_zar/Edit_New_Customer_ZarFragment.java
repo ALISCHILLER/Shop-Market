@@ -514,14 +514,14 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment implements 
 
         if (economicCode != null && !economicCode.equals("") && economicCode.length() == 11 ||
                 nationalCode != null && !nationalCode.equals("") && nationalCode.length() == 10) {
-
+            startProgressDialog();
          PingApi ping=new PingApi();
          ping.refreshBaseServerUrl(getContext(), new PingApi.PingCallback() {
              @Override
              public void done(String ipAddress) {
                  ApiNew apiNew = new ApiNew(getContext());
                  Call<List<RoleCodeViewModel>> calll = apiNew.getCodeNaghsh(roleCodeCustomerViewModel);
-                 startProgressDialog();
+
 
                  apiNew.runWebRequest(calll, new WebCallBack<List<RoleCodeViewModel>>() {
                      @Override
@@ -571,6 +571,7 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment implements 
                      cuteMessageDialog.setMessage(R.string.network_error);
                      cuteMessageDialog.setNeutralButton(R.string.ok, null);
                      cuteMessageDialog.show();
+
                  }
              }
          });
