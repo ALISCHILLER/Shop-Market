@@ -1568,24 +1568,33 @@ public class CustomerSaveOrderFragment extends VisitFragment
             if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
 
 
+                if(customer.CodeNaghsh !=null) {
 
-             SharedPreferences sharedPreferences = context.getSharedPreferences("ReportConfig",
-                     Context.MODE_PRIVATE);
-                sharedPreferences.edit().putString(customerId.toString(),shipPairedItemsSpinner
-                        .getSelectedItem().UniqueId.toString()).apply();
-                SysConfigManager sysConfigManager = new SysConfigManager(getContext());
-                SysConfigModel sendPromotionPreview = sysConfigManager.read(ConfigKey.
-                        SendPromotionPreview, SysConfigManager.cloud);
-                if (SysConfigManager.compare(sendPromotionPreview, true)) {
-                    UUID customerIdOrderPreview = VaranegarApplication.getInstance().tryRetrieve("CUSTOMER_ID_ORDER_PREVIEW", false);
-                    if (!customerId.equals(customerIdOrderPreview)) {
-                        CustomerOrderPreviewFragment previewFragment = new CustomerOrderPreviewFragment();
-                        previewFragment.setArguments(customerId, callOrderId);
-                        getVaranegarActvity().pushFragment(previewFragment);
-                        return;
+
+                    SharedPreferences sharedPreferences = context.getSharedPreferences("ReportConfig",
+                            Context.MODE_PRIVATE);
+                    sharedPreferences.edit().putString(customerId.toString(), shipPairedItemsSpinner
+                            .getSelectedItem().UniqueId.toString()).apply();
+                    SysConfigManager sysConfigManager = new SysConfigManager(getContext());
+                    SysConfigModel sendPromotionPreview = sysConfigManager.read(ConfigKey.
+                            SendPromotionPreview, SysConfigManager.cloud);
+                    if (SysConfigManager.compare(sendPromotionPreview, true)) {
+                        UUID customerIdOrderPreview = VaranegarApplication.getInstance().tryRetrieve("CUSTOMER_ID_ORDER_PREVIEW", false);
+                        if (!customerId.equals(customerIdOrderPreview)) {
+                            CustomerOrderPreviewFragment previewFragment = new CustomerOrderPreviewFragment();
+                            previewFragment.setArguments(customerId, callOrderId);
+                            getVaranegarActvity().pushFragment(previewFragment);
+                            return;
+                        }
                     }
+                }else{
+                    CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(getContext());
+                    cuteMessageDialog.setIcon(Icon.Error);
+                    cuteMessageDialog.setTitle(R.string.error);
+                    cuteMessageDialog.setMessage(R.string.the_customer_not_code);
+                    cuteMessageDialog.setNegativeButton(R.string.ok, null);
+                    cuteMessageDialog.show();
                 }
-
             }if (VaranegarApplication.is(VaranegarApplication.AppId.Contractor) && otherDiscount.compareTo(orderAmount.TotalAmount) > 0) {
                 CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(getContext());
                 cuteMessageDialog.setIcon(Icon.Error);

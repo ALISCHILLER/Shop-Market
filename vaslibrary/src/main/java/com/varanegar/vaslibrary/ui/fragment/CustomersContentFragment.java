@@ -116,7 +116,7 @@ import varanegar.com.discountcalculatorlib.utility.JalaliCalendar;
 
 /**
  * Created by atp on 5/2/2017.
- * صفحه جزئیات مشتری
+ * صفحه  مشتری
  * updated by moji
  */
 
@@ -531,8 +531,7 @@ public class CustomersContentFragment extends VaranegarFragment {
                                     if (customer.CodeNaghsh != null && !customer.CodeNaghsh.isEmpty()) {
                                         code_naghsh_paired_item.setValue(customer.CodeNaghsh);
                                     }else {
-                                        code_naghsh_paired_item.
-                                                setBackgroundColor(getContext()
+                                        code_naghsh_paired_item.setBackgroundColor(getContext()
                                                         .getResources().getColor(R.color.red));
                                         SharedPreferences sharedPreferences = getContext()
                                                 .getSharedPreferences("preferred_local", Context.MODE_PRIVATE);
@@ -543,7 +542,7 @@ public class CustomersContentFragment extends VaranegarFragment {
                                         if (un3!=null&&un3.isEmpty()&&un3.equals("")) {
                                             showEditDialog();
                                         }else{
-                                            onBackPressed();
+                                           // onBackPressed();
                                         }
                                     }
                                 }
