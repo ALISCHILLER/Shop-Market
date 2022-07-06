@@ -94,9 +94,10 @@ public class PinApprove extends GeneralNotification {
                 (NotificationManager) mContext
                         .getSystemService(Context.NOTIFICATION_SERVICE);
 
+        //int notifId = (int) (Math.random() * (99));
         int notifId = Integer.parseInt(_customerId.toString()
                 .replaceAll("-", "")
-                .substring(0, 8), 16);
+                .substring(0, 4), 16);
 
         notificationManager.notify(notifId, mBuilder.build());
     }
