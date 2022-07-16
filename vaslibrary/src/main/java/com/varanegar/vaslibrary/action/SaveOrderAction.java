@@ -94,7 +94,7 @@ public class SaveOrderAction extends CheckDistanceAction {
                     .read(ConfigKey.SendInactiveCustomers, SysConfigManager.cloud);
             SysConfigModel TakeOrderFromInactiveCustomers = sysConfigManager
                     .read(ConfigKey.TakeOrderFromInactiveCustomers, SysConfigManager.cloud);
-            if(getCustomer().CodeNaghsh ==null){
+            if(getCustomer().CodeNaghsh ==null||getCustomer().CodeNaghsh.isEmpty()){
                 return getActivity().getString(R.string.the_customer_not_code);
             }
             if (!getCustomer().IsActive)
