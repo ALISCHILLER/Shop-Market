@@ -54,7 +54,7 @@ public class EditCustomerAction extends CheckBarcodeAction {
         if (error != null)
             return error;
 
-        if(getCustomer().CodeNaghsh !=null){
+        if(getCustomer().CodeNaghsh !=null&&!getCustomer().CodeNaghsh.isEmpty()){
             return getActivity().getString(R.string.the_customer_have_code);
         }
         if (getCallManager().isDataSent(getCalls(), null))
