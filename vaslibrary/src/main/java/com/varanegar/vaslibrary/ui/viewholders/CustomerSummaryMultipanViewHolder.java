@@ -24,6 +24,7 @@ import com.varanegar.vaslibrary.model.customercall.CustomerCallModel;
 import com.varanegar.vaslibrary.model.customerpathview.CustomerPathViewModel;
 import com.varanegar.vaslibrary.ui.fragment.CustomersContentFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -98,6 +99,10 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
                 codenaghsh_text.setTextColor(getContext().getResources().getColor(R.color.red));
             }
         }
+
+
+        if(calls==null)
+            calls = new ArrayList();
 
         List<CustomerCallModel> customerCalls = Linq.findAll(calls,
                 new Linq.Criteria<CustomerCallModel>() {
