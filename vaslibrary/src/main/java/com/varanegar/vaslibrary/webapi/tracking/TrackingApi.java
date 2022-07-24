@@ -24,7 +24,7 @@ import retrofit2.http.Body;
  */
 
 public class TrackingApi extends BaseApi implements ITrackingApi {
-    public static final String VARANEGAR_SEVER_ADDRESS_MAIN = "http://192.168.50.111:7072";
+    public static final String VARANEGAR_SEVER_ADDRESS_MAIN = "http://192.168.50.110:7072";
     public static final String VARANEGAR_SEVER_ADDRESS_TEST = "http://crm.varanegar.com:7071";
     private static OwnerKeysWrapper ownerKeysWrapper;
 

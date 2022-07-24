@@ -512,6 +512,7 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment implements 
         roleCodeCustomerViewModel.NationalCode = nationalCode;
         roleCodeCustomerViewModel.EconomicCode = economicCode;
 
+
         if (economicCode != null && !economicCode.equals("") && economicCode.length() == 11 ||
                 nationalCode != null && !nationalCode.equals("") && nationalCode.length() == 10) {
             startProgressDialog();
