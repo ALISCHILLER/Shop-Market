@@ -265,6 +265,13 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
             return false;
         });
 
+        getTourImageView.setOnClickListener(view -> {
+            SharedPreferences.Editor editor = getContext().getSharedPreferences(IS_VIRTUAL, MODE_PRIVATE).edit();
+            editor.putBoolean(IS_VIRTUAL_BOOLEAN, false);
+            editor.apply();
+            getTour(null);
+        });
+
         /**
          * دانلود نسخه جدید
          */
@@ -350,12 +357,7 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
             dialog.show(getChildFragmentManager(), "7b0b529b-3f9b-4399-a2c7-2a85bcf57c1c");
         });
 
-        getTourImageView.setOnClickListener(view -> {
-            SharedPreferences.Editor editor = getContext().getSharedPreferences(IS_VIRTUAL, MODE_PRIVATE).edit();
-            editor.putBoolean(IS_VIRTUAL_BOOLEAN, false);
-            editor.apply();
-            getTour(null);
-        });
+
 
 
         cancelTourRecordBtn.setRecordListener(new OnRecordListener() {
@@ -409,6 +411,7 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
             Timber.e(e1);
         }
     }
+
     private void getTour(final String tourNo) {
         getTourImageView.setEnabled(false);
         Timber.e("Get Tour Clicked!!");

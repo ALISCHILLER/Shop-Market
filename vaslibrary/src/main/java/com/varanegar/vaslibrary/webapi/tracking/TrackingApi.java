@@ -18,6 +18,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
+import timber.log.Timber;
 
 /**
  * Created by A.Torabi on 8/12/2017.
@@ -102,6 +103,7 @@ public class TrackingApi extends BaseApi implements ITrackingApi {
 
     @Override
     public Call<Boolean> sendPoint(@Body TrackingRequestModel body) {
+        Timber.i("LocationManager sendPoint 1");
         String baseUrl = getDefaultServer();
         if (!baseUrl.equals(TrackingApi.VARANEGAR_SEVER_ADDRESS_MAIN) && !baseUrl.equals(TrackingApi.VARANEGAR_SEVER_ADDRESS_TEST))
             runWebRequest(sendPoint(TrackingApi.VARANEGAR_SEVER_ADDRESS_MAIN, body), null);
@@ -109,6 +111,7 @@ public class TrackingApi extends BaseApi implements ITrackingApi {
     }
 
     public Call<Boolean> sendPoint(String baseUrl, @Body TrackingRequestModel body) {
+        Timber.i("LocationManager sendPoint 2");
         if (!baseUrl.equals(TrackingApi.VARANEGAR_SEVER_ADDRESS_MAIN) && !baseUrl.equals(TrackingApi.VARANEGAR_SEVER_ADDRESS_TEST))
             runWebRequest(sendPoint(TrackingApi.VARANEGAR_SEVER_ADDRESS_MAIN, body), null);
         return buildRetrofit(baseUrl).create(ITrackingApi.class).sendPoint(body);

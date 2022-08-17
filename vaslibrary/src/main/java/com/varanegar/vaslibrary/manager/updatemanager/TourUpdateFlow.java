@@ -155,6 +155,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     }
                 });
             }
+
             if (backOfficeType == BackOfficeType.Varanegar) {
                 if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
                     tasks.add(new TourAsyncTask() {
@@ -645,6 +646,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     }
                 });
             }
+
             if (backOfficeType == BackOfficeType.Rastak) {
                 tasks.add(new SimpleTourAsyncTask() {
                     @Override
@@ -713,6 +715,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     }
                 });
             }
+
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
@@ -735,6 +738,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 0;
                 }
             });
+
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
@@ -757,6 +761,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 0;
                 }
             });
+
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
@@ -779,6 +784,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 1;
                 }
             });
+
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
@@ -801,6 +807,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 1;
                 }
             });
+
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
@@ -827,6 +834,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
             tasks.add(new TourAsyncTask() {
                 CustomerShipToPartyManager shipToPartyManager = new
                         CustomerShipToPartyManager(getContext());
+
                 @Override
                 public void run(UpdateCall call) {
                     shipToPartyManager.sync(call, true);
@@ -853,6 +861,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                         shipToPartyManager.cancelSync();
                 }
             });
+
             tasks.add(new TourAsyncTask() {
                 CustomerManager customerManager = new CustomerManager(getContext());
 
@@ -913,6 +922,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                         notAllowProductManager.cancelSync();
                 }
             });
+
             tasks.add(new TourAsyncTask() {
                 ProductGroupManager productGroupManager = new ProductGroupManager(getContext());
 
@@ -942,6 +952,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                         productGroupManager.cancelSync();
                 }
             });
+
             tasks.add(new TourAsyncTask() {
                 ProductBoGroupManager productBoGroupManager = new ProductBoGroupManager(getContext());
 
@@ -971,6 +982,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                         productBoGroupManager.cancelSync();
                 }
             });
+
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
@@ -993,6 +1005,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 1;
                 }
             });
+
             tasks.add(new TourAsyncTask() {
                 VisitTemplatePathCustomerManager visitTemplatePathCustomerManager = new VisitTemplatePathCustomerManager(getContext());
 
@@ -1022,6 +1035,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                         visitTemplatePathCustomerManager.cancelSync();
                 }
             });
+
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
@@ -1045,28 +1059,29 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                 }
             });
 
-                tasks.add(new SimpleTourAsyncTask() {
-                    @Override
-                    public void run(UpdateCall call) {
-                        NewsZarManager newsZarManager = new NewsZarManager(getContext());
-                        newsZarManager.sync(call);
-                    }
+            tasks.add(new SimpleTourAsyncTask() {
+                @Override
+                public void run(UpdateCall call) {
+                    NewsZarManager newsZarManager = new NewsZarManager(getContext());
+                    newsZarManager.sync(call);
+                }
 
-                    @Override
-                    public String name() {
-                        return "Questionnaire";
-                    }
+                @Override
+                public String name() {
+                    return "Questionnaire";
+                }
 
-                    @Override
-                    public int group() {
-                        return R.string.questionnairie_info;
-                    }
+                @Override
+                public int group() {
+                    return R.string.questionnairie_info;
+                }
 
-                    @Override
-                    public int queueId() {
-                        return 1;
-                    }
-                });
+                @Override
+                public int queueId() {
+                    return 1;
+                }
+            });
+
             if (!isSimpleMode)
                 tasks.add(new SimpleTourAsyncTask() {
                     @Override
@@ -1090,7 +1105,6 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                         return 2;
                     }
                 });
-
 
             tasks.add(new TourAsyncTask() {
                 ProductManager productManager = new ProductManager(getContext());
@@ -1121,6 +1135,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                         productManager.cancelSync();
                 }
             });
+
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
@@ -1143,6 +1158,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 2;
                 }
             });
+
             tasks.add(new TourAsyncTask() {
                 ContractPriceManager contractPriceManager = new ContractPriceManager(getContext());
 
@@ -1172,6 +1188,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                         contractPriceManager.cancelSync();
                 }
             });
+
             tasks.add(new TourAsyncTask() {
                 PriceHistoryManager priceHistoryManager = new PriceHistoryManager(getContext());
 
@@ -1201,6 +1218,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                         priceHistoryManager.cancelSync();
                 }
             });
+
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
@@ -1223,6 +1241,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 2;
                 }
             });
+
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
@@ -1245,6 +1264,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 2;
                 }
             });
+
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
@@ -1267,6 +1287,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 2;
                 }
             });
+
 //            tasks.add(new SimpleTourAsyncTask() {
 //                @Override
 //                public void run(UpdateCall call) {
@@ -1312,28 +1333,30 @@ public abstract class TourUpdateFlow extends UpdateFlow {
 //                        return 3;
 //                    }
 //                });
-            tasks.add(new SimpleTourAsyncTask() {
-                @Override
-                public void run(UpdateCall call) {
-                    PictureSubjectZarManager manager = new PictureSubjectZarManager(getContext());
-                    manager.sync(call);
-                }
 
-                @Override
-                public String name() {
-                    return "PictureSubject";
-                }
+                tasks.add(new SimpleTourAsyncTask() {
+                    @Override
+                    public void run(UpdateCall call) {
+                        PictureSubjectZarManager manager = new PictureSubjectZarManager(getContext());
+                        manager.sync(call);
+                    }
 
-                @Override
-                public int group() {
-                    return R.string.customer_picture_subjects;
-                }
+                    @Override
+                    public String name() {
+                        return "PictureSubject";
+                    }
 
-                @Override
-                public int queueId() {
-                    return 3;
-                }
-            });
+                    @Override
+                    public int group() {
+                        return R.string.customer_picture_subjects;
+                    }
+
+                    @Override
+                    public int queueId() {
+                        return 3;
+                    }
+                });
+
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
@@ -1356,6 +1379,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 2;
                 }
             });
+
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
@@ -1378,6 +1402,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 3;
                 }
             });
+
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
@@ -1400,6 +1425,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 3;
                 }
             });
+
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
@@ -1422,6 +1448,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 4;
                 }
             });
+
             if (!isSimpleMode)
                 tasks.add(new SimpleTourAsyncTask() {
                     @Override
@@ -1445,6 +1472,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                         return 4;
                     }
                 });
+
             if (!isSimpleMode)
                 tasks.add(new SimpleTourAsyncTask() {
                     @Override
@@ -1468,6 +1496,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                         return 4;
                     }
                 });
+
             if (!isSimpleMode)
                 tasks.add(new SimpleTourAsyncTask() {
                     @Override
@@ -1491,6 +1520,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                         return 4;
                     }
                 });
+
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
@@ -1513,6 +1543,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 4;
                 }
             });
+
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
@@ -1535,6 +1566,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 4;
                 }
             });
+
             tasks.add(new TourAsyncTask() {
                 ImageManager imageManager = new ImageManager(getContext());
 
@@ -1594,6 +1626,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                         customerCardexManager.cancelSync();
                 }
             });
+
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
@@ -1616,6 +1649,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 4;
                 }
             });
+
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
@@ -1638,6 +1672,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 4;
                 }
             });
+
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
@@ -1660,6 +1695,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 1;
                 }
             });
+
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
@@ -1682,6 +1718,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 1;
                 }
             });
+
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
@@ -1704,6 +1741,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 0;
                 }
             });
+
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
@@ -1726,6 +1764,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 0;
                 }
             });
+
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
@@ -1748,6 +1787,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 0;
                 }
             });
+
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
@@ -1770,6 +1810,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 0;
                 }
             });
+
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
@@ -1792,6 +1833,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 0;
                 }
             });
+
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
@@ -1814,6 +1856,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 3;
                 }
             });
+
             tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
@@ -1836,6 +1879,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 4;
                 }
             });
+
             SysConfigModel checkBarcode = sysConfigManager.read(ConfigKey.CheckBarcode, SysConfigManager.cloud);
             if (SysConfigManager.compare(checkBarcode, true))
                 tasks.add(new SimpleTourAsyncTask() {
@@ -1863,6 +1907,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
         } catch (UnknownBackOfficeException e) {
             call.failure(getContext().getString(R.string.back_office_type_is_uknown));
         }
+
         SysConfigManager sysConfigManager = new SysConfigManager(getContext());
         OwnerKeysWrapper ownerKeysWrapper = sysConfigManager.readOwnerKeys();
         if (ownerKeysWrapper.DataOwnerKey != null && ownerKeysWrapper.isZarMakaron()) {

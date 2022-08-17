@@ -754,12 +754,14 @@ public class LocationManager extends BaseManager<LocationModel> {
 
                 @Override
                 protected void onSuccess(Boolean result, Request request) {
+                    Timber.i("LocationManager trackingApi onSuccess SendPoint1 " + request + "result = " +result);
                     TrackingLogManager.addLog(getContext(), LogType.SUBMIT_POINT, LogLevel.Info, locations.size() + " نقطه ارسال شد." + " تاریخ پوینت ها از " + DateHelper.toString(locations.get(0).Date, DateFormat.Complete, Locale.getDefault()) + " تا " + DateHelper.toString(locations.get(locations.size() - 1).Date, DateFormat.Complete, Locale.getDefault()));
                     Date date = new Date();
                     for (LocationModel locationModel :
                             locations) {
                         locationModel.IsSend = true;
                         locationModel.LastRetryTime = date;
+
                     }
                     try {
                         update(locations);
@@ -768,6 +770,7 @@ public class LocationManager extends BaseManager<LocationModel> {
                         if (locations.size() == POINT_SEND_LIMIT) // Probably we have more points to send se we start this task again
                             JobScheduler.resetJob(SendTrackingPointsServiceJob.class, getContext());
                     } catch (Exception e) {
+                        Timber.i("LocationManager SendPoint1 Exception "+e.getMessage());
                         removeSemaphore();
                         sendReport();
                     }
@@ -872,6 +875,7 @@ public class LocationManager extends BaseManager<LocationModel> {
 
             @Override
             protected void onSuccess(Boolean result, Request request) {
+                Timber.i("LocationManager trackingApi onSuccess SendPoint22 " + request + "result = " +result);
                 TrackingLogManager.addLog(getContext(), LogType.SUBMIT_POINT, LogLevel.Info, locations.size() + " نقطه ارسال شد." + " تاریخ پوینت ها از " + DateHelper.toString(locations.get(0).Date, DateFormat.Complete, Locale.getDefault()) + " تا " + DateHelper.toString(locations.get(locations.size() - 1).Date, DateFormat.Complete, Locale.getDefault()));
                 Date date = new Date();
                 for (LocationModel locationModel :
@@ -883,6 +887,7 @@ public class LocationManager extends BaseManager<LocationModel> {
                     update(filteredLocations);
                     removeSemaphore();
                 } catch (Exception e) {
+                    Timber.i("LocationManager SendPoint22 Exception "+e.getMessage());
                     removeSemaphore();
                 }
             }
@@ -960,12 +965,14 @@ public class LocationManager extends BaseManager<LocationModel> {
 
             @Override
             protected void onSuccess(Boolean result, Request request) {
+                Timber.i("LocationManager trackingApi onSuccess SendPoint2 " + request + "result = " +result);
                 TrackingLogManager.addLog(getContext(), LogType.SUBMIT_POINT, LogLevel.Info, " نقطه ارسال شد ۱ ." + " تاریخ پوینت " + DateHelper.toString(location.Date, DateFormat.Complete, Locale.getDefault()));
                 location.IsSend = true;
                 location.LastRetryTime = new Date();
                 try {
                     update(location);
                 } catch (Exception e) {
+                    Timber.i("LocationManager SendPoint2 Exception "+e.getMessage());
                     Timber.e(e);
                 } finally {
                     removeSemaphore();

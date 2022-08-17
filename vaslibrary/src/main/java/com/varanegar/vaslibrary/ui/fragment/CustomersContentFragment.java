@@ -804,6 +804,8 @@ public class CustomersContentFragment extends VaranegarFragment {
         printAction.setActionCallBack(this::updateItem);
         actions.add(printAction);
 
+
+
         if (!getActionsAdapter().getCloudConfigs().compare(ConfigKey.SimplePresale, true)) {
             actions.add(new CameraAction(
                     getVaranegarActvity(),

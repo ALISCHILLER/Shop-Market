@@ -18,8 +18,12 @@ import com.varanegar.vaslibrary.model.questionnaire.QuestionnaireHeader;
 import com.varanegar.vaslibrary.model.questionnaire.QuestionnaireHeaderModel;
 import com.varanegar.vaslibrary.model.questionnaire.QuestionnaireHeaderModelRepository;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.UUID;
 
 /**
@@ -32,6 +36,7 @@ public class QuestionnaireHeaderManager extends BaseManager<QuestionnaireHeaderM
     }
 
     public List<QuestionnaireHeaderModel> getValidTemplatesForCustomer(UUID customerId) {
+
         CustomerManager customerManager = new CustomerManager(getContext());
         CustomerModel customer = customerManager.getItem(customerId);
         if (customer == null)

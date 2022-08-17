@@ -1487,6 +1487,7 @@
     <string name="show_customers_order">نمایش ترتیب ویزیت مشتریان</string>
     <string name="optimizing_today_customers">بهینه سازی مشتریان روز</string>
     <string name="editing_customer_is_mandatory">ویرایش مشتری الزامی است</string>
+    <string name="inventory_customer_is_mandatory">ثبت موجودی مشتری الزامی است</string>
     <string name="registering_customer_completed_but_not_inserted_in_db">مشتری جدید با موفقیت ثبت شد اما به تور اضافه نشد</string>
     <string name="product_is_not_for_sale">کالا قابل فروش نیست</string>
     <string name="error_in_saving_picture">خطا در ذخیره سازی عکس</string>

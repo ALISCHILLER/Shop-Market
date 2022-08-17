@@ -3,6 +3,7 @@ package com.varanegar.vaslibrary.action;
 import androidx.annotation.Nullable;
 
 import com.varanegar.framework.base.MainVaranegarActivity;
+import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.util.fragment.extendedlist.ActionsAdapter;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.ui.fragment.CustomerInventoryFragment;
@@ -28,7 +29,11 @@ public class CustomerInventoryAction extends CheckDistanceAction {
     @Nullable
     @Override
     protected String isMandatory() {
-        return null;
+        int p = getTaskPriority();
+        if (p > 0 && Linq.findFirstIndex(getTaskPriorities().values(), item -> item.Priority > p) > 0)
+            return getActivity().getString(R.string.inventory_customer_is_mandatory);
+        else
+            return null;
     }
 
     @Nullable
