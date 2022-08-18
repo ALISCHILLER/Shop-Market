@@ -900,6 +900,7 @@
     <string name="total_pack_qty">تعداد کل فروش (واحد بزرگ)</string>
     <string name="return_date">تاریخ مرجوعی</string>
     <string name="start_date">تاریخ شروع</string>
+    <string name="start_Production">تاریخ تولید</string>
     <string name="end_date">تاریخ پایان</string>
     <string name="end_date_could_not_be_before_start_date">تاریخ پایان نمیتواند قبل از تاریخ شروع باشد!</string>
     <string name="start_date_could_not_be_after_end_date">تاریخ شروع نمی تواند بعد از تاریخ پایان باشد!</string>

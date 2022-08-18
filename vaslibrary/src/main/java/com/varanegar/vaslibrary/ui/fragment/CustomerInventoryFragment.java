@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,13 +16,20 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.varanegar.framework.database.DbException;
 import com.varanegar.framework.util.HelperMethods;
+import com.varanegar.framework.util.component.PairedItems;
 import com.varanegar.framework.util.component.SimpleToolbar;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
+import com.varanegar.framework.util.component.cutemessagedialog.Icon;
+import com.varanegar.framework.util.datetime.DateFormat;
+import com.varanegar.framework.util.datetime.DateHelper;
 import com.varanegar.framework.util.recycler.BaseRecyclerAdapter;
 import com.varanegar.framework.util.recycler.BaseRecyclerView;
 import com.varanegar.framework.util.recycler.BaseViewHolder;
+import com.varanegar.framework.validation.ValidationException;
 import com.varanegar.vaslibrary.R;
+import com.varanegar.vaslibrary.base.VasHelperMethods;
 import com.varanegar.vaslibrary.manager.CustomerInventoryManager;
 import com.varanegar.vaslibrary.manager.CustomerInventoryQtyManager;
 import com.varanegar.vaslibrary.manager.ProductInventoryManager;
@@ -47,7 +55,10 @@ import com.varanegar.vaslibrary.ui.calculator.ordercalculator.CustomerInventoryC
 import com.varanegar.vaslibrary.ui.qtyview.QtyView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import timber.log.Timber;
@@ -185,6 +196,7 @@ public class CustomerInventoryFragment extends VisitFragment {
             productCodeTextView = (TextView) itemView.findViewById(R.id.product_code_text_view);
             productNameTextView = (TextView) itemView.findViewById(R.id.product_name_text_view);
             rowTextView = (TextView) itemView.findViewById(R.id.row_text_view);
+
             manager = new CustomerInventoryManager(getContext());
         }
 
@@ -216,6 +228,9 @@ public class CustomerInventoryFragment extends VisitFragment {
                         update(item, item.IsSold, false);
                 }
             });
+
+
+
         }
 
         private void update(final ProductInventoryModel item, final boolean isSold, final boolean isAvailable) {
@@ -259,7 +274,8 @@ public class CustomerInventoryFragment extends VisitFragment {
         private final TextView rowTextView;
         private final TextView totalQtyTextView;
         private final CheckBox isSoldCheckBox;
-
+        private PairedItems startDatePairedItems;
+        private Date date;
         public CustomerInventoryWithQtyViewHolder(View itemView, BaseRecyclerAdapter<ProductInventoryModel> recyclerAdapter, Context context) {
             super(itemView, recyclerAdapter, context);
             productCodeTextView = (TextView) itemView.findViewById(R.id.product_code_text_view);
@@ -268,6 +284,7 @@ public class CustomerInventoryFragment extends VisitFragment {
             qtyView = (LinearLayout) itemView.findViewById(R.id.qty_layout);
             totalQtyTextView = (TextView) itemView.findViewById(R.id.total_qty_text_view);
             isSoldCheckBox = (CheckBox) itemView.findViewById(R.id.is_sold_check_box);
+            startDatePairedItems=itemView.findViewById(R.id.start_date_item);
             manager = new CustomerInventoryManager(getContext());
         }
 
@@ -276,9 +293,11 @@ public class CustomerInventoryFragment extends VisitFragment {
             final ProductInventoryModel item = adapter.get(position);
             productCodeTextView.setText(item.ProductCode);
             productNameTextView.setText(item.ProductName);
+
             isSoldCheckBox.setChecked(item.IsSold);
             totalQtyTextView.setText(HelperMethods.bigDecimalToString(item.TotalQty));
             rowTextView.setText(String.valueOf(position + 1));
+
             isSoldCheckBox.setOnClickListener(new View.OnClickListener() {
                 private void update() {
                     ProductInventoryManager productInventoryManager = new ProductInventoryManager(getContext());
@@ -329,7 +348,48 @@ public class CustomerInventoryFragment extends VisitFragment {
                     showCalculator(item);
                 }
             });
+            startDatePairedItems.setOnClickListener(new View.OnClickListener() {
 
+                @Override
+                public void onClick(View v) {
+
+                    if (!item.IsSold) {
+                        return;
+                    }
+                    DateHelper.showDatePicker(getVaranegarActvity(), VasHelperMethods.getSysConfigLocale(getContext()),
+                            new DateHelper.OnDateSelected() {
+                                @Override
+                                public void run(Calendar calendar) {
+                                    if (calendar.getTime().after(new Date())) {
+                                        showErrorDialog(getString(R.string.date_could_not_be_after_now));
+                                        return;
+                                    }
+                                    date = calendar.getTime();
+                                    startDatePairedItems.setValue(DateHelper.toString
+                                            (date, DateFormat.Date,
+                                                    VasHelperMethods.getSysConfigLocale(getContext())));
+
+
+                                    CustomerInventoryManager customerInventoryManager = new CustomerInventoryManager(getContext());
+                                    CustomerInventoryModel customerInventoryModel;
+                                    customerInventoryModel = customerInventoryManager.getLine(item.UniqueId, customerId);
+                                    String startDate=DateHelper.toString(date, DateFormat.Complete, Locale.getDefault());
+                                    customerInventoryModel.FactoryDate=startDate;
+                                    try {
+                                        customerInventoryManager.insertOrUpdate(customerInventoryModel);
+//                        ProductInventoryManager productInventoryManager = new ProductInventoryManager(getContext());
+//                        ProductInventoryModel updatedModel = productInventoryManager.getLine(item.UniqueId, customerId);
+//                        recyclerAdapter.set(getAdapterPosition(), updatedModel);
+                                    } catch (ValidationException e) {
+                                        e.printStackTrace();
+                                    } catch (DbException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                            });
+                }
+            });
             if (item.UnitName != null && !item.UnitName.isEmpty()) {
                 List<BaseUnit> units = new ArrayList<>();
                 String[] unitNames = item.UnitName.split(":");
@@ -369,7 +429,8 @@ public class CustomerInventoryFragment extends VisitFragment {
             List<CustomerInventoryQtyModel> qtys = customerInventoryQtyManager.getLines(inventoryModel.UniqueId);
             try {
                 CalculatorHelper calculatorHelper = new CalculatorHelper(getContext());
-                CalculatorUnits calculatorUnits = calculatorHelper.generateCalculatorUnits(productModel.UniqueId, qtys, null, ProductType.All);
+                CalculatorUnits calculatorUnits = calculatorHelper.generateCalculatorUnits(productModel.UniqueId,
+                        qtys, null, ProductType.All);
                 calculatorForm.setArguments(productModel, calculatorUnits);
                 final CustomerInventoryModel finalInventoryModel = inventoryModel;
                 calculatorForm.onCalcFinish = new CustomerInventoryCalculatorForm.OnCalcFinish() {
@@ -390,6 +451,18 @@ public class CustomerInventoryFragment extends VisitFragment {
             } catch (ProductUnitViewManager.UnitNotFoundException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+
+    private void showErrorDialog(String error) {
+        if (isResumed()) {
+            CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+            dialog.setTitle(com.varanegar.vaslibrary.R.string.error);
+            dialog.setMessage(error);
+            dialog.setIcon(Icon.Error);
+            dialog.setPositiveButton(com.varanegar.vaslibrary.R.string.ok, null);
+            dialog.show();
         }
     }
 }

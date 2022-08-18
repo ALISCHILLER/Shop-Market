@@ -5,6 +5,7 @@ import com.varanegar.processor.annotations.Column;
 import com.varanegar.processor.annotations.Table;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -32,4 +33,5 @@ public class ProductInventoryModel extends BaseModel {
     public boolean IsAvailable;
     @Column
     public boolean IsSold;
+
 }

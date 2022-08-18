@@ -1,6 +1,9 @@
 package com.varanegar.vaslibrary.webapi.tour;
 
+import com.varanegar.processor.annotations.Column;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,5 +17,6 @@ public class SyncGetCustomerCallStockLevelLineViewModel {
     public boolean IsPurchased;
     public UUID ProductUniqueId;
     public boolean HasLevel;
+    public String FactoryDate;
     public List<SyncGetCustomerCallStockLevelLineQtyDetailViewModel> CustomerCallStockLevelLineQtyDetails = new ArrayList<>();
 }
