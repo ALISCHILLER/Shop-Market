@@ -297,6 +297,7 @@ public class CustomerInventoryFragment extends VisitFragment {
             isSoldCheckBox.setChecked(item.IsSold);
             totalQtyTextView.setText(HelperMethods.bigDecimalToString(item.TotalQty));
             rowTextView.setText(String.valueOf(position + 1));
+            startDatePairedItems.setValue(item.FactoryDate);
 
             isSoldCheckBox.setOnClickListener(new View.OnClickListener() {
                 private void update() {
@@ -373,13 +374,13 @@ public class CustomerInventoryFragment extends VisitFragment {
                                     CustomerInventoryManager customerInventoryManager = new CustomerInventoryManager(getContext());
                                     CustomerInventoryModel customerInventoryModel;
                                     customerInventoryModel = customerInventoryManager.getLine(item.UniqueId, customerId);
-                                    String startDate=DateHelper.toString(date, DateFormat.Complete, Locale.getDefault());
+                                    String startDate=DateHelper.toString(date, DateFormat.Date, Locale.getDefault());
                                     customerInventoryModel.FactoryDate=startDate;
                                     try {
                                         customerInventoryManager.insertOrUpdate(customerInventoryModel);
-//                        ProductInventoryManager productInventoryManager = new ProductInventoryManager(getContext());
-//                        ProductInventoryModel updatedModel = productInventoryManager.getLine(item.UniqueId, customerId);
-//                        recyclerAdapter.set(getAdapterPosition(), updatedModel);
+                                        ProductInventoryManager productInventoryManager = new ProductInventoryManager(getContext());
+                                        ProductInventoryModel updatedModel = productInventoryManager.getLine(item.UniqueId, customerId);
+                                        recyclerAdapter.set(getAdapterPosition(), updatedModel);
                                     } catch (ValidationException e) {
                                         e.printStackTrace();
                                     } catch (DbException e) {

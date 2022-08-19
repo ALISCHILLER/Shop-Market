@@ -49,7 +49,8 @@ public class ProductInventoryManager extends BaseManager<ProductInventoryModel> 
                 Projection.column(CustomerInventoryView.UnitName).as("UnitName"),
                 Projection.column(CustomerInventoryView.TotalQty).as("TotalQty"),
                 Projection.column(CustomerInventoryView.IsAvailable).as("IsAvailable"),
-                Projection.column(CustomerInventoryView.IsSold).as("IsSold")
+                Projection.column(CustomerInventoryView.IsSold).as("IsSold"),
+                Projection.column(CustomerInventoryView.FactoryDate).as("FactoryDate")
         );
         subQuery.from(From.table(Product.ProductTbl)
                 .leftJoin(CustomerInventoryView.CustomerInventoryViewTbl)

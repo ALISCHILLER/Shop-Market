@@ -33,5 +33,7 @@ public class ProductInventoryModel extends BaseModel {
     public boolean IsAvailable;
     @Column
     public boolean IsSold;
+    @Column
+    public String FactoryDate;
 
 }
