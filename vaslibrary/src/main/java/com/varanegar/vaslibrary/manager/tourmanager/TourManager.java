@@ -1848,7 +1848,7 @@ public class TourManager {
             syncGetCustomerCallStockLevelLineViewModel.UniqueId = UUID.randomUUID();
             syncGetCustomerCallStockLevelLineViewModel.ProductUniqueId = customerInventoryModel.ProductId;
             syncGetCustomerCallStockLevelLineViewModel.IsPurchased = customerInventoryModel.IsSold;
-            syncGetCustomerCallStockLevelLineViewModel.FactoryDate = customerInventoryModel.FactoryDate;
+            syncGetCustomerCallStockLevelLineViewModel.ProductionDate = customerInventoryModel.FactoryDate + " 10:20:30";
             if (SysConfigManager.compare(sysConfigModel, ProductInventoryManager.CustomerStockCheckType.Count)) {
                 List<CustomerInventoryQtyModel> qtys = customerInventoryQtyManager.getLines(customerInventoryModel.UniqueId);
                 boolean isAvailable = false;

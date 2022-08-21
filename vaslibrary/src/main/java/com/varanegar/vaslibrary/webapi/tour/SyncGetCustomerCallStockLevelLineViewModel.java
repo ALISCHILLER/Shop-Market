@@ -17,6 +17,6 @@ public class SyncGetCustomerCallStockLevelLineViewModel {
     public boolean IsPurchased;
     public UUID ProductUniqueId;
     public boolean HasLevel;
-    public String FactoryDate;
+    public String ProductionDate;
     public List<SyncGetCustomerCallStockLevelLineQtyDetailViewModel> CustomerCallStockLevelLineQtyDetails = new ArrayList<>();
 }

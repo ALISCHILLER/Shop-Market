@@ -286,7 +286,7 @@
     <string name="customer_data_sent">داده مشتری ارسال شده است.</string>
     <string name="connection_to_server_failed">ارتباط با سرور برقرار نشد</string>
     <string name="web_api_failure">خطا در وب سرویس</string>
-    <string name="network_error">خطا در ارتباط با سرور</string>
+    <string name="network_error">خطا در ارتباط با سرور \n اینترنت و وی پی ان را چک کنید</string>
     <string name="data_error">خطا در داده های دریافتی</string>
     <string name="dealerPayment_error">اطلاعات نحوه پرداخت دریافت نشده است</string>
     <string name="please_set_settings">لطفا تنطیمات را دریافت کنید</string>

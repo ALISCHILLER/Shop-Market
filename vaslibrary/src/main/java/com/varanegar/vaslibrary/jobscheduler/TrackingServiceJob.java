@@ -16,6 +16,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.util.jobscheduler.Job;
 import com.varanegar.vaslibrary.manager.locationmanager.LogLevel;
 import com.varanegar.vaslibrary.manager.locationmanager.LogType;
@@ -53,9 +54,13 @@ public class TrackingServiceJob implements Job {
                             context.checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED)
                         TrackingLogManager.addLog(context, LogType.LOCATION_SETTINGS, LogLevel.Error, "مجوز دسترسی به موقعیت در حالت background ندارد");
                 }
-                Intent trackingService = new Intent(context, TrackingService.class);
-                context.startService(trackingService);
-                getOnePoint(context);
+                /**
+                 * mehrdad Ali
+                 * فعال کردن سرویس ارسال  لوکیشن
+                 */
+                    Intent trackingService = new Intent(context, TrackingService.class);
+                    context.startService(trackingService);
+                    getOnePoint(context);
             } else {
                 if (result == ConnectionResult.API_UNAVAILABLE) {
                     TrackingLogManager.addLog(context, LogType.LOCATION_SETTINGS, LogLevel.Error, "Google api client is not available");

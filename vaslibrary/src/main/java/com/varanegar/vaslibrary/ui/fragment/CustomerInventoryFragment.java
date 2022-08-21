@@ -297,6 +297,7 @@ public class CustomerInventoryFragment extends VisitFragment {
             isSoldCheckBox.setChecked(item.IsSold);
             totalQtyTextView.setText(HelperMethods.bigDecimalToString(item.TotalQty));
             rowTextView.setText(String.valueOf(position + 1));
+
             startDatePairedItems.setValue(item.FactoryDate);
 
             isSoldCheckBox.setOnClickListener(new View.OnClickListener() {
