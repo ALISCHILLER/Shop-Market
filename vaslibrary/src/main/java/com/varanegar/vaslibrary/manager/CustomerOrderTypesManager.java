@@ -59,7 +59,8 @@ public class CustomerOrderTypesManager extends BaseManager<CustomerOrderTypeMode
         SysConfigManager sysConfigManager = new SysConfigManager(getContext());
         SysConfigModel sysConfigModel = sysConfigManager.read(ConfigKey.SettingsId, SysConfigManager.local);
         String dateString = DateHelper.toString(UpdateManager.MIN_DATE, DateFormat.MicrosoftDateTime, Locale.US);
-        customerOrderTypeApi.runWebRequest(customerOrderTypeApi.getAll(dateString, sysConfigModel.Value, VaranegarApplication.getInstance().getAppId()), new WebCallBack<List<CustomerOrderTypeModel>>() {
+        customerOrderTypeApi.runWebRequest(customerOrderTypeApi.getAll(dateString, sysConfigModel.Value, VaranegarApplication.getInstance().getAppId()),
+                new WebCallBack<List<CustomerOrderTypeModel>>() {
             @Override
             protected void onFinish() {
             }

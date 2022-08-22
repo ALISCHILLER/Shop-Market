@@ -79,4 +79,12 @@ public class ProductInventoryManager extends BaseManager<ProductInventoryModel> 
         query.whereAnd(Criteria.equals(ProductInventory.UniqueId, productId.toString()));
         return getItem(query);
     }
+
+
+    public List<ProductInventoryModel> getAllProduct(UUID customerId) {
+        Query query = baseQuery(customerId);
+        return getItems(query);
+    }
+
+
 }

@@ -141,6 +141,9 @@ public class CustomerInventoryFragment extends VisitFragment {
             toolbar.setOnBackClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    boolean i= getChackDate();
+                    if (i)
                     promptSave();
                 }
             });
@@ -149,6 +152,22 @@ public class CustomerInventoryFragment extends VisitFragment {
             Timber.e(e);
             return null;
         }
+    }
+
+
+    private boolean getChackDate(){
+        ProductInventoryManager productInventoryManager = new ProductInventoryManager(getContext());
+        List<ProductInventoryModel> product = productInventoryManager.getAllProduct(customerId);
+
+        for (ProductInventoryModel productli:product){
+            if (productli.IsSold){
+                if (productli.FactoryDate==null){
+                    showErrorDialog("لطفا تاریخ تولید را وارد کنید");
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     private void promptSave() {
@@ -167,7 +186,11 @@ public class CustomerInventoryFragment extends VisitFragment {
 
     @Override
     public void onBackPressed() {
+
+        boolean i= getChackDate();
+        if (i)
         promptSave();
+
     }
 
     public void setCustomerId(UUID customerId) {
@@ -375,7 +398,7 @@ public class CustomerInventoryFragment extends VisitFragment {
                                     CustomerInventoryManager customerInventoryManager = new CustomerInventoryManager(getContext());
                                     CustomerInventoryModel customerInventoryModel;
                                     customerInventoryModel = customerInventoryManager.getLine(item.UniqueId, customerId);
-                                    String startDate=DateHelper.toString(date, DateFormat.Date, Locale.getDefault());
+                                    String startDate=DateHelper.toString(date, DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext()));
                                     customerInventoryModel.FactoryDate=startDate;
                                     try {
                                         customerInventoryManager.insertOrUpdate(customerInventoryModel);

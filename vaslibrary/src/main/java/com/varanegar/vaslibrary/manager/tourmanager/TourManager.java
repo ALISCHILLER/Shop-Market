@@ -1848,7 +1848,16 @@ public class TourManager {
             syncGetCustomerCallStockLevelLineViewModel.UniqueId = UUID.randomUUID();
             syncGetCustomerCallStockLevelLineViewModel.ProductUniqueId = customerInventoryModel.ProductId;
             syncGetCustomerCallStockLevelLineViewModel.IsPurchased = customerInventoryModel.IsSold;
-            syncGetCustomerCallStockLevelLineViewModel.ProductionDate = customerInventoryModel.FactoryDate + " 10:20:30";
+
+            if (customerInventoryModel.FactoryDate !=null&&!customerInventoryModel.FactoryDate.isEmpty()) {
+                String dateString = DateHelper.toString(new Date(), DateFormat.Time, VasHelperMethods.getSysConfigLocale(context));
+                syncGetCustomerCallStockLevelLineViewModel.ProductionDate = customerInventoryModel.FactoryDate + " " + dateString;
+            }else{
+                String dateString = DateHelper.toString(new Date(), DateFormat.Complete, VasHelperMethods.getSysConfigLocale(context));
+                syncGetCustomerCallStockLevelLineViewModel.ProductionDate = dateString;
+            }
+
+
             if (SysConfigManager.compare(sysConfigModel, ProductInventoryManager.CustomerStockCheckType.Count)) {
                 List<CustomerInventoryQtyModel> qtys = customerInventoryQtyManager.getLines(customerInventoryModel.UniqueId);
                 boolean isAvailable = false;
