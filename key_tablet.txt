@@ -1,0 +1,26 @@
+  signingConfigs {
+        release {
+            keyAlias 'supervisor'
+            keyPassword '2tDCjCYf=a5gsYF^'
+            storeFile file('./keystore.jks')
+            storePassword 'Z7tSLN=8Agnwgjzy'
+        }
+    }
+
+    signingConfigs {
+        release {
+            keyAlias 'dist'
+            keyPassword 'hmmAd+V3KMFq@y65'
+            storeFile file('./keystore.jks')
+            storePassword 'y69+z6E%KXS@6Pcz'
+        }
+    }
+
+ signingConfigs {
+
+        release {
+            keyAlias 'presale'
+            keyPassword 'hmmAd+V3KMFq@y65'
+            storeFile file('./keystore.jks')
+            storePassword 'y69+z6E%KXS@6Pcz'
+        }
