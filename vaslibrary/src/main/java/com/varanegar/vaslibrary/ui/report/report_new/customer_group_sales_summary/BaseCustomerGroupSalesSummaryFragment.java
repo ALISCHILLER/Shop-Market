@@ -169,6 +169,7 @@ public abstract class BaseCustomerGroupSalesSummaryFragment<T extends ProductCus
                 });
             }
         });
+
         reportView = view.findViewById(R.id.review_report_view);
         SimpleToolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setOnBackClickListener(new View.OnClickListener() {

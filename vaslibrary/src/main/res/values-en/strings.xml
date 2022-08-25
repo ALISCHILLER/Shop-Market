@@ -90,6 +90,7 @@
     <string name="return_qty_count">Number of returns</string>
     <string name="total_return">Total return</string>
     <string name="visitor_name_label">Seller Name:</string>
+    <string name="searchProductGroup">Product group search</string>
     <string name="day_sum_order_label">Total order of the day:</string>
     <string name="line_customers_label">Route Customers:</string>
     <string name="day_customer">Customers of the day</string>
@@ -124,6 +125,7 @@
     <string name="edit_customer_label">Edit client</string>
     <string name="non_visit">Lack of visits</string>
     <string name="send_customer_actions">Send customer operations</string>
+    <string name="customerInventoryReport">customer inventory repost</string>
     <string name="salesman_report">Vendor performance</string>
     <string name="receipt">Arrived</string>
     <string name="delivered_qty_lablel">Number delivered</string>
@@ -346,4 +348,8 @@
     <string name="remain_settlement_usance">To date days</string>
     <string name="sent_tour_info">Tour\'s info</string>
     <string name="empty_album">There is no album to download</string>
+    <string name="startDateEmpty">Select a start date</string>
+    <string name="endDateEmpty">Select a end date</string>
+
+
 </resources>

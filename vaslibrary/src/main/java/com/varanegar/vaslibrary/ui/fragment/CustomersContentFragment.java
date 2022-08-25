@@ -50,6 +50,7 @@ import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.action.BaseAction;
 import com.varanegar.vaslibrary.action.BaseReturnAction;
 import com.varanegar.vaslibrary.action.CameraAction;
+import com.varanegar.vaslibrary.action.CustomerInventoryReportAction;
 import com.varanegar.vaslibrary.action.SendOperationAction;
 import com.varanegar.vaslibrary.action.VpnAction;
 import com.varanegar.vaslibrary.action.confirm.ConfirmAction;
@@ -126,6 +127,7 @@ public class CustomersContentFragment extends VaranegarFragment {
     private SimpleToolbar simpleToolbar;
     private MapView mapView;
     private PairedItems code_naghsh_paired_item;
+
     protected VasActionsAdapter getActionsAdapter() {
         return actionsAdapter;
     }
@@ -524,25 +526,25 @@ public class CustomersContentFragment extends VaranegarFragment {
                                         .findViewById(R.id.customer_code_paired_item))
                                         .setValue(customer.CustomerCode);
 
-                                if(VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
-                                        code_naghsh_paired_item= view.
-                                                findViewById(R.id.code_naghsh_paired_item);
+                                if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+                                    code_naghsh_paired_item = view.
+                                            findViewById(R.id.code_naghsh_paired_item);
                                     code_naghsh_paired_item.setVisibility(View.VISIBLE);
                                     if (customer.CodeNaghsh != null && !customer.CodeNaghsh.isEmpty()) {
                                         code_naghsh_paired_item.setValue(customer.CodeNaghsh);
-                                    }else {
+                                    } else {
                                         code_naghsh_paired_item.setBackgroundColor(getContext()
-                                                        .getResources().getColor(R.color.red));
+                                                .getResources().getColor(R.color.red));
                                         SharedPreferences sharedPreferences = getContext()
                                                 .getSharedPreferences("preferred_local", Context.MODE_PRIVATE);
-                                        String un3=sharedPreferences.getString(customer.UniqueId.toString()
-                                                ,"");
+                                        String un3 = sharedPreferences.getString(customer.UniqueId.toString()
+                                                , "");
                                         sharedPreferences.edit()
-                                                .putString(customer.UniqueId.toString(),"").apply();
-                                        if (un3!=null&&un3.isEmpty()&&un3.equals("")) {
+                                                .putString(customer.UniqueId.toString(), "").apply();
+                                        if (un3 != null && un3.isEmpty() && un3.equals("")) {
                                             //showEditDialog();
-                                        }else{
-                                           // onBackPressed();
+                                        } else {
+                                            // onBackPressed();
                                         }
                                     }
                                 }
@@ -805,7 +807,6 @@ public class CustomersContentFragment extends VaranegarFragment {
         actions.add(printAction);
 
 
-
         if (!getActionsAdapter().getCloudConfigs().compare(ConfigKey.SimplePresale, true)) {
             actions.add(new CameraAction(
                     getVaranegarActvity(),
@@ -815,6 +816,7 @@ public class CustomersContentFragment extends VaranegarFragment {
             SysConfigManager sysConfigManager = new SysConfigManager(getContext());
             SysConfigModel sysConfigModel = sysConfigManager
                     .read(CheckCustomerStock, SysConfigManager.cloud);
+
             if (SysConfigManager.compare(sysConfigModel, true)) {
                 actions.add(new CustomerInventoryAction(
                         getVaranegarActvity(),
@@ -826,7 +828,14 @@ public class CustomersContentFragment extends VaranegarFragment {
                     getVaranegarActvity(),
                     actionsAdapter,
                     getSelectedId()));
+
+            // گزارش موجودی مشتری
+            actions.add(new CustomerInventoryReportAction(
+                    getVaranegarActvity(),
+                    actionsAdapter,
+                    getSelectedId()));
         }
+
 
         ConfirmAction confirmAction = new ConfirmAction(
                 getVaranegarActvity(),
@@ -866,7 +875,8 @@ public class CustomersContentFragment extends VaranegarFragment {
             updateCustomer();
         });
         actions.add(sendOperationAction);
-        VpnAction vpnAction=new VpnAction(
+
+        VpnAction vpnAction = new VpnAction(
                 getVaranegarActvity(),
                 actionsAdapter,
                 getSelectedId());
@@ -877,6 +887,7 @@ public class CustomersContentFragment extends VaranegarFragment {
             }
         });
         actions.add(vpnAction);
+
     }
 
     private void sortActions(List<Action> actions) {
@@ -917,8 +928,7 @@ public class CustomersContentFragment extends VaranegarFragment {
     }
 
 
-
-    private String pin ;
+    private String pin;
 
     public void toeditFragment() {
 
@@ -932,7 +942,7 @@ public class CustomersContentFragment extends VaranegarFragment {
                 pin = tourModel.Pins.get(i).PinCode4;
             }
         }
-        if ( pin != null) {
+        if (pin != null) {
             InsertPinDialog dialog = new InsertPinDialog();
             dialog.setCancelable(false);
             dialog.setClosable(false);
@@ -958,19 +968,19 @@ public class CustomersContentFragment extends VaranegarFragment {
                 }
             });
             dialog.show(getActivity().getSupportFragmentManager(), "InsertPinDialog");
-        }else {
-            pin="1111";
+        } else {
+            pin = "1111";
             InsertPinDialog dialog = new InsertPinDialog();
             dialog.setCancelable(false);
             dialog.setClosable(false);
             dialog.setValues(pin);
             dialog.settype("true");
-            dialog.setValuesRequst("pin4",getSelectedId(),
-                    null,null,getActivity().getString(R.string.please_insert_pin_code));
+            dialog.setValuesRequst("pin4", getSelectedId(),
+                    null, null, getActivity().getString(R.string.please_insert_pin_code));
             dialog.setOnResult(new InsertPinDialog.OnResult() {
                 @Override
                 public void done() {
-                   // showEditDialog();
+                    // showEditDialog();
                 }
 
                 @Override
@@ -989,7 +999,7 @@ public class CustomersContentFragment extends VaranegarFragment {
     }
 
 
-    private void showEditDialog(){
+    private void showEditDialog() {
 //        EditCustomerZarFragmentDialog editCustomerFragmentDialog =
 //                new EditCustomerZarFragmentDialog();
 //       // editCustomerFragmentDialog.onCustomerEditedCallBack = this::runActionCallBack;
@@ -1000,7 +1010,7 @@ public class CustomersContentFragment extends VaranegarFragment {
 //                "EditCustomerFragmentDialog");
 
 
-        Edit_New_Customer_ZarFragment edit_new_customer_zar=new Edit_New_Customer_ZarFragment();
+        Edit_New_Customer_ZarFragment edit_new_customer_zar = new Edit_New_Customer_ZarFragment();
         Bundle bundle = new Bundle();
         bundle.putString("68565e5e-d407-4858-bc5f-fd52b9318734", getSelectedId().toString());
         edit_new_customer_zar.setArguments(bundle);

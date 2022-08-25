@@ -3,6 +3,8 @@ package com.varanegar.vaslibrary.ui.report.report_new.webApi;
 import com.varanegar.vaslibrary.model.sendAnswersQustion.SyncGetTourModel;
 import com.varanegar.vaslibrary.ui.report.report_new.customerNoSaleReport.model.CustomerNoSaleModel;
 import com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary.model.ProductCustomerGroupSalesSummaryModel;
+import com.varanegar.vaslibrary.ui.report.report_new.customer_inventory_report.model.InventoryRequest;
+import com.varanegar.vaslibrary.ui.report.report_new.customer_inventory_report.model.PCustomerInventoryReportModel;
 import com.varanegar.vaslibrary.ui.report.report_new.customer_purchase_history_report.model.PCustomerPurchaseHistoryViewModel;
 import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.model.ProductInvoiveBalanceReportModel;
 import com.varanegar.vaslibrary.ui.report.report_new.products_purchase_history_report.model.TProductsPurchaseHistoryReportModel;
@@ -16,6 +18,12 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface InReportApi {
+
+    @POST("api/v2/ngt/customerinventoryreport")
+    Call<List<PCustomerInventoryReportModel>> inventoryReport(
+            @Body InventoryRequest request
+            );
+
 
     @GET("api/v2/ngt/ReviewReport/InvoiceRemain")
     Call<List<ProductInvoiveBalanceReportModel>> product

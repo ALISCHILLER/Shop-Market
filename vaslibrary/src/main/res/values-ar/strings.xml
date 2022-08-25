@@ -95,6 +95,7 @@
     <string name="sales_report">تقارير البيع</string>
     <string name="operation_report">تقارير العمل</string>
     <string name="visitor_name_label">اسم المندوب :</string>
+    <string name="searchProductGroup">البحث عن مجموعة المنتج</string>
     <string name="day_sum_order_label">اجمالي الطلبات اليومية :</string>
     <string name="line_customers_label">عملاء الخط التسويقي</string>
     <string name="day_customer">عملاء اليوم:</string>
@@ -129,6 +130,7 @@
     <string name="edit_customer_label">تحرير العميل</string>
     <string name="non_visit">امتناع زيارة العميل</string>
     <string name="send_customer_actions">ارسال معلومات العميل</string>
+    <string name="customerInventoryReport">تقرير جرد العميل</string>
     <string name="salesman_report">تقارير المندوب</string>
     <string name="receipt">رصيد</string>
     <string name="delivered_qty_lablel">الکمية المسلمه</string>

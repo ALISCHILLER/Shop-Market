@@ -26,4 +26,9 @@ public class ProductGroupModel extends BaseModel{
     @Column
     public int RowIndex;
 
+    @Override
+    public String toString() {
+        return ProductGroupName;
+    }
+
 }

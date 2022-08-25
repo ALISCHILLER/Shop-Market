@@ -950,7 +950,8 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
             if (newTour) {
                 MainVaranegarActivity activity = getVaranegarActvity();
                 if (activity != null && !activity.isFinishing()) {
-                    activity.putFragment(getCustomersFragment());
+                    activity.putFragment(
+                            getCustomersFragment());
                     activity.getSharedPreferences("TourReportFragment", MODE_PRIVATE).edit().remove("NEW_TOUR").apply();
                 }
             }

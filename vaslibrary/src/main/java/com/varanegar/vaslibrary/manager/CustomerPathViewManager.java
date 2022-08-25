@@ -414,6 +414,13 @@ public class CustomerPathViewManager extends BaseManager<CustomerPathViewModel> 
         return customerPathViewModel != null;
     }
 
+    public CustomerPathViewModel getCustomerPathViewModel(UUID customerId){
+        Query query = new Query().from(CustomerPathView.CustomerPathViewTbl)
+                .whereAnd(Criteria.equals(CustomerPathView.UniqueId, customerId));
+        return getItem(query);
+    }
+
+
     public boolean isAllCustomersOfPathVisited() {
         SysConfigManager sysConfigManager = new SysConfigManager(getContext());
         SysConfigModel sysConfigModel = sysConfigManager.read(ConfigKey.MandatoryCustomerVisit, SysConfigManager.cloud);

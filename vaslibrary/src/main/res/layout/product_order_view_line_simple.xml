@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_margin="@dimen/padding_small"
     app:cardCornerRadius="@dimen/padding_xsmall"
     app:cardElevation="@dimen/cardview_default_elevation">
@@ -92,6 +93,13 @@
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical">
 
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewProductUnit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:itemCount="2"
+                    android:visibility="gone"/>
 
                 <LinearLayout
                     android:id="@+id/large_unit_layout"
@@ -219,7 +227,6 @@
                         android:src="@drawable/ic_minus_square_red_36dp"
                         android:tint="@color/red" />
                 </LinearLayout>
-
 
                 <TextView
                     android:id="@+id/equals_text_view"

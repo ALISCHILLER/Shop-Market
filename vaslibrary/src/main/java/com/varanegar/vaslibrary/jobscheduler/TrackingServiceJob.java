@@ -58,9 +58,11 @@ public class TrackingServiceJob implements Job {
                  * mehrdad Ali
                  * فعال کردن سرویس ارسال  لوکیشن
                  */
+                if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
                     Intent trackingService = new Intent(context, TrackingService.class);
                     context.startService(trackingService);
                     getOnePoint(context);
+                }
             } else {
                 if (result == ConnectionResult.API_UNAVAILABLE) {
                     TrackingLogManager.addLog(context, LogType.LOCATION_SETTINGS, LogLevel.Error, "Google api client is not available");

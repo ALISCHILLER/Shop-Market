@@ -142,7 +142,7 @@
     <string name="send_customer_actions">ارسال عملیات مشتری</string>
     <string name="salesman_report">عملکرد فروشنده</string>
     <string name="receipt">رسید</string>
-
+    <string name="customerInventoryReport">گزارش موجودی مشتری</string>
     <string name="delivered_qty_lablel">تعداد تحویل شده</string>
     <string name="delivered_qty_label">تعداد توزیع</string>
     <string name="dist_qty_label">تعداد توزیع</string>
@@ -462,6 +462,7 @@
     <string name="no_change_for_day_customer">تغییری برای مشتریان روز وجود ندارد</string>
     <string name="returned_total_qty_label">تعداد کل برگشتی</string>
     <string name="reports">گزارش ها</string>
+    <string name="createReport">تهیه گزارش</string>
     <string name="could_not_delete_request">درخواست حذف نشد !</string>
     <string name="cancel_return_request">انصراف از برگشتی</string>
     <string name="order_is_empty">درخواست خالی است !</string>
@@ -509,6 +510,7 @@
     <string name="in_adequate_inventory">موجودی ناکافی</string>
     <string name="total_price">قیمت کل :</string>
     <string name="product_group_label">گروه کالا :</string>
+    <string name="searchProductGroup">جستجوی گروه کالا</string>
     <string name="user_price_label">قیمت مصرف کننده </string>
     <string name="total_ordered_qty_label">مجموع سفارش کالا :</string>
     <string name="store_inventory_label">موجودی انبار :</string>
@@ -1522,6 +1524,8 @@
     <string name="not_found">Not Found!</string>
     <string name="emailSubject">\"My Android device ID is:\"</string>
 
+    <string name="startDateEmpty">تاریخ شروع را انتخاب کنید</string>
+    <string name="endDateEmpty">تاریخ پایان را انتخاب کنید</string>
 
     <string-array name="choice_items">
         <item>One</item>

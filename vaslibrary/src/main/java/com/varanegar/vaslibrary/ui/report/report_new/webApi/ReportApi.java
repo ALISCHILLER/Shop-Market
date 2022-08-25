@@ -5,6 +5,8 @@ import android.content.Context;
 import com.varanegar.vaslibrary.model.sendAnswersQustion.SyncGetTourModel;
 import com.varanegar.vaslibrary.ui.report.report_new.customerNoSaleReport.model.CustomerNoSaleModel;
 import com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary.model.ProductCustomerGroupSalesSummaryModel;
+import com.varanegar.vaslibrary.ui.report.report_new.customer_inventory_report.model.InventoryRequest;
+import com.varanegar.vaslibrary.ui.report.report_new.customer_inventory_report.model.PCustomerInventoryReportModel;
 import com.varanegar.vaslibrary.ui.report.report_new.customer_purchase_history_report.model.PCustomerPurchaseHistoryViewModel;
 import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.model.ProductInvoiveBalanceReportModel;
 import com.varanegar.vaslibrary.ui.report.report_new.products_purchase_history_report.model.TProductsPurchaseHistoryReportModel;
@@ -21,6 +23,14 @@ import retrofit2.Call;
 public class ReportApi extends BaseApi implements InReportApi {
     public ReportApi(Context context) {
         super(context);
+    }
+
+
+    @Override
+    public Call<List<PCustomerInventoryReportModel>> inventoryReport(
+            InventoryRequest request) {
+        return getRetrofitBuilder(TokenType.UserToken).build().create(InReportApi.class)
+                .inventoryReport(request);
     }
 
 
