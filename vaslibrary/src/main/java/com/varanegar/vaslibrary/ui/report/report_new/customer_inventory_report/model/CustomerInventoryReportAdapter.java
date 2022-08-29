@@ -19,12 +19,12 @@ public class CustomerInventoryReportAdapter extends SimpleReportAdapter<PCustome
 
     @Override
     public void bind(ReportColumns columns, PCustomerInventoryReportModel entity){
-        columns.add(bind(entity, CustomerInventoryReportView.saleDate,"تاریخ فروش").setWeight(1f));
-        columns.add(bind(entity, CustomerInventoryReportView.productCode,"کد کالا").setWeight(1f));
-        columns.add(bind(entity, CustomerInventoryReportView.productName,"نام کالا").setWeight(1.5f));
-        columns.add(bind(entity, CustomerInventoryReportView.productGroupName,"گروه کالا").setWeight(1f));
+        columns.add(bind(entity, CustomerInventoryReportView.saleDate,"تاریخ فروش").setWeight(0.9f));
+        columns.add(bind(entity, CustomerInventoryReportView.productCode,"کد کالا").setWeight(0.9f));
+        columns.add(bind(entity, CustomerInventoryReportView.productName,"نام کالا").setWeight(1.2f));
+        columns.add(bind(entity, CustomerInventoryReportView.productGroupName,"گروه کالا").setWeight(0.8f));
         columns.add(bind(entity, CustomerInventoryReportView.inventoryCustomer,"موجودی مشتری").setWeight(1f));
-        columns.add(bind(entity, CustomerInventoryReportView.tedadKochektarinVahed,"تعداد کوچکترین واحد").setWeight(2));
+        columns.add(bind(entity, CustomerInventoryReportView.tedadKochektarinVahed,"تعداد سفارش").setWeight(1.5f));
         columns.add(bind(entity, CustomerInventoryReportView.productionDate,"تاریخ تولید").setWeight(1f));
         columns.add(bind(entity, CustomerInventoryReportView.customerCode,"کد مشتری").setWeight(1f));
         columns.add(bind(entity, CustomerInventoryReportView.customerName,"نام مشتری").setWeight(1.5f));

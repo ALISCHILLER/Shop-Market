@@ -72,6 +72,7 @@ public class CustomerInventoryReportFragment <T extends CustomerInventoryReportV
     private Button buttonReport;
     private ProgressDialog progressDialog;
     private PairedItemsSpinner<ProductGroupModel> filterSpinner;
+    private List<PCustomerInventoryReportModel> customerInventoryReportModelList;
 
 
     //---------------------------------------------------------------------------------------------- onCreateView
@@ -243,6 +244,7 @@ public class CustomerInventoryReportFragment <T extends CustomerInventoryReportV
 
             @Override
             protected void onSuccess(List<PCustomerInventoryReportModel> result, Request request) {
+//                customerInventoryReportModelList.addAll(result);
                 setFilterSpinner(result);
                 setReportAdapter(result);
             }
