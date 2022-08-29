@@ -22,6 +22,7 @@ import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialo
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.framework.util.datetime.DateFormat;
 import com.varanegar.framework.util.datetime.DateHelper;
+import com.varanegar.framework.util.datetime.JalaliCalendar;
 import com.varanegar.framework.util.report.ReportView;
 import com.varanegar.framework.util.report.SimpleReportAdapter;
 import com.varanegar.vaslibrary.R;
@@ -44,6 +45,7 @@ import com.varanegar.vaslibrary.ui.report.report_new.webApi.ReportApi;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -72,7 +74,7 @@ public class CustomerInventoryReportFragment <T extends CustomerInventoryReportV
     private Button buttonReport;
     private ProgressDialog progressDialog;
     private PairedItemsSpinner<ProductGroupModel> filterSpinner;
-    private List<PCustomerInventoryReportModel> customerInventoryReportModelList;
+    private List<PCustomerInventoryReportModel> customerInventoryReportModelList;//برای چرخش صفحه مجبور شدم استاتیک باشه چون از viewModel و هیچ معماری استفاده نکرده
 
 
     //---------------------------------------------------------------------------------------------- onCreateView
@@ -84,6 +86,7 @@ public class CustomerInventoryReportFragment <T extends CustomerInventoryReportV
     //---------------------------------------------------------------------------------------------- onCreateView
 
 
+
     //---------------------------------------------------------------------------------------------- onViewCreated
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -92,6 +95,20 @@ public class CustomerInventoryReportFragment <T extends CustomerInventoryReportV
         setListener();
     }
     //---------------------------------------------------------------------------------------------- onViewCreated
+
+
+
+    //---------------------------------------------------------------------------------------------- onResume
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (customerInventoryReportModelList != null && customerInventoryReportModelList.size() > 0) {
+            setFilterSpinner(customerInventoryReportModelList);
+            setReportAdapter(customerInventoryReportModelList);
+        }
+    }
+    //---------------------------------------------------------------------------------------------- onResume
+
 
 
     //---------------------------------------------------------------------------------------------- getCustomerId
@@ -105,6 +122,7 @@ public class CustomerInventoryReportFragment <T extends CustomerInventoryReportV
 
     //---------------------------------------------------------------------------------------------- init
     private void init(@NonNull View view) {
+
         customerId = UUID.fromString(getStringArgument("67485d97-5f0e-4b1e-9677-0798dec7a587"));
         try {
             CustomerCallManager callManager = new CustomerCallManager(requireContext());
@@ -125,6 +143,15 @@ public class CustomerInventoryReportFragment <T extends CustomerInventoryReportV
         buttonReport = view.findViewById(R.id.buttonReport);
         filterSpinner = view.findViewById(R.id.filterSpinner);
         toolbar.setTitle(getTitle());
+
+        endDate = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, -30);
+        String to = DateHelper.toString(endDate, DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext()));
+        String from = DateHelper.toString(calendar.getTime(), DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext()));
+        startDate = calendar.getTime();
+        startDatePairedItems.setValue(from);
+        endDatePairedItems.setValue(to);
 
     }
     //---------------------------------------------------------------------------------------------- init
@@ -244,9 +271,10 @@ public class CustomerInventoryReportFragment <T extends CustomerInventoryReportV
 
             @Override
             protected void onSuccess(List<PCustomerInventoryReportModel> result, Request request) {
-//                customerInventoryReportModelList.addAll(result);
-                setFilterSpinner(result);
-                setReportAdapter(result);
+                customerInventoryReportModelList = new ArrayList<>();
+                customerInventoryReportModelList.addAll(result);
+                setFilterSpinner(customerInventoryReportModelList);
+                setReportAdapter(customerInventoryReportModelList);
             }
 
             @Override
@@ -362,5 +390,7 @@ public class CustomerInventoryReportFragment <T extends CustomerInventoryReportV
         setReportAdapter(filter);
     }
     //---------------------------------------------------------------------------------------------- filterList
+
+
 
 }
