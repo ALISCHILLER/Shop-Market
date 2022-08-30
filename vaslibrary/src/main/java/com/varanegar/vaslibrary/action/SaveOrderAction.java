@@ -41,6 +41,8 @@ import timber.log.Timber;
 
 public class SaveOrderAction extends CheckDistanceAction {
 
+    private UUID CustomerLevelId;
+
     @Nullable
     @Override
     public UUID getTaskUniqueId() {
@@ -48,9 +50,10 @@ public class SaveOrderAction extends CheckDistanceAction {
     }
 
     public SaveOrderAction(MainVaranegarActivity activity,
-                           ActionsAdapter adapter, UUID selectedId) {
+                           ActionsAdapter adapter, UUID selectedId, UUID CustomerLevelId) {
         super(activity, adapter, selectedId);
         icon = R.drawable.ic_thumb_up_white_24dp;
+        this.CustomerLevelId = CustomerLevelId;
     }
 
     @Nullable
@@ -243,7 +246,7 @@ public class SaveOrderAction extends CheckDistanceAction {
             public void run(UUID orderId) {
                 if (orderId != null) {
                     CustomerSaveOrderFragment saveOrderFragment = new CustomerSaveOrderFragment();
-                    saveOrderFragment.setArguments(customerId, orderId);
+                    saveOrderFragment.setArguments(customerId, orderId, CustomerLevelId);
                     getActivity().pushFragment(saveOrderFragment);
                 } else {
                     addCustomerCallOrder(getSelectedId());
@@ -255,7 +258,7 @@ public class SaveOrderAction extends CheckDistanceAction {
 
     private void letsGo(UUID customerId, UUID orderId) {
         CustomerSaveOrderFragment saveOrderFragment = new CustomerSaveOrderFragment();
-        saveOrderFragment.setArguments(customerId, orderId);
+        saveOrderFragment.setArguments(customerId, orderId, CustomerLevelId);
         getActivity().pushFragment(saveOrderFragment);
     }
 

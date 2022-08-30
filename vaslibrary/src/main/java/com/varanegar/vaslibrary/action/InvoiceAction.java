@@ -38,15 +38,18 @@ import timber.log.Timber;
 
 public class InvoiceAction extends CheckDistanceAction {
 
+    private UUID CustomerLevelId;
+
     @Nullable
     @Override
     public UUID getTaskUniqueId() {
         return UUID.fromString("c81c3571-6f8f-4a53-bb64-4742fbf64f3a");
     }
 
-    public InvoiceAction(MainVaranegarActivity activity, ActionsAdapter adapter, UUID selectedId) {
+    public InvoiceAction(MainVaranegarActivity activity, ActionsAdapter adapter, UUID selectedId, UUID CustomerLevelId) {
         super(activity, adapter, selectedId);
         icon = R.drawable.ic_thumb_up_white_24dp;
+        this.CustomerLevelId = CustomerLevelId;
     }
 
     @Nullable
@@ -184,7 +187,7 @@ public class InvoiceAction extends CheckDistanceAction {
                 callOrderManager.initCall(callOrderId, false);
             }
             CustomerSaveOrderFragment saveOrderFragment = new CustomerSaveOrderFragment();
-            saveOrderFragment.setArguments(getSelectedId(), callOrderId);
+            saveOrderFragment.setArguments(getSelectedId(), callOrderId, CustomerLevelId);
             getActivity().pushFragment(saveOrderFragment);
         } catch (OrderInitException ex) {
             Timber.e(ex);

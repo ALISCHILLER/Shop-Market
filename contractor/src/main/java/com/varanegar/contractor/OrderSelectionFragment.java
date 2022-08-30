@@ -36,6 +36,7 @@ import timber.log.Timber;
 public class OrderSelectionFragment extends VaranegarFragment {
     private BaseSelectionRecyclerAdapter<CustomerCallOrderPreviewModel> adapter;
     private UUID customerId;
+    private UUID customerLevelId;
     private Button printButton;
 
 
@@ -43,6 +44,9 @@ public class OrderSelectionFragment extends VaranegarFragment {
         this.customerId = customerId;
     }
 
+    public void setCustomerLevelId(UUID customerLevelId) {
+        this.customerLevelId = customerLevelId;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState) {
@@ -75,7 +79,7 @@ public class OrderSelectionFragment extends VaranegarFragment {
             public void onItemSelected(int position, boolean selected) {
                 CustomerCallOrderPreviewModel selectedOrder = adapter.getSelectedItem();
                 CustomerSaveOrderFragment saveOrderFragment = new CustomerSaveOrderFragment();
-                saveOrderFragment.setArguments(customerId, selectedOrder.UniqueId);
+                saveOrderFragment.setArguments(customerId, selectedOrder.UniqueId, customerLevelId);
                 getVaranegarActvity().pushFragment(saveOrderFragment);
             }
         });
@@ -87,7 +91,7 @@ public class OrderSelectionFragment extends VaranegarFragment {
                     CustomerSaveOrderFragment saveOrderFragment = new CustomerSaveOrderFragment();
                     CustomerCallOrderManager callOrderManager = new CustomerCallOrderManager(getActivity());
                     CustomerCallOrderModel callOrderModel = callOrderManager.addOrder(customerId);
-                    saveOrderFragment.setArguments(customerId, callOrderModel.UniqueId);
+                    saveOrderFragment.setArguments(customerId, callOrderModel.UniqueId, customerLevelId);
                     getVaranegarActvity().pushFragment(saveOrderFragment);
                 } catch (Exception ex) {
                     Timber.e(ex);

@@ -148,6 +148,7 @@ public class CustomersContentFragment extends VaranegarFragment {
         }
     }
 
+    
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -352,6 +353,7 @@ public class CustomersContentFragment extends VaranegarFragment {
 
         actionsAdapter = new VasActionsAdapter(mainVarActivity, getSelectedId());
         customer = new CustomerManager(context).getItem(getSelectedId());
+
         if (customer == null) {
             Timber.wtf("customer id not found : ", getSelectedId().toString());
             throw new NullPointerException("customer id not found : " + getSelectedId().toString());
@@ -745,12 +747,12 @@ public class CustomersContentFragment extends VaranegarFragment {
             actions.add(new InvoiceAction(
                     getVaranegarActvity(),
                     getActionsAdapter(),
-                    getSelectedId()));
+                    getSelectedId(),customer.CustomerLevelId));
         else
             actions.add(new SaveOrderAction(
                     getVaranegarActvity(),
                     getActionsAdapter(),
-                    getSelectedId()));
+                    getSelectedId(),customer.CustomerLevelId));
 
         if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
             NonVisitAction nonVisitAction =

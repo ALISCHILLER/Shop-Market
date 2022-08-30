@@ -112,6 +112,8 @@ import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.EditOrderLocat
 import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.OrderActivityEventViewModel;
 import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.OrderLineActivityEventViewModel;
 import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.OrderLocationViewModel;
+import com.varanegar.vaslibrary.manager.msl.MslManager;
+import com.varanegar.vaslibrary.manager.msl.MslProductPatternManager;
 import com.varanegar.vaslibrary.manager.orderprizemanager.OrderPrizeManager;
 import com.varanegar.vaslibrary.manager.paymentmanager.PaymentManager;
 import com.varanegar.vaslibrary.manager.paymentmanager.paymenttypes.PaymentType;
@@ -145,6 +147,8 @@ import com.varanegar.vaslibrary.model.customerpathview.CustomerPathViewModel;
 import com.varanegar.vaslibrary.model.customerremainperline.CustomerRemainPerLineModel;
 import com.varanegar.vaslibrary.model.freeReason.FreeReasonModel;
 import com.varanegar.vaslibrary.model.location.LocationModel;
+import com.varanegar.vaslibrary.model.msl.MslModel;
+import com.varanegar.vaslibrary.model.msl.MslProductPatternModel;
 import com.varanegar.vaslibrary.model.noSaleReason.NoSaleReasonModel;
 import com.varanegar.vaslibrary.model.onhandqty.OnHandQtyStock;
 import com.varanegar.vaslibrary.model.orderLineQtyModel.OrderLineQtyModel;
@@ -242,6 +246,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
     private List<CustomerCallInvoiceModel> customerCallOrderModels;
 
     private UUID customerId;
+    private UUID customerLevelId;
     private TextView netAmountTextView;
     private ArrayList<OrderOption<CustomerCallOrderOrderViewModel>> orderOptions;
     private TextView statusTextView;
@@ -297,9 +302,10 @@ public class CustomerSaveOrderFragment extends VisitFragment
 
     List<DiscountOrderPrizeViewModel> orderPrizeList = new ArrayList<>();
 
-    public void setArguments(UUID customerId, UUID callOrderId) {
+    public void setArguments(UUID customerId, UUID callOrderId, UUID customerLevelId) {
         addArgument("9c497998-18e6-4be9-ad80-984fcfb2169c", customerId.toString());
         addArgument("cfa84e29-90a1-461c-aa59-d201f410ac7b", callOrderId.toString());
+        addArgument("customerLevelId", customerLevelId.toString());
     }
 
     @Override
@@ -568,9 +574,12 @@ public class CustomerSaveOrderFragment extends VisitFragment
                 startProductStockLevelProgressDialog();
             customerId = UUID.fromString(savedInstanceState.getString("eb6d7315-0bd0-420c-bf80-e0257c7b153a"));
             callOrderId = UUID.fromString(savedInstanceState.getString("cfa84e29-90a1-461c-aa59-d201f410ac7b"));
+            customerLevelId = UUID.fromString(savedInstanceState.getString("customerLevelId"));
+
         } else {
             customerId = UUID.fromString(getArguments().getString("9c497998-18e6-4be9-ad80-984fcfb2169c"));
             callOrderId = UUID.fromString(getArguments().getString("cfa84e29-90a1-461c-aa59-d201f410ac7b"));
+            customerLevelId = UUID.fromString(getArguments().getString("customerLevelId"));
         }
         setRetainInstance(true);
 
@@ -1566,9 +1575,38 @@ public class CustomerSaveOrderFragment extends VisitFragment
 //                    }
 //                });
             if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
-
-
                 if(customer.CodeNaghsh !=null) {
+
+
+                    //check msl in order mehrdad latifi
+
+                    UUID emphasisProduct = null;
+                    List<MslProductPatternModel> mslProductPatternModels = new MslProductPatternManager(getContext()).getAll();
+
+                    for (MslProductPatternModel mslModel : mslProductPatternModels) {
+                        boolean mslCheck = false;
+                        for (CustomerCallOrderOrderViewModel item : orderAdapter.getItems())
+                            if (mslModel.ProductId.equals(item.ProductId)) {
+                                mslCheck = true;
+                                break;
+                            }
+                        if (!mslCheck) {
+                            emphasisProduct = mslModel.ProductId;
+                            break;
+                        }
+                    }
+
+                    if (emphasisProduct != null) {
+                        ProductManager productManager = new ProductManager(getContext());
+                        String productName = productManager.getItem(emphasisProduct).ProductName;
+                        CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(getContext());
+                        cuteMessageDialog.setIcon(Icon.Error);
+                        cuteMessageDialog.setTitle(R.string.error);
+                        cuteMessageDialog.setMessage(productName + " جزو کالاهای تاکیدی است و حتما باید در سفارش باشد ");
+                        cuteMessageDialog.setNegativeButton(R.string.ok, null);
+                        cuteMessageDialog.show();
+                        return;
+                    }
 
 
                     SharedPreferences sharedPreferences = context.getSharedPreferences("ReportConfig",
@@ -1699,6 +1737,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
             bundle2.putString("1c886632-a88a-4e73-9164-f6656c219917", callOrderId.toString());
             bundle2.putString("3af8c4e9-c5c7-4540-8678-4669879caa79", customerId.toString());
             bundle2.putString("b505233a-aaec-4c3c-a7ec-8fa08b940e74", customerCallOrderModel.OrderTypeUniqueId.toString());
+            bundle2.putString("customerLevelId", customerLevelId.toString());
             productGroupFragment.setArguments(bundle2);
             getVaranegarActvity().pushFragment(productGroupFragment);
         });

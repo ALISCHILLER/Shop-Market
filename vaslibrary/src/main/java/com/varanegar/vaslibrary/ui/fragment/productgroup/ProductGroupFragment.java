@@ -72,9 +72,12 @@ import com.varanegar.vaslibrary.manager.ProductType;
 import com.varanegar.vaslibrary.manager.ProductUnitViewManager;
 import com.varanegar.vaslibrary.manager.ProductUnitsViewManager;
 import com.varanegar.vaslibrary.manager.UserManager;
+import com.varanegar.vaslibrary.manager.customer.CustomerLevelManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.customercall.CallOrderLineManager;
 import com.varanegar.vaslibrary.manager.customercall.CallOrderLinesTempManager;
+import com.varanegar.vaslibrary.manager.msl.MslManager;
+import com.varanegar.vaslibrary.manager.msl.MslProductPatternManager;
 import com.varanegar.vaslibrary.manager.orderprizemanager.OrderPrizeManager;
 import com.varanegar.vaslibrary.manager.productorderviewmanager.OnHandQtyError;
 import com.varanegar.vaslibrary.manager.productorderviewmanager.OnHandQtyWarning;
@@ -90,12 +93,15 @@ import com.varanegar.vaslibrary.manager.updatemanager.UpdateManager;
 import com.varanegar.vaslibrary.model.UpdateKey;
 import com.varanegar.vaslibrary.model.call.CallOrderLineModel;
 import com.varanegar.vaslibrary.model.call.temporder.CallOrderLinesTemp;
+import com.varanegar.vaslibrary.model.customer.CustomerLevelModel;
 import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.model.customerCallOrderOrderView.CustomerCallOrderOrderView;
 import com.varanegar.vaslibrary.model.customerCallOrderOrderView.CustomerCallOrderOrderViewModel;
 import com.varanegar.vaslibrary.model.customerCallOrderOrderView.CustomerCallOrderOrderViewModelRepository;
 import com.varanegar.vaslibrary.model.customeremphaticproduct.EmphasisType;
 import com.varanegar.vaslibrary.model.freeReason.FreeReasonModel;
+import com.varanegar.vaslibrary.model.msl.MslModel;
+import com.varanegar.vaslibrary.model.msl.MslProductPatternModel;
 import com.varanegar.vaslibrary.model.oldinvoicedetailview.OldInvoiceDetailView;
 import com.varanegar.vaslibrary.model.onhandqty.OnHandQtyStock;
 import com.varanegar.vaslibrary.model.orderLineQtyModel.OrderLineQtyModel;
@@ -174,6 +180,7 @@ public class ProductGroupFragment extends VisitFragment {
     protected UUID callOrderId;
     protected UUID orderTypeId;
     protected UUID customerId;
+    protected UUID customerLevelId;
     FiltersAdapter filtersAdapter;
     Filter allFilter;
     Filter freeFilter;
@@ -258,7 +265,7 @@ public class ProductGroupFragment extends VisitFragment {
 
                     //manager customerid productid
                     CustomerNotAllowProductManager.checkNotAllowed(getContext()
-                            ,customerId,productId);
+                            , customerId, productId);
 
                     add();
                 } catch (final OnHandQtyWarning e) {
@@ -358,6 +365,7 @@ public class ProductGroupFragment extends VisitFragment {
         callOrderId = UUID.fromString(getArguments().getString("1c886632-a88a-4e73-9164-f6656c219917"));
         customerId = UUID.fromString(getArguments().getString("3af8c4e9-c5c7-4540-8678-4669879caa79"));
         orderTypeId = UUID.fromString(getArguments().getString("b505233a-aaec-4c3c-a7ec-8fa08b940e74"));
+        customerLevelId = UUID.fromString(getArguments().getString("customerLevelId"));
         SysConfigManager sysConfigManager = new SysConfigManager(getContext());
         sysConfigMap = sysConfigManager.read(SysConfigManager.cloud);
         showStockLevel = sysConfigMap.get(ConfigKey.ShowStockLevel);
@@ -397,7 +405,7 @@ public class ProductGroupFragment extends VisitFragment {
                     ProductOrderViewManager.checkOnHandQty(getContext(), onHandQtyStock, change.discreteUnits, null);
                     //manager customerid productid
                     CustomerNotAllowProductManager.checkNotAllowed(getContext()
-                            ,customerId,productOrderViewModel.UniqueId);
+                            , customerId, productOrderViewModel.UniqueId);
                     add(productOrderViewModel, change);
                     return true;
                 } catch (OnHandQtyWarning e) {
@@ -573,6 +581,13 @@ public class ProductGroupFragment extends VisitFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        try {
+            new MslProductPatternManager(getContext()).deleteAll();
+        } catch (DbException e) {
+            onBackPressed();
+            e.printStackTrace();
+        }
+
         view.findViewById(R.id.back_image_view).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1012,6 +1027,8 @@ public class ProductGroupFragment extends VisitFragment {
         }
     }
 
+
+    //comment for find show list of product pattern pre visit by mehrdad latifi
     private void setupProductList() {
         final ProgressDialog loadProgressDialog = new ProgressDialog(getContext());
         loadProgressDialog.setTitle(R.string.please_wait);
@@ -1033,7 +1050,6 @@ public class ProductGroupFragment extends VisitFragment {
                 ProductUnitsViewManager productUnitsViewManager = new ProductUnitsViewManager(getContext());
                 productUnitsViewModelHashMap = productUnitsViewManager.getProductsUnits();
                 final ProductOrderViewManager productOrderViewManager = new ProductOrderViewManager(getContext());
-
 
                 if (selectedFilter == FilterType.Emphatic) {
                     if (inStock)
@@ -1084,6 +1100,44 @@ public class ProductGroupFragment extends VisitFragment {
                                 .getAll(null, customerId, callOrderId, null,
                                         null, false, null));
                 }
+
+/*                try {
+                    new MslManager(getContext()).deleteAll();
+                } catch (DbException e) {
+                    e.printStackTrace();
+                }*/
+
+//                new MslManager(getContext()).insertTest();
+
+                List<MslModel> mslModels = new MslManager(getContext()).getAll(customerLevelId.toString());
+                List<ProductOrderViewModel> checkMsl = new ArrayList<>();
+                for (ProductOrderViewModel item : productsList) {
+                    boolean find = false;
+                    for (MslModel model : mslModels) {
+                        if (item.UniqueId.equals(model.ProductId)) {
+                            find = true;
+                            if (model.IsForce) {
+                                MslProductPatternModel mslProductPatternModel = new MslProductPatternModel(model.CustomerLevelId, model.ProductId, model.IsForce);
+                                mslProductPatternModel.UniqueId = model.UniqueId;
+                                try {
+                                    new MslProductPatternManager(getContext()).insert(mslProductPatternModel);
+                                } catch (ValidationException e) {
+                                    e.printStackTrace();
+                                } catch (DbException e) {
+                                    e.printStackTrace();
+                                }
+                                item.EmphaticType = EmphasisType.Deterrent;
+                                checkMsl.add(item);
+                                break;
+                            }
+                        }
+                    }
+                    if (!find)
+                        checkMsl.add(item);
+                }
+
+                productsList.clear();
+                productsList.addAll(checkMsl);
                 final HashMap<UUID, ProductUnitViewManager.ProductUnits> unitSet = new
                         ProductUnitViewManager(getContext()).getUnitSet(ProductType.isForSale);
                 if (productsList != null && productsList.size() > 0)

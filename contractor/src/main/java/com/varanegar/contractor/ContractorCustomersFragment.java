@@ -9,6 +9,7 @@ import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialo
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.framework.validation.ValidationException;
 import com.varanegar.vaslibrary.manager.CustomerOrderTypesManager;
+import com.varanegar.vaslibrary.manager.CustomerPathViewManager;
 import com.varanegar.vaslibrary.manager.CustomerPaymentTypesViewManager;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallOrderManager;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallOrderPreviewManager;
@@ -22,6 +23,7 @@ import com.varanegar.vaslibrary.model.CustomerOrderType.CustomerOrderTypeModel;
 import com.varanegar.vaslibrary.model.CustomerPaymentTypesView.CustomerPaymentTypesViewModel;
 import com.varanegar.vaslibrary.model.call.CustomerCallOrderModel;
 import com.varanegar.vaslibrary.model.call.CustomerCallOrderPreviewModel;
+import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.model.emphaticproductcount.EmphaticProductCountModel;
 import com.varanegar.vaslibrary.ui.fragment.CustomersFragment;
 import com.varanegar.vaslibrary.ui.fragment.TourReportFragment;
@@ -50,13 +52,14 @@ public class ContractorCustomersFragment extends CustomersFragment {
 
     @Override
     protected VaranegarFragment getContentFragment(UUID customerId) {
+        CustomerModel customer = new CustomerPathViewManager(getContext()).getItem(customerId);
         CustomerOrderTypesManager customerOrderTypesManager = new CustomerOrderTypesManager(getActivity());
         List<CustomerOrderTypeModel> customerOrderTypeModels = customerOrderTypesManager.getItems();
         CustomerPaymentTypesViewManager customerPaymentTypesViewManager = new CustomerPaymentTypesViewManager(getActivity());
         try {
             List<CustomerPaymentTypesViewModel> customerPaymentTypes = customerPaymentTypesViewManager.getCustomerPaymentType(customerId);
             if (customerOrderTypeModels.size() > 0 && customerPaymentTypes.size() > 0)
-                return gotoOrder(customerId);
+                return gotoOrder(customerId, customer.CustomerLevelId);
             else {
                 CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
                 dialog.setTitle(R.string.error);
@@ -103,7 +106,7 @@ public class ContractorCustomersFragment extends CustomersFragment {
         manager.calcEmphaticProducts(customerId);
     }
 
-    private VaranegarFragment gotoOrder(UUID customerId) {
+    private VaranegarFragment gotoOrder(UUID customerId, UUID customerLevelId) {
         try {
             calculateEmphaticItems(customerId);
             CustomerEmphaticProductManager customerEmphaticProductManager = new CustomerEmphaticProductManager(getActivity());
@@ -112,18 +115,19 @@ public class ContractorCustomersFragment extends CustomersFragment {
             if (checkCloudConfig(ConfigKey.DoubleRequestIsEnabled, true)) {
                 List<CustomerCallOrderPreviewModel> orderModels = orderManager.getCustomerCallOrders(customerId);
                 if (orderModels.size() == 0) {
-                    return addCustomerCallOrder(customerId);
+                    return addCustomerCallOrder(customerId, customerLevelId);
                 } else {
                     OrderSelectionFragment orderSelectionFragment = new OrderSelectionFragment();
                     orderSelectionFragment.setCustomerId(customerId);
+                    orderSelectionFragment.setCustomerLevelId(customerLevelId);
                     return orderSelectionFragment;
                 }
             } else {
                 List<CustomerCallOrderPreviewModel> orderModels = orderManager.getCustomerCallOrders(customerId);
                 if (orderModels.size() == 0) {
-                    return addCustomerCallOrder(customerId);
+                    return addCustomerCallOrder(customerId, customerLevelId);
                 } else {
-                    return letsGo(customerId, orderModels.get(0).UniqueId);
+                    return letsGo(customerId, orderModels.get(0).UniqueId, customerLevelId);
                 }
             }
 
@@ -151,20 +155,20 @@ public class ContractorCustomersFragment extends CustomersFragment {
         }
     }
 
-    private VaranegarFragment addCustomerCallOrder(final UUID customerId) {
+    private VaranegarFragment addCustomerCallOrder(final UUID customerId, UUID customerLevelId) {
         CustomerCallOrderManager callOrderManager = new CustomerCallOrderManager(getActivity());
         try {
             CustomerCallOrderModel callOrderModel = callOrderManager.addOrder(customerId);
-            return letsGo(customerId, callOrderModel.UniqueId);
+            return letsGo(customerId, callOrderModel.UniqueId, customerLevelId);
         } catch (Exception ex) {
             Timber.e(ex);
             return null;
         }
     }
 
-    private VaranegarFragment letsGo(UUID customerId, UUID orderId) {
+    private VaranegarFragment letsGo(UUID customerId, UUID orderId, UUID customerLevelId) {
         CustomerSaveOrderFragment saveOrderFragment = new CustomerSaveOrderFragment();
-        saveOrderFragment.setArguments(customerId, orderId);
+        saveOrderFragment.setArguments(customerId, orderId, customerLevelId);
         return saveOrderFragment;
     }
 
