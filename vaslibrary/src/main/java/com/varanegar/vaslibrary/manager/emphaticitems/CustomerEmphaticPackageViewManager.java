@@ -12,6 +12,7 @@ import com.varanegar.vaslibrary.model.customerCallOrderOrderView.CustomerCallOrd
 import com.varanegar.vaslibrary.model.customeremphaticpackageview.CustomerEmphaticPackageView;
 import com.varanegar.vaslibrary.model.customeremphaticpackageview.CustomerEmphaticPackageViewModel;
 import com.varanegar.vaslibrary.model.customeremphaticpackageview.CustomerEmphaticPackageViewModelRepository;
+import com.varanegar.vaslibrary.model.emphaticproduct.EmphaticProductModel;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -39,6 +40,7 @@ public class CustomerEmphaticPackageViewManager extends BaseManager<CustomerEmph
         return getItems(query);
     }
 
+
     public EmphaticPackageCheckResult checkEmphaticPackages(UUID customerId, List<CustomerCallOrderOrderViewModel> orderItems) {
         String error = null;
         String warning = null;
@@ -55,6 +57,7 @@ public class CustomerEmphaticPackageViewManager extends BaseManager<CustomerEmph
 
         CustomerEmphaticPackageViewManager emphaticProductManager = new CustomerEmphaticPackageViewManager(getContext());
         List<CustomerEmphaticPackageViewModel> emphaticProductModels = emphaticProductManager.getPackageRules(customerId);
+
         HashMap<UUID, BigDecimal> qtys = new HashMap<>();
         for (CustomerEmphaticPackageViewModel emphaticProductModel :
                 emphaticProductModels) {

@@ -102,6 +102,7 @@ import com.varanegar.vaslibrary.manager.discountmanager.DiscountConditionManager
 import com.varanegar.vaslibrary.manager.emphaticitems.CustomerEmphaticPackageViewManager;
 import com.varanegar.vaslibrary.manager.emphaticitems.CustomerEmphaticProductManager;
 import com.varanegar.vaslibrary.manager.emphaticitems.EmphaticPackageCheckResult;
+import com.varanegar.vaslibrary.manager.emphaticitems.EmphaticProductCountManager;
 import com.varanegar.vaslibrary.manager.locationmanager.LocationManager;
 import com.varanegar.vaslibrary.manager.locationmanager.LogLevel;
 import com.varanegar.vaslibrary.manager.locationmanager.LogType;
@@ -145,6 +146,7 @@ import com.varanegar.vaslibrary.model.customercall.CustomerCallType;
 import com.varanegar.vaslibrary.model.customeremphaticproduct.CustomerEmphaticProductModel;
 import com.varanegar.vaslibrary.model.customerpathview.CustomerPathViewModel;
 import com.varanegar.vaslibrary.model.customerremainperline.CustomerRemainPerLineModel;
+import com.varanegar.vaslibrary.model.emphaticproductcount.EmphaticProductCountModel;
 import com.varanegar.vaslibrary.model.freeReason.FreeReasonModel;
 import com.varanegar.vaslibrary.model.location.LocationModel;
 import com.varanegar.vaslibrary.model.msl.MslModel;
@@ -225,9 +227,9 @@ import static varanegar.com.discountcalculatorlib.Global.orderPrize;
 
 
 /**
- *صفحه تحویل حواله
+ * صفحه تحویل حواله
  * صفحه تحویل سفارش   **
-*/
+ */
 public class CustomerSaveOrderFragment extends VisitFragment
         implements ChoicePrizesDialog.choicePrizeDialogListener {
     private OnItemQtyChangedHandler onItemQtyChangedHandler;
@@ -493,7 +495,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
             ProductOrderViewManager.checkOnHandQty(getContext(), onHandQtyStock, change.discreteUnits, null);
             //manager customerid productid
             CustomerNotAllowProductManager.checkNotAllowed(getContext()
-                    ,customerId,orderLine.ProductId);
+                    , customerId, orderLine.ProductId);
             add(orderLine, change, editReasonId);
             refresh(true, false, true);
             VaranegarApplication.getInstance().printElapsedTime("refresh order view");
@@ -819,7 +821,6 @@ public class CustomerSaveOrderFragment extends VisitFragment
         setupToolbarButtons(view);
 
 
-
         dealerNameTextView.setText(customerCallOrderModel.DealerName);
         dealerMobileTextView.setText(customerCallOrderModel.DealerMobile);
         TextView localPaperNo = view.findViewById(R.id.local_paper_no);
@@ -1008,21 +1009,19 @@ public class CustomerSaveOrderFragment extends VisitFragment
             }
 
             // Get ship Types and Show to User|
-            shipPairedItemsSpinner=view.findViewById(R.id.ship_types_spinner);
-            CustomerShipToPartyManager shipManager=new CustomerShipToPartyManager(getContext());
-            List<CustomerShipToPartyModel> ships=shipManager.getItems(customerId);
+            shipPairedItemsSpinner = view.findViewById(R.id.ship_types_spinner);
+            CustomerShipToPartyManager shipManager = new CustomerShipToPartyManager(getContext());
+            List<CustomerShipToPartyModel> ships = shipManager.getItems(customerId);
 
             Collections.sort(ships, (o1, o2) -> {
-                Integer a1 = o1.UniqueId.equals(o1.SoldToPartyUniqueId)?0:1;
-                Integer b1 = o2.UniqueId.equals( o2.SoldToPartyUniqueId)?0:1;
+                Integer a1 = o1.UniqueId.equals(o1.SoldToPartyUniqueId) ? 0 : 1;
+                Integer b1 = o2.UniqueId.equals(o2.SoldToPartyUniqueId) ? 0 : 1;
                 return a1.compareTo(b1);
             });
 
 
-
-
             shipPairedItemsSpinner.setVisibility(View.VISIBLE);
-            shipPairedItemsSpinner.setup(getChildFragmentManager(),ships, (item, text) -> {
+            shipPairedItemsSpinner.setup(getChildFragmentManager(), ships, (item, text) -> {
                 String str = HelperMethods.persian2Arabic(text);
                 if (str == null)
                     return true;
@@ -1030,20 +1029,19 @@ public class CustomerSaveOrderFragment extends VisitFragment
                 return item.toString().toLowerCase().contains(str);
             });
 
-            UUID shipid=customerCallOrderModel.ShipToPartyUniqueId;
-            if (shipid!=null){
-                for (int i=0;i<ships.size();i++){
-                    if (shipid.equals(ships.get(i).UniqueId)){
+            UUID shipid = customerCallOrderModel.ShipToPartyUniqueId;
+            if (shipid != null) {
+                for (int i = 0; i < ships.size(); i++) {
+                    if (shipid.equals(ships.get(i).UniqueId)) {
                         shipPairedItemsSpinner.selectItem(i);
                     }
                 }
-            }else if(ships.get(0)!=null) {
+            } else if (ships.get(0) != null) {
                 shipPairedItemsSpinner.selectItem(0);
             }
             shipPairedItemsSpinner.setOnItemSelectedListener((position, item) -> {
 
             });
-
 
 
             // Get Order Types and Show to User
@@ -1327,17 +1325,19 @@ public class CustomerSaveOrderFragment extends VisitFragment
             cuteMessageDialog.show();
         }
     }
- private void showErrorDialog(String err) {
-     Context context = getContext();
-     if (context != null) {
-         CuteMessageDialog dialog = new CuteMessageDialog(context);
-         dialog.setTitle(R.string.error);
-         dialog.setIcon(Icon.Error);
-         dialog.setMessage(err);
-         dialog.setPositiveButton(R.string.ok, null);
-         dialog.show();
-     }
- }
+
+    private void showErrorDialog(String err) {
+        Context context = getContext();
+        if (context != null) {
+            CuteMessageDialog dialog = new CuteMessageDialog(context);
+            dialog.setTitle(R.string.error);
+            dialog.setIcon(Icon.Error);
+            dialog.setMessage(err);
+            dialog.setPositiveButton(R.string.ok, null);
+            dialog.show();
+        }
+    }
+
     protected void showErrorMessage(@StringRes int str) {
         Activity activity = getVaranegarActvity();
         if (activity != null && !activity.isFinishing()) {
@@ -1486,6 +1486,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
 
             }
     }
+
     private void setupToolbarButtons(View view) {
         toolbar = (CuteToolbar) view.findViewById(R.id.options_toolbar);
         toolbar.setVisibility(View.GONE);
@@ -1575,12 +1576,12 @@ public class CustomerSaveOrderFragment extends VisitFragment
 //                    }
 //                });
             if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
-                if(customer.CodeNaghsh !=null) {
+                if (customer.CodeNaghsh != null) {
 
 
                     //check msl in order mehrdad latifi
 
-                    UUID emphasisProduct = null;
+/*                    UUID emphasisProduct = null;
                     List<MslProductPatternModel> mslProductPatternModels = new MslProductPatternManager(getContext()).getAll();
 
                     for (MslProductPatternModel mslModel : mslProductPatternModels) {
@@ -1606,7 +1607,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
                         cuteMessageDialog.setNegativeButton(R.string.ok, null);
                         cuteMessageDialog.show();
                         return;
-                    }
+                    }*/
 
 
                     SharedPreferences sharedPreferences = context.getSharedPreferences("ReportConfig",
@@ -1625,7 +1626,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
                             return;
                         }
                     }
-                }else{
+                } else {
                     CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(getContext());
                     cuteMessageDialog.setIcon(Icon.Error);
                     cuteMessageDialog.setTitle(R.string.error);
@@ -1633,14 +1634,15 @@ public class CustomerSaveOrderFragment extends VisitFragment
                     cuteMessageDialog.setNegativeButton(R.string.ok, null);
                     cuteMessageDialog.show();
                 }
-            }if (VaranegarApplication.is(VaranegarApplication.AppId.Contractor) && otherDiscount.compareTo(orderAmount.TotalAmount) > 0) {
+            }
+            if (VaranegarApplication.is(VaranegarApplication.AppId.Contractor) && otherDiscount.compareTo(orderAmount.TotalAmount) > 0) {
                 CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(getContext());
                 cuteMessageDialog.setIcon(Icon.Error);
                 cuteMessageDialog.setTitle(R.string.error);
                 cuteMessageDialog.setMessage(R.string.discount_can_not_more_amount);
                 cuteMessageDialog.setNegativeButton(R.string.ok, null);
                 cuteMessageDialog.show();
-            } else{
+            } else {
                 saveOrder();
             }
         });
@@ -2073,7 +2075,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
             ProductOrderViewManager.checkOnHandQty(context, onHandQtyStock, discreteUnits, bulkUnit);
             //manager customerid productid
             CustomerNotAllowProductManager.checkNotAllowed(getContext()
-                    ,customerId,productOrderViewModel.UniqueId);
+                    , customerId, productOrderViewModel.UniqueId);
             add(productOrderViewModel, discreteUnits, bulkUnit, batchQtyList);
         } catch (OnHandQtyWarning e) {
             Timber.e(e);
@@ -2664,7 +2666,8 @@ public class CustomerSaveOrderFragment extends VisitFragment
     @SubsystemType(id = SubsystemTypeId.Dist)
     private void saveDistReturnPartially() {
         try {
-            SysConfigManager sysConfigManager = new SysConfigManager(context);BackOfficeType backOfficeType = sysConfigManager.getBackOfficeType();
+            SysConfigManager sysConfigManager = new SysConfigManager(context);
+            BackOfficeType backOfficeType = sysConfigManager.getBackOfficeType();
             if (backOfficeType != BackOfficeType.ThirdParty) {
                 OrderReturnReasonDialog returnReasonDialog = new OrderReturnReasonDialog();
                 returnReasonDialog.onItemSelected = reasonUniqueId -> {
@@ -2728,7 +2731,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
         returnReasonDialog.show(getActivity().getSupportFragmentManager(), "NonOrderActionDialog");
     }
 
-    private void showPinCodeDialogInCompeleteReturnMode(){
+    private void showPinCodeDialogInCompeleteReturnMode() {
         CustomerCallInvoiceManager customerCallOrderManager = new CustomerCallInvoiceManager(getActivity());
         customerCallOrderModels = customerCallOrderManager.getCustomerCallInvoices(customerId);
 
@@ -2736,8 +2739,8 @@ public class CustomerSaveOrderFragment extends VisitFragment
         dialog.setCancelable(false);
         dialog.setClosable(false);
         dialog.setValues(customerCallOrderModels.get(0).PinCode3);
-        dialog.setValuesRequst("pin3",customerId,customerCallOrderModels.get(0).UniqueId
-        ,customerCallOrderModels.get(0).DealerCodeSDS,getActivity().getString(R.string.please_insert_pin_code));
+        dialog.setValuesRequst("pin3", customerId, customerCallOrderModels.get(0).UniqueId
+                , customerCallOrderModels.get(0).DealerCodeSDS, getActivity().getString(R.string.please_insert_pin_code));
         dialog.setOnResult(new InsertPinDialog.OnResult() {
             @Override
             public void done() {
@@ -2765,8 +2768,8 @@ public class CustomerSaveOrderFragment extends VisitFragment
         dialog.setCancelable(false);
         dialog.setClosable(false);
         dialog.setValues(customerCallOrderModels.get(0).PinCode3);
-        dialog.setValuesRequst("pin3",customerId,customerCallOrderModels.get(0).UniqueId,
-                customerCallOrderModels.get(0).DealerCodeSDS,getActivity().getString(R.string.please_insert_pin_code));
+        dialog.setValuesRequst("pin3", customerId, customerCallOrderModels.get(0).UniqueId,
+                customerCallOrderModels.get(0).DealerCodeSDS, getActivity().getString(R.string.please_insert_pin_code));
         dialog.setOnResult(new InsertPinDialog.OnResult() {
             @Override
             public void done() {
@@ -2852,9 +2855,44 @@ public class CustomerSaveOrderFragment extends VisitFragment
                     break;
             }
 
-            EmphaticPackageCheckResult result = new CustomerEmphaticPackageViewManager(getContext()).checkEmphaticPackages(customerId, orderAdapter.getItems());
+            //در اینجا چک میکنیم که کالای تاکیدی در الگوی کالا هست یا خیر
+            List<EmphaticProductCountModel> temp = new EmphaticProductCountManager(getContext()).getAll();
+            ProductManager productManager = new ProductManager(getContext());
 
-            if ((!isInOrder || result.getError() != null || result.getWarning() != null) && !SysConfigManager.compare(new SysConfigManager(getContext()).read(ConfigKey.SimplePresale, SysConfigManager.cloud), true)) {
+            List<EmphaticProductCountModel> emphaticProductCountModels = new ArrayList<>();
+            for (EmphaticProductCountModel item : temp) {
+                ProductModel model = productManager.checkEmphaticInProductPattern(item.ProductId);
+                if (model != null)
+                    emphaticProductCountModels.add(item);
+            }
+            //ـــــــــــــــــــــــــــ emphaticProductCountModels
+
+            if (emphaticProductCountModels.size() == 0)
+                isInOrder = true;
+
+            for (EmphaticProductCountModel emphatic : emphaticProductCountModels) {
+                for (CustomerCallOrderOrderViewModel item : orderAdapter.getItems())
+                    if (emphatic.ProductId.equals(item.ProductId)) {
+                        BigDecimal ProductCount = BigDecimal.valueOf(emphatic.ProductCount);
+                        if (ProductCount.compareTo(item.ProductTotalOrderedQty) < 0) {
+                            isInOrder = true;
+                            break;
+                        } else
+                            isInOrder = false;
+                    } else
+                        isInOrder = false;
+
+                if (!isInOrder)
+                    break;
+            }
+
+/*            EmphaticPackageCheckResult result = new CustomerEmphaticPackageViewManager(getContext()).checkEmphaticPackages(customerId, orderAdapter.getItems());
+            if (isInOrder) {
+                result.setError(null);
+                result.setWarning(null);
+            }*/
+
+            if (!isInOrder && !SysConfigManager.compare(new SysConfigManager(getContext()).read(ConfigKey.SimplePresale, SysConfigManager.cloud), true)) {
                 EmphaticProductDialog emphaticProductDialog = new EmphaticProductDialog();
                 emphaticProductDialog.onOrderUpdate = () -> refresh(true, false, true);
                 emphaticProductDialog.onUserAccept = () -> {

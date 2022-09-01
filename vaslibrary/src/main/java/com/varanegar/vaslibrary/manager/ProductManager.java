@@ -34,6 +34,8 @@ import com.varanegar.vaslibrary.model.catalog.Catalog;
 import com.varanegar.vaslibrary.model.product.Product;
 import com.varanegar.vaslibrary.model.product.ProductModel;
 import com.varanegar.vaslibrary.model.product.ProductModelRepository;
+import com.varanegar.vaslibrary.model.productorderview.ProductOrderView;
+import com.varanegar.vaslibrary.model.productorderview.ProductOrderViewModel;
 import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.product.PersonnelProductTemplateViewModel;
@@ -371,5 +373,13 @@ public class ProductManager extends BaseManager<ProductModel> {
     public ProductModel getProductByBackOfficeId (int backOfficeId) {
         return getItem(new Query().from(Product.ProductTbl)
                 .whereAnd(Criteria.equals(Product.BackOfficeId, backOfficeId)));
+    }
+
+
+    public ProductModel checkEmphaticInProductPattern(UUID productId) {
+        Query query = new Query();
+        query.from(Product.ProductTbl).whereAnd(Criteria.equals(Product.UniqueId, productId))
+                .whereAnd(Criteria.equals(Product.IsForSale, true));
+        return getItem(query);
     }
 }

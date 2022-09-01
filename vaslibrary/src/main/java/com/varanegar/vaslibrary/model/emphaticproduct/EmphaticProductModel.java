@@ -55,4 +55,6 @@ public class EmphaticProductModel extends BaseModel {
     @Column
     public UUID saleAreaUniqueId;
     public List<EmphaticProductCountModel> emphasisProductDetails;
+    @Column
+    public boolean IsEmphasis;
 }

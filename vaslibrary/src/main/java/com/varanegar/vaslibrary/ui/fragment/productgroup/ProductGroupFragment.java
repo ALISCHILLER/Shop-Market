@@ -1109,7 +1109,7 @@ public class ProductGroupFragment extends VisitFragment {
 
 //                new MslManager(getContext()).insertTest();
 
-                List<MslModel> mslModels = new MslManager(getContext()).getAll(customerLevelId.toString());
+/*                List<MslModel> mslModels = new MslManager(getContext()).getAll(customerLevelId.toString());
                 List<ProductOrderViewModel> checkMsl = new ArrayList<>();
                 for (ProductOrderViewModel item : productsList) {
                     boolean find = false;
@@ -1137,7 +1137,9 @@ public class ProductGroupFragment extends VisitFragment {
                 }
 
                 productsList.clear();
-                productsList.addAll(checkMsl);
+                productsList.addAll(checkMsl);*/
+
+
                 final HashMap<UUID, ProductUnitViewManager.ProductUnits> unitSet = new
                         ProductUnitViewManager(getContext()).getUnitSet(ProductType.isForSale);
                 if (productsList != null && productsList.size() > 0)

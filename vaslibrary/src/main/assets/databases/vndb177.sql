@@ -19,3 +19,9 @@ CREATE TABLE "MslProductPattern" (
 
 PRIMARY KEY ("UniqueId" ASC)
 );
+
+-- ALTER TABLE Customer
+-- ----------------------------
+ALTER TABLE EmphaticProduct ADD COLUMN [IsEmphasis]  INTEGER  NULL,
+
+

@@ -22,6 +22,8 @@ import com.varanegar.vaslibrary.model.emphaticproduct.EmphaticProduct;
 import com.varanegar.vaslibrary.model.emphaticproduct.EmphaticProductModel;
 import com.varanegar.vaslibrary.model.emphaticproduct.EmphaticProductModelRepository;
 import com.varanegar.vaslibrary.model.emphaticproductcount.EmphaticProductCountModel;
+import com.varanegar.vaslibrary.model.msl.MslProductPattern;
+import com.varanegar.vaslibrary.model.msl.MslProductPatternModel;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.product.EmphaticProductApi;
 
@@ -115,6 +117,11 @@ public class EmphaticProductManager extends BaseManager<EmphaticProductModel> {
                 updateCall.failure(getContext().getString(R.string.network_error));
             }
         });
+    }
+
+
+    public List<EmphaticProductModel> getAll() {
+        return getItems(new Query().from(EmphaticProduct.EmphaticProductTbl));
     }
 
     public String getTypeName(EmphasisType type) {

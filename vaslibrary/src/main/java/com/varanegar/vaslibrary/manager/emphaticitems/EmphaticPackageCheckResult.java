@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class EmphaticPackageCheckResult {
-    private final String error;
+    private String error;
     private final HashMap<UUID, BigDecimal> qtys;
-    private final String warning;
+    private String warning;
 
     public EmphaticPackageCheckResult(String error, String warning, HashMap<UUID, BigDecimal> qtys) {
         this.error = error;
@@ -25,5 +25,13 @@ public class EmphaticPackageCheckResult {
 
     public String getWarning() {
         return warning;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public void setWarning(String warning) {
+        this.warning = warning;
     }
 }
