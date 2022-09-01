@@ -146,4 +146,8 @@ public class EmphaticProductManager extends BaseManager<EmphaticProductModel> {
         return getItem(new Query().from(EmphaticProduct.EmphaticProductTbl).whereAnd(Criteria.equals(EmphaticProduct.CustomerLevelId, roleId)));
     }
 
+    public EmphaticProductModel getCustomerActivity(UUID roleId) {
+        return getItem(new Query().from(EmphaticProduct.EmphaticProductTbl).whereAnd(Criteria.equals(EmphaticProduct.CustomerActivityId, roleId)));
+    }
+
 }

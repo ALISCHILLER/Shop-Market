@@ -2882,15 +2882,19 @@ public class CustomerSaveOrderFragment extends VisitFragment
             EmphaticProductModel emphaticProductModel=null;
             EmphaticProductModel emphaticProductCategory=null;
             EmphaticProductModel emphaticProductLevel=null;
+            EmphaticProductModel emphaticProductActivity=null;
             EmphaticProductModel notInOrder = null;
             CustomerCallOrderOrderViewModel itemd=null;
             for (EmphaticProductCountModel emphatic : emphaticProductCountModels) {
                 for (CustomerCallOrderOrderViewModel item : orderAdapter.getItems()) {
                     emphaticProductModel = emphaticProductManager.getItemByRoleId(emphatic.RuleId);
-                    if (emphaticProductModel.CustomerCategoryId != null || emphaticProductModel.CustomerLevelId != null) {
+                    if (emphaticProductModel.CustomerCategoryId != null || emphaticProductModel.CustomerLevelId != null
+                            || emphaticProductModel.CustomerActivityId!=null) {
                         emphaticProductCategory=emphaticProductManager.getCustomerCategory(customer.CustomerCategoryId);
-                        emphaticProductLevel=emphaticProductManager.getCustomerCategory(customer.CustomerLevelId);
-                        if(emphaticProductCategory !=null ||emphaticProductLevel !=null){
+                        emphaticProductLevel=emphaticProductManager.getCustomerLevel(customer.CustomerLevelId);
+                        emphaticProductActivity=emphaticProductManager.getCustomerActivity(customer.CustomerActivityId);
+
+                        if(emphaticProductCategory !=null ||emphaticProductLevel !=null||emphaticProductActivity!=null){
                             is=true;
                         }
                     }else{
