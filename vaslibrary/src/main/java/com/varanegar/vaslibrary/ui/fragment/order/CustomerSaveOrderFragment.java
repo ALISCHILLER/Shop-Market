@@ -2858,6 +2858,13 @@ public class CustomerSaveOrderFragment extends VisitFragment
                     break;
             }
 
+            CustomerModel customer = new CustomerManager(getContext()).getItem(getCustomerId());
+            EmphaticProductManager emphaticProductManager = new EmphaticProductManager(getContext());
+            List<EmphaticProductModel> emphaticAll = emphaticProductManager.getAll();
+
+
+
+            boolean is=false;
             //در اینجا چک میکنیم که کالای تاکیدی در الگوی کالا هست یا خیر
             List<EmphaticProductCountModel> temp = new EmphaticProductCountManager(getContext()).getAll();
             ProductManager productManager = new ProductManager(getContext());
@@ -2873,28 +2880,45 @@ public class CustomerSaveOrderFragment extends VisitFragment
             if (emphaticProductCountModels.size() == 0)
                 isInOrder = true;
             EmphaticProductModel emphaticProductModel=null;
-            EmphaticProductManager emphaticProductManager = new EmphaticProductManager(getContext());
+            EmphaticProductModel emphaticProductCategory=null;
+            EmphaticProductModel emphaticProductLevel=null;
             EmphaticProductModel notInOrder = null;
             CustomerCallOrderOrderViewModel itemd=null;
             for (EmphaticProductCountModel emphatic : emphaticProductCountModels) {
                 for (CustomerCallOrderOrderViewModel item : orderAdapter.getItems()) {
                     emphaticProductModel = emphaticProductManager.getItemByRoleId(emphatic.RuleId);
-                    if (emphatic.ProductId.equals(item.ProductId)) {
-                        if (!emphaticProductModel.IsEmphasis) {
-                            BigDecimal ProductCount = BigDecimal.valueOf(emphatic.ProductCount);
-                            if (ProductCount.compareTo(item.ProductTotalOrderedQty) < 0) {
-                                isInOrder = true;
-                                break;
-                            } else
-                                isInOrder = false;
-                        } else {
-                            isInOrder = false;
-                            notInOrder = emphaticProductModel;
-                            itemd = item;
-                            break;
+                    if (emphaticProductModel.CustomerCategoryId != null || emphaticProductModel.CustomerLevelId != null) {
+                        emphaticProductCategory=emphaticProductManager.getCustomerCategory(customer.CustomerCategoryId);
+                        emphaticProductLevel=emphaticProductManager.getCustomerCategory(customer.CustomerLevelId);
+                        if(emphaticProductCategory !=null ||emphaticProductLevel !=null){
+                            is=true;
                         }
+                    }else{
+                        is=true;
+                    }
+                    if(is){
+                    if (emphatic.ProductId.equals(item.ProductId)) {
+
+
+                            if (!emphaticProductModel.IsEmphasis) {
+                                BigDecimal ProductCount = BigDecimal.valueOf(emphatic.ProductCount);
+                                if (ProductCount.compareTo(item.ProductTotalOrderedQty) < 0) {
+                                    isInOrder = true;
+                                    break;
+                                } else
+                                    isInOrder = false;
+                            } else {
+                                isInOrder = false;
+                                notInOrder = emphaticProductModel;
+                                itemd = item;
+                                break;
+                            }
+
                     } else if (!emphaticProductModel.IsEmphasis)
                         isInOrder = false;
+                    }else{
+                        isInOrder = true;
+                    }
                 }
 //                if (!isInOrder)
 //                    break;
