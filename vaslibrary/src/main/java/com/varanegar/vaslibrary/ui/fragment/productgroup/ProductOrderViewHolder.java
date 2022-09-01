@@ -19,9 +19,14 @@ import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
 import com.varanegar.vaslibrary.manager.OnHandQtyManager;
 import com.varanegar.vaslibrary.manager.ProductInventoryManager;
+import com.varanegar.vaslibrary.manager.ProductManager;
 import com.varanegar.vaslibrary.manager.ProductUnitViewManager;
+import com.varanegar.vaslibrary.manager.emphaticitems.EmphaticProductCountManager;
+import com.varanegar.vaslibrary.manager.emphaticitems.EmphaticProductManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.model.customeremphaticproduct.EmphasisType;
+import com.varanegar.vaslibrary.model.emphaticproduct.EmphaticProductModel;
+import com.varanegar.vaslibrary.model.emphaticproductcount.EmphaticProductCountModel;
 import com.varanegar.vaslibrary.model.onhandqty.OnHandQtyStock;
 import com.varanegar.vaslibrary.model.productorderview.ProductOrderViewModel;
 import com.varanegar.vaslibrary.model.productunitsview.ProductUnitsViewModel;
@@ -241,9 +246,17 @@ public class ProductOrderViewHolder extends BaseViewHolder<ProductOrderViewModel
                 productOrderViewModel.EmphaticProductCount = BigDecimal.ZERO;
             if (productOrderViewModel.EmphaticProductCount.compareTo(BigDecimal.ZERO) == 0)
                 productNameTextView.setText(Html.fromHtml(productName + " ( " + activity.getString(R.string.package_) + " )"));
-            else
-                productNameTextView.setText(Html.fromHtml(productName + " ( " + activity.getString(R.string.emphatic_count) + HelperMethods.bigDecimalToString(productOrderViewModel.EmphaticProductCount) + " )"));
-            if (productOrderViewModel.EmphaticType == EmphasisType.Deterrent) {
+            else {
+                EmphaticProductCountModel temp = new EmphaticProductCountManager(getContext())
+                        .getItem(productOrderViewModel.UniqueId);
+                EmphaticProductManager emphaticProductManager = new EmphaticProductManager(getContext());
+                EmphaticProductModel emphaticProductModel = emphaticProductManager.getItemByRoleId(temp.RuleId);
+                if (!emphaticProductModel.IsEmphasis)
+                productNameTextView.setText(Html.fromHtml(productName + " ( " + activity.getString(R.string.emphatic_count) + HelperMethods.bigDecimalToString(emphaticProductModel.PackageCount) + " )"));
+                else
+                    productNameTextView.setText(Html.fromHtml(productName + " ( " + activity.getString(R.string.NOemphatic_count) + HelperMethods.bigDecimalToString(productOrderViewModel.EmphaticProductCount) + " )"));
+            }
+                if (productOrderViewModel.EmphaticType == EmphasisType.Deterrent) {
                 productNameTextView.setTextColor(HelperMethods.getColor(getContext(), R.color.red));
             } else if (productOrderViewModel.EmphaticType == EmphasisType.Warning) {
                 productNameTextView.setTextColor(HelperMethods.getColor(getContext(), R.color.orange));

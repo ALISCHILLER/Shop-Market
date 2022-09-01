@@ -101,6 +101,7 @@ import com.varanegar.vaslibrary.manager.customercallmanager.CustomerCallManager;
 import com.varanegar.vaslibrary.manager.discountmanager.DiscountConditionManager;
 import com.varanegar.vaslibrary.manager.emphaticitems.CustomerEmphaticPackageViewManager;
 import com.varanegar.vaslibrary.manager.emphaticitems.CustomerEmphaticProductManager;
+import com.varanegar.vaslibrary.manager.emphaticitems.EmphasisProductErrorTypeId;
 import com.varanegar.vaslibrary.manager.emphaticitems.EmphaticPackageCheckResult;
 import com.varanegar.vaslibrary.manager.emphaticitems.EmphaticProductCountManager;
 import com.varanegar.vaslibrary.manager.emphaticitems.EmphaticProductManager;
@@ -2871,14 +2872,14 @@ public class CustomerSaveOrderFragment extends VisitFragment
 
             if (emphaticProductCountModels.size() == 0)
                 isInOrder = true;
-
+            EmphaticProductModel emphaticProductModel=null;
             EmphaticProductManager emphaticProductManager = new EmphaticProductManager(getContext());
-            EmphaticProductCountModel notInOrder = null;
-
+            EmphaticProductModel notInOrder = null;
+            CustomerCallOrderOrderViewModel itemd=null;
             for (EmphaticProductCountModel emphatic : emphaticProductCountModels) {
-                for (CustomerCallOrderOrderViewModel item : orderAdapter.getItems())
+                for (CustomerCallOrderOrderViewModel item : orderAdapter.getItems()) {
+                    emphaticProductModel = emphaticProductManager.getItemByRoleId(emphatic.RuleId);
                     if (emphatic.ProductId.equals(item.ProductId)) {
-                        EmphaticProductModel emphaticProductModel = emphaticProductManager.getItemByRoleId(emphatic.RuleId);
                         if (!emphaticProductModel.IsEmphasis) {
                             BigDecimal ProductCount = BigDecimal.valueOf(emphatic.ProductCount);
                             if (ProductCount.compareTo(item.ProductTotalOrderedQty) < 0) {
@@ -2888,20 +2889,27 @@ public class CustomerSaveOrderFragment extends VisitFragment
                                 isInOrder = false;
                         } else {
                             isInOrder = false;
-                            notInOrder = emphatic;
+                            notInOrder = emphaticProductModel;
+                            itemd = item;
                             break;
                         }
-                    } else
+                    } else if (!emphaticProductModel.IsEmphasis)
                         isInOrder = false;
-
-                if (!isInOrder)
-                    break;
+                }
+//                if (!isInOrder)
+//                    break;
             }
 
 
             if (notInOrder != null) {
-
-                return;
+                if (notInOrder.EmphasisProductErrorTypeId.equals(EmphasisProductErrorTypeId.DETERRENT)) {
+                    showError("کالای مربوطه"+" "+itemd.ProductName+"در سفارش نباشد");
+                    return;
+                } else if (notInOrder.EmphasisProductErrorTypeId.equals(EmphasisProductErrorTypeId.WARNING)){
+                    showError(" کالای مربوطه "+""+itemd.ProductName+"در سفارش نباشد");
+                } else if (notInOrder.EmphasisProductErrorTypeId.equals(EmphasisProductErrorTypeId.SUGGESTION)){
+                    showError(" کالای مربوطه "+""+itemd.ProductName+"در سفارش نباشد");
+                }
             }
 
 
@@ -3473,6 +3481,18 @@ public class CustomerSaveOrderFragment extends VisitFragment
                 paymentTypesSpinner.setVisibility(View.VISIBLE);
                 calcOnlineUsanceDay.setVisibility(View.GONE);
             }
+        }
+    }
+
+    private void showError(String error) {
+        Context context = getContext();
+        if (isResumed() && context != null) {
+            CuteMessageDialog dialog = new CuteMessageDialog(context);
+            dialog.setTitle(R.string.error);
+            dialog.setMessage(error);
+            dialog.setIcon(Icon.Error);
+            dialog.setPositiveButton(R.string.ok, null);
+            dialog.show();
         }
     }
 }

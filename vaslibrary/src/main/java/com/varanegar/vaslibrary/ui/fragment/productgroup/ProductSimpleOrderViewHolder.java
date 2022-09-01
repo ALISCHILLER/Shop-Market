@@ -6,6 +6,7 @@ import android.util.Pair;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -24,8 +25,12 @@ import com.varanegar.vaslibrary.manager.OnHandQtyManager;
 import com.varanegar.vaslibrary.manager.ProductInventoryManager;
 import com.varanegar.vaslibrary.manager.ProductUnitViewManager;
 import com.varanegar.vaslibrary.manager.customerpricemanager.CustomerPriceManager;
+import com.varanegar.vaslibrary.manager.emphaticitems.EmphaticProductCountManager;
+import com.varanegar.vaslibrary.manager.emphaticitems.EmphaticProductManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.model.customeremphaticproduct.EmphasisType;
+import com.varanegar.vaslibrary.model.emphaticproduct.EmphaticProductModel;
+import com.varanegar.vaslibrary.model.emphaticproductcount.EmphaticProductCountModel;
 import com.varanegar.vaslibrary.model.onhandqty.OnHandQtyStock;
 import com.varanegar.vaslibrary.model.productorderview.ProductOrderViewModel;
 import com.varanegar.vaslibrary.model.productunitsview.ProductUnitsViewModel;
@@ -57,6 +62,8 @@ public class ProductSimpleOrderViewHolder extends BaseViewHolder<ProductOrderVie
     private final TextView equalsTextView;
     private final AppCompatActivity activity;
     private final UUID callOrderId;
+
+
     private final HashMap<UUID, ProductUnitViewManager.ProductUnits> productUnitHashMap;
     private final View largeUnitLayout;
     private final View smallUnitLayout;
@@ -98,7 +105,7 @@ public class ProductSimpleOrderViewHolder extends BaseViewHolder<ProductOrderVie
     private final TextView unitTextViewSmall;
     private final TextView qtyTextViewLarge;
     private final TextView unitTextViewLarge;
-
+    private final LinearLayout header_layout;
     public ProductSimpleOrderViewHolder(View itemView,
                                         SysConfigModel showStockLevel,
                                         SysConfigModel orderPointCheckType,
@@ -151,7 +158,7 @@ public class ProductSimpleOrderViewHolder extends BaseViewHolder<ProductOrderVie
         moreInfoImageView = itemView.findViewById(R.id.more_info_image_view);
         customerInventoryPairedItems = itemView.findViewById(R.id.customer_inventory_paired_items);
         inventoryPairedItems = itemView.findViewById(R.id.inventory_paired_items);
-
+        header_layout= itemView.findViewById(R.id.header_layout);
 
         this.callOrderId = callOrderId;
         this.onItemQtyChangedHandler = onItemQtyChangedHandler;
@@ -250,7 +257,20 @@ public class ProductSimpleOrderViewHolder extends BaseViewHolder<ProductOrderVie
             productNameTextView.setTextColor(activity.getResources().getColor(R.color.black));
             productNameTextView.setText(Html.fromHtml(productName));
         } else {
-            productNameTextView.setText(Html.fromHtml(productName + " ( " + activity.getString(R.string.emphatic_count) + HelperMethods.bigDecimalToString(productOrderViewModel.EmphaticProductCount) + " )"));
+
+            EmphaticProductCountModel temp = new EmphaticProductCountManager(getContext())
+                    .getItem(productOrderViewModel.UniqueId);
+            EmphaticProductManager emphaticProductManager = new EmphaticProductManager(getContext());
+            EmphaticProductModel emphaticProductModel = emphaticProductManager.getItemByRoleId(temp.RuleId);
+            if (!emphaticProductModel.IsEmphasis)
+                productNameTextView.setText(Html.fromHtml(productName + " ( " + activity.getString(R.string.emphatic_count)+HelperMethods.bigDecimalToString(emphaticProductModel.PackageCount)  + " )"));
+            else {
+                productNameTextView.setText(Html.fromHtml(productName + " ( " + activity.getString(R.string.NOemphatic_count) + " )"));
+                header_layout.setBackgroundColor(activity.getResources().getColor(R.color.no_emphatic));
+            }
+
+
+//            productNameTextView.setText(Html.fromHtml(productName + " ( " + activity.getString(R.string.emphatic_count) + HelperMethods.bigDecimalToString(productOrderViewModel.EmphaticProductCount) + " )"));
             if (productOrderViewModel.EmphaticType == EmphasisType.Deterrent) {
                 productNameTextView.setTextColor(HelperMethods.getColor(getContext(), R.color.red));
             } else if (productOrderViewModel.EmphaticType == EmphasisType.Warning) {

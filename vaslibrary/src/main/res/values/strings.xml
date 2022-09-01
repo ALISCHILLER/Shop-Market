@@ -523,6 +523,7 @@
     <string name="exit_app">خروج از برنامه</string>
     <string name="get_tour">دریافت تور</string>
     <string name="emphatic_count">تعداد تاکیدی :</string>
+    <string name="NOemphatic_count">عدم فروش</string>
     <string name="remove_operation">حذف عملیات</string>
     <string name="confirm_failed">خطا در قطعی کردن عملیات</string>
     <string name="error_saving_customer">خطا در ذخیره اطلاعات مشتری</string>
