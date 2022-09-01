@@ -22,6 +22,6 @@ PRIMARY KEY ("UniqueId" ASC)
 
 -- ALTER TABLE Customer
 -- ----------------------------
-ALTER TABLE EmphaticProduct ADD COLUMN [IsEmphasis]  INTEGER  NULL,
+ALTER TABLE EmphaticProduct ADD COLUMN [IsEmphasis]  BIT  NULL;
 
 

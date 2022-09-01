@@ -132,4 +132,10 @@ public class EmphaticProductManager extends BaseManager<EmphaticProductModel> {
         else
             return getContext().getString(R.string.emphatic_warning);
     }
+
+
+
+    public EmphaticProductModel getItemByRoleId(UUID roleId) {
+        return getItem(new Query().from(EmphaticProduct.EmphaticProductTbl).whereAnd(Criteria.equals(EmphaticProduct.UniqueId, roleId)));
+    }
 }

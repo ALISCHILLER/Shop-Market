@@ -103,6 +103,7 @@ import com.varanegar.vaslibrary.manager.emphaticitems.CustomerEmphaticPackageVie
 import com.varanegar.vaslibrary.manager.emphaticitems.CustomerEmphaticProductManager;
 import com.varanegar.vaslibrary.manager.emphaticitems.EmphaticPackageCheckResult;
 import com.varanegar.vaslibrary.manager.emphaticitems.EmphaticProductCountManager;
+import com.varanegar.vaslibrary.manager.emphaticitems.EmphaticProductManager;
 import com.varanegar.vaslibrary.manager.locationmanager.LocationManager;
 import com.varanegar.vaslibrary.manager.locationmanager.LogLevel;
 import com.varanegar.vaslibrary.manager.locationmanager.LogType;
@@ -146,6 +147,7 @@ import com.varanegar.vaslibrary.model.customercall.CustomerCallType;
 import com.varanegar.vaslibrary.model.customeremphaticproduct.CustomerEmphaticProductModel;
 import com.varanegar.vaslibrary.model.customerpathview.CustomerPathViewModel;
 import com.varanegar.vaslibrary.model.customerremainperline.CustomerRemainPerLineModel;
+import com.varanegar.vaslibrary.model.emphaticproduct.EmphaticProductModel;
 import com.varanegar.vaslibrary.model.emphaticproductcount.EmphaticProductCountModel;
 import com.varanegar.vaslibrary.model.freeReason.FreeReasonModel;
 import com.varanegar.vaslibrary.model.location.LocationModel;
@@ -2870,21 +2872,38 @@ public class CustomerSaveOrderFragment extends VisitFragment
             if (emphaticProductCountModels.size() == 0)
                 isInOrder = true;
 
+            EmphaticProductManager emphaticProductManager = new EmphaticProductManager(getContext());
+            EmphaticProductCountModel notInOrder = null;
+
             for (EmphaticProductCountModel emphatic : emphaticProductCountModels) {
                 for (CustomerCallOrderOrderViewModel item : orderAdapter.getItems())
                     if (emphatic.ProductId.equals(item.ProductId)) {
-                        BigDecimal ProductCount = BigDecimal.valueOf(emphatic.ProductCount);
-                        if (ProductCount.compareTo(item.ProductTotalOrderedQty) < 0) {
-                            isInOrder = true;
-                            break;
-                        } else
+                        EmphaticProductModel emphaticProductModel = emphaticProductManager.getItemByRoleId(emphatic.RuleId);
+                        if (!emphaticProductModel.IsEmphasis) {
+                            BigDecimal ProductCount = BigDecimal.valueOf(emphatic.ProductCount);
+                            if (ProductCount.compareTo(item.ProductTotalOrderedQty) < 0) {
+                                isInOrder = true;
+                                break;
+                            } else
+                                isInOrder = false;
+                        } else {
                             isInOrder = false;
+                            notInOrder = emphatic;
+                            break;
+                        }
                     } else
                         isInOrder = false;
 
                 if (!isInOrder)
                     break;
             }
+
+
+            if (notInOrder != null) {
+
+                return;
+            }
+
 
 /*            EmphaticPackageCheckResult result = new CustomerEmphaticPackageViewManager(getContext()).checkEmphaticPackages(customerId, orderAdapter.getItems());
             if (isInOrder) {
