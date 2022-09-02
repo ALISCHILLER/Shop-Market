@@ -262,9 +262,9 @@ public class ProductSimpleOrderViewHolder extends BaseViewHolder<ProductOrderVie
                     .getItem(productOrderViewModel.UniqueId);
             EmphaticProductManager emphaticProductManager = new EmphaticProductManager(getContext());
             EmphaticProductModel emphaticProductModel = emphaticProductManager.getItemByRoleId(temp.RuleId);
-            if (!emphaticProductModel.IsEmphasis)
-                productNameTextView.setText(Html.fromHtml(productName + " ( " + activity.getString(R.string.emphatic_count)+HelperMethods.bigDecimalToString(emphaticProductModel.PackageCount)  + " )"));
-            else {
+            if (!emphaticProductModel.IsEmphasis) {
+                productNameTextView.setText(Html.fromHtml(productName + " ( " + activity.getString(R.string.emphatic_count) + HelperMethods.bigDecimalToString(emphaticProductModel.PackageCount) + " )"));
+            }else {
                 productNameTextView.setText(Html.fromHtml(productName + " ( " + activity.getString(R.string.NOemphatic_count) + " )"));
                 header_layout.setBackgroundColor(activity.getResources().getColor(R.color.no_emphatic));
             }

@@ -2931,13 +2931,15 @@ public class CustomerSaveOrderFragment extends VisitFragment
 
             if (notInOrder != null) {
                 if (notInOrder.EmphasisProductErrorTypeId.equals(EmphasisProductErrorTypeId.DETERRENT)) {
-                    showError("کالای مربوطه"+" "+itemd.ProductName+"در سفارش نباشد");
+                    showError("کالای مربوطه"+" "+itemd.ProductName+"در سفارش نباشد",false,isInOrder);
                     return;
                 } else if (notInOrder.EmphasisProductErrorTypeId.equals(EmphasisProductErrorTypeId.WARNING)){
-                    showError(" کالای مربوطه "+""+itemd.ProductName+"در سفارش نباشد");
+                    showError(" کالای مربوطه "+""+itemd.ProductName+"در سفارش نباشد",true,isInOrder);
                 } else if (notInOrder.EmphasisProductErrorTypeId.equals(EmphasisProductErrorTypeId.SUGGESTION)){
-                    showError(" کالای مربوطه "+""+itemd.ProductName+"در سفارش نباشد");
+                    showError(" کالای مربوطه "+""+itemd.ProductName+"در سفارش نباشد",true,isInOrder);
                 }
+            }else{
+                show(isInOrder);
             }
 
 
@@ -2947,31 +2949,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
                 result.setWarning(null);
             }*/
 
-            if (!isInOrder && !SysConfigManager.compare(new SysConfigManager(getContext()).read(ConfigKey.SimplePresale, SysConfigManager.cloud), true)) {
-                EmphaticProductDialog emphaticProductDialog = new EmphaticProductDialog();
-                emphaticProductDialog.onOrderUpdate = () -> refresh(true, false, true);
-                emphaticProductDialog.onUserAccept = () -> {
-                    SharedPreferences sharedPreferences = context.getSharedPreferences("UsanceDaySharedPrefences", Context.MODE_PRIVATE);
-                    if (!sharedPreferences.getBoolean(callOrderId.toString() + customer.BackOfficeId + "CheckBoxChecked", false))
-                        showPaymentTypeDialogAndSave();
-                    else {
-                        updateAndSave();
-                    }
-                };
-                Bundle bundle = new Bundle();
-                bundle.putString("d55e60a5-f997-406a-b420-b015488c22a1", customerId.toString());
-                bundle.putString("dee377db-d44a-4021-93fc-9792d620b88b", callOrderId.toString());
-                emphaticProductDialog.setArguments(bundle);
-                emphaticProductDialog.show(getChildFragmentManager(), "EmphaticProductDialog");
-            } else {
 
-                SharedPreferences sharedPreferences = context.getSharedPreferences("UsanceDaySharedPrefences", Context.MODE_PRIVATE);
-                if (!sharedPreferences.getBoolean(callOrderId.toString() + customer.BackOfficeId + "CheckBoxChecked", false))
-                    showPaymentTypeDialogAndSave();
-                else {
-                    updateAndSave();
-                }
-            }
         } else {
             /**
              * چک کردن تحویل قسمتی و تغییر کردن اجناس
@@ -2991,6 +2969,34 @@ public class CustomerSaveOrderFragment extends VisitFragment
         }
     }
 
+
+    public void show(boolean isInOrder){
+        if (!isInOrder && !SysConfigManager.compare(new SysConfigManager(getContext()).read(ConfigKey.SimplePresale, SysConfigManager.cloud), true)) {
+            EmphaticProductDialog emphaticProductDialog = new EmphaticProductDialog();
+            emphaticProductDialog.onOrderUpdate = () -> refresh(true, false, true);
+            emphaticProductDialog.onUserAccept = () -> {
+                SharedPreferences sharedPreferences = context.getSharedPreferences("UsanceDaySharedPrefences", Context.MODE_PRIVATE);
+                if (!sharedPreferences.getBoolean(callOrderId.toString() + customer.BackOfficeId + "CheckBoxChecked", false))
+                    showPaymentTypeDialogAndSave();
+                else {
+                    updateAndSave();
+                }
+            };
+            Bundle bundle = new Bundle();
+            bundle.putString("d55e60a5-f997-406a-b420-b015488c22a1", customerId.toString());
+            bundle.putString("dee377db-d44a-4021-93fc-9792d620b88b", callOrderId.toString());
+            emphaticProductDialog.setArguments(bundle);
+            emphaticProductDialog.show(getChildFragmentManager(), "EmphaticProductDialog");
+        } else {
+
+            SharedPreferences sharedPreferences = context.getSharedPreferences("UsanceDaySharedPrefences", Context.MODE_PRIVATE);
+            if (!sharedPreferences.getBoolean(callOrderId.toString() + customer.BackOfficeId + "CheckBoxChecked", false))
+                showPaymentTypeDialogAndSave();
+            else {
+                updateAndSave();
+            }
+        }
+    }
     private void showEmphaticItems() {
         if (!VaranegarApplication.is(VaranegarApplication.AppId.Supervisor) && !hasCallOrder()) {
             SysConfigManager sysConfigManager = new SysConfigManager(getContext());
@@ -3512,14 +3518,23 @@ public class CustomerSaveOrderFragment extends VisitFragment
         }
     }
 
-    private void showError(String error) {
+    private void showError(String error,boolean chack,boolean isInOrder) {
         Context context = getContext();
         if (isResumed() && context != null) {
             CuteMessageDialog dialog = new CuteMessageDialog(context);
             dialog.setTitle(R.string.error);
             dialog.setMessage(error);
             dialog.setIcon(Icon.Error);
-            dialog.setPositiveButton(R.string.ok, null);
+            dialog.setPositiveButton(R.string.ok, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (chack) {
+                        show(isInOrder);
+                    }else{
+                        return;
+                    }
+                }
+            });
             dialog.show();
         }
     }
