@@ -2931,7 +2931,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
 
             if (notInOrder != null) {
                 if (notInOrder.EmphasisProductErrorTypeId.equals(EmphasisProductErrorTypeId.DETERRENT)) {
-                    showError("کالای مربوطه"+" "+itemd.ProductName+"در سفارش نباشد",false,isInOrder);
+                    showError("کالای مربوطه"+" "+itemd.ProductName+"در سفارش نباشد");
                     return;
                 } else if (notInOrder.EmphasisProductErrorTypeId.equals(EmphasisProductErrorTypeId.WARNING)){
                     showError(" کالای مربوطه "+""+itemd.ProductName+"در سفارش نباشد",true,isInOrder);
@@ -3535,6 +3535,19 @@ public class CustomerSaveOrderFragment extends VisitFragment
                     }
                 }
             });
+            dialog.show();
+        }
+    }
+
+
+    private void showError(String error) {
+        Context context = getContext();
+        if (isResumed() && context != null) {
+            CuteMessageDialog dialog = new CuteMessageDialog(context);
+            dialog.setTitle(R.string.error);
+            dialog.setMessage(error);
+            dialog.setIcon(Icon.Error);
+            dialog.setPositiveButton(R.string.ok, null);
             dialog.show();
         }
     }
