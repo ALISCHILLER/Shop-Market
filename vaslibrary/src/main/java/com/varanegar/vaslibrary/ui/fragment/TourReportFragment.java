@@ -1512,7 +1512,7 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
                             CuteMessageDialog dialog = new CuteMessageDialog(activity);
                             dialog.setIcon(Icon.Error);
                             dialog.setTitle(err);
-                            dialog.setMessage(R.string.error_connecting_to_server);
+                            dialog.setMessage(R.string.no_tour_rest);
                             dialog.setPositiveButton(R.string.ok, null);
                             dialog.show();
                         }
