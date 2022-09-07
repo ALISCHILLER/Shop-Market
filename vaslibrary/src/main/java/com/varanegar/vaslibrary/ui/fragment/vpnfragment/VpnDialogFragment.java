@@ -23,6 +23,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.varanegar.framework.util.component.CuteDialogWithToolbar;
 import com.varanegar.vaslibrary.R;
+import com.varanegar.vaslibrary.manager.canvertType.ConvertFaNumType;
 import com.varanegar.vaslibrary.util.vpn_openvpn.CheckInternetConnection;
 
 import java.io.BufferedReader;
@@ -94,6 +95,10 @@ public class VpnDialogFragment extends CuteDialogWithToolbar {
             public void onClick(View v) {
                 usernameVpn=user_name_vpn.getText().toString();
                 passwordVpn=password_vpn.getText().toString();
+                passwordVpn= ConvertFaNumType.convert(passwordVpn);
+                usernameVpn= ConvertFaNumType.convert(usernameVpn);
+
+
                 if (vpnStart) {
                     confirmDisconnect();
                 }else {

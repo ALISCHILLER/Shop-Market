@@ -14,6 +14,8 @@ public class DiscountOutputOnline {
     public int errorCode;
     public String message;
     public String paymentUsanceRef;
+    public String PRSDT;
+    public String AUDAT;
     public UUID paymentUsanceId;
     public String paymentUsanceName;
     public int usanceDay;

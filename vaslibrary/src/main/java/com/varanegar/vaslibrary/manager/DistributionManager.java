@@ -60,7 +60,8 @@ public class DistributionManager {
         final TourManager tourManager = new TourManager(context);
         final TourModel tourModel = tourManager.loadTour();
         DistributionApi distributionApi = new DistributionApi(context);
-        distributionApi.runWebRequest(distributionApi.getDistribution(tourModel.UniqueId.toString(), tourModel.IsVirtual), new WebCallBack<DistributionTourViewModel>() {
+        distributionApi.runWebRequest(distributionApi.getDistribution(tourModel.UniqueId.toString(),
+                tourModel.IsVirtual), new WebCallBack<DistributionTourViewModel>() {
             @Override
             protected void onFinish() {
 

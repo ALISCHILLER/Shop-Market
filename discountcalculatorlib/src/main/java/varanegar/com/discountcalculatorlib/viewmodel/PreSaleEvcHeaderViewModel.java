@@ -1,5 +1,7 @@
 package varanegar.com.discountcalculatorlib.viewmodel;
 
+import com.varanegar.processor.annotations.Column;
+
 import java.util.List;
 
 /**
@@ -18,6 +20,8 @@ public class PreSaleEvcHeaderViewModel {
     public String PaymentUsanceRef;
     public int EvcType;
     public int RefId;
+    public String DocPDate;
+    public String SalePDate;
     public List<DiscountCallOrderLineDataOnline> PreSaleEvcDetails;
     public List<DiscountOrderPrizeViewModel> OrderPrizeList;
     public List<Integer> SelIds;

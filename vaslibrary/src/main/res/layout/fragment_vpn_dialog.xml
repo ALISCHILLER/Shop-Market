@@ -15,7 +15,6 @@
 
         <TextView
             android:id="@+id/textView2"
-            style="@android:style/TextAppearance.DeviceDefault.Small"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/item_pair_top_background"
@@ -28,12 +27,10 @@
 
         <EditText
             android:id="@+id/user_name_vpn"
-            style="@android:style/TextAppearance.DeviceDefault.Small"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:hint="نام کاربری"
-            android:imeOptions="actionNext"
             android:lines="1"
             android:longClickable="false"
             android:padding="@dimen/padding_default"
@@ -46,7 +43,6 @@
 
         <TextView
             android:id="@+id/textView3"
-            style="@android:style/TextAppearance.DeviceDefault.Small"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/item_pair_top_background"
@@ -58,16 +54,11 @@
 
         <EditText
             android:id="@+id/password_vpn"
-            style="@android:style/TextAppearance.DeviceDefault.Small"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:hint="رمز ورود"
-            android:imeOptions="actionNext"
-            android:lines="1"
-            android:longClickable="false"
             android:padding="@dimen/padding_default"
-            android:singleLine="true"
             android:textColor="@color/black"
             custom:layout_constraintEnd_toEndOf="parent"
             custom:layout_constraintStart_toEndOf="@+id/user_name_vpn"

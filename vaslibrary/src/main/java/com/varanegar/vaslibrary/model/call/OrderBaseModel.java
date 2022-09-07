@@ -36,6 +36,7 @@ public class OrderBaseModel extends BaseModel {
     public String BackOfficeOrderNo;
     @Column
     public Date SaleDate;
+
     @Column
     public int BackOfficeOrderId;
     @Column
@@ -153,4 +154,11 @@ public class OrderBaseModel extends BaseModel {
     public  Currency TotalAmountNutCheque;
     @Column
     public  Currency TotalAmountNutImmediate;
+    @Column
+    public Date DocDate;
+    @Column
+    public String DocPDate;
+    @Column
+    public String SalePDate;
+
 }

@@ -23,6 +23,9 @@ public class CustomerCallInvoiceModel extends OrderBaseModel {
         customerCallOrderModel.LocalPaperNo = LocalPaperNo;
         customerCallOrderModel.BackOfficeOrderNo = BackOfficeOrderNo;
         customerCallOrderModel.SaleDate = SaleDate;
+        customerCallOrderModel.SalePDate = SalePDate;
+        customerCallOrderModel.DocDate = DocDate;
+        customerCallOrderModel.DocPDate = DocPDate;
         customerCallOrderModel.BackOfficeOrderId = BackOfficeOrderId;
         customerCallOrderModel.BackOfficeOrderTypeId = BackOfficeOrderTypeId;
         customerCallOrderModel.OrderPaymentTypeUniqueId = OrderPaymentTypeUniqueId;
