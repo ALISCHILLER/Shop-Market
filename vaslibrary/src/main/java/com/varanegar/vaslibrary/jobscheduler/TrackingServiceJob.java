@@ -25,6 +25,8 @@ import com.varanegar.vaslibrary.manager.locationmanager.TrackingLogManager;
 import com.varanegar.vaslibrary.manager.locationmanager.TrackingService;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 
+import timber.log.Timber;
+
 /**
  * Created by A.Torabi on 8/13/2017.
  */
@@ -58,10 +60,14 @@ public class TrackingServiceJob implements Job {
                  * mehrdad Ali
                  * فعال کردن سرویس ارسال  لوکیشن
                  */
-                if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
-                    Intent trackingService = new Intent(context, TrackingService.class);
-                    context.startService(trackingService);
-                    getOnePoint(context);
+                if (SysConfigManager.hasTracking(context)) {
+                    if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+                        Intent trackingService = new Intent(context, TrackingService.class);
+                        context.startService(trackingService);
+                        getOnePoint(context);
+                    }
+                }else {
+                    Timber.d("Tracking config is false");
                 }
             } else {
                 if (result == ConnectionResult.API_UNAVAILABLE) {
