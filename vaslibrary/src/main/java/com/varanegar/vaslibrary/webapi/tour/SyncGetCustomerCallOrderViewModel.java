@@ -1,5 +1,7 @@
 package com.varanegar.vaslibrary.webapi.tour;
 
+import com.varanegar.processor.annotations.Column;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -56,6 +58,9 @@ public class SyncGetCustomerCallOrderViewModel {
     public UUID SellTypeStatusTypeUniqueId;
     public double OrderOtherRoundDiscount;
     public String InvoiceStartPTime;
+    public Date DocDate;
+    public String DocPDate;
+    public String SalePDate;
     public List<SyncGetCustomerCallOrderLineViewModel> OrderLines = new ArrayList<>();
     public List<SyncGetCustomerCallOrderPrizeViewModel> OrderPrizes = new ArrayList<>();
     public List<SyncGetCustomerCallOrderLineViewModel> PromotionsPreview = new ArrayList<>();

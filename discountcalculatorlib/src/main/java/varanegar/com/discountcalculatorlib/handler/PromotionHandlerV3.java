@@ -169,7 +169,13 @@ public class PromotionHandlerV3 {
      * @return
      * @throws InterruptedException
      */
-    public static DiscountCallOrderData distCalcPromotionOnlineSDS(final List<DiscountOrderPrizeViewModel> orderPrizeList, final DiscountCallOrderData discountCallOrderData, final Context context) throws InterruptedException {
+    public static DiscountCallOrderData distCalcPromotionOnlineSDS(
+            final List<DiscountOrderPrizeViewModel> orderPrizeList,
+            final DiscountCallOrderData discountCallOrderData,
+            final Context context,
+            String SalePDate,
+            String  DocPDate
+            ) throws InterruptedException {
         final String[] errorMessage = {null};
         final Thread thread = new Thread(new Runnable() {
             @Override
@@ -200,6 +206,8 @@ public class PromotionHandlerV3 {
                     totallyError = "";
                     orderPrize = new ArrayList<>();
                     hasChoicePrize = false;
+                    onlineData.SalePDate=SalePDate;
+                    onlineData.DocPDate=DocPDate;
                     /**
                      * محاسبه تخفیف جوایز
                      */

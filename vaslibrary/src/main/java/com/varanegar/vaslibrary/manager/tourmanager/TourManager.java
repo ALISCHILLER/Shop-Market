@@ -2034,6 +2034,8 @@ public class TourManager {
                 syncGetCustomerCallOrderViewModel.InvoiceStartPTime = DateHelper.toString(customerCallOrderModel.StartTime, DateFormat.MicrosoftDateTime, DateHelper.fa);
                 syncGetCustomerCallOrderViewModel.InvoiceEndTime = customerCallOrderModel.EndTime;
                 syncGetCustomerCallOrderViewModel.SaleDate = customerCallOrderModel.SaleDate;
+
+
                 syncGetCustomerCallOrderViewModel.BackOfficeOrderNo = customerCallOrderModel.BackOfficeOrderNo;
                 syncGetCustomerCallOrderViewModel.BackOfficeInvoiceNo = customerCallOrderModel.BackOfficeInvoiceNo;
 //                syncGetCustomerCallOrderViewModel.RoundInvoiceAmount = HelperMethods.currencyToDouble(customerCallOrderModel.RoundInvoiceAmount);
@@ -2270,7 +2272,9 @@ public class TourManager {
                     if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
                         syncGetCustomerCallOrderViewModel.OrderPaymentTypeUniqueId = customerCallOrderModel.OrderPaymentTypeUniqueId;
 
-
+                        syncGetCustomerCallOrderViewModel.DocPDate = String.valueOf(customerCallOrderModel.SaleDate);
+                            syncGetCustomerCallOrderViewModel.SalePDate = String.valueOf(customerCallOrderModel.SaleDate);
+                            syncGetCustomerCallOrderViewModel.DocDate = customerCallOrderModel.SaleDate;
                         syncGetCustomerCallOrderViewModel.ShipToPartyUniqueId=customerCallOrderModel.ShipToPartyUniqueId;
                         syncGetCustomerCallOrderViewModel.ShipToPartyCode=customerCallOrderModel.ShipToPartyCode;
                     } else if (VaranegarApplication.is(VaranegarApplication.AppId.HotSales))

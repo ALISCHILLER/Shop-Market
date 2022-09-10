@@ -24,6 +24,7 @@ import com.varanegar.vaslibrary.manager.OrderAmount;
 import com.varanegar.vaslibrary.manager.PaymentOrderTypeManager;
 import com.varanegar.vaslibrary.manager.ProductManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
+import com.varanegar.vaslibrary.manager.customercall.CustomerCallInvoiceManager;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallOrderManager;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallReturnManager;
 import com.varanegar.vaslibrary.manager.customerpricemanager.CustomerPriceManager;
@@ -36,6 +37,7 @@ import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.UnknownBackOfficeException;
 import com.varanegar.vaslibrary.model.CustomerOrderType.CustomerOrderTypeModel;
+import com.varanegar.vaslibrary.model.call.CustomerCallInvoiceModel;
 import com.varanegar.vaslibrary.model.call.CustomerCallOrderModel;
 import com.varanegar.vaslibrary.model.call.CustomerCallReturnModel;
 import com.varanegar.vaslibrary.model.customer.CustomerModel;
@@ -102,7 +104,8 @@ public class CalcPromotion {
                     try {
                         DiscountCallOrderData disCallData;
                         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist))
-                            disCallData = PromotionHandlerV3.distCalcPromotionOnlineSDS(null, callData.toDiscount(context), context);
+                            disCallData = PromotionHandlerV3.distCalcPromotionOnlineSDS(null, callData.toDiscount(context), context,
+                                    null,null);
                         else
                             disCallData = PromotionHandlerV3.calcPromotionOnlineSDS(null, callData.toDiscount(context), context);
 
@@ -143,7 +146,8 @@ public class CalcPromotion {
         progressDialog.setMessage(activity.getString(R.string.please_wait));
         progressDialog.setCancelable(false);
         progressDialog.show();
-        calcPromotionV3(SelIds, orderPrizeList, activity, callOrderUniqueId, customerUniqueId, evcType, CalcDiscount, CalcSaleRestriction, CalcPaymentType, new PromotionCallback() {
+        calcPromotionV3(SelIds, orderPrizeList, activity, callOrderUniqueId, customerUniqueId, evcType, CalcDiscount,
+                CalcSaleRestriction, CalcPaymentType, new PromotionCallback() {
             @Override
             public void onSuccess(CustomerCallOrderPromotion data) {
                 if (progressDialog != null && progressDialog.isShowing()) {
@@ -252,7 +256,9 @@ public class CalcPromotion {
                                         DiscountCallOrderData disCallData = null;
                                         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
                                             ArrayList<DiscountCallOrderLineData> orderProduct = populateOriginalData(context, callOrderUniqueId);
-                                            distDiscountCalc(orderPrizeList, context, callData, disCallData, evcType, orderProduct);
+                                            List<CustomerCallInvoiceModel> callInvoiceModel= new CustomerCallInvoiceManager(context)
+                                                    .getCustomerCallInvoices(customerUniqueId);
+                                            distDiscountCalc(orderPrizeList, context, callData, disCallData, evcType, orderProduct,  callInvoiceModel.get(0));
                                             handler.post(() -> callback.onSuccess(callData));
 //                                                disCallData = DiscountCalculatorHandler.calcPromotion(callData.toDiscount(context), evcType.value(), context);
                                             //                                                disCallData = DiscountCalculatorHandler.calcPromotion(callData.toDiscount(context), evcType.value(), context);
@@ -295,7 +301,7 @@ public class CalcPromotion {
                             DiscountCallOrderData disCallData = null;
                             if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
                                 ArrayList<DiscountCallOrderLineData> orderProduct = populateOriginalData(context, callOrderUniqueId);
-                                distDiscountCalc(null, context, callData, disCallData, evcType, orderProduct);
+                                distDiscountCalc(null, context, callData, disCallData, evcType, orderProduct,null);
                                 handler.post(() -> callback.onSuccess(callData));
                             } else {
                                 disCallData = DiscountCalculatorHandler.calcPromotion(SelIds, callData.toDiscount(context), evcType.value(), context);
@@ -341,11 +347,21 @@ public class CalcPromotion {
      * @throws DiscountException
      * @throws InterruptedException
      */
-    private static void distDiscountCalc(List<DiscountOrderPrizeViewModel> orderPrizeList, Context context, CustomerCallOrderPromotion callData, DiscountCallOrderData disCallData, EVCType evcType, ArrayList<DiscountCallOrderLineData> orderProduct) throws DiscountException, InterruptedException {
+    private static void distDiscountCalc(List<DiscountOrderPrizeViewModel> orderPrizeList,
+                                         Context context, CustomerCallOrderPromotion callData,
+                                         DiscountCallOrderData disCallData,
+                                         EVCType evcType,
+                                         ArrayList<DiscountCallOrderLineData> orderProduct,
+                                         CustomerCallInvoiceModel callInvoiceModel
+    ) throws DiscountException, InterruptedException {
         //                                                if (true) {
         try {
+            String DocPDate=callInvoiceModel.DocPDate;
+            String SalePDate=callInvoiceModel.SalePDate;
+
+
             if (GlobalVariables.isCalcOnline())
-                disCallData = PromotionHandlerV3.distCalcPromotionOnlineSDS(orderPrizeList, callData.toDiscount(context), context);
+                disCallData = PromotionHandlerV3.distCalcPromotionOnlineSDS(orderPrizeList, callData.toDiscount(context), context,SalePDate,DocPDate);
             else {
                 DiscountInitializeHandler disc = DiscountInitializeHandlerV3.getDiscountHandler(context);
                 //DiscountCalculatorHandler.init(disc, callData.BackOfficeOrderId, null);

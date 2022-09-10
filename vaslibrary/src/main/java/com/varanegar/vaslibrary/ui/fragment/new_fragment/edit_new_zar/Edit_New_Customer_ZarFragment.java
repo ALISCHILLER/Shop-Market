@@ -277,7 +277,7 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment implements 
 
         /**  آدرس*/
         addressPairedItem = view.findViewById(R.id.address_paired_item);
-        validator.addField(addressPairedItem, getString(R.string.address), new LengthChecker(0, 150,
+        validator.addField(addressPairedItem, getString(R.string.address), new LengthChecker(1, 150,
                 false));
         addressPairedItem.setEnabled(false);
         addressPairedItem.setFocusable(false);
