@@ -18,6 +18,17 @@ import varanegar.com.discountcalculatorlib.viewmodel.PreSaleEvcHeaderViewModel;
  */
 
 public interface ICalcOnlinePromotionAPI {
+
+
+    /** محاسبه تخفیف جوایز
+     * پیش نمایش ویزیت
+     *
+     * @param order
+     * @param calcDiscount
+     * @param calcSaleRestriction
+     * @param calcPaymentType
+     * @return
+     */
     @POST("api/v2/ngt/evc/presale")
     Call<DiscountOutputOnline> getPromotion(@Body DiscountCallOrderDataOnline order,
                                                        @Query("calcDiscount") boolean calcDiscount,
@@ -25,7 +36,7 @@ public interface ICalcOnlinePromotionAPI {
 
                                                        @Query("calcPaymentType")  boolean calcPaymentType);
 
-    /**
+    /** پیش نمایش موزع
      * محاسبه تخفیف جوایز
      * @param order
      * @param calcDiscount
