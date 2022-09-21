@@ -426,68 +426,68 @@ public abstract class CustomersFragment
                 .is(VaranegarApplication.AppId.Contractor))
             buttons.add(mapBtn);
 
-        CuteButton pathBtn = new CuteButton();
-        pathBtn.setTitle(R.string.omptimizing_path);
-        pathBtn.setIcon(R.drawable.ic_path_black_36dp);
-        pathBtn.setEnabled(() ->
-                new TourManager(getContext()).isTourAvailable());
-        pathBtn.setOnClickListener(() -> {
-            if (getActivity() == null || getActivity().isFinishing()) return;
-
-            Location lastLocation = ((VasActivity) getActivity()).getLastLocation();
-            if (lastLocation != null) {
-                PathOptimizationDialog dialog = new PathOptimizationDialog();
-                dialog.lastLocation = lastLocation;
-                dialog.onResponse = new PathOptimizationDialog.IOnResponse() {
-                    @Override
-                    public void done(List<CustomerModel> customerModels, List<LatLng> points) {
-                        if (getActivity() == null || getActivity().isFinishing()) return;
-
-                        if (customerModels.size() > 0) {
-                            try {
-                                CustomerManager customerManager =
-                                        new CustomerManager(getActivity());
-                                customerManager.updateOPathIds(customerModels, points);
-                                refresh();
-                                CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
-                                dialog.setIcon(Icon.Success);
-                                dialog.setMessage(R.string.customers_list_updated);
-                                dialog.setPositiveButton(R.string.ok, null);
-                                dialog.show();
-                            } catch (Exception e) {
-                                CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
-                                dialog.setIcon(Icon.Error);
-                                dialog.setMessage(R.string.error_saving_request);
-                                dialog.setPositiveButton(R.string.ok, null);
-                                dialog.show();
-                            }
-                        } else
-                            refresh();
-                    }
-
-                    @Override
-                    public void failed(String error) {
-                        if (getActivity() == null || getActivity().isFinishing()) return;
-
-                        CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
-                        dialog.setIcon(Icon.Error);
-                        dialog.setMessage(error);
-                        dialog.setPositiveButton(R.string.ok, null);
-                        dialog.show();
-                    }
-                };
-                dialog.show(
-                        getActivity().getSupportFragmentManager(),
-                        "CuteAlertDialogOptimisation");
-            } else {
-                CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
-                dialog.setIcon(Icon.Error);
-                dialog.setMessage(R.string.location_is_not_available);
-                dialog.setPositiveButton(R.string.ok, null);
-                dialog.show();
-            }
-        });
-        buttons.add(pathBtn);
+//        CuteButton pathBtn = new CuteButton();
+//        pathBtn.setTitle(R.string.omptimizing_path);
+//        pathBtn.setIcon(R.drawable.ic_path_black_36dp);
+//        pathBtn.setEnabled(() ->
+//                new TourManager(getContext()).isTourAvailable());
+//        pathBtn.setOnClickListener(() -> {
+//            if (getActivity() == null || getActivity().isFinishing()) return;
+//
+//            Location lastLocation = ((VasActivity) getActivity()).getLastLocation();
+//            if (lastLocation != null) {
+//                PathOptimizationDialog dialog = new PathOptimizationDialog();
+//                dialog.lastLocation = lastLocation;
+//                dialog.onResponse = new PathOptimizationDialog.IOnResponse() {
+//                    @Override
+//                    public void done(List<CustomerModel> customerModels, List<LatLng> points) {
+//                        if (getActivity() == null || getActivity().isFinishing()) return;
+//
+//                        if (customerModels.size() > 0) {
+//                            try {
+//                                CustomerManager customerManager =
+//                                        new CustomerManager(getActivity());
+//                                customerManager.updateOPathIds(customerModels, points);
+//                                refresh();
+//                                CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
+//                                dialog.setIcon(Icon.Success);
+//                                dialog.setMessage(R.string.customers_list_updated);
+//                                dialog.setPositiveButton(R.string.ok, null);
+//                                dialog.show();
+//                            } catch (Exception e) {
+//                                CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
+//                                dialog.setIcon(Icon.Error);
+//                                dialog.setMessage(R.string.error_saving_request);
+//                                dialog.setPositiveButton(R.string.ok, null);
+//                                dialog.show();
+//                            }
+//                        } else
+//                            refresh();
+//                    }
+//
+//                    @Override
+//                    public void failed(String error) {
+//                        if (getActivity() == null || getActivity().isFinishing()) return;
+//
+//                        CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
+//                        dialog.setIcon(Icon.Error);
+//                        dialog.setMessage(error);
+//                        dialog.setPositiveButton(R.string.ok, null);
+//                        dialog.show();
+//                    }
+//                };
+//                dialog.show(
+//                        getActivity().getSupportFragmentManager(),
+//                        "CuteAlertDialogOptimisation");
+//            } else {
+//                CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
+//                dialog.setIcon(Icon.Error);
+//                dialog.setMessage(R.string.location_is_not_available);
+//                dialog.setPositiveButton(R.string.ok, null);
+//                dialog.show();
+//            }
+//        });
+//        buttons.add(pathBtn);
 
         CuteButton albumBtn = new CuteButton();
         albumBtn.setTitle(R.string.product_album);

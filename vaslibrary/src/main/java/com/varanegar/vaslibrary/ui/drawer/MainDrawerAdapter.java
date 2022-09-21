@@ -99,14 +99,14 @@ public class MainDrawerAdapter extends DrawerAdapter {
                 getActivity().pushFragment(new UserProfileFragment());
             }
         });
-        add(new DrawerItem(activity, R.string.tracking_license, R.drawable.ic_tracking_black_24dp).setClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                activity.closeDrawer();
-                TrackingLicenseFragment trackingLicenseFragment = new TrackingLicenseFragment();
-                activity.pushFragment(trackingLicenseFragment);
-            }
-        }));
+//        add(new DrawerItem(activity, R.string.tracking_license, R.drawable.ic_tracking_black_24dp).setClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                activity.closeDrawer();
+//                TrackingLicenseFragment trackingLicenseFragment = new TrackingLicenseFragment();
+//                activity.pushFragment(trackingLicenseFragment);
+//            }
+//        }));
         add(new DrawerItem(activity, R.string.news_zar, R.drawable.ic_baseline_newspaper_24)
                 .setClickListener(new View.OnClickListener() {
             @Override
@@ -401,59 +401,59 @@ public class MainDrawerAdapter extends DrawerAdapter {
         if (!VaranegarApplication.is(VaranegarApplication.AppId.Contractor))
             add(reports);
 
-        reviewReports = new DrawerSectionItem(activity, this, R.string.review_reports, R.drawable.ic_review_report_black_24dp);
-        reviewReports.addItem(new DrawerItem(activity, R.string.sell_request).setClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                OrderReviewReportFragment fragment = new OrderReviewReportFragment();
-                gotoReportFragment(fragment, true);
-            }
-        }));
-        reviewReports.addItem(new DrawerItem(activity, R.string.sell_invoice).setClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SellReviewReportFragment fragment = new SellReviewReportFragment();
-                gotoReportFragment(fragment, true);
-            }
-        }));
-        reviewReports.addItem(new DrawerItem(activity, R.string.product_sale).setClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ProductReviewReportFragment fragment = new ProductReviewReportFragment();
-                gotoReportFragment(fragment, true);
-            }
-        }));
-//                 TODO: 5/21/2018 temporarily do not show!!
-//                reviewReports.addItem(new DrawerItem(activity, R.string.product_group_sale).setClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        ProductGroupReviewReportFragment fragment = new ProductGroupReviewReportFragment();
-//                        gotoReportFragment(fragment, true);
-//                    }
-//                }));
-        reviewReports.addItem(new DrawerItem(activity, R.string.return_report).setClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SellReturnReviewReportFragment fragment = new SellReturnReviewReportFragment();
-                gotoReportFragment(fragment, true);
-            }
-        }));
-        reviewReports.addItem(new DrawerItem(activity, R.string.tour_report).setClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                TourReviewReportFragment fragment = new TourReviewReportFragment();
-                gotoReportFragment(fragment, true);
-            }
-        }));
-        reviewReports.addItem(new DrawerItem(activity, R.string.target_report).setClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                TargetReviewReportFragment fragment = new TargetReviewReportFragment();
-                gotoReportFragment(fragment, true);
-            }
-        }));
-        if (!VaranegarApplication.is(VaranegarApplication.AppId.Contractor) && !VaranegarApplication.is(VaranegarApplication.AppId.Dist))
-            add(reviewReports);
+//        reviewReports = new DrawerSectionItem(activity, this, R.string.review_reports, R.drawable.ic_review_report_black_24dp);
+//        reviewReports.addItem(new DrawerItem(activity, R.string.sell_request).setClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                OrderReviewReportFragment fragment = new OrderReviewReportFragment();
+//                gotoReportFragment(fragment, true);
+//            }
+//        }));
+//        reviewReports.addItem(new DrawerItem(activity, R.string.sell_invoice).setClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                SellReviewReportFragment fragment = new SellReviewReportFragment();
+//                gotoReportFragment(fragment, true);
+//            }
+//        }));
+//        reviewReports.addItem(new DrawerItem(activity, R.string.product_sale).setClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                ProductReviewReportFragment fragment = new ProductReviewReportFragment();
+//                gotoReportFragment(fragment, true);
+//            }
+//        }));
+////                 TODO: 5/21/2018 temporarily do not show!!
+////                reviewReports.addItem(new DrawerItem(activity, R.string.product_group_sale).setClickListener(new View.OnClickListener() {
+////                    @Override
+////                    public void onClick(View view) {
+////                        ProductGroupReviewReportFragment fragment = new ProductGroupReviewReportFragment();
+////                        gotoReportFragment(fragment, true);
+////                    }
+////                }));
+////        reviewReports.addItem(new DrawerItem(activity, R.string.return_report).setClickListener(new View.OnClickListener() {
+////            @Override
+////            public void onClick(View view) {
+////                SellReturnReviewReportFragment fragment = new SellReturnReviewReportFragment();
+////                gotoReportFragment(fragment, true);
+////            }
+////        }));
+//        reviewReports.addItem(new DrawerItem(activity, R.string.tour_report).setClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                TourReviewReportFragment fragment = new TourReviewReportFragment();
+//                gotoReportFragment(fragment, true);
+//            }
+//        }));
+//        reviewReports.addItem(new DrawerItem(activity, R.string.target_report).setClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                TargetReviewReportFragment fragment = new TargetReviewReportFragment();
+//                gotoReportFragment(fragment, true);
+//            }
+//        }));
+//        if (!VaranegarApplication.is(VaranegarApplication.AppId.Contractor) && !VaranegarApplication.is(VaranegarApplication.AppId.Dist))
+//            add(reviewReports);
 
         updates = new DrawerSectionItem(activity, this, R.string.updates, R.drawable.ic_autorenew_white_24dp);
         if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
