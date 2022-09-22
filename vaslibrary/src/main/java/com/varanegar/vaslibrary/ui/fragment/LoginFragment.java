@@ -41,7 +41,6 @@ import com.varanegar.framework.util.LocaleHelper;
 import com.varanegar.framework.util.component.SearchBox;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
-import com.varanegar.framework.util.prefs.Preferences;
 import com.varanegar.framework.validation.ValidationError;
 import com.varanegar.framework.validation.ValidationListener;
 import com.varanegar.framework.validation.Validator;
@@ -51,33 +50,28 @@ import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.base.BackupManager;
 import com.varanegar.vaslibrary.base.LocalModel;
 import com.varanegar.vaslibrary.base.SelectLanguageDialog;
-import com.varanegar.vaslibrary.jobscheduler.SendTrackingPointsService;
 import com.varanegar.vaslibrary.manager.UserManager;
+import com.varanegar.vaslibrary.manager.dealerdivision.DealerDivisionManager;
 import com.varanegar.vaslibrary.manager.locationmanager.LocationManager;
 import com.varanegar.vaslibrary.manager.locationmanager.LogLevel;
 import com.varanegar.vaslibrary.manager.locationmanager.LogType;
-import com.varanegar.vaslibrary.manager.locationmanager.OnSaveLocation;
 import com.varanegar.vaslibrary.manager.locationmanager.TrackingLicense;
 import com.varanegar.vaslibrary.manager.locationmanager.TrackingLogManager;
-import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.SendTourEventViewModel;
-import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.SendTourLocationViewModel;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 
+import com.varanegar.vaslibrary.manager.updatemanager.UpdateCall;
 import com.varanegar.vaslibrary.model.TrackingLog;
 import com.varanegar.vaslibrary.model.location.Location;
-import com.varanegar.vaslibrary.model.location.LocationModel;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfig;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.model.user.User;
 import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.model.user.UserModelRepository;
-import com.varanegar.vaslibrary.print.SentTourInfoPrint.TourInfo;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
 import com.varanegar.vaslibrary.ui.dialog.ImportDialogFragment;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
 
-import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -370,21 +364,7 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
                             , new OnTokenAcquired() {
                                 @Override
                                 public void run(Token token) {
-                                    try {
-                                        BackupManager.exportData(getContext(), true);
-                                        AccountManager accountManager = new AccountManager();
-                                        accountManager.writeToFile(token, getContext(), "user.token");
-                                        user.LoginDate = new Date();
-                                        UserManager.writeToFile(user, getContext());
-                                        VaranegarApplication.getInstance().getDbHandler()
-                                                .emptyAllTablesExcept(User.UserTbl, SysConfig.SysConfigTbl,
-                                                        Location.LocationTbl, TrackingLog.TrackingLogTbl);
-                                        MainVaranegarActivity activity = getVaranegarActvity();
-                                        if (activity != null && !activity.isFinishing() && isResumed())
-                                            activity.putFragment(getTourReportFragment());
-                                        setEnabled(true);
-                                        loginButton.setProgress(0);
-                                        getTrackingLicense();
+                                    gotoTourReportFragment(user, token);
                                         /*VasInstanceIdService.refreshToken(getContext(), new VasInstanceIdService.TokenRefreshCallBack() {
                                             @Override
                                             public void onSuccess(@NonNull String token) {
@@ -396,16 +376,6 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
                                                 Timber.d("Token update failed. Error=" + error + "  Token=" + token);
                                             }
                                         });*/
-                                    } catch (Exception e) {
-                                        Timber.e(e);
-                                        if (isResumed()) {
-                                            setEnabled(true);
-                                            loginButton.setProgress(0);
-                                            MainVaranegarActivity activity = getVaranegarActvity();
-                                            if (activity != null && !activity.isFinishing())
-                                                activity.showSnackBar(getContext().getString(R.string.login_failed), MainVaranegarActivity.Duration.Short);
-                                        }
-                                    }
                                 }
                             }, new OnError() {
                                 @Override
@@ -456,6 +426,43 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
         }
 
     }
+
+
+    /**
+     * Added By Mehrdad Latifi on 9/21/2022
+     */
+    //---------------------------------------------------------------------------------------------- gotoTourReportFragment
+    private void gotoTourReportFragment(UserModel user, Token token) {
+        try {
+            BackupManager.exportData(getContext(), true);
+            AccountManager accountManager = new AccountManager();
+            accountManager.writeToFile(token, getContext(), "user.token");
+            user.LoginDate = new Date();
+            UserManager.writeToFile(user, getContext());
+            VaranegarApplication.getInstance().getDbHandler()
+                    .emptyAllTablesExcept(User.UserTbl, SysConfig.SysConfigTbl,
+                            Location.LocationTbl, TrackingLog.TrackingLogTbl);
+
+            MainVaranegarActivity activity = getVaranegarActvity();
+            if (activity != null && !activity.isFinishing() && isResumed())
+                activity.putFragment(getTourReportFragment());
+            setEnabled(true);
+            loginButton.setProgress(0);
+            getTrackingLicense();
+        } catch (Exception e) {
+            Timber.e(e);
+            if (isResumed()) {
+                setEnabled(true);
+                loginButton.setProgress(0);
+                MainVaranegarActivity activity = getVaranegarActvity();
+                if (activity != null && !activity.isFinishing())
+                    activity.showSnackBar(getContext().getString(R.string.login_failed), MainVaranegarActivity.Duration.Short);
+            }
+        }
+    }
+    //---------------------------------------------------------------------------------------------- gotoTourReportFragment
+
+
 
     private void getTrackingLicense() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M && Build.VERSION.SDK_INT < 29) {

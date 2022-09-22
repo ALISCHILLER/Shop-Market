@@ -84,6 +84,7 @@ public class PriceUpdateFlow extends UpdateFlow {
                 return 0;
             }
         });
+
         tasks.add(new SimpleTourAsyncTask() {
             @Override
             public void run(UpdateCall call) {

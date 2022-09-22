@@ -374,7 +374,7 @@ public class CustomersFragment extends IMainPageFragment {
                     }
                     columns.add(bind(entity, SupervisorCustomer.newPhone, getString(R.string.phone_number)));
                     columns.add(bind(entity, SupervisorCustomer.newMobile, getString(R.string.mobile_label)));
-                    columns.add(bind(entity, SupervisorCustomer.newAddress, getString(R.string.address)).setWeight(3));
+                    columns.add(bind(entity, SupervisorCustomer.Address, getString(R.string.address)).setWeight(3));
                     columns.add(bind(entity, SupervisorCustomer.NationalCode, getString(R.string.national_id_label)).sendToDetail());
                     columns.add(bind(entity, SupervisorCustomer.newCustomerActivityName, getString(R.string.customer_activity)).sendToDetail());
                     columns.add(bind(entity, SupervisorCustomer.newCustomerLevelName, getString(R.string.customer_level)).sendToDetail());
@@ -597,8 +597,9 @@ public class CustomersFragment extends IMainPageFragment {
 //        }if(!entity.Phone.equals(entity.newPhone)) {
 //            messageback=messageback+"شماره تلفن قبل از ویرایش:"+entity.Phone+ "\n";
 //            messageback=messageback+"شماره تلفن بعد از ویرایش:"+entity.newPhone+ "\n";
-//        }if(!entity.Address.equals(entity.newAddress)) {
-//            messageback=messageback+"ادرس:"+entity.Address+ "\n";
+//        }
+        if(!entity.Address.equals(entity.newAddress))
+            messageback=messageback+"ادرس:"+entity.newAddress+ "\n";
         }
 //        if(!entity.CustomerLevel.equals(entity.newCustomerLevelName)) {
 //            messageback=messageback+" درجه مشتری قبل از ویرایش:"+ entity.CustomerLevel+ "\n";

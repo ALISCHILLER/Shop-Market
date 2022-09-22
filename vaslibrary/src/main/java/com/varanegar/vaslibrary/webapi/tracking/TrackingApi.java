@@ -79,7 +79,7 @@ public class TrackingApi extends BaseApi implements ITrackingApi {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         SysConfigManager sysConfigManager = new SysConfigManager(getContext());
         OwnerKeysWrapper ownerKeys = sysConfigManager.readOwnerKeys();
-        builder.addInterceptor(new HeaderInterceptor(ownerKeys, ""));
+        builder.addInterceptor(new HeaderInterceptor(ownerKeys, "", null));
         builder.connectTimeout(10, TimeUnit.SECONDS);
         builder.readTimeout(30, TimeUnit.SECONDS);
         builder.writeTimeout(30, TimeUnit.SECONDS);

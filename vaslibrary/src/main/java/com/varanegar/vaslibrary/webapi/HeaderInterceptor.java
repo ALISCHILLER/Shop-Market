@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.varanegar.vaslibrary.manager.sysconfigmanager.OwnerKeysNotFoundException;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.OwnerKeysWrapper;
+import com.varanegar.vaslibrary.model.dealerdivision.DealerDivisionModel;
 
 import java.io.IOException;
 
@@ -18,10 +19,12 @@ import okhttp3.Response;
 public class HeaderInterceptor implements Interceptor {
     private String token;
     private OwnerKeysWrapper ownerKeys;
+    private DealerDivisionModel dealerDivisionModel;
 
-    public HeaderInterceptor(@NonNull OwnerKeysWrapper ownerKeys, String token) {
+    public HeaderInterceptor(@NonNull OwnerKeysWrapper ownerKeys, String token, DealerDivisionModel dealerDivisionModel) {
         this.token = token;
         this.ownerKeys = ownerKeys;
+        this.dealerDivisionModel = dealerDivisionModel;
     }
 
     @Override
@@ -40,8 +43,14 @@ public class HeaderInterceptor implements Interceptor {
                         .header("Accept", " application/json")
                         .header("http.keepAlive", "false")
                         .header("SubSystemTypeId",ownerKeys.subsystemtypeid)
-                        .header("Version",ownerKeys.Version)
-                        ;
+                        .header("Version",ownerKeys.Version);
+                if (dealerDivisionModel != null) {
+                    builder.addHeader("DivisionCenterKey", dealerDivisionModel.DivisionCenterKey.toString());
+                    builder.addHeader("DivisionBackOfficeCode", dealerDivisionModel.DivisionBackOfficeCode);
+                    builder.addHeader("DivisionSalesOrg", dealerDivisionModel.DivisionSalesOrg);
+                    builder.addHeader("DivisionDisChanel", dealerDivisionModel.DivisionDisChanel);
+                    builder.addHeader("DivisionCode", dealerDivisionModel.DivisionCode);
+                }
                 if (token != null)
                     builder = builder.header("Authorization", "Bearer " + token);
                 return chain.proceed(builder.build());
