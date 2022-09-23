@@ -35,6 +35,7 @@ import varanegar.com.discountcalculatorlib.handler.vnlite.PromotionDoEVCByStatut
 import varanegar.com.discountcalculatorlib.handler.vnlite.PromotionFillEVCVnLiteV3;
 import varanegar.com.discountcalculatorlib.handler.vnlite.PromotionGetRetExtraValueVnLiteV3;
 import varanegar.com.discountcalculatorlib.helper.DiscountDbHelper;
+import varanegar.com.discountcalculatorlib.model.DealerDivisionModelDC;
 import varanegar.com.discountcalculatorlib.utility.DiscountException;
 import varanegar.com.discountcalculatorlib.utility.GlobalVariables;
 import varanegar.com.discountcalculatorlib.utility.enumerations.BackOfficeType;
@@ -57,15 +58,16 @@ import static varanegar.com.vdmclient.call.GlobalVariable.usanceDay;
 
 public class PromotionHandlerV3 {
 
+
     public PromotionHandlerV3() {
     }
 
 
-    public static DiscountCallOrderData calcPromotion(final List<Integer> SelIds, DiscountCallOrderData discountCallOrderData, EVCType evcType, Context context) throws DiscountException, InterruptedException {
+    public static DiscountCallOrderData calcPromotion(final List<Integer> SelIds, DiscountCallOrderData discountCallOrderData, EVCType evcType, Context context, DealerDivisionModelDC dealerDivisionModelDC) throws DiscountException, InterruptedException {
 //        try {
         if (GlobalVariables.getBackOffice().equals(BackOfficeType.VARANEGAR)) {
             if (GlobalVariables.isCalcOnline())
-                discountCallOrderData = PromotionHandlerV3.calcPromotionOnlineSDS(SelIds, discountCallOrderData, context);
+                discountCallOrderData = PromotionHandlerV3.calcPromotionOnlineSDS(SelIds, discountCallOrderData, context, dealerDivisionModelDC);
             else
                 discountCallOrderData = PromotionHandlerV3.calcPromotionSDS(discountCallOrderData, evcType);
         } else {
@@ -174,14 +176,15 @@ public class PromotionHandlerV3 {
             final DiscountCallOrderData discountCallOrderData,
             final Context context,
             String SalePDate,
-            String  DocPDate
+            String  DocPDate,
+            DealerDivisionModelDC dealerDivisionModelDC
             ) throws InterruptedException {
         final String[] errorMessage = {null};
         final Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 Timber.d("calcPromotionOnline : Thread started ");
-                CalcOnlinePromotionAPI calcPromotionAPI = new CalcOnlinePromotionAPI();
+                CalcOnlinePromotionAPI calcPromotionAPI = new CalcOnlinePromotionAPI(dealerDivisionModelDC);
                 PreSaleEvcHeaderViewModel onlineData = discountCallOrderData.toOnlineDist(orderPrizeList);
                 try {
                     // do for Third Party SAP
@@ -258,13 +261,13 @@ public class PromotionHandlerV3 {
     /* ***************************************************************************
      * SDS
      * **************************************************************************** */
-    public static DiscountCallOrderData calcPromotionOnlineSDS(final List<Integer> SelIds, final DiscountCallOrderData discountCallOrderData, final Context context) throws DiscountException, InterruptedException {
+    public static DiscountCallOrderData calcPromotionOnlineSDS(final List<Integer> SelIds, final DiscountCallOrderData discountCallOrderData, final Context context, DealerDivisionModelDC dealerDivisionModelDC) throws DiscountException, InterruptedException {
         final String[] errorMessage = {null};
         final Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 Timber.d("calcPromotionOnline : Thread started ");
-                CalcOnlinePromotionAPI calcPromotionAPI = new CalcOnlinePromotionAPI();
+                CalcOnlinePromotionAPI calcPromotionAPI = new CalcOnlinePromotionAPI(dealerDivisionModelDC);
                 DiscountCallOrderDataOnline onlineData = discountCallOrderData.ToOnline();
                 // do for Third Party SAP
                 if (GlobalVariables.getIsThirdParty()) {
