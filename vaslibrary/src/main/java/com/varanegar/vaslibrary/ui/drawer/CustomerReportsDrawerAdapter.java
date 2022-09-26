@@ -125,15 +125,15 @@ public class CustomerReportsDrawerAdapter extends DrawerAdapter {
                     gotoReportFragment(fragment);
                 }
             }));
-        if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist))
-            add(new DrawerItem(activity, R.string.target_report, R.drawable.ic_purchase_summary_24dp).setClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    TargetHeaderReport fragment = new TargetHeaderReport();
-                    fragment.setCostumer(String.valueOf(customerId));
-                    gotoReportFragment(fragment);
-                }
-            }));
+//        if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist))
+//            add(new DrawerItem(activity, R.string.target_report, R.drawable.ic_purchase_summary_24dp).setClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    TargetHeaderReport fragment = new TargetHeaderReport();
+//                    fragment.setCostumer(String.valueOf(customerId));
+//                    gotoReportFragment(fragment);
+//                }
+//            }));
         add(new DrawerItem(activity, R.string.update_customer_reports, R.drawable.ic_autorenew_white_24dp).setClickListener(new View.OnClickListener() {
             ProgressDialog progressDialog;
 
