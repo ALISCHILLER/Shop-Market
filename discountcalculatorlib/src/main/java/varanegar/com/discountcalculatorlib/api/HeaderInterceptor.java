@@ -9,7 +9,6 @@ import java.io.IOException;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
-import varanegar.com.discountcalculatorlib.model.DealerDivisionModelDC;
 import varanegar.com.discountcalculatorlib.utility.DiscountException;
 import varanegar.com.discountcalculatorlib.utility.GlobalVariables;
 import varanegar.com.discountcalculatorlib.viewmodel.OwnerKeysViewModel;
@@ -19,13 +18,6 @@ import varanegar.com.discountcalculatorlib.viewmodel.OwnerKeysViewModel;
  */
 
 public class HeaderInterceptor implements Interceptor {
-
-    private DealerDivisionModelDC dealerDivisionModelDC;
-
-
-    public HeaderInterceptor(DealerDivisionModelDC dealerDivisionModelDC) {
-        this.dealerDivisionModelDC = dealerDivisionModelDC;
-    }
 
     @Override
     public Response intercept(Chain chain) throws IOException {
@@ -38,25 +30,7 @@ public class HeaderInterceptor implements Interceptor {
             if (ownerKeys.OwnerKey == null || ownerKeys.DataOwnerKey == null || ownerKeys.DataOwnerCenterKey == null)
                 throw new DiscountException("Owner key value is null");
             else {
-                Request request;
-                if (dealerDivisionModelDC != null)
-                request = originalRequest.newBuilder()
-                        .header("OwnerKey", ownerKeys.OwnerKey)
-                        .header("DataOwnerKey", ownerKeys.DataOwnerKey)
-                        .header("DataOwnerCenterKey", ownerKeys.DataOwnerCenterKey)
-                        .header("Accept", " application/json")
-                        .header("http.keepAlive", "false")
-                        .header("Authorization", "Bearer " + ownerKeys.Token)
-                        .header("SubSystemTypeId",ownerKeys.subsystemtypeid)
-                        .header("Version",ownerKeys.Version)
-                        .header("DivisionCenterKey", dealerDivisionModelDC.DivisionCenterKey.toString())
-                        .header("DivisionBackOfficeCode", dealerDivisionModelDC.DivisionBackOfficeCode)
-                        .header("DivisionSalesOrg", dealerDivisionModelDC.DivisionSalesOrg)
-                        .header("DivisionDisChanel", dealerDivisionModelDC.DivisionDisChanel)
-                        .header("DivisionCode", dealerDivisionModelDC.DivisionCode)
-                        .build();
-                else
-                    request = originalRequest.newBuilder()
+                Request request = originalRequest.newBuilder()
                             .header("OwnerKey", ownerKeys.OwnerKey)
                             .header("DataOwnerKey", ownerKeys.DataOwnerKey)
                             .header("DataOwnerCenterKey", ownerKeys.DataOwnerCenterKey)

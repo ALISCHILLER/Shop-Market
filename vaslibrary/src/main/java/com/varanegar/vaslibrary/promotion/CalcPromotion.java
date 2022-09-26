@@ -28,7 +28,6 @@ import com.varanegar.vaslibrary.manager.customercall.CustomerCallInvoiceManager;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallOrderManager;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallReturnManager;
 import com.varanegar.vaslibrary.manager.customerpricemanager.CustomerPriceManager;
-import com.varanegar.vaslibrary.manager.dealerdivision.DealerDivisionManager;
 import com.varanegar.vaslibrary.manager.discountmanager.DiscountItemCountViewManager;
 import com.varanegar.vaslibrary.manager.oldinvoicemanager.CustomerOldInvoiceHeaderManager;
 import com.varanegar.vaslibrary.manager.orderprizemanager.OrderPrizeManager;
@@ -46,7 +45,6 @@ import com.varanegar.vaslibrary.model.customerCallOrderOrderView.CustomerCallOrd
 import com.varanegar.vaslibrary.model.customercallreturnlinesview.CustomerCallReturnLinesViewModel;
 import com.varanegar.vaslibrary.model.customeroldInvoice.CustomerOldInvoiceHeaderModel;
 import com.varanegar.vaslibrary.model.customerprice.CustomerPriceModel;
-import com.varanegar.vaslibrary.model.dealerdivision.DealerDivisionModel;
 import com.varanegar.vaslibrary.model.discountSDS.DiscountItemCountViewModel;
 import com.varanegar.vaslibrary.model.orderprize.OrderPrizeModel;
 import com.varanegar.vaslibrary.model.orderprizeview.OrderPrizeViewModel;
@@ -70,7 +68,6 @@ import timber.log.Timber;
 import varanegar.com.discountcalculatorlib.DiscountCalculatorHandler;
 import varanegar.com.discountcalculatorlib.callback.DiscountHandlerOrderCallback;
 import varanegar.com.discountcalculatorlib.handler.PromotionHandlerV3;
-import varanegar.com.discountcalculatorlib.model.DealerDivisionModelDC;
 import varanegar.com.discountcalculatorlib.utility.DiscountException;
 import varanegar.com.discountcalculatorlib.utility.GlobalVariables;
 import varanegar.com.discountcalculatorlib.utility.enumerations.EVCType;
@@ -106,17 +103,11 @@ public class CalcPromotion {
                     DiscountCalculatorHandler.setOnlineOptions(ipAddress, true, false, false);
                     try {
                         DiscountCallOrderData disCallData;
-                        DealerDivisionManager manager = new DealerDivisionManager(context);
-                        DealerDivisionModel model = manager.getDealerDivisionModel();
-                        DealerDivisionModelDC modelDC = new DealerDivisionModelDC(
-                                model.DivisionCenterKey,
-                                model.DivisionBackOfficeCode,
-                                model.DivisionSalesOrg, model.DivisionDisChanel, model.DivisionCode);
                         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist))
                             disCallData = PromotionHandlerV3.distCalcPromotionOnlineSDS(null, callData.toDiscount(context), context,
-                                    null,null, modelDC);
+                                    null,null);
                         else
-                            disCallData = PromotionHandlerV3.calcPromotionOnlineSDS(null, callData.toDiscount(context), context, modelDC);
+                            disCallData = PromotionHandlerV3.calcPromotionOnlineSDS(null, callData.toDiscount(context), context);
 
                         Timber.d("finished!");
                         callData.setFromDiscount(context, disCallData);
@@ -261,12 +252,6 @@ public class CalcPromotion {
                                 public void done(String ipAddress) {
 //                                        runCalcPromotion(ipAddress, CalcDiscount, CalcSaleRestriction, CalcPaymentType, callData, context, evcType, callback);
                                     try {
-                                        DealerDivisionManager manager = new DealerDivisionManager(context);
-                                        DealerDivisionModel model = manager.getDealerDivisionModel();
-                                        DealerDivisionModelDC modelDC = new DealerDivisionModelDC(
-                                                model.DivisionCenterKey,
-                                                model.DivisionBackOfficeCode,
-                                                model.DivisionSalesOrg, model.DivisionDisChanel, model.DivisionCode);
                                         DiscountCalculatorHandler.setOnlineOptions(ipAddress, CalcDiscount, CalcSaleRestriction, CalcPaymentType);
                                         DiscountCallOrderData disCallData = null;
                                         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
@@ -278,7 +263,7 @@ public class CalcPromotion {
 //                                                disCallData = DiscountCalculatorHandler.calcPromotion(callData.toDiscount(context), evcType.value(), context);
                                             //                                                disCallData = DiscountCalculatorHandler.calcPromotion(callData.toDiscount(context), evcType.value(), context);
                                         } else {
-                                            disCallData = DiscountCalculatorHandler.calcPromotion(SelIds, callData.toDiscount(context), evcType.value(), context, modelDC);
+                                            disCallData = DiscountCalculatorHandler.calcPromotion(SelIds, callData.toDiscount(context), evcType.value(), context);
                                             Timber.d("finished!");
                                             callData.setFromDiscount(context, disCallData);
                                             if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist))
@@ -313,19 +298,13 @@ public class CalcPromotion {
                                 }
                             });
                         } else {
-                            DealerDivisionManager manager = new DealerDivisionManager(context);
-                            DealerDivisionModel model = manager.getDealerDivisionModel();
-                            DealerDivisionModelDC modelDC = new DealerDivisionModelDC(
-                                    model.DivisionCenterKey,
-                                    model.DivisionBackOfficeCode,
-                                    model.DivisionSalesOrg, model.DivisionDisChanel, model.DivisionCode);
                             DiscountCallOrderData disCallData = null;
                             if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
                                 ArrayList<DiscountCallOrderLineData> orderProduct = populateOriginalData(context, callOrderUniqueId);
                                 distDiscountCalc(null, context, callData, disCallData, evcType, orderProduct,null);
                                 handler.post(() -> callback.onSuccess(callData));
                             } else {
-                                disCallData = DiscountCalculatorHandler.calcPromotion(SelIds, callData.toDiscount(context), evcType.value(), context, modelDC);
+                                disCallData = DiscountCalculatorHandler.calcPromotion(SelIds, callData.toDiscount(context), evcType.value(), context);
                                 Timber.d("finished!");
                                 callData.setFromDiscount(context, disCallData);
                                 fillOrderPrize(context, callData, callData.discountEvcPrize);
@@ -380,15 +359,8 @@ public class CalcPromotion {
             String DocPDate=callInvoiceModel.DocPDate;
             String SalePDate=callInvoiceModel.SalePDate;
 
-            DealerDivisionManager manager = new DealerDivisionManager(context);
-            DealerDivisionModel model = manager.getDealerDivisionModel();
-            DealerDivisionModelDC modelDC = new DealerDivisionModelDC(
-                    model.DivisionCenterKey,
-                    model.DivisionBackOfficeCode,
-                    model.DivisionSalesOrg, model.DivisionDisChanel, model.DivisionCode);
-
             if (GlobalVariables.isCalcOnline())
-                disCallData = PromotionHandlerV3.distCalcPromotionOnlineSDS(orderPrizeList, callData.toDiscount(context), context,SalePDate,DocPDate, modelDC);
+                disCallData = PromotionHandlerV3.distCalcPromotionOnlineSDS(orderPrizeList, callData.toDiscount(context), context,SalePDate,DocPDate);
             else {
                 DiscountInitializeHandler disc = DiscountInitializeHandlerV3.getDiscountHandler(context);
                 //DiscountCalculatorHandler.init(disc, callData.BackOfficeOrderId, null);

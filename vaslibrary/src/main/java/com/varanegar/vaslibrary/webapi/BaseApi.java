@@ -9,7 +9,6 @@ import com.varanegar.framework.base.account.Token;
 import com.varanegar.framework.network.WebRequest;
 import com.varanegar.framework.network.gson.VaranegarGsonBuilder;
 import com.varanegar.framework.util.HelperMethods;
-import com.varanegar.vaslibrary.manager.dealerdivision.DealerDivisionManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.OwnerKeysWrapper;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
@@ -71,8 +70,7 @@ public abstract class BaseApi extends WebRequest {
         builder.writeTimeout(writeTimeout, TimeUnit.SECONDS);
         SysConfigManager sysConfigManager = new SysConfigManager(getContext());
         OwnerKeysWrapper ownerKeys = sysConfigManager.readOwnerKeys();
-        DealerDivisionManager divisionManager = new DealerDivisionManager(getContext());
-        builder.addInterceptor(new HeaderInterceptor(ownerKeys, getToken(tokenType), divisionManager.getDealerDivisionModel()));
+        builder.addInterceptor(new HeaderInterceptor(ownerKeys, getToken(tokenType)));
         return builder.build();
     }
 
@@ -84,7 +82,7 @@ public abstract class BaseApi extends WebRequest {
         builder.writeTimeout(writeTimeout, TimeUnit.SECONDS);
         SysConfigManager sysConfigManager = new SysConfigManager(getContext());
         OwnerKeysWrapper ownerKeys = sysConfigManager.readOwnerKeys();
-        builder.addInterceptor(new HeaderInterceptor(ownerKeys, null, null));
+        builder.addInterceptor(new HeaderInterceptor(ownerKeys, null));
         return builder.build();
     }
 

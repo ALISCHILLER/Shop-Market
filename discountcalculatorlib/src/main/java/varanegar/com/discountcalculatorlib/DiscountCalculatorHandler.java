@@ -16,7 +16,6 @@ import varanegar.com.discountcalculatorlib.dataadapter.evc.sds.DiscountEvcPrizeD
 import varanegar.com.discountcalculatorlib.handler.FillInitDataHandlerV3;
 import varanegar.com.discountcalculatorlib.handler.IDiscountInitializeHandlerV3;
 import varanegar.com.discountcalculatorlib.handler.PromotionHandlerV3;
-import varanegar.com.discountcalculatorlib.model.DealerDivisionModelDC;
 import varanegar.com.discountcalculatorlib.utility.DiscountException;
 import varanegar.com.discountcalculatorlib.utility.GlobalVariables;
 import varanegar.com.discountcalculatorlib.utility.enumerations.BackOfficeType;
@@ -166,8 +165,8 @@ public class DiscountCalculatorHandler {
         });
     }
 
-    public static DiscountCallOrderData calcPromotion(final List<Integer> SelIds, DiscountCallOrderData discountCallOrderData, int evcTypeCode, Context context, DealerDivisionModelDC dealerDivisionModelDC) throws DiscountException, InterruptedException {
-        return PromotionHandlerV3.calcPromotion(SelIds, discountCallOrderData, EVCType.getByCode(evcTypeCode), context, dealerDivisionModelDC);
+    public static DiscountCallOrderData calcPromotion(final List<Integer> SelIds, DiscountCallOrderData discountCallOrderData, int evcTypeCode, Context context) throws DiscountException, InterruptedException {
+        return PromotionHandlerV3.calcPromotion(SelIds, discountCallOrderData, EVCType.getByCode(evcTypeCode), context);
     }
 
     public static DiscountCallOrderData DoCalcEVC(DiscountCallOrderData callOrderData, int evcTypeCode) throws DiscountException {

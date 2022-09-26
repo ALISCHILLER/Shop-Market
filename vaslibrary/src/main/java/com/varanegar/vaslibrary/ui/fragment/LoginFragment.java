@@ -51,7 +51,6 @@ import com.varanegar.vaslibrary.base.BackupManager;
 import com.varanegar.vaslibrary.base.LocalModel;
 import com.varanegar.vaslibrary.base.SelectLanguageDialog;
 import com.varanegar.vaslibrary.manager.UserManager;
-import com.varanegar.vaslibrary.manager.dealerdivision.DealerDivisionManager;
 import com.varanegar.vaslibrary.manager.locationmanager.LocationManager;
 import com.varanegar.vaslibrary.manager.locationmanager.LogLevel;
 import com.varanegar.vaslibrary.manager.locationmanager.LogType;

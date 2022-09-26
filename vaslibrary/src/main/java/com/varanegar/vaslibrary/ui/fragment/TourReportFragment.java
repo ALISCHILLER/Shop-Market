@@ -68,7 +68,6 @@ import com.varanegar.vaslibrary.manager.UserManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.customeractiontimemanager.CustomerActionTimeManager;
 import com.varanegar.vaslibrary.manager.customercallmanager.CustomerCallManager;
-import com.varanegar.vaslibrary.manager.dealerdivision.DealerDivisionManager;
 import com.varanegar.vaslibrary.manager.image.ImageType;
 import com.varanegar.vaslibrary.manager.locationmanager.LocationManager;
 import com.varanegar.vaslibrary.manager.productorderviewmanager.ProductOrderViewManager;
@@ -463,58 +462,11 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
             SysConfigManager sysConfigManager = new SysConfigManager(getContext());
             sysConfigManager.save(ConfigKey.FirstTimeAfterGetTour, "True", SysConfigManager.local);
             sysConfigManager.save(ConfigKey.DownloadOldInvoicePolicy, DownloadOldInvoicePolicy, SysConfigManager.local);
-            requestGetCustomerLine(tourNo);
+            getTourFinally(tourNo);
         } catch (Exception e) {
             Timber.e(e);
         }
     }
-
-
-    /**
-     * Added By Mehrdad Latifi on 9/21/2022
-     */
-    //---------------------------------------------------------------------------------------------- requestGetCustomerLine
-    private void requestGetCustomerLine(String tourNo) {
-        DealerDivisionManager manager = new DealerDivisionManager(requireContext());
-        manager.sync(new UpdateCall() {
-            @Override
-            protected void onFinish() {
-                super.onFinish();
-            }
-
-            @Override
-            protected void onSuccess() {
-                super.onSuccess();
-                getTourFinally(tourNo);
-            }
-
-            @Override
-            protected void onFailure(String error) {
-                super.onFailure(error);
-                getTourImageView.setEnabled(true);
-                CuteMessageDialog dialog = new CuteMessageDialog(activity);
-                dialog.setIcon(Icon.Error);
-                dialog.setTitle(R.string.error);
-                dialog.setMessage(R.string.dealerDivisionFailed);
-                dialog.setPositiveButton(R.string.ok, null);
-                dialog.show();
-            }
-
-            @Override
-            protected void onError(String error) {
-                super.onError(error);
-                getTourImageView.setEnabled(true);
-                CuteMessageDialog dialog = new CuteMessageDialog(activity);
-                dialog.setIcon(Icon.Error);
-                dialog.setTitle(R.string.error);
-                dialog.setMessage(R.string.dealerDivisionFailed);
-                dialog.setPositiveButton(R.string.ok, null);
-                dialog.show();
-            }
-        });
-    }
-    //---------------------------------------------------------------------------------------------- requestGetCustomerLine
-
 
 
     private void getTourFinally(final String tourNo) {
