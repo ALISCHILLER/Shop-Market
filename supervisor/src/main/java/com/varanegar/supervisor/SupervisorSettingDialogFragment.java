@@ -118,10 +118,10 @@ public class SupervisorSettingDialogFragment extends CuteDialogWithToolbar {
         getButton.setMode(ActionProcessButton.Mode.ENDLESS);
 
         ipPairedItemsEditable = (PairedItemsEditable) view.findViewById(R.id.ipExitText);
-        ipPairedItemsEditable.setValue("http://192.168.50.110:8080/");
+        ipPairedItemsEditable.setValue("http://5.160.125.98:8080");
         ipPairedItemsEditable.setEnabled(false);
         localIpPairedItemsEditable = (PairedItemsEditable) view.findViewById(R.id.local_ip_edit_text);
-        localIpPairedItemsEditable.setValue("http://192.168.50.110:8080/");
+        localIpPairedItemsEditable.setValue("http://5.160.125.98:8080");
         localIpPairedItemsEditable .setEnabled(false);
 
         sharedconditionCustomer = getActivity().getSharedPreferences("OpenVPN", Context.MODE_PRIVATE);
