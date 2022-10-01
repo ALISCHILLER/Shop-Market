@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.util.HelperMethods;
@@ -84,6 +85,7 @@ public class ProductSimpleOrderViewHolder extends BaseViewHolder<ProductOrderVie
     //    private OnItemClickedListener onItemClickedListener;
     private DiscreteUnit largeUnit;
     private DiscreteUnit smallUnit;
+    private RecyclerView recyclerViewProductUnit;
 
     public interface OnItemClickedListener {
 
@@ -157,8 +159,12 @@ public class ProductSimpleOrderViewHolder extends BaseViewHolder<ProductOrderVie
 
         moreInfoImageView = itemView.findViewById(R.id.more_info_image_view);
         customerInventoryPairedItems = itemView.findViewById(R.id.customer_inventory_paired_items);
+
         inventoryPairedItems = itemView.findViewById(R.id.inventory_paired_items);
         header_layout= itemView.findViewById(R.id.header_layout);
+
+
+        recyclerViewProductUnit = itemView.findViewById(R.id.recyclerViewProductUnit);
 
         this.callOrderId = callOrderId;
         this.onItemQtyChangedHandler = onItemQtyChangedHandler;
