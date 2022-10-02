@@ -1,12 +1,15 @@
 package com.varanegar.vaslibrary.manager;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import com.varanegar.framework.database.BaseManager;
 import com.varanegar.framework.database.DbException;
 import com.varanegar.framework.database.querybuilder.Query;
 import com.varanegar.framework.database.querybuilder.criteria.Criteria;
+import com.varanegar.framework.database.querybuilder.from.From;
+import com.varanegar.framework.database.querybuilder.projection.Projection;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.util.datetime.DateFormat;
@@ -16,6 +19,7 @@ import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateCall;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateManager;
 import com.varanegar.vaslibrary.model.UpdateKey;
+import com.varanegar.vaslibrary.model.productUnit.ProductUnit;
 import com.varanegar.vaslibrary.model.unit.Unit;
 import com.varanegar.vaslibrary.model.unit.UnitModel;
 import com.varanegar.vaslibrary.model.unit.UnitModelRepository;
@@ -25,6 +29,7 @@ import com.varanegar.vaslibrary.webapi.product.UnitApi;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import okhttp3.Request;
 import timber.log.Timber;
@@ -90,5 +95,6 @@ public class UnitManager extends BaseManager<UnitModel> {
                 .whereAnd(Criteria.equals(Unit.BackOfficeId, backofficeId));
         return getRepository().getItem(query);
     }
+
 
 }

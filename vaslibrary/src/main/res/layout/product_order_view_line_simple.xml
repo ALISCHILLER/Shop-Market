@@ -90,16 +90,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical">
+                android:layout_gravity="center_vertical">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerViewProductUnit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:itemCount="2"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:spanCount="2"
                     />
 
                 <LinearLayout

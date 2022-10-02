@@ -2,15 +2,19 @@ package com.varanegar.vaslibrary.ui.fragment.productgroup;
 
 import android.os.Handler;
 import android.text.Html;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.varanegar.framework.base.VaranegarApplication;
@@ -25,17 +29,21 @@ import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.manager.OnHandQtyManager;
 import com.varanegar.vaslibrary.manager.ProductInventoryManager;
 import com.varanegar.vaslibrary.manager.ProductUnitViewManager;
+import com.varanegar.vaslibrary.manager.UnitManager;
 import com.varanegar.vaslibrary.manager.customerpricemanager.CustomerPriceManager;
 import com.varanegar.vaslibrary.manager.emphaticitems.EmphaticProductCountManager;
 import com.varanegar.vaslibrary.manager.emphaticitems.EmphaticProductManager;
+import com.varanegar.vaslibrary.manager.productUnit.UnitOfProductManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.model.customeremphaticproduct.EmphasisType;
 import com.varanegar.vaslibrary.model.emphaticproduct.EmphaticProductModel;
 import com.varanegar.vaslibrary.model.emphaticproductcount.EmphaticProductCountModel;
 import com.varanegar.vaslibrary.model.onhandqty.OnHandQtyStock;
+import com.varanegar.vaslibrary.model.productUnit.UnitOfProductModel;
 import com.varanegar.vaslibrary.model.productorderview.ProductOrderViewModel;
 import com.varanegar.vaslibrary.model.productunitsview.ProductUnitsViewModel;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
+import com.varanegar.vaslibrary.model.unit.UnitModel;
 import com.varanegar.vaslibrary.ui.calculator.DiscreteUnit;
 import com.varanegar.vaslibrary.ui.dialog.PriceEditorDialog;
 import com.varanegar.vaslibrary.ui.dialog.ProductOrderInfoDialog;
@@ -43,6 +51,7 @@ import com.varanegar.vaslibrary.ui.dialog.ProductOrderInfoDialog;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import timber.log.Timber;
@@ -63,6 +72,8 @@ public class ProductSimpleOrderViewHolder extends BaseViewHolder<ProductOrderVie
     private final TextView equalsTextView;
     private final AppCompatActivity activity;
     private final UUID callOrderId;
+    private final RecyclerView recyclerViewProductUnit;
+    private ProductUnitAdapter adapter;
 
 
     private final HashMap<UUID, ProductUnitViewManager.ProductUnits> productUnitHashMap;
@@ -85,7 +96,6 @@ public class ProductSimpleOrderViewHolder extends BaseViewHolder<ProductOrderVie
     //    private OnItemClickedListener onItemClickedListener;
     private DiscreteUnit largeUnit;
     private DiscreteUnit smallUnit;
-    private RecyclerView recyclerViewProductUnit;
 
     public interface OnItemClickedListener {
 
@@ -163,7 +173,6 @@ public class ProductSimpleOrderViewHolder extends BaseViewHolder<ProductOrderVie
         inventoryPairedItems = itemView.findViewById(R.id.inventory_paired_items);
         header_layout= itemView.findViewById(R.id.header_layout);
 
-
         recyclerViewProductUnit = itemView.findViewById(R.id.recyclerViewProductUnit);
 
         this.callOrderId = callOrderId;
@@ -184,6 +193,12 @@ public class ProductSimpleOrderViewHolder extends BaseViewHolder<ProductOrderVie
 
         if (productOrderViewModel == null)
             return;
+
+
+        UUID productId = productOrderViewModel.UniqueId;
+
+        List<UnitOfProductModel> units = new UnitOfProductManager(getContext()).getUnitsOfProduct(productId);
+        setUnitsAdapter(units, position);
 
         pricePairedItems.setValue(HelperMethods.currencyToString(productOrderViewModel.Price));
 
@@ -305,6 +320,12 @@ public class ProductSimpleOrderViewHolder extends BaseViewHolder<ProductOrderVie
                 emphasisImageView.setImageResource(R.drawable.ic_star_border_red_900_24dp);
         }
 
+
+
+
+
+
+
         OnHandQtyStock onHandQtyStock = new OnHandQtyStock();
         ProductUnitsViewModel productUnitsViewModel = productUnitsHashMap.get(productOrderViewModel.UniqueId);
         onHandQtyStock.ConvertFactors = productUnitsViewModel.ConvertFactor;
@@ -368,6 +389,18 @@ public class ProductSimpleOrderViewHolder extends BaseViewHolder<ProductOrderVie
         });
 
     }
+
+
+    /*
+    * Add By Mehrdad Latifi
+    * */
+    //---------------------------------------------------------------------------------------------- setUnitsAdapter
+    private void setUnitsAdapter(List<UnitOfProductModel> units, int position) {
+        adapter = new ProductUnitAdapter(units, onItemQtyChangedHandler, position);
+        recyclerViewProductUnit.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false));
+        recyclerViewProductUnit.setAdapter(adapter);
+    }
+    //---------------------------------------------------------------------------------------------- setUnitsAdapter
 
     private void createUnits(final ProductOrderViewModel productOrderViewModel, final int position) {
 

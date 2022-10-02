@@ -27,6 +27,7 @@ import com.varanegar.vaslibrary.model.product.ProductModel;
 import com.varanegar.vaslibrary.model.productUnit.ProductUnit;
 import com.varanegar.vaslibrary.model.productUnit.ProductUnitModel;
 import com.varanegar.vaslibrary.model.productUnit.ProductUnitModelRepository;
+import com.varanegar.vaslibrary.model.unit.Unit;
 import com.varanegar.vaslibrary.model.unit.UnitModel;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.product.ProductUnitApi;
@@ -178,5 +179,9 @@ public class ProductUnitManager extends BaseManager<ProductUnitModel>
         query.from(ProductUnit.ProductUnitTbl).whereAnd(Criteria.equals(ProductUnit.ProductId, productId).and(Criteria.equals(ProductUnit.UnitId, unitId)));
         return getItem(query);
     }
+
+
+
+
 
 }

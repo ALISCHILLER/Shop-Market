@@ -87,6 +87,11 @@
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical">
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewProductUnit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"/>
 
                 <LinearLayout
                     android:id="@+id/large_unit_layout"
@@ -95,7 +100,8 @@
                     android:layout_marginLeft="@dimen/padding_xsmall"
                     android:layout_marginRight="@dimen/padding_xsmall"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <ImageButton
                         android:id="@+id/plus_image_view_large"
@@ -161,7 +167,8 @@
                     android:layout_marginLeft="@dimen/padding_xsmall"
                     android:layout_marginRight="@dimen/padding_xsmall"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <ImageButton
                         android:id="@+id/plus_image_view_small"
