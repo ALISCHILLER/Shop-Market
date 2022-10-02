@@ -1579,39 +1579,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
 //                    }
 //                });
             if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
-                if (customer.CodeNaghsh != null) {
-
-
-                    //check msl in order mehrdad latifi
-
-/*                    UUID emphasisProduct = null;
-                    List<MslProductPatternModel> mslProductPatternModels = new MslProductPatternManager(getContext()).getAll();
-
-                    for (MslProductPatternModel mslModel : mslProductPatternModels) {
-                        boolean mslCheck = false;
-                        for (CustomerCallOrderOrderViewModel item : orderAdapter.getItems())
-                            if (mslModel.ProductId.equals(item.ProductId)) {
-                                mslCheck = true;
-                                break;
-                            }
-                        if (!mslCheck) {
-                            emphasisProduct = mslModel.ProductId;
-                            break;
-                        }
-                    }
-
-                    if (emphasisProduct != null) {
-                        ProductManager productManager = new ProductManager(getContext());
-                        String productName = productManager.getItem(emphasisProduct).ProductName;
-                        CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(getContext());
-                        cuteMessageDialog.setIcon(Icon.Error);
-                        cuteMessageDialog.setTitle(R.string.error);
-                        cuteMessageDialog.setMessage(productName + " جزو کالاهای تاکیدی است و حتما باید در سفارش باشد ");
-                        cuteMessageDialog.setNegativeButton(R.string.ok, null);
-                        cuteMessageDialog.show();
-                        return;
-                    }*/
-
+                if (checkPastaInOrder()) {
 
                     SharedPreferences sharedPreferences = context.getSharedPreferences("ReportConfig",
                             Context.MODE_PRIVATE);
@@ -1636,6 +1604,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
                     cuteMessageDialog.setMessage(R.string.the_customer_not_code);
                     cuteMessageDialog.setNegativeButton(R.string.ok, null);
                     cuteMessageDialog.show();
+                    return;
                 }
             }
             if (VaranegarApplication.is(VaranegarApplication.AppId.Contractor) && otherDiscount.compareTo(orderAmount.TotalAmount) > 0) {
@@ -2002,6 +1971,26 @@ public class CustomerSaveOrderFragment extends VisitFragment
         }
 
     }
+
+    /**
+     * Add by mehrdad latifi on 10/02/2022.
+     */
+    //---------------------------------------------------------------------------------------------- checkPastaInOrder
+    private boolean checkPastaInOrder() {
+        List<CustomerCallOrderOrderViewModel> items = orderAdapter.getItems();
+        boolean codeNaghsh = true;
+        for (CustomerCallOrderOrderViewModel item : items) {
+            String productCode = item.ProductCode.substring(0,2);
+            if (!productCode.equals("34")) {
+                if (customer.CodeNaghsh == null || customer.CodeNaghsh.isEmpty())
+                    codeNaghsh = false;
+                break;
+            }
+        }
+        return codeNaghsh;
+    }
+    //---------------------------------------------------------------------------------------------- checkPastaInOrder
+
 
     private void saveOrder() {
         if (orderAdapter.size() == 0) {
