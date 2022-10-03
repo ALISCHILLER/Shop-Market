@@ -15,7 +15,9 @@ import com.varanegar.vaslibrary.model.productUnit.UnitOfProductModel;
 import com.varanegar.vaslibrary.model.unit.UnitModel;
 
 import java.util.List;
-
+/*
+* Creted by mehrdad latifi
+* */
 public class ProductUnitAdapter extends RecyclerView.Adapter<ProductUnitAdapter.ViewHolder>{
 
     private List<UnitOfProductModel> units;
@@ -69,7 +71,8 @@ public class ProductUnitAdapter extends RecyclerView.Adapter<ProductUnitAdapter.
             plusImageViewLarge.setOnClickListener(v -> {
                 item.Count++;
                 qtyTextViewLarge.setText(HelperMethods.doubleToString(item.Count));
-                onItemQtyChangedHandler.plusQty(position, productOrderViewModel.UniqueId, unit, otherUnit);
+                //TODO
+//                onItemQtyChangedHandler.plusQty(position, productOrderViewModel.UniqueId, unit, otherUnit);
             });
 
             minusImageViewLarge.setOnClickListener(v -> {
