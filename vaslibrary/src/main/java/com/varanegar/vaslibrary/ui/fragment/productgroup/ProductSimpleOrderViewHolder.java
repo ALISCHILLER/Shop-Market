@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,6 +34,7 @@ import com.varanegar.vaslibrary.manager.UnitManager;
 import com.varanegar.vaslibrary.manager.customerpricemanager.CustomerPriceManager;
 import com.varanegar.vaslibrary.manager.emphaticitems.EmphaticProductCountManager;
 import com.varanegar.vaslibrary.manager.emphaticitems.EmphaticProductManager;
+import com.varanegar.vaslibrary.manager.productUnit.ProductUnitManager;
 import com.varanegar.vaslibrary.manager.productUnit.UnitOfProductManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.model.customeremphaticproduct.EmphasisType;
@@ -77,8 +79,11 @@ public class ProductSimpleOrderViewHolder extends BaseViewHolder<ProductOrderVie
 
 
     private final HashMap<UUID, ProductUnitViewManager.ProductUnits> productUnitHashMap;
-    private final View largeUnitLayout;
-    private final View smallUnitLayout;
+//    private final View largeUnitLayout;
+    private final View karUnitLayout;
+    private final View kgUnitLayout;
+    private final View eaUnitLayout;
+//    private final View smallUnitLayout;
     private final ImageView moreInfoImageView;
     private final PairedItems customerInventoryPairedItems;
     private final PairedItems inventoryPairedItems;
@@ -94,8 +99,12 @@ public class ProductSimpleOrderViewHolder extends BaseViewHolder<ProductOrderVie
     HashMap<UUID, ProductUnitsViewModel> productUnitsHashMap;
 
     //    private OnItemClickedListener onItemClickedListener;
-    private DiscreteUnit largeUnit;
-    private DiscreteUnit smallUnit;
+    //TODO
+    private DiscreteUnit karUnit;
+    private DiscreteUnit kgUnit;
+    private DiscreteUnit eaUnit;
+//    private DiscreteUnit largeUnit;
+//    private DiscreteUnit smallUnit;
 
     public interface OnItemClickedListener {
 
@@ -109,14 +118,26 @@ public class ProductSimpleOrderViewHolder extends BaseViewHolder<ProductOrderVie
         void run();
     }
 
-    private final ImageButton plusImageViewSmall;
-    private final ImageButton minusImageViewSmall;
-    private final ImageButton plusImageViewLarge;
-    private final ImageButton minusImageViewLarge;
-    private final TextView qtyTextViewSmall;
-    private final TextView unitTextViewSmall;
-    private final TextView qtyTextViewLarge;
-    private final TextView unitTextViewLarge;
+//    private final ImageButton plusImageViewSmall;
+//    private final ImageButton minusImageViewSmall;
+//    private final ImageButton plusImageViewLarge;
+    private final ImageButton plusImageViewKar;
+    private final ImageButton plusImageViewKg;
+    private final ImageButton plusImageViewEa;
+//    private final ImageButton minusImageViewLarge;
+    private final ImageButton minusImageViewKar;
+    private final ImageButton minusImageViewKg;
+    private final ImageButton minusImageViewEa;
+//    private final TextView qtyTextViewSmall;
+//    private final TextView unitTextViewSmall;
+//    private final TextView qtyTextViewLarge;
+    private final TextView qtyTextViewKar;
+    private final TextView qtyTextViewKg;
+    private final TextView qtyTextViewea;
+//    private final TextView unitTextViewLarge;
+    private final TextView unitTextViewKar;
+    private final TextView unitTextViewKg;
+    private final TextView unitTextViewea;
     private final LinearLayout header_layout;
     public ProductSimpleOrderViewHolder(View itemView,
                                         SysConfigModel showStockLevel,
@@ -152,20 +173,35 @@ public class ProductSimpleOrderViewHolder extends BaseViewHolder<ProductOrderVie
         emphasisImageView = (ImageView) itemView.findViewById(R.id.emphasis_image_view);
         equalsTextView = (TextView) itemView.findViewById(R.id.equals_text_view);
 
-        plusImageViewSmall = itemView.findViewById(R.id.plus_image_view_small);
-        minusImageViewSmall = itemView.findViewById(R.id.minus_image_view_small);
+//        plusImageViewSmall = itemView.findViewById(R.id.plus_image_view_small);
+//        minusImageViewSmall = itemView.findViewById(R.id.minus_image_view_small);
 
-        plusImageViewLarge = itemView.findViewById(R.id.plus_image_view_large);
-        minusImageViewLarge = itemView.findViewById(R.id.minus_image_view_large);
+//        plusImageViewLarge = itemView.findViewById(R.id.plus_image_view_large);
+        plusImageViewKar = itemView.findViewById(R.id.kar_plus_image_view_large);
+        plusImageViewKg = itemView.findViewById(R.id.kg_plus_image_view_small);
+        plusImageViewEa = itemView.findViewById(R.id.ea_plus_image_view_small);
+//        minusImageViewLarge = itemView.findViewById(R.id.minus_image_view_large);
+        minusImageViewKar = itemView.findViewById(R.id.kar_minus_image_view_large);
+        minusImageViewKg = itemView.findViewById(R.id.kg_minus_image_view_small);
+        minusImageViewEa = itemView.findViewById(R.id.ea_minus_image_view_small);
 
-        qtyTextViewSmall = itemView.findViewById(R.id.qty_text_view_small);
-        unitTextViewSmall = itemView.findViewById(R.id.unit_text_view_small);
+//        qtyTextViewSmall = itemView.findViewById(R.id.qty_text_view_small);
+//        unitTextViewSmall = itemView.findViewById(R.id.unit_text_view_small);
 
-        qtyTextViewLarge = itemView.findViewById(R.id.qty_text_view_large);
-        unitTextViewLarge = itemView.findViewById(R.id.unit_text_view_large);
+//        qtyTextViewLarge = itemView.findViewById(R.id.qty_text_view_large);
+        qtyTextViewKar = itemView.findViewById(R.id.kar_qty_text_view_large);
+        qtyTextViewKg = itemView.findViewById(R.id.kg_qty_text_view_small);
+        qtyTextViewea = itemView.findViewById(R.id.ea_qty_text_view_small);
+//        unitTextViewLarge = itemView.findViewById(R.id.unit_text_view_large);
+        unitTextViewKar = itemView.findViewById(R.id.kar_unit_text_view_large);
+        unitTextViewKg = itemView.findViewById(R.id.kg_unit_text_view_small);
+        unitTextViewea = itemView.findViewById(R.id.ea_unit_text_view_small);
 
-        largeUnitLayout = itemView.findViewById(R.id.large_unit_layout);
-        smallUnitLayout = itemView.findViewById(R.id.small_unit_layout);
+//        largeUnitLayout = itemView.findViewById(R.id.large_unit_layout);
+        karUnitLayout = itemView.findViewById(R.id.kar_unit_layout);
+        kgUnitLayout = itemView.findViewById(R.id.kg_unit_layout);
+        eaUnitLayout = itemView.findViewById(R.id.ea_unit_layout);
+//        smallUnitLayout = itemView.findViewById(R.id.small_unit_layout);
 
         moreInfoImageView = itemView.findViewById(R.id.more_info_image_view);
         customerInventoryPairedItems = itemView.findViewById(R.id.customer_inventory_paired_items);
@@ -194,11 +230,6 @@ public class ProductSimpleOrderViewHolder extends BaseViewHolder<ProductOrderVie
         if (productOrderViewModel == null)
             return;
 
-
-        UUID productId = productOrderViewModel.UniqueId;
-
-        List<UnitOfProductModel> units = new UnitOfProductManager(getContext()).getUnitsOfProduct(productId);
-        setUnitsAdapter(units, position);
 
         pricePairedItems.setValue(HelperMethods.currencyToString(productOrderViewModel.Price));
 
@@ -388,6 +419,10 @@ public class ProductSimpleOrderViewHolder extends BaseViewHolder<ProductOrderVie
             dialog.show(activity.getSupportFragmentManager(), "ProductInfoDialog");
         });
 
+        UUID productId = productOrderViewModel.UniqueId;
+        List<UnitOfProductModel> units = new UnitOfProductManager(getContext()).getUnitsOfProduct(productId);
+        setUnitsAdapter(units, position, productId, productOrderViewModel);
+
     }
 
 
@@ -395,17 +430,18 @@ public class ProductSimpleOrderViewHolder extends BaseViewHolder<ProductOrderVie
     * Add By Mehrdad Latifi
     * */
     //---------------------------------------------------------------------------------------------- setUnitsAdapter
-    private void setUnitsAdapter(List<UnitOfProductModel> units, int position) {
-        adapter = new ProductUnitAdapter(units, onItemQtyChangedHandler, position);
-        recyclerViewProductUnit.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL, false));
+    private void setUnitsAdapter(List<UnitOfProductModel> units, int position, UUID productId, ProductOrderViewModel productOrderViewModel) {
+        adapter = new ProductUnitAdapter(units, onItemQtyChangedHandler, position, productId, productUnitHashMap, productOrderViewModel);
+        recyclerViewProductUnit.setLayoutManager(new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false));
         recyclerViewProductUnit.setAdapter(adapter);
     }
     //---------------------------------------------------------------------------------------------- setUnitsAdapter
 
     private void createUnits(final ProductOrderViewModel productOrderViewModel, final int position) {
 
-        smallUnit = null;
-        largeUnit = null;
+        karUnit = null;
+        kgUnit = null;
+        eaUnit = null;
         String[] allQtys = null;
         if (productOrderViewModel.Qty != null)
             allQtys = productOrderViewModel.Qty.split(":");
@@ -419,7 +455,105 @@ public class ProductSimpleOrderViewHolder extends BaseViewHolder<ProductOrderVie
         if (pu == null)
             return;
 
-        if (pu.LargeUnit != null) {
+/*        ProductUnitManager manager = new ProductUnitManager(getContext());
+        manager.mUpdate();*/
+        List<UnitOfProductModel> units = new UnitOfProductManager(getContext()).getUnitsOfProduct(productOrderViewModel.UniqueId);
+
+        if (units == null || units.isEmpty())
+            return;
+
+        karUnitLayout.setVisibility(View.GONE);
+        kgUnitLayout.setVisibility(View.GONE);
+        eaUnitLayout.setVisibility(View.GONE);
+
+        for (UnitOfProductModel item : units) {
+            switch (item.UnitName) {
+                case "KAR" :
+                    karUnit = new DiscreteUnit();
+                    karUnitLayout.setVisibility(View.VISIBLE);
+                    karUnit.ProductUnitId = item.productUnitId;
+                    karUnit.Name = item.UnitName;
+                    karUnit.ConvertFactor = HelperMethods.bigDecimalToDouble(item.ConvertFactor);
+                    if (productUnitIds != null && allQtys != null)
+                        for (int i = 0; i < productUnitIds.length; i++) {
+                            UUID productUnitId = UUID.fromString(productUnitIds[i]);
+                            if (productUnitId.equals(karUnit.ProductUnitId)) {
+                                karUnit.value = Double.parseDouble(allQtys[i]);
+                            }
+                        }
+                    break;
+                case "EA" :
+                    eaUnit = new DiscreteUnit();
+                    eaUnitLayout.setVisibility(View.VISIBLE);
+                    eaUnit.ProductUnitId = item.productUnitId;
+                    eaUnit.Name = item.UnitName;
+                    eaUnit.ConvertFactor = HelperMethods.bigDecimalToDouble(item.ConvertFactor);
+                    if (productUnitIds != null && allQtys != null)
+                        for (int i = 0; i < productUnitIds.length; i++) {
+                            UUID productUnitId = UUID.fromString(productUnitIds[i]);
+                            if (productUnitId.equals(eaUnit.ProductUnitId)) {
+                                eaUnit.value = Double.parseDouble(allQtys[i]);
+                            }
+                        }
+                    break;
+                case "KG" :
+                    kgUnit = new DiscreteUnit();
+                    kgUnitLayout.setVisibility(View.VISIBLE);
+                    kgUnit.ProductUnitId = item.productUnitId;
+                    kgUnit.Name = item.UnitName;
+                    kgUnit.ConvertFactor = HelperMethods.bigDecimalToDouble(item.ConvertFactor);
+                    if (productUnitIds != null && allQtys != null)
+                        for (int i = 0; i < productUnitIds.length; i++) {
+                            UUID productUnitId = UUID.fromString(productUnitIds[i]);
+                            if (productUnitId.equals(kgUnit.ProductUnitId)) {
+                                kgUnit.value = Double.parseDouble(allQtys[i]);
+                            }
+                        }
+                    break;
+            }
+        }
+
+
+        if (karUnit != null) {
+            qtyTextViewKar.setText(HelperMethods.doubleToString(karUnit.value));
+            unitTextViewKar.setText(karUnit.Name);
+            minusImageViewKar.setEnabled(karUnit.value > 0);
+            plusImageViewKar.setOnClickListener(view -> addItem(karUnit, qtyTextViewKar, productOrderViewModel, position));
+            minusImageViewKar.setOnClickListener(view -> removeItem(karUnit, qtyTextViewKar, productOrderViewModel, position));
+            minusImageViewKar.setOnLongClickListener(view -> {
+                deleteItem(karUnit, qtyTextViewKar, productOrderViewModel, position);
+                return true;
+            });
+        }
+
+
+        if (kgUnit != null) {
+            qtyTextViewKg.setText(HelperMethods.doubleToString(kgUnit.value));
+            unitTextViewKg.setText(kgUnit.Name);
+            minusImageViewKg.setEnabled(kgUnit.value > 0);
+            plusImageViewKg.setOnClickListener(view -> addItem(kgUnit, qtyTextViewKg, productOrderViewModel, position));
+            minusImageViewKg.setOnClickListener(view -> removeItem(kgUnit, qtyTextViewKg, productOrderViewModel, position));
+            minusImageViewKg.setOnLongClickListener(view -> {
+                deleteItem(kgUnit, qtyTextViewKg, productOrderViewModel, position);
+                return true;
+            });
+        }
+
+//TODO
+        if (eaUnit != null) {
+            qtyTextViewea.setText(HelperMethods.doubleToString(eaUnit.value));
+            unitTextViewea.setText(eaUnit.Name);
+            minusImageViewEa.setEnabled(eaUnit.value > 0);
+            plusImageViewEa.setOnClickListener(view -> addItem(eaUnit, qtyTextViewea, productOrderViewModel, position));
+            minusImageViewEa.setOnClickListener(view -> removeItem(eaUnit, qtyTextViewea, productOrderViewModel, position));
+            minusImageViewEa.setOnLongClickListener(view -> {
+                deleteItem(eaUnit, qtyTextViewea, productOrderViewModel, position);
+                return true;
+            });
+        }
+
+
+/*        if (pu.LargeUnit != null) {
             largeUnit = new DiscreteUnit();
             largeUnitLayout.setVisibility(View.VISIBLE);
             largeUnit.ProductUnitId = pu.LargeUnit.UniqueId;
@@ -433,9 +567,9 @@ public class ProductSimpleOrderViewHolder extends BaseViewHolder<ProductOrderVie
                     }
                 }
         } else
-            largeUnitLayout.setVisibility(View.GONE);
+            largeUnitLayout.setVisibility(View.GONE);*/
 
-        smallUnit = new DiscreteUnit();
+/*        smallUnit = new DiscreteUnit();
         smallUnit.ProductUnitId = pu.SmallUnit.UniqueId;
         smallUnit.Name = pu.SmallUnit.UnitName;
         smallUnit.ConvertFactor = pu.SmallUnit.ConvertFactor;
@@ -445,38 +579,41 @@ public class ProductSimpleOrderViewHolder extends BaseViewHolder<ProductOrderVie
                 if (productUnitId.equals(smallUnit.ProductUnitId)) {
                     smallUnit.value = Double.parseDouble(allQtys[i]);
                 }
-            }
+            }*/
 
 
-        qtyTextViewSmall.setText(HelperMethods.doubleToString(smallUnit.value));
-        if (largeUnit != null)
-            qtyTextViewLarge.setText(HelperMethods.doubleToString(largeUnit.value));
-        unitTextViewSmall.setText(smallUnit.Name);
-        if (largeUnit != null)
-            unitTextViewLarge.setText(largeUnit.Name);
+//        qtyTextViewSmall.setText(HelperMethods.doubleToString(smallUnit.value));
+/*        if (largeUnit != null)
+            qtyTextViewLarge.setText(HelperMethods.doubleToString(largeUnit.value));*/
 
 
-        minusImageViewSmall.setEnabled(smallUnit.value > 0);
-        if (largeUnit != null)
-            minusImageViewLarge.setEnabled(largeUnit.value > 0);
 
-        plusImageViewSmall.setOnClickListener(view -> addItem(smallUnit, largeUnit, qtyTextViewSmall, productOrderViewModel, position));
+//        unitTextViewSmall.setText(smallUnit.Name);
+/*        if (largeUnit != null)
+            unitTextViewLarge.setText(largeUnit.Name);*/
 
-        plusImageViewLarge.setOnClickListener(view -> addItem(largeUnit, smallUnit, qtyTextViewLarge, productOrderViewModel, position));
 
-        minusImageViewSmall.setOnClickListener(view -> removeItem(smallUnit, largeUnit, qtyTextViewSmall, productOrderViewModel, position));
+//        minusImageViewSmall.setEnabled(smallUnit.value > 0);
+/*        if (largeUnit != null)
+            minusImageViewLarge.setEnabled(largeUnit.value > 0);*/
 
-        minusImageViewLarge.setOnClickListener(view -> removeItem(largeUnit, smallUnit, qtyTextViewLarge, productOrderViewModel, position));
+//        plusImageViewSmall.setOnClickListener(view -> addItem(smallUnit, qtyTextViewSmall, productOrderViewModel, position));
 
-        minusImageViewSmall.setOnLongClickListener(view -> {
-            deleteItem(smallUnit, largeUnit, qtyTextViewSmall, productOrderViewModel, position);
+//        plusImageViewLarge.setOnClickListener(view -> addItem(largeUnit, smallUnit, qtyTextViewLarge, productOrderViewModel, position));
+
+//        minusImageViewSmall.setOnClickListener(view -> removeItem(smallUnit, qtyTextViewSmall, productOrderViewModel, position));
+
+//        minusImageViewLarge.setOnClickListener(view -> removeItem(largeUnit, smallUnit, qtyTextViewLarge, productOrderViewModel, position));
+
+/*        minusImageViewSmall.setOnLongClickListener(view -> {
+            deleteItem(smallUnit, qtyTextViewSmall, productOrderViewModel, position);
             return true;
-        });
+        });*/
 
-        minusImageViewLarge.setOnLongClickListener(view -> {
+/*        minusImageViewLarge.setOnLongClickListener(view -> {
             deleteItem(largeUnit, smallUnit, qtyTextViewLarge, productOrderViewModel, position);
             return true;
-        });
+        });*/
 //
 //        unitTextViewSmall.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -507,12 +644,12 @@ public class ProductSimpleOrderViewHolder extends BaseViewHolder<ProductOrderVie
 
     }
 
-    private synchronized void removeItem(@Nullable DiscreteUnit unit, @Nullable DiscreteUnit otherUnit, TextView qtyTextView, final ProductOrderViewModel productOrderViewModel, int position) {
+    private synchronized void removeItem(@Nullable DiscreteUnit unit, TextView qtyTextView, final ProductOrderViewModel productOrderViewModel, int position) {
         if (unit != null && unit.value > 0) {
             unit.value--;
             qtyTextView.setText(HelperMethods.doubleToString(unit.value));
             lastClick = new Date().getTime();
-            onItemQtyChangedHandler.minusQty(position, productOrderViewModel.UniqueId, unit, otherUnit);
+            onItemQtyChangedHandler.minusQty(position, productOrderViewModel.UniqueId, unit, getContext());
             handler.postDelayed(() -> {
                 if (new Date().getTime() - lastClick < delay)
                     return;
@@ -523,26 +660,25 @@ public class ProductSimpleOrderViewHolder extends BaseViewHolder<ProductOrderVie
     }
 
     private synchronized void deleteItem(@Nullable DiscreteUnit unit,
-                                         @Nullable DiscreteUnit otherUnit,
                                          TextView qtyTextView,
                                          ProductOrderViewModel productOrderViewModel,
                                          int position) {
         if (unit != null && unit.value > 0) {
             unit.value = 0;
             qtyTextView.setText(HelperMethods.doubleToString(unit.value));
-            onItemQtyChangedHandler.minusQty(position, productOrderViewModel.UniqueId, unit, otherUnit);
+            onItemQtyChangedHandler.minusQty(position, productOrderViewModel.UniqueId, unit, getContext());
             if (onItemQtyChangedHandler != null)
                 onItemQtyChangedHandler.start(productOrderViewModel);
         }
     }
 
-    private synchronized void addItem(@Nullable DiscreteUnit unit, @Nullable DiscreteUnit otherUnit,
+    private synchronized void addItem(@Nullable DiscreteUnit unit,
                                       TextView qtyTextView, final ProductOrderViewModel productOrderViewModel, int position) {
         if (unit != null) {
             unit.value++;
             qtyTextView.setText(HelperMethods.doubleToString(unit.value));
             lastClick = new Date().getTime();
-            onItemQtyChangedHandler.plusQty(position, productOrderViewModel.UniqueId, unit, otherUnit);
+            onItemQtyChangedHandler.plusQty(position, productOrderViewModel.UniqueId, unit, getContext());
             handler.postDelayed(() -> {
                 if (new Date().getTime() - lastClick < delay)
                     return;

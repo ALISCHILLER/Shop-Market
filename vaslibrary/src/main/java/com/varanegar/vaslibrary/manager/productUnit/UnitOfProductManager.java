@@ -26,10 +26,19 @@ public class UnitOfProductManager extends BaseManager<UnitOfProductModel> {
     }
 
 
-
     public List<UnitOfProductModel> getUnitsOfProduct(UUID productId) {
         Query query = new Query();
-        query.from(From.table(Unit.UnitTbl).innerJoin(From.table(ProductUnit.ProductUnitTbl))
+        query.select(
+                        Projection.column(Unit.UniqueId).as("UniqueId"),
+                        Projection.column(Unit.UnitName).as("UnitName"),
+                        Projection.column(Unit.BackOfficeId).as("BackOfficeId"),
+                        Projection.column(ProductUnit.UniqueId).as("productUnitId"),
+                        Projection.column(ProductUnit.ConvertFactor).as("ConvertFactor"),
+                        Projection.column(ProductUnit.IsDefault).as("IsDefault"),
+                        Projection.column(ProductUnit.IsForSale).as("IsForSale"),
+                        Projection.column(ProductUnit.IsReturnDefault).as("IsReturnDefault"),
+                        Projection.column(ProductUnit.IsForReturn).as("IsForReturn"))
+                .from(From.table(Unit.UnitTbl).innerJoin(From.table(ProductUnit.ProductUnitTbl))
                         .on(Unit.UniqueId, ProductUnit.UnitId).onAnd(Criteria.equals(ProductUnit.ProductId, productId)));
         Query query2 = new Query().from(From.subQuery(query).as("UnitOfProduct"));
         return getItems(query2);

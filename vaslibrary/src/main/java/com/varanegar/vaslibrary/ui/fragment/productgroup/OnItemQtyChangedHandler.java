@@ -1,10 +1,15 @@
 package com.varanegar.vaslibrary.ui.fragment.productgroup;
 
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.varanegar.framework.util.HelperMethods;
 import com.varanegar.framework.util.Linq;
+import com.varanegar.vaslibrary.manager.productUnit.UnitOfProductManager;
+import com.varanegar.vaslibrary.model.productUnit.UnitOfProductModel;
 import com.varanegar.vaslibrary.model.productorderview.ProductOrderViewModel;
 import com.varanegar.vaslibrary.ui.calculator.DiscreteUnit;
 
@@ -18,7 +23,7 @@ public abstract class OnItemQtyChangedHandler {
 
     public abstract boolean run(ProductOrderViewModel productOrderViewModel, QtyChange change);
 
-    public synchronized void plusQty(int position, UUID productId, @NonNull final DiscreteUnit unit, @Nullable final DiscreteUnit otherUnit) {
+    public synchronized void plusQty(int position, UUID productId, @NonNull final DiscreteUnit unit, Context context) {
         if (qtys.containsKey(productId)) {
             List<ItemInfo> qtyItems = qtys.get(productId);
             ItemInfo qtyItem = Linq.findFirst(qtyItems, new Linq.Criteria<ItemInfo>() {
@@ -34,15 +39,31 @@ public abstract class OnItemQtyChangedHandler {
                 qtyItem.qty = unit.value;
             }
         } else {
+            //find product units
+            //add main unit
+            //add other units
             List<ItemInfo> l = new ArrayList<>();
             l.add(new ItemInfo(unit, position, unit.value));
-            if (otherUnit != null)
-                l.add(new ItemInfo(otherUnit, position, otherUnit.value));
+            List<UnitOfProductModel> units = new UnitOfProductManager(context).getUnitsOfProduct(productId);
+            for (UnitOfProductModel item : units)
+                if (!item.productUnitId.equals(unit.ProductUnitId)){
+                    DiscreteUnit discreteUnit = new DiscreteUnit();
+                    discreteUnit.ConvertFactor =
+                            HelperMethods.bigDecimalToDouble(item.ConvertFactor);
+                    discreteUnit.IsDefault = item.IsDefault;
+                    discreteUnit.Name = item.UnitName;
+                    discreteUnit.ProductUnitId = item.productUnitId;
+                    discreteUnit.value = 0;
+                    l.add(new ItemInfo(discreteUnit, position, discreteUnit.value));
+                }
+
+/*            if (otherUnit != null)
+                l.add(new ItemInfo(otherUnit, position, otherUnit.value));*/
             qtys.put(productId, l);
         }
     }
 
-    public synchronized void minusQty(int position, UUID productId, @NonNull final DiscreteUnit unit, @Nullable final DiscreteUnit otherUnit) {
+    public synchronized void minusQty(int position, UUID productId, @NonNull final DiscreteUnit unit, Context context) {
         if (qtys.containsKey(productId)) {
             List<ItemInfo> qtyItems = qtys.get(productId);
             ItemInfo qtyItem = Linq.findFirst(qtyItems, new Linq.Criteria<ItemInfo>() {
@@ -58,10 +79,26 @@ public abstract class OnItemQtyChangedHandler {
                 qtyItem.qty = unit.value;
             }
         } else {
+            //find product units
+            //add main unit
+            //add other units
             List<ItemInfo> l = new ArrayList<>();
             l.add(new ItemInfo(unit, position, unit.value));
-            if (otherUnit != null)
-                l.add(new ItemInfo(otherUnit, position, otherUnit.value));
+            List<UnitOfProductModel> units = new UnitOfProductManager(context).getUnitsOfProduct(productId);
+            for (UnitOfProductModel item : units)
+                if (!item.productUnitId.equals(unit.ProductUnitId)){
+                    DiscreteUnit discreteUnit = new DiscreteUnit();
+                    discreteUnit.ConvertFactor =
+                            HelperMethods.bigDecimalToDouble(item.ConvertFactor);
+                    discreteUnit.IsDefault = item.IsDefault;
+                    discreteUnit.Name = item.UnitName;
+                    discreteUnit.ProductUnitId = item.productUnitId;
+                    discreteUnit.value = 0;
+                    l.add(new ItemInfo(discreteUnit, position, discreteUnit.value));
+                }
+
+/*            if (otherUnit != null)
+                l.add(new ItemInfo(otherUnit, position, otherUnit.value));*/
             qtys.put(productId, l);
         }
 
@@ -81,7 +118,7 @@ public abstract class OnItemQtyChangedHandler {
 //            if (!list.contains(key))
 //                nQtys.put(key, itemInfo);
 //        }
-        qtys.clear();
+//        qtys.clear();
 //        qtys.putAll(nQtys);
     }
 

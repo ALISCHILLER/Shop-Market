@@ -1,5 +1,6 @@
 package com.varanegar.vaslibrary.ui.fragment.productgroup;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +12,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.varanegar.framework.util.HelperMethods;
 import com.varanegar.vaslibrary.R;
+import com.varanegar.vaslibrary.manager.ProductUnitViewManager;
 import com.varanegar.vaslibrary.model.productUnit.UnitOfProductModel;
+import com.varanegar.vaslibrary.model.productorderview.ProductOrderViewModel;
 import com.varanegar.vaslibrary.model.unit.UnitModel;
+import com.varanegar.vaslibrary.ui.calculator.DiscreteUnit;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
+
 /*
 * Creted by mehrdad latifi
 * */
@@ -23,11 +31,21 @@ public class ProductUnitAdapter extends RecyclerView.Adapter<ProductUnitAdapter.
     private List<UnitOfProductModel> units;
     private OnItemQtyChangedHandler onItemQtyChangedHandler;
     private int productPosition;
+    private UUID productId;
+    private HashMap<UUID, ProductUnitViewManager.ProductUnits> productUnitHashMap;
+    private long lastClick = 0;
+    private final int delay = 200;
+    private final Handler handler;
+    private ProductOrderViewModel productOrderViewModel;
 
-    public ProductUnitAdapter(List<UnitOfProductModel> units, OnItemQtyChangedHandler onItemQtyChangedHandler, int productPosition) {
+    public ProductUnitAdapter(List<UnitOfProductModel> units, OnItemQtyChangedHandler onItemQtyChangedHandler, int productPosition, UUID productId, HashMap<UUID, ProductUnitViewManager.ProductUnits> productUnitHashMap, ProductOrderViewModel productOrderViewModel) {
         this.units = units;
         this.onItemQtyChangedHandler = onItemQtyChangedHandler;
         this.productPosition = productPosition;
+        this.productId = productId;
+        this.productUnitHashMap = productUnitHashMap;
+        this.handler = new Handler();
+        this.productOrderViewModel = productOrderViewModel;
     }
 
     @NonNull
@@ -70,15 +88,27 @@ public class ProductUnitAdapter extends RecyclerView.Adapter<ProductUnitAdapter.
 
             plusImageViewLarge.setOnClickListener(v -> {
                 item.Count++;
+                ProductUnitViewManager.ProductUnits pu = productUnitHashMap.get(productId);
                 qtyTextViewLarge.setText(HelperMethods.doubleToString(item.Count));
-                //TODO
-//                onItemQtyChangedHandler.plusQty(position, productOrderViewModel.UniqueId, unit, otherUnit);
+                DiscreteUnit unit = new DiscreteUnit();
+                unit.ProductUnitId = item.productUnitId;
+                unit.Name = item.UnitName;
+                unit.ConvertFactor = pu.LargeUnit.ConvertFactor;
+                unit.value = item.Count;
+//                onItemQtyChangedHandler.plusQty(position, productId, unit, null);
+                lastClick = new Date().getTime();
+                handler.postDelayed(() -> {
+                    if (new Date().getTime() - lastClick < delay)
+                        return;
+                    if (onItemQtyChangedHandler != null)
+                        onItemQtyChangedHandler.start(productOrderViewModel);
+                }, delay + 50);
             });
 
             minusImageViewLarge.setOnClickListener(v -> {
                 if (item.Count > 0){
                     item.Count--;
-                    qtyTextViewLarge.setText(item.Count);
+                    qtyTextViewLarge.setText(HelperMethods.doubleToString(item.Count));
                 }
             });
 

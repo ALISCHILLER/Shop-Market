@@ -9,6 +9,7 @@ import com.varanegar.framework.database.querybuilder.Query;
 import com.varanegar.framework.database.querybuilder.criteria.Criteria;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
+import com.varanegar.framework.util.HelperMethods;
 import com.varanegar.framework.validation.ValidationException;
 import com.varanegar.framework.validation.Validator;
 import com.varanegar.framework.util.datetime.DateFormat;
@@ -34,6 +35,7 @@ import com.varanegar.vaslibrary.webapi.product.ProductUnitApi;
 
 import com.varanegar.framework.validation.ConstraintViolation;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -181,7 +183,23 @@ public class ProductUnitManager extends BaseManager<ProductUnitModel>
     }
 
 
-
+    public void mUpdate(){
+        BigDecimal decimal = new BigDecimal(3);
+        Query query = new Query();
+        query.from(ProductUnit.ProductUnitTbl).whereAnd(Criteria.equals(ProductUnit.UnitId,"e75c6e1b-ab1b-4b74-b4b7-4c6bb50e91eb"));
+        List<ProductUnitModel> units = getItems(query);
+        for (ProductUnitModel unit : units){
+            unit.IsDefault = false;
+            unit.ConvertFactor = decimal;
+            try {
+                insertOrUpdate(unit);
+            } catch (ValidationException e) {
+                e.printStackTrace();
+            } catch (DbException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 
 }

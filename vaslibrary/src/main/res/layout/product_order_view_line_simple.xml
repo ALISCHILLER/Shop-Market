@@ -87,23 +87,221 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="2">
+
+                <LinearLayout
+                    android:id="@+id/kar_unit_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/kar_plus_image_view_large"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/transparent"
+                        android:paddingLeft="@dimen/padding_small"
+                        android:paddingRight="@dimen/padding_small"
+                        android:src="@drawable/ic_plus_square_green_36dp"
+                        android:tint="@color/green" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layoutDirection="ltr"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/kar_qty_text_view_large"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:background="@drawable/calculator_left_green_corner"
+                            android:gravity="center"
+                            android:minWidth="20dp"
+                            android:paddingLeft="@dimen/padding_small"
+                            android:paddingRight="@dimen/padding_small"
+                            android:textAlignment="center"
+                            android:textColor="@color/green"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/kar_unit_text_view_large"
+                            android:layout_width="40dp"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/calculator_right_green_corner"
+                            android:gravity="center"
+                            android:lines="1"
+                            android:paddingLeft="@dimen/padding_small"
+                            android:paddingRight="@dimen/padding_small"
+                            android:singleLine="true"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/calculator_text_size_small" />
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:id="@+id/kar_minus_image_view_large"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/transparent"
+                        android:paddingLeft="@dimen/padding_small"
+                        android:paddingRight="@dimen/padding_small"
+                        android:src="@drawable/ic_minus_square_red_36dp"
+                        android:tint="@color/red" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/kg_unit_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/kg_plus_image_view_small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/transparent"
+                        android:paddingLeft="@dimen/padding_small"
+                        android:paddingRight="@dimen/padding_small"
+                        android:src="@drawable/ic_plus_square_green_36dp"
+                        android:tint="@color/green" />
+
+                    <LinearLayout
+                        android:id="@+id/kg_unit_linear_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layoutDirection="ltr"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/kg_qty_text_view_small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:background="@drawable/calculator_left_green_corner"
+                            android:gravity="center"
+                            android:minWidth="20dp"
+                            android:paddingLeft="@dimen/padding_small"
+                            android:paddingRight="@dimen/padding_small"
+                            android:textAlignment="center"
+                            android:textColor="@color/green"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/kg_unit_text_view_small"
+                            android:layout_width="40dp"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/calculator_right_green_corner"
+                            android:gravity="center"
+                            android:lines="1"
+                            android:paddingLeft="@dimen/padding_small"
+                            android:paddingRight="@dimen/padding_small"
+                            android:singleLine="true"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/calculator_text_size_small" />
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:id="@+id/kg_minus_image_view_small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/transparent"
+                        android:paddingLeft="@dimen/padding_small"
+                        android:paddingRight="@dimen/padding_small"
+                        android:src="@drawable/ic_minus_square_red_36dp"
+                        android:tint="@color/red" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ea_unit_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/ea_plus_image_view_small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/transparent"
+                        android:paddingLeft="@dimen/padding_small"
+                        android:paddingRight="@dimen/padding_small"
+                        android:src="@drawable/ic_plus_square_green_36dp"
+                        android:tint="@color/green" />
+
+                    <LinearLayout
+                        android:id="@+id/ea_unit_linear_layout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layoutDirection="ltr"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/ea_qty_text_view_small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:background="@drawable/calculator_left_green_corner"
+                            android:gravity="center"
+                            android:minWidth="20dp"
+                            android:paddingLeft="@dimen/padding_small"
+                            android:paddingRight="@dimen/padding_small"
+                            android:textAlignment="center"
+                            android:textColor="@color/green"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/ea_unit_text_view_small"
+                            android:layout_width="40dp"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/calculator_right_green_corner"
+                            android:gravity="center"
+                            android:lines="1"
+                            android:paddingLeft="@dimen/padding_small"
+                            android:paddingRight="@dimen/padding_small"
+                            android:singleLine="true"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/calculator_text_size_small" />
+                    </LinearLayout>
+
+                    <ImageButton
+                        android:id="@+id/ea_minus_image_view_small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/transparent"
+                        android:paddingLeft="@dimen/padding_small"
+                        android:paddingRight="@dimen/padding_small"
+                        android:src="@drawable/ic_minus_square_red_36dp"
+                        android:tint="@color/red" />
+                </LinearLayout>
+
+            </GridLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical">
+                android:layout_gravity="center_vertical"
+                android:visibility="gone">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerViewProductUnit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    />
+                    android:visibility="gone"/>
 
                 <LinearLayout
                     android:id="@+id/large_unit_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:visibility="gone"
                     android:orientation="horizontal">
 
                     <ImageButton
@@ -166,7 +364,6 @@
                     android:id="@+id/small_unit_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 

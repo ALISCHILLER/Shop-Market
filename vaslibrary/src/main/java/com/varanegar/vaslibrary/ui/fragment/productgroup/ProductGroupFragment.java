@@ -1155,7 +1155,7 @@ public class ProductGroupFragment extends VisitFragment {
                             productsAdapter = new BaseRecyclerAdapter<ProductOrderViewModel>(getVaranegarActvity(), filteredProductsList) {
                                 @Override
                                 public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                                    if (viewType == OrderLineViewType.Calculator.ordinal()) {
+//                                    if (viewType == OrderLineViewType.Calculator.ordinal()) {
                                         View view = LayoutInflater.from(parent.getContext()).inflate(
                                                 R.layout.product_order_view_line,
                                                 parent,
@@ -1171,7 +1171,7 @@ public class ProductGroupFragment extends VisitFragment {
                                                 productUnitsViewModelHashMap,
                                                 unitSet,
                                                 getActivity());
-                                    } else {
+ /*                                   } else {
                                         View view = LayoutInflater.from(parent.getContext()).inflate(
                                                 R.layout.product_order_view_line_simple,
                                                 parent,
@@ -1189,7 +1189,7 @@ public class ProductGroupFragment extends VisitFragment {
                                                 onItemQtyChangedHandler,
                                                 onPriceChangedListener,
                                                 orderTypeId);
-                                    }
+                                    }*/
                                 }
 
                                 @Override
