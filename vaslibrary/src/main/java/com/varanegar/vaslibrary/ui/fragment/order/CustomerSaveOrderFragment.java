@@ -251,7 +251,6 @@ public class CustomerSaveOrderFragment extends VisitFragment
     private List<CustomerCallInvoiceModel> customerCallOrderModels;
 
     private UUID customerId;
-    private UUID customerLevelId;
     private TextView netAmountTextView;
     private ArrayList<OrderOption<CustomerCallOrderOrderViewModel>> orderOptions;
     private TextView statusTextView;
@@ -310,7 +309,6 @@ public class CustomerSaveOrderFragment extends VisitFragment
     public void setArguments(UUID customerId, UUID callOrderId, UUID customerLevelId) {
         addArgument("9c497998-18e6-4be9-ad80-984fcfb2169c", customerId.toString());
         addArgument("cfa84e29-90a1-461c-aa59-d201f410ac7b", callOrderId.toString());
-        addArgument("customerLevelId", customerLevelId.toString());
     }
 
     @Override
@@ -578,13 +576,11 @@ public class CustomerSaveOrderFragment extends VisitFragment
             if (savedInstanceState.getBoolean("69d2ac5d-cc07-4b66-aa0f-cc09d55e3296"))
                 startProductStockLevelProgressDialog();
             customerId = UUID.fromString(savedInstanceState.getString("eb6d7315-0bd0-420c-bf80-e0257c7b153a"));
-            callOrderId = UUID.fromString(savedInstanceState.getString("cfa84e29-90a1-461c-aa59-d201f410ac7b"));
-            customerLevelId = UUID.fromString(savedInstanceState.getString("customerLevelId"));
+            callOrderId = UUID.fromString(savedInstanceState.getString("cfa84e29-90a1-461c-aa59-d201f410ac7b"));;
 
         } else {
             customerId = UUID.fromString(getArguments().getString("9c497998-18e6-4be9-ad80-984fcfb2169c"));
             callOrderId = UUID.fromString(getArguments().getString("cfa84e29-90a1-461c-aa59-d201f410ac7b"));
-            customerLevelId = UUID.fromString(getArguments().getString("customerLevelId"));
         }
         setRetainInstance(true);
 
@@ -1711,7 +1707,6 @@ public class CustomerSaveOrderFragment extends VisitFragment
             bundle2.putString("1c886632-a88a-4e73-9164-f6656c219917", callOrderId.toString());
             bundle2.putString("3af8c4e9-c5c7-4540-8678-4669879caa79", customerId.toString());
             bundle2.putString("b505233a-aaec-4c3c-a7ec-8fa08b940e74", customerCallOrderModel.OrderTypeUniqueId.toString());
-            bundle2.putString("customerLevelId", customerLevelId.toString());
             productGroupFragment.setArguments(bundle2);
             getVaranegarActvity().pushFragment(productGroupFragment);
         });

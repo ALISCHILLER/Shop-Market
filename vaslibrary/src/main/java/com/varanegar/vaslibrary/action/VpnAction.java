@@ -28,7 +28,8 @@ public class VpnAction  extends CheckPathAction{
     @Override
     public void run() {
         VpnDialogFragment vpnDialogFragment = new VpnDialogFragment();
-        vpnDialogFragment.show(getActivity().getSupportFragmentManager(), "SettingDialogFragment");
+        vpnDialogFragment.show(getActivity().getSupportFragmentManager(),
+                "SettingDialogFragment");
     }
 
     @Nullable

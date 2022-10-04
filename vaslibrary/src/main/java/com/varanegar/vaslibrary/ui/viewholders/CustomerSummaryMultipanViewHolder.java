@@ -89,16 +89,7 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
 
 
 
-        if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)){
-            codenaghsh_layout.setVisibility(View.VISIBLE);
-            if (codeNagesh_Str!=null&&!codeNagesh_Str.isEmpty()&&!codeNagesh_Str.equals("")){
-                codenaghsh_text_view.setText(customerModel.CodeNaghsh);
-                codenaghsh_text.setTextColor(getContext().getResources().getColor(R.color.blue));
-            }else if(codeNagesh_Str==null){
-                codenaghsh_text_view.setText("");
-                codenaghsh_text.setTextColor(getContext().getResources().getColor(R.color.red));
-            }
-        }
+
 
 
         if(calls==null)
@@ -112,10 +103,19 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
             }
         });
 
-
-
-
         setStatus(customerCalls);
+
+        if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)){
+            codenaghsh_layout.setVisibility(View.VISIBLE);
+            if (codeNagesh_Str!=null&&!codeNagesh_Str.isEmpty()&&!codeNagesh_Str.equals("")){
+                codenaghsh_text_view.setText(customerModel.CodeNaghsh);
+                codenaghsh_text.setTextColor(getContext().getResources().getColor(R.color.blue));
+            }else if(codeNagesh_Str==null){
+                codenaghsh_text_view.setText("");
+                codenaghsh_text.setTextColor(getContext().getResources().getColor(R.color.red));
+            }
+        }
+
         if (descriptionLayout != null) {
             if (backOfficeType == BackOfficeType.ThirdParty &&
                     VaranegarApplication.is(VaranegarApplication.AppId.Dist) &&

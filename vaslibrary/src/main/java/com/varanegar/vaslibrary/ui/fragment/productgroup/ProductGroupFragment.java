@@ -180,7 +180,6 @@ public class ProductGroupFragment extends VisitFragment {
     protected UUID callOrderId;
     protected UUID orderTypeId;
     protected UUID customerId;
-    protected UUID customerLevelId;
     FiltersAdapter filtersAdapter;
     Filter allFilter;
     Filter freeFilter;
@@ -365,7 +364,6 @@ public class ProductGroupFragment extends VisitFragment {
         callOrderId = UUID.fromString(getArguments().getString("1c886632-a88a-4e73-9164-f6656c219917"));
         customerId = UUID.fromString(getArguments().getString("3af8c4e9-c5c7-4540-8678-4669879caa79"));
         orderTypeId = UUID.fromString(getArguments().getString("b505233a-aaec-4c3c-a7ec-8fa08b940e74"));
-        customerLevelId = UUID.fromString(getArguments().getString("customerLevelId"));
         SysConfigManager sysConfigManager = new SysConfigManager(getContext());
         sysConfigMap = sysConfigManager.read(SysConfigManager.cloud);
         showStockLevel = sysConfigMap.get(ConfigKey.ShowStockLevel);

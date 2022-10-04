@@ -68,6 +68,7 @@ import com.varanegar.vaslibrary.action.PrintAction;
 import com.varanegar.vaslibrary.action.SaveOrderAction;
 import com.varanegar.vaslibrary.action.SetCustomerLocationAction;
 import com.varanegar.vaslibrary.action.VasActionsAdapter;
+import com.varanegar.vaslibrary.action.newAcation.CustomerUpdateAction;
 import com.varanegar.vaslibrary.manager.CustomerPathViewManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerActivityManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerCategoryManager;
@@ -889,6 +890,15 @@ public class CustomersContentFragment extends VaranegarFragment {
             }
         });
         actions.add(vpnAction);
+
+
+        CustomerUpdateAction customerUpdateAction = new CustomerUpdateAction(
+                getVaranegarActvity(),
+                actionsAdapter,
+                getSelectedId());
+        sendOperationAction.setActionCallBack(() -> {
+        });
+        actions.add(customerUpdateAction);
 
     }
 
