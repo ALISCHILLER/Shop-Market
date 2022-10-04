@@ -274,13 +274,13 @@ public class OrderAdapter extends BaseRecyclerAdapter<CustomerCallOrderOrderView
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == 0) {
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(com.varanegar.vaslibrary.R.layout.simple_row_customer_order_order_view, parent, false);
-            return new SimpleCustomerOrderLineViewHolder(itemView, this, getActivity());
-        } else {
+//        if (viewType == 0) {
+//            View itemView = LayoutInflater.from(parent.getContext()).inflate(com.varanegar.vaslibrary.R.layout.simple_row_customer_order_order_view, parent, false);
+//            return new SimpleCustomerOrderLineViewHolder(itemView, this, getActivity());
+//        } else {
             View itemView = LayoutInflater.from(parent.getContext()).inflate(com.varanegar.vaslibrary.R.layout.row_customer_order_order_view, parent, false);
             return new CustomerOrderLineViewHolder(itemView, this, getActivity());
-        }
+//        }
     }
 
     @Override
