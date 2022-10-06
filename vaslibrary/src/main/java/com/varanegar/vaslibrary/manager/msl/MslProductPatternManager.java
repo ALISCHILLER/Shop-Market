@@ -10,7 +10,6 @@ import com.varanegar.framework.database.querybuilder.Query;
 import com.varanegar.framework.database.querybuilder.criteria.Criteria;
 import com.varanegar.framework.validation.ValidationException;
 import com.varanegar.vaslibrary.model.msl.Msl;
-import com.varanegar.vaslibrary.model.msl.MslModel;
 import com.varanegar.vaslibrary.model.msl.MslModelRepository;
 import com.varanegar.vaslibrary.model.msl.MslProductPattern;
 import com.varanegar.vaslibrary.model.msl.MslProductPatternModel;

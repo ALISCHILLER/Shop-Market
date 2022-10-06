@@ -10,8 +10,7 @@ import com.varanegar.framework.database.querybuilder.criteria.Criteria;
 import com.varanegar.vaslibrary.model.emphaticproductcount.EmphaticProductCount;
 import com.varanegar.vaslibrary.model.emphaticproductcount.EmphaticProductCountModel;
 import com.varanegar.vaslibrary.model.emphaticproductcount.EmphaticProductCountModelRepository;
-import com.varanegar.vaslibrary.model.msl.MslProductPattern;
-import com.varanegar.vaslibrary.model.msl.MslProductPatternModel;
+
 
 import java.util.List;
 import java.util.UUID;

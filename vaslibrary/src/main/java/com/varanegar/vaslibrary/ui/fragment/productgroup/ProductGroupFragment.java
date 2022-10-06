@@ -76,8 +76,6 @@ import com.varanegar.vaslibrary.manager.customer.CustomerLevelManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.customercall.CallOrderLineManager;
 import com.varanegar.vaslibrary.manager.customercall.CallOrderLinesTempManager;
-import com.varanegar.vaslibrary.manager.msl.MslManager;
-import com.varanegar.vaslibrary.manager.msl.MslProductPatternManager;
 import com.varanegar.vaslibrary.manager.orderprizemanager.OrderPrizeManager;
 import com.varanegar.vaslibrary.manager.productorderviewmanager.OnHandQtyError;
 import com.varanegar.vaslibrary.manager.productorderviewmanager.OnHandQtyWarning;
@@ -100,8 +98,6 @@ import com.varanegar.vaslibrary.model.customerCallOrderOrderView.CustomerCallOrd
 import com.varanegar.vaslibrary.model.customerCallOrderOrderView.CustomerCallOrderOrderViewModelRepository;
 import com.varanegar.vaslibrary.model.customeremphaticproduct.EmphasisType;
 import com.varanegar.vaslibrary.model.freeReason.FreeReasonModel;
-import com.varanegar.vaslibrary.model.msl.MslModel;
-import com.varanegar.vaslibrary.model.msl.MslProductPatternModel;
 import com.varanegar.vaslibrary.model.oldinvoicedetailview.OldInvoiceDetailView;
 import com.varanegar.vaslibrary.model.onhandqty.OnHandQtyStock;
 import com.varanegar.vaslibrary.model.orderLineQtyModel.OrderLineQtyModel;
@@ -579,12 +575,6 @@ public class ProductGroupFragment extends VisitFragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        try {
-            new MslProductPatternManager(getContext()).deleteAll();
-        } catch (DbException e) {
-            onBackPressed();
-            e.printStackTrace();
-        }
 
         view.findViewById(R.id.back_image_view).setOnClickListener(new View.OnClickListener() {
             @Override

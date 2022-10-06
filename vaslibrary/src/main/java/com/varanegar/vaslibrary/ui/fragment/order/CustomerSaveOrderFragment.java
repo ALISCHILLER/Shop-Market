@@ -115,8 +115,6 @@ import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.EditOrderLocat
 import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.OrderActivityEventViewModel;
 import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.OrderLineActivityEventViewModel;
 import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.OrderLocationViewModel;
-import com.varanegar.vaslibrary.manager.msl.MslManager;
-import com.varanegar.vaslibrary.manager.msl.MslProductPatternManager;
 import com.varanegar.vaslibrary.manager.orderprizemanager.OrderPrizeManager;
 import com.varanegar.vaslibrary.manager.paymentmanager.PaymentManager;
 import com.varanegar.vaslibrary.manager.paymentmanager.paymenttypes.PaymentType;
@@ -152,8 +150,6 @@ import com.varanegar.vaslibrary.model.emphaticproduct.EmphaticProductModel;
 import com.varanegar.vaslibrary.model.emphaticproductcount.EmphaticProductCountModel;
 import com.varanegar.vaslibrary.model.freeReason.FreeReasonModel;
 import com.varanegar.vaslibrary.model.location.LocationModel;
-import com.varanegar.vaslibrary.model.msl.MslModel;
-import com.varanegar.vaslibrary.model.msl.MslProductPatternModel;
 import com.varanegar.vaslibrary.model.noSaleReason.NoSaleReasonModel;
 import com.varanegar.vaslibrary.model.onhandqty.OnHandQtyStock;
 import com.varanegar.vaslibrary.model.orderLineQtyModel.OrderLineQtyModel;

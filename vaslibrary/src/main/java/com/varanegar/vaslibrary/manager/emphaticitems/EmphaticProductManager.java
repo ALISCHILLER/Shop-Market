@@ -22,8 +22,6 @@ import com.varanegar.vaslibrary.model.emphaticproduct.EmphaticProduct;
 import com.varanegar.vaslibrary.model.emphaticproduct.EmphaticProductModel;
 import com.varanegar.vaslibrary.model.emphaticproduct.EmphaticProductModelRepository;
 import com.varanegar.vaslibrary.model.emphaticproductcount.EmphaticProductCountModel;
-import com.varanegar.vaslibrary.model.msl.MslProductPattern;
-import com.varanegar.vaslibrary.model.msl.MslProductPatternModel;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.product.EmphaticProductApi;
 
