@@ -276,12 +276,12 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
                 secondExternalIpLayout.setVisibility(View.VISIBLE);
                 secondExternalIpEditText.setText(removeHttp(ips[1]));
             }
-            firstExternalIpEditText.setText(removeHttp(ips[0]));
+//            firstExternalIpEditText.setText(removeHttp(ips[0]));
         }
         SysConfigModel localServerAddress = sysConfigManager.read(ConfigKey.LocalServerAddress, SysConfigManager.local);
-        if (localServerAddress != null) {
+/*        if (localServerAddress != null) {
             localIpEditText.setText(removeHttp(localServerAddress.Value));
-        }
+        }*/
         SysConfigModel settingsId = sysConfigManager.read(ConfigKey.SettingsId, SysConfigManager.local);
         if (settingsId != null) {
             idPairedItemsEditable.setValue(settingsId.Value);
