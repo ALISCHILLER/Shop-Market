@@ -564,7 +564,8 @@ public class PaymentManager extends BaseManager<PaymentModel> {
                     //عرفی PTCH
                     Currency ptch= getTotalAmountNutCheque(customerModel.UniqueId);
 
-                    if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PTCH.toString()))
+                    //if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PTCH.toString()))//todo change this to ptca
+                    if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PTCA.toString()))
                        minCheckPay = ptca.subtract(payedCashCheck.Cash.subtract(validCashCheck.Cash));
                     if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PTCH.toString()))
                         minCheckPay = ptch.subtract(payedCashCheck.Cash.subtract(validCashCheck.Cash));
