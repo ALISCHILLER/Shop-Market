@@ -545,14 +545,32 @@ public class PaymentManager extends BaseManager<PaymentModel> {
             PaymentTypeOrderModel paymentTypeOrderModel = paymentTypeOrderModels.get(0);
             if (checkPayments) {
                 if (paymentModels.size() > 0 || (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PT01.toString()))) {
+
+                    //PT01
+                   Currency pt01= getTotalAmountNutImmediate(customerModel.UniqueId);
+
                     CashCheckReceiptModel validCashCheck = calcCashAndCheckValidAmount(customerModel.UniqueId);
-                    if (payedCashCheck.Cash.compareTo(validCashCheck.Cash) < 0)
+                    if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PT01.toString()))
+                    if (payedCashCheck.Cash.compareTo(pt01) < 0)
                         throw new ControlPaymentException(getString(R.string.min_valid_cash) + " " + validCashCheck.Cash + "\n" +
                                 getString(R.string.chash_payed) + " " + payedCashCheck.Cash + "\n" +
                                 getString(R.string.remian_cash) + " " + validCashCheck.Cash.subtract(payedCashCheck.Cash));
 
-                    Currency minCheckPay = validCashCheck.Check.subtract(payedCashCheck.Cash.subtract(validCashCheck.Cash));
-                    if (payedCashCheck.Check.compareTo(minCheckPay) < 0)
+
+                    Currency minCheckPay = null;
+                    //PTCA
+                    Currency ptca =getTotalAmountNutCash(customerModel.UniqueId);
+
+                    //عرفی PTCH
+                    Currency ptch= getTotalAmountNutCheque(customerModel.UniqueId);
+
+                    if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PTCH.toString()))
+                       minCheckPay = ptca.subtract(payedCashCheck.Cash.subtract(validCashCheck.Cash));
+                    if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PTCH.toString()))
+                        minCheckPay = ptch.subtract(payedCashCheck.Cash.subtract(validCashCheck.Cash));
+
+                   // Currency minCheckPay = validCashCheck.Check.subtract(payedCashCheck.Cash.subtract(validCashCheck.Cash));
+                    if (minCheckPay!=null && payedCashCheck.Check.compareTo(minCheckPay) < 0)
                         throw new ControlPaymentException(getString(R.string.min_valid_check_and_cash) + " " + validCashCheck.Cash.add(validCashCheck.Check) + "\n" +
                                 getString(R.string.cash_check_payed) + " " + payedCashCheck.Cash.add(payedCashCheck.Check) + "\n" +
                                 getString(R.string.remain_cash_and_check) + " " + (validCashCheck.Cash.add(validCashCheck.Check).subtract(payedCashCheck.Cash.add(payedCashCheck.Check))));
@@ -869,6 +887,13 @@ public class PaymentManager extends BaseManager<PaymentModel> {
         return 0;
     }
 
+
+
+    /**
+     * گرفتن دیتای مبلغ نقدی
+     * @param customerId
+     * @return
+     */
     public Currency getTotalAmountNutCash(UUID customerId) {
         CustomerCallOrderManager customerCallOrderManager = new CustomerCallOrderManager(getContext());
         List<CustomerCallOrderModel> customerCallOrderModels = customerCallOrderManager.getCustomerCallOrders(customerId);
@@ -894,6 +919,11 @@ public class PaymentManager extends BaseManager<PaymentModel> {
         return null;
     }
 
+    /**
+     * گرفتن دیتای مبلغ عرفی
+     * @param customerId
+     * @return
+     */
     public Currency getTotalAmountNutCheque(UUID customerId) {
         CustomerCallOrderManager customerCallOrderManager = new CustomerCallOrderManager(getContext());
         List<CustomerCallOrderModel> customerCallOrderModels = customerCallOrderManager.getCustomerCallOrders(customerId);
