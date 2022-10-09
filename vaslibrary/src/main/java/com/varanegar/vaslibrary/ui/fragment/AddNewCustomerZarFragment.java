@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.ArrayMap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,7 +102,7 @@ import timber.log.Timber;
  */
 
 public class AddNewCustomerZarFragment extends VaranegarFragment implements ValidationListener
-         ,SingleChoiceDialog.SingleChoiceListener {
+        , SingleChoiceDialog.SingleChoiceListener {
 
 
     private ProgressDialog progressDialog;
@@ -135,9 +136,10 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
     private PairedItemsEditable cityNamePairedItem;
     private PairedItems code_naghsh_paired_item;
     private Button request_codenaghsh;
-    private RoleCodeCustomerRequestViewModel roleCodeCustomerViewModel ;
+    private RoleCodeCustomerRequestViewModel roleCodeCustomerViewModel;
 
     private List<RoleCodeViewModel> roleCodeViewModels;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -245,7 +247,7 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
                 customerAccountGroupSpinner,
                 getString(R.string.customer_account_group),
                 new NotEmptyChecker());
-        request_codenaghsh= view.findViewById(R.id.request_codenaghsh);
+        request_codenaghsh = view.findViewById(R.id.request_codenaghsh);
 
         request_codenaghsh.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -382,8 +384,12 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
                         item.PaymentTypeOrderName.contains(text));
         validator.addField(paymentTypeSpinner, getString(R.string.payment_type), new NotEmptyChecker());
 
-        validator.addField(latitude, getString(R.string.geo_location), new NotNullChecker());
-        validator.addField(longitude, getString(R.string.geo_location), new NotNullChecker());
+        /*
+        * Edit By Mehrdad Latifi
+        * */
+
+/*        validator.addField(latitude, getString(R.string.geo_location), new NotNullChecker());
+        validator.addField(longitude, getString(R.string.geo_location), new NotNullChecker());*/
     }
 
     private void submit(final SyncZarGetNewCustomerViewModel syncGetNewCustomerViewModel/*, File file*/) {
@@ -524,7 +530,7 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
                         final MainVaranegarActivity activity = getVaranegarActvity();
                         if (activity != null && !activity.isFinishing()) {
                             stopProgressDialog();
-                            registernewNationalCardImage(result.UniqueId,messageRes);
+                            registernewNationalCardImage(result.UniqueId, messageRes);
 
                         }
                     }
@@ -549,7 +555,7 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
 
     }
 
-    private void registernewNationalCardImage(UUID CustomeId , String messageRes){
+    private void registernewNationalCardImage(UUID CustomeId, String messageRes) {
         final CustomerApi customerApi = new CustomerApi(getContext());
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage(getString(R.string.registering_new_customer));
@@ -565,18 +571,18 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
                     @Override
                     protected void onSuccess(Boolean result, Request request) {
                         final MainVaranegarActivity activity = getVaranegarActvity();
-                        if (result){
-                        if (activity != null && !activity.isFinishing()) {
-                            stopProgressDialog();
-                            CuteMessageDialog dialog = new CuteMessageDialog(activity);
-                            dialog.setTitle(R.string.done);
-                            dialog.setMessage("مشتری جدید با موفقیت ثبت شد");
-                            dialog.setIcon(Icon.Success);
-                            dialog.setPositiveButton(R.string.ok,
-                                    v -> activity.popFragment());
-                            dialog.show();
-                        }
-                        }else {
+                        if (result) {
+                            if (activity != null && !activity.isFinishing()) {
+                                stopProgressDialog();
+                                CuteMessageDialog dialog = new CuteMessageDialog(activity);
+                                dialog.setTitle(R.string.done);
+                                dialog.setMessage("مشتری جدید با موفقیت ثبت شد");
+                                dialog.setIcon(Icon.Success);
+                                dialog.setPositiveButton(R.string.ok,
+                                        v -> activity.popFragment());
+                                dialog.show();
+                            }
+                        } else {
                             if (activity != null && !activity.isFinishing()) {
                                 stopProgressDialog();
                                 CuteMessageDialog dialog = new CuteMessageDialog(activity);
@@ -622,77 +628,82 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
 
     private void createSyncViewModel() {
 
-        String codenaghsh=code_naghsh_paired_item.getValue();
-        if (codenaghsh !=null&&!codenaghsh.equals("")) {
-            syncGetNewCustomerViewModel = new SyncZarGetNewCustomerViewModel();
-            syncGetNewCustomerViewModel.PersonName = personNamePairedItem.getValue();
-            syncGetNewCustomerViewModel.StoreName = tabloNamePairedItem.getValue();
-            syncGetNewCustomerViewModel.Street = addressPairedItem.getValue();
-            syncGetNewCustomerViewModel.Street2 = street2PairedItem.getValue();
-            syncGetNewCustomerViewModel.Street3 = street3PairedItem.getValue();
-            syncGetNewCustomerViewModel.Street4 = street4PairedItem.getValue();
-            syncGetNewCustomerViewModel.Street5 = street5PairedItem.getValue();
-            syncGetNewCustomerViewModel.PostalCode = postalCodePairedItem.getValue();
-            syncGetNewCustomerViewModel.Tel = telPairedItem.getValue();
-            syncGetNewCustomerViewModel.Mobile = mobilePairedItem.getValue();
-            syncGetNewCustomerViewModel.EconomicCode = economicCodePairedItem.getValue();
-            syncGetNewCustomerViewModel.NationalCode = nationalCodePairedItem.getValue();
-            syncGetNewCustomerViewModel.CityId = cityNamePairedItem.getValue();
-            syncGetNewCustomerViewModel.CodeNaghsh = code_naghsh_paired_item.getValue();
+        /*
+         * Edited By Mehrdad Latifi
+         * */
 
-            DataForRegisterModel ktokd = customerAccountGroupSpinner.getSelectedItem();
-            if (ktokd != null)
-                syncGetNewCustomerViewModel.KTOKD = ktokd.FieldKey;
+/*        String codenaghsh=code_naghsh_paired_item.getValue();
+        if (codenaghsh !=null&&!codenaghsh.equals("")) {*/
+        syncGetNewCustomerViewModel = new SyncZarGetNewCustomerViewModel();
+        syncGetNewCustomerViewModel.PersonName = personNamePairedItem.getValue();
+        syncGetNewCustomerViewModel.StoreName = tabloNamePairedItem.getValue();
+        syncGetNewCustomerViewModel.Street = addressPairedItem.getValue();
+        syncGetNewCustomerViewModel.Street2 = street2PairedItem.getValue();
+        syncGetNewCustomerViewModel.Street3 = street3PairedItem.getValue();
+        syncGetNewCustomerViewModel.Street4 = street4PairedItem.getValue();
+        syncGetNewCustomerViewModel.Street5 = street5PairedItem.getValue();
+        syncGetNewCustomerViewModel.PostalCode = postalCodePairedItem.getValue();
+        syncGetNewCustomerViewModel.Tel = telPairedItem.getValue();
+        syncGetNewCustomerViewModel.Mobile = mobilePairedItem.getValue();
+        syncGetNewCustomerViewModel.EconomicCode = economicCodePairedItem.getValue();
+        syncGetNewCustomerViewModel.NationalCode = nationalCodePairedItem.getValue();
+        syncGetNewCustomerViewModel.CityId = cityNamePairedItem.getValue();
+        syncGetNewCustomerViewModel.CodeNaghsh = code_naghsh_paired_item.getValue();
 
-            DataForRegisterModel state = stateSpinner.getSelectedItem();
-            if (state != null)
-                syncGetNewCustomerViewModel.StateId = state.FieldKey;
+        DataForRegisterModel ktokd = customerAccountGroupSpinner.getSelectedItem();
+        if (ktokd != null)
+            syncGetNewCustomerViewModel.KTOKD = ktokd.FieldKey;
 
-            DataForRegisterModel zone = deliveryZoneSpinner.getSelectedItem();
-            if (zone != null)
-                syncGetNewCustomerViewModel.TRANSPZONE = zone.FieldKey;
+        DataForRegisterModel state = stateSpinner.getSelectedItem();
+        if (state != null)
+            syncGetNewCustomerViewModel.StateId = state.FieldKey;
 
-            DataForRegisterModel sale = saleZonesSpinner.getSelectedItem();
-            if (sale != null)
-                syncGetNewCustomerViewModel.BZIRK = sale.FieldKey;
+        DataForRegisterModel zone = deliveryZoneSpinner.getSelectedItem();
+        if (zone != null)
+            syncGetNewCustomerViewModel.TRANSPZONE = zone.FieldKey;
 
-            DataForRegisterModel degree = customerDegreeSpinner.getSelectedItem();
-            if (degree != null)
-                syncGetNewCustomerViewModel.KUKLA = degree.FieldKey;
+        DataForRegisterModel sale = saleZonesSpinner.getSelectedItem();
+        if (sale != null)
+            syncGetNewCustomerViewModel.BZIRK = sale.FieldKey;
 
-            DataForRegisterModel group1 = customerGroup1Spinner.getSelectedItem();
-            if (group1 != null) {
-                syncGetNewCustomerViewModel.KVGR1 = group1.FieldKey;
-                syncGetNewCustomerViewModel.KDGRP = group1.FieldKey;
-            }
+        DataForRegisterModel degree = customerDegreeSpinner.getSelectedItem();
+        if (degree != null)
+            syncGetNewCustomerViewModel.KUKLA = degree.FieldKey;
 
-            DataForRegisterModel group2 = customerGroup2Spinner.getSelectedItem();
-            if (group2 != null)
-                syncGetNewCustomerViewModel.KVGR2 = group2.FieldKey;
-
-            UserModel um = UserManager.readFromFile(getContext());
-            if (um != null) {
-                syncGetNewCustomerViewModel.DealerId = um.UniqueId;
-            }
-
-            TourManager tourManager = new TourManager(getContext());
-            TourModel tm = tourManager.loadTour();
-            if (tm != null)
-                syncGetNewCustomerViewModel.PathId = tm.DayVisitPathId;
-
-            PaymentTypeOrderModel paymentTypeOrderModel =
-                    paymentTypeSpinner.getSelectedItem();
-            if (paymentTypeOrderModel != null)
-                syncGetNewCustomerViewModel.PaymentTypeId =
-                        paymentTypeOrderModel.BackOfficeId;
-
-            syncGetNewCustomerViewModel.latitude = latitude.getData();
-            syncGetNewCustomerViewModel.longitude = longitude.getData();
-
-            validator.validate(this);
-        }else {
-            showErrorDialog(" کدنقش مشتری را ثبت کنید ");
+        DataForRegisterModel group1 = customerGroup1Spinner.getSelectedItem();
+        if (group1 != null) {
+            syncGetNewCustomerViewModel.KVGR1 = group1.FieldKey;
+            syncGetNewCustomerViewModel.KDGRP = group1.FieldKey;
         }
+
+        DataForRegisterModel group2 = customerGroup2Spinner.getSelectedItem();
+        if (group2 != null)
+            syncGetNewCustomerViewModel.KVGR2 = group2.FieldKey;
+
+        UserModel um = UserManager.readFromFile(getContext());
+        if (um != null) {
+            syncGetNewCustomerViewModel.DealerId = um.UniqueId;
+        }
+
+        TourManager tourManager = new TourManager(getContext());
+        TourModel tm = tourManager.loadTour();
+        if (tm != null)
+            syncGetNewCustomerViewModel.PathId = tm.DayVisitPathId;
+
+        PaymentTypeOrderModel paymentTypeOrderModel =
+                paymentTypeSpinner.getSelectedItem();
+        if (paymentTypeOrderModel != null)
+            syncGetNewCustomerViewModel.PaymentTypeId =
+                    paymentTypeOrderModel.BackOfficeId;
+
+        syncGetNewCustomerViewModel.latitude = latitude.getData();
+        syncGetNewCustomerViewModel.longitude = longitude.getData();
+
+        validator.validate(this);
+/*        }
+        else {
+            showErrorDialog(" کدنقش مشتری را ثبت کنید ");
+        }*/
     }
 
     private void stopProgressDialog() {
@@ -708,7 +719,8 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
 
     @Override
     public void onValidationSucceeded() {
-        submit(syncGetNewCustomerViewModel);
+        Log.i("meri", "onValidationSucceeded");
+//        submit(syncGetNewCustomerViewModel);
     }
 
     @Override
@@ -736,6 +748,7 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
     }
 
     Uri photoURI;
+
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null) {
@@ -746,8 +759,8 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
             }
 
             if (file != null) {
-               photoURI = FileProvider.getUriForFile(getContext(),
-                        getContext().getPackageName()+ ".provider",
+                photoURI = FileProvider.getUriForFile(getContext(),
+                        getContext().getPackageName() + ".provider",
                         file);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
@@ -771,8 +784,6 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
     }
 
 
-
-
     private void showErrorDialog(String err) {
         Context context = getContext();
         if (context != null) {
@@ -784,98 +795,101 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
             dialog.show();
         }
     }
-    private void  getDataCodeNaghsh(){
 
-        String economicCode=economicCodePairedItem.getValue();
-        String nationalCode=nationalCodePairedItem.getValue();
+    private void getDataCodeNaghsh() {
 
-        roleCodeCustomerViewModel=new RoleCodeCustomerRequestViewModel();
-        roleCodeCustomerViewModel.NationalCode=nationalCode;
-        roleCodeCustomerViewModel.EconomicCode=economicCode;
+        String economicCode = economicCodePairedItem.getValue();
+        String nationalCode = nationalCodePairedItem.getValue();
+
+        roleCodeCustomerViewModel = new RoleCodeCustomerRequestViewModel();
+        roleCodeCustomerViewModel.NationalCode = nationalCode;
+        roleCodeCustomerViewModel.EconomicCode = economicCode;
 
         if (economicCode != null && !economicCode.equals("") && economicCode.length() == 11 ||
                 nationalCode != null && !nationalCode.equals("") && nationalCode.length() == 10) {
 
-         PingApi pingApi = new PingApi();
+            PingApi pingApi = new PingApi();
             startProgressDialog();
-         pingApi.refreshBaseServerUrl(getContext(), new PingApi.PingCallback() {
-             @Override
-             public void done(String ipAddress) {
-                 ApiNew apiNew=new ApiNew(getContext());
-                 Call<List<RoleCodeViewModel>> calll=apiNew.getCodeNaghsh(roleCodeCustomerViewModel);
+            pingApi.refreshBaseServerUrl(getContext(), new PingApi.PingCallback() {
+                @Override
+                public void done(String ipAddress) {
+                    ApiNew apiNew = new ApiNew(getContext());
+                    Call<List<RoleCodeViewModel>> calll = apiNew.getCodeNaghsh(roleCodeCustomerViewModel);
 
-                 apiNew.runWebRequest(calll, new WebCallBack<List<RoleCodeViewModel>>() {
-                     @Override
-                     protected void onFinish() {
-                         stopProgressDialog();
-                     }
+                    apiNew.runWebRequest(calll, new WebCallBack<List<RoleCodeViewModel>>() {
+                        @Override
+                        protected void onFinish() {
+                            stopProgressDialog();
+                        }
 
-                     @Override
-                     protected void onSuccess(List<RoleCodeViewModel> result, Request request) {
+                        @Override
+                        protected void onSuccess(List<RoleCodeViewModel> result, Request request) {
 
-                         if (result.size()>0){
-                             if (result.size()==1){
-                                 code_naghsh_paired_item.setValue(result.get(0).Code);
-                                 request_codenaghsh.setVisibility(View.GONE);
-                             }else {
-                                 dialogShow(result);
-                             }
-                         }else {
-                             showErrorDialog("یرای این کد ملی کد نقش ثبت نشده است ");
-                         }
-                     }
+                            if (result.size() > 0) {
+                                if (result.size() == 1) {
+                                    code_naghsh_paired_item.setValue(result.get(0).Code);
+                                    request_codenaghsh.setVisibility(View.GONE);
+                                } else {
+                                    dialogShow(result);
+                                }
+                            } else {
+                                showErrorDialog("یرای این کد ملی کد نقش ثبت نشده است ");
+                            }
+                        }
 
-                     @Override
-                     protected void onApiFailure(ApiError error, Request request) {
-                         String err = WebApiErrorBody.log(error, getContext());
-                         if (isResumed()) {
-                             showErrorDialog(err);
+                        @Override
+                        protected void onApiFailure(ApiError error, Request request) {
+                            String err = WebApiErrorBody.log(error, getContext());
+                            if (isResumed()) {
+                                showErrorDialog(err);
 
-                         }
-                     }
+                            }
+                        }
 
-                     @Override
-                     protected void onNetworkFailure(Throwable t, Request request) {
-                         if (isResumed()) {
-                             showErrorDialog(getString(R.string.network_error));
+                        @Override
+                        protected void onNetworkFailure(Throwable t, Request request) {
+                            if (isResumed()) {
+                                showErrorDialog(getString(R.string.network_error));
 
-                         }
-                     }
-                 });
-             }
+                            }
+                        }
+                    });
+                }
 
-             @Override
-             public void failed() {
-                 MainVaranegarActivity activity = getVaranegarActvity();
-                 if (activity != null && !activity.isFinishing()) {
-                     stopProgressDialog();
-                     CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(activity);
-                     cuteMessageDialog.setIcon(Icon.Error);
-                     cuteMessageDialog.setTitle(R.string.error);
-                     cuteMessageDialog.setMessage(R.string.network_error);
-                     cuteMessageDialog.setNeutralButton(R.string.ok, null);
-                     cuteMessageDialog.show();
-                 }
-             }
-         });
+                @Override
+                public void failed() {
+                    MainVaranegarActivity activity = getVaranegarActvity();
+                    if (activity != null && !activity.isFinishing()) {
+                        stopProgressDialog();
+                        CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(activity);
+                        cuteMessageDialog.setIcon(Icon.Error);
+                        cuteMessageDialog.setTitle(R.string.error);
+                        cuteMessageDialog.setMessage(R.string.network_error);
+                        cuteMessageDialog.setNeutralButton(R.string.ok, null);
+                        cuteMessageDialog.show();
+                    }
+                }
+            });
 
-        }else {
+        } else {
             showErrorDialog("کد ملی و کداقتصادی مشتری را ثبت کنید ");
         }
     }
-    private void dialogShow(List<RoleCodeViewModel> roleCodeViewModel){
+
+    private void dialogShow(List<RoleCodeViewModel> roleCodeViewModel) {
         String[] data = new String[roleCodeViewModel.size()];
-        roleCodeViewModels=roleCodeViewModel;
-        for (int i=0;i<roleCodeViewModel.size();i++){
-            data[i]=roleCodeViewModel.get(i).Title+roleCodeViewModel.get(i).Code;
+        roleCodeViewModels = roleCodeViewModel;
+        for (int i = 0; i < roleCodeViewModel.size(); i++) {
+            data[i] = roleCodeViewModel.get(i).Title + roleCodeViewModel.get(i).Code;
         }
         SingleChoiceDialog singleChoiceDialog = new
-                SingleChoiceDialog(getContext(),"کد نقش مورد نظر را انتخاب کنید",data);
+                SingleChoiceDialog(getContext(), "کد نقش مورد نظر را انتخاب کنید", data);
         singleChoiceDialog.setCancelable(false);
         singleChoiceDialog.addItemClickListener(this);
         singleChoiceDialog.show(getActivity().getSupportFragmentManager(),
                 "Single Choice Dialog");
     }
+
     @Override
     public void onPositiveButtonClicked(String[] list, int position) {
         code_naghsh_paired_item.setValue(roleCodeViewModels.get(position).Code);
