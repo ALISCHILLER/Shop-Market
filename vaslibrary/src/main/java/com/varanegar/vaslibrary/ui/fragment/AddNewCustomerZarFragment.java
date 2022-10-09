@@ -713,14 +713,12 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
             try {
                 progressDialog.dismiss();
             } catch (Exception ignored) {
-
             }
     }
 
     @Override
     public void onValidationSucceeded() {
-        Log.i("meri", "onValidationSucceeded");
-//        submit(syncGetNewCustomerViewModel);
+        submit(syncGetNewCustomerViewModel);
     }
 
     @Override
