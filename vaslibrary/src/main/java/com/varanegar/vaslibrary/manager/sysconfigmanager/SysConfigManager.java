@@ -471,6 +471,7 @@ public class SysConfigManager extends BaseManager<SysConfigModel> {
         return sysConfigModel;
     }
 
+
     @NonNull
     public ConfigMap read(UUID scope) {
         List<SysConfigModel> sysConfigModels = getItems(new Query().from(SysConfig.SysConfigTbl)

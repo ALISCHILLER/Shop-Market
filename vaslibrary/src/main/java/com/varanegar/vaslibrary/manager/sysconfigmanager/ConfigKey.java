@@ -236,6 +236,10 @@ public class ConfigKey {
 
     public static ConfigKey CheckSingleSendOperation = new ConfigKey("CheckSingleSendOperation");
 
+    public static ConfigKey OprationCodeNaghsh = new ConfigKey("OprationCodeNaghsh");
+
+
+
 
     public String getKey() {
         return this.key;

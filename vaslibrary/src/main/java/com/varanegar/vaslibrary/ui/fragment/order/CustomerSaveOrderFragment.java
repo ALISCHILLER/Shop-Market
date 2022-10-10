@@ -37,8 +37,6 @@ import com.varanegar.framework.database.model.BaseModel;
 import com.varanegar.framework.database.querybuilder.Query;
 import com.varanegar.framework.database.querybuilder.criteria.Criteria;
 import com.varanegar.framework.network.Connectivity;
-import com.varanegar.framework.network.listeners.ApiError;
-import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.util.HelperMethods;
 import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.util.component.PairedItems;
@@ -188,9 +186,7 @@ import com.varanegar.vaslibrary.ui.fragment.productgroup.ProductGroupFragment;
 import com.varanegar.vaslibrary.ui.fragment.settlement.CardReaderDialog;
 import com.varanegar.vaslibrary.ui.fragment.settlement.CashPaymentDialog;
 import com.varanegar.vaslibrary.ui.fragment.settlement.CustomerPayment;
-import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.apiNew.modelNew.customer_not_allowed_product.CustomerNotAllowProductManager;
-import com.varanegar.vaslibrary.webapi.customer.CustomerApi;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
 
 import java.math.BigDecimal;
@@ -208,7 +204,6 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import okhttp3.Request;
 import timber.log.Timber;
 import varanegar.com.discountcalculatorlib.utility.enumerations.EVCType;
 import varanegar.com.discountcalculatorlib.viewmodel.DiscountOrderPrizeViewModel;
@@ -1571,7 +1566,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
 //                    }
 //                });
             if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
-                if (checkPastaInOrder()) {
+                if (checkCodeNaghsh()) {
 
                     SharedPreferences sharedPreferences = context.getSharedPreferences("ReportConfig",
                             Context.MODE_PRIVATE);
@@ -1966,8 +1961,33 @@ public class CustomerSaveOrderFragment extends VisitFragment
     /**
      * Add by mehrdad latifi on 10/02/2022.
      */
-    //---------------------------------------------------------------------------------------------- checkPastaInOrder
-    private boolean checkPastaInOrder() {
+    //---------------------------------------------------------------------------------------------- checkCodeNaghsh
+    private boolean checkCodeNaghsh() {
+        SysConfigModel configModel = new SysConfigManager(getContext()).read(ConfigKey.OprationCodeNaghsh, SysConfigManager.cloud);
+        switch (configModel.Value) {
+            case "3D96D16E-D0EC-4AD3-9FBB-0AE185548F12"://کنترل نشود
+                return true;
+            case "6334B0E1-93BE-4B31-A30F-0AE4817864AB"://کنترل کامل
+                return customer.CodeNaghsh != null && !customer.CodeNaghsh.isEmpty();
+            case "CE262265-6032-483A-B46E-CD0540DF2DEA":// کنترل در پاستا
+                return checkPastaInorder();
+            case "EF279812-7773-42C2-BD17-2F53FA378163"://کنترل در کانفکشنری
+                return checkConfectioneryInorder();
+            default:
+                CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(getContext());
+                cuteMessageDialog.setIcon(Icon.Error);
+                cuteMessageDialog.setTitle(R.string.error);
+                cuteMessageDialog.setMessage(R.string.then_config_code_naghsh_unknown);
+                cuteMessageDialog.setNegativeButton(R.string.ok, null);
+                cuteMessageDialog.show();
+                return false;
+        }
+    }
+    //---------------------------------------------------------------------------------------------- checkCodeNaghsh
+
+
+    //---------------------------------------------------------------------------------------------- checkPastaInorder
+    private boolean checkPastaInorder() {
         List<CustomerCallOrderOrderViewModel> items = orderAdapter.getItems();
         boolean codeNaghsh = true;
         for (CustomerCallOrderOrderViewModel item : items) {
@@ -1980,7 +2000,25 @@ public class CustomerSaveOrderFragment extends VisitFragment
         }
         return codeNaghsh;
     }
-    //---------------------------------------------------------------------------------------------- checkPastaInOrder
+    //---------------------------------------------------------------------------------------------- checkPastaInorder
+
+
+
+    //---------------------------------------------------------------------------------------------- checkConfectioneryInorder
+    private boolean checkConfectioneryInorder() {
+        List<CustomerCallOrderOrderViewModel> items = orderAdapter.getItems();
+        boolean codeNaghsh = true;
+        for (CustomerCallOrderOrderViewModel item : items) {
+            String productCode = item.ProductCode.substring(0,2);
+            if (productCode.equals("34")) {
+                if (customer.CodeNaghsh == null || customer.CodeNaghsh.isEmpty())
+                    codeNaghsh = false;
+                break;
+            }
+        }
+        return codeNaghsh;
+    }
+    //---------------------------------------------------------------------------------------------- checkConfectioneryInorder
 
 
     private void saveOrder() {
