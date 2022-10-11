@@ -1964,7 +1964,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
     //---------------------------------------------------------------------------------------------- checkCodeNaghsh
     private boolean checkCodeNaghsh() {
         SysConfigModel configModel = new SysConfigManager(getContext()).read(ConfigKey.OprationCodeNaghsh, SysConfigManager.cloud);
-        switch (configModel.Value) {
+        switch (configModel.Value.toUpperCase()) {
             case "3D96D16E-D0EC-4AD3-9FBB-0AE185548F12"://کنترل نشود
                 return true;
             case "6334B0E1-93BE-4B31-A30F-0AE4817864AB"://کنترل کامل
