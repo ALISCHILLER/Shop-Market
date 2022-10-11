@@ -1959,8 +1959,9 @@ public class CustomerSaveOrderFragment extends VisitFragment
     }
 
     /**
-     * Add by mehrdad latifi on 10/02/2022.
+     * Add by mehrdad latifi on 10/11/2022.
      */
+
     //---------------------------------------------------------------------------------------------- checkCodeNaghsh
     private boolean checkCodeNaghsh() {
         SysConfigModel configModel = new SysConfigManager(getContext()).read(ConfigKey.OprationCodeNaghsh, SysConfigManager.cloud);
