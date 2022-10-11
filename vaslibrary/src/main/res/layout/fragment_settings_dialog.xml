@@ -247,7 +247,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="داخلی"
-                android:enabled="false"/>
+                android:enabled="false"
+                android:checked="true"/>
             <RadioButton
                 android:id="@+id/radio_wan"
                 android:layout_width="wrap_content"
