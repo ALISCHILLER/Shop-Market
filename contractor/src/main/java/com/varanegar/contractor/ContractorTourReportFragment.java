@@ -1,7 +1,7 @@
 package com.varanegar.contractor;
 
 import com.varanegar.vaslibrary.sync.SyncService;
-import com.varanegar.vaslibrary.ui.fragment.CustomersFragment;
+import com.varanegar.vaslibrary.ui.fragment.clean.CustomersFragment;
 import com.varanegar.vaslibrary.ui.fragment.TourReportFragment;
 
 public class ContractorTourReportFragment extends TourReportFragment {

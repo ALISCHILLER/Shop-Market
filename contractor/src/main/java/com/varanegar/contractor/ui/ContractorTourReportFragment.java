@@ -3,7 +3,7 @@ package com.varanegar.contractor.ui;
 import com.varanegar.contractor.ContractorCustomersFragment;
 import com.varanegar.contractor.ContractorSyncService;
 import com.varanegar.vaslibrary.sync.SyncService;
-import com.varanegar.vaslibrary.ui.fragment.CustomersFragment;
+import com.varanegar.vaslibrary.ui.fragment.clean.CustomersFragment;
 import com.varanegar.vaslibrary.ui.fragment.TourReportFragment;
 
 /**

@@ -1,4 +1,4 @@
-package com.varanegar.vaslibrary.ui.fragment;
+package com.varanegar.vaslibrary.ui.fragment.clean;
 
 import static android.content.Context.ACTIVITY_SERVICE;
 import static com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey.DeviceWorkingHour;
@@ -10,7 +10,6 @@ import android.app.ActivityManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,7 +20,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarActivity;
 import com.varanegar.framework.base.VaranegarApplication;
@@ -39,7 +37,6 @@ import com.varanegar.framework.util.filter.Filter;
 import com.varanegar.framework.util.fragment.extendedlist.DbListFragment;
 import com.varanegar.framework.util.recycler.BaseViewHolder;
 import com.varanegar.vaslibrary.R;
-import com.varanegar.vaslibrary.base.VasActivity;
 import com.varanegar.vaslibrary.catalogue.CatalogueHelper;
 import com.varanegar.vaslibrary.manager.CustomerPathViewManager;
 import com.varanegar.vaslibrary.manager.Target.TargetMasterManager;
@@ -74,6 +71,10 @@ import com.varanegar.vaslibrary.model.tour.TourModel;
 import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.model.visitday.VisitDayViewModel;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
+import com.varanegar.vaslibrary.ui.fragment.AddNewCustomerFragment;
+import com.varanegar.vaslibrary.ui.fragment.AddNewCustomerZarFragment;
+import com.varanegar.vaslibrary.ui.fragment.TourReportFragment;
+import com.varanegar.vaslibrary.ui.fragment.UserLocationFragment;
 import com.varanegar.vaslibrary.ui.fragment.vpnfragment.VpnDialogFragment;
 import com.varanegar.vaslibrary.ui.viewholders.CustomerSummaryMultipanViewHolder;
 import com.varanegar.vaslibrary.ui.viewholders.CustomerSummaryViewHolder;
@@ -91,6 +92,7 @@ import timber.log.Timber;
  * Created by atp on 1/14/2017.
  * صفحه لیست مشتریان
  * edited by moji
+ * edit by latifi
  */
 
 public abstract class CustomersFragment
@@ -103,40 +105,92 @@ public abstract class CustomersFragment
     private boolean multipan;
     BackOfficeType backOfficeType;
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Timber.d("Customers fragment destroyed");
-        remove("dd003d32-4f05-423f-b7ba-3ccc9f54fb39");
-        Runtime.getRuntime().gc();
-    }
+    protected abstract VaranegarFragment getSendTourFragment();
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        Timber.d("Customers fragment paused");
-        Runtime.getRuntime().gc();
-    }
+    protected abstract TourReportFragment getProfileFragment();
 
-    private void wipeOldPriceData() {
-        new Thread() {
-            @Override
-            public void run() {
-                Context context = getContext();
-                if (context != null) {
-                    SharedPreferences sharedPreferences =
-                            context.getSharedPreferences(
-                                    "DATA_RECOVERY", Context.MODE_PRIVATE);
-                    long lastClearDate =
-                            sharedPreferences.getLong("Last_Clear_Date", 0);
-                    if (lastClearDate == 0 ||
-                            ((new Date().getTime() - lastClearDate) / 1000) > 3600 * 24)
-                        PriceUpdateFlow.clearAdditionalData(context);
+    protected abstract VaranegarFragment getContentFragment(UUID selectedItem);
+
+    protected abstract VaranegarFragment getContentTargetFragment();
+
+    protected abstract VaranegarFragment getContentTargetDetailFragment();
+
+
+    //---------------------------------------------------------------------------------------------- onCreateContentFragment
+    @Override
+    @Nullable
+    protected VaranegarFragment onCreateContentFragment(
+            UUID selectedItem,
+            LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
+        SysConfigManager sysConfigManager = new SysConfigManager(getContext());
+        SysConfigModel deviceWorkingHour =
+                sysConfigManager.read(DeviceWorkingHour, SysConfigManager.cloud);
+        if (SysConfigManager.compare(deviceWorkingHour, true)) {
+            SysConfigModel startConfig =
+                    sysConfigManager.read(StartDeviceWorkingHour, SysConfigManager.cloud);
+            SysConfigModel endConfig =
+                    sysConfigManager.read(EndDeviceWorkingHour, SysConfigManager.cloud);
+            Date startTime = SysConfigManager.getDateFromTime(startConfig, null);
+            Date endTime = SysConfigManager.getDateFromTime(endConfig, null);
+            if ((startTime != null && new Date().before(startTime)) ||
+                    (endTime != null && new Date().after(endTime))) {
+                if (getContext() != null) {
+                    CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+                    dialog.setTitle(R.string.error);
+                    dialog.setMessage(R.string.you_are_not_allowed_at_this_time);
+                    dialog.setIcon(Icon.Error);
+                    dialog.setPositiveButton(R.string.close, null);
+                    dialog.show();
+                    return null;
                 }
             }
-        }.start();
-    }
+        }
+        if (!new TourManager(getContext()).isTourAvailable() && getContext() != null) {
+            CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+            dialog.setTitle(R.string.terrible_failure);
+            dialog.setMessage(R.string.tour_is_not_available);
+            dialog.setIcon(Icon.Error);
+            dialog.setPositiveButton(R.string.close, view -> {
+                MainVaranegarActivity activity = getVaranegarActvity();
+                if (activity != null)
+                    activity.finish();
+            });
+            dialog.show();
+            return null;
+        }
 
+        if (getContext() != null) {
+            UserModel usermodel = UserManager.readFromFile(getContext());
+            if (usermodel != null) {
+                SysConfigModel sysConfigModel =
+                        sysConfigManager.read(ConfigKey.ViewCustomerTargetReport, SysConfigManager.cloud);
+                List<TargetMasterModel> targets =
+                        new TargetMasterManager(getContext())
+                                .getItems(TargetMasterManager
+                                        .getFilterTargets(usermodel.UniqueId, selectedItem));
+
+                if (SysConfigManager.compare(sysConfigModel, true)) {
+                    if (targets.size() > 0) {
+                        if (targets.size() == 1) {
+                            return getContentTargetDetailFragment();
+                        } else {
+                            return getContentTargetFragment();
+                        }
+                    } else {
+                        return getContentFragment(selectedItem);
+                    }
+                } else
+                    return getContentFragment(selectedItem);
+            }
+        }
+        return null;
+    }
+    //---------------------------------------------------------------------------------------------- onCreateContentFragment
+
+
+    //---------------------------------------------------------------------------------------------- onResume
     @Override
     public void onResume() {
         super.onResume();
@@ -146,63 +200,49 @@ public abstract class CustomersFragment
             Objects.requireNonNull(getVaranegarActvity()).putFragment(getProfileFragment());
             return;
         }
-
         try {
             CustomerCardexTempManager cardexTempManager =
-                    new CustomerCardexTempManager(Objects.requireNonNull(getContext()));
+                    new CustomerCardexTempManager(Objects.requireNonNull(requireContext()));
             cardexTempManager.deleteAll();
             CustomerOldInvoiceHeaderTempManager customerOldInvoiceHeaderTempManager =
-                    new CustomerOldInvoiceHeaderTempManager(getContext());
+                    new CustomerOldInvoiceHeaderTempManager(requireContext());
             customerOldInvoiceHeaderTempManager.deleteAll();
             CustomerOldInvoiceDetailTempManager customerOldInvoiceDetailTempManager =
-                    new CustomerOldInvoiceDetailTempManager(getContext());
+                    new CustomerOldInvoiceDetailTempManager(requireContext());
             customerOldInvoiceDetailTempManager.deleteAll();
-            SysConfigManager sysConfigManager = new SysConfigManager(getContext());
+            SysConfigManager sysConfigManager = new SysConfigManager(requireContext());
             sysConfigManager.delete(ConfigKey.ReportsPeriod);
         } catch (DbException e) {
             Timber.e(e);
         }
-
         refreshGetOldInvoice();
+        getAdapter().notifyDataSetChanged();
     }
+    //---------------------------------------------------------------------------------------------- onResume
 
-    private void getOldInvoices(SysConfigModel firstTime,
-                                boolean onlyDiscount,
-                                final SysConfigManager sysConfigManager) {
-        if (SysConfigManager.compare(firstTime, true)) {
-            updateCustomerOldInvoices(true, onlyDiscount);
-        } else {
-            UpdateManager updateManager = new UpdateManager(getContext());
-            Date oldInvoiceDate = updateManager.getLog(UpdateKey.CustomerOldInvoice);
-            Date tourStartDate = updateManager.getLog(UpdateKey.TourStartTime);
-            if (tourStartDate.after(oldInvoiceDate)) {
-                final CuteMessageDialog dialog =
-                        new CuteMessageDialog(Objects.requireNonNull(getContext()));
-                dialog.setIcon(Icon.Alert);
-                dialog.setMessage(R.string.do_you_update_old_invoices);
-                dialog.setPositiveButton(R.string.yes, view ->
-                        updateCustomerOldInvoices(false, false));
-                dialog.setNegativeButton(R.string.no, view -> {
-                    try {
-                        sysConfigManager.save(
-                                ConfigKey.IgnoreOldInvoice,
-                                "True",
-                                SysConfigManager.local);
-                    } catch (Exception e) {
-                        Timber.e(e);
-                    }
-                });
-                dialog.show();
-            }
-        }
+
+    //---------------------------------------------------------------------------------------------- onDestroy
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Timber.d("Customers fragment destroyed");
+        remove("dd003d32-4f05-423f-b7ba-3ccc9f54fb39");
+        Runtime.getRuntime().gc();
     }
+    //---------------------------------------------------------------------------------------------- onDestroy
 
-    protected void refreshCustomerCalls() {
-        CustomerSummaryMultipanViewHolder.calls =
-                new CustomerCallManager(Objects.requireNonNull(getContext()))
-                        .getItems(new Query().from(CustomerCall.CustomerCallTbl));
+
+    //---------------------------------------------------------------------------------------------- onPause
+    @Override
+    public void onPause() {
+        super.onPause();
+        Timber.d("Customers fragment paused");
+        Runtime.getRuntime().gc();
     }
+    //---------------------------------------------------------------------------------------------- onPause
 
+
+    //---------------------------------------------------------------------------------------------- onCreate
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -222,148 +262,30 @@ public abstract class CustomersFragment
             Timber.e(e);
         }
     }
+    //---------------------------------------------------------------------------------------------- onCreate
 
-    private Boolean isLowMemory() {
-        try {
-            ActivityManager activityManager =
-                    (ActivityManager) Objects.requireNonNull(getContext())
-                            .getSystemService(ACTIVITY_SERVICE);
-            ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
-            activityManager.getMemoryInfo(memoryInfo);
-            return memoryInfo.lowMemory;
-        } catch (Error e) {
-            return true;
-        }
-    }
 
-    @NonNull
-    @Override
-    protected Query createFiltersQuery(
-            @Nullable String text,
-            @Nullable List<Filter> filters,
-            @Nullable Object spinnerFilterItem) {
-        ArrayList<CustomerCallType> customerCallType = null;
-        boolean unknownStatus = false;
-        if (spinnerFilterItem != null) {
-            StatusFilter statusFilter = (StatusFilter) spinnerFilterItem;
-            customerCallType = statusFilter.customerCallType;
-            unknownStatus = statusFilter.unknownStatus;
-        }
-        text = HelperMethods
-                .convertToEnglishNumbers(HelperMethods.persian2Arabic(text));
-        List<Filter> selectedPaths = new ArrayList<>();
-        if (filters != null)
-            selectedPaths = Linq.findAll(filters, item -> item.selected);
-        if (selectedPaths.size() == 1 &&
-                selectedPaths.get(0).khafan &&
-                selectedPaths.get(0).value.equals(CustomerPathViewManager.All_PATHS)) {
-            if (text != null && !text.isEmpty()) {
-                if (unknownStatus)
-                    return CustomerPathViewManager
-                            .getAllWithUnknownStatus(
-                                    text,
-                                    setCheckConfirmStatus(spinnerFilterItem));
-                else
-                    return CustomerPathViewManager
-                            .getAll(
-                                    text,
-                                    customerCallType,
-                                    setCheckConfirmStatus(spinnerFilterItem));
-            } else {
-                if (unknownStatus)
-                    return CustomerPathViewManager
-                            .getAllWithUnknownStatus(
-                                    setCheckConfirmStatus(spinnerFilterItem));
-                else
-                    return CustomerPathViewManager
-                            .getAll(
-                                    customerCallType,
-                                    setCheckConfirmStatus(spinnerFilterItem));
-            }
-        } else {
-            if (text != null && !text.isEmpty()) {
-                if (unknownStatus)
-                    return CustomerPathViewManager
-                            .getAllWithUnknownVisitStatus(
-                                    selectedPaths,
-                                    text,
-                                    setCheckConfirmStatus(spinnerFilterItem));
-                else
-                    return CustomerPathViewManager
-                            .getAll(
-                                    selectedPaths,
-                                    text,
-                                    customerCallType,
-                                    setCheckConfirmStatus(spinnerFilterItem));
-            } else {
-                if (unknownStatus)
-                    return CustomerPathViewManager
-                            .getAllWithUnknownVisitStatus(
-                                    selectedPaths,
-                                    setCheckConfirmStatus(spinnerFilterItem));
-                else
-                    return CustomerPathViewManager
-                            .getAll(
-                                    selectedPaths,
-                                    customerCallType,
-                                    setCheckConfirmStatus(spinnerFilterItem));
-            }
-        }
-    }
-
-    @NonNull
-    @Override
-    protected CustomerPathViewModelRepository getRepository() {
-        return new CustomerPathViewModelRepository();
-    }
-
+    //---------------------------------------------------------------------------------------------- onSaveInstanceState
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         if (barcode != null && !barcode.isEmpty())
             outState.putString("dd003d32-4f05-423f-b7ba-3ccc9f54fb39", barcode);
     }
+    //---------------------------------------------------------------------------------------------- onSaveInstanceState
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        multipan = getResources().getBoolean(R.bool.multipane);
-    }
 
-    /**
-     * لیست مشتریان Adapter
-     * row_coustomer_multipan layout
-     */
-    @Override
-    public BaseViewHolder<CustomerPathViewModel> createListItemViewHolder(
-            ViewGroup parent,
-            int viewType) {
-        if (multipan) {
-            View view = LayoutInflater
-                    .from(parent.getContext())
-                    .inflate(R.layout.row_customer_multipan, parent, false);
-            return new CustomerSummaryMultipanViewHolder(
-                    view,
-                    getAdapter(),
-                    backOfficeType);
-        } else {
-            View view = LayoutInflater
-                    .from(parent.getContext())
-                    .inflate(R.layout.row_customer, parent, false);
-            return new CustomerSummaryViewHolder(
-                    view,
-                    getAdapter(),
-                    backOfficeType);
-        }
-    }
-
+    //---------------------------------------------------------------------------------------------- onMenuClicked
     @Override
     protected void onMenuClicked() {
         MainVaranegarActivity activity = getVaranegarActvity();
         if (activity != null && !activity.isFinishing())
             activity.toggleDrawer();
     }
+    //---------------------------------------------------------------------------------------------- onMenuClicked
 
+
+    //---------------------------------------------------------------------------------------------- createFilterOptions
     @Override
     protected List<Filter> createFilterOptions() {
         final ArrayList<Filter> list = new ArrayList<>();
@@ -397,7 +319,10 @@ public abstract class CustomersFragment
                     CustomerPathViewManager.All_PATHS, true));
         return list;
     }
+    //---------------------------------------------------------------------------------------------- createFilterOptions
 
+
+    //---------------------------------------------------------------------------------------------- onCreateCuteToolbar
     @Override
     protected List<CuteButton> onCreateCuteToolbar() {
         List<CuteButton> buttons = new ArrayList<>();
@@ -427,73 +352,73 @@ public abstract class CustomersFragment
             buttons.add(mapBtn);
 
 
-        /**
+        /*
          *بهینه سازی مسیر
          * حذف شد
          *  Ali Soleymani
          */
-        //        CuteButton pathBtn = new CuteButton();
-//        pathBtn.setTitle(R.string.omptimizing_path);
-//        pathBtn.setIcon(R.drawable.ic_path_black_36dp);
-//        pathBtn.setEnabled(() ->
-//                new TourManager(getContext()).isTourAvailable());
-//        pathBtn.setOnClickListener(() -> {
-//            if (getActivity() == null || getActivity().isFinishing()) return;
-//
-//            Location lastLocation = ((VasActivity) getActivity()).getLastLocation();
-//            if (lastLocation != null) {
-//                PathOptimizationDialog dialog = new PathOptimizationDialog();
-//                dialog.lastLocation = lastLocation;
-//                dialog.onResponse = new PathOptimizationDialog.IOnResponse() {
-//                    @Override
-//                    public void done(List<CustomerModel> customerModels, List<LatLng> points) {
-//                        if (getActivity() == null || getActivity().isFinishing()) return;
-//
-//                        if (customerModels.size() > 0) {
-//                            try {
-//                                CustomerManager customerManager =
-//                                        new CustomerManager(getActivity());
-//                                customerManager.updateOPathIds(customerModels, points);
-//                                refresh();
-//                                CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
-//                                dialog.setIcon(Icon.Success);
-//                                dialog.setMessage(R.string.customers_list_updated);
-//                                dialog.setPositiveButton(R.string.ok, null);
-//                                dialog.show();
-//                            } catch (Exception e) {
-//                                CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
-//                                dialog.setIcon(Icon.Error);
-//                                dialog.setMessage(R.string.error_saving_request);
-//                                dialog.setPositiveButton(R.string.ok, null);
-//                                dialog.show();
-//                            }
-//                        } else
-//                            refresh();
-//                    }
-//
-//                    @Override
-//                    public void failed(String error) {
-//                        if (getActivity() == null || getActivity().isFinishing()) return;
-//
-//                        CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
-//                        dialog.setIcon(Icon.Error);
-//                        dialog.setMessage(error);
-//                        dialog.setPositiveButton(R.string.ok, null);
-//                        dialog.show();
-//                    }
-//                };
-//                dialog.show(
-//                        getActivity().getSupportFragmentManager(),
-//                        "CuteAlertDialogOptimisation");
-//            } else {
-//                CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
-//                dialog.setIcon(Icon.Error);
-//                dialog.setMessage(R.string.location_is_not_available);
-//                dialog.setPositiveButton(R.string.ok, null);
-//                dialog.show();
-//            }
-//        });
-//        buttons.add(pathBtn);
+/*                CuteButton pathBtn = new CuteButton();
+        pathBtn.setTitle(R.string.omptimizing_path);
+        pathBtn.setIcon(R.drawable.ic_path_black_36dp);
+        pathBtn.setEnabled(() ->
+                new TourManager(getContext()).isTourAvailable());
+        pathBtn.setOnClickListener(() -> {
+            if (getActivity() == null || getActivity().isFinishing()) return;
+
+            Location lastLocation = ((VasActivity) getActivity()).getLastLocation();
+            if (lastLocation != null) {
+                PathOptimizationDialog dialog = new PathOptimizationDialog();
+                dialog.lastLocation = lastLocation;
+                dialog.onResponse = new PathOptimizationDialog.IOnResponse() {
+                    @Override
+                    public void done(List<CustomerModel> customerModels, List<LatLng> points) {
+                        if (getActivity() == null || getActivity().isFinishing()) return;
+
+                        if (customerModels.size() > 0) {
+                            try {
+                                CustomerManager customerManager =
+                                        new CustomerManager(getActivity());
+                                customerManager.updateOPathIds(customerModels, points);
+                                refresh();
+                                CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
+                                dialog.setIcon(Icon.Success);
+                                dialog.setMessage(R.string.customers_list_updated);
+                                dialog.setPositiveButton(R.string.ok, null);
+                                dialog.show();
+                            } catch (Exception e) {
+                                CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
+                                dialog.setIcon(Icon.Error);
+                                dialog.setMessage(R.string.error_saving_request);
+                                dialog.setPositiveButton(R.string.ok, null);
+                                dialog.show();
+                            }
+                        } else
+                            refresh();
+                    }
+
+                    @Override
+                    public void failed(String error) {
+                        if (getActivity() == null || getActivity().isFinishing()) return;
+
+                        CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
+                        dialog.setIcon(Icon.Error);
+                        dialog.setMessage(error);
+                        dialog.setPositiveButton(R.string.ok, null);
+                        dialog.show();
+                    }
+                };
+                dialog.show(
+                        getActivity().getSupportFragmentManager(),
+                        "CuteAlertDialogOptimisation");
+            } else {
+                CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
+                dialog.setIcon(Icon.Error);
+                dialog.setMessage(R.string.location_is_not_available);
+                dialog.setPositiveButton(R.string.ok, null);
+                dialog.show();
+            }
+        });
+        buttons.add(pathBtn);*/
 
         CuteButton albumBtn = new CuteButton();
         albumBtn.setTitle(R.string.product_album);
@@ -511,9 +436,9 @@ public abstract class CustomersFragment
         final SysConfigManager sysConfigManager = new SysConfigManager(getContext());
         SysConfigModel allowAddNewCustomer = sysConfigManager
                 .read(ConfigKey.AllowRegisterNewCustomer, SysConfigManager.cloud);
-       // SysConfigManager.compare(allowAddNewCustomer, true) &&
+        // SysConfigManager.compare(allowAddNewCustomer, true) &&
         if (SysConfigManager.compare(allowAddNewCustomer, true)
-                &&!VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
+                && !VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
             CuteButton addCustomerBtn = new CuteButton();
             addCustomerBtn.setTitle(R.string.register_new_customer);
             addCustomerBtn.setIcon(R.drawable.ic_person_add_black_36dp);
@@ -827,19 +752,337 @@ public abstract class CustomersFragment
         openVpn.setTitle(R.string.vpn_open);
         openVpn.setIcon(R.drawable.ic_baseline_vpn_lock_24);
         openVpn.setEnabled(() -> new TourManager(getContext()).isTourAvailable());
-        openVpn.setOnClickListener(new CuteButton.OnClickListener() {
-            @Override
-            public void onClick() {
-                VpnDialogFragment vpnDialogFragment = new VpnDialogFragment();
-                vpnDialogFragment.show(getChildFragmentManager(), "SettingDialogFragment");
-            }
+        openVpn.setOnClickListener(() -> {
+            VpnDialogFragment vpnDialogFragment = new VpnDialogFragment();
+            vpnDialogFragment.show(getChildFragmentManager(), "SettingDialogFragment");
         });
         buttons.add(openVpn);
         return buttons;
     }
+    //---------------------------------------------------------------------------------------------- onCreateCuteToolbar
 
-    protected abstract VaranegarFragment getSendTourFragment();
 
+    //---------------------------------------------------------------------------------------------- createFiltersQuery
+    @NonNull
+    @Override
+    protected Query createFiltersQuery(
+            @Nullable String text,
+            @Nullable List<Filter> filters,
+            @Nullable Object spinnerFilterItem) {
+        ArrayList<CustomerCallType> customerCallType = null;
+        boolean unknownStatus = false;
+        if (spinnerFilterItem != null) {
+            StatusFilter statusFilter = (StatusFilter) spinnerFilterItem;
+            customerCallType = statusFilter.customerCallType;
+            unknownStatus = statusFilter.unknownStatus;
+        }
+        text = HelperMethods
+                .convertToEnglishNumbers(HelperMethods.persian2Arabic(text));
+        List<Filter> selectedPaths = new ArrayList<>();
+        if (filters != null)
+            selectedPaths = Linq.findAll(filters, item -> item.selected);
+        if (selectedPaths.size() == 1 &&
+                selectedPaths.get(0).khafan &&
+                selectedPaths.get(0).value.equals(CustomerPathViewManager.All_PATHS)) {
+            if (text != null && !text.isEmpty()) {
+                if (unknownStatus)
+                    return CustomerPathViewManager
+                            .getAllWithUnknownStatus(
+                                    text,
+                                    setCheckConfirmStatus(spinnerFilterItem));
+                else
+                    return CustomerPathViewManager
+                            .getAll(
+                                    text,
+                                    customerCallType,
+                                    setCheckConfirmStatus(spinnerFilterItem));
+            } else {
+                if (unknownStatus)
+                    return CustomerPathViewManager
+                            .getAllWithUnknownStatus(
+                                    setCheckConfirmStatus(spinnerFilterItem));
+                else
+                    return CustomerPathViewManager
+                            .getAll(
+                                    customerCallType,
+                                    setCheckConfirmStatus(spinnerFilterItem));
+            }
+        } else {
+            if (text != null && !text.isEmpty()) {
+                if (unknownStatus)
+                    return CustomerPathViewManager
+                            .getAllWithUnknownVisitStatus(
+                                    selectedPaths,
+                                    text,
+                                    setCheckConfirmStatus(spinnerFilterItem));
+                else
+                    return CustomerPathViewManager
+                            .getAll(
+                                    selectedPaths,
+                                    text,
+                                    customerCallType,
+                                    setCheckConfirmStatus(spinnerFilterItem));
+            } else {
+                if (unknownStatus)
+                    return CustomerPathViewManager
+                            .getAllWithUnknownVisitStatus(
+                                    selectedPaths,
+                                    setCheckConfirmStatus(spinnerFilterItem));
+                else
+                    return CustomerPathViewManager
+                            .getAll(
+                                    selectedPaths,
+                                    customerCallType,
+                                    setCheckConfirmStatus(spinnerFilterItem));
+            }
+        }
+    }
+    //---------------------------------------------------------------------------------------------- createFiltersQuery
+
+
+    //---------------------------------------------------------------------------------------------- getRepository
+    @NonNull
+    @Override
+    protected CustomerPathViewModelRepository getRepository() {
+        return new CustomerPathViewModelRepository();
+    }
+    //---------------------------------------------------------------------------------------------- getRepository
+
+
+    /**
+     * لیست مشتریان Adapter
+     * row_coustomer_multipan layout
+     */
+    //---------------------------------------------------------------------------------------------- createListItemViewHolder
+    @Override
+    public BaseViewHolder<CustomerPathViewModel> createListItemViewHolder(
+            ViewGroup parent,
+            int viewType) {
+        if (multipan) {
+            View view = LayoutInflater
+                    .from(parent.getContext())
+                    .inflate(R.layout.row_customer_multipan, parent, false);
+            return new CustomerSummaryMultipanViewHolder(
+                    view,
+                    getAdapter(),
+                    backOfficeType);
+        } else {
+            View view = LayoutInflater
+                    .from(parent.getContext())
+                    .inflate(R.layout.row_customer, parent, false);
+            return new CustomerSummaryViewHolder(
+                    view,
+                    getAdapter(),
+                    backOfficeType);
+        }
+    }
+    //---------------------------------------------------------------------------------------------- createListItemViewHolder
+
+
+    //---------------------------------------------------------------------------------------------- onActivityCreated
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        multipan = getResources().getBoolean(R.bool.multipane);
+    }
+    //---------------------------------------------------------------------------------------------- onActivityCreated
+
+
+    //---------------------------------------------------------------------------------------------- refreshCustomerCalls
+    protected void refreshCustomerCalls() {
+        CustomerSummaryMultipanViewHolder.calls =
+                new CustomerCallManager(requireContext())
+                        .getItems(new Query().from(CustomerCall.CustomerCallTbl));
+    }
+    //---------------------------------------------------------------------------------------------- refreshCustomerCalls
+
+
+    /**
+     * بارکد سرچ اسکن کد بارکد و برگشت کد بارکد  در کلاس
+     * ExtendedListFragment و چک در onResume() ExtendedListFragment
+     */
+    //---------------------------------------------------------------------------------------------- onClick
+    private void onClick(View v) {
+        if (getActivity() == null) return;
+        CustomerBarcodeManager customerBarcodeManager =
+                new CustomerBarcodeManager(getActivity());
+        customerBarcodeManager.readBarcode();
+    }
+    //---------------------------------------------------------------------------------------------- onClick
+
+
+    //---------------------------------------------------------------------------------------------- cancelTour
+    private void cancelTour(Context context) {
+        startProgress(R.string.please_wait, R.string.canceling_tour);
+        TourManager tourManager = new TourManager(getContext());
+        TourModel tourModel = tourManager.loadTour();
+        if (tourModel != null && tourModel.IsVirtual) {
+            tourManager.cancelVirtualTour();
+            finishProgress();
+            MainVaranegarActivity activity = getVaranegarActvity();
+            if (activity != null && !activity.isFinishing() && activity.isVisible()) {
+                TourReportFragment fragment = getProfileFragment();
+                activity.putFragment(fragment);
+            }
+        } else {
+            PingApi pingApi = new PingApi();
+            pingApi.refreshBaseServerUrl(context, new PingApi.PingCallback() {
+                @Override
+                public void done(String ipAddress) {
+                    MainVaranegarActivity activity = getVaranegarActvity();
+                    if (activity != null && !activity.isFinishing()) {
+                        tourManager.cancelTour(new TourManager.TourCallBack() {
+                            @Override
+                            public void onSuccess() {
+                                finishProgress();
+                                MainVaranegarActivity activity = getVaranegarActvity();
+                                if (activity != null &&
+                                        !activity.isFinishing() &&
+                                        activity.isVisible()) {
+                                    TourReportFragment fragment = getProfileFragment();
+                                    activity.putFragment(fragment);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(String error) {
+                                finishProgress();
+                                MainVaranegarActivity activity = getVaranegarActvity();
+                                if (activity != null && !activity.isFinishing()) {
+                                    CuteMessageDialog dialog = new CuteMessageDialog(activity);
+                                    dialog.setCancelable(false);
+                                    dialog.setMessage(error);
+                                    dialog.setTitle(R.string.error);
+                                    dialog.setIcon(Icon.Error);
+                                    dialog.setPositiveButton(R.string.ok,
+                                            view -> refreshGetOldInvoice());
+                                    dialog.show();
+                                }
+                            }
+
+                            @Override
+                            public void onProgressChanged(String progress) {
+
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void failed() {
+                    finishProgress();
+                    MainVaranegarActivity activity = getVaranegarActvity();
+                    if (activity != null && !activity.isFinishing()) {
+                        CuteMessageDialog dialog = new CuteMessageDialog(activity);
+                        dialog.setCancelable(false);
+                        dialog.setMessage(R.string.error_connecting_to_server);
+                        dialog.setTitle(R.string.error);
+                        dialog.setIcon(Icon.Error);
+                        dialog.setPositiveButton(R.string.ok, view -> refreshGetOldInvoice());
+                        dialog.show();
+                    }
+                }
+            });
+        }
+    }
+    //---------------------------------------------------------------------------------------------- cancelTour
+
+
+    //---------------------------------------------------------------------------------------------- wipeOldPriceData
+    private void wipeOldPriceData() {
+        new Thread() {
+            @Override
+            public void run() {
+                Context context = getContext();
+                if (context != null) {
+                    SharedPreferences sharedPreferences =
+                            context.getSharedPreferences(
+                                    "DATA_RECOVERY", Context.MODE_PRIVATE);
+                    long lastClearDate =
+                            sharedPreferences.getLong("Last_Clear_Date", 0);
+                    if (lastClearDate == 0 ||
+                            ((new Date().getTime() - lastClearDate) / 1000) > 3600 * 24)
+                        PriceUpdateFlow.clearAdditionalData(context);
+                }
+            }
+        }.start();
+    }
+    //---------------------------------------------------------------------------------------------- wipeOldPriceData
+
+
+    //---------------------------------------------------------------------------------------------- refreshGetOldInvoice
+    private void refreshGetOldInvoice() {
+        SysConfigManager sysConfigManager = new SysConfigManager(getContext());
+        SysConfigModel sysConfigModel =
+                sysConfigManager.read(
+                        ConfigKey.IgnoreOldInvoice, SysConfigManager.local);
+        SysConfigModel firstTimeSysConfigModel =
+                sysConfigManager.read(
+                        ConfigKey.FirstTimeAfterGetTour, SysConfigManager.local);
+        if (!SysConfigManager.compare(sysConfigModel, true) ||
+                SysConfigManager.compare(firstTimeSysConfigModel, true)) {
+            SysConfigModel DownloadOldInvoicePolicySysConfigModel =
+                    sysConfigManager
+                            .read(ConfigKey.DownloadOldInvoicePolicy, SysConfigManager.local);
+            boolean onlyDiscount = SysConfigManager.compare(firstTimeSysConfigModel, true) &&
+                    !SysConfigManager.compare(DownloadOldInvoicePolicySysConfigModel, true);
+            getOldInvoices(firstTimeSysConfigModel, onlyDiscount, sysConfigManager);
+        }
+    }
+    //---------------------------------------------------------------------------------------------- refreshGetOldInvoice
+
+
+    //---------------------------------------------------------------------------------------------- getOldInvoices
+    private void getOldInvoices(SysConfigModel firstTime,
+                                boolean onlyDiscount,
+                                final SysConfigManager sysConfigManager) {
+        if (SysConfigManager.compare(firstTime, true)) {
+            updateCustomerOldInvoices(true, onlyDiscount);
+        } else {
+            UpdateManager updateManager = new UpdateManager(getContext());
+            Date oldInvoiceDate = updateManager.getLog(UpdateKey.CustomerOldInvoice);
+            Date tourStartDate = updateManager.getLog(UpdateKey.TourStartTime);
+            if (tourStartDate.after(oldInvoiceDate)) {
+                final CuteMessageDialog dialog =
+                        new CuteMessageDialog(requireContext());
+                dialog.setIcon(Icon.Alert);
+                dialog.setMessage(R.string.do_you_update_old_invoices);
+                dialog.setPositiveButton(R.string.yes, view ->
+                        updateCustomerOldInvoices(false, false));
+                dialog.setNegativeButton(R.string.no, view -> {
+                    try {
+                        sysConfigManager.save(
+                                ConfigKey.IgnoreOldInvoice,
+                                "True",
+                                SysConfigManager.local);
+                    } catch (Exception e) {
+                        Timber.e(e);
+                    }
+                });
+                dialog.show();
+            }
+        }
+    }
+    //---------------------------------------------------------------------------------------------- getOldInvoices
+
+
+    //---------------------------------------------------------------------------------------------- isLowMemory
+    private Boolean isLowMemory() {
+        try {
+            ActivityManager activityManager =
+                    (ActivityManager) requireContext()
+                            .getSystemService(ACTIVITY_SERVICE);
+            ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
+            activityManager.getMemoryInfo(memoryInfo);
+            return memoryInfo.lowMemory;
+        } catch (Error e) {
+            return true;
+        }
+    }
+    //---------------------------------------------------------------------------------------------- isLowMemory
+
+
+    //---------------------------------------------------------------------------------------------- updateCustomerOldInvoices
     private void updateCustomerOldInvoices(final boolean firstTime, final boolean onlyDiscount) {
         final MainVaranegarActivity activity = getVaranegarActvity();
         if (activity == null || activity.isFinishing())
@@ -919,101 +1162,10 @@ public abstract class CustomersFragment
             }
         });
     }
+    //---------------------------------------------------------------------------------------------- updateCustomerOldInvoices
 
-    @Override
-    @Nullable
-    protected VaranegarFragment onCreateContentFragment(
-            UUID selectedItem,
-            LayoutInflater inflater,
-            @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
-        SysConfigManager sysConfigManager = new SysConfigManager(getContext());
-        SysConfigModel deviceWorkingHour =
-                sysConfigManager.read(DeviceWorkingHour, SysConfigManager.cloud);
-        if (SysConfigManager.compare(deviceWorkingHour, true)) {
-            SysConfigModel startConfig =
-                    sysConfigManager.read(StartDeviceWorkingHour, SysConfigManager.cloud);
-            SysConfigModel endConfig =
-                    sysConfigManager.read(EndDeviceWorkingHour, SysConfigManager.cloud);
-            Date startTime = SysConfigManager.getDateFromTime(startConfig, null);
-            Date endTime = SysConfigManager.getDateFromTime(endConfig, null);
-            if ((startTime != null && new Date().before(startTime)) ||
-                    (endTime != null && new Date().after(endTime))) {
-                if (getContext() != null) {
-                    CuteMessageDialog dialog = new CuteMessageDialog(getContext());
-                    dialog.setTitle(R.string.error);
-                    dialog.setMessage(R.string.you_are_not_allowed_at_this_time);
-                    dialog.setIcon(Icon.Error);
-                    dialog.setPositiveButton(R.string.close, null);
-                    dialog.show();
-                    return null;
-                }
-            }
-        }
-        if (!new TourManager(getContext()).isTourAvailable() && getContext() != null) {
-            CuteMessageDialog dialog = new CuteMessageDialog(getContext());
-            dialog.setTitle(R.string.terrible_failure);
-            dialog.setMessage(R.string.tour_is_not_available);
-            dialog.setIcon(Icon.Error);
-            dialog.setPositiveButton(R.string.close, view -> {
-                MainVaranegarActivity activity = getVaranegarActvity();
-                if (activity != null)
-                    activity.finish();
-            });
-            dialog.show();
-            return null;
-        }
 
-        if (getContext() != null) {
-            UserModel usermodel = UserManager.readFromFile(getContext());
-            if (usermodel != null) {
-                SysConfigModel sysConfigModel =
-                        sysConfigManager.read(ConfigKey.ViewCustomerTargetReport, SysConfigManager.cloud);
-                List<TargetMasterModel> targets =
-                        new TargetMasterManager(getContext())
-                                .getItems(TargetMasterManager
-                                        .getFilterTargets(usermodel.UniqueId, selectedItem));
-
-                if (SysConfigManager.compare(sysConfigModel, true)) {
-                    if (targets.size() > 0) {
-                        if (targets.size() == 1) {
-                            return getContentTargetDetailFragment();
-                        } else {
-                            return getContentTargetFragment();
-                        }
-                    } else {
-                        return getContentFragment(selectedItem);
-                    }
-                } else
-                    return getContentFragment(selectedItem);
-            }
-        }
-        return null;
-    }
-
-    /**
-     * بارکد سرچ اسکن کد بارکد و برگشت کد بارکد  در کلاس
-     * ExtendedListFragment و چک در onResume() ExtendedListFragment
-     */
-    private void onClick(View v) {
-        if (getActivity() == null) return;
-        CustomerBarcodeManager customerBarcodeManager =
-                new CustomerBarcodeManager(getActivity());
-        customerBarcodeManager.readBarcode();
-    }
-
-    static class StatusFilter {
-        public boolean unknownStatus = false;
-        public ArrayList<CustomerCallType> customerCallType;
-        public String name;
-
-        @NonNull
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
-
+    //---------------------------------------------------------------------------------------------- setupAdvancedFilter
     protected boolean setupAdvancedFilter(PairedItemsSpinner<StatusFilter> spinner) {
         if (getContext() == null) return false;
         StatusFilter filter0 = new StatusFilter();
@@ -1107,25 +1259,10 @@ public abstract class CustomersFragment
         spinner.setup(getChildFragmentManager(), filterList, null);
         return true;
     }
+    //---------------------------------------------------------------------------------------------- setupAdvancedFilter
 
-    protected abstract TourReportFragment getProfileFragment();
 
-    protected abstract VaranegarFragment getContentFragment(UUID selectedItem);
-
-    protected abstract VaranegarFragment getContentTargetFragment();
-
-    protected abstract VaranegarFragment getContentTargetDetailFragment();
-
-    public static Boolean setCheckConfirmStatus(@Nullable Object spinnerFilterItem) {
-        if (VaranegarApplication.is(VaranegarApplication.AppId.Contractor))
-            return null;
-        else
-            return !(spinnerFilterItem != null &&
-                    ((StatusFilter) spinnerFilterItem).customerCallType != null &&
-                    ((StatusFilter) spinnerFilterItem).customerCallType.contains(
-                            CustomerCallType.IncompleteOperation));
-    }
-
+    //---------------------------------------------------------------------------------------------- dismissProgressDialog
     private void dismissProgressDialog(ProgressDialog progressDialog) {
         if (progressDialog != null &&
                 progressDialog.isShowing() &&
@@ -1136,81 +1273,10 @@ public abstract class CustomersFragment
                 Timber.d(ex);
             }
     }
+    //---------------------------------------------------------------------------------------------- dismissProgressDialog
 
-    private void cancelTour(Context context) {
-        startProgress(R.string.please_wait, R.string.canceling_tour);
-        TourManager tourManager = new TourManager(getContext());
-        TourModel tourModel = tourManager.loadTour();
-        if (tourModel != null && tourModel.IsVirtual) {
-            tourManager.cancelVirtualTour();
-            finishProgress();
-            MainVaranegarActivity activity = getVaranegarActvity();
-            if (activity != null && !activity.isFinishing() && activity.isVisible()) {
-                TourReportFragment fragment = getProfileFragment();
-                activity.putFragment(fragment);
-            }
-        } else {
-            PingApi pingApi = new PingApi();
-            pingApi.refreshBaseServerUrl(context, new PingApi.PingCallback() {
-                @Override
-                public void done(String ipAddress) {
-                    MainVaranegarActivity activity = getVaranegarActvity();
-                    if (activity != null && !activity.isFinishing()) {
-                        tourManager.cancelTour(new TourManager.TourCallBack() {
-                            @Override
-                            public void onSuccess() {
-                                finishProgress();
-                                MainVaranegarActivity activity = getVaranegarActvity();
-                                if (activity != null &&
-                                        !activity.isFinishing() &&
-                                        activity.isVisible()) {
-                                    TourReportFragment fragment = getProfileFragment();
-                                    activity.putFragment(fragment);
-                                }
-                            }
 
-                            @Override
-                            public void onFailure(String error) {
-                                finishProgress();
-                                MainVaranegarActivity activity = getVaranegarActvity();
-                                if (activity != null && !activity.isFinishing()) {
-                                    CuteMessageDialog dialog = new CuteMessageDialog(activity);
-                                    dialog.setCancelable(false);
-                                    dialog.setMessage(error);
-                                    dialog.setTitle(R.string.error);
-                                    dialog.setIcon(Icon.Error);
-                                    dialog.setPositiveButton(R.string.ok,
-                                            view -> refreshGetOldInvoice());
-                                    dialog.show();
-                                }
-                            }
-
-                            @Override
-                            public void onProgressChanged(String progress) {
-
-                            }
-                        });
-                    }
-                }
-
-                @Override
-                public void failed() {
-                    finishProgress();
-                    MainVaranegarActivity activity = getVaranegarActvity();
-                    if (activity != null && !activity.isFinishing()) {
-                        CuteMessageDialog dialog = new CuteMessageDialog(activity);
-                        dialog.setCancelable(false);
-                        dialog.setMessage(R.string.error_connecting_to_server);
-                        dialog.setTitle(R.string.error);
-                        dialog.setIcon(Icon.Error);
-                        dialog.setPositiveButton(R.string.ok, view -> refreshGetOldInvoice());
-                        dialog.show();
-                    }
-                }
-            });
-        }
-    }
-
+    //---------------------------------------------------------------------------------------------- handleDiscountError
     private void handleDiscountError(String errorMessage, final boolean onlyDiscount) {
         final MainVaranegarActivity activity = getVaranegarActvity();
         if (activity != null && !activity.isFinishing()) {
@@ -1227,7 +1293,10 @@ public abstract class CustomersFragment
             dialog.show();
         }
     }
+    //---------------------------------------------------------------------------------------------- handleDiscountError
 
+
+    //---------------------------------------------------------------------------------------------- saveFirstTimeAfterGetTour
     private void saveFirstTimeAfterGetTour(Context context, boolean getDiscount) {
         try {
             SysConfigManager sysConfigManager = new SysConfigManager(context);
@@ -1246,23 +1315,34 @@ public abstract class CustomersFragment
             e.printStackTrace();
         }
     }
+    //---------------------------------------------------------------------------------------------- saveFirstTimeAfterGetTour
 
-    private void refreshGetOldInvoice() {
-        SysConfigManager sysConfigManager = new SysConfigManager(getContext());
-        SysConfigModel sysConfigModel =
-                sysConfigManager.read(
-                        ConfigKey.IgnoreOldInvoice, SysConfigManager.local);
-        SysConfigModel firstTimeSysConfigModel =
-                sysConfigManager.read(
-                        ConfigKey.FirstTimeAfterGetTour, SysConfigManager.local);
-        if (!SysConfigManager.compare(sysConfigModel, true) ||
-                SysConfigManager.compare(firstTimeSysConfigModel, true)) {
-            SysConfigModel DownloadOldInvoicePolicySysConfigModel =
-                    sysConfigManager
-                            .read(ConfigKey.DownloadOldInvoicePolicy, SysConfigManager.local);
-            boolean onlyDiscount = SysConfigManager.compare(firstTimeSysConfigModel, true) &&
-                    !SysConfigManager.compare(DownloadOldInvoicePolicySysConfigModel, true);
-            getOldInvoices(firstTimeSysConfigModel, onlyDiscount, sysConfigManager);
+
+    //---------------------------------------------------------------------------------------------- setCheckConfirmStatus
+    public static Boolean setCheckConfirmStatus(@Nullable Object spinnerFilterItem) {
+        if (VaranegarApplication.is(VaranegarApplication.AppId.Contractor))
+            return null;
+        else
+            return !(spinnerFilterItem != null &&
+                    ((StatusFilter) spinnerFilterItem).customerCallType != null &&
+                    ((StatusFilter) spinnerFilterItem).customerCallType.contains(
+                            CustomerCallType.IncompleteOperation));
+    }
+    //---------------------------------------------------------------------------------------------- setCheckConfirmStatus
+
+
+    //---------------------------------------------------------------------------------------------- StatusFilter
+    static class StatusFilter {
+        public boolean unknownStatus = false;
+        public ArrayList<CustomerCallType> customerCallType;
+        public String name;
+
+        @NonNull
+        @Override
+        public String toString() {
+            return name;
         }
     }
+    //---------------------------------------------------------------------------------------------- StatusFilter
+
 }

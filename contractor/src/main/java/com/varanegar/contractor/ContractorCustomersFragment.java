@@ -25,7 +25,7 @@ import com.varanegar.vaslibrary.model.call.CustomerCallOrderModel;
 import com.varanegar.vaslibrary.model.call.CustomerCallOrderPreviewModel;
 import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.model.emphaticproductcount.EmphaticProductCountModel;
-import com.varanegar.vaslibrary.ui.fragment.CustomersFragment;
+import com.varanegar.vaslibrary.ui.fragment.clean.CustomersFragment;
 import com.varanegar.vaslibrary.ui.fragment.TourReportFragment;
 import com.varanegar.vaslibrary.ui.fragment.order.CustomerSaveOrderFragment;
 

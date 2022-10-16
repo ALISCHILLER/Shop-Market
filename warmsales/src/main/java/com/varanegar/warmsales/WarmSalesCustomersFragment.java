@@ -5,7 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 
 import com.varanegar.framework.base.VaranegarFragment;
-import com.varanegar.vaslibrary.ui.fragment.CustomersFragment;
+import com.varanegar.vaslibrary.ui.fragment.clean.CustomersFragment;
 import com.varanegar.vaslibrary.ui.fragment.TourReportFragment;
 
 import java.util.UUID;

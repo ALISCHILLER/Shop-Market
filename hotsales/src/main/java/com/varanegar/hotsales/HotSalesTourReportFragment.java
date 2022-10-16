@@ -2,7 +2,7 @@ package com.varanegar.hotsales;
 
 import com.varanegar.hotsales.fragment.HotSalesCustomersFragment;
 import com.varanegar.vaslibrary.sync.SyncService;
-import com.varanegar.vaslibrary.ui.fragment.CustomersFragment;
+import com.varanegar.vaslibrary.ui.fragment.clean.CustomersFragment;
 import com.varanegar.vaslibrary.ui.fragment.TourReportFragment;
 
 /**

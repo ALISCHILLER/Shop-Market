@@ -1,7 +1,7 @@
 package com.varanegar.warmsales;
 
 import com.varanegar.vaslibrary.sync.SyncService;
-import com.varanegar.vaslibrary.ui.fragment.CustomersFragment;
+import com.varanegar.vaslibrary.ui.fragment.clean.CustomersFragment;
 import com.varanegar.vaslibrary.ui.fragment.TourReportFragment;
 
 public class WarmTourReportFragment extends TourReportFragment {

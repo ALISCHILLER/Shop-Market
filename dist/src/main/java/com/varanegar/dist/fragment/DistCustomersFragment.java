@@ -2,13 +2,11 @@ package com.varanegar.dist.fragment;
 
 import android.os.Bundle;
 import androidx.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.ViewGroup;
 
 import com.varanegar.dist.DistDrawerAdapter;
 import com.varanegar.dist.DistTourReportFragment;
 import com.varanegar.framework.base.VaranegarFragment;
-import com.varanegar.vaslibrary.ui.fragment.CustomersFragment;
+import com.varanegar.vaslibrary.ui.fragment.clean.CustomersFragment;
 import com.varanegar.vaslibrary.ui.fragment.TourReportFragment;
 
 import java.util.UUID;

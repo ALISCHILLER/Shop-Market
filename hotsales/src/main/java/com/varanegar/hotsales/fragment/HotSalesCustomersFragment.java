@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 import com.varanegar.framework.base.VaranegarFragment;
 import com.varanegar.hotsales.HotSalesTourReportFragment;
 import com.varanegar.hotsales.ui.HotSalesDrawerAdapter;
-import com.varanegar.vaslibrary.ui.fragment.CustomersFragment;
+import com.varanegar.vaslibrary.ui.fragment.clean.CustomersFragment;
 import com.varanegar.vaslibrary.ui.fragment.TourReportFragment;
 
 import java.util.UUID;

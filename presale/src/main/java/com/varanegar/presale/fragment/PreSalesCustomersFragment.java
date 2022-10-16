@@ -7,7 +7,7 @@ import com.varanegar.framework.base.VaranegarFragment;
 import com.varanegar.presale.ui.PreSalesDrawerAdapter;
 import com.varanegar.presale.ui.PreSalesTourReportFragment;
 import com.varanegar.vaslibrary.ui.fragment.TourReportFragment;
-import com.varanegar.vaslibrary.ui.fragment.CustomersFragment;
+import com.varanegar.vaslibrary.ui.fragment.clean.CustomersFragment;
 
 import java.util.UUID;
 
