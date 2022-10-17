@@ -210,11 +210,11 @@ public class SupervisorSettingDialogFragment extends CuteDialogWithToolbar {
         sysConfigManager = new SysConfigManager(getContext());
         SysConfigModel serverAddress = sysConfigManager.read(ConfigKey.ValidServerAddress, SysConfigManager.local);
         if (serverAddress != null) {
-            ipPairedItemsEditable.setValue(serverAddress.Value);
+            //ipPairedItemsEditable.setValue(serverAddress.Value);
         }
         SysConfigModel localServerAddress = sysConfigManager.read(ConfigKey.LocalServerAddress, SysConfigManager.local);
         if (localServerAddress != null) {
-            localIpPairedItemsEditable.setValue(localServerAddress.Value);
+            //localIpPairedItemsEditable.setValue(localServerAddress.Value);
         }
         getButton.setOnClickListener(new View.OnClickListener() {
             @Override
