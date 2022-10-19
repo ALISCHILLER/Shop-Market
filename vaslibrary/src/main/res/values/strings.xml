@@ -683,6 +683,7 @@
     <string name="please_insert_id">لطفا شماره تنظمات را وارد نمایید</string>
     <string name="free_reason_name">علت رایگان</string>
     <string name="download">دانلود</string>
+    <string name="iUnderstood">متوجه شدم</string>
     <string name="album_not_found_please_download">اطلاعات آلبوم کالا موجود نیست. لطفا آلبوم کالا را دریافت نمایید</string>
     <string name="order_request">درخواست فروش</string>
     <string name="no_payment_type_no_order_type">هیچ نوع درخواست و نحوه پرداختی تعریف نشده است</string>
@@ -740,6 +741,7 @@
     <string name="error_connecting_to_server">خطا در برقراری ارتباط با سرور</string>
     <string name="no_tour_rest">تور یافت نشد در سرور</string>
     <string name="new_version_exist">نسخه جدید برنامه موجود است</string>
+    <string name="newFeatures">تغییرات جدید برنامه</string>
     <string name="please_download_the_newest_version">لطفا جدیدترین نسخه برنامه را دریافت نمایید</string>
     <string name="cancel_and_get_tour">دریافت تور</string>
     <string name="error_downloading_apk">خطا در دریافت فایل نصبی</string>

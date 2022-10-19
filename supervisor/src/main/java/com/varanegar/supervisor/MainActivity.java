@@ -3,9 +3,12 @@ package com.varanegar.supervisor;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import com.varanegar.framework.network.gson.VaranegarGsonBuilder;
+import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
+import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.framework.util.jobscheduler.JobSchedulerService;
 import com.varanegar.supervisor.firebase.MyFirebaseMessagingService;
 import com.varanegar.supervisor.fragment.list_notification_Fragment.ListNotification_Fragment;
@@ -18,41 +21,29 @@ import com.varanegar.vaslibrary.base.VasActivity;
 import com.varanegar.vaslibrary.manager.UserManager;
 import com.varanegar.vaslibrary.model.user.UserModel;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
    * Created by A.Torabi on 6/7/2018.
  */
 
 public class MainActivity extends VasActivity {
-    @Override
-    protected void onStart() {
-        super.onStart();
-        JobSchedulerService.start(this, R.mipmap.ic_launcher, SupervisorJobScheduler.class);
-    }
 
+
+    //---------------------------------------------------------------------------------------------- onCreate
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         boolean firstCreation = false;
         if (savedInstanceState != null)
             firstCreation = savedInstanceState.getBoolean("firstCreation", false);
-        if (!firstCreation) {
-            UserModel userModel = UserManager.readFromFile(this);
-
-            List<VisitorModel>  visitorModels = new VisitorManager(this).getAll();
-
-            if (userModel == null) {
-                SupervisorLoginFragment loginFragment = new SupervisorLoginFragment();
-                pushFragment(loginFragment);
-            } else if (visitorModels.size() == 0) {
-                Get_Tour_Fragment get_tour_fragment=new Get_Tour_Fragment();
-                pushFragment(get_tour_fragment);
-            } else {
-                MainFragment mainFragment = new MainFragment();
-                pushFragment(mainFragment);
-            }
-        }
+        if (!firstCreation)
+            checkVersionIsUpdated();
 
         String newString;
         if (savedInstanceState == null) {
@@ -92,15 +83,106 @@ public class MainActivity extends VasActivity {
                         }
                     });
     }
+    //---------------------------------------------------------------------------------------------- onCreate
 
 
+    //---------------------------------------------------------------------------------------------- checkVersionIsUpdated
+    private void checkVersionIsUpdated() {
+        try {
+            int currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+            SharedPreferences sharedPreferences = getApplicationContext()
+                    .getSharedPreferences("ApplicationVersion", Context.MODE_PRIVATE);
+            int saveVersion = sharedPreferences.getInt("SaveVersion", 0);
+            if (currentVersion != saveVersion) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt("SaveVersion", currentVersion);
+                editor.apply();
+                showDialogNewFeatures();
+            } else
+                checkUserLogin();
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            checkUserLogin();
+        }
+
+    }
+    //---------------------------------------------------------------------------------------------- checkVersionIsUpdated
+
+
+
+    //---------------------------------------------------------------------------------------------- showDialogNewFeatures
+    private void showDialogNewFeatures() {
+        StringBuilder text = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(getAssets().open("newFeature.txt")))) {
+            String mLine;
+            while ((mLine = reader.readLine()) != null) {
+                text.append(mLine);
+                text.append('\n');
+            }
+            CuteMessageDialog dialog = new CuteMessageDialog(this);
+            dialog.setIcon(Icon.Info);
+            dialog.setCancelable(false);
+            dialog.setTitle(com.varanegar.vaslibrary.R.string.newFeatures);
+            dialog.setMessage(text.toString());
+            dialog.setPositiveButton(com.varanegar.vaslibrary.R.string.iUnderstood, view -> checkUserLogin());
+            dialog.show();
+        } catch (IOException e) {
+            Timber.e("Error reading file new feature " + e.getMessage());
+            checkUserLogin();
+        }
+    }
+    //---------------------------------------------------------------------------------------------- showDialogNewFeatures
+
+
+
+
+    //---------------------------------------------------------------------------------------------- checkUserLogin
+    private void checkUserLogin() {
+        UserModel userModel = UserManager.readFromFile(this);
+        if (userModel == null)
+            pushFragment(new SupervisorLoginFragment());
+        else
+            checkVisitors();
+    }
+    //---------------------------------------------------------------------------------------------- checkUserLogin
+
+
+
+    //---------------------------------------------------------------------------------------------- checkVisitors
+    private void checkVisitors() {
+        List<VisitorModel>  visitorModels = new VisitorManager(this).getAll();
+        if (visitorModels.size() == 0) {
+            Get_Tour_Fragment get_tour_fragment=new Get_Tour_Fragment();
+            pushFragment(get_tour_fragment);
+        } else {
+            MainFragment mainFragment = new MainFragment();
+            pushFragment(mainFragment);
+        }
+    }
+    //---------------------------------------------------------------------------------------------- checkVisitors
+
+
+    //---------------------------------------------------------------------------------------------- onStart
+    @Override
+    protected void onStart() {
+        super.onStart();
+        JobSchedulerService.start(this, R.mipmap.ic_launcher, SupervisorJobScheduler.class);
+    }
+    //---------------------------------------------------------------------------------------------- onStart
+
+
+    //---------------------------------------------------------------------------------------------- onSaveInstanceState
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean("firstCreation", true);
 
     }
+    //---------------------------------------------------------------------------------------------- onSaveInstanceState
 
+
+    //---------------------------------------------------------------------------------------------- onDestroy
     @Override
     protected void onDestroy() {
         SharedPreferences editor = getSharedPreferences("KeyPairBoolData", Context.MODE_PRIVATE);
@@ -108,5 +190,6 @@ public class MainActivity extends VasActivity {
         editor.edit().putString("visitorBoolData", json).commit();
         super.onDestroy();
     }
+    //---------------------------------------------------------------------------------------------- onDestroy
 
 }
