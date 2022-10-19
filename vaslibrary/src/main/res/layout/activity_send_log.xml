@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <FrameLayout
+        android:id="@+id/frame1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="50dp">
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/gifImageView2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/under_construction"/>
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/textViewError"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/frame1"
+        android:gravity="center"
+        android:text="@string/crashApp"
+        android:textStyle="bold"
+        style="@style/Base.TextAppearance.AppCompat.Title"/>
+
+
+
+    <TextView
+        android:id="@+id/textViewWaiting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        app:layout_constraintTop_toBottomOf="@id/textViewError"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="@string/inProgressSendReport"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:background="@color/red_error"
+        style="@style/Base.TextAppearance.AppCompat.Title"/>
+
+    <Button
+        android:id="@+id/buttonClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        app:layout_constraintTop_toBottomOf="@id/textViewError"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp"
+        android:background="@color/blue"
+        android:text="@string/closeApp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        style="@style/Base.TextAppearance.AppCompat.Title"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

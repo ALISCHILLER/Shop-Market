@@ -742,6 +742,8 @@
     <string name="no_tour_rest">تور یافت نشد در سرور</string>
     <string name="new_version_exist">نسخه جدید برنامه موجود است</string>
     <string name="newFeatures">تغییرات جدید برنامه</string>
+    <string name="closeApp">بستن برنامه</string>
+    <string name="crashApp">متاسفانه خطایی در برنامه رخ داده \n تیم پشتیبانی بزودی خطا را پیگیری میکند \n لطفا بعد از ارسال خطا بصورت خودکار، دوباره وارد برنامه شوید</string>
     <string name="please_download_the_newest_version">لطفا جدیدترین نسخه برنامه را دریافت نمایید</string>
     <string name="cancel_and_get_tour">دریافت تور</string>
     <string name="error_downloading_apk">خطا در دریافت فایل نصبی</string>
@@ -1021,6 +1023,7 @@
     <string name="yes_i_take_responsibility">بله مسئولیت را می پذیرم</string>
     <string name="ready_ro_send">آماده ارسال</string>
     <string name="in_progress">در حال ارسال</string>
+    <string name="inProgressSendReport">در حال ارسال خطا به سرور</string>
     <string name="finished">به اتمام رسیده</string>
     <string name="deactivated">غیرفعال</string>
     <string name="all_orders_and_data_will_be_deleted">تمام سفارش ها و اطلاعات پاک خواهد شد!</string>
