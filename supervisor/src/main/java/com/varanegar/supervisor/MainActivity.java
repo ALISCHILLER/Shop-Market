@@ -1,7 +1,6 @@
 package com.varanegar.supervisor;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -12,8 +11,6 @@ import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.framework.util.jobscheduler.JobSchedulerService;
 import com.varanegar.supervisor.firebase.MyFirebaseMessagingService;
 import com.varanegar.supervisor.fragment.list_notification_Fragment.ListNotification_Fragment;
-import com.varanegar.supervisor.fragment.menuTools_Fragment.MenuTools_Fragmnet;
-import com.varanegar.supervisor.fragment.news_fragment.News_Fragment;
 import com.varanegar.supervisor.getTour_fragment.Get_Tour_Fragment;
 import com.varanegar.supervisor.model.VisitorManager;
 import com.varanegar.supervisor.model.VisitorModel;
@@ -187,7 +184,7 @@ public class MainActivity extends VasActivity {
     protected void onDestroy() {
         SharedPreferences editor = getSharedPreferences("KeyPairBoolData", Context.MODE_PRIVATE);
         String json = VaranegarGsonBuilder.build().create().toJson(null);
-        editor.edit().putString("visitorBoolData", json).commit();
+        editor.edit().putString("visitorBoolData", json).apply();
         super.onDestroy();
     }
     //---------------------------------------------------------------------------------------------- onDestroy

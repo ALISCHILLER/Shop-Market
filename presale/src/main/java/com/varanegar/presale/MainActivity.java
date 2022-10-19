@@ -1,16 +1,9 @@
 package com.varanegar.presale;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-
-import androidx.core.content.FileProvider;
-
-import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.framework.util.jobscheduler.JobSchedulerService;
@@ -24,10 +17,7 @@ import com.varanegar.vaslibrary.base.VasActivity;
 import com.varanegar.vaslibrary.manager.UserManager;
 import com.varanegar.vaslibrary.manager.tourmanager.TourManager;
 import com.varanegar.vaslibrary.model.user.UserModel;
-import com.varanegar.vaslibrary.webapi.appversion.ApkDownloadCallBack;
-
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
