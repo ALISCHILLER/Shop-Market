@@ -28,10 +28,9 @@ import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.model.Produ
 import com.varanegar.vaslibrary.ui.report.report_new.webApi.ReportApi;
 import com.varanegar.vaslibrary.ui.report.review.BaseReviewReportFragment;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
-
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import okhttp3.Request;
@@ -73,7 +72,7 @@ public abstract class BaseInvoiceBalanceReportFragment<T extends ProductInvoiveB
     }
 
     protected UUID getDealerId() {
-        return UserManager.readFromFile(getContext()).UniqueId;
+        return Objects.requireNonNull(UserManager.readFromFile(getContext())).UniqueId;
     }
 
     protected String getStartDateString() {
@@ -102,7 +101,7 @@ public abstract class BaseInvoiceBalanceReportFragment<T extends ProductInvoiveB
 
     private void showErrorDialog(String error) {
         if (isResumed()) {
-            CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+            CuteMessageDialog dialog = new CuteMessageDialog(requireContext());
             dialog.setTitle(R.string.error);
             dialog.setMessage(error);
             dialog.setIcon(Icon.Error);
@@ -117,71 +116,42 @@ public abstract class BaseInvoiceBalanceReportFragment<T extends ProductInvoiveB
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_invoice_balance_report, container, false);
-        view.findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setupAdapter();
-            }
-        });
+        view.findViewById(R.id.buttonReport).setOnClickListener(view15 -> setupAdapter());
         startDatePairedItems = view.findViewById(R.id.start_date_item);
         endDatePairedItems = view.findViewById(R.id.end_date_item);
 
-        view.findViewById(R.id.start_calendar_image_view).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DateHelper.showDatePicker(getVaranegarActvity(), VasHelperMethods.getSysConfigLocale(getContext()), new DateHelper.OnDateSelected() {
-                    @Override
-                    public void run(Calendar calendar) {
-                        if (calendar.getTime().after(new Date())) {
-                            showErrorDialog(getString(R.string.date_could_not_be_after_now));
-                            return;
-                        }
-                        if (endDate != null && endDate.before(calendar.getTime())) {
-                            showErrorDialog(getString(R.string.end_date_could_not_be_before_start_date));
-                            return;
-                        }
-                        startDate = calendar.getTime();
-                        startDatePairedItems.setValue(DateHelper.toString
-                                (startDate, DateFormat.Date,
-                                        VasHelperMethods.getSysConfigLocale(getContext())));
-                    }
-                });
+        view.findViewById(R.id.start_calendar_image_view).setOnClickListener(view14 -> DateHelper.showDatePicker(Objects.requireNonNull(getVaranegarActvity()), VasHelperMethods.getSysConfigLocale(getContext()), calendar -> {
+            if (calendar.getTime().after(new Date())) {
+                showErrorDialog(getString(R.string.date_could_not_be_after_now));
+                return;
             }
-        });
-        view.findViewById(R.id.end_calendar_image_view).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DateHelper.showDatePicker(getVaranegarActvity(), VasHelperMethods.getSysConfigLocale(getContext()), new DateHelper.OnDateSelected() {
-                    @Override
-                    public void run(Calendar calendar) {
-                        if (calendar.getTime().after(new Date())) {
-                            showErrorDialog(getString(R.string.date_could_not_be_after_now));
-                            return;
-                        }
-                        if (startDate != null && startDate.after(calendar.getTime())) {
-                            showErrorDialog(getString(R.string.start_date_could_not_be_after_end_date));
-                            return;
-                        }
-                        endDate = calendar.getTime();
-                        endDatePairedItems.setValue(DateHelper.toString(endDate, DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext())));
-                    }
-                });
+            if (endDate != null && endDate.before(calendar.getTime())) {
+                showErrorDialog(getString(R.string.end_date_could_not_be_before_start_date));
+                return;
             }
-        });
+            startDate = calendar.getTime();
+            startDatePairedItems.setValue(DateHelper.toString
+                    (startDate, DateFormat.Date,
+                            VasHelperMethods.getSysConfigLocale(getContext())));
+        }));
+        view.findViewById(R.id.end_calendar_image_view).setOnClickListener(view13 ->
+                DateHelper.showDatePicker(Objects.requireNonNull(getVaranegarActvity()),
+                        VasHelperMethods.getSysConfigLocale(getContext()), calendar -> {
+            if (calendar.getTime().after(new Date())) {
+                showErrorDialog(getString(R.string.date_could_not_be_after_now));
+                return;
+            }
+            if (startDate != null && startDate.after(calendar.getTime())) {
+                showErrorDialog(getString(R.string.start_date_could_not_be_after_end_date));
+                return;
+            }
+            endDate = calendar.getTime();
+            endDatePairedItems.setValue(DateHelper.toString(endDate, DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext())));
+        }));
         reportView = view.findViewById(R.id.review_report_view);
         SimpleToolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setOnBackClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getVaranegarActvity().popFragment();
-            }
-        });
-        toolbar.setOnMenuClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getVaranegarActvity().openDrawer();
-            }
-        });
+        toolbar.setOnBackClickListener(view12 -> Objects.requireNonNull(getVaranegarActvity()).popFragment());
+        toolbar.setOnMenuClickListener(view1 -> Objects.requireNonNull(getVaranegarActvity()).openDrawer());
         toolbar.setTitle(getTitle());
         return view;
     }
@@ -192,13 +162,9 @@ public abstract class BaseInvoiceBalanceReportFragment<T extends ProductInvoiveB
             showErrorDialog(error);
             return;
         }
-//        if ((getEndDate().getTime() / 1000) - (getStartDate().getTime() / 1000) > 3600 * 24 * 30) {
-//            showErrorDialog(getString(R.string.time_span_should_be_smaller_than_a_month));
-//            return;
-//        }
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setTitle(R.string.please_wait);
-        progressDialog.setMessage(getContext().getString(R.string.downloading_data));
+        progressDialog.setMessage(requireContext().getString(R.string.downloading_data));
         progressDialog.show();
         ReportApi invoiceReportApi = new ReportApi(getContext());
         invoiceReportApi.runWebRequest(reportApi(), new WebCallBack<List<T>>() {

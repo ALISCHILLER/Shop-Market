@@ -28,7 +28,6 @@ import com.varanegar.vaslibrary.manager.UserManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.ui.report.report_new.customer_purchase_history_report.model.CustomerPurchaseHistoryViewModel;
-import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.model.InvoiveBalanceReportViewModel;
 import com.varanegar.vaslibrary.ui.report.report_new.webApi.ReportApi;
 import com.varanegar.vaslibrary.ui.report.review.BaseReviewReportFragment;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
@@ -37,6 +36,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.UUID;
 
 import okhttp3.Request;
@@ -48,8 +48,6 @@ public abstract class BaseCustomerPurchaseHistoryReportFragment <T extends Custo
     private ProgressDialog progressDialog;
     private Date startDate;
     private Date endDate;
-    private PairedItems startDatePairedItems;
-    private PairedItems endDatePairedItems;
 
     protected BaseReviewReportFragment.OnAdapterCallback onAdapterCallback;
 
@@ -78,32 +76,26 @@ public abstract class BaseCustomerPurchaseHistoryReportFragment <T extends Custo
     }
 
     protected UUID getDealerId() {
-        return UserManager.readFromFile(getContext()).UniqueId;
+        return Objects.requireNonNull(UserManager.readFromFile(getContext())).UniqueId;
     }
 
 
     protected String getCustomerUniqueId(){
-        CustomerModel customer = new CustomerModel();
-        customer = new CustomerManager(getContext()).getItem(UUID.fromString(getArguments().getString("ac2208bc-a990-4c28-bbfc-6f143a6aa9c2")));
-        return customer.CustomerCode ;
+        CustomerModel customer = new CustomerManager(getContext())
+                .getItem(UUID.fromString(requireArguments()
+                .getString("ac2208bc-a990-4c28-bbfc-6f143a6aa9c2")));
+        return Objects.requireNonNull(customer).CustomerCode ;
     }
 
     protected String getStartDateString() {
         JalaliCalendar calendar = new JalaliCalendar();
-        String date = calendar.get(Calendar.YEAR)+"/01/01";
-        return date;
+        return calendar.get(Calendar.YEAR)+"/01/01";
     }
 
     protected String getEndDateString() {
-//        JalaliCalendar calendar = new JalaliCalendar();
-//        String year= String.valueOf(calendar.get(Calendar.YEAR));
-//        String month= String.format(Locale.US,"%2d",calendar.get(Calendar.MONTH));
-//        String day=String.format(Locale.US,"%2d",calendar.get(Calendar.DAY_OF_MONTH));
-//        String date=year+"/"+month+"/"+day;
         Date d=new Date();
-        String date = DateHelper.toString(d, DateFormat.Date, Locale.getDefault());
 
-        return date;
+        return DateHelper.toString(d, DateFormat.Date, Locale.getDefault());
     }
 
     protected Date getStartDate() {
@@ -124,7 +116,7 @@ public abstract class BaseCustomerPurchaseHistoryReportFragment <T extends Custo
 
     private void showErrorDialog(String error) {
         if (isResumed()) {
-            CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+            CuteMessageDialog dialog = new CuteMessageDialog(requireContext());
             dialog.setTitle(R.string.error);
             dialog.setMessage(error);
             dialog.setIcon(Icon.Error);
@@ -139,79 +131,18 @@ public abstract class BaseCustomerPurchaseHistoryReportFragment <T extends Custo
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_invoice_balance_report, container, false);
-//        view.findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                setupAdapter();
-//            }
-//        });
-        startDatePairedItems = view.findViewById(R.id.start_date_item);
-        endDatePairedItems = view.findViewById(R.id.end_date_item);
+        PairedItems startDatePairedItems = view.findViewById(R.id.start_date_item);
+        PairedItems endDatePairedItems = view.findViewById(R.id.end_date_item);
         startDatePairedItems.setVisibility(View.GONE);
         endDatePairedItems.setVisibility(View.GONE);
         view.findViewById(R.id.start_calendar_image_view).setVisibility(View.GONE);
         view.findViewById(R.id.end_calendar_image_view).setVisibility(View.GONE);
-        view.findViewById(R.id.fab).setVisibility(View.GONE);
-        /**
-         * عکس تاریخ
-         */
-        //        view.findViewById(R.id.start_calendar_image_view).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                DateHelper.showDatePicker(getVaranegarActvity(), VasHelperMethods.getSysConfigLocale(getContext()), new DateHelper.OnDateSelected() {
-//                    @Override
-//                    public void run(Calendar calendar) {
-//                        if (calendar.getTime().after(new Date())) {
-//                            showErrorDialog(getString(R.string.date_could_not_be_after_now));
-//                            return;
-//                        }
-//                        if (endDate != null && endDate.before(calendar.getTime())) {
-//                            showErrorDialog(getString(R.string.end_date_could_not_be_before_start_date));
-//                            return;
-//                        }
-//                        startDate = calendar.getTime();
-//                        startDatePairedItems.setValue(DateHelper.toString
-//                                (startDate, DateFormat.Date,
-//                                        VasHelperMethods.getSysConfigLocale(getContext())));
-//                    }
-//                });
-//            }
-//        });
-//        view.findViewById(R.id.end_calendar_image_view).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                DateHelper.showDatePicker(getVaranegarActvity(), VasHelperMethods.getSysConfigLocale(getContext()), new DateHelper.OnDateSelected() {
-//                    @Override
-//                    public void run(Calendar calendar) {
-//                        if (calendar.getTime().after(new Date())) {
-//                            showErrorDialog(getString(R.string.date_could_not_be_after_now));
-//                            return;
-//                        }
-//                        if (startDate != null && startDate.after(calendar.getTime())) {
-//                            showErrorDialog(getString(R.string.start_date_could_not_be_after_end_date));
-//                            return;
-//                        }
-//                        endDate = calendar.getTime();
-//                        endDatePairedItems.setValue(DateHelper.toString(endDate, DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext())));
-//                    }
-//                });
-//            }
-//        });
+        view.findViewById(R.id.buttonReport).setVisibility(View.GONE);
 
         reportView = view.findViewById(R.id.review_report_view);
         SimpleToolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setOnBackClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getVaranegarActvity().popFragment();
-            }
-        });
-        toolbar.setOnMenuClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getVaranegarActvity().openDrawer();
-            }
-        });
+        toolbar.setOnBackClickListener(view12 -> Objects.requireNonNull(getVaranegarActvity()).popFragment());
+        toolbar.setOnMenuClickListener(view1 -> Objects.requireNonNull(getVaranegarActvity()).openDrawer());
         toolbar.setTitle(getTitle());
         setupAdapter();
         return view;
@@ -223,13 +154,9 @@ public abstract class BaseCustomerPurchaseHistoryReportFragment <T extends Custo
             showErrorDialog(error);
             return;
         }
-//        if ((getEndDate().getTime() / 1000) - (getStartDate().getTime() / 1000) > 3600 * 24 * 30) {
-//            showErrorDialog(getString(R.string.time_span_should_be_smaller_than_a_month));
-//            return;
-//        }
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setTitle(R.string.please_wait);
-        progressDialog.setMessage(getContext().getString(R.string.downloading_data));
+        progressDialog.setMessage(requireContext().getString(R.string.downloading_data));
         progressDialog.show();
         ReportApi invoiceReportApi = new ReportApi(getContext());
         invoiceReportApi.runWebRequest(reportApi(), new WebCallBack<List<T>>() {
