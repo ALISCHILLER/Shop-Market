@@ -53,7 +53,7 @@
         android:textStyle="bold"
         android:textColor="@color/white"
         android:background="@color/red_error"
-        style="@style/Base.TextAppearance.AppCompat.Title"/>
+        style="@style/Base.TextAppearance.AppCompat.Title" />
 
     <Button
         android:id="@+id/buttonClose"

@@ -42,12 +42,14 @@
                 android:id="@+id/radio_lan"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="داخلی"/>
+                android:text="داخلی"
+                android:enabled="false"/>
             <RadioButton
                 android:id="@+id/radio_wan"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="خارجی"/>
+                android:text="خارجی"
+                android:enabled="false"/>
         </RadioGroup>
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/vpn_profile"

@@ -93,6 +93,8 @@ public class SendCrashLogActivity extends MainVaranegarActivity {
 
     //---------------------------------------------------------------------------------------------- requestForReport
     private void requestForReport() {
+        textViewWaiting.setText(getResources().getString(R.string.inProgressSendReport));
+        textViewWaiting.setEnabled(false);
         ReportApi invoiceReportApi = new ReportApi(this);
         invoiceReportApi.runWebRequest(crashReportApi(), new WebCallBack<List<PCustomerInventoryReportModel>>() {
             @Override
@@ -102,17 +104,19 @@ public class SendCrashLogActivity extends MainVaranegarActivity {
 
             @Override
             protected void onSuccess(List<PCustomerInventoryReportModel> result, Request request) {
-
+                textViewWaiting.setVisibility(View.GONE);
+                buttonClose.setVisibility(View.VISIBLE);
             }
 
             @Override
             protected void onApiFailure(ApiError error, Request request) {
-
+                textViewWaiting.setText(getResources().getString(R.string.reTrySendRequestToserver));
+                textViewWaiting.setEnabled(false);
             }
 
             @Override
             protected void onNetworkFailure(Throwable t, Request request) {
-
+                textViewWaiting.setText(getResources().getString(R.string.reTrySendRequestToserver));
             }
         });
 

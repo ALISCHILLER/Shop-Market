@@ -1024,6 +1024,7 @@
     <string name="ready_ro_send">آماده ارسال</string>
     <string name="in_progress">در حال ارسال</string>
     <string name="inProgressSendReport">در حال ارسال خطا به سرور</string>
+    <string name="reTrySendRequestToserver">تلاش دوباره برای ارسال خطا</string>
     <string name="finished">به اتمام رسیده</string>
     <string name="deactivated">غیرفعال</string>
     <string name="all_orders_and_data_will_be_deleted">تمام سفارش ها و اطلاعات پاک خواهد شد!</string>
