@@ -1,29 +1,18 @@
 package com.varanegar.vaslibrary.base;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.logging.LogConfig;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.vaslibrary.R;
-import com.varanegar.vaslibrary.manager.CustomerPathViewManager;
-import com.varanegar.vaslibrary.manager.UserManager;
-import com.varanegar.vaslibrary.model.customerpathview.CustomerPathViewModel;
-import com.varanegar.vaslibrary.model.user.UserModel;
-import com.varanegar.vaslibrary.ui.report.report_new.customer_inventory_report.model.InventoryRequest;
 import com.varanegar.vaslibrary.ui.report.report_new.customer_inventory_report.model.PCustomerInventoryReportModel;
 import com.varanegar.vaslibrary.ui.report.report_new.webApi.ReportApi;
-import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
-
-import java.util.ArrayList;
 import java.util.List;
-
 import okhttp3.Request;
 import retrofit2.Call;
 import timber.log.Timber;
@@ -104,36 +93,26 @@ public class SendCrashLogActivity extends MainVaranegarActivity {
 
     //---------------------------------------------------------------------------------------------- requestForReport
     private void requestForReport() {
-        ReportApi invoiceReportApi = new ReportApi(getContext());
+        ReportApi invoiceReportApi = new ReportApi(this);
         invoiceReportApi.runWebRequest(crashReportApi(), new WebCallBack<List<PCustomerInventoryReportModel>>() {
             @Override
             protected void onFinish() {
-                dismissProgressDialog();
+
             }
 
             @Override
             protected void onSuccess(List<PCustomerInventoryReportModel> result, Request request) {
-                customerInventoryReportModelList = new ArrayList<>();
-                customerInventoryReportModelList.addAll(result);
-                setFilterSpinner(customerInventoryReportModelList);
-                setReportAdapter(customerInventoryReportModelList);
+
             }
 
             @Override
             protected void onApiFailure(ApiError error, Request request) {
-                String err = WebApiErrorBody.log(error, getContext());
-                MainVaranegarActivity activity = getVaranegarActvity();
-                if (activity != null && !activity.isFinishing() && isResumed()) {
-                    showErrorDialog(err);
-                }
+
             }
 
             @Override
             protected void onNetworkFailure(Throwable t, Request request) {
-                MainVaranegarActivity activity = getVaranegarActvity();
-                if (activity != null && !activity.isFinishing() && isResumed()) {
-                    showErrorDialog(getString(R.string.connection_to_server_failed));
-                }
+
             }
         });
 
@@ -143,7 +122,7 @@ public class SendCrashLogActivity extends MainVaranegarActivity {
 
     //---------------------------------------------------------------------------------------------- crashReportApi
     private Call<List<PCustomerInventoryReportModel>> crashReportApi() {
-        CustomerPathViewModel pathView = new CustomerPathViewManager(requireContext()).getCustomerPathViewModel(customerId);
+/*        CustomerPathViewModel pathView = new CustomerPathViewManager(this).getCustomerPathViewModel(customerId);
         UserModel userModel = UserManager.readFromFile(getContext());
         if (userModel == null || userModel.UniqueId == null)
             return null;
@@ -154,7 +133,8 @@ public class SendCrashLogActivity extends MainVaranegarActivity {
                 customerId.toString(),
                 pathView.VisitTemplatePathId.toString()
         );
-        return new ReportApi(getContext()).inventoryReport(request);
+        return new ReportApi(getContext()).inventoryReport(request);*/
+        return null;
     }
     //---------------------------------------------------------------------------------------------- crashReportApi
 

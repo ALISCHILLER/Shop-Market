@@ -743,7 +743,7 @@
     <string name="new_version_exist">نسخه جدید برنامه موجود است</string>
     <string name="newFeatures">تغییرات جدید برنامه</string>
     <string name="closeApp">بستن برنامه</string>
-    <string name="crashApp">متاسفانه خطایی در برنامه رخ داده \n تیم پشتیبانی بزودی خطا را پیگیری میکند \n لطفا بعد از ارسال خطا بصورت خودکار، دوباره وارد برنامه شوید</string>
+    <string name="crashApp">متاسفانه خطایی در برنامه رخ داده \n تیم فنی بزودی خطا را پیگیری و رفع میکند \n لطفا بعد از ارسال خطا بصورت خودکار، دوباره وارد برنامه شوید</string>
     <string name="please_download_the_newest_version">لطفا جدیدترین نسخه برنامه را دریافت نمایید</string>
     <string name="cancel_and_get_tour">دریافت تور</string>
     <string name="error_downloading_apk">خطا در دریافت فایل نصبی</string>
