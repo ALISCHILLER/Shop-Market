@@ -29,33 +29,22 @@ import com.varanegar.framework.util.datetime.DateHelper;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
 import com.varanegar.vaslibrary.manager.UserManager;
-import com.varanegar.vaslibrary.ui.report.report_new.orderReturn_report.ReturnFlatGenerator;
 import com.varanegar.vaslibrary.ui.report.report_new.orderReturn_report.model.ReturnDealerModel;
-import com.varanegar.vaslibrary.ui.report.report_new.orderStatus_Report.TreeNodeHolder;
-import com.varanegar.vaslibrary.ui.report.report_new.orderStatus_Report.model.CustomerItem;
-import com.varanegar.vaslibrary.ui.report.report_new.orderStatus_Report.model.DealersItem;
 import com.varanegar.vaslibrary.ui.report.report_new.orderStatus_Report.model.OrderStatusModel;
-import com.varanegar.vaslibrary.ui.report.report_new.orderStatus_Report.model.OrderStatusReport;
-import com.varanegar.vaslibrary.ui.report.report_new.orderStatus_Report.model.OrderStatusReportFlat;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.supervisor.SupervisorApi;
-
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import okhttp3.Request;
 import timber.log.Timber;
 
 public class RerurnReportFragment extends VaranegarFragment {
     private TreeNode root;
-    private View view;
-    private OrderStatusModel orderStatusModel;
     private LinearLayoutCompat containerView;
     private LinearLayout layout_header_return,layout_header_order;
-    private int typeReport;
-    private LinearLayoutCompat linear_view;
     private PairedItems startDatePairedItems;
     private PairedItems endDatePairedItems;
     private Date startDate;
@@ -66,68 +55,50 @@ public class RerurnReportFragment extends VaranegarFragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_order_status_report,
+        View view = inflater.inflate(R.layout.fragment_order_status_report,
                 container, false);
         startDatePairedItems = view.findViewById(R.id.start_date_item);
         endDatePairedItems = view.findViewById(R.id.end_date_item);
         containerView = view.findViewById(R.id.container_view);
-        layout_header_return=view.findViewById(R.id.layout_header_return);
-        layout_header_order=view.findViewById(R.id.layout_header_order);
-        linear_view=view.findViewById(R.id.linear_view);
+        layout_header_return= view.findViewById(R.id.layout_header_return);
+        layout_header_order= view.findViewById(R.id.layout_header_order);
+        LinearLayoutCompat linear_view = view.findViewById(R.id.linear_view);
 
-        view.findViewById(R.id.start_calendar_image_view).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DateHelper.showDatePicker(getVaranegarActvity(), VasHelperMethods.getSysConfigLocale(getContext()), new DateHelper.OnDateSelected() {
-                    @Override
-                    public void run(Calendar calendar) {
-                        if (calendar.getTime().after(new Date())) {
-                            showErrorDialog(getString(R.string.date_could_not_be_after_now));
-                            return;
-                        }
-                        if (endDate != null && endDate.before(calendar.getTime())) {
-                            showErrorDialog(getString(R.string.end_date_could_not_be_before_start_date));
-                            return;
-                        }
-                        startDate = calendar.getTime();
-                        startDatePairedItems.setValue(DateHelper.toString
-                                (startDate, DateFormat.Date,
-                                        VasHelperMethods.getSysConfigLocale(getContext())));
-                    }
-                });
+        view.findViewById(R.id.start_calendar_image_view).setOnClickListener(view1 ->
+                DateHelper.showDatePicker(Objects.requireNonNull(getVaranegarActvity()),
+                        VasHelperMethods.getSysConfigLocale(getContext()), calendar -> {
+                            if (calendar.getTime().after(new Date())) {
+                                showErrorDialog(getString(R.string.date_could_not_be_after_now));
+                                return;
+                            }
+                            if (endDate != null && endDate.before(calendar.getTime())) {
+                                showErrorDialog(getString(R.string.end_date_could_not_be_before_start_date));
+                                return;
+                            }
+                            startDate = calendar.getTime();
+                            startDatePairedItems.setValue(DateHelper.toString
+                                    (startDate, DateFormat.Date,
+                                            VasHelperMethods.getSysConfigLocale(getContext())));
+                        }));
+
+
+        view.findViewById(R.id.end_calendar_image_view).setOnClickListener(view13 ->
+                DateHelper.showDatePicker(Objects.requireNonNull(getVaranegarActvity()),
+                VasHelperMethods.getSysConfigLocale(getContext()), calendar -> {
+            if (calendar.getTime().after(new Date())) {
+                showErrorDialog(getString(R.string.date_could_not_be_after_now));
+                return;
             }
-        });
-
-
-        view.findViewById(R.id.end_calendar_image_view).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DateHelper.showDatePicker(getVaranegarActvity(), VasHelperMethods.getSysConfigLocale(getContext()), new DateHelper.OnDateSelected() {
-                    @Override
-                    public void run(Calendar calendar) {
-                        if (calendar.getTime().after(new Date())) {
-                            showErrorDialog(getString(R.string.date_could_not_be_after_now));
-                            return;
-                        }
-                        if (startDate != null && startDate.after(calendar.getTime())) {
-                            showErrorDialog(getString(R.string.start_date_could_not_be_after_end_date));
-                            return;
-                        }
-                        endDate = calendar.getTime();
-                        endDatePairedItems.setValue(DateHelper.toString(endDate, DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext())));
-                    }
-                });
+            if (startDate != null && startDate.after(calendar.getTime())) {
+                showErrorDialog(getString(R.string.start_date_could_not_be_after_end_date));
+                return;
             }
-        });
+            endDate = calendar.getTime();
+            endDatePairedItems.setValue(DateHelper.toString(endDate, DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext())));
+        }));
 
 
-        view.findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                refreshapi();
-
-            }
-        });
+        view.findViewById(R.id.buttonReport).setOnClickListener(view12 -> refreshapi());
 
 
 
@@ -139,7 +110,7 @@ public class RerurnReportFragment extends VaranegarFragment {
 
     private void showErrorDialog(String error) {
         if (isResumed()) {
-            CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+            CuteMessageDialog dialog = new CuteMessageDialog(requireContext());
             dialog.setTitle(com.varanegar.vaslibrary.R.string.error);
             dialog.setMessage(error);
             dialog.setIcon(Icon.Error);
@@ -157,10 +128,10 @@ public class RerurnReportFragment extends VaranegarFragment {
             layout_header_order.setVisibility(View.GONE);
             List<String> dealersId = new ArrayList<>();
 
-            dealersId.add(String.valueOf(UserManager.readFromFile(getContext()).UniqueId));
+            dealersId.add(String.valueOf(Objects.requireNonNull(UserManager.readFromFile(getContext())).UniqueId));
             String startDate=DateHelper.toString(getStartDate(), DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext()));
             String  toDate =DateHelper.toString(getEndDate(), DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext()));
-            orderStatusModel = new OrderStatusModel();
+            OrderStatusModel orderStatusModel = new OrderStatusModel();
             orderStatusModel.setDealersId(dealersId);
             orderStatusModel.setStartdata(startDate);
             orderStatusModel.setEndDate(toDate);
@@ -214,7 +185,7 @@ public class RerurnReportFragment extends VaranegarFragment {
                                 Activity activity = getActivity();
                                 if (activity != null && !activity.isFinishing()) {
                                     Timber.e(t);
-                                    showErrorDialog(getContext().getString(R.string.error_connecting_to_server));
+                                    showErrorDialog(requireContext().getString(R.string.error_connecting_to_server));
                                 }
                             }
                         }
@@ -228,7 +199,6 @@ public class RerurnReportFragment extends VaranegarFragment {
 
 
     int childCount = 0;
-    int totalCount = 0;
     private final TreeNode.TreeNodeClickListener returnNodeClickListener = (node, value) -> {
         if(node.getLevel() == 1){
             LinearLayout  layout_header_sub=node.getViewHolder().getView().findViewById(R.id.layout_header_sub);

@@ -257,7 +257,7 @@ public class CalcPromotion {
                                         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
                                             ArrayList<DiscountCallOrderLineData> orderProduct = populateOriginalData(context, callOrderUniqueId);
                                             List<CustomerCallInvoiceModel> callInvoiceModel= new CustomerCallInvoiceManager(context)
-                                                    .getCustomerCallInvoices(customerUniqueId);
+                                                    .getCustomerCallInvoices(callData.BackOfficeOrderId);
                                             distDiscountCalc(orderPrizeList, context, callData, disCallData, evcType, orderProduct,  callInvoiceModel.get(0));
                                             handler.post(() -> callback.onSuccess(callData));
 //                                                disCallData = DiscountCalculatorHandler.calcPromotion(callData.toDiscount(context), evcType.value(), context);
