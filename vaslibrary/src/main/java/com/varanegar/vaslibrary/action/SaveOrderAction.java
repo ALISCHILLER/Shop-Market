@@ -149,9 +149,9 @@ public class SaveOrderAction extends CheckDistanceAction {
 
     @Override
     public void run() {
-        String m = null;
-        Integer n = Integer.parseInt(m);
-/*        CustomerOrderTypesManager customerOrderTypesManager = new CustomerOrderTypesManager(getActivity());
+/*        String m = null;
+        Integer n = Integer.parseInt(m);*/
+        CustomerOrderTypesManager customerOrderTypesManager = new CustomerOrderTypesManager(getActivity());
         List<CustomerOrderTypeModel> customerOrderTypeModels = customerOrderTypesManager.getItems();
         CustomerPaymentTypesViewManager customerPaymentTypesViewManager = new CustomerPaymentTypesViewManager(getActivity());
         try {
@@ -180,7 +180,7 @@ public class SaveOrderAction extends CheckDistanceAction {
             dialog.setPositiveButton(R.string.ok, null);
             dialog.setMessage(R.string.back_office_type_is_uknown);
             dialog.show();
-        }*/
+        }
 
     }
 
