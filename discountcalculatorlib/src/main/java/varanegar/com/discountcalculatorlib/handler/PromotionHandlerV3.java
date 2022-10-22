@@ -5,10 +5,14 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.network.gson.VaranegarGsonBuilder;
+import com.varanegar.framework.util.datetime.DateFormat;
+import com.varanegar.framework.util.datetime.DateHelper;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -288,6 +292,7 @@ public class PromotionHandlerV3 {
                 }
 
                 onlineData.SelIds = SelIds;
+                onlineData.OrderDate = DateHelper.toString(new Date(), DateFormat.Date, Locale.US);
                 try {
                     Call<DiscountOutputOnline> call = calcPromotionAPI.getPromotion(onlineData,
                             GlobalVariables.getCalcDiscount(),
