@@ -4,10 +4,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <EditText
+        android:id="@+id/editTextSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="3dp"
+        android:background="@android:drawable/editbox_background"
+        android:hint="@string/search"
+        android:imeActionLabel="@string/search"
+        android:imeOptions="actionDone"
+        android:lines="1"
+        android:paddingLeft="@dimen/padding_xxlarge"
+        android:paddingTop="@dimen/padding_default"
+        android:paddingRight="@dimen/padding_xxlarge"
+        android:paddingBottom="@dimen/padding_default"
+        android:singleLine="true"
+        android:importantForAutofill="no"
+        android:inputType="text" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_list_request"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/editTextSearch"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="5dp"
         />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
