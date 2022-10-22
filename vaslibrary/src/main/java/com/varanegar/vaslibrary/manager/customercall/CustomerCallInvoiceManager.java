@@ -23,10 +23,10 @@ public class CustomerCallInvoiceManager extends BaseManager<CustomerCallInvoiceM
         super(context, new CustomerCallInvoiceModelRepository());
     }
 
-    public List<CustomerCallInvoiceModel> getCustomerCallInvoices(int customerUniqueId) {
+    public List<CustomerCallInvoiceModel> getCustomerCallInvoices(int backOfficeOrderId) {
         Query query = new Query();
         query.from(CustomerCallInvoice.CustomerCallInvoiceTbl).
-                whereAnd(Criteria.equals(CustomerCallInvoice.CustomerUniqueId, customerUniqueId));
+                whereAnd(Criteria.equals(CustomerCallInvoice.BackOfficeOrderId, backOfficeOrderId));
         return getItems(query);
     }
     public List<CustomerCallInvoiceModel> getCustomerCallInvoices(UUID customerUniqueId) {
