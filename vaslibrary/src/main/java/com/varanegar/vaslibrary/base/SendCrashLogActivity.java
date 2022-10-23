@@ -78,7 +78,7 @@ public class SendCrashLogActivity extends MainVaranegarActivity {
         textViewWaiting = findViewById(R.id.textViewWaiting);
         buttonClose.setVisibility(View.GONE);
         textViewWaiting.setVisibility(View.VISIBLE);
-        requestForReport();
+//        requestForReport();
     }
     //---------------------------------------------------------------------------------------------- init
 
