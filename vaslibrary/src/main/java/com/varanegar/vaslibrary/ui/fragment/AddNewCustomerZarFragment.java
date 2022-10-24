@@ -50,8 +50,10 @@ import com.varanegar.framework.validation.ValidationException;
 import com.varanegar.framework.validation.ValidationListener;
 import com.varanegar.framework.validation.annotations.IraniNationalCodeChecker;
 import com.varanegar.framework.validation.annotations.LengthChecker;
+import com.varanegar.framework.validation.annotations.MobileNumberChecker;
 import com.varanegar.framework.validation.annotations.NotEmptyChecker;
 import com.varanegar.framework.validation.annotations.NotNullChecker;
+import com.varanegar.framework.validation.annotations.PhoneNumberChecker;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.manager.DataForRegisterManager;
 import com.varanegar.vaslibrary.manager.PaymentOrderTypeManager;
@@ -285,6 +287,9 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
         validator.addField(postalCodePairedItem, getString(R.string.postal_code_label),
                 new LengthChecker(10, 10, false));
 
+        mobilePairedItem = view.findViewById(R.id.mobile_paired_item);
+        validator.addField(mobilePairedItem, getString(R.string.mobile_label_supervisor), new MobileNumberChecker());
+
         code_naghsh_paired_item = view.findViewById(R.id.code_naghsh_paired_item);
         validator.addField(code_naghsh_paired_item, getString(R.string.code_naghsh));
 
@@ -311,7 +316,7 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
         validator.addField(deliveryZoneSpinner, getString(R.string.delivery_zone), new NotEmptyChecker());
 
         telPairedItem = view.findViewById(R.id.tel_paired_item);
-        mobilePairedItem = view.findViewById(R.id.mobile_paired_item);
+
         economicCodePairedItem = view.findViewById(R.id.economic_code_paired_item);
         nationalCardPic = view.findViewById(R.id.national_card_pic);
         nationalCardPic.setOnClickListener(new View.OnClickListener() {
@@ -376,12 +381,20 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
 
         PaymentOrderTypeManager paymentOrderTypeManager =
                 new PaymentOrderTypeManager(getContext());
-        List<PaymentTypeOrderModel> paymentTypes =
-                paymentOrderTypeManager.getDealerPaymentTypes();
+
+/*        List<PaymentTypeOrderModel> paymentTypes =
+                paymentOrderTypeManager.getDealerPaymentTypes();*/
+
+        List<PaymentTypeOrderModel> paymentTypes = new ArrayList<>();
+        UUID instantSettlement = UUID.fromString("11fdf92f-724e-49af-ac01-be0384a6bc8e");
+        paymentTypes.add(paymentOrderTypeManager.getPaymentType(instantSettlement));
+
         paymentTypeSpinner = view.findViewById(R.id.payment_type_spinner);
         paymentTypeSpinner.setup(getChildFragmentManager(), paymentTypes,
                 (item, text) -> item.PaymentTypeOrderName != null &&
                         item.PaymentTypeOrderName.contains(text));
+        paymentTypeSpinner.selectItem(0);
+        paymentTypeSpinner.setEnabled(false);
         validator.addField(paymentTypeSpinner, getString(R.string.payment_type), new NotEmptyChecker());
 
         /*

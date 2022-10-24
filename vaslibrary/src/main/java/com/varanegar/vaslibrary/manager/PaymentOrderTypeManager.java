@@ -101,6 +101,13 @@ public class PaymentOrderTypeManager extends BaseManager<PaymentTypeOrderModel> 
         return getItem(query);
     }
 
+/*    public PaymentTypeOrderModel getPaymentType(String uniqueId) {
+        Query query = new Query().from(PaymentTypeOrder.PaymentTypeOrderTbl)
+                .whereAnd(Criteria.equals(PaymentTypeOrder.UniqueId, paymentTypeUniqueId));
+        return getItem(query);
+    }*/
+
+
     public List<PaymentTypeOrderModel> getDealerPaymentTypes() {
         return getItems(new Query().from(JoinFrom.table(PaymentTypeOrder.PaymentTypeOrderTbl).innerJoin(DealerPaymentType.DealerPaymentTypeTbl).on(DealerPaymentType.PaymentTypeOrderUniqueId, PaymentTypeOrder.UniqueId)));
     }

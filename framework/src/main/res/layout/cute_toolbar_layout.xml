@@ -15,11 +15,44 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/toolbar_buttons_recycler_view"
+        <ScrollView
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutToolbarProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/toolbar_buttons_recycler_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#BABABA"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"/>
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutToolbarReport"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"/>
+
+
+            </LinearLayout>
+
+        </ScrollView>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -32,10 +65,11 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_gravity="center_horizontal"
-                android:padding="@dimen/padding_xsmall"
+                android:padding="@dimen/padding_small"
                 android:src="@drawable/ic_expand_white_24dp" />
         </RelativeLayout>
 
     </LinearLayout>
+
     <include layout="@layout/vertical_line" />
 </LinearLayout>

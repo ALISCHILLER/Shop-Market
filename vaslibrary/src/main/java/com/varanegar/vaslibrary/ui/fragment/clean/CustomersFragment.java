@@ -32,7 +32,10 @@ import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.util.component.PairedItemsSpinner;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
+import com.varanegar.framework.util.component.drawer.DrawerItem;
+import com.varanegar.framework.util.component.drawer.DrawerSectionItem;
 import com.varanegar.framework.util.component.toolbar.CuteButton;
+import com.varanegar.framework.util.component.toolbar.CuteToolbar;
 import com.varanegar.framework.util.filter.Filter;
 import com.varanegar.framework.util.fragment.extendedlist.DbListFragment;
 import com.varanegar.framework.util.recycler.BaseViewHolder;
@@ -56,6 +59,7 @@ import com.varanegar.vaslibrary.manager.sysconfigmanager.UnknownBackOfficeExcept
 import com.varanegar.vaslibrary.manager.tourmanager.TourManager;
 import com.varanegar.vaslibrary.manager.updatemanager.CustomersUpdateFlow;
 import com.varanegar.vaslibrary.manager.updatemanager.PriceUpdateFlow;
+import com.varanegar.vaslibrary.manager.updatemanager.ProductUpdateFlow;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateCall;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateManager;
 import com.varanegar.vaslibrary.manager.visitday.VisitDayViewManager;
@@ -71,11 +75,20 @@ import com.varanegar.vaslibrary.model.tour.TourModel;
 import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.model.visitday.VisitDayViewModel;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
+import com.varanegar.vaslibrary.ui.drawer.TourReportDrawerItem;
+import com.varanegar.vaslibrary.ui.drawer.UserProfileDrawerItem;
+import com.varanegar.vaslibrary.ui.drawer.UserProfileFragment;
 import com.varanegar.vaslibrary.ui.fragment.AddNewCustomerFragment;
 import com.varanegar.vaslibrary.ui.fragment.AddNewCustomerZarFragment;
 import com.varanegar.vaslibrary.ui.fragment.TourReportFragment;
 import com.varanegar.vaslibrary.ui.fragment.UserLocationFragment;
-import com.varanegar.vaslibrary.ui.fragment.vpnfragment.VpnDialogFragment;
+import com.varanegar.vaslibrary.ui.report.ProductReportFragment;
+import com.varanegar.vaslibrary.ui.report.report_new.customerNoSaleReport.CustomerNoSaleReportFragment;
+import com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary.CustomerGroupSalesSummaryFragment;
+import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.InvoiceBalanceReportFragment;
+import com.varanegar.vaslibrary.ui.report.report_new.orderReturn_report.RerurnReportFragment;
+import com.varanegar.vaslibrary.ui.report.report_new.orderStatus_Report.OrderReportFragment;
+import com.varanegar.vaslibrary.ui.report.report_new.products_purchase_history_report.ProductsPurchaseHistoryReportFragment;
 import com.varanegar.vaslibrary.ui.viewholders.CustomerSummaryMultipanViewHolder;
 import com.varanegar.vaslibrary.ui.viewholders.CustomerSummaryViewHolder;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
@@ -325,6 +338,7 @@ public abstract class CustomersFragment
     //---------------------------------------------------------------------------------------------- onCreateCuteToolbar
     @Override
     protected List<CuteButton> onCreateCuteToolbar() {
+
         List<CuteButton> buttons = new ArrayList<>();
         CuteButton mapBtn = new CuteButton();
         mapBtn.setTitle(R.string.map);
@@ -748,7 +762,7 @@ public abstract class CustomersFragment
                 false));
         buttons.add(oldInvoiceBtn);
 
-        CuteButton openVpn = new CuteButton();
+/*        CuteButton openVpn = new CuteButton();
         openVpn.setTitle(R.string.vpn_open);
         openVpn.setIcon(R.drawable.ic_baseline_vpn_lock_24);
         openVpn.setEnabled(() -> new TourManager(getContext()).isTourAvailable());
@@ -756,10 +770,41 @@ public abstract class CustomersFragment
             VpnDialogFragment vpnDialogFragment = new VpnDialogFragment();
             vpnDialogFragment.show(getChildFragmentManager(), "SettingDialogFragment");
         });
-        buttons.add(openVpn);
+        buttons.add(openVpn);*/
+
+        addProfileToCuteToolbar();
+
+/*        if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+            addReportToCutePresaleToolbar();
+            addUpdateToCutePresaleToolbar();
+        }*/
+
         return buttons;
     }
     //---------------------------------------------------------------------------------------------- onCreateCuteToolbar
+
+
+    //---------------------------------------------------------------------------------------------- addProfileToCuteToolbar
+    public void addProfileToCuteToolbar() {
+        final MainVaranegarActivity activity = getVaranegarActvity();
+        if (activity == null)
+            return;
+        getButtonsToolbar().getLinearLayoutToolbarProfile().addView(new UserProfileDrawerItem(getContext()) {
+            @Override
+            protected void onClick() {
+                activity.pushFragment(new UserProfileFragment());
+            }
+        });
+
+/*        getButtonsToolbar().getLinearLayoutToolbarProfile().addView(new TourReportDrawerItem(getContext()) {
+            @Override
+            protected void onClick() {
+
+            }
+        });*/
+    }
+    //---------------------------------------------------------------------------------------------- addProfileToCuteToolbar
+
 
 
     //---------------------------------------------------------------------------------------------- createFiltersQuery

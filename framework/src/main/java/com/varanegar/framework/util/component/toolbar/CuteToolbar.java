@@ -29,6 +29,8 @@ public class CuteToolbar extends LinearLayout {
     private RecyclerView buttonsRecyclerView;
     private RecyclerView.Adapter adapter;
     private ImageView expandImageView;
+    private LinearLayout linearLayoutToolbarReport;
+    private LinearLayout linearLayoutToolbarProfile;
     private boolean expanded = false;
     private List<CuteButton> buttons = new ArrayList<>();
     private SharedPreferences sharedPreferences;
@@ -127,6 +129,8 @@ public class CuteToolbar extends LinearLayout {
         buttonsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         buttonsRecyclerView.setAdapter(adapter);
         expandImageView = (ImageView) view.findViewById(R.id.expand_image_view);
+        linearLayoutToolbarReport = view.findViewById(R.id.linearLayoutToolbarReport);
+        linearLayoutToolbarProfile = view.findViewById(R.id.linearLayoutToolbarProfile);
         expandImageView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -158,5 +162,13 @@ public class CuteToolbar extends LinearLayout {
 
     public void refresh() {
         adapter.notifyDataSetChanged();
+    }
+
+    public LinearLayout getLinearLayoutToolbarReport() {
+        return linearLayoutToolbarReport;
+    }
+
+    public LinearLayout getLinearLayoutToolbarProfile() {
+        return linearLayoutToolbarProfile;
     }
 }

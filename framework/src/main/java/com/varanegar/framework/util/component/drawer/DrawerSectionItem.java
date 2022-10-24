@@ -106,7 +106,7 @@ public class DrawerSectionItem extends BaseDrawerItem {
             parent.notifyDataSetInvalidated();
     }
 
-    private void closeItems() {
+    public void closeItems() {
         expandImageView.setImageResource(R.drawable.ic_expand_more_black_24dp);
         itemsLinearlayout.setVisibility(GONE);
         if (parent != null)

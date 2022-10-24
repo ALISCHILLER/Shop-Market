@@ -432,12 +432,13 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
                 dialog.show(getChildFragmentManager(), "ConnectionSettingDialog");
                 getTourImageView.setEnabled(true);
             } else {
-                final CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+/*                final CuteMessageDialog dialog = new CuteMessageDialog(getContext());
                 dialog.setIcon(Icon.Alert);
                 dialog.setMessage(R.string.do_you_update_old_invoices_in_last);
                 dialog.setPositiveButton(R.string.yes, view -> saveGetOldInvoiceType("True", tourNo));
                 dialog.setNegativeButton(R.string.no, view -> saveGetOldInvoiceType("False", tourNo));
-                dialog.show();
+                dialog.show();*/
+                saveGetOldInvoiceType("True", tourNo);
                 getTourImageView.setEnabled(false);
             }
         } else {

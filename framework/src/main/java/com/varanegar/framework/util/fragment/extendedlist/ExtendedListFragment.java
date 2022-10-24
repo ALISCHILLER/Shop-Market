@@ -45,6 +45,7 @@ public abstract class ExtendedListFragment<DataModel extends BaseModel,SPIN_TYPE
     private String searchText;
     EditText searchEditText;
     private ImageView advancedSearchImageView;
+    private ImageView imageViewMenuIcon;
     private TextView titleTextView;
     String title;
     private CuteToolbar buttonsToolbar;
@@ -155,7 +156,8 @@ public abstract class ExtendedListFragment<DataModel extends BaseModel,SPIN_TYPE
                 runFilter(searchText, filtersAdapter.getSelectedFilters(), item);
             }
         });
-        view.findViewById(R.id.drawer_image_view).setOnClickListener(new View.OnClickListener() {
+        imageViewMenuIcon = view.findViewById(R.id.drawer_image_view);
+        imageViewMenuIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onMenuClicked();
@@ -236,6 +238,14 @@ public abstract class ExtendedListFragment<DataModel extends BaseModel,SPIN_TYPE
             advancedSearchImageView.setVisibility(View.VISIBLE);
             advancedSearchImageView.setOnClickListener(search);
         }
+    }
+
+    public CuteToolbar getButtonsToolbar() {
+        return buttonsToolbar;
+    }
+
+    public void setVisibleImageViewMenuIcon(int visibility) {
+        imageViewMenuIcon.setVisibility(visibility);
     }
 
     protected boolean setupAdvancedFilter(PairedItemsSpinner<SPIN_TYPE> spinner) {

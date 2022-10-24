@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
+
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.core.app.ActivityCompat;
@@ -101,17 +102,17 @@ public class MainDrawerAdapter extends DrawerAdapter {
 //        }));
         add(new DrawerItem(activity, R.string.news_zar, R.drawable.ic_baseline_newspaper_24)
                 .setClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                activity.closeDrawer();
-                News_Zar_Fragment trackingLicenseFragment = new News_Zar_Fragment();
-                activity.pushFragment(trackingLicenseFragment);
+                    @Override
+                    public void onClick(View v) {
+                        activity.closeDrawer();
+                        News_Zar_Fragment trackingLicenseFragment = new News_Zar_Fragment();
+                        activity.pushFragment(trackingLicenseFragment);
 
-            }
-        }));
+                    }
+                }));
 
 
-        if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
+/*        if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
             add(new DrawerItem(activity, R.string.recommended_products_configs, R.drawable.ic_recommender_system_black_24dp).setClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -288,14 +289,13 @@ public class MainDrawerAdapter extends DrawerAdapter {
                 }
             }
             }));
-        }
+        }*/
 
-        reports = new DrawerSectionItem(activity, this, R.string.reports, R.drawable.ic_report_24dp);
 
         /**
          * گزارشات قبلی
          */
-          //        if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
+        //        if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
 //            reports.addItem(new DrawerItem(activity, R.string.rep3013).setClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View view) {
@@ -333,7 +333,9 @@ public class MainDrawerAdapter extends DrawerAdapter {
          * گزارشات جدید
          */
 
-        if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+        reports = new DrawerSectionItem(activity, this, R.string.reports, R.drawable.ic_report_24dp);
+
+/*        if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
             reports.addItem(new DrawerItem(activity, "گزارش مانده فاکتور").setClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -389,8 +391,9 @@ public class MainDrawerAdapter extends DrawerAdapter {
                 }
             }));
 
-        }
-        if (!VaranegarApplication.is(VaranegarApplication.AppId.Contractor))
+        }*/
+
+        if (!VaranegarApplication.is(VaranegarApplication.AppId.Contractor) && !VaranegarApplication.is(VaranegarApplication.AppId.PreSales))
             add(reports);
 
 //        reviewReports = new DrawerSectionItem(activity, this, R.string.review_reports, R.drawable.ic_review_report_black_24dp);
@@ -712,7 +715,9 @@ public class MainDrawerAdapter extends DrawerAdapter {
                 }
             }));
         }
-        add(updates);
+
+        if (!VaranegarApplication.is(VaranegarApplication.AppId.PreSales))
+            add(updates);
 //        }
     }
 }

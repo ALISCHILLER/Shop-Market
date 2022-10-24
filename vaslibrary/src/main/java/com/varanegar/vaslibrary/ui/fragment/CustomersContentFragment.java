@@ -879,7 +879,7 @@ public class CustomersContentFragment extends VaranegarFragment {
         });
         actions.add(sendOperationAction);
 
-        VpnAction vpnAction = new VpnAction(
+/*        VpnAction vpnAction = new VpnAction(
                 getVaranegarActvity(),
                 actionsAdapter,
                 getSelectedId());
@@ -889,7 +889,7 @@ public class CustomersContentFragment extends VaranegarFragment {
 
             }
         });
-        actions.add(vpnAction);
+        actions.add(vpnAction);*/
 
 
         CustomerUpdateAction customerUpdateAction = new CustomerUpdateAction(
