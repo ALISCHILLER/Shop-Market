@@ -795,13 +795,6 @@ public abstract class CustomersFragment
                 activity.pushFragment(new UserProfileFragment());
             }
         });
-
-/*        getButtonsToolbar().getLinearLayoutToolbarProfile().addView(new TourReportDrawerItem(getContext()) {
-            @Override
-            protected void onClick() {
-
-            }
-        });*/
     }
     //---------------------------------------------------------------------------------------------- addProfileToCuteToolbar
 

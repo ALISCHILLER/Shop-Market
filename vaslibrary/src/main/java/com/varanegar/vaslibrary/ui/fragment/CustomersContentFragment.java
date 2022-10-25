@@ -52,7 +52,6 @@ import com.varanegar.vaslibrary.action.BaseReturnAction;
 import com.varanegar.vaslibrary.action.CameraAction;
 import com.varanegar.vaslibrary.action.CustomerInventoryReportAction;
 import com.varanegar.vaslibrary.action.SendOperationAction;
-import com.varanegar.vaslibrary.action.VpnAction;
 import com.varanegar.vaslibrary.action.confirm.ConfirmAction;
 import com.varanegar.vaslibrary.action.CustomerInventoryAction;
 import com.varanegar.vaslibrary.action.CustomerQuestionnaireAction;
@@ -97,7 +96,6 @@ import com.varanegar.vaslibrary.model.customercall.TaskPriorityModel;
 import com.varanegar.vaslibrary.model.customeroldInvoice.CustomerOldInvoiceHeaderModel;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.model.tour.TourModel;
-import com.varanegar.vaslibrary.ui.dialog.EditCustomerZarFragmentDialog;
 import com.varanegar.vaslibrary.ui.dialog.InsertPinDialog;
 import com.varanegar.vaslibrary.ui.drawer.CustomerReportsDrawerAdapter;
 import com.varanegar.vaslibrary.ui.fragment.new_fragment.edit_new_zar.Edit_New_Customer_ZarFragment;
@@ -128,222 +126,23 @@ public class CustomersContentFragment extends VaranegarFragment {
     private SimpleToolbar simpleToolbar;
     private MapView mapView;
     private PairedItems code_naghsh_paired_item;
-
     protected VasActionsAdapter getActionsAdapter() {
         return actionsAdapter;
     }
-
     private boolean isLoading;
     private RecyclerView actionsRecyclerView;
+    private final ArrayList<OnItemUpdateListener> onItemUpdateListeners = new ArrayList<>();
+    private String pin;
 
-    public UUID getSelectedId() {
-        try {
-            if (getArguments() == null)
-                return null;
 
-            return UUID.fromString(getArguments()
-                    .getString("a129ef75-77ce-432a-8982-6bcab0bf7b51"));
-
-        } catch (Exception ex) {
-            return null;
-        }
+    //---------------------------------------------------------------------------------------------- interface
+    public interface OnItemUpdateListener {
+        void run();
     }
+    //---------------------------------------------------------------------------------------------- interface
 
-    
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString("a129ef75-77ce-432a-8982-6bcab0bf7b51", getSelectedId().toString());
-    }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        loading(true);
-        if (mapView != null)
-            mapView.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (getContext() == null) return;
-        if (getVaranegarActvity() == null) return;
-        if (getView() == null) return;
-        PairedItems customerTime = getView().findViewById(R.id.customer_time_paired_item);
-
-        new Handler().postDelayed(() -> {
-            try {
-                if (actionsAdapter != null && isResumed() && !isRemoving()) {
-                    List<Action> actions = new ArrayList<>();
-                    addActions(actions);
-                    sortActions(actions);
-                    actionsAdapter.setActions(actions, () -> {
-                        if (isResumed()) {
-                            actionsRecyclerView.setAdapter(actionsAdapter);
-                            loading(false);
-                        }
-                    });
-                } else {
-                    loading(false);
-                }
-
-                boolean isConfirmed = new CustomerCallManager(getContext()).isConfirmed(getCalls());
-                if (!isConfirmed) {
-                    CustomerActionTimeManager customerActionTimeManager =
-                            new CustomerActionTimeManager(getContext());
-                    Date startTime = customerActionTimeManager.get(
-                            getSelectedId(),
-                            CustomerActions.CustomerCallStart);
-                    if (startTime == null)
-                        customerActionTimeManager.save(
-                                getSelectedId(),
-                                CustomerActions.CustomerCallStart);
-                    CustomerActionTimeManager.startVisitTimer(
-                            getVaranegarActvity(),
-                            getSelectedId(),
-                            (timeOffset, timeOffsetStr) -> {
-                                if (isVisible()) {
-                                    VaranegarActivity activity = getVaranegarActvity();
-                                    if (activity != null)
-                                        activity.runOnUiThread(() -> {
-                                            if (isVisible()) {
-
-                                                customerTime.setValue(timeOffsetStr);
-                                            }
-                                        });
-                                }
-                            });
-                } else {
-                    long time = CustomerActionTimeManager.getCustomerCallTime(
-                            getContext(),
-                            getSelectedId());
-                    if (isVisible())
-                        customerTime.setValue(DateHelper.getTimeSpanString(time));
-                }
-            } catch (Exception ex) {
-                Timber.e(ex);
-            }
-        }, 300);
-        new Handler().postDelayed(this::updateCustomer, 600);
-    }
-
-    private List<CustomerCallModel> getCalls() {
-        return getActionsAdapter().getCalls();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mapView != null)
-            mapView.onStop();
-        Runtime.getRuntime().gc();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        CustomerActionTimeManager.stopVisitTimer();
-        if (mapView != null)
-            mapView.onDestroy();
-        Runtime.getRuntime().gc();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        if (mapView != null)
-            mapView.onLowMemory();
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        setDrawerAdapter(new CustomerReportsDrawerAdapter(getVaranegarActvity(), getSelectedId()));
-    }
-
-    @SuppressLint("PotentialBehaviorOverride")
-    @Override
-    public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        if (getContext() == null || getVaranegarActvity() == null) return;
-
-        new Handler().postDelayed(() -> {
-            if (isResumed() && !isRemoving()) {
-                mapView = view.findViewById(R.id.map_view);
-                mapView.onCreate(savedInstanceState);
-                mapView.onResume(); // needed to getUnits the map to display immediately
-                mapView.getMapAsync(googleMap -> {
-                    FloatingActionButton googleMapFab = view.findViewById(R.id.google_map_fab);
-                    FloatingActionButton wazeFab = view.findViewById(R.id.waze_fab);
-                    if (customer.Longitude != 0 && customer.Latitude != 0) {
-                        view.findViewById(R.id.location_text_view).setVisibility(View.GONE);
-                        LatLng latLng = new LatLng(customer.Latitude, customer.Longitude);
-                        MarkerOptions options = new MarkerOptions().position(latLng);
-                        options.flat(false);
-                        Marker marker = googleMap.addMarker(options);
-                        if (marker != null) {
-                            marker.setZIndex(10);
-                            CustomerCallManager callManager = new CustomerCallManager(getContext());
-                            int icon = callManager.getIcon(getCalls());
-                            BitmapDescriptor bitmap = BitmapDescriptorFactory.fromResource(icon);
-                            marker.setTitle(customer.CustomerName);
-                            marker.setIcon(bitmap);
-                            marker.setTag(customer.UniqueId == null
-                                    ? ""
-                                    : customer.UniqueId.toString());
-                        }
-
-                        CameraPosition cameraPosition = new CameraPosition
-                                .Builder()
-                                .target(latLng)
-                                .zoom(17)
-                                .build();
-                        googleMap.animateCamera(CameraUpdateFactory
-                                .newCameraPosition(cameraPosition));
-                        googleMap.setOnMarkerClickListener(marker1 -> {
-                            UserLocationFragment userLocationFragment = new UserLocationFragment();
-                            userLocationFragment.setCustomerId(getSelectedId());
-
-                            getVaranegarActvity().pushFragment(userLocationFragment);
-                            return true;
-                        });
-                        googleMapFab.setOnClickListener(v -> {
-                            try {
-                                String map = "http://maps.google.com/maps?daddr=" +
-                                        customer.Latitude + "," +
-                                        customer.Longitude;
-                                Intent intent = new Intent(Intent.ACTION_VIEW,
-                                        Uri.parse(map));
-                                getContext().startActivity(intent);
-                            } catch (Exception ignored) {
-
-                            }
-
-                        });
-                        wazeFab.setOnClickListener(v -> {
-                            try {
-                                String waze = "waze://?ll=" + customer.Latitude + ", " +
-                                        customer.Longitude + "&navigate=yes";
-                                Intent intent = new Intent(Intent.ACTION_VIEW,
-                                        Uri.parse(waze));
-                                getContext().startActivity(intent);
-                            } catch (Exception ignored) {
-
-                            }
-
-                        });
-                    } else {
-                        googleMapFab.setVisibility(View.GONE);
-                        wazeFab.setVisibility(View.GONE);
-                        view.findViewById(R.id.location_text_view)
-                                .setVisibility(View.VISIBLE);
-                    }
-                });
-            }
-        }, 1000);
-    }
-
+    //---------------------------------------------------------------------------------------------- onCreateView
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, final ViewGroup viewGroup,
                              Bundle savedInstanceState) {
@@ -459,13 +258,466 @@ public class CustomersContentFragment extends VaranegarFragment {
 
         return view;
     }
+    //---------------------------------------------------------------------------------------------- onCreateView
 
+
+
+    //---------------------------------------------------------------------------------------------- onViewCreated
+    @SuppressLint("PotentialBehaviorOverride")
+    @Override
+    public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (getContext() == null || getVaranegarActvity() == null) return;
+
+        new Handler().postDelayed(() -> {
+            if (isResumed() && !isRemoving()) {
+                mapView = view.findViewById(R.id.map_view);
+                mapView.onCreate(savedInstanceState);
+                mapView.onResume(); // needed to getUnits the map to display immediately
+                mapView.getMapAsync(googleMap -> {
+                    FloatingActionButton googleMapFab = view.findViewById(R.id.google_map_fab);
+                    FloatingActionButton wazeFab = view.findViewById(R.id.waze_fab);
+                    if (customer.Longitude != 0 && customer.Latitude != 0) {
+                        view.findViewById(R.id.location_text_view).setVisibility(View.GONE);
+                        LatLng latLng = new LatLng(customer.Latitude, customer.Longitude);
+                        MarkerOptions options = new MarkerOptions().position(latLng);
+                        options.flat(false);
+                        Marker marker = googleMap.addMarker(options);
+                        if (marker != null) {
+                            marker.setZIndex(10);
+                            CustomerCallManager callManager = new CustomerCallManager(getContext());
+                            int icon = callManager.getIcon(getCalls());
+                            BitmapDescriptor bitmap = BitmapDescriptorFactory.fromResource(icon);
+                            marker.setTitle(customer.CustomerName);
+                            marker.setIcon(bitmap);
+                            marker.setTag(customer.UniqueId == null
+                                    ? ""
+                                    : customer.UniqueId.toString());
+                        }
+
+                        CameraPosition cameraPosition = new CameraPosition
+                                .Builder()
+                                .target(latLng)
+                                .zoom(17)
+                                .build();
+                        googleMap.animateCamera(CameraUpdateFactory
+                                .newCameraPosition(cameraPosition));
+                        googleMap.setOnMarkerClickListener(marker1 -> {
+                            UserLocationFragment userLocationFragment = new UserLocationFragment();
+                            userLocationFragment.setCustomerId(getSelectedId());
+
+                            getVaranegarActvity().pushFragment(userLocationFragment);
+                            return true;
+                        });
+                        googleMapFab.setOnClickListener(v -> {
+                            try {
+                                String map = "http://maps.google.com/maps?daddr=" +
+                                        customer.Latitude + "," +
+                                        customer.Longitude;
+                                Intent intent = new Intent(Intent.ACTION_VIEW,
+                                        Uri.parse(map));
+                                getContext().startActivity(intent);
+                            } catch (Exception ignored) {
+
+                            }
+
+                        });
+                        wazeFab.setOnClickListener(v -> {
+                            try {
+                                String waze = "waze://?ll=" + customer.Latitude + ", " +
+                                        customer.Longitude + "&navigate=yes";
+                                Intent intent = new Intent(Intent.ACTION_VIEW,
+                                        Uri.parse(waze));
+                                getContext().startActivity(intent);
+                            } catch (Exception ignored) {
+
+                            }
+
+                        });
+                    } else {
+                        googleMapFab.setVisibility(View.GONE);
+                        wazeFab.setVisibility(View.GONE);
+                        view.findViewById(R.id.location_text_view)
+                                .setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+        }, 1000);
+    }
+    //---------------------------------------------------------------------------------------------- onViewCreated
+
+
+    //---------------------------------------------------------------------------------------------- onResume
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getContext() == null) return;
+        if (getVaranegarActvity() == null) return;
+        if (getView() == null) return;
+        PairedItems customerTime = getView().findViewById(R.id.customer_time_paired_item);
+        new Handler().postDelayed(() -> {
+            try {
+                if (actionsAdapter != null && isResumed() && !isRemoving()) {
+                    List<Action> actions = new ArrayList<>();
+                    BaseAction.currentAction = null;
+                    addActions(actions);
+                    sortActions(actions);
+                    actionsAdapter.setActions(actions, () -> {
+                        if (isResumed()) {
+                            actionsRecyclerView.setAdapter(actionsAdapter);
+                            loading(false);
+                        }
+                    });
+                } else {
+                    loading(false);
+                }
+
+                boolean isConfirmed = new CustomerCallManager(getContext()).isConfirmed(getCalls());
+                if (!isConfirmed) {
+                    CustomerActionTimeManager customerActionTimeManager =
+                            new CustomerActionTimeManager(getContext());
+                    Date startTime = customerActionTimeManager.get(
+                            getSelectedId(),
+                            CustomerActions.CustomerCallStart);
+                    if (startTime == null)
+                        customerActionTimeManager.save(
+                                getSelectedId(),
+                                CustomerActions.CustomerCallStart);
+                    CustomerActionTimeManager.startVisitTimer(
+                            getVaranegarActvity(),
+                            getSelectedId(),
+                            (timeOffset, timeOffsetStr) -> {
+                                if (isVisible()) {
+                                    VaranegarActivity activity = getVaranegarActvity();
+                                    if (activity != null)
+                                        activity.runOnUiThread(() -> {
+                                            if (isVisible()) {
+
+                                                customerTime.setValue(timeOffsetStr);
+                                            }
+                                        });
+                                }
+                            });
+                } else {
+                    long time = CustomerActionTimeManager.getCustomerCallTime(
+                            getContext(),
+                            getSelectedId());
+                    if (isVisible())
+                        customerTime.setValue(DateHelper.getTimeSpanString(time));
+                }
+            } catch (Exception ex) {
+                Timber.e(ex);
+            }
+        }, 300);
+        new Handler().postDelayed(this::updateCustomer, 600);
+    }
+    //---------------------------------------------------------------------------------------------- onResume
+
+
+    //---------------------------------------------------------------------------------------------- onPause
+    @Override
+    public void onPause() {
+        super.onPause();
+        loading(true);
+        if (mapView != null)
+            mapView.onPause();
+    }
+    //---------------------------------------------------------------------------------------------- onPause
+
+
+    //---------------------------------------------------------------------------------------------- onSaveInstanceState
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("a129ef75-77ce-432a-8982-6bcab0bf7b51", getSelectedId().toString());
+    }
+    //---------------------------------------------------------------------------------------------- onSaveInstanceState
+
+
+
+    //---------------------------------------------------------------------------------------------- addActions
+    @CallSuper
+    protected void addActions(@NonNull List<Action> actions) {
+        //  دکمه ویرایش مشتری در صحه نمایش مشتری درpresale
+        if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+            EditCustomerAction editCustomerAction =
+                    new EditCustomerAction(getVaranegarActvity(), actionsAdapter, getSelectedId());
+            editCustomerAction.setActionCallBack(() -> {
+                updateCustomer();
+                updateItem();
+            });
+            actions.add(editCustomerAction);
+        }
+
+        actions.add(new SetCustomerLocationAction(
+                getVaranegarActvity(),
+                getActionsAdapter(),
+                getSelectedId()));
+
+        /*
+         * دکمه ثبت سفارش و تحوبل سفارش
+         */
+        if (VaranegarApplication.is(VaranegarApplication.AppId.Dist))
+            actions.add(new InvoiceAction(
+                    getVaranegarActvity(),
+                    getActionsAdapter(),
+                    getSelectedId(), customer.CustomerLevelId));
+        else
+            actions.add(new SaveOrderAction(
+                    getVaranegarActvity(),
+                    getActionsAdapter(),
+                    getSelectedId(), customer.CustomerLevelId));
+
+        if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
+            NonVisitAction nonVisitAction =
+                    new NonVisitAction(
+                            getVaranegarActvity(),
+                            getActionsAdapter(),
+                            getSelectedId());
+            nonVisitAction.setActionCallBack(() -> {
+                updateCustomer();
+                updateItem();
+            });
+            actions.add(nonVisitAction);
+        }
+
+        if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
+            NonDeliveryAction nonDeliveryAction = new NonDeliveryAction(
+                    getVaranegarActvity(), getActionsAdapter(), getSelectedId());
+            nonDeliveryAction.setActionCallBack(() -> {
+                updateCustomer();
+                updateItem();
+            });
+            actions.add(nonDeliveryAction);
+
+            DistReturnAction returnAction = new DistReturnAction(
+                    getVaranegarActvity(), getActionsAdapter(), getSelectedId());
+            returnAction.setActionCallBack(() -> {
+                updateCustomer();
+                updateItem();
+            });
+            actions.add(returnAction);
+
+        } else {
+            NonOrderAction nonOrderAction = new NonOrderAction(
+                    getVaranegarActvity(),
+                    getActionsAdapter(),
+                    getSelectedId());
+            nonOrderAction.setActionCallBack(() -> {
+                updateCustomer();
+                updateItem();
+            });
+            actions.add(nonOrderAction);
+        }
+        if (!VaranegarApplication.is(VaranegarApplication.AppId.PreSales))
+            actions.add(new PaymentAction(
+                    getVaranegarActvity(),
+                    getActionsAdapter(),
+                    getSelectedId()));
+
+        PrintAction printAction = new PrintAction(
+                getVaranegarActvity(),
+                actionsAdapter,
+                getSelectedId());
+        printAction.setActionCallBack(this::updateItem);
+        actions.add(printAction);
+
+
+        if (!getActionsAdapter().getCloudConfigs().compare(ConfigKey.SimplePresale, true)) {
+            actions.add(new CameraAction(
+                    getVaranegarActvity(),
+                    getActionsAdapter(),
+                    getSelectedId()));
+
+            SysConfigManager sysConfigManager = new SysConfigManager(getContext());
+            SysConfigModel sysConfigModel = sysConfigManager
+                    .read(CheckCustomerStock, SysConfigManager.cloud);
+
+            if (SysConfigManager.compare(sysConfigModel, true)) {
+                actions.add(new CustomerInventoryAction(
+                        getVaranegarActvity(),
+                        actionsAdapter,
+                        getSelectedId()));
+            }
+
+            actions.add(new CustomerQuestionnaireAction(
+                    getVaranegarActvity(),
+                    actionsAdapter,
+                    getSelectedId()));
+
+            // گزارش موجودی مشتری
+            actions.add(new CustomerInventoryReportAction(
+                    getVaranegarActvity(),
+                    actionsAdapter,
+                    getSelectedId()));
+        }
+
+
+        ConfirmAction confirmAction = new ConfirmAction(
+                getVaranegarActvity(),
+                actionsAdapter,
+                getSelectedId());
+        confirmAction.setActionCallBack(() -> {
+            updateItem();
+            updateCustomer();
+        });
+        actions.add(confirmAction);
+
+        DeleteAction deleteAction = new DeleteAction(
+                getVaranegarActvity(),
+                actionsAdapter,
+                getSelectedId());
+        deleteAction.setActionCallBack(() -> {
+            updateItem();
+            updateCustomer();
+        });
+        actions.add(deleteAction);
+
+        /*
+         * درخواست برگشتی
+         * ثبت برگشتی
+         */
+        actions.add(new BaseReturnAction(
+                getVaranegarActvity(),
+                getActionsAdapter(),
+                getSelectedId()));
+
+        SendOperationAction sendOperationAction = new SendOperationAction(
+                getVaranegarActvity(),
+                actionsAdapter,
+                getSelectedId());
+        sendOperationAction.setActionCallBack(() -> {
+            updateItem();
+            updateCustomer();
+        });
+        actions.add(sendOperationAction);
+
+/*        VpnAction vpnAction = new VpnAction(
+                getVaranegarActvity(),
+                actionsAdapter,
+                getSelectedId());
+        vpnAction.setActionCallBack(new Action.ActionCallBack() {
+            @Override
+            public void done() {
+
+            }
+        });
+        actions.add(vpnAction);*/
+
+
+        CustomerUpdateAction customerUpdateAction = new CustomerUpdateAction(
+                getVaranegarActvity(),
+                actionsAdapter,
+                getSelectedId());
+        sendOperationAction.setActionCallBack(() -> {
+        });
+        actions.add(customerUpdateAction);
+
+    }
+    //---------------------------------------------------------------------------------------------- addActions
+
+
+    //---------------------------------------------------------------------------------------------- onBackPressed
+    @Override
+    public void onBackPressed() {
+        if (getContext() == null || getVaranegarActvity() == null) return;
+        if (!this.isLoading) {
+            List<Action> actions = actionsAdapter.getActions();
+            for (Action action :
+                    actions) {
+                String error = action.isForce();
+                if (error != null && !action.getIsDone()) {
+                    CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+                    dialog.setMessage(error);
+                    dialog.setTitle(R.string.error);
+                    dialog.setIcon(Icon.Error);
+                    dialog.setPositiveButton(R.string.ok, null);
+                    dialog.show();
+                    return;
+                }
+
+            }
+            UpdateManager updateManager = new UpdateManager(getContext());
+            updateManager.removeBarcode();
+            CustomerCallManager customerCallManager = new CustomerCallManager(getContext());
+            boolean isConfirmed = customerCallManager.isConfirmed(getCalls());
+            if (!isConfirmed) {
+                CustomerActionTimeManager.clearVisitTimer(getContext(), getSelectedId());
+            }
+            super.onBackPressed();
+        } else {
+            getVaranegarActvity().showSnackBar(R.string.please_wait,
+                    MainVaranegarActivity.Duration.Short);
+        }
+    }
+    //---------------------------------------------------------------------------------------------- onBackPressed
+
+
+
+    //---------------------------------------------------------------------------------------------- sortActions
+    private void sortActions(List<Action> actions) {
+        if (getContext() == null) return;
+        final List<TaskPriorityModel> tasks = new TaskPriorityManager(getContext()).getAll();
+        Linq.sort(actions, (o, t1) -> {
+            final BaseAction action1 = (BaseAction) o;
+            final BaseAction action2 = (BaseAction) t1;
+            if (action1.getTaskUniqueId() == null && action2.getTaskUniqueId() == null)
+                return 0;
+            else if (action1.getTaskUniqueId() == null && action2.getTaskUniqueId() != null)
+                return 1;
+            else if (action1.getTaskUniqueId() != null && action2.getTaskUniqueId() == null)
+                return -1;
+            TaskPriorityModel task1 = Linq.findFirst(tasks, item ->
+                    item.DeviceTaskUniqueId.equals(action1.getTaskUniqueId()));
+            TaskPriorityModel task2 = Linq.findFirst(tasks, item ->
+                    item.DeviceTaskUniqueId.equals(action2.getTaskUniqueId()));
+            if (task1 == null && task2 == null)
+                return 0;
+            else if (task1 == null)
+                return 1;
+            else if (task2 == null)
+                return -1;
+            return Integer.compare(task1.Priority, task2.Priority);
+        });
+    }
+    //---------------------------------------------------------------------------------------------- sortActions
+
+
+
+    //---------------------------------------------------------------------------------------------- getSelectedId
+    public UUID getSelectedId() {
+        try {
+            if (getArguments() == null)
+                return null;
+
+            return UUID.fromString(getArguments()
+                    .getString("a129ef75-77ce-432a-8982-6bcab0bf7b51"));
+
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+    //---------------------------------------------------------------------------------------------- getSelectedId
+
+
+    //---------------------------------------------------------------------------------------------- getCalls
+    private List<CustomerCallModel> getCalls() {
+        return getActionsAdapter().getCalls();
+    }
+    //---------------------------------------------------------------------------------------------- getCalls
+
+
+    //---------------------------------------------------------------------------------------------- onMenuClicked
     protected void onMenuClicked() {
         if (getVaranegarActvity() != null)
             getVaranegarActvity().toggleDrawer();
     }
+    //---------------------------------------------------------------------------------------------- onMenuClicked
 
+
+    //---------------------------------------------------------------------------------------------- updateItem
     public void updateItem() {
+        BaseAction.currentAction = null;
         loading(true);
         actionsAdapter.refresh(() -> {
             if (isResumed()) {
@@ -476,18 +728,34 @@ public class CustomersContentFragment extends VaranegarFragment {
             }
         });
     }
+    //---------------------------------------------------------------------------------------------- updateItem
 
+
+    //---------------------------------------------------------------------------------------------- loading
     private void loading(boolean isLoading) {
         this.isLoading = isLoading;
         ProgressView progressView = ((ProgressView) getView());
         if (progressView != null) {
             if (isLoading)
                 progressView.start();
-            else
+            else {
                 progressView.finish();
+                boldCurrentAction();
+            }
         }
     }
+    //---------------------------------------------------------------------------------------------- loading
 
+
+    //---------------------------------------------------------------------------------------------- boldCurrentAction
+    private void boldCurrentAction() {
+
+    }
+    //---------------------------------------------------------------------------------------------- boldCurrentAction
+
+
+
+    //---------------------------------------------------------------------------------------------- updateCustomer
     protected void updateCustomer() {
         if (isResumed() && !isRemoving()) {
             final View view = getView();
@@ -540,15 +808,15 @@ public class CustomersContentFragment extends VaranegarFragment {
                                                 .getResources().getColor(R.color.red));
                                         SharedPreferences sharedPreferences = getContext()
                                                 .getSharedPreferences("preferred_local", Context.MODE_PRIVATE);
-                                        String un3 = sharedPreferences.getString(customer.UniqueId.toString()
-                                                , "");
+/*                                        String un3 = sharedPreferences.getString(customer.UniqueId.toString()
+                                                , "");*/
                                         sharedPreferences.edit()
                                                 .putString(customer.UniqueId.toString(), "").apply();
-                                        if (un3 != null && un3.isEmpty() && un3.equals("")) {
+/*                                        if (un3 != null && un3.isEmpty() && un3.equals("")) {
                                             //showEditDialog();
                                         } else {
                                             // onBackPressed();
-                                        }
+                                        }*/
                                     }
                                 }
                                 ((PairedItems) view
@@ -690,259 +958,19 @@ public class CustomersContentFragment extends VaranegarFragment {
             });
         }
     }
-
-    @Override
-    public void onBackPressed() {
-        if (getContext() == null || getVaranegarActvity() == null) return;
-        if (!this.isLoading) {
-            List<Action> actions = actionsAdapter.getActions();
-            for (Action action :
-                    actions) {
-                String error = action.isForce();
-                if (error != null && !action.getIsDone()) {
-                    CuteMessageDialog dialog = new CuteMessageDialog(getContext());
-                    dialog.setMessage(error);
-                    dialog.setTitle(R.string.error);
-                    dialog.setIcon(Icon.Error);
-                    dialog.setPositiveButton(R.string.ok, null);
-                    dialog.show();
-                    return;
-                }
-
-            }
-            UpdateManager updateManager = new UpdateManager(getContext());
-            updateManager.removeBarcode();
-            CustomerCallManager customerCallManager = new CustomerCallManager(getContext());
-            boolean isConfirmed = customerCallManager.isConfirmed(getCalls());
-            if (!isConfirmed) {
-                CustomerActionTimeManager.clearVisitTimer(getContext(), getSelectedId());
-            }
-            super.onBackPressed();
-        } else {
-            getVaranegarActvity().showSnackBar(R.string.please_wait,
-                    MainVaranegarActivity.Duration.Short);
-        }
-    }
-
-    @CallSuper
-    protected void addActions(@NonNull List<Action> actions) {
-        //  دکمه ویرایش مشتری در صحه نمایش مشتری درpresale
-        if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
-            EditCustomerAction editCustomerAction =
-                    new EditCustomerAction(getVaranegarActvity(), actionsAdapter, getSelectedId());
-            editCustomerAction.setActionCallBack(() -> {
-                updateCustomer();
-                updateItem();
-            });
-            actions.add(editCustomerAction);
-        }
-        actions.add(new SetCustomerLocationAction(
-                getVaranegarActvity(),
-                getActionsAdapter(),
-                getSelectedId()));
-
-        /**
-         * دکمه ثبت سفارش و تحوبل سفارش
-         */
-        if (VaranegarApplication.is(VaranegarApplication.AppId.Dist))
-            actions.add(new InvoiceAction(
-                    getVaranegarActvity(),
-                    getActionsAdapter(),
-                    getSelectedId(),customer.CustomerLevelId));
-        else
-            actions.add(new SaveOrderAction(
-                    getVaranegarActvity(),
-                    getActionsAdapter(),
-                    getSelectedId(),customer.CustomerLevelId));
-
-        if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
-            NonVisitAction nonVisitAction =
-                    new NonVisitAction(
-                            getVaranegarActvity(),
-                            getActionsAdapter(),
-                            getSelectedId());
-            nonVisitAction.setActionCallBack(() -> {
-                updateCustomer();
-                updateItem();
-            });
-            actions.add(nonVisitAction);
-        }
-
-        if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
-            NonDeliveryAction nonDeliveryAction = new NonDeliveryAction(
-                    getVaranegarActvity(), getActionsAdapter(), getSelectedId());
-            nonDeliveryAction.setActionCallBack(() -> {
-                updateCustomer();
-                updateItem();
-            });
-            actions.add(nonDeliveryAction);
-
-            DistReturnAction returnAction = new DistReturnAction(
-                    getVaranegarActvity(), getActionsAdapter(), getSelectedId());
-            returnAction.setActionCallBack(() -> {
-                updateCustomer();
-                updateItem();
-            });
-            actions.add(returnAction);
-
-        } else {
-            NonOrderAction nonOrderAction = new NonOrderAction(
-                    getVaranegarActvity(),
-                    getActionsAdapter(),
-                    getSelectedId());
-            nonOrderAction.setActionCallBack(() -> {
-                updateCustomer();
-                updateItem();
-            });
-            actions.add(nonOrderAction);
-        }
-        if (!VaranegarApplication.is(VaranegarApplication.AppId.PreSales))
-            actions.add(new PaymentAction(
-                    getVaranegarActvity(),
-                    getActionsAdapter(),
-                    getSelectedId()));
-
-        PrintAction printAction = new PrintAction(
-                getVaranegarActvity(),
-                actionsAdapter,
-                getSelectedId());
-        printAction.setActionCallBack(this::updateItem);
-        actions.add(printAction);
+    //---------------------------------------------------------------------------------------------- updateCustomer
 
 
-        if (!getActionsAdapter().getCloudConfigs().compare(ConfigKey.SimplePresale, true)) {
-            actions.add(new CameraAction(
-                    getVaranegarActvity(),
-                    getActionsAdapter(),
-                    getSelectedId()));
 
-            SysConfigManager sysConfigManager = new SysConfigManager(getContext());
-            SysConfigModel sysConfigModel = sysConfigManager
-                    .read(CheckCustomerStock, SysConfigManager.cloud);
-
-            if (SysConfigManager.compare(sysConfigModel, true)) {
-                actions.add(new CustomerInventoryAction(
-                        getVaranegarActvity(),
-                        actionsAdapter,
-                        getSelectedId()));
-            }
-
-            actions.add(new CustomerQuestionnaireAction(
-                    getVaranegarActvity(),
-                    actionsAdapter,
-                    getSelectedId()));
-
-            // گزارش موجودی مشتری
-            actions.add(new CustomerInventoryReportAction(
-                    getVaranegarActvity(),
-                    actionsAdapter,
-                    getSelectedId()));
-        }
-
-
-        ConfirmAction confirmAction = new ConfirmAction(
-                getVaranegarActvity(),
-                actionsAdapter,
-                getSelectedId());
-        confirmAction.setActionCallBack(() -> {
-            updateItem();
-            updateCustomer();
-        });
-        actions.add(confirmAction);
-
-        DeleteAction deleteAction = new DeleteAction(
-                getVaranegarActvity(),
-                actionsAdapter,
-                getSelectedId());
-        deleteAction.setActionCallBack(() -> {
-            updateItem();
-            updateCustomer();
-        });
-        actions.add(deleteAction);
-
-        /**
-         * درخواست برگشتی
-         * ثبت برگشتی
-         */
-        actions.add(new BaseReturnAction(
-                getVaranegarActvity(),
-                getActionsAdapter(),
-                getSelectedId()));
-
-        SendOperationAction sendOperationAction = new SendOperationAction(
-                getVaranegarActvity(),
-                actionsAdapter,
-                getSelectedId());
-        sendOperationAction.setActionCallBack(() -> {
-            updateItem();
-            updateCustomer();
-        });
-        actions.add(sendOperationAction);
-
-/*        VpnAction vpnAction = new VpnAction(
-                getVaranegarActvity(),
-                actionsAdapter,
-                getSelectedId());
-        vpnAction.setActionCallBack(new Action.ActionCallBack() {
-            @Override
-            public void done() {
-
-            }
-        });
-        actions.add(vpnAction);*/
-
-
-        CustomerUpdateAction customerUpdateAction = new CustomerUpdateAction(
-                getVaranegarActvity(),
-                actionsAdapter,
-                getSelectedId());
-        sendOperationAction.setActionCallBack(() -> {
-        });
-        actions.add(customerUpdateAction);
-
-    }
-
-    private void sortActions(List<Action> actions) {
-        if (getContext() == null) return;
-        final List<TaskPriorityModel> tasks = new TaskPriorityManager(getContext()).getAll();
-        Linq.sort(actions, (o, t1) -> {
-            final BaseAction action1 = (BaseAction) o;
-            final BaseAction action2 = (BaseAction) t1;
-            if (action1.getTaskUniqueId() == null && action2.getTaskUniqueId() == null)
-                return 0;
-            else if (action1.getTaskUniqueId() == null && action2.getTaskUniqueId() != null)
-                return 1;
-            else if (action1.getTaskUniqueId() != null && action2.getTaskUniqueId() == null)
-                return -1;
-            TaskPriorityModel task1 = Linq.findFirst(tasks, item ->
-                    item.DeviceTaskUniqueId.equals(action1.getTaskUniqueId()));
-            TaskPriorityModel task2 = Linq.findFirst(tasks, item ->
-                    item.DeviceTaskUniqueId.equals(action2.getTaskUniqueId()));
-            if (task1 == null && task2 == null)
-                return 0;
-            else if (task1 == null)
-                return 1;
-            else if (task2 == null)
-                return -1;
-            return Integer.compare(task1.Priority, task2.Priority);
-        });
-    }
-
-    private final ArrayList<OnItemUpdateListener> onItemUpdateListeners = new ArrayList<>();
-
-    public interface OnItemUpdateListener {
-        void run();
-    }
-
-
+    //---------------------------------------------------------------------------------------------- addOnItemUpdateListener
     public void addOnItemUpdateListener(OnItemUpdateListener onItemUpdateListener) {
         onItemUpdateListeners.add(onItemUpdateListener);
     }
+    //---------------------------------------------------------------------------------------------- addOnItemUpdateListener
 
 
-    private String pin;
-
-    public void toeditFragment() {
+    //---------------------------------------------------------------------------------------------- toEditFragment
+    public void toEditFragment() {
 
         /**
          * گرفتن pincode4 برای ویرایش مشتری در presale
@@ -1009,8 +1037,10 @@ public class CustomersContentFragment extends VaranegarFragment {
             dialog.show(getActivity().getSupportFragmentManager(), "InsertPinDialog");
         }
     }
+    //---------------------------------------------------------------------------------------------- toEditFragment
 
 
+    //---------------------------------------------------------------------------------------------- showEditDialog
     private void showEditDialog() {
 //        EditCustomerZarFragmentDialog editCustomerFragmentDialog =
 //                new EditCustomerZarFragmentDialog();
@@ -1028,7 +1058,10 @@ public class CustomersContentFragment extends VaranegarFragment {
         edit_new_customer_zar.setArguments(bundle);
         getVaranegarActvity().pushFragment(edit_new_customer_zar);
     }
+    //---------------------------------------------------------------------------------------------- showEditDialog
 
+
+    //---------------------------------------------------------------------------------------------- printFailed
     private void printFailed(Context context, String error) {
         try {
             CuteMessageDialog dialog = new CuteMessageDialog(context);
@@ -1041,4 +1074,51 @@ public class CustomersContentFragment extends VaranegarFragment {
             Timber.e(e1);
         }
     }
+    //---------------------------------------------------------------------------------------------- printFailed
+
+
+
+    //---------------------------------------------------------------------------------------------- onStop
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mapView != null)
+            mapView.onStop();
+        Runtime.getRuntime().gc();
+    }
+    //---------------------------------------------------------------------------------------------- onStop
+
+
+
+    //---------------------------------------------------------------------------------------------- onDestroy
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        CustomerActionTimeManager.stopVisitTimer();
+        if (mapView != null)
+            mapView.onDestroy();
+        Runtime.getRuntime().gc();
+    }
+    //---------------------------------------------------------------------------------------------- onDestroy
+
+
+
+    //---------------------------------------------------------------------------------------------- onLowMemory
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        if (mapView != null)
+            mapView.onLowMemory();
+    }
+    //---------------------------------------------------------------------------------------------- onLowMemory
+
+
+    //---------------------------------------------------------------------------------------------- onActivityCreated
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setDrawerAdapter(new CustomerReportsDrawerAdapter(getVaranegarActvity(), getSelectedId()));
+    }
+    //---------------------------------------------------------------------------------------------- onActivityCreated
+
 }

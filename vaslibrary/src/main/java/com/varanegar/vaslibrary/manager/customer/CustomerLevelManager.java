@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import com.varanegar.framework.database.BaseManager;
 import com.varanegar.framework.database.DbException;
 import com.varanegar.framework.database.querybuilder.Query;
+import com.varanegar.framework.database.querybuilder.criteria.Criteria;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.validation.ValidationException;
@@ -18,6 +19,7 @@ import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.customer.CustomerApi;
 
 import java.util.List;
+import java.util.UUID;
 
 import okhttp3.Request;
 import timber.log.Timber;
@@ -31,6 +33,7 @@ public class CustomerLevelManager extends BaseManager<CustomerLevelModel> {
         super(context, new CustomerLevelModelRepository());
     }
 
+    //---------------------------------------------------------------------------------------------- sync
     public void sync(final UpdateCall call) {
         try {
             deleteAll();
@@ -80,8 +83,22 @@ public class CustomerLevelManager extends BaseManager<CustomerLevelModel> {
         }
 
     }
+    //---------------------------------------------------------------------------------------------- sync
 
+
+    //---------------------------------------------------------------------------------------------- getAll
     public List<CustomerLevelModel> getAll() {
         return getItems(new Query().from(CustomerLevel.CustomerLevelTbl));
     }
+    //---------------------------------------------------------------------------------------------- getAll
+
+
+    //---------------------------------------------------------------------------------------------- getItem
+    public CustomerLevelModel getItem(@NonNull UUID uniqueId) {
+        Query query = new Query();
+        query.from(CustomerLevel.CustomerLevelTbl).whereAnd(Criteria.equals(CustomerLevel.UniqueId, uniqueId));
+        return getItem(query);
+    }
+    //---------------------------------------------------------------------------------------------- getItem
+
 }

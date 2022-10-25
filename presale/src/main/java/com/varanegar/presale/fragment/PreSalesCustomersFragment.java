@@ -14,7 +14,6 @@ import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.framework.util.component.drawer.DrawerItem;
 import com.varanegar.framework.util.component.drawer.DrawerSectionItem;
 import com.varanegar.framework.util.component.toolbar.CuteToolbar;
-import com.varanegar.presale.ui.PreSalesDrawerAdapter;
 import com.varanegar.presale.ui.PreSalesTourReportDrawerItem;
 import com.varanegar.presale.ui.PreSalesTourReportFragment;
 import com.varanegar.vaslibrary.catalogue.CatalogueHelper;
@@ -39,6 +38,8 @@ import com.varanegar.vaslibrary.webapi.ping.PingApi;
 import java.util.UUID;
 
 public class PreSalesCustomersFragment extends CustomersFragment {
+    
+    //---------------------------------------------------------------------------------------------- onActivityCreated
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -47,32 +48,47 @@ public class PreSalesCustomersFragment extends CustomersFragment {
         setVisibleImageViewMenuIcon(View.GONE);
 //        setDrawerAdapter(new PreSalesDrawerAdapter(getVaranegarActvity()));
     }
+    //---------------------------------------------------------------------------------------------- onActivityCreated
 
+
+    //---------------------------------------------------------------------------------------------- getSendTourFragment
     @Override
     protected VaranegarFragment getSendTourFragment() {
         return new PreSalesSendTourFragment();
     }
+    //---------------------------------------------------------------------------------------------- getSendTourFragment
 
+
+    //---------------------------------------------------------------------------------------------- getProfileFragment
     @Override
     protected TourReportFragment getProfileFragment() {
         return new PreSalesTourReportFragment();
     }
+    //---------------------------------------------------------------------------------------------- getProfileFragment
 
+
+    //---------------------------------------------------------------------------------------------- getContentFragment
     @Override
     protected VaranegarFragment getContentFragment(UUID selectedItem) {
         return new PreSalesCustomerContentFragment();
     }
+    //---------------------------------------------------------------------------------------------- getContentFragment
 
+
+    //---------------------------------------------------------------------------------------------- getContentTargetFragment
     @Override
     protected VaranegarFragment getContentTargetFragment() {
         return new PreSalesCustomerTargetFragment();
     }
+    //---------------------------------------------------------------------------------------------- getContentTargetFragment
 
+
+    //---------------------------------------------------------------------------------------------- getContentTargetDetailFragment
     @Override
     protected VaranegarFragment getContentTargetDetailFragment() {
         return new PreSalesCustomerTargetDetailFragment();
     }
-
+    //---------------------------------------------------------------------------------------------- getContentTargetDetailFragment
 
 
     //---------------------------------------------------------------------------------------------- addReportToCutePresaleToolbar
@@ -223,6 +239,7 @@ public class PreSalesCustomersFragment extends CustomersFragment {
 
         SysConfigManager sysConfigManager = new SysConfigManager(activity);
         SysConfigModel sysConfigModel = sysConfigManager.read(ConfigKey.AllowUpdatePrice, SysConfigManager.cloud);
+
         if (SysConfigManager.compare(sysConfigModel, true))
             updates.addItem(new DrawerItem(activity, com.varanegar.vaslibrary.R.string.update_prices).setClickListener(new View.OnClickListener() {
                 ProgressDialog progressDialog;
@@ -303,6 +320,88 @@ public class PreSalesCustomersFragment extends CustomersFragment {
                     });
                 }
 
+            }));
+
+        SysConfigModel advanceDealerCredit = sysConfigManager.read(ConfigKey.DealerAdvanceCreditControl, SysConfigManager.cloud);
+        if (SysConfigManager.compare(advanceDealerCredit, true))
+            updates.addItem(new DrawerItem(activity, com.varanegar.vaslibrary.R.string.update_advance_dealer_credit).setClickListener(new View.OnClickListener() {
+
+                ProgressDialog progressDialog;
+
+                private void showProgressDialog() {
+                    if (progressDialog == null) {
+                        progressDialog = new ProgressDialog(activity);
+                        progressDialog.setMessage(activity.getString(com.varanegar.vaslibrary.R.string.updating_advance_dealer_credit));
+                    }
+                    progressDialog.show();
+                }
+
+                private void dismissProgressDialog() {
+                    if (!activity.isFinishing())
+                        if (progressDialog != null && progressDialog.isShowing())
+                            try {
+                                progressDialog.dismiss();
+                            } catch (Exception ignored) {
+
+                            }
+                }
+
+                @Override
+                public void onClick(View view) {
+                    activity.closeDrawer();
+                    if (!Connectivity.isConnected(activity)) {
+                        ConnectionSettingDialog connectionSettingDialog = new ConnectionSettingDialog();
+                        connectionSettingDialog.show(activity.getSupportFragmentManager(), "ConnectionSettingDialog");
+                        return;
+                    }
+                    PingApi pingApi = new PingApi();
+                    showProgressDialog();
+                    pingApi.refreshBaseServerUrl(activity, new PingApi.PingCallback() {
+                        @Override
+                        public void done(String ipAddress) {
+                            sysConfigManager.syncAdvanceDealerCredit(new UpdateCall() {
+                                @Override
+                                protected void onSuccess() {
+                                    dismissProgressDialog();
+                                    if (!activity.isFinishing()) {
+                                        CuteMessageDialog dialog = new CuteMessageDialog(activity);
+                                        dialog.setMessage(com.varanegar.vaslibrary.R.string.updated_advance_dealer_credit);
+                                        dialog.setTitle(com.varanegar.vaslibrary.R.string.done);
+                                        dialog.setIcon(Icon.Success);
+                                        dialog.setPositiveButton(com.varanegar.vaslibrary.R.string.ok, null);
+                                        dialog.show();
+                                    }
+                                }
+
+                                @Override
+                                protected void onFailure(String error) {
+                                    dismissProgressDialog();
+                                    if (!activity.isFinishing()) {
+                                        CuteMessageDialog dialog = new CuteMessageDialog(activity);
+                                        dialog.setMessage(error);
+                                        dialog.setTitle(com.varanegar.vaslibrary.R.string.error);
+                                        dialog.setIcon(Icon.Error);
+                                        dialog.setPositiveButton(com.varanegar.vaslibrary.R.string.ok, null);
+                                        dialog.show();
+                                    }
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void failed() {
+                            dismissProgressDialog();
+                            if (!activity.isFinishing()) {
+                                CuteMessageDialog dialog = new CuteMessageDialog(activity);
+                                dialog.setPositiveButton(com.varanegar.vaslibrary.R.string.ok, null);
+                                dialog.setTitle(com.varanegar.vaslibrary.R.string.error);
+                                dialog.setMessage(com.varanegar.vaslibrary.R.string.network_error);
+                                dialog.setIcon(Icon.Error);
+                                dialog.show();
+                            }
+                        }
+                    });
+                }
             }));
 
         updates.addItem(new DrawerItem(activity, com.varanegar.vaslibrary.R.string.download_product_images).setClickListener(view -> {

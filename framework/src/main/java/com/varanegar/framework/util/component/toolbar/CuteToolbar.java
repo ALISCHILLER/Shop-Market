@@ -31,14 +31,14 @@ public class CuteToolbar extends LinearLayout {
     private ImageView expandImageView;
     private LinearLayout linearLayoutToolbarReport;
     private LinearLayout linearLayoutToolbarProfile;
-    private boolean expanded = false;
+    private boolean expanded = true;
     private List<CuteButton> buttons = new ArrayList<>();
     private SharedPreferences sharedPreferences;
     private long lastClickTime = 0;
 
     private void init() {
         sharedPreferences = getContext().getSharedPreferences("cute_toolbar", Context.MODE_PRIVATE);
-        expanded = sharedPreferences.getBoolean("expanded", false);
+        expanded = sharedPreferences.getBoolean("expanded", true);
     }
 
     public CuteToolbar(Context context) {
@@ -147,6 +147,8 @@ public class CuteToolbar extends LinearLayout {
     }
 
     private void expand() {
+        linearLayoutToolbarReport.setVisibility(VISIBLE);
+        linearLayoutToolbarProfile.setVisibility(VISIBLE);
         sharedPreferences.edit().putBoolean("expanded", true).apply();
         expanded = true;
         expandImageView.setImageResource(R.drawable.ic_collapse_white_24dp);
@@ -154,6 +156,8 @@ public class CuteToolbar extends LinearLayout {
     }
 
     private void collapse() {
+        linearLayoutToolbarReport.setVisibility(GONE);
+        linearLayoutToolbarProfile.setVisibility(GONE);
         sharedPreferences.edit().putBoolean("expanded", false).apply();
         expanded = false;
         expandImageView.setImageResource(R.drawable.ic_expand_white_24dp);

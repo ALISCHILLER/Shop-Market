@@ -19,6 +19,7 @@ import java.util.UUID;
 public abstract class Action implements Serializable {
     private String isEnabled;
     private int oldOrientation;
+    public static Action currentAction;
 
     public String getIsEnabled() {
         return isEnabled;

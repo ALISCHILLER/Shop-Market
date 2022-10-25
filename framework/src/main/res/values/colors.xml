@@ -24,5 +24,6 @@
     <color name="black_transparent">#0d000000</color>
     <color name="grey_dark_dark_dark">#4d4d4d</color>
     <color name="no_emphatic">#FFA8A8</color>
+    <color name="light_green">#ADE7B1</color>
 
 </resources>

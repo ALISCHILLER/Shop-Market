@@ -13,8 +13,12 @@ import java.util.List;
 
 public class PreSalesCustomerContentFragment extends CustomersContentFragment {
 
+    //---------------------------------------------------------------------------------------------- addActions
     @Override
     protected void addActions(@NonNull List<Action> actions) {
         super.addActions(actions);
     }
+    //---------------------------------------------------------------------------------------------- addActions
+
+
 }

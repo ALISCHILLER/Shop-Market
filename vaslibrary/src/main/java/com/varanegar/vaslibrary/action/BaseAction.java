@@ -117,9 +117,11 @@ public abstract class BaseAction extends Action {
                 } else
                     return false;
             });
-            if (task != null)
+            if (task != null) {
+                if (currentAction == null)
+                    currentAction = leveragedAction;
                 return getActivity().getString(R.string.please_honor_priorities) + "    " + leveragedAction.isMandatory();
-            else
+            } else
                 return null;
         }
     }

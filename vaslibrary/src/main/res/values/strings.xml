@@ -107,6 +107,8 @@
     <string name="refused_label">انصراف داده :</string>
     <string name="order_taked_label">سفارش گرفته:</string>
     <string name="customer_name_label">نام مشتری :</string>
+    <string name="customer_level_lable">درجه مشتری : </string>
+    <string name="customer_group_lable">گروه مشتری : </string>
     <string name="customer_code_label">کد مشتری :</string>
     <string name="store_name_label">نام فروشگاه :</string>
     <string name="telephone_label">تلفن :</string>

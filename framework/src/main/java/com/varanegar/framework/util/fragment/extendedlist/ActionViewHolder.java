@@ -1,9 +1,15 @@
 package com.varanegar.framework.util.fragment.extendedlist;
 
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -30,6 +36,7 @@ class ActionViewHolder extends RecyclerView.ViewHolder {
     private ActionsAdapter adapter;
     private TextView actionNameTextView;
     private ImageView actionImageView;
+    private LinearLayout linearLayoutParent;
     boolean isClickable = true;
 
     public ActionViewHolder(MainVaranegarActivity activity, View itemView, ActionsAdapter adapter) {
@@ -41,11 +48,23 @@ class ActionViewHolder extends RecyclerView.ViewHolder {
         actionImageViewDisabled = itemView.findViewById(R.id.action_icon_image_view_disabled);
         doneImageView = itemView.findViewById(R.id.done_image_view);
         progressBar = itemView.findViewById(R.id.progress_view);
+        linearLayoutParent = itemView.findViewById(R.id.linearLayoutParent);
     }
 
     public void bind(int position) {
         final Action action = adapter.getActions().get(position);
         if (action != null) {
+
+            linearLayoutParent.setAnimation(null);
+            linearLayoutParent.clearAnimation();
+            if (action == Action.currentAction) {
+                Context context = linearLayoutParent.getContext();
+                Resources resources = context.getResources();
+                linearLayoutParent.setBackgroundColor(resources.getColor(R.color.light_green));
+                linearLayoutParent.startAnimation(AnimationUtils.loadAnimation(context, R.anim.bounce));
+            } else
+                linearLayoutParent.setBackgroundColor(Color.TRANSPARENT);
+
             if (action.icon != -1) {
                 actionImageView.setImageResource(action.icon);
                 actionImageViewDisabled.setImageResource(action.icon);

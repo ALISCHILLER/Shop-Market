@@ -13,13 +13,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.varanegar.framework.base.VaranegarApplication;
+import com.varanegar.framework.database.querybuilder.Query;
+import com.varanegar.framework.database.querybuilder.criteria.Criteria;
 import com.varanegar.framework.util.HelperMethods;
 import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.util.recycler.BaseRecyclerAdapter;
 import com.varanegar.framework.util.recycler.BaseViewHolder;
 import com.varanegar.vaslibrary.R;
+import com.varanegar.vaslibrary.manager.customer.CustomerLevelManager;
 import com.varanegar.vaslibrary.manager.customercallmanager.CustomerCallManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.BackOfficeType;
+import com.varanegar.vaslibrary.model.customer.CustomerLevel;
+import com.varanegar.vaslibrary.model.customer.CustomerLevelModel;
 import com.varanegar.vaslibrary.model.customercall.CustomerCallModel;
 import com.varanegar.vaslibrary.model.customerpathview.CustomerPathViewModel;
 import com.varanegar.vaslibrary.ui.fragment.CustomersContentFragment;
@@ -42,11 +47,13 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
     private TextView customerNameTextView;
     private TextView customerAddressTextView;
     private TextView customerStatusTextView;
+    private TextView customerGroupTextView;
     private TextView codenaghsh_text_view,codenaghsh_text;
     private LinearLayout descriptionLayout;
     private TextView descriptionTextView;
     private BackOfficeType backOfficeType;
     private LinearLayout codenaghsh_layout;
+    private TextView customerLevelTextView;
     //private ImageUrlViewDialog customerImageView;
 
     public CustomerSummaryMultipanViewHolder(View itemView,
@@ -69,6 +76,8 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
         codenaghsh_layout = (LinearLayout) itemView.findViewById(R.id.codenaghsh_layout);
         descriptionLayout = itemView.findViewById(R.id.description_layout);
         descriptionTextView = itemView.findViewById(R.id.order_description_text_view);
+        customerLevelTextView = itemView.findViewById(R.id.customer_level_text_view);
+        customerGroupTextView = itemView.findViewById(R.id.customer_group_text_view);
         this.backOfficeType = backOfficeType;
     }
 
@@ -84,12 +93,6 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
         customerTelTextView.setText(customerModel.Phone);
         storeNameTextView.setText(customerModel.StoreName);
         String codeNagesh_Str=customerModel.CodeNaghsh;
-
-
-
-
-
-
 
 
         if(calls==null)
@@ -178,6 +181,8 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
             customerMobileTextView.setPaintFlags(customerMobileTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
             customerTelTextView.setPaintFlags(customerTelTextView.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
         }
+
+        setCustomerLevelAndCategory(customerModel);
     }
 
     private void setStatus(List<CustomerCallModel> calls) {
@@ -190,4 +195,18 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
         else
             customerStatusTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
     }
+
+
+    //---------------------------------------------------------------------------------------------- setCustomerLevelAndCategory
+    private void setCustomerLevelAndCategory(CustomerPathViewModel customerModel) {
+        CustomerLevelManager manager = new CustomerLevelManager(getContext());
+        CustomerLevelModel model = manager.getItem(customerModel.CustomerLevelId);
+        customerLevelTextView.setText(model.CustomerLevelName);
+        customerGroupTextView.setText(customerModel.CustomerCategoryName);
+    }
+    //---------------------------------------------------------------------------------------------- setCustomerLevelAndCategory
+
+
+
+
 }

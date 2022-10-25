@@ -81,6 +81,31 @@
                             android:singleLine="true" />
                     </LinearLayout>
 
+                    <!--   customer level     -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@android:style/TextAppearance.Small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/padding_left_right_small"
+                            android:text="@string/customer_level_lable"
+                            android:textColor="?attr/colorPrimary" />
+
+                        <TextView
+                            android:id="@+id/customer_level_text_view"
+                            style="@android:style/TextAppearance.DeviceDefault"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:lines="1"
+                            android:padding="@dimen/padding_left_right_small"
+                            android:singleLine="true" />
+
+                    </LinearLayout>
+                    <!--   customer level     -->
 
                 </LinearLayout>
 
@@ -134,6 +159,32 @@
                             android:padding="@dimen/padding_left_right_small" />
 
                     </LinearLayout>
+
+                    <!--   customer Group     -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@android:style/TextAppearance.Small"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/padding_left_right_small"
+                            android:text="@string/customer_group_lable"
+                            android:textColor="?attr/colorPrimary" />
+
+                        <TextView
+                            android:id="@+id/customer_group_text_view"
+                            style="@android:style/TextAppearance.DeviceDefault"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:lines="1"
+                            android:padding="@dimen/padding_left_right_small"
+                            android:singleLine="true" />
+
+                    </LinearLayout>
+                    <!--   customer Group     -->
 
                 </LinearLayout>
 
@@ -201,6 +252,7 @@
                 android:src="@drawable/ic_call_green_900_24dp" />
         </LinearLayout>
 
+
         <LinearLayout
             android:id="@+id/description_layout"
             android:layout_width="match_parent"
@@ -226,6 +278,7 @@
                 android:gravity="center_vertical"
                 android:padding="@dimen/padding_left_right_small" />
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/codenaghsh_layout"
             android:layout_width="match_parent"
@@ -253,6 +306,7 @@
                 android:gravity="center_vertical"
                 android:padding="@dimen/padding_left_right_small" />
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -289,4 +343,5 @@
         </LinearLayout>
 
     </LinearLayout>
+
 </androidx.cardview.widget.CardView>
