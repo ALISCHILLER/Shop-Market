@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayoutNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="#80050505">
+
+        <TextView
+            android:id="@+id/textViewCount"
+            android:layout_width="@dimen/_15sdp"
+            android:layout_height="@dimen/_15sdp"
+            android:layout_margin="@dimen/_3sdp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_7sdp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:background="@drawable/dw_background_slide_number"/>
+
+        <TextView
+            android:id="@+id/textViewNewsTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintWidth_percent="0.45"
+            android:maxLines="4"
+            android:textSize="@dimen/_8sdp"
+            android:padding="@dimen/_3sdp"
+            android:textStyle="bold"
+            android:textColor="@color/white" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_170sdp"
+        app:layout_constraintTop_toBottomOf="@id/linearLayoutNumber">
+
+        <TextView
+            android:id="@+id/textViewNewsBody"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_7sdp"
+            android:layout_marginTop="@dimen/_3sdp"
+            android:layout_marginBottom="@dimen/_3sdp"
+            android:lineSpacingExtra="@dimen/_2sdp"
+            android:padding="@dimen/_3sdp"/>
+
+    </ScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

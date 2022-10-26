@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,10 +33,7 @@ import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.util.component.PairedItemsSpinner;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
-import com.varanegar.framework.util.component.drawer.DrawerItem;
-import com.varanegar.framework.util.component.drawer.DrawerSectionItem;
 import com.varanegar.framework.util.component.toolbar.CuteButton;
-import com.varanegar.framework.util.component.toolbar.CuteToolbar;
 import com.varanegar.framework.util.filter.Filter;
 import com.varanegar.framework.util.fragment.extendedlist.DbListFragment;
 import com.varanegar.framework.util.recycler.BaseViewHolder;
@@ -48,6 +46,7 @@ import com.varanegar.vaslibrary.manager.customer.CustomerBarcodeManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.customercallmanager.CustomerCallManager;
 import com.varanegar.vaslibrary.manager.customercardex.CustomerCardexTempManager;
+import com.varanegar.vaslibrary.manager.news.NewsZarManager;
 import com.varanegar.vaslibrary.manager.oldinvoicemanager.CustomerOldInvoiceDetailTempManager;
 import com.varanegar.vaslibrary.manager.oldinvoicemanager.CustomerOldInvoiceHeaderTempManager;
 import com.varanegar.vaslibrary.manager.oldinvoicemanager.OldInvoiceManager;
@@ -59,7 +58,6 @@ import com.varanegar.vaslibrary.manager.sysconfigmanager.UnknownBackOfficeExcept
 import com.varanegar.vaslibrary.manager.tourmanager.TourManager;
 import com.varanegar.vaslibrary.manager.updatemanager.CustomersUpdateFlow;
 import com.varanegar.vaslibrary.manager.updatemanager.PriceUpdateFlow;
-import com.varanegar.vaslibrary.manager.updatemanager.ProductUpdateFlow;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateCall;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateManager;
 import com.varanegar.vaslibrary.manager.visitday.VisitDayViewManager;
@@ -75,20 +73,14 @@ import com.varanegar.vaslibrary.model.tour.TourModel;
 import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.model.visitday.VisitDayViewModel;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
-import com.varanegar.vaslibrary.ui.drawer.TourReportDrawerItem;
+import com.varanegar.vaslibrary.ui.dialog.News.NewsDialog;
 import com.varanegar.vaslibrary.ui.drawer.UserProfileDrawerItem;
 import com.varanegar.vaslibrary.ui.drawer.UserProfileFragment;
 import com.varanegar.vaslibrary.ui.fragment.AddNewCustomerFragment;
 import com.varanegar.vaslibrary.ui.fragment.AddNewCustomerZarFragment;
 import com.varanegar.vaslibrary.ui.fragment.TourReportFragment;
 import com.varanegar.vaslibrary.ui.fragment.UserLocationFragment;
-import com.varanegar.vaslibrary.ui.report.ProductReportFragment;
-import com.varanegar.vaslibrary.ui.report.report_new.customerNoSaleReport.CustomerNoSaleReportFragment;
-import com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary.CustomerGroupSalesSummaryFragment;
-import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.InvoiceBalanceReportFragment;
-import com.varanegar.vaslibrary.ui.report.report_new.orderReturn_report.RerurnReportFragment;
-import com.varanegar.vaslibrary.ui.report.report_new.orderStatus_Report.OrderReportFragment;
-import com.varanegar.vaslibrary.ui.report.report_new.products_purchase_history_report.ProductsPurchaseHistoryReportFragment;
+import com.varanegar.vaslibrary.ui.fragment.news_fragment.model.NewsData_Model;
 import com.varanegar.vaslibrary.ui.viewholders.CustomerSummaryMultipanViewHolder;
 import com.varanegar.vaslibrary.ui.viewholders.CustomerSummaryViewHolder;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
@@ -114,7 +106,7 @@ public abstract class CustomersFragment
         CustomersFragment.StatusFilter> {
     private static final String TAG = "CustomersFragment";
     private String barcode;
-
+    boolean firstCreation = false;
     private boolean multipan;
     BackOfficeType backOfficeType;
 
@@ -137,6 +129,7 @@ public abstract class CustomersFragment
             LayoutInflater inflater,
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
+
         SysConfigManager sysConfigManager = new SysConfigManager(getContext());
         SysConfigModel deviceWorkingHour =
                 sysConfigManager.read(DeviceWorkingHour, SysConfigManager.cloud);
@@ -238,6 +231,11 @@ public abstract class CustomersFragment
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (getContext() != null) {
+            SharedPreferences sharedPreferences = getContext()
+                    .getSharedPreferences("valuesStatus", Context.MODE_PRIVATE);
+            sharedPreferences.edit().putBoolean("loadFirstCustomerFragment", false).apply();
+        }
         Timber.d("Customers fragment destroyed");
         remove("dd003d32-4f05-423f-b7ba-3ccc9f54fb39");
         Runtime.getRuntime().gc();
@@ -282,6 +280,7 @@ public abstract class CustomersFragment
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putBoolean("loadFirstCustomerFragment", true);
         if (barcode != null && !barcode.isEmpty())
             outState.putString("dd003d32-4f05-423f-b7ba-3ccc9f54fb39", barcode);
     }
@@ -784,6 +783,7 @@ public abstract class CustomersFragment
     //---------------------------------------------------------------------------------------------- onCreateCuteToolbar
 
 
+
     //---------------------------------------------------------------------------------------------- addProfileToCuteToolbar
     public void addProfileToCuteToolbar() {
         final MainVaranegarActivity activity = getVaranegarActvity();
@@ -797,7 +797,6 @@ public abstract class CustomersFragment
         });
     }
     //---------------------------------------------------------------------------------------------- addProfileToCuteToolbar
-
 
 
     //---------------------------------------------------------------------------------------------- createFiltersQuery

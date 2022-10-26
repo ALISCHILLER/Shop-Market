@@ -64,7 +64,7 @@ public class MainActivity extends VasActivity {
             SharedPreferences sharedPreferences = getApplicationContext()
                     .getSharedPreferences("ApplicationVersion", Context.MODE_PRIVATE);
             int saveVersion = sharedPreferences.getInt("SaveVersion", 0);
-            if (currentVersion != saveVersion) {
+            if (currentVersion != saveVersion && saveVersion > 0) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt("SaveVersion", currentVersion);
                 editor.apply();

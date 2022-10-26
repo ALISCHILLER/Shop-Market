@@ -15,11 +15,17 @@ import com.varanegar.presale.jobscheduler.PresalesJobScheduler;
 import com.varanegar.presale.ui.PreSalesTourReportFragment;
 import com.varanegar.vaslibrary.base.VasActivity;
 import com.varanegar.vaslibrary.manager.UserManager;
+import com.varanegar.vaslibrary.manager.news.NewsZarManager;
 import com.varanegar.vaslibrary.manager.tourmanager.TourManager;
+import com.varanegar.vaslibrary.manager.updatemanager.UpdateCall;
 import com.varanegar.vaslibrary.model.user.UserModel;
+import com.varanegar.vaslibrary.ui.dialog.News.NewsDialog;
+import com.varanegar.vaslibrary.ui.fragment.news_fragment.model.NewsData_Model;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import timber.log.Timber;
 
@@ -83,7 +89,7 @@ public class MainActivity extends VasActivity {
             SharedPreferences sharedPreferences = getApplicationContext()
                     .getSharedPreferences("ApplicationVersion", Context.MODE_PRIVATE);
             int saveVersion = sharedPreferences.getInt("SaveVersion", 0);
-            if (currentVersion != saveVersion) {
+            if (currentVersion != saveVersion && saveVersion > 0) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt("SaveVersion", currentVersion);
                 editor.apply();
@@ -137,6 +143,7 @@ public class MainActivity extends VasActivity {
 
     //---------------------------------------------------------------------------------------------- checkTourAvailable
     private void checkTourAvailable() {
+        requestNews();
         TourManager tourManager = new TourManager(this);
         if (tourManager.isTourAvailable())
             pushFragment(new PreSalesCustomersFragment());
@@ -146,5 +153,50 @@ public class MainActivity extends VasActivity {
             pushFragment(new PreSalesTourReportFragment());
     }
     //---------------------------------------------------------------------------------------------- checkTourAvailable
+
+
+
+
+    //---------------------------------------------------------------------------------------------- requestNews
+    private void requestNews() {
+        NewsZarManager manager = new NewsZarManager(this);
+        manager.sync(new UpdateCall() {
+            @Override
+            protected void onFinish() {
+                super.onFinish();
+            }
+
+            @Override
+            protected void onSuccess() {
+                super.onSuccess();
+                showDialogNews();
+            }
+
+            @Override
+            protected void onFailure(String error) {
+                super.onFailure(error);
+            }
+
+            @Override
+            protected void onError(String error) {
+                super.onError(error);
+            }
+        });
+    }
+    //---------------------------------------------------------------------------------------------- requestNews
+
+
+    //---------------------------------------------------------------------------------------------- showDialogNews
+    private void showDialogNews() {
+        NewsZarManager manager = new NewsZarManager(this);
+        List<NewsData_Model> news = manager.getAllNewNews();
+        NewsDialog dialog = new NewsDialog(news);
+        dialog.setTitle(getString(com.varanegar.vaslibrary.R.string.news_zar));
+        dialog.setCancelable(true);
+        dialog.setClosable(true);
+        dialog.show(getSupportFragmentManager(), "NewsDialog");
+    }
+    //---------------------------------------------------------------------------------------------- showDialogNews
+
 
 }

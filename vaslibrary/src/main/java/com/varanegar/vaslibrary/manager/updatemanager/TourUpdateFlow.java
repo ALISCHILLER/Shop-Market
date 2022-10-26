@@ -62,7 +62,6 @@ import com.varanegar.vaslibrary.manager.goodspackagemanager.GoodsPackageManager;
 import com.varanegar.vaslibrary.manager.image.ImageManager;
 import com.varanegar.vaslibrary.manager.image.LogoManager;
 import com.varanegar.vaslibrary.manager.picture.PictureCustomerHistoryManager;
-import com.varanegar.vaslibrary.manager.picture.PictureSubjectManager;
 
 import com.varanegar.vaslibrary.manager.picture.PictureSubjectZarManager;
 import com.varanegar.vaslibrary.manager.picture.PictureTemplateManager;
@@ -79,7 +78,6 @@ import com.varanegar.vaslibrary.model.product.ProductModel;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.promotion.V3.DiscountInitializeHandler;
 import com.varanegar.vaslibrary.promotion.V3.DiscountInitializeHandlerV3;
-import com.varanegar.vaslibrary.ui.fragment.news_fragment.NewsZarManager;
 import com.varanegar.vaslibrary.webapi.apiNew.modelNew.customer_not_allowed_product.CustomerNotAllowProductManager;
 
 import java.util.List;
@@ -1059,7 +1057,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                 }
             });
 
-            tasks.add(new SimpleTourAsyncTask() {
+/*            tasks.add(new SimpleTourAsyncTask() {
                 @Override
                 public void run(UpdateCall call) {
                     NewsZarManager newsZarManager = new NewsZarManager(getContext());
@@ -1080,7 +1078,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                 public int queueId() {
                     return 1;
                 }
-            });
+            });*/
 
             if (!isSimpleMode)
                 tasks.add(new SimpleTourAsyncTask() {
