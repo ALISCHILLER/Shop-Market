@@ -199,6 +199,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -1199,7 +1200,9 @@ public class CustomerSaveOrderFragment extends VisitFragment
         calcOnlineUsanceDay.setVisibility(View.VISIBLE);
         editor.putBoolean(callOrderId.toString() + customer.BackOfficeId + "CheckBoxChecked", true);
         editor.apply();
-        calcOnlineUsanceDay.setOnClickListener(view -> CalcPromotion.calcPromotionV3WithDialog(null, null, getActivity(), callOrderId, customerId, EVCType.TOSELL, false, false, true, new PromotionCallback() {
+        calcOnlineUsanceDay.setOnClickListener(view -> CalcPromotion.calcPromotionV3WithDialog(null,
+                null, getActivity(), callOrderId, customerId, EVCType.TOSELL, false,
+                false, true, new PromotionCallback() {
             @Override
             public void onSuccess(CustomerCallOrderPromotion data) {
                 try {
@@ -1210,11 +1213,14 @@ public class CustomerSaveOrderFragment extends VisitFragment
                             .getItem(new Query().from(PaymentTypeOrder.PaymentTypeOrderTbl)
                                     .whereAnd(Criteria.equals(PaymentTypeOrder.UniqueId, data.OrderPaymentTypeId)));
                     if (paymentTypeOrderModel != null) {
-                        for (CustomerPaymentTypesViewModel customerPaymentTypesViewModel : customerPaymentTypes) {
-                            if (customerPaymentTypesViewModel.UniqueId.equals(paymentTypeOrderModel.UniqueId))
+                        for (CustomerPaymentTypesViewModel customerPaymentTypesViewModel
+                                : customerPaymentTypes) {
+                            if (customerPaymentTypesViewModel.UniqueId
+                                    .equals(paymentTypeOrderModel.UniqueId))
                                 selectedPaymentType = customerPaymentTypesViewModel;
                         }
-                        if (customerCallOrderModel == null || data == null || data.OrderPaymentTypeId == null) {
+                        if (customerCallOrderModel == null || data == null ||
+                                data.OrderPaymentTypeId == null) {
                             CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(getContext());
                             cuteMessageDialog.setMessage(R.string.error_on_usance_day);
                             cuteMessageDialog.setNeutralButton(R.string.ok, null);
@@ -1227,7 +1233,8 @@ public class CustomerSaveOrderFragment extends VisitFragment
                                 Timber.e("data.OrderPaymentTypeId == null");
                         } else {
                             try {
-                                customerCallOrderModel.OrderPaymentTypeUniqueId = data.OrderPaymentTypeId;
+                                customerCallOrderModel.OrderPaymentTypeUniqueId =
+                                        data.OrderPaymentTypeId;
                                 CallOrderLineManager callOrderLineManager = new CallOrderLineManager(getContext());
                                 List<CallOrderLineModel> customerCallOrderModels = callOrderLineManager.getOrderLines(callOrderId);
                                 List<CallOrderLineModel> editedCustomerCallOrderModels = new ArrayList<>();
@@ -1904,12 +1911,12 @@ public class CustomerSaveOrderFragment extends VisitFragment
                     CustomerCallInvoicePreviewManager invoiceManager = new CustomerCallInvoicePreviewManager(getActivity());
                     List<CustomerCallInvoicePreviewModel> invoiceModels = invoiceManager.getCustomerCallOrders(customerId);
                     if (invoiceModels.size() == 1) {
-                        buttons.add(cashButton);
-                        buttons.add(poseButton);
+                        //buttons.add(cashButton);
+                     ///   buttons.add(poseButton);
                     }
                 } else {
-                    buttons.add(cashButton);
-                    buttons.add(poseButton);
+                  //  buttons.add(cashButton);
+                  //  buttons.add(poseButton);
                 }
             }
         }
@@ -3038,12 +3045,17 @@ public class CustomerSaveOrderFragment extends VisitFragment
                         break;
                 }
 
-                EmphaticPackageCheckResult result = new CustomerEmphaticPackageViewManager(getContext()).checkEmphaticPackages(customerId, orderAdapter.getItems());
+                EmphaticPackageCheckResult result = new CustomerEmphaticPackageViewManager(getContext())
+                        .checkEmphaticPackages(customerId, orderAdapter.getItems());
 
                 if (isInOrder) {
-                    isInOrder = !Linq.exists(productList, item -> item.PrizeComment != null && !item.PrizeComment.isEmpty() && !Linq.exists(orderAdapter.getItems(), p -> item.UniqueId.equals(p.ProductId)));
+                    isInOrder = !Linq.exists(productList, item -> item.PrizeComment != null &&
+                            !item.PrizeComment.isEmpty() && !Linq.exists(orderAdapter.getItems(),
+                            p -> item.UniqueId.equals(p.ProductId)));
                 }
-                if ((!isInOrder || result.getError() != null || result.getWarning() != null) && !SysConfigManager.compare(new SysConfigManager(getContext()).read(ConfigKey.SimplePresale, SysConfigManager.cloud), true)) {
+                if ((!isInOrder || result.getError() != null || result.getWarning() != null) &&
+                        !SysConfigManager.compare(new SysConfigManager(getContext())
+                                .read(ConfigKey.SimplePresale, SysConfigManager.cloud), true)) {
                     FastOrderProductsDialog dialog = new FastOrderProductsDialog();
                     dialog.setProductOrderViewModels(productList);
                     Bundle bundle = new Bundle();
@@ -3071,7 +3083,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
                 if (sharedPreferences.getBoolean(callOrderId.toString() + customer.BackOfficeId + "CheckBoxChecked", false))
                     paymentTypeOrderGroupRef = selectedPaymentType.PaymentTypeOrderGroupRef;
                 else
-                    paymentTypeOrderGroupRef = paymentTypesSpinner.getSelectedItem().PaymentTypeOrderGroupRef;
+                    paymentTypeOrderGroupRef = Objects.requireNonNull(paymentTypesSpinner.getSelectedItem()).PaymentTypeOrderGroupRef;
                 PriceCalculator priceCalculator = PriceCalculator.getPriceCalculator(context, customerId, callOrderId, paymentTypeOrderGroupRef, getOrderTypeBackOfficeId(), priceClassRef);
                 priceCalculator.calculateAndSavePriceList(persistCustomizedPrices, new PriceCalcCallback() {
                     @Override
@@ -3187,7 +3199,8 @@ public class CustomerSaveOrderFragment extends VisitFragment
                         if (value != null)
                             s = value.toString();
                         contractorDiscountEditText.setText(s);
-                        SharedPreferences discountTypeShP = getContext().getSharedPreferences("DiscountType", Context.MODE_PRIVATE);
+                        SharedPreferences discountTypeShP = requireContext()
+                                .getSharedPreferences("DiscountType", Context.MODE_PRIVATE);
                         final String discountType = discountTypeShP.getString("discountTypeId", percent);
                         if (discountType.equals(percent)) {
                             Currency percent = new Currency(Long.parseLong(s));
@@ -3215,7 +3228,8 @@ public class CustomerSaveOrderFragment extends VisitFragment
                             contractorNetAmountTextView.setText(HelperMethods.currencyToString(orderAmount.TotalAmount.subtract(result)));
                         }
                     });
-                    valueEditorDialog.show(getActivity().getSupportFragmentManager(), "ValueEditorDialog");
+                    valueEditorDialog.show(requireActivity()
+                            .getSupportFragmentManager(), "ValueEditorDialog");
                 });
             }
         }
@@ -3231,16 +3245,20 @@ public class CustomerSaveOrderFragment extends VisitFragment
         orderAdapter.setEnabled(enabled);
         enableItems(enabled);
 
-        CustomerCallOrderOrderViewManager customerCallOrderOrderViewManager = new CustomerCallOrderOrderViewManager(context);
+        CustomerCallOrderOrderViewManager customerCallOrderOrderViewManager = new
+                CustomerCallOrderOrderViewManager(context);
         orderAmount = customerCallOrderOrderViewManager.calculateTotalAmount(callOrderId);
         orderAdapter.refresh();
         if (VaranegarApplication.is(VaranegarApplication.AppId.Contractor)) {
-            SharedPreferences discountTypeShP = getContext().getSharedPreferences("DiscountType", Context.MODE_PRIVATE);
+            SharedPreferences discountTypeShP = requireContext()
+                    .getSharedPreferences("DiscountType", Context.MODE_PRIVATE);
             final String discountType = discountTypeShP.getString("discountTypeId", percent);
             if (discountType.equals(percent) && otherPercent.compareTo(Currency.ZERO) > 0)
-                otherDiscount = (otherPercent.multiply(orderAmount.TotalAmount)).divide(new Currency(100));
+                otherDiscount = (otherPercent.multiply(orderAmount.TotalAmount))
+                        .divide(new Currency(100));
             contractorDiscountTextView.setText(String.valueOf(otherDiscount));
-            contractorNetAmountTextView.setText(String.valueOf(orderAmount.TotalAmount.subtract(otherDiscount)));
+            contractorNetAmountTextView.setText(String
+                    .valueOf(orderAmount.TotalAmount.subtract(otherDiscount)));
             discountCalculatorForContractor();
         }
         orderCostTextView.setText(HelperMethods.currencyToString(orderAmount.TotalAmount));
@@ -3259,31 +3277,36 @@ public class CustomerSaveOrderFragment extends VisitFragment
                 netAmountTextView.setText(HelperMethods.currencyToString(orderAmount.NetAmount));
                 discountTextView.setText(HelperMethods.currencyToString(orderAmount.DiscountAmount));
                 addAmountTextView.setText(HelperMethods.currencyToString(orderAmount.AddAmount));
-                statusTextView.setText(getContext().getString(R.string.delivered_complete));
+                statusTextView.setText(requireContext()
+                        .getString(R.string.delivered_complete));
                 statusTextView.setTextColor(HelperMethods.getColor(getContext(), R.color.green));
             } else if (hasDistCall(CustomerCallType.OrderPartiallyDelivered)) {
                 netAmountTextView.setText(HelperMethods.currencyToString(orderAmount.NetAmount));
                 discountTextView.setText(HelperMethods.currencyToString(orderAmount.DiscountAmount));
                 addAmountTextView.setText(HelperMethods.currencyToString(orderAmount.AddAmount));
-                statusTextView.setText(getContext().getString(R.string.delivered_partially));
-                statusTextView.setTextColor(HelperMethods.getColor(getContext(), R.color.orange_light));
+                statusTextView.setText(requireContext()
+                        .getString(R.string.delivered_partially));
+                statusTextView.setTextColor(HelperMethods
+                        .getColor(getContext(), R.color.orange_light));
             } else if (hasDistCall(CustomerCallType.OrderReturn)) {
                 netAmountTextView.setText("--");
                 discountTextView.setText("--");
                 addAmountTextView.setText("--");
-                statusTextView.setText(getContext().getString(R.string.complete_return));
+                statusTextView.setText(requireContext()
+                        .getString(R.string.complete_return));
                 statusTextView.setTextColor(HelperMethods.getColor(getContext(), R.color.red));
             } else if (hasDistCall(CustomerCallType.OrderLackOfDelivery)) {
                 netAmountTextView.setText("--");
                 discountTextView.setText("--");
                 addAmountTextView.setText("--");
-                statusTextView.setText(getContext().getString(R.string.lack_of_delivery));
+                statusTextView.setText(requireContext().getString(R.string.lack_of_delivery));
                 statusTextView.setTextColor(HelperMethods.getColor(getContext(), R.color.orange));
             } else {
                 netAmountTextView.setText("--");
                 discountTextView.setText("--");
                 addAmountTextView.setText("--");
-                statusTextView.setText(getContext().getString(R.string.unKnown));
+                statusTextView.setText(requireContext()
+                        .getString(R.string.unKnown));
                 statusTextView.setTextColor(HelperMethods.getColor(getContext(), R.color.grey));
             }
         }
@@ -3299,18 +3322,24 @@ public class CustomerSaveOrderFragment extends VisitFragment
         if (defaultPayment != -1) {
             paymentTypesSpinner.selectItem(defaultPayment);
         } else {
-            if (sharedPreferences.getBoolean(callOrderId.toString() + customer.BackOfficeId + "CheckBoxChecked", false)) {
-                if (customerCallOrderModel != null && customerCallOrderModel.OrderPaymentTypeUniqueId != null) {
-                    for (CustomerPaymentTypesViewModel customerPaymentTypesViewModel : customerPaymentTypes) {
-                        if (customerPaymentTypesViewModel.UniqueId.equals(customerCallOrderModel.OrderPaymentTypeUniqueId))
+            if (sharedPreferences.getBoolean(callOrderId.toString() +
+                    customer.BackOfficeId + "CheckBoxChecked", false)) {
+                if (customerCallOrderModel != null && customerCallOrderModel
+                        .OrderPaymentTypeUniqueId != null) {
+                    for (CustomerPaymentTypesViewModel customerPaymentTypesViewModel
+                            : customerPaymentTypes)
+                        if (Objects.equals(customerPaymentTypesViewModel.UniqueId,
+                                customerCallOrderModel.OrderPaymentTypeUniqueId))
                             selectedPaymentType = customerPaymentTypesViewModel;
-                    }
                 } else {
                     selectedPaymentType = customerPaymentTypes.get(0);
                 }
             } else {
-                if (customerCallOrderModel != null && customerCallOrderModel.OrderPaymentTypeUniqueId != null) {
-                    int p = Linq.findFirstIndex(paymentTypesSpinner.getItems(), item -> item.UniqueId.equals(customerCallOrderModel.OrderPaymentTypeUniqueId));
+                if (customerCallOrderModel != null && customerCallOrderModel
+                        .OrderPaymentTypeUniqueId != null) {
+                    int p = Linq.findFirstIndex(paymentTypesSpinner.getItems(), item ->
+                            Objects.requireNonNull(item.UniqueId)
+                                    .equals(customerCallOrderModel.OrderPaymentTypeUniqueId));
                     paymentTypesSpinner.selectItem(p);
                 } else {
                     paymentTypesSpinner.selectItem(0);
@@ -3351,20 +3380,32 @@ public class CustomerSaveOrderFragment extends VisitFragment
     }
 
     @Override
-    public void onFinishChoicePrize(int disRef, UUID customerId, UUID callOrderId, HashMap<UUID, OrderPrizeModel> oldPrize) {
-        OrderPrizeManager orderPrizeManager = new OrderPrizeManager(getContext());
-        List<OrderPrizeModel> orderPrizeModels = orderPrizeManager.getItems(OrderPrizeManager.getCustomerOrderPrizes(customerId, disRef, callOrderId));
+    public void onFinishChoicePrize(int disRef, UUID customerId, UUID callOrderId, HashMap<UUID,
+            OrderPrizeModel> oldPrize) {
+        OrderPrizeManager orderPrizeManager = new
+                OrderPrizeManager(requireContext());
+        List<OrderPrizeModel> orderPrizeModels = orderPrizeManager
+                .getItems(OrderPrizeManager.getCustomerOrderPrizes(customerId, disRef, callOrderId));
         for (OrderPrizeModel orderPrizeModel : orderPrizeModels) {
-            DiscountOrderPrizeViewModel choicePrizeDiscountOrderPrizeViewModel = new DiscountOrderPrizeViewModel();
+            DiscountOrderPrizeViewModel choicePrizeDiscountOrderPrizeViewModel =
+                    new DiscountOrderPrizeViewModel();
             choicePrizeDiscountOrderPrizeViewModel.discountRef = disRef;
-            ProductModel productModel = new ProductManager(getContext()).getItem(orderPrizeModel.ProductId);
-            choicePrizeDiscountOrderPrizeViewModel.goodsRef = productModel.BackOfficeId;
-            choicePrizeDiscountOrderPrizeViewModel.orderDiscountRef = orderPrize.get(0).orderDiscountRef;
-            choicePrizeDiscountOrderPrizeViewModel.qty = Integer.parseInt(String.valueOf(orderPrizeModel.TotalQty.setScale(0, RoundingMode.HALF_DOWN)));
+            ProductModel productModel = new ProductManager(getContext())
+                    .getItem(orderPrizeModel.ProductId);
+            choicePrizeDiscountOrderPrizeViewModel.goodsRef =
+                    Objects.requireNonNull(productModel).BackOfficeId;
+            choicePrizeDiscountOrderPrizeViewModel.orderDiscountRef =
+                    orderPrize.get(0).orderDiscountRef;
+            choicePrizeDiscountOrderPrizeViewModel.qty = Integer.parseInt(
+                    String.valueOf(orderPrizeModel.TotalQty
+                            .setScale(0, RoundingMode.HALF_DOWN)));
             DiscountPrizeViewModel discountPrizeViewModel = orderPrize.get(loopCount - 1);
-            for (DiscountOrderPrizeViewModel discountOrderPrizeViewModel : discountPrizeViewModel.orderPrizeList) {
-                if (discountOrderPrizeViewModel.goodsRef == choicePrizeDiscountOrderPrizeViewModel.goodsRef) {
-                    choicePrizeDiscountOrderPrizeViewModel.unitRef = discountOrderPrizeViewModel.unitRef;
+            for (DiscountOrderPrizeViewModel discountOrderPrizeViewModel :
+                    discountPrizeViewModel.orderPrizeList) {
+                if (discountOrderPrizeViewModel.goodsRef ==
+                        choicePrizeDiscountOrderPrizeViewModel.goodsRef) {
+                    choicePrizeDiscountOrderPrizeViewModel.unitRef =
+                            discountOrderPrizeViewModel.unitRef;
                     choicePrizeDiscountOrderPrizeViewModel.id = discountOrderPrizeViewModel.id;
                 }
             }
@@ -3376,15 +3417,17 @@ public class CustomerSaveOrderFragment extends VisitFragment
             showPrizeDialog();
     }
 
-    public abstract class OnItemQtyChangedHandler {
+    public abstract static class OnItemQtyChangedHandler {
         HashMap<UUID, List<ItemInfo>> qtys = new HashMap<>();
 
         public abstract void run(CustomerCallOrderOrderViewModel orderLine, QtyChange change);
 
-        public synchronized void plusQty(int position, UUID productId, final DiscreteUnit unit, @Nullable DiscreteUnit otherUnit) {
+        public synchronized void plusQty(int position, UUID productId, final DiscreteUnit unit,
+                                         @Nullable DiscreteUnit otherUnit) {
             if (qtys.containsKey(productId)) {
                 List<ItemInfo> qtyItems = qtys.get(productId);
-                ItemInfo qtyItem = Linq.findFirst(qtyItems, item -> item.unit.ProductUnitId.equals(unit.ProductUnitId));
+                ItemInfo qtyItem = Linq.findFirst(Objects.requireNonNull(qtyItems),
+                        item -> item.unit.ProductUnitId.equals(unit.ProductUnitId));
                 if (qtyItem == null) {
                     qtyItem = new ItemInfo(unit, position, unit.value);
                     qtyItems.add(qtyItem);
@@ -3400,10 +3443,12 @@ public class CustomerSaveOrderFragment extends VisitFragment
             }
         }
 
-        public synchronized void minusQty(int position, UUID productId, final DiscreteUnit unit, @Nullable DiscreteUnit otherUnit) {
+        public synchronized void minusQty(int position, UUID productId, final DiscreteUnit unit,
+                                          @Nullable DiscreteUnit otherUnit) {
             if (qtys.containsKey(productId)) {
                 List<ItemInfo> qtyItems = qtys.get(productId);
-                ItemInfo qtyItem = Linq.findFirst(qtyItems, item -> item.unit.ProductUnitId.equals(unit.ProductUnitId));
+                ItemInfo qtyItem = Linq.findFirst(Objects.requireNonNull(qtyItems),
+                        item -> item.unit.ProductUnitId.equals(unit.ProductUnitId));
                 if (qtyItem == null) {
                     qtyItem = new ItemInfo(unit, position, unit.value);
                     qtyItems.add(qtyItem);
@@ -3422,12 +3467,13 @@ public class CustomerSaveOrderFragment extends VisitFragment
         public synchronized void start(CustomerCallOrderOrderViewModel orderLine) {
             for (UUID key : qtys.keySet()) {
                 List<ItemInfo> itemInfo = qtys.get(key);
-                run(orderLine, new QtyChange(key, itemInfo.get(0).position, itemInfo));
+                run(orderLine, new QtyChange(key, Objects
+                        .requireNonNull(itemInfo).get(0).position, itemInfo));
             }
             qtys.clear();
         }
 
-        public class QtyChange {
+        public static class QtyChange {
             public QtyChange(UUID productId, int position, List<ItemInfo> qtys) {
                 this.productId = productId;
                 this.position = position;
@@ -3449,7 +3495,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
             public List<DiscreteUnit> discreteUnits;
         }
 
-        private class ItemInfo {
+        private static class ItemInfo {
             public ItemInfo(DiscreteUnit unit, int position, double qty) {
                 this.unit = unit;
                 this.position = position;
@@ -3463,9 +3509,10 @@ public class CustomerSaveOrderFragment extends VisitFragment
     }
 
 
-    class DiscountTypeModel extends BaseModel {
+    static class DiscountTypeModel extends BaseModel {
         public String lable;
 
+        @NonNull
         public String toString() {
             return lable;
         }
@@ -3473,15 +3520,20 @@ public class CustomerSaveOrderFragment extends VisitFragment
     }
 
     protected void refreshUsanceDayAverage() {
-        CustomerCallOrderOrderViewManager customerCallOrderOrderViewManager = new CustomerCallOrderOrderViewManager(getContext());
-        int usanceDayAverage = customerCallOrderOrderViewManager.calculateUsanceDayAverage(callOrderId, String.valueOf(customer.BackOfficeId));
+        CustomerCallOrderOrderViewManager customerCallOrderOrderViewManager = new
+                CustomerCallOrderOrderViewManager(requireContext());
+        int usanceDayAverage = customerCallOrderOrderViewManager
+                .calculateUsanceDayAverage(callOrderId, String.valueOf(customer.BackOfficeId));
         if (usanceDayAverage == 1)
             usanceDayAverage = 0;
         Calendar newDate = Calendar.getInstance();
         newDate.add(Calendar.DAY_OF_YEAR, usanceDayAverage);
-        String date = DateHelper.toString(newDate.getTime(), DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext()));
-        SharedPreferences sharedPreferences = context.getSharedPreferences("UsanceDaySharedPrefences", Context.MODE_PRIVATE);
-        if (sharedPreferences.getBoolean(callOrderId.toString() + customer.BackOfficeId + "CheckBoxChecked", false)) {
+        String date = DateHelper.toString(newDate.getTime(), DateFormat.Date,
+                VasHelperMethods.getSysConfigLocale(getContext()));
+        SharedPreferences sharedPreferences = context
+                .getSharedPreferences("UsanceDaySharedPrefences", Context.MODE_PRIVATE);
+        if (sharedPreferences.getBoolean(callOrderId.toString() +
+                customer.BackOfficeId + "CheckBoxChecked", false)) {
             usanceDayTextView.setText(selectedPaymentType.PaymentTypeOrderName);
             usanceTextView.setText("");
         } else if (customerCallOrderOrderViewManager.getLines(callOrderId, null).size() > 0) {
@@ -3489,10 +3541,14 @@ public class CustomerSaveOrderFragment extends VisitFragment
             usanceTextView.setText(usanceDayAverage + " " + getString(R.string.day));
         } else
             usanceDayTextView.setText("-");
-        if (!(usanceDayTextView.getText().toString().equals("-")) && sharedPreferences.getBoolean(callOrderId.toString() + customer.BackOfficeId + "CheckBoxChecked", false)) {
+        if (!(usanceDayTextView.getText().toString().equals("-")) && sharedPreferences
+                .getBoolean(callOrderId.toString() + customer.BackOfficeId +
+                        "CheckBoxChecked", false)) {
             usanceDayTextView.startAnimation(getBlinkAnimation());
             usanceTextView.startAnimation(getBlinkAnimation());
-            @SuppressLint("RestrictedApi") ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), getResources().getColor(R.color.holo_red_light), getResources().getColor(R.color.white4));
+            @SuppressLint("RestrictedApi") ValueAnimator colorAnimation = ValueAnimator
+                    .ofObject(new ArgbEvaluator(), getResources().getColor(R.color.holo_red_light),
+                            getResources().getColor(R.color.white4));
             colorAnimation.setDuration(1000); // milliseconds
             colorAnimation.addUpdateListener(animator -> {
                 usanceDayTextView.setBackgroundColor((int) animator.getAnimatedValue());
@@ -3514,16 +3570,20 @@ public class CustomerSaveOrderFragment extends VisitFragment
 
     private void initSystemCheck() {
         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
-            SharedPreferences sharedPreferences = context.getSharedPreferences("UsanceDaySharedPrefences", Context.MODE_PRIVATE);
+            SharedPreferences sharedPreferences = context
+                    .getSharedPreferences("UsanceDaySharedPrefences", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             PaymentOrderTypeManager paymentOrderTypeManager = new PaymentOrderTypeManager(context);
             SysConfigManager sysConfigManager = new SysConfigManager(context);
             SysConfigModel sysConfigModel = sysConfigManager.read(ConfigKey.SystemPaymentTypeId, SysConfigManager.cloud);
-            PaymentTypeOrderModel paymentTypeOrderModel = paymentOrderTypeManager.getPaymentType(customerCallOrderModel.OrderPaymentTypeUniqueId);
-            if (SysConfigManager.compare(sysConfigModel, paymentTypeOrderModel.PaymentTypeOrderGroupUniqueId)) {
+            PaymentTypeOrderModel paymentTypeOrderModel = paymentOrderTypeManager
+                    .getPaymentType(customerCallOrderModel.OrderPaymentTypeUniqueId);
+            if (SysConfigManager.compare(sysConfigModel,
+                    paymentTypeOrderModel.PaymentTypeOrderGroupUniqueId)) {
                 systemCheckBox.setChecked(true);
                 for (CustomerPaymentTypesViewModel customerPaymentTypesViewModel : customerPaymentTypes) {
-                    if (customerPaymentTypesViewModel.UniqueId.equals(customerCallOrderModel.OrderPaymentTypeUniqueId))
+                    if (Objects.requireNonNull(customerPaymentTypesViewModel.UniqueId)
+                            .equals(customerCallOrderModel.OrderPaymentTypeUniqueId))
                         selectedPaymentType = customerPaymentTypesViewModel;
                 }
                 checkSystemCheck(editor);
@@ -3544,14 +3604,9 @@ public class CustomerSaveOrderFragment extends VisitFragment
             dialog.setTitle(R.string.error);
             dialog.setMessage(error);
             dialog.setIcon(Icon.Error);
-            dialog.setPositiveButton(R.string.ok, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (chack) {
-                        show(isInOrder);
-                    }else{
-                        return;
-                    }
+            dialog.setPositiveButton(R.string.ok, v -> {
+                if (chack) {
+                    show(isInOrder);
                 }
             });
             dialog.show();
