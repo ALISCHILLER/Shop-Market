@@ -216,12 +216,12 @@ import static com.varanegar.vaslibrary.model.customerCallOrderOrderView.Customer
 import static com.varanegar.vaslibrary.model.customerCallOrderOrderView.CustomerCallOrderOrderView.TotalQty;
 import static varanegar.com.discountcalculatorlib.Global.orderPrize;
 
-/**
+/*
  * Created by A.Torabi on 1/14/2018.
  */
 
 
-/**
+/*
  * صفحه تحویل حواله
  * صفحه تحویل سفارش   **
  */
@@ -264,8 +264,6 @@ public class CustomerSaveOrderFragment extends VisitFragment
     private CustomerPaymentTypesViewModel selectedPaymentType;
     private CustomerPayment customerPayment;
     private Set<UUID> validPaymentTypes;
-    private HashMap<UUID, ProductUnitViewManager.ProductUnits> productUnits;
-    private SaveOrderUtility.ISaveOrderCallback saveCallBack;
     private SaveOrderUtility saveOrderUtility;
     private CustomerCallOrderModel customerCallOrderModel;
     private CustomerCallOrderManager customerCallOrderManager;
@@ -337,12 +335,12 @@ public class CustomerSaveOrderFragment extends VisitFragment
                     orderTypeDialog.setItems(customerOrderTypeModels,
                             (SearchBox.SearchMethod<CustomerOrderTypeModel>)
                                     (item, text) -> item.OrderTypeName.contains(text));
-                    orderTypeDialog.show(getVaranegarActvity().getSupportFragmentManager(), "orderTypeDialog");
+                    orderTypeDialog.show(Objects.requireNonNull(getVaranegarActvity()).getSupportFragmentManager(), "orderTypeDialog");
                     orderTypeDialog.setOnItemSelectedListener((position, selectedOrderType) -> {
                         orderTypeDialog.dismiss();
                         if (selectedOrderType == null)
                             return;
-                        if (selectedOrderType.UniqueId.equals(CustomerOrderTypesManager.OrderType24))
+                        if (Objects.requireNonNull(selectedOrderType.UniqueId).equals(CustomerOrderTypesManager.OrderType24))
                             customerCallOrderModel.DeliveryDate = new Date(new Date().getTime() + 24 * 3600 * 1000);
                         if (selectedOrderType.UniqueId.equals(CustomerOrderTypesManager.OrderType48))
                             customerCallOrderModel.DeliveryDate = new Date(new Date().getTime() + 48 * 3600 * 1000);
@@ -421,13 +419,15 @@ public class CustomerSaveOrderFragment extends VisitFragment
                                 change.discreteUnits) {
                             total = total.add(BigDecimal.valueOf(discreteUnit.getTotalQty()));
                         }
-                        if (VaranegarApplication.is(VaranegarApplication.AppId.Dist) && backOfficeType == BackOfficeType.ThirdParty) {
-                            if (orderLine.EditReasonId == null && total.compareTo(orderLine.OriginalTotalQty) < 0) {
+                        if (VaranegarApplication.is(VaranegarApplication.AppId.Dist) &&
+                                backOfficeType == BackOfficeType.ThirdParty) {
+                            if (orderLine.EditReasonId == null && total
+                                    .compareTo(orderLine.OriginalTotalQty) < 0) {
                                 OrderReturnReasonDialog editReasonDialog = new OrderReturnReasonDialog();
-                                editReasonDialog.onItemSelected = reasonUniqueId -> {
-                                    addItem(orderLine, change, reasonUniqueId);
-                                };
-                                editReasonDialog.show(getActivity().getSupportFragmentManager(), "PartialOrderActionDialog");
+                                editReasonDialog.onItemSelected = reasonUniqueId ->
+                                        addItem(orderLine, change, reasonUniqueId);
+                                editReasonDialog.show(requireActivity().getSupportFragmentManager(),
+                                        "PartialOrderActionDialog");
                             } else if (total.compareTo(orderLine.OriginalTotalQty) == 0) {
                                 addItem(orderLine, change, null);
                             } else {
@@ -448,7 +448,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
                 } catch (Exception e) {
                     Timber.e(e);
                     orderAdapter.notifyItemChanged(change.position);
-                    CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+                    CuteMessageDialog dialog = new CuteMessageDialog(requireContext());
                     dialog.setIcon(Icon.Error);
                     dialog.setMessage(R.string.error_saving_request);
                     dialog.setTitle(R.string.error);
@@ -464,9 +464,9 @@ public class CustomerSaveOrderFragment extends VisitFragment
                          OnItemQtyChangedHandler.QtyChange change, @Nullable UUID editReasonId) {
         try {
             OnHandQtyStock onHandQtyStock = new OnHandQtyStock();
-            ProductUnitsViewManager productUnitsViewManager = new ProductUnitsViewManager(getContext());
+            ProductUnitsViewManager productUnitsViewManager = new ProductUnitsViewManager(requireContext());
             ProductUnitsViewModel productUnitsViewModel = productUnitsViewManager.getItem(orderLine.ProductId);
-            onHandQtyStock.ConvertFactors = productUnitsViewModel.ConvertFactor;
+            onHandQtyStock.ConvertFactors = Objects.requireNonNull(productUnitsViewModel).ConvertFactor;
             onHandQtyStock.UnitNames = productUnitsViewModel.UnitName;
             if (orderLine.OnHandQty == null)
                 orderLine.OnHandQty = BigDecimal.ZERO;
@@ -495,7 +495,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
         } catch (OnHandQtyWarning e) {
             Timber.e(e);
             orderAdapter.notifyItemChanged(change.position);
-            CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+            CuteMessageDialog dialog = new CuteMessageDialog(requireContext());
             dialog.setIcon(Icon.Warning);
             dialog.setMessage(e.getMessage());
             dialog.setTitle(R.string.warning);
@@ -506,7 +506,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
             } catch (Exception ex) {
                 Timber.e(ex);
                 orderAdapter.notifyItemChanged(change.position);
-                CuteMessageDialog dialog2 = new CuteMessageDialog(getContext());
+                CuteMessageDialog dialog2 = new CuteMessageDialog(requireContext());
                 dialog2.setIcon(Icon.Error);
                 dialog2.setMessage(R.string.error_saving_request);
                 dialog2.setTitle(R.string.error);
@@ -516,7 +516,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
         } catch (OnHandQtyError e) {
             Timber.e(e);
             orderAdapter.notifyItemChanged(change.position);
-            CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+            CuteMessageDialog dialog = new CuteMessageDialog(requireContext());
             dialog.setIcon(Icon.Error);
             dialog.setMessage(e.getMessage());
             dialog.setTitle(R.string.error);
@@ -525,7 +525,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
         } catch (Exception e) {
             Timber.e(e);
             orderAdapter.notifyItemChanged(change.position);
-            CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+            CuteMessageDialog dialog = new CuteMessageDialog(requireContext());
             dialog.setIcon(Icon.Error);
             dialog.setMessage(R.string.error_saving_request);
             dialog.setTitle(R.string.error);
@@ -567,18 +567,22 @@ public class CustomerSaveOrderFragment extends VisitFragment
                 startTempTablesProgressDialog();
             if (savedInstanceState.getBoolean("69d2ac5d-cc07-4b66-aa0f-cc09d55e3296"))
                 startProductStockLevelProgressDialog();
-            customerId = UUID.fromString(savedInstanceState.getString("eb6d7315-0bd0-420c-bf80-e0257c7b153a"));
-            callOrderId = UUID.fromString(savedInstanceState.getString("cfa84e29-90a1-461c-aa59-d201f410ac7b"));;
+            customerId = UUID.fromString(savedInstanceState
+                    .getString("eb6d7315-0bd0-420c-bf80-e0257c7b153a"));
+            callOrderId = UUID.fromString(savedInstanceState
+                    .getString("cfa84e29-90a1-461c-aa59-d201f410ac7b"));
 
         } else {
-            customerId = UUID.fromString(getArguments().getString("9c497998-18e6-4be9-ad80-984fcfb2169c"));
-            callOrderId = UUID.fromString(getArguments().getString("cfa84e29-90a1-461c-aa59-d201f410ac7b"));
+            customerId = UUID.fromString(requireArguments()
+                    .getString("9c497998-18e6-4be9-ad80-984fcfb2169c"));
+            callOrderId = UUID.fromString(requireArguments().
+                    getString("cfa84e29-90a1-461c-aa59-d201f410ac7b"));
         }
         setRetainInstance(true);
 
         customerCallOrderModel = customerCallOrderManager.getItem(callOrderId);
-        saveOrderUtility = new SaveOrderUtility(getContext());
-        saveCallBack = new SaveOrderUtility.ISaveOrderCallback() {
+        saveOrderUtility = new SaveOrderUtility(requireContext());
+        SaveOrderUtility.ISaveOrderCallback saveCallBack = new SaveOrderUtility.ISaveOrderCallback() {
             @Override
             public void onSuccess() {
                 try {
@@ -593,13 +597,13 @@ public class CustomerSaveOrderFragment extends VisitFragment
 
                     if (VaranegarApplication.is(VaranegarApplication.AppId.Contractor)) {
                         saveContractorEventLocation();
-                        InvoicePrintHelper printContractor = new InvoicePrintHelper(getVaranegarActvity(), customerId, OrderPrintType.contractor);
+                        InvoicePrintHelper printContractor = new InvoicePrintHelper(Objects.requireNonNull(getVaranegarActvity()), customerId, OrderPrintType.contractor);
                         printContractor.start(null);
                     }
 
                     if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
                         VaranegarApplication.getInstance().remove("CUSTOMER_ID_ORDER_PREVIEW");
-                        getVaranegarActvity().popFragment();
+                        Objects.requireNonNull(getVaranegarActvity()).popFragment();
                     }
                 } catch (Exception ex) {
                     showErrorMessage(R.string.error_saving_request);
@@ -621,13 +625,13 @@ public class CustomerSaveOrderFragment extends VisitFragment
             @Override
             public void onAlert(SaveOrderUtility.SaveOrderCallbackType type, String title,
                                 String msg, @Nullable SaveOrderUtility.IWarningCallBack callBack) {
-                CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(getContext());
+                CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(requireContext());
                 cuteMessageDialog.setTitle(title);
                 cuteMessageDialog.setMessage(msg);
                 if (type == SaveOrderUtility.SaveOrderCallbackType.NoSystemPayment) {
                     cuteMessageDialog.setIcon(Icon.Alert);
                     cuteMessageDialog.setNeutralButton(R.string.ok, view1 -> {
-                        callBack.cancel();
+                        Objects.requireNonNull(callBack).cancel();
                         systemCheckBox.setChecked(false);
                         paymentTypesSpinner.setVisibility(View.VISIBLE);
                         calcOnlineUsanceDay.setVisibility(View.GONE);
@@ -638,8 +642,10 @@ public class CustomerSaveOrderFragment extends VisitFragment
                 } else if (type == SaveOrderUtility.SaveOrderCallbackType.SelectReturnReason) {
                     showPinCodeDialogInSaveMode(callBack);
                 } else {
-                    cuteMessageDialog.setPositiveButton(R.string.ok, view -> callBack.onContinue());
-                    cuteMessageDialog.setNegativeButton(R.string.cancel, view -> callBack.cancel());
+                    cuteMessageDialog.setPositiveButton(R.string.ok, view ->
+                            Objects.requireNonNull(callBack).onContinue());
+                    cuteMessageDialog.setNegativeButton(R.string.cancel, view ->
+                            Objects.requireNonNull(callBack).cancel());
                     cuteMessageDialog.show();
                 }
 
@@ -658,7 +664,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
 
     private void startProductStockLevelProgressDialog() {
         productStockLevelProgressDialog = new ProgressDialog(getActivity());
-        productStockLevelProgressDialog.setMessage(getActivity().getString(com.varanegar.vaslibrary.R.string.Inventory_update));
+        productStockLevelProgressDialog.setMessage(requireActivity().getString(com.varanegar.vaslibrary.R.string.Inventory_update));
         productStockLevelProgressDialog.setCancelable(false);
         productStockLevelProgressDialog.show();
     }
@@ -676,7 +682,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
     private void startTempTablesProgressDialog() {
         tempTablesProgressDialog = new ProgressDialog(getActivity());
         tempTablesProgressDialog.setTitle(R.string.please_wait);
-        tempTablesProgressDialog.setMessage(getActivity().getString(R.string.calculating_customer_history_and_evc_statute));
+        tempTablesProgressDialog.setMessage(requireActivity().getString(R.string.calculating_customer_history_and_evc_statute));
         tempTablesProgressDialog.setCancelable(false);
         tempTablesProgressDialog.setProgress(0);
         tempTablesProgressDialog.setIndeterminate(false);
@@ -690,7 +696,8 @@ public class CustomerSaveOrderFragment extends VisitFragment
         loadCalls();
         customer = new CustomerManager(context).getItem(customerId);
 
-        otherDiscount = new CustomerCallOrderManager(getContext()).getCustomerCallOrder(customerId, callOrderId).RoundOrderOtherDiscount;
+        otherDiscount = new CustomerCallOrderManager(getContext()).getCustomerCallOrder(customerId,
+                callOrderId).RoundOrderOtherDiscount;
         if (otherDiscount == null)
             otherDiscount = Currency.ZERO;
 
@@ -704,11 +711,16 @@ public class CustomerSaveOrderFragment extends VisitFragment
             if (orderAmountColumn != null)
                 orderAmountColumn.setText(R.string.returns);
             if (customerCallOrderModel.IsInvoice)
-                toolbar.setTitle(getString(R.string.delivery_of_invoice) + " " + getString(R.string.no_label) + " " + customerCallOrderModel.SaleNoSDS + " - " + customer.CustomerName);
+                toolbar.setTitle(getString(R.string.delivery_of_invoice) + " " +
+                        getString(R.string.no_label) + " " +
+                        customerCallOrderModel.SaleNoSDS + " - " + customer.CustomerName);
             else
-                toolbar.setTitle(getString(R.string.delivery_of_draft) + " " + getString(R.string.no_label) + " " + customerCallOrderModel.SaleNoSDS + " - " + customer.CustomerName);
+                toolbar.setTitle(getString(R.string.delivery_of_draft) + " " +
+                        getString(R.string.no_label) + " " +
+                        customerCallOrderModel.SaleNoSDS + " - " + customer.CustomerName);
         } else {
-            toolbar.setTitle(getString(R.string.save_order_request) + " " + customer.CustomerName + " (" + customer.CustomerCode + ")");
+            toolbar.setTitle(getString(R.string.save_order_request) + " " +
+                    customer.CustomerName + " (" + customer.CustomerCode + ")");
         }
 
         toolbar.setOnBackClickListener(view12 -> onBackPressed());
@@ -737,13 +749,18 @@ public class CustomerSaveOrderFragment extends VisitFragment
                 .setProjection(TotalQty).setName(R.string.total_qty));
 
         view.findViewById(R.id.sort_fab).setOnClickListener(view13 -> {
-            final SearchBox<OrderOption<CustomerCallOrderOrderViewModel>> searchBox = new SearchBox<>();
-            searchBox.setItems(orderOptions, (SearchBox.SearchMethod<OrderOption<CustomerCallOrderOrderViewModel>>) (item, text) -> item.getProjection().getSimpleName().contains(text));
+            final SearchBox<OrderOption<CustomerCallOrderOrderViewModel>> searchBox =
+                    new SearchBox<>();
+            searchBox.setItems(orderOptions, (SearchBox.SearchMethod<
+                    OrderOption<CustomerCallOrderOrderViewModel>>)
+                    (item, text) -> item.getProjection().getSimpleName().contains(text));
             searchBox.show(getChildFragmentManager(), "SearchBox");
             searchBox.setOnItemSelectedListener((position, item) -> {
-                orderAdapter.refreshAsync(new CustomerCallOrderOrderViewManager(context).getLinesQuery(callOrderId,
+                orderAdapter.refreshAsync(new CustomerCallOrderOrderViewManager(context)
+                        .getLinesQuery(callOrderId,
                         new OrderBy(item.getProjection(), OrderType.ASC)));
-                SharedPreferences sharedPreferences = getContext().getSharedPreferences("SortOrders", Context.MODE_PRIVATE);
+                SharedPreferences sharedPreferences = requireContext()
+                        .getSharedPreferences("SortOrders", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt("OrderOptionsPosition", position);
                 editor.apply();
@@ -909,15 +926,20 @@ public class CustomerSaveOrderFragment extends VisitFragment
             }
 
             if (sysConfigManager.getBackOfficeType().equals(BackOfficeType.ThirdParty) && (customer.RealName != null)) {
-                defaultPayment = Linq.findFirstIndex(paymentTypesSpinner.getItems(), item -> customer.RealName.equalsIgnoreCase(item.UniqueId.toString()));
+                defaultPayment = Linq.findFirstIndex(paymentTypesSpinner.getItems(), item ->
+                        customer.RealName.equalsIgnoreCase(Objects.requireNonNull(item.UniqueId).toString()));
             }
             if (defaultPayment != -1) {
                 paymentTypesSpinner.selectItem(defaultPayment);
             } else {
-                if (sharedPreferences.getBoolean(callOrderId.toString() + customer.BackOfficeId + "CheckBoxChecked", false)) {
-                    if (customerCallOrderModel != null && customerCallOrderModel.OrderPaymentTypeUniqueId != null) {
-                        for (CustomerPaymentTypesViewModel customerPaymentTypesViewModel : customerPaymentTypes) {
-                            if (customerPaymentTypesViewModel.UniqueId.equals(customerCallOrderModel.OrderPaymentTypeUniqueId))
+                if (sharedPreferences.getBoolean(callOrderId.toString() + customer.BackOfficeId +
+                        "CheckBoxChecked", false)) {
+                    if (customerCallOrderModel != null &&
+                            customerCallOrderModel.OrderPaymentTypeUniqueId != null) {
+                        for (CustomerPaymentTypesViewModel customerPaymentTypesViewModel
+                                : customerPaymentTypes) {
+                            if (Objects.requireNonNull(customerPaymentTypesViewModel.UniqueId)
+                                    .equals(customerCallOrderModel.OrderPaymentTypeUniqueId))
                                 selectedPaymentType = customerPaymentTypesViewModel;
                         }
                     } else {
@@ -925,7 +947,8 @@ public class CustomerSaveOrderFragment extends VisitFragment
                     }
                 } else {
                     if (customerCallOrderModel != null && customerCallOrderModel.OrderPaymentTypeUniqueId != null) {
-                        int p = Linq.findFirstIndex(paymentTypesSpinner.getItems(), item -> item.UniqueId.equals(customerCallOrderModel.OrderPaymentTypeUniqueId));
+                        int p = Linq.findFirstIndex(paymentTypesSpinner.getItems(), item ->
+                                Objects.equals(item.UniqueId, customerCallOrderModel.OrderPaymentTypeUniqueId));
                         paymentTypesSpinner.selectItem(p);
                     } else {
                         paymentTypesSpinner.selectItem(0);
@@ -963,9 +986,12 @@ public class CustomerSaveOrderFragment extends VisitFragment
                 view.findViewById(R.id.delivery_date_picker).setVisibility(View.VISIBLE);
                 calendarImageView = view.findViewById(R.id.calendar_image_view);
                 if (customerCallOrderModel.DeliveryDate != null) {
-                    deliveryDateItem.setValue(DateHelper.toString(customerCallOrderModel.DeliveryDate, DateFormat.Date, VasHelperMethods.getSysConfigLocale(context)));
+                    deliveryDateItem.setValue(DateHelper.toString(customerCallOrderModel.DeliveryDate,
+                            DateFormat.Date, VasHelperMethods.getSysConfigLocale(context)));
                 }
-                calendarImageView.setOnClickListener(view15 -> DateHelper.showDatePicker(getVaranegarActvity(), VasHelperMethods.getSysConfigLocale(context), calendar -> {
+                calendarImageView.setOnClickListener(view15 -> DateHelper.showDatePicker(
+                        Objects.requireNonNull(getVaranegarActvity()),
+                        VasHelperMethods.getSysConfigLocale(context), calendar -> {
                     // SAP: We Can Edit DeliveryDate Just For 7 Days Later
                     Calendar minDeadLineTimeForThirdParty = Calendar.getInstance();
                     minDeadLineTimeForThirdParty.set(Calendar.HOUR_OF_DAY, 0);
@@ -980,8 +1006,10 @@ public class CustomerSaveOrderFragment extends VisitFragment
                     maxDeadLineTimeForThirdParty.add(Calendar.DAY_OF_YEAR, 7);
                     SysConfigManager sysConfigManager1 = new SysConfigManager(getContext());
                     OwnerKeysWrapper ownerKeysWrapper = sysConfigManager1.readOwnerKeys();
-                    if (ownerKeysWrapper.isZarMakaron() && (calendar.getTime().after(maxDeadLineTimeForThirdParty.getTime()) || calendar.getTime().before(minDeadLineTimeForThirdParty.getTime()))) {
-                        CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
+                    if (ownerKeysWrapper.isZarMakaron() && (calendar.getTime()
+                            .after(maxDeadLineTimeForThirdParty.getTime())
+                            || calendar.getTime().before(minDeadLineTimeForThirdParty.getTime()))) {
+                        CuteMessageDialog dialog = new CuteMessageDialog(requireActivity());
                         dialog.setMessage("تاریخ مجاز نیست");
                         dialog.setTitle(R.string.error);
                         dialog.setIcon(Icon.Error);
@@ -1001,12 +1029,12 @@ public class CustomerSaveOrderFragment extends VisitFragment
 
             // Get ship Types and Show to User|
             shipPairedItemsSpinner = view.findViewById(R.id.ship_types_spinner);
-            CustomerShipToPartyManager shipManager = new CustomerShipToPartyManager(getContext());
+            CustomerShipToPartyManager shipManager = new CustomerShipToPartyManager(requireContext());
             List<CustomerShipToPartyModel> ships = shipManager.getItems(customerId);
 
             Collections.sort(ships, (o1, o2) -> {
-                Integer a1 = o1.UniqueId.equals(o1.SoldToPartyUniqueId) ? 0 : 1;
-                Integer b1 = o2.UniqueId.equals(o2.SoldToPartyUniqueId) ? 0 : 1;
+                Integer a1 = Objects.equals(o1.UniqueId, o1.SoldToPartyUniqueId) ? 0 : 1;
+                Integer b1 = Objects.equals(o2.UniqueId, o2.SoldToPartyUniqueId) ? 0 : 1;
                 return a1.compareTo(b1);
             });
 
@@ -1057,21 +1085,26 @@ public class CustomerSaveOrderFragment extends VisitFragment
                 return item.toString().toLowerCase().contains(str);
             });
             if (customerCallOrderModel.OrderTypeUniqueId != null) {
-                int p = Linq.findFirstIndex(customerOrderTypeModels, item -> item.UniqueId.equals(customerCallOrderModel.OrderTypeUniqueId));
+                int p = Linq.findFirstIndex(customerOrderTypeModels, item ->
+                        Objects.equals(item.UniqueId, customerCallOrderModel.OrderTypeUniqueId));
                 orderTypesSpinner.selectItem(p);
             } else
                 orderTypesSpinner.selectItem(0);
             orderTypesSpinner.setOnItemSelectedListener((position, selectedOrderType) -> {
                 customerCallOrderModel.OrderTypeUniqueId = selectedOrderType.UniqueId;
                 try {
-                    if (selectedOrderType.UniqueId.equals(CustomerOrderTypesManager.OrderType24))
-                        customerCallOrderModel.DeliveryDate = new Date(new Date().getTime() + 24 * 3600 * 1000);
-                    if (selectedOrderType.UniqueId.equals(CustomerOrderTypesManager.OrderType48))
-                        customerCallOrderModel.DeliveryDate = new Date(new Date().getTime() + 48 * 3600 * 1000);
-                    deliveryDateItem.setValue(DateHelper.toString(customerCallOrderModel.DeliveryDate, DateFormat.Date, VasHelperMethods.getSysConfigLocale(context)));
+                    if (Objects.equals(selectedOrderType.UniqueId,
+                            CustomerOrderTypesManager.OrderType24))
+                        customerCallOrderModel.DeliveryDate =
+                                new Date(new Date().getTime() + 24 * 3600 * 1000);
+                    if (Objects.equals(selectedOrderType.UniqueId, CustomerOrderTypesManager.OrderType48))
+                        customerCallOrderModel.DeliveryDate =
+                                new Date(new Date().getTime() + 48 * 3600 * 1000);
+                    deliveryDateItem.setValue(DateHelper.toString(customerCallOrderModel.DeliveryDate,
+                            DateFormat.Date, VasHelperMethods.getSysConfigLocale(context)));
 
                     if (VaranegarApplication.is(VaranegarApplication.AppId.Contractor)) {
-                        if (selectedOrderType.UniqueId.toString().equals("4cc866f9-eb19-4c76-8a41-f8207104cdbf")) {
+                        if (Objects.requireNonNull(selectedOrderType.UniqueId).toString().equals("4cc866f9-eb19-4c76-8a41-f8207104cdbf")) {
                             linearLayout.setVisibility(View.VISIBLE);
                             orderTypesSpinner.setEnabled(false);
                         } else {
@@ -1164,16 +1197,18 @@ public class CustomerSaveOrderFragment extends VisitFragment
             }
             contractorDiscountImageView.setOnClickListener(view16 -> {
                 final SearchBox<DiscountTypeModel> searchBox = new SearchBox<>();
-                searchBox.setItems(discountTypeModels, (SearchBox.SearchMethod<DiscountTypeModel>) (item, text) -> {
+                searchBox.setItems(discountTypeModels, (SearchBox.SearchMethod<DiscountTypeModel>)
+                        (item, text) -> {
                     text = text.toLowerCase();
                     return item.toString().toLowerCase().contains(text);
                 });
                 searchBox.disableSearch();
                 searchBox.setOnItemSelectedListener((position, item) -> {
-                    SharedPreferences discountTypeShP = getContext().getSharedPreferences("DiscountType", Context.MODE_PRIVATE);
+                    SharedPreferences discountTypeShP = requireContext()
+                            .getSharedPreferences("DiscountType", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor1 = discountTypeShP.edit();
                     final String discountType = discountTypeShP.getString("discountTypeId", percent);
-                    if (item.UniqueId.toString().equals(percent)) {
+                    if (Objects.requireNonNull(item.UniqueId).toString().equals(percent)) {
                         editor1.putString("discountTypeId", percent);
                         editor1.apply();
                         if (discountType.equals(cash))
@@ -1208,20 +1243,22 @@ public class CustomerSaveOrderFragment extends VisitFragment
                 try {
                     UUID oldPaymentType = customerCallOrderModel.OrderPaymentTypeUniqueId;
                     UUID newPaymentType = data.OrderPaymentTypeId;
-                    PaymentOrderTypeManager paymentOrderTypeManager = new PaymentOrderTypeManager(context);
+                    PaymentOrderTypeManager paymentOrderTypeManager = new
+                            PaymentOrderTypeManager(context);
                     PaymentTypeOrderModel paymentTypeOrderModel = paymentOrderTypeManager
                             .getItem(new Query().from(PaymentTypeOrder.PaymentTypeOrderTbl)
-                                    .whereAnd(Criteria.equals(PaymentTypeOrder.UniqueId, data.OrderPaymentTypeId)));
+                                    .whereAnd(Criteria.equals(PaymentTypeOrder.UniqueId,
+                                            data.OrderPaymentTypeId)));
                     if (paymentTypeOrderModel != null) {
                         for (CustomerPaymentTypesViewModel customerPaymentTypesViewModel
                                 : customerPaymentTypes) {
-                            if (customerPaymentTypesViewModel.UniqueId
+                            if (Objects.requireNonNull(customerPaymentTypesViewModel.UniqueId)
                                     .equals(paymentTypeOrderModel.UniqueId))
                                 selectedPaymentType = customerPaymentTypesViewModel;
                         }
                         if (customerCallOrderModel == null || data == null ||
                                 data.OrderPaymentTypeId == null) {
-                            CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(getContext());
+                            CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(requireContext());
                             cuteMessageDialog.setMessage(R.string.error_on_usance_day);
                             cuteMessageDialog.setNeutralButton(R.string.ok, null);
                             cuteMessageDialog.show();
@@ -1235,13 +1272,21 @@ public class CustomerSaveOrderFragment extends VisitFragment
                             try {
                                 customerCallOrderModel.OrderPaymentTypeUniqueId =
                                         data.OrderPaymentTypeId;
-                                CallOrderLineManager callOrderLineManager = new CallOrderLineManager(getContext());
-                                List<CallOrderLineModel> customerCallOrderModels = callOrderLineManager.getOrderLines(callOrderId);
+                                CallOrderLineManager callOrderLineManager = new
+                                        CallOrderLineManager(getContext());
+                                List<CallOrderLineModel> customerCallOrderModels =
+                                        callOrderLineManager.getOrderLines(callOrderId);
                                 List<CallOrderLineModel> editedCustomerCallOrderModels = new ArrayList<>();
-                                for (CustomerCallOrderLinePromotion customerCallOrderLinePromotion : data.LinesWithPromo) {
-                                    for (CallOrderLineModel callOrderLineModel : customerCallOrderModels) {
-                                        if (callOrderLineModel.UniqueId.equals(customerCallOrderLinePromotion.UniqueId)) {
-                                            callOrderLineModel.PayDuration = customerCallOrderLinePromotion.PayDuration;
+                                for (CustomerCallOrderLinePromotion customerCallOrderLinePromotion :
+                                        data.LinesWithPromo) {
+                                    for (CallOrderLineModel callOrderLineModel :
+                                            customerCallOrderModels) {
+
+                                        if (Objects.equals(callOrderLineModel.UniqueId,
+                                                customerCallOrderLinePromotion.UniqueId)) {
+
+                                            callOrderLineModel.PayDuration =
+                                                    customerCallOrderLinePromotion.PayDuration;
                                             editedCustomerCallOrderModels.add(callOrderLineModel);
                                         }
                                     }
@@ -1249,11 +1294,15 @@ public class CustomerSaveOrderFragment extends VisitFragment
                                 callOrderLineManager.update(editedCustomerCallOrderModels);
                                 updateCustomerCallOrder();
                                 extractAndCalcCustomerPrice();
-                                DiscountConditionManager discountConditionManager = new DiscountConditionManager(context);
-                                boolean existDiscountItemCountBaseOnPaymentType = discountConditionManager.existDiscountBaseOnPaymentType(true);
-                                boolean existDiscountBaseOnPaymentType = discountConditionManager.existDiscountBaseOnPaymentType(false);
+                                DiscountConditionManager discountConditionManager =
+                                        new DiscountConditionManager(context);
+                                boolean existDiscountItemCountBaseOnPaymentType =
+                                        discountConditionManager.existDiscountBaseOnPaymentType(true);
+                                boolean existDiscountBaseOnPaymentType = discountConditionManager
+                                        .existDiscountBaseOnPaymentType(false);
                                 boolean paymentTypeChanged = !oldPaymentType.equals(newPaymentType);
-                                refresh((paymentTypeChanged && existDiscountItemCountBaseOnPaymentType), true, (paymentTypeChanged && existDiscountBaseOnPaymentType));
+                                refresh((paymentTypeChanged && existDiscountItemCountBaseOnPaymentType),
+                                        true, (paymentTypeChanged && existDiscountBaseOnPaymentType));
                             } catch (Exception e) {
                                 showErrorMessage();
                             }
@@ -1295,7 +1344,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
     }
 
     private void discountCalculatorForContractor() {
-        SharedPreferences discountTypeShP = getContext().getSharedPreferences("DiscountType", Context.MODE_PRIVATE);
+        SharedPreferences discountTypeShP = requireContext().getSharedPreferences("DiscountType", Context.MODE_PRIVATE);
         final String discountType = discountTypeShP.getString("discountTypeId", percent);
         if (discountType.equals(percent)) {
             contractorDiscountEditText.setHint(R.string.percent_discount);
@@ -1364,7 +1413,8 @@ public class CustomerSaveOrderFragment extends VisitFragment
         customerCallOrderModel.RoundOrderOtherDiscount = otherDiscount;
         customerCallOrderModel.EndTime = new Date();
         if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
-            customerCallOrderModel.ShipToPartyUniqueId = shipPairedItemsSpinner.getSelectedItem().UniqueId;
+            customerCallOrderModel.ShipToPartyUniqueId = Objects
+                    .requireNonNull(shipPairedItemsSpinner.getSelectedItem()).UniqueId;
             customerCallOrderModel.ShipToPartyCode = shipPairedItemsSpinner.getSelectedItem().BackOfficeId;
         }
         try {
@@ -1492,7 +1542,8 @@ public class CustomerSaveOrderFragment extends VisitFragment
         reportsButton.setIcon(R.drawable.ic_report_white_36dp);
         reportsButton.setTitle(R.string.customer_reports);
         reportsButton.setEnabled(() -> !hasCallOrder());
-        reportsButton.setOnClickListener(() -> getVaranegarActvity().toggleDrawer());
+        reportsButton.setOnClickListener(() ->
+                Objects.requireNonNull(getVaranegarActvity()).toggleDrawer());
 
         /**
          * دکمه ثبت سفارش
@@ -1653,7 +1704,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
                     final CalculatorHelper calculatorHelper = new CalculatorHelper(context);
                     final OnHandQtyStock onHandQtyStock = new OnHandQtyStock();
                     ProductUnitsViewModel productUnitsViewModel = productUnitsHashMap.get(productOrderViewModel.UniqueId);
-                    onHandQtyStock.ConvertFactors = productUnitsViewModel.ConvertFactor;
+                    onHandQtyStock.ConvertFactors = Objects.requireNonNull(productUnitsViewModel).ConvertFactor;
                     onHandQtyStock.UnitNames = productUnitsViewModel.UnitName;
                     if (productOrderViewModel.OnHandQty == null)
                         productOrderViewModel.OnHandQty = BigDecimal.ZERO;
@@ -1674,10 +1725,24 @@ public class CustomerSaveOrderFragment extends VisitFragment
                     onHandQtyStock.HasAllocation = productOrderViewModel.HasAllocation;
                     BaseUnit bulkUnit = calculatorHelper.getBulkQtyUnit(customerCallOrderOrderViewModel);
                     if (productOrderViewModel.ExpDate == null)
-                        orderCalculatorForm.setArguments(productOrderViewModel.UniqueId, productOrderViewModel.ProductName, calculatorHelper.generateCalculatorUnits(productOrderViewModel.UniqueId, orderLineQtyModels, bulkUnit, ProductType.isForSale), productOrderViewModel.Price, productOrderViewModel.UserPrice, onHandQtyStock, customerId, callOrderId);
+                        orderCalculatorForm.setArguments(Objects
+                                        .requireNonNull(productOrderViewModel.UniqueId),
+                                productOrderViewModel.ProductName, calculatorHelper
+                                        .generateCalculatorUnits(productOrderViewModel.UniqueId,
+                                                orderLineQtyModels, bulkUnit, ProductType.isForSale),
+                                productOrderViewModel.Price, productOrderViewModel.UserPrice,
+                                onHandQtyStock, customerId, callOrderId);
                     else
-                        orderCalculatorForm.setArguments(productOrderViewModel.UniqueId, productOrderViewModel.ProductName, CalculatorBatchUnits.generate(getContext(), productOrderViewModel, customerCallOrderOrderViewModel == null ? null : customerCallOrderOrderViewModel.UniqueId, productOrderViewModel.Price, productOrderViewModel.PriceId, productOrderViewModel.UserPrice), productOrderViewModel.UserPrice, onHandQtyStock, customerId, callOrderId);
-                    orderCalculatorForm.onCalcFinish = (discreteUnits, bulkUnit1, batchQtyList) -> onAddItem(productOrderViewModel, discreteUnits, bulkUnit1, batchQtyList);
+                        orderCalculatorForm.setArguments(productOrderViewModel.UniqueId,
+                                productOrderViewModel.ProductName,
+                                CalculatorBatchUnits.generate(getContext(), productOrderViewModel,
+                                        customerCallOrderOrderViewModel == null ? null :
+                                                customerCallOrderOrderViewModel.UniqueId,
+                                        productOrderViewModel.Price, productOrderViewModel.PriceId,
+                                        productOrderViewModel.UserPrice), productOrderViewModel.UserPrice,
+                                onHandQtyStock, customerId, callOrderId);
+                    orderCalculatorForm.onCalcFinish = (discreteUnits, bulkUnit1, batchQtyList) ->
+                            onAddItem(productOrderViewModel, discreteUnits, bulkUnit1, batchQtyList);
                     orderCalculatorForm.show(getChildFragmentManager(), "2af40365-a4db-4afb-bb13-2a9896803d92");
                 } catch (ProductUnitViewManager.UnitNotFoundException e) {
                     MainVaranegarActivity activity = getVaranegarActvity();
@@ -2158,7 +2223,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
     }
 
     private void setupOrderAdapter() {
-        productUnits = new ProductUnitViewManager(getContext()).getUnitSet(ProductType.isForSale);
+        HashMap<UUID, ProductUnitViewManager.ProductUnits> productUnits = new ProductUnitViewManager(getContext()).getUnitSet(ProductType.isForSale);
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("SortOrders", Context.MODE_PRIVATE);
         OrderOption<CustomerCallOrderOrderViewModel> item = orderOptions
                 .get(sharedPreferences.getInt("OrderOptionsPosition", 0));
@@ -3051,7 +3116,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
                 if (isInOrder) {
                     isInOrder = !Linq.exists(productList, item -> item.PrizeComment != null &&
                             !item.PrizeComment.isEmpty() && !Linq.exists(orderAdapter.getItems(),
-                            p -> item.UniqueId.equals(p.ProductId)));
+                            p -> Objects.equals(item.UniqueId, p.ProductId)));
                 }
                 if ((!isInOrder || result.getError() != null || result.getWarning() != null) &&
                         !SysConfigManager.compare(new SysConfigManager(getContext())

@@ -59,9 +59,11 @@ public class CustomerOrderLineViewHolder extends BaseViewHolder<CustomerCallOrde
         if (product == null)
             return;
         itemView.setOnClickListener(v -> {
-            itemView.setEnabled(false);
-            recyclerAdapter.showContextMenu(position);
-            new Handler().postDelayed(() -> itemView.setEnabled(true), 2000);
+            if (!product.IsPromoLine && !product.IsRequestFreeItem) {
+                itemView.setEnabled(false);
+                recyclerAdapter.showContextMenu(position);
+                new Handler().postDelayed(() -> itemView.setEnabled(true), 2000);
+            }
         });
         productNameTextView.setText(product.ProductName);
         productCodeTextView.setText(product.ProductCode);
