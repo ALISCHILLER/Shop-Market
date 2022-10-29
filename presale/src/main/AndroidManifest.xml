@@ -24,6 +24,7 @@
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
             </intent-filter>
         </activity>
+
         <receiver android:name=".jobscheduler.PresalesJobScheduler" />
 
 
@@ -32,6 +33,7 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/zar" />
@@ -45,6 +47,7 @@
             android:value="@string/default_notification_channel_id" />
 
         <service android:name=".PreSalesSyncService" />
+
         <service
             android:name="de.blinkt.openvpn.core.OpenVPNService"
             android:permission="android.permission.BIND_VPN_SERVICE">

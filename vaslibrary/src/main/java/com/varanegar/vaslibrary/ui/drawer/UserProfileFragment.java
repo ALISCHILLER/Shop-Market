@@ -29,6 +29,7 @@ import com.varanegar.framework.validation.annotations.Length;
 import com.varanegar.framework.validation.annotations.NotEmpty;
 import com.varanegar.framework.validation.annotations.NotEmptyChecker;
 import com.varanegar.vaslibrary.R;
+import com.varanegar.vaslibrary.base.ManageSpaceActivity;
 import com.varanegar.vaslibrary.base.SelectLanguageDialog;
 import com.varanegar.vaslibrary.manager.UserManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
@@ -89,15 +90,20 @@ public class UserProfileFragment extends VaranegarFragment implements Validation
                 validator.validate(UserProfileFragment.this);
             }
         });
+
         view.findViewById(R.id.reset_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SysConfigManager sysConfigManager = new SysConfigManager(getContext());
+                Intent intent = new Intent(getVaranegarActvity(), ManageSpaceActivity.class);
+                getVaranegarActvity().startActivity(intent);
+/*                SysConfigManager sysConfigManager = new SysConfigManager(getContext());
                 SysConfigModel sysConfigModel = sysConfigManager.read(ConfigKey.UserDialogPreference, SysConfigManager.cloud);
                 UserDialogPreferences.clearPreferences(getContext());
-                UserDialogPreferences.setPreferenceAvailability(getContext(), SysConfigManager.compare(sysConfigModel, true));
+                UserDialogPreferences.setPreferenceAvailability(getContext(), SysConfigManager.compare(sysConfigModel, true));*/
             }
         });
+
+
         view.findViewById(R.id.change_language).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

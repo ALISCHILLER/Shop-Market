@@ -34,7 +34,7 @@
         android:padding="@dimen/padding_default"
         android:text="@string/space_management_warning"
         android:textAlignment="center"
-        android:textColor="@color/red"
+        android:textColor="#B71C1C"
         android:textStyle="bold|italic" />
 
     <LinearLayout
@@ -99,7 +99,7 @@
         android:id="@+id/ok_button"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbarSize"
-        android:background="@color/red"
+        android:background="#B71C1C"
         android:text="@string/clear_data"
         android:textColor="@color/white"
         android:textStyle="bold" />

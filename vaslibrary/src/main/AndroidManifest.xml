@@ -49,6 +49,7 @@
             android:value="AIzaSyC59Phohy6k55fy9Be9zeWF2xMTeGOqP-c" />
 
         <activity android:name="com.varanegar.vaslibrary.base.ManageSpaceActivity" />
+
         <activity android:name=".base.SendCrashLogActivity" />
         <service android:name=".manager.locationmanager.TrackingService" />
         <service android:name="com.varanegar.framework.util.jobscheduler.JobSchedulerService" />
