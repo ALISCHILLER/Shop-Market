@@ -473,7 +473,7 @@ public class CameraFragment extends VisitFragment {
                             InsertPinDialog dialog = new InsertPinDialog();
                             dialog.setCancelable(false);
                             dialog.setClosable(false);
-                            dialog.setValues("8585075751");
+                            dialog.setValues("677267");
                             dialog.setOnResult(new InsertPinDialog.OnResult() {
                                 @Override
                                 public void done() {

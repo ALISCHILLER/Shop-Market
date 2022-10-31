@@ -76,6 +76,7 @@ import com.varanegar.vaslibrary.webapi.tracking.LicenseRequestBody;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import okhttp3.Request;
 import timber.log.Timber;
@@ -115,7 +116,8 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_supervisor_login, container, false);
         // Checking permission for network monitor
         Intent intent = VpnService.prepare(getContext());
@@ -125,7 +127,8 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
         // region apk name and version
         try {
             String packageName = getContext().getApplicationInfo().packageName;
-            String version = getContext().getPackageManager().getPackageInfo(packageName, 0).versionName;
+            String version = getContext().getPackageManager().getPackageInfo(packageName, 0)
+                    .versionName;
             TextView versionTextView = view.findViewById(R.id.version_text_view);
             versionTextView.setText(getString(R.string.app_name) + " " + version);
         } catch (PackageManager.NameNotFoundException e) {
@@ -133,23 +136,20 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
         }
         // endregion
 
-        view.findViewById(R.id.logo_image_view).setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (BackupManager.getList(getContext(), BackupManager.BackupType.Full).size() > 0) {
-                    ImportDialogFragment importDialog = new ImportDialogFragment();
-                    importDialog.setBackupType(BackupManager.BackupType.Full);
-                    importDialog.show(getChildFragmentManager(), "ImportDialogFragment");
-                } else {
-                    CuteMessageDialog dialog = new CuteMessageDialog(getContext());
-                    dialog.setTitle(com.varanegar.vaslibrary.R.string.error);
-                    dialog.setMessage(com.varanegar.vaslibrary.R.string.there_is_no_backup_file);
-                    dialog.setIcon(Icon.Alert);
-                    dialog.setPositiveButton(com.varanegar.vaslibrary.R.string.ok, null);
-                    dialog.show();
-                }
-                return true;
+        view.findViewById(R.id.logo_image_view).setOnLongClickListener(v -> {
+            if (BackupManager.getList(getContext(), BackupManager.BackupType.Full).size() > 0) {
+                ImportDialogFragment importDialog = new ImportDialogFragment();
+                importDialog.setBackupType(BackupManager.BackupType.Full);
+                importDialog.show(getChildFragmentManager(), "ImportDialogFragment");
+            } else {
+                CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+                dialog.setTitle(com.varanegar.vaslibrary.R.string.error);
+                dialog.setMessage(com.varanegar.vaslibrary.R.string.there_is_no_backup_file);
+                dialog.setIcon(Icon.Alert);
+                dialog.setPositiveButton(com.varanegar.vaslibrary.R.string.ok, null);
+                dialog.show();
             }
+            return true;
         });
         // region username and password
         passwordEditText = view.findViewById(R.id.password_edit_text);
@@ -178,44 +178,35 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
                                     return UserManager.getAll(text);
                                 }
                             });
-                    searchBox.setOnItemSelectedListener(new SearchBox.OnItemSelectedListener<UserModel>() {
-                        @Override
-                        public void run(int position, UserModel item) {
-                            searchBox.dismiss();
-                            userNameEditText.setText(item.UserName);
-                        }
+                    searchBox.setOnItemSelectedListener((position, item) -> {
+                        searchBox.dismiss();
+                        userNameEditText.setText(item.UserName);
                     });
                     searchBox.show(getChildFragmentManager(), "SearchBox");
                 }
             }
         });
-        settingsImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SupervisorSettingDialogFragment settingDialogFragment = new SupervisorSettingDialogFragment();
-                settingDialogFragment.setCancelable(false);
-                settingDialogFragment.setConfigListener(new SupervisorSettingDialogFragment
-                        .SettingsUpdateListener() {
-                    @Override
-                    public void onSettingsUpdated() {
-                        Intent intent = getVaranegarActvity().getIntent();
-                        getVaranegarActvity().finish();
-                        startActivity(intent);
-                    }
-                });
-                settingDialogFragment.show(getChildFragmentManager(), "SettingDialogFragment");
-            }
+        settingsImageView.setOnClickListener(view1 -> {
+            SupervisorSettingDialogFragment settingDialogFragment = new SupervisorSettingDialogFragment();
+            settingDialogFragment.setCancelable(false);
+            settingDialogFragment.setConfigListener(new SupervisorSettingDialogFragment
+                    .SettingsUpdateListener() {
+                @Override
+                public void onSettingsUpdated() {
+                    Intent intent1 = getVaranegarActvity().getIntent();
+                    getVaranegarActvity().finish();
+                    startActivity(intent1);
+                }
+            });
+            settingDialogFragment.show(getChildFragmentManager(), "SettingDialogFragment");
         });
 
 
         loginButton = view.findViewById(R.id.ok_button);
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                userNameEditText.setError(null);
-                passwordEditText.setError(null);
-                validator.validate(SupervisorLoginFragment.this);
-            }
+        loginButton.setOnClickListener(view12 -> {
+            userNameEditText.setError(null);
+            passwordEditText.setError(null);
+            validator.validate(SupervisorLoginFragment.this);
         });
 
 
@@ -237,9 +228,10 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
         }
 
 
-        SysConfigModel serverAddressConfig = new SysConfigManager(getContext()).read(ConfigKey.LocalServerAddress, SysConfigManager.local);
+        SysConfigModel serverAddressConfig = new SysConfigManager(getContext()).read(ConfigKey
+                .LocalServerAddress, SysConfigManager.local);
         if (serverAddressConfig == null) {
-            CuteMessageDialog alert = new CuteMessageDialog(getContext());
+            CuteMessageDialog alert = new CuteMessageDialog(requireContext());
             alert.setMessage(R.string.please_set_settings);
             alert.setTitle(R.string.error);
             alert.setIcon(Icon.Error);
@@ -255,7 +247,7 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
             public void done(String ipAddress) {
                 //try{
 
-                SharedPreferences sharedPreferences = getActivity()
+                SharedPreferences sharedPreferences = requireActivity()
                         .getSharedPreferences("Firebase_Token", Context.MODE_PRIVATE);
                 String token=sharedPreferences.getString("172F4321-16BB-4415-85D1-DD88FF04234C"
                         ,"");
@@ -289,7 +281,8 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
                                         setEnabled(true);
                                         loginButton.setProgress(0);
                                         getTrackingLicense();
-                                        /*VasInstanceIdService.refreshToken(getContext(), new VasInstanceIdService.TokenRefreshCallBack() {
+                                        /*VasInstanceIdService.refreshToken(getContext(),
+                                         new VasInstanceIdService.TokenRefreshCallBack() {
                                             @Override
                                             public void onSuccess(@NonNull String token) {
                                                 Timber.d("Token update succeeded. Token = " + token);
@@ -307,7 +300,9 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
                                             loginButton.setProgress(0);
                                             MainVaranegarActivity activity = getVaranegarActvity();
                                             if (activity != null && !activity.isFinishing())
-                                                activity.showSnackBar(getContext().getString(com.varanegar.vaslibrary.R.string.login_failed), MainVaranegarActivity.Duration.Short);
+                                                activity.showSnackBar(requireContext()
+                                                                .getString(com.varanegar.vaslibrary.R.string.login_failed),
+                                                        MainVaranegarActivity.Duration.Short);
                                         }
                                     }
                                 }
@@ -325,7 +320,8 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
                                 public void onNetworkFailure(Throwable t) {
                                     MainVaranegarActivity activity = getVaranegarActvity();
                                     if (activity != null && !activity.isFinishing() && isResumed())
-                                        activity.showSnackBar(com.varanegar.vaslibrary.R.string.connection_to_server_failed, MainVaranegarActivity.Duration.Short);
+                                        activity.showSnackBar(com.varanegar.vaslibrary.R.string.connection_to_server_failed,
+                                                MainVaranegarActivity.Duration.Short);
                                     setEnabled(true);
                                     loginButton.setProgress(0);
                                 }
@@ -427,7 +423,7 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
                 ((EditText) error.getField()).setError(errorMessage);
                 ((EditText) error.getField()).requestFocus();
             } else
-                getVaranegarActvity().showSnackBar(errorMessage, MainVaranegarActivity.Duration.Short);
+                Objects.requireNonNull(getVaranegarActvity()).showSnackBar(errorMessage, MainVaranegarActivity.Duration.Short);
         }
     }
 
@@ -435,14 +431,18 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
     @Nullable
     public String getDeviceId() {
         String deviceId = "";
-        TelephonyManager telephonyManager = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager telephonyManager = (TelephonyManager) requireActivity()
+                .getSystemService(Context.TELEPHONY_SERVICE);
         try {
             if (Build.VERSION.SDK_INT >= 29) {
-                deviceId = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
+                deviceId = Settings.Secure.getString(getActivity().getContentResolver(),
+                        Settings.Secure.ANDROID_ID);
             } else {
-                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(requireActivity(),
+                        Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
                     Timber.e("Manifest.permission.READ_PHONE_STATE Permission not granted");
-                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_PHONE_STATE}, REQUEST_CODE);
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission
+                            .READ_PHONE_STATE}, REQUEST_CODE);
                 } else {
                     if (telephonyManager != null)
                         deviceId = telephonyManager.getDeviceId();
@@ -463,18 +463,22 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions
+            , @NonNull int[] grantResults) {
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 12456) {
-            if (permissions[0].equals(Manifest.permission_group.PHONE) && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            if (permissions[0].equals(Manifest.permission_group.PHONE) && grantResults[0] ==
+                    PackageManager.PERMISSION_GRANTED)
                 getTrackingLicense();
         }
     }
 
     private void getTrackingLicense() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M && Build.VERSION.SDK_INT < 29) {
-            int phonePermission = getActivity().checkSelfPermission(Manifest.permission_group.PHONE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M
+                && Build.VERSION.SDK_INT < 29) {
+            int phonePermission = requireActivity()
+                    .checkSelfPermission(Manifest.permission_group.PHONE);
             if (phonePermission != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{
                         Manifest.permission.READ_PHONE_STATE
@@ -484,14 +488,19 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
         }
 
         if (TrackingLicense.readLicense(getContext()) == null) {
-            final String deviceId = TrackingLicense.getDeviceId(getContext());
+            final String deviceId = TrackingLicense.getDeviceId(requireContext());
             if (deviceId == null) {
-                getVaranegarActvity().showSnackBar(R.string.device_id_is_not_available, MainVaranegarActivity.Duration.Short);
+                Objects.requireNonNull(getVaranegarActvity())
+                        .showSnackBar(R.string.device_id_is_not_available,
+                                MainVaranegarActivity.Duration.Short);
                 return;
             }
-            TrackingLogManager.addLog(getActivity(), LogType.LICENSE, LogLevel.Info, "Device IMEI = " + deviceId);
-            com.varanegar.vaslibrary.manager.locationmanager.LocationManager locationManager = new com.varanegar.vaslibrary.manager.locationmanager.LocationManager(getContext());
-            locationManager.downloadTrackingLicense(deviceId, new com.varanegar.vaslibrary.manager.locationmanager.LocationManager.DownloadCallBack() {
+            TrackingLogManager.addLog(requireActivity(), LogType.LICENSE, LogLevel.Info,
+                    "Device IMEI = " + deviceId);
+            com.varanegar.vaslibrary.manager.locationmanager.LocationManager locationManager = new
+                    com.varanegar.vaslibrary.manager.locationmanager.LocationManager(requireContext());
+            locationManager.downloadTrackingLicense(deviceId, new com.varanegar.vaslibrary.manager
+                    .locationmanager.LocationManager.DownloadCallBack() {
                 @Override
                 public void done() {
 
