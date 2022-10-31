@@ -273,73 +273,25 @@ public class CustomersContentFragment extends VaranegarFragment {
 
         if (getContext() == null || getVaranegarActvity() == null) return;
 
-        new Handler().postDelayed(() -> {
-            if (isResumed() && !isRemoving()) {
+        Button buttonTracking = view.findViewById(R.id.buttonTracking);
+        TextView location_text_view = view.findViewById(R.id.location_text_view);
 
-                Button buttonTracking = view.findViewById(R.id.buttonTracking);
-                TextView location_text_view = view.findViewById(R.id.location_text_view);
-
-                if (customer.Longitude != 0 && customer.Latitude != 0) {
-                    buttonTracking.setVisibility(View.VISIBLE);
-                    pairedItemAddress.setVisibility(View.VISIBLE);
-                    location_text_view.setVisibility(View.GONE);
-                } else {
-                    buttonTracking.setVisibility(View.GONE);
-                    pairedItemAddress.setVisibility(View.GONE);
-                    location_text_view.setVisibility(View.VISIBLE);
-                }
+        if (customer.Longitude != 0 && customer.Latitude != 0) {
+            buttonTracking.setVisibility(View.VISIBLE);
+            pairedItemAddress.setVisibility(View.VISIBLE);
+            location_text_view.setVisibility(View.GONE);
+        } else {
+            buttonTracking.setVisibility(View.GONE);
+            pairedItemAddress.setVisibility(View.GONE);
+            location_text_view.setVisibility(View.VISIBLE);
+        }
 
 
-                buttonTracking.setOnClickListener(v -> {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(Locale.US, "geo:%.8f,%.8f", customer.Latitude, customer.Longitude)));
-                    startActivity(Intent.createChooser(intent, "یک برنامه مسیریاب انتخاب کنید"));
-                });
+        buttonTracking.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(Locale.US, "geo:%.8f,%.8f", customer.Latitude, customer.Longitude)));
+            startActivity(Intent.createChooser(intent, "یک برنامه مسیریاب انتخاب کنید"));
+        });
 
-/*                mapView = view.findViewById(R.id.map_view);
-                mapView.onCreate(savedInstanceState);
-                mapView.onResume(); // needed to getUnits the map to display immediately
-                mapView.getMapAsync(googleMap -> {
-                    if (customer.Longitude != 0 && customer.Latitude != 0) {
-                        view.findViewById(R.id.location_text_view).setVisibility(View.GONE);
-                        LatLng latLng = new LatLng(customer.Latitude, customer.Longitude);
-                        MarkerOptions options = new MarkerOptions().position(latLng);
-                        options.flat(false);
-                        Marker marker = googleMap.addMarker(options);
-                        if (marker != null) {
-                            marker.setZIndex(10);
-                            CustomerCallManager callManager = new CustomerCallManager(getContext());
-                            int icon = callManager.getIcon(getCalls());
-                            BitmapDescriptor bitmap = BitmapDescriptorFactory.fromResource(icon);
-                            marker.setTitle(customer.CustomerName);
-                            marker.setIcon(bitmap);
-                            marker.setTag(customer.UniqueId == null
-                                    ? ""
-                                    : customer.UniqueId.toString());
-                        }
-
-                        CameraPosition cameraPosition = new CameraPosition
-                                .Builder()
-                                .target(latLng)
-                                .zoom(17)
-                                .build();
-                        googleMap.animateCamera(CameraUpdateFactory
-                                .newCameraPosition(cameraPosition));
-                        googleMap.setOnMarkerClickListener(marker1 -> {
-                            UserLocationFragment userLocationFragment = new UserLocationFragment();
-                            userLocationFragment.setCustomerId(getSelectedId());
-
-                            getVaranegarActvity().pushFragment(userLocationFragment);
-                            return true;
-                        });
-
-                    } else {
-                        buttonTracking.setVisibility(View.GONE);
-                        view.findViewById(R.id.location_text_view)
-                                .setVisibility(View.VISIBLE);
-                    }
-                });*/
-            }
-        }, 1000);
     }
     //---------------------------------------------------------------------------------------------- onViewCreated
 

@@ -158,10 +158,12 @@
                                             app:layout_constraintTop_toTopOf="parent"
                                             app:layout_constraintLeft_toLeftOf="parent"
                                             app:layout_constraintBottom_toBottomOf="parent"
-                                            android:text="مسیر یابی"
+                                            android:text="@string/tracking"
                                             android:backgroundTint="?attr/colorPrimary"
                                             android:textColor="@color/white"
-                                            android:padding="@dimen/_3sdp" />
+                                            android:padding="@dimen/_3sdp"
+                                            android:drawableRight="@drawable/ic_tracking_white_24dp"
+                                            android:drawablePadding="@dimen/_3sdp"/>
 
                                         <com.varanegar.framework.util.component.PairedItems
                                             android:id="@+id/customer_address_paired_item"
@@ -177,14 +179,14 @@
                                         <TextView
                                             android:id="@+id/location_text_view"
                                             android:layout_width="match_parent"
-                                            android:layout_height="0dp"
-                                            android:minHeight="@dimen/_50sdp"
+                                            android:layout_height="@dimen/_50sdp"
                                             app:layout_constraintTop_toTopOf="parent"
                                             app:layout_constraintBottom_toBottomOf="parent"
                                             android:background="@color/no_emphatic"
                                             android:gravity="center"
+                                            android:textColor="@color/black"
                                             android:padding="@dimen/padding_large"
-                                            android:text="@string/customer_position_is_not_avalable" />
+                                            android:text="@string/customerLocationIsEmpty" />
 
                                     </androidx.constraintlayout.widget.ConstraintLayout>
 

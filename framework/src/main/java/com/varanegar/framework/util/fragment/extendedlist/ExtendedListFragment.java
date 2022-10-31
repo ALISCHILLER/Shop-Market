@@ -230,10 +230,13 @@ public abstract class ExtendedListFragment<DataModel extends BaseModel,SPIN_TYPE
 
     public void setAdvancedSearch(@DrawableRes int drawable, View.OnClickListener search) {
         Log.d(TAG, "setAdvancedSearch: called");
-
         this.advancedSearch = search;
         this.advancedSearchDrawable = drawable;
         if (advancedSearchImageView != null) {
+            if (drawable == 0 || search == null){
+                advancedSearchImageView.setVisibility(View.GONE);
+                return;
+            }
             advancedSearchImageView.setImageResource(drawable);
             advancedSearchImageView.setVisibility(View.VISIBLE);
             advancedSearchImageView.setOnClickListener(search);

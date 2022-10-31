@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="@dimen/padding_default">
+    android:padding="@dimen/padding_default"
+    android:background="@color/tourReportBack">
 
 
     <LinearLayout
@@ -16,12 +17,13 @@
             android:layout_gravity="center_vertical"
             android:padding="@dimen/padding_small"
             android:src="@drawable/ic_tour_report_black_24dp"
-            android:tint="?attr/colorPrimary" />
+            android:tint="@color/white" />
 
         <TextView
             android:id="@+id/tour_no_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:layout_gravity="center_vertical" />
     </LinearLayout>
 

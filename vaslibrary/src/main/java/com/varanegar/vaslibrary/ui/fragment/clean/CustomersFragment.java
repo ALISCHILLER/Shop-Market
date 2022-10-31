@@ -253,7 +253,7 @@ public abstract class CustomersFragment
         Timber.d("Customers fragment created");
         Log.d(TAG, "onCreate: called");
         setTitle(getString(R.string.customers_list));
-        setAdvancedSearch(R.drawable.ic_barcode_black_48dp, this::onClick);
+        setAdvancedSearch(0, null);
 
         if (savedInstanceState != null)
             barcode = savedInstanceState.getString("dd003d32-4f05-423f-b7ba-3ccc9f54fb39");
@@ -937,14 +937,14 @@ public abstract class CustomersFragment
      * بارکد سرچ اسکن کد بارکد و برگشت کد بارکد  در کلاس
      * ExtendedListFragment و چک در onResume() ExtendedListFragment
      */
-    //---------------------------------------------------------------------------------------------- onClick
-    private void onClick(View v) {
+    //---------------------------------------------------------------------------------------------- onClickCustomerBarcode
+    private void onClickCustomerBarcode(View v) {
         if (getActivity() == null) return;
         CustomerBarcodeManager customerBarcodeManager =
                 new CustomerBarcodeManager(getActivity());
         customerBarcodeManager.readBarcode();
     }
-    //---------------------------------------------------------------------------------------------- onClick
+    //---------------------------------------------------------------------------------------------- onClickCustomerBarcode
 
 
     //---------------------------------------------------------------------------------------------- cancelTour

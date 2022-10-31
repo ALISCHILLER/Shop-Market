@@ -212,6 +212,8 @@
     <string name="customer_national_code">کد ملی</string>
     <string name="customer_mobile">موبایل</string>
     <string name="customer_address">آدرس</string>
+    <string name="tracking">مسیر یابی و \n فاصله تا مشتری</string>
+    <string name="customerLocationIsEmpty">موقعیت مشتری نامشخص است \n از منوی کنار روی (ثبت موقعیت) بزنید</string>
     <string name="customer_total_order">مجموع سفارش</string>
     <string name="customer_status">وضعیت</string>
     <string name="accept">تایید</string>
