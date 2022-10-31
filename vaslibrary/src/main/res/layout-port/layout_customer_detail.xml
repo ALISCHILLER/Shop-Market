@@ -71,48 +71,55 @@
                             android:layout_height="wrap_content"
                             android:text="@string/refresh_customer_location" />
 
-                        <RelativeLayout
+                        <androidx.cardview.widget.CardView
                             android:layout_width="match_parent"
-                            android:layout_height="150dp">
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_3sdp"
+                            android:padding="@dimen/_5sdp"
+                            app:cardCornerRadius="@dimen/_3sdp">
 
-                            <com.google.android.gms.maps.MapView
-                                android:id="@+id/map_view"
+                            <androidx.constraintlayout.widget.ConstraintLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent" />
+                                android:layout_height="wrap_content">
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:padding="@dimen/padding_small">
-
-                                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                                    android:id="@+id/google_map_fab"
+                                <Button
+                                    android:id="@+id/buttonTracking"
                                     android:layout_width="wrap_content"
+                                    android:layout_height="0dp"
+                                    android:backgroundTint="?attr/colorPrimary"
+                                    android:padding="@dimen/_3sdp"
+                                    android:text="مسیر یابی"
+                                    android:textColor="@color/white"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintLeft_toLeftOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <com.varanegar.framework.util.component.PairedItems
+                                    android:id="@+id/customer_address_paired_item"
+                                    android:layout_width="0dp"
                                     android:layout_height="wrap_content"
-                                    android:layout_margin="@dimen/padding_small"
-                                    android:src="@mipmap/ic_navigate"
-                                    app:fabSize="mini" />
+                                    android:orientation="vertical"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintLeft_toRightOf="@id/buttonTracking"
+                                    app:layout_constraintRight_toRightOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:title="@string/customer_address" />
 
-                                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                                    android:id="@+id/waze_fab"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="@dimen/padding_small"
-                                    android:src="@mipmap/ic_waze"
-                                    app:fabSize="mini" />
-                            </LinearLayout>
+                                <TextView
+                                    android:id="@+id/location_text_view"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="0dp"
+                                    android:background="@color/no_emphatic"
+                                    android:gravity="center"
+                                    android:minHeight="@dimen/_50sdp"
+                                    android:padding="@dimen/padding_large"
+                                    android:text="@string/customer_position_is_not_avalable"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
 
-                            <TextView
-                                android:id="@+id/location_text_view"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@color/white4"
-                                android:gravity="center"
-                                android:padding="@dimen/padding_large"
-                                android:text="@string/customer_position_is_not_avalable" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-                        </RelativeLayout>
+                        </androidx.cardview.widget.CardView>
 
                         <com.varanegar.framework.util.component.PairedItems
                             android:id="@+id/customer_time_paired_item"
@@ -136,6 +143,7 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             app:title="@string/customer_code" />
+
                         <com.varanegar.framework.util.component.PairedItems
                             android:id="@+id/code_naghsh_paired_item"
                             android:layout_width="match_parent"
@@ -172,12 +180,6 @@
                             android:orientation="horizontal"
                             app:title="@string/customer_mobile" />
 
-                        <com.varanegar.framework.util.component.PairedItems
-                            android:id="@+id/customer_address_paired_item"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            app:title="@string/customer_address" />
 
                         <com.varanegar.framework.util.component.PairedItems
                             android:id="@+id/customer_level_paired_item"
@@ -212,7 +214,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            app:title="@string/customer_last_invoice_days"/>
+                            app:title="@string/customer_last_invoice_days" />
 
                         <com.varanegar.framework.util.component.PairedItems
                             android:id="@+id/customer_status_paired_item"
@@ -228,6 +230,7 @@
                             android:layout_weight="1"
                             android:orientation="horizontal"
                             app:singleLine="true"
+                            android:visibility="gone"
                             app:title="@string/spd" />
 
                         <com.varanegar.framework.util.component.PairedItems

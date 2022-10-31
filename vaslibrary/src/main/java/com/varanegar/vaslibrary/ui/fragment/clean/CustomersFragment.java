@@ -12,15 +12,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarActivity;
 import com.varanegar.framework.base.VaranegarApplication;
@@ -46,7 +43,6 @@ import com.varanegar.vaslibrary.manager.customer.CustomerBarcodeManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.customercallmanager.CustomerCallManager;
 import com.varanegar.vaslibrary.manager.customercardex.CustomerCardexTempManager;
-import com.varanegar.vaslibrary.manager.news.NewsZarManager;
 import com.varanegar.vaslibrary.manager.oldinvoicemanager.CustomerOldInvoiceDetailTempManager;
 import com.varanegar.vaslibrary.manager.oldinvoicemanager.CustomerOldInvoiceHeaderTempManager;
 import com.varanegar.vaslibrary.manager.oldinvoicemanager.OldInvoiceManager;
@@ -73,18 +69,15 @@ import com.varanegar.vaslibrary.model.tour.TourModel;
 import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.model.visitday.VisitDayViewModel;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
-import com.varanegar.vaslibrary.ui.dialog.News.NewsDialog;
 import com.varanegar.vaslibrary.ui.drawer.UserProfileDrawerItem;
 import com.varanegar.vaslibrary.ui.drawer.UserProfileFragment;
 import com.varanegar.vaslibrary.ui.fragment.AddNewCustomerFragment;
 import com.varanegar.vaslibrary.ui.fragment.AddNewCustomerZarFragment;
 import com.varanegar.vaslibrary.ui.fragment.TourReportFragment;
 import com.varanegar.vaslibrary.ui.fragment.UserLocationFragment;
-import com.varanegar.vaslibrary.ui.fragment.news_fragment.model.NewsData_Model;
 import com.varanegar.vaslibrary.ui.viewholders.CustomerSummaryMultipanViewHolder;
 import com.varanegar.vaslibrary.ui.viewholders.CustomerSummaryViewHolder;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -106,7 +99,6 @@ public abstract class CustomersFragment
         CustomersFragment.StatusFilter> {
     private static final String TAG = "CustomersFragment";
     private String barcode;
-    boolean firstCreation = false;
     private boolean multipan;
     BackOfficeType backOfficeType;
 
@@ -197,6 +189,7 @@ public abstract class CustomersFragment
 
 
     //---------------------------------------------------------------------------------------------- onResume
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onResume() {
         super.onResume();
@@ -339,6 +332,7 @@ public abstract class CustomersFragment
     protected List<CuteButton> onCreateCuteToolbar() {
 
         List<CuteButton> buttons = new ArrayList<>();
+
         CuteButton mapBtn = new CuteButton();
         mapBtn.setTitle(R.string.map);
         mapBtn.setIcon(R.drawable.ic_map_black_36dp);
@@ -752,14 +746,19 @@ public abstract class CustomersFragment
             });
         });
         buttons.add(updateCustomersBtn);
-        CuteButton oldInvoiceBtn = new CuteButton();
+
+/*        CuteButton oldInvoiceBtn = new CuteButton();
         oldInvoiceBtn.setTitle(R.string.update_customers_history);
         oldInvoiceBtn.setIcon(R.drawable.ic_old_invoice_white_36dp);
         oldInvoiceBtn.setEnabled(() -> new TourManager(getContext()).isTourAvailable());
         oldInvoiceBtn.setOnClickListener(() -> updateCustomerOldInvoices(
                 false,
                 false));
-        buttons.add(oldInvoiceBtn);
+        buttons.add(oldInvoiceBtn);*/
+
+
+
+
 
 /*        CuteButton openVpn = new CuteButton();
         openVpn.setTitle(R.string.vpn_open);

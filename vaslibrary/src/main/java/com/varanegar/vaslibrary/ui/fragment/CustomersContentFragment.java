@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
@@ -124,7 +125,6 @@ public class CustomersContentFragment extends VaranegarFragment {
     CustomerModel customer;
     private VasActionsAdapter actionsAdapter;
     private SimpleToolbar simpleToolbar;
-    private MapView mapView;
     private PairedItems code_naghsh_paired_item;
     protected VasActionsAdapter getActionsAdapter() {
         return actionsAdapter;
@@ -133,6 +133,7 @@ public class CustomersContentFragment extends VaranegarFragment {
     private RecyclerView actionsRecyclerView;
     private final ArrayList<OnItemUpdateListener> onItemUpdateListeners = new ArrayList<>();
     private String pin;
+    private PairedItems pairedItemAddress;
 
 
     //---------------------------------------------------------------------------------------------- interface
@@ -267,16 +268,37 @@ public class CustomersContentFragment extends VaranegarFragment {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        pairedItemAddress = view.findViewById(R.id.customer_address_paired_item);
+
         if (getContext() == null || getVaranegarActvity() == null) return;
 
         new Handler().postDelayed(() -> {
             if (isResumed() && !isRemoving()) {
-                mapView = view.findViewById(R.id.map_view);
+
+                Button buttonTracking = view.findViewById(R.id.buttonTracking);
+                TextView location_text_view = view.findViewById(R.id.location_text_view);
+
+                if (customer.Longitude != 0 && customer.Latitude != 0) {
+                    buttonTracking.setVisibility(View.VISIBLE);
+                    pairedItemAddress.setVisibility(View.VISIBLE);
+                    location_text_view.setVisibility(View.GONE);
+                } else {
+                    buttonTracking.setVisibility(View.GONE);
+                    pairedItemAddress.setVisibility(View.GONE);
+                    location_text_view.setVisibility(View.VISIBLE);
+                }
+
+
+                buttonTracking.setOnClickListener(v -> {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(Locale.US, "geo:%.8f,%.8f", customer.Latitude, customer.Longitude)));
+                    startActivity(Intent.createChooser(intent, "یک برنامه مسیریاب انتخاب کنید"));
+                });
+
+/*                mapView = view.findViewById(R.id.map_view);
                 mapView.onCreate(savedInstanceState);
                 mapView.onResume(); // needed to getUnits the map to display immediately
                 mapView.getMapAsync(googleMap -> {
-                    FloatingActionButton googleMapFab = view.findViewById(R.id.google_map_fab);
-                    FloatingActionButton wazeFab = view.findViewById(R.id.waze_fab);
                     if (customer.Longitude != 0 && customer.Latitude != 0) {
                         view.findViewById(R.id.location_text_view).setVisibility(View.GONE);
                         LatLng latLng = new LatLng(customer.Latitude, customer.Longitude);
@@ -309,38 +331,13 @@ public class CustomersContentFragment extends VaranegarFragment {
                             getVaranegarActvity().pushFragment(userLocationFragment);
                             return true;
                         });
-                        googleMapFab.setOnClickListener(v -> {
-                            try {
-                                String map = "http://maps.google.com/maps?daddr=" +
-                                        customer.Latitude + "," +
-                                        customer.Longitude;
-                                Intent intent = new Intent(Intent.ACTION_VIEW,
-                                        Uri.parse(map));
-                                getContext().startActivity(intent);
-                            } catch (Exception ignored) {
 
-                            }
-
-                        });
-                        wazeFab.setOnClickListener(v -> {
-                            try {
-                                String waze = "waze://?ll=" + customer.Latitude + ", " +
-                                        customer.Longitude + "&navigate=yes";
-                                Intent intent = new Intent(Intent.ACTION_VIEW,
-                                        Uri.parse(waze));
-                                getContext().startActivity(intent);
-                            } catch (Exception ignored) {
-
-                            }
-
-                        });
                     } else {
-                        googleMapFab.setVisibility(View.GONE);
-                        wazeFab.setVisibility(View.GONE);
+                        buttonTracking.setVisibility(View.GONE);
                         view.findViewById(R.id.location_text_view)
                                 .setVisibility(View.VISIBLE);
                     }
-                });
+                });*/
             }
         }, 1000);
     }
@@ -419,8 +416,6 @@ public class CustomersContentFragment extends VaranegarFragment {
     public void onPause() {
         super.onPause();
         loading(true);
-        if (mapView != null)
-            mapView.onPause();
     }
     //---------------------------------------------------------------------------------------------- onPause
 
@@ -1082,8 +1077,6 @@ public class CustomersContentFragment extends VaranegarFragment {
     @Override
     public void onStop() {
         super.onStop();
-        if (mapView != null)
-            mapView.onStop();
         Runtime.getRuntime().gc();
     }
     //---------------------------------------------------------------------------------------------- onStop
@@ -1095,8 +1088,6 @@ public class CustomersContentFragment extends VaranegarFragment {
     public void onDestroy() {
         super.onDestroy();
         CustomerActionTimeManager.stopVisitTimer();
-        if (mapView != null)
-            mapView.onDestroy();
         Runtime.getRuntime().gc();
     }
     //---------------------------------------------------------------------------------------------- onDestroy
@@ -1107,8 +1098,6 @@ public class CustomersContentFragment extends VaranegarFragment {
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        if (mapView != null)
-            mapView.onLowMemory();
     }
     //---------------------------------------------------------------------------------------------- onLowMemory
 

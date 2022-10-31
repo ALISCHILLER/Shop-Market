@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import com.varanegar.framework.database.BaseManager;
 import com.varanegar.framework.database.DbException;
 import com.varanegar.framework.database.querybuilder.Query;
+import com.varanegar.framework.database.querybuilder.criteria.Criteria;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.validation.ValidationException;
@@ -14,10 +15,13 @@ import com.varanegar.vaslibrary.manager.updatemanager.UpdateCall;
 import com.varanegar.vaslibrary.model.customer.CustomerActivity;
 import com.varanegar.vaslibrary.model.customer.CustomerActivityModel;
 import com.varanegar.vaslibrary.model.customer.CustomerActivityModelRepository;
+import com.varanegar.vaslibrary.model.customer.CustomerLevel;
+import com.varanegar.vaslibrary.model.customer.CustomerLevelModel;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.customer.CustomerApi;
 
 import java.util.List;
+import java.util.UUID;
 
 import okhttp3.Request;
 import timber.log.Timber;
@@ -84,4 +88,15 @@ public class CustomerActivityManager extends BaseManager<CustomerActivityModel> 
     public List<CustomerActivityModel> getAll() {
         return getItems(new Query().from(CustomerActivity.CustomerActivityTbl));
     }
+
+
+    //---------------------------------------------------------------------------------------------- getItem
+    public CustomerActivityModel getItem(@NonNull UUID uniqueId) {
+        Query query = new Query();
+        query.from(CustomerActivity.CustomerActivityTbl).whereAnd(Criteria.equals(CustomerActivity.UniqueId, uniqueId));
+        return getItem(query);
+    }
+    //---------------------------------------------------------------------------------------------- getItem
+
+
 }

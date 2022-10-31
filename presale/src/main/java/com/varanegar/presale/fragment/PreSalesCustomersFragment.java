@@ -46,6 +46,7 @@ public class PreSalesCustomersFragment extends CustomersFragment {
         addReportToCutePresaleToolbar();
         addUpdateToCutePresaleToolbar();
         setVisibleImageViewMenuIcon(View.GONE);
+        getButtonsToolbar().getLinearLayoutToolbarProfile().addView(new PreSalesTourReportDrawerItem(getVaranegarActvity()));
 //        setDrawerAdapter(new PreSalesDrawerAdapter(getVaranegarActvity()));
     }
     //---------------------------------------------------------------------------------------------- onActivityCreated
@@ -100,7 +101,6 @@ public class PreSalesCustomersFragment extends CustomersFragment {
 
         DrawerSectionItem reports = new DrawerSectionItem(activity, null, com.varanegar.vaslibrary.R.string.reports, com.varanegar.vaslibrary.R.drawable.ic_report_24dp);
 
-        reports.addItem(new PreSalesTourReportDrawerItem(activity));
 
         reports.addItem(new DrawerItem(activity, "گزارش مانده فاکتور").setClickListener(v -> {
             InvoiceBalanceReportFragment fragment = new InvoiceBalanceReportFragment();

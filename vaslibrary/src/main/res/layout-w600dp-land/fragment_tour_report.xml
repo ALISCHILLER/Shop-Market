@@ -358,7 +358,31 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_margin="@dimen/_5sdp">
+
+                    <ImageView
+                        android:id="@+id/clear_cash_image_view"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center_horizontal"
+                        android:background="#BF1616"
+                        android:src="@drawable/ic_settings_white_36dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="@string/space_management" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_margin="@dimen/_5sdp">
 
                     <ImageView
                         android:id="@+id/log_out_image_view"
@@ -377,15 +401,11 @@
 
                 </LinearLayout>
 
-                <View
-                    android:layout_width="10dp"
-                    android:layout_height="24dp" />
-
                 <LinearLayout
-
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_margin="@dimen/_5sdp">
 
                     <ImageView
                         android:id="@+id/get_tour_image_view"
@@ -419,15 +439,13 @@
 
                 </LinearLayout>
 
-                <View
-                    android:layout_width="10dp"
-                    android:layout_height="24dp" />
-
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_margin="@dimen/_5sdp"
+                    >
 
                     <ImageView
                         android:id="@+id/tracking_license_image_view"
@@ -446,11 +464,13 @@
                         android:text="@string/tracking_license" />
 
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="gone"
+                    android:layout_margin="@dimen/_5sdp">
 
                     <ImageView
                         android:id="@+id/open_vpn"
@@ -469,14 +489,12 @@
                         android:text="@string/vpn_open" />
 
                 </LinearLayout>
-                <View
-                    android:layout_width="10dp"
-                    android:layout_height="24dp" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_margin="@dimen/_5sdp">
 
                     <ImageView
                         android:id="@+id/download_apk"
@@ -496,15 +514,12 @@
 
                 </LinearLayout>
 
-                <View
-                    android:layout_width="10dp"
-                    android:layout_height="24dp" />
-
                 <LinearLayout
                     android:id="@+id/refresh_tour_lin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_margin="@dimen/_5sdp">
 
                     <ImageView
                         android:id="@+id/refresh_tour"
@@ -523,14 +538,12 @@
                         android:text="@string/refresh_tour" />
 
                 </LinearLayout>
-                <View
-                    android:layout_width="10dp"
-                    android:layout_height="24dp" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_margin="@dimen/_5sdp">
 
                     <ImageView
                         android:id="@+id/backup_image_view"
@@ -549,6 +562,7 @@
                         android:text="@string/backup" />
 
                 </LinearLayout>
+
             </LinearLayout>
 
             <View xmlns:android="http://schemas.android.com/apk/res/android"
