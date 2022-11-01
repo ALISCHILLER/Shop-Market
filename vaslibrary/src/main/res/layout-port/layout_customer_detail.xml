@@ -48,7 +48,9 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:padding="@dimen/padding_small"
-                        android:src="@drawable/ic_expand_white_24dp" />
+                        android:src="@drawable/ic_expand_white_24dp"
+                        android:contentDescription="Close Menu" />
+
                 </RelativeLayout>
             </LinearLayout>
 

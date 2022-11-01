@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
+
 import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.util.HelperMethods;
 import com.varanegar.framework.util.Linq;
@@ -53,6 +55,7 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
     private final LinearLayout codenaghsh_layout;
     private final TextView customerLevelTextView;
     private final TextView customerActivityTextView;
+    private final CardView cardViewCustomerStatus;
     //private ImageUrlViewDialog customerImageView;
 
     //---------------------------------------------------------------------------------------------- CustomerSummaryMultipanViewHolder
@@ -79,6 +82,7 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
         customerLevelTextView = itemView.findViewById(R.id.customer_level_text_view);
         customerActivityTextView = itemView.findViewById(R.id.customer_activity_text_view);
         customerGroupTextView = itemView.findViewById(R.id.customer_group_text_view);
+        cardViewCustomerStatus = itemView.findViewById(R.id.cardViewCustomerStatus);
         this.backOfficeType = backOfficeType;
     }
     //---------------------------------------------------------------------------------------------- CustomerSummaryMultipanViewHolder
@@ -173,6 +177,7 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
         CustomerCallManager callManager = new CustomerCallManager(getContext());
         customerStatusTextView.setText(callManager.getName(calls, VaranegarApplication.is(VaranegarApplication.AppId.Contractor)));
         customerStatusTextView.setBackgroundColor(callManager.getColor(calls, VaranegarApplication.is(VaranegarApplication.AppId.Contractor)));
+        cardViewCustomerStatus.setCardBackgroundColor(callManager.getColor(calls, VaranegarApplication.is(VaranegarApplication.AppId.Contractor)));
         boolean isConfirmed = callManager.isConfirmed(calls);
         if (isConfirmed)
             customerStatusTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_done_white_24dp, 0);
