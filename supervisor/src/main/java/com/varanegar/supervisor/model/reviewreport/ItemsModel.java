@@ -17,7 +17,7 @@ public class ItemsModel extends BaseModel {
     @SerializedName("amount")
     @Expose
     @Column
-    public int amount;
+    public long amount;
     @SerializedName("productCode")
     @Expose
     @Column
