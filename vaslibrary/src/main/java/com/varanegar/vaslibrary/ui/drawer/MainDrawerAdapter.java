@@ -1,26 +1,15 @@
 package com.varanegar.vaslibrary.ui.drawer;
 
-import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.provider.Settings;
 
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
-import android.telephony.TelephonyManager;
 import android.view.View;
 
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.base.VaranegarFragment;
 import com.varanegar.framework.network.Connectivity;
-import com.varanegar.framework.network.listeners.ApiError;
-import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.framework.util.component.drawer.DrawerAdapter;
@@ -28,7 +17,6 @@ import com.varanegar.framework.util.component.drawer.DrawerItem;
 import com.varanegar.framework.util.component.drawer.DrawerSectionItem;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.catalogue.CatalogueHelper;
-import com.varanegar.vaslibrary.manager.UserManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.manager.updatemanager.PriceUpdateFlow;
@@ -38,24 +26,7 @@ import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
 import com.varanegar.vaslibrary.ui.fragment.clean.CustomersFragment;
 import com.varanegar.vaslibrary.ui.fragment.news_fragment.News_Zar_Fragment;
-import com.varanegar.vaslibrary.ui.report.ProductReportFragment;
-import com.varanegar.vaslibrary.ui.report.report_new.customerNoSaleReport.CustomerNoSaleReportFragment;
-import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.InvoiceBalanceReportFragment;
-import com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary.CustomerGroupSalesSummaryFragment;
-import com.varanegar.vaslibrary.ui.report.report_new.orderReturn_report.RerurnReportFragment;
-import com.varanegar.vaslibrary.ui.report.report_new.orderStatus_Report.OrderReportFragment;
-import com.varanegar.vaslibrary.ui.report.report_new.products_purchase_history_report.ProductsPurchaseHistoryReportFragment;
-import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
-import com.varanegar.vaslibrary.webapi.device.CompanyDeviceAppResult;
-import com.varanegar.vaslibrary.webapi.device.DeviceApi;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
-import com.varanegar.vaslibrary.webapi.rs.RecSysConfig;
-import com.varanegar.vaslibrary.webapi.rs.RecommenderSystemApi;
-import com.varanegar.vaslibrary.webapi.tracking.CompanyDeviceAppData;
-import com.varanegar.vaslibrary.webapi.tracking.LicenseRequestBody;
-
-import okhttp3.Request;
-import timber.log.Timber;
 
 /**
  * Created by atp on 1/29/2017.

@@ -41,6 +41,10 @@ import java.util.UUID;
 import okhttp3.Request;
 import retrofit2.Call;
 
+/*
+ * Edited By m-Latifi on 11/03/2022
+ * */
+
 public abstract class BaseInvoiceBalanceReportFragment<T extends ProductInvoiveBalanceReportModel> extends VaranegarFragment {
 
     private ReportView reportView;
@@ -55,39 +59,27 @@ public abstract class BaseInvoiceBalanceReportFragment<T extends ProductInvoiveB
     private SimpleToolbar toolbar;
     private MainVaranegarActivity activity;
     private List<T> resultReport;
+    private SimpleReportAdapter<T> adapter;
+
 
     protected BaseReviewReportFragment.OnAdapterCallback onAdapterCallback;
 
-    public SimpleReportAdapter<T> getAdapter() {
-        return adapter;
-    }
-
-    private SimpleReportAdapter<T> adapter;
-
     protected abstract SimpleReportAdapter<T> createAdapter();
 
-/**    public interface OnAdapterCallback {
-        void onFailure();
+    protected abstract Call<List<T>> reportApi();
 
-        void onSuccess();
-    }*/
+    protected abstract String getTitle();
 
-    //---------------------------------------------------------------------------------------------- onCreate
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) {
-            long start = savedInstanceState.getLong("startDate", 0);
-            long end = savedInstanceState.getLong("endDate", 0);
-            resultReport = new List<T>(savedInstanceState.getParcelableArrayList("report"))
-;
-            if (start != 0 && end != 0) {
-                startDate = new Date(start);
-                endDate = new Date(end);
-            }
-        }
-    }
-    //---------------------------------------------------------------------------------------------- onCreate
+    protected abstract String isEnabled();
+
+
+    /**
+     * public interface OnAdapterCallback {
+     * void onFailure();
+     * <p>
+     * void onSuccess();
+     * }
+     */
 
 
     //---------------------------------------------------------------------------------------------- onCreateView
@@ -108,6 +100,29 @@ public abstract class BaseInvoiceBalanceReportFragment<T extends ProductInvoiveB
             @NonNull View view,
             @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (savedInstanceState != null) {
+            long start = savedInstanceState.getLong("startDate", 0);
+            long end = savedInstanceState.getLong("endDate", 0);
+            /*
+             * مجبور شدم این کار رو بکنم چون مدل اصلی کل پروژه از Parcelable ارث بری نکرده بود
+             * */
+            ArrayList<Parcelable> objects = savedInstanceState.getParcelableArrayList("report");
+            try {
+                resultReport = new ArrayList<>();
+                for (int i = 0; i < objects.size(); i++) {
+                    T item = (T) objects.get(i);
+                    resultReport.add(item);
+                }
+            } catch (Exception ignored) {
+
+            }
+
+            if (start != 0 && end != 0) {
+                startDate = new Date(start);
+                endDate = new Date(end);
+            }
+        }
+
         activity = getVaranegarActvity();
         if (activity == null)
             return;
@@ -127,26 +142,25 @@ public abstract class BaseInvoiceBalanceReportFragment<T extends ProductInvoiveB
         imageViewEndCalender = view.findViewById(R.id.end_calendar_image_view);
         reportView = view.findViewById(R.id.review_report_view);
         toolbar.setTitle(getTitle());
+
         if (startDate != null)
             setDateToDatePairedItems(startDatePairedItems, startDate);
 
         if (endDate != null)
             setDateToDatePairedItems(endDatePairedItems, endDate);
+
+        if (resultReport != null)
+            setReportAdapter();
     }
     //---------------------------------------------------------------------------------------------- initView
 
 
     //---------------------------------------------------------------------------------------------- setOnListener
     private void setOnListener() {
-
-        buttonReport.setOnClickListener(view15 -> invoiceReportApi());
-
+        buttonReport.setOnClickListener(view15 -> requestInvoiceReport());
         toolbar.setOnBackClickListener(view12 -> activity.popFragment());
-
         toolbar.setOnMenuClickListener(view1 -> activity.openDrawer());
-
         imageViewStartCalender.setOnClickListener(v -> clickOnStartCalender());
-
         imageViewEndCalender.setOnClickListener(v -> clickOnEndCalender());
     }
     //---------------------------------------------------------------------------------------------- setOnListener
@@ -213,9 +227,7 @@ public abstract class BaseInvoiceBalanceReportFragment<T extends ProductInvoiveB
     //---------------------------------------------------------------------------------------------- dismissProgressDialog
 
 
-    protected abstract Call<List<T>> reportApi();
-
-
+    //---------------------------------------------------------------------------------------------- showErrorDialog
     private void showErrorDialog(String error) {
         if (isResumed()) {
             CuteMessageDialog dialog = new CuteMessageDialog(requireContext());
@@ -226,11 +238,11 @@ public abstract class BaseInvoiceBalanceReportFragment<T extends ProductInvoiveB
             dialog.show();
         }
     }
+    //---------------------------------------------------------------------------------------------- showErrorDialog
 
 
-
-
-    private void invoiceReportApi() {
+    //---------------------------------------------------------------------------------------------- requestInvoiceReport
+    private void requestInvoiceReport() {
         String error = isEnabled();
         if (error != null) {
             showErrorDialog(error);
@@ -251,7 +263,7 @@ public abstract class BaseInvoiceBalanceReportFragment<T extends ProductInvoiveB
             protected void onSuccess(List<T> result, Request request) {
                 if (activity != null && !activity.isFinishing() && isResumed()) {
                     resultReport = result;
-                    setAdapter();
+                    setReportAdapter();
                 }
             }
 
@@ -277,9 +289,11 @@ public abstract class BaseInvoiceBalanceReportFragment<T extends ProductInvoiveB
             }
         });
     }
+    //---------------------------------------------------------------------------------------------- requestInvoiceReport
 
 
-    private void setAdapter() {
+    //---------------------------------------------------------------------------------------------- setReportAdapter
+    private void setReportAdapter() {
         adapter = createAdapter();
         adapter.setLocale(VasHelperMethods.getSysConfigLocale(getContext()));
         adapter.create(resultReport, null);
@@ -287,39 +301,59 @@ public abstract class BaseInvoiceBalanceReportFragment<T extends ProductInvoiveB
         if (onAdapterCallback != null)
             onAdapterCallback.onSuccess();
     }
+    //---------------------------------------------------------------------------------------------- setReportAdapter
 
 
-    protected abstract String getTitle();
-
-    protected abstract String isEnabled();
-
+    //---------------------------------------------------------------------------------------------- getDealerId
     protected UUID getDealerId() {
         return Objects.requireNonNull(UserManager.readFromFile(getContext())).UniqueId;
     }
+    //---------------------------------------------------------------------------------------------- getDealerId
 
+
+    //---------------------------------------------------------------------------------------------- getStartDateString
     protected String getStartDateString() {
         return DateHelper.toString(getStartDate(), DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext()));
     }
+    //---------------------------------------------------------------------------------------------- getStartDateString
 
+
+    //---------------------------------------------------------------------------------------------- getEndDateString
     protected String getEndDateString() {
         return DateHelper.toString(getEndDate(), DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext()));
     }
+    //---------------------------------------------------------------------------------------------- getEndDateString
 
+
+    //---------------------------------------------------------------------------------------------- getStartDate
     protected Date getStartDate() {
         return startDate == null ? DateHelper.Min : startDate;
     }
+    //---------------------------------------------------------------------------------------------- getStartDate
 
+
+    //---------------------------------------------------------------------------------------------- getEndDate
     protected Date getEndDate() {
         return endDate == null ? new Date() : endDate;
     }
+    //---------------------------------------------------------------------------------------------- getEndDate
+
+
+    //---------------------------------------------------------------------------------------------- getAdapter
+    public SimpleReportAdapter<T> getAdapter() {
+        return adapter;
+    }
+    //---------------------------------------------------------------------------------------------- getAdapter
 
 
     //---------------------------------------------------------------------------------------------- onSaveInstanceState
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putLong("startDate", startDate.getTime());
-        outState.putLong("endDate", endDate.getTime());
+        if (startDate != null)
+            outState.putLong("startDate", startDate.getTime());
+        if (endDate != null)
+            outState.putLong("endDate", endDate.getTime());
         outState.putParcelableArrayList("report", (ArrayList<? extends Parcelable>) resultReport);
     }
     //---------------------------------------------------------------------------------------------- onSaveInstanceState

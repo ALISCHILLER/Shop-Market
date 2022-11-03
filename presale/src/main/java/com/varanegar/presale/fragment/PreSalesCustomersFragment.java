@@ -30,7 +30,7 @@ import com.varanegar.vaslibrary.ui.report.ProductReportFragment;
 import com.varanegar.vaslibrary.ui.report.report_new.customerNoSaleReport.CustomerNoSaleReportFragment;
 import com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary.CustomerGroupSalesSummaryFragment;
 import com.varanegar.vaslibrary.ui.report.report_new.invoice_balance.InvoiceBalanceReportFragment;
-import com.varanegar.vaslibrary.ui.report.report_new.orderReturn_report.RerurnReportFragment;
+import com.varanegar.vaslibrary.ui.report.report_new.orderReturn_report.ReturnReportFragment;
 import com.varanegar.vaslibrary.ui.report.report_new.orderStatus_Report.OrderReportFragment;
 import com.varanegar.vaslibrary.ui.report.report_new.products_purchase_history_report.ProductsPurchaseHistoryReportFragment;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
@@ -113,7 +113,7 @@ public class PreSalesCustomersFragment extends CustomersFragment {
         }));
 
         reports.addItem(new DrawerItem(activity, "گزارش برگشتی").setClickListener(v -> {
-            RerurnReportFragment fragment = new RerurnReportFragment();
+            ReturnReportFragment fragment = new ReturnReportFragment();
             activity.pushFragment(fragment, true);
         }));
 

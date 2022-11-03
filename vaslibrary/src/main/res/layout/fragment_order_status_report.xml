@@ -11,7 +11,8 @@
         android:id="@+id/linear_date_picker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/_5sdp">
 
         <LinearLayout
             android:id="@+id/start_date_picker"
@@ -39,7 +40,8 @@
                 android:layout_marginLeft="@dimen/padding_default"
                 android:layout_marginRight="@dimen/padding_default"
                 android:padding="@dimen/padding_default"
-                android:src="@drawable/ic_date_range_black_24dp" />
+                android:src="@drawable/ic_date_range_black_24dp"
+                android:contentDescription="start calendar" />
         </LinearLayout>
 
         <LinearLayout
@@ -68,30 +70,29 @@
                 android:layout_marginRight="@dimen/padding_default"
                 android:padding="@dimen/padding_default"
                 android:src="@drawable/ic_date_range_black_24dp" />
+
         </LinearLayout>
 
         <Button
-        android:id="@+id/buttonReport"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginLeft="@dimen/padding_default"
-        android:layout_marginRight="@dimen/padding_default"
-        android:padding="@dimen/padding_default"
-        android:textSize="12sp"
-        android:textColor="@color/white"
-        android:text="@string/createReport"
-        android:background="@drawable/btn_background"/>
+            android:id="@+id/buttonReport"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/padding_default"
+            android:layout_marginRight="@dimen/padding_default"
+            android:background="@drawable/btn_background"
+            android:padding="@dimen/padding_default"
+            android:text="@string/createReport"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
     </LinearLayout>
-
 
 
     <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/linear_date_picker"
-        android:layout_marginTop="10dp"
-      >
+        android:layout_marginTop="10dp">
 
 
         <androidx.appcompat.widget.LinearLayoutCompat
@@ -122,11 +123,11 @@
                     android:background="#AFAFAF" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_gravity="center"
-                    android:gravity="center"
                     android:layout_width="130dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginStart="18dp"
+                    android:gravity="center"
                     android:padding="3dp"
                     android:text="تاریخ"
                     app:layout_constraintStart_toStartOf="parent"
@@ -138,11 +139,11 @@
                     android:background="#AFAFAF" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_gravity="center"
-                    android:gravity="center"
                     android:layout_width="230dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginStart="18dp"
+                    android:gravity="center"
                     android:padding="3dp"
                     android:text="کل سفارش"
                     android:textSize="12sp"
@@ -155,11 +156,11 @@
                     android:background="#AFAFAF" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_gravity="center"
-                    android:gravity="center"
                     android:layout_width="190dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginStart="18dp"
+                    android:gravity="center"
                     android:padding="3dp"
                     android:text="سفارش بدون وضعیت"
                     app:layout_constraintStart_toEndOf="@+id/txtorderWeight"
@@ -171,11 +172,11 @@
                     android:background="#AFAFAF" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_gravity="center"
-                    android:gravity="center"
                     android:layout_width="190dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginStart="18dp"
+                    android:gravity="center"
                     android:padding="3dp"
                     android:text="سفارشات ستل نشده"
                     app:layout_constraintStart_toEndOf="@+id/txtpendingOrderWeight"
@@ -187,11 +188,11 @@
                     android:background="#AFAFAF" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_gravity="center"
-                    android:gravity="center"
                     android:layout_width="190dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginStart="18dp"
+                    android:gravity="center"
                     android:padding="3dp"
                     android:text="سفارشات برگشتی"
                     app:layout_constraintStart_toEndOf="@+id/txtinProgressOrderWeight"
@@ -205,11 +206,11 @@
                     />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_gravity="center"
-                    android:gravity="center"
                     android:layout_width="190dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginStart="18dp"
+                    android:gravity="center"
 
                     android:padding="3dp"
                     android:text="سفارشات فاکتور شده"
@@ -240,11 +241,11 @@
                     android:background="#AFAFAF" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_gravity="center"
-                    android:gravity="center"
                     android:layout_width="180dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginStart="18dp"
+                    android:gravity="center"
                     android:padding="3dp"
                     android:text="کدویزیتور"
 
@@ -257,11 +258,11 @@
                     android:background="#AFAFAF" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_gravity="center"
-                    android:gravity="center"
                     android:layout_width="260dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginStart="18dp"
+                    android:gravity="center"
                     android:padding="3dp"
                     android:text="نام ویزیتور"
 
@@ -274,11 +275,11 @@
                     android:background="#AFAFAF" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_gravity="center"
-                    android:gravity="center"
                     android:layout_width="230dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginStart="18dp"
+                    android:gravity="center"
                     android:padding="3dp"
                     android:text="تعداد کارتن برگشتی"
                     app:layout_constraintStart_toEndOf="@+id/txtorderWeight"
@@ -293,6 +294,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
         </androidx.appcompat.widget.LinearLayoutCompat>
+
     </HorizontalScrollView>
 
 <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
