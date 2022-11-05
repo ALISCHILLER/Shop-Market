@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.util.fragment.extendedlist.ActionsAdapter;
 import com.varanegar.vaslibrary.R;
+import com.varanegar.vaslibrary.ui.report.report_new.customer_inventory_report.BaseCustomerInventoryReportFragment;
 import com.varanegar.vaslibrary.ui.report.report_new.customer_inventory_report.CustomerInventoryReportFragment;
 
 import java.util.UUID;

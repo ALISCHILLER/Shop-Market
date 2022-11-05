@@ -2,9 +2,13 @@ package com.varanegar.vaslibrary.ui.report.report_new.products_purchase_history_
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.varanegar.framework.base.MainVaranegarActivity;
@@ -26,6 +30,8 @@ import com.varanegar.vaslibrary.ui.report.report_new.products_purchase_history_r
 import com.varanegar.vaslibrary.ui.report.report_new.webApi.ReportApi;
 import com.varanegar.vaslibrary.ui.report.review.BaseReviewReportFragment;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -43,104 +49,131 @@ public abstract class BasProductsPurchaseHistoryReportFragment <T extends
     private Date endDate;
     private PairedItems startDatePairedItems;
     private PairedItems endDatePairedItems;
-
+    private ImageView imageViewStartCalender;
+    private ImageView imageViewEndCalender;
+    private Button buttonReport;
+    private SimpleToolbar toolbar;
+    private MainVaranegarActivity activity;
+    private SimpleReportAdapter<T> adapter;
+    private List<T> resultReport;
     protected BaseReviewReportFragment.OnAdapterCallback onAdapterCallback;
 
-    public SimpleReportAdapter<T> getAdapter() {
-        return adapter;
-    }
-
-    private SimpleReportAdapter<T> adapter;
-
-
-    public interface OnAdapterCallback {
-
-        void onFailure();
-
-        void onSuccess();
-    }
-
-    private void dismissProgressDialog() {
-        if (progressDialog != null && progressDialog.isShowing()) {
-            try {
-                progressDialog.dismiss();
-            } catch (Exception ignored) {
-
-            }
-        }
-    }
-
-    protected UUID getDealerId() {
-        return Objects.requireNonNull(UserManager.readFromFile(getContext())).UniqueId;
-    }
-
-    protected String getStartDateString() {
-        return DateHelper.toString(getStartDate(), DateFormat.Date,
-                VasHelperMethods.getSysConfigLocale(getContext()));
-    }
-
-    protected String getEndDateString() {
-        return DateHelper.toString(getEndDate(), DateFormat.Date,
-                VasHelperMethods.getSysConfigLocale(getContext()));
-    }
-
-    protected Date getStartDate() {
-        return startDate == null ? DateHelper.Min : startDate;
-    }
-
-    protected Date getEndDate() {
-        return endDate == null ? new Date() : endDate;
-    }
-
+    protected abstract String getTitle();
+    protected abstract String isEnabled();
     protected abstract Call<List<T>> reportApi();
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-
-    private void showErrorDialog(String error) {
-        if (isResumed()) {
-            CuteMessageDialog dialog = new CuteMessageDialog(requireContext());
-            dialog.setTitle(R.string.error);
-            dialog.setMessage(error);
-            dialog.setIcon(Icon.Error);
-            dialog.setPositiveButton(R.string.ok, null);
-            dialog.show();
-        }
-    }
-
     protected abstract SimpleReportAdapter<T> createAdapter();
 
+
+
+    //---------------------------------------------------------------------------------------------- onCreateView
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_invoice_balance_report, container, false);
-        view.findViewById(R.id.buttonReport).setOnClickListener(view1 -> setupAdapter());
+        return inflater.inflate(R.layout.fragment_invoice_balance_report, container, false);
+    }
+    //---------------------------------------------------------------------------------------------- onCreateView
+
+
+    //---------------------------------------------------------------------------------------------- onViewCreated
+    @Override
+    public void onViewCreated(
+            @NonNull View view,
+            @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (savedInstanceState != null) {
+            long start = savedInstanceState.getLong("startDate", 0);
+            long end = savedInstanceState.getLong("endDate", 0);
+            /*
+             * مجبور شدم این کار رو بکنم چون مدل اصلی کل پروژه از Parcelable ارث بری نکرده بود
+             * */
+            ArrayList<Parcelable> objects = savedInstanceState.getParcelableArrayList("report");
+            try {
+                resultReport = new ArrayList<>();
+                for (int i = 0; i < objects.size(); i++) {
+                    T item = (T) objects.get(i);
+                    resultReport.add(item);
+                }
+            } catch (Exception ignored) {
+
+            }
+
+            if (start != 0 && end != 0) {
+                startDate = new Date(start);
+                endDate = new Date(end);
+            }
+        }
+
+        activity = getVaranegarActvity();
+        if (activity == null)
+            return;
+        initView(view);
+        setOnListener();
+    }
+    //---------------------------------------------------------------------------------------------- onViewCreated
+
+
+
+    //---------------------------------------------------------------------------------------------- initView
+    private void initView(@NonNull View view) {
+        toolbar = view.findViewById(R.id.toolbar);
         startDatePairedItems = view.findViewById(R.id.start_date_item);
         endDatePairedItems = view.findViewById(R.id.end_date_item);
+        imageViewStartCalender = view.findViewById(R.id.start_calendar_image_view);
+        imageViewEndCalender = view.findViewById(R.id.end_calendar_image_view);
+        buttonReport = view.findViewById(R.id.buttonReport);
+        reportView = view.findViewById(R.id.review_report_view);
+        toolbar.setTitle(getTitle());
 
-        view.findViewById(R.id.start_calendar_image_view).setOnClickListener(view12 ->
-                DateHelper.showDatePicker(Objects.requireNonNull(getVaranegarActvity()),
+        if (startDate != null)
+            setDateToDatePairedItems(startDatePairedItems, startDate);
+
+        if (endDate != null)
+            setDateToDatePairedItems(endDatePairedItems, endDate);
+
+        if (resultReport != null)
+            setReportAdapter();
+
+    }
+    //---------------------------------------------------------------------------------------------- initView
+
+
+
+    //---------------------------------------------------------------------------------------------- setOnListener
+    private void setOnListener() {
+        buttonReport.setOnClickListener(view15 -> requestProductsPurchaseHistoryReport());
+        toolbar.setOnBackClickListener(view12 -> activity.popFragment());
+        toolbar.setOnMenuClickListener(view1 -> activity.openDrawer());
+        imageViewStartCalender.setOnClickListener(v -> clickOnStartCalender());
+        imageViewEndCalender.setOnClickListener(v -> clickOnEndCalender());
+    }
+    //---------------------------------------------------------------------------------------------- setOnListener
+
+
+
+    //---------------------------------------------------------------------------------------------- clickOnStartCalender
+    private void clickOnStartCalender() {
+        DateHelper.showDatePicker(activity,
                 VasHelperMethods.getSysConfigLocale(getContext()), calendar -> {
-            if (calendar.getTime().after(new Date())) {
-                showErrorDialog(getString(R.string.date_could_not_be_after_now));
-                return;
-            }
-            if (endDate != null && endDate.before(calendar.getTime())) {
-                showErrorDialog(getString(R.string.end_date_could_not_be_before_start_date));
-                return;
-            }
-            startDate = calendar.getTime();
-            startDatePairedItems.setValue(DateHelper.toString
-                    (startDate, DateFormat.Date,
-                            VasHelperMethods.getSysConfigLocale(getContext())));
-        }));
-        view.findViewById(R.id.end_calendar_image_view).setOnClickListener(view13 ->
-                DateHelper.showDatePicker(Objects.requireNonNull(getVaranegarActvity()),
-                        VasHelperMethods.getSysConfigLocale(getContext()), calendar -> {
+                    if (calendar.getTime().after(new Date())) {
+                        showErrorDialog(getString(R.string.date_could_not_be_after_now));
+                        return;
+                    }
+                    if (endDate != null && endDate.before(calendar.getTime())) {
+                        showErrorDialog(getString(R.string.end_date_could_not_be_before_start_date));
+                        return;
+                    }
+                    startDate = calendar.getTime();
+                    setDateToDatePairedItems(startDatePairedItems, startDate);
+                });
+    }
+    //---------------------------------------------------------------------------------------------- clickOnStartCalender
+
+
+    //---------------------------------------------------------------------------------------------- clickOnEndCalender
+    private void clickOnEndCalender() {
+        DateHelper.showDatePicker(activity,
+                VasHelperMethods.getSysConfigLocale(getContext()), calendar -> {
                     if (calendar.getTime().after(new Date())) {
                         showErrorDialog(getString(R.string.date_could_not_be_after_now));
                         return;
@@ -150,20 +183,25 @@ public abstract class BasProductsPurchaseHistoryReportFragment <T extends
                         return;
                     }
                     endDate = calendar.getTime();
-                    endDatePairedItems.setValue(DateHelper.toString(endDate, DateFormat.Date,
-                            VasHelperMethods.getSysConfigLocale(getContext())));
-                }));
-        reportView = view.findViewById(R.id.review_report_view);
-        SimpleToolbar toolbar = view.findViewById(R.id.toolbar);
-        toolbar.setOnBackClickListener(view14 ->
-                Objects.requireNonNull(getVaranegarActvity()).popFragment());
-        toolbar.setOnMenuClickListener(view15 ->
-                Objects.requireNonNull(getVaranegarActvity()).openDrawer());
-        toolbar.setTitle(getTitle());
-        return view;
+                    setDateToDatePairedItems(endDatePairedItems, endDate);
+                });
     }
+    //---------------------------------------------------------------------------------------------- clickOnEndCalender
 
-    private void setupAdapter() {
+
+    //---------------------------------------------------------------------------------------------- setDateToDatePairedItems
+    private void setDateToDatePairedItems(PairedItems pairedItems, Date date) {
+        pairedItems.setValue(DateHelper.toString(
+                date,
+                DateFormat.Date,
+                VasHelperMethods.getSysConfigLocale(getContext())));
+    }
+    //---------------------------------------------------------------------------------------------- setDateToDatePairedItems
+
+
+
+    //---------------------------------------------------------------------------------------------- requestProductsPurchaseHistoryReport
+    private void requestProductsPurchaseHistoryReport() {
         String error = isEnabled();
         if (error != null) {
             showErrorDialog(error);
@@ -184,12 +222,8 @@ public abstract class BasProductsPurchaseHistoryReportFragment <T extends
             protected void onSuccess(List<T> result, Request request) {
                 MainVaranegarActivity activity = getVaranegarActvity();
                 if (activity != null && !activity.isFinishing() && isResumed()) {
-                    adapter = createAdapter();
-                    adapter.setLocale(VasHelperMethods.getSysConfigLocale(getContext()));
-                    adapter.create(result, null);
-                    reportView.setAdapter(adapter);
-                    if (onAdapterCallback != null)
-                        onAdapterCallback.onSuccess();
+                    resultReport = result;
+                    setReportAdapter();
                 }
             }
 
@@ -215,9 +249,108 @@ public abstract class BasProductsPurchaseHistoryReportFragment <T extends
             }
         });
     }
+    //---------------------------------------------------------------------------------------------- requestProductsPurchaseHistoryReport
 
-    protected abstract String getTitle();
 
-    protected abstract String isEnabled();
+
+    //---------------------------------------------------------------------------------------------- setReportAdapter
+    private void setReportAdapter() {
+        adapter = createAdapter();
+        adapter.setLocale(VasHelperMethods.getSysConfigLocale(getContext()));
+        adapter.create(resultReport, null);
+        reportView.setAdapter(adapter);
+        if (onAdapterCallback != null)
+            onAdapterCallback.onSuccess();
+    }
+    //---------------------------------------------------------------------------------------------- setReportAdapter
+
+
+    //---------------------------------------------------------------------------------------------- dismissProgressDialog
+    private void dismissProgressDialog() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            try {
+                progressDialog.dismiss();
+            } catch (Exception ignored) {
+
+            }
+        }
+    }
+    //---------------------------------------------------------------------------------------------- dismissProgressDialog
+
+
+
+    //---------------------------------------------------------------------------------------------- getAdapter
+    public SimpleReportAdapter<T> getAdapter() {
+        return adapter;
+    }
+    //---------------------------------------------------------------------------------------------- getAdapter
+
+
+    //---------------------------------------------------------------------------------------------- getDealerId
+    protected UUID getDealerId() {
+        return Objects.requireNonNull(UserManager.readFromFile(getContext())).UniqueId;
+    }
+    //---------------------------------------------------------------------------------------------- getDealerId
+
+
+    //---------------------------------------------------------------------------------------------- getStartDateString
+    protected String getStartDateString() {
+        return DateHelper.toString(getStartDate(), DateFormat.Date,
+                VasHelperMethods.getSysConfigLocale(getContext()));
+    }
+    //---------------------------------------------------------------------------------------------- getStartDateString
+
+
+    //---------------------------------------------------------------------------------------------- getEndDateString
+    protected String getEndDateString() {
+        return DateHelper.toString(getEndDate(), DateFormat.Date,
+                VasHelperMethods.getSysConfigLocale(getContext()));
+    }
+    //---------------------------------------------------------------------------------------------- getEndDateString
+
+
+    //---------------------------------------------------------------------------------------------- getStartDate
+    protected Date getStartDate() {
+        return startDate == null ? DateHelper.Min : startDate;
+    }
+    //---------------------------------------------------------------------------------------------- getStartDate
+
+
+    //---------------------------------------------------------------------------------------------- getEndDate
+    protected Date getEndDate() {
+        return endDate == null ? new Date() : endDate;
+    }
+    //---------------------------------------------------------------------------------------------- getEndDate
+
+
+
+    //---------------------------------------------------------------------------------------------- showErrorDialog
+    private void showErrorDialog(String error) {
+        if (isResumed()) {
+            CuteMessageDialog dialog = new CuteMessageDialog(requireContext());
+            dialog.setTitle(R.string.error);
+            dialog.setMessage(error);
+            dialog.setIcon(Icon.Error);
+            dialog.setPositiveButton(R.string.ok, null);
+            dialog.show();
+        }
+    }
+    //---------------------------------------------------------------------------------------------- showErrorDialog
+
+
+
+
+    //---------------------------------------------------------------------------------------------- onSaveInstanceState
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (startDate != null)
+            outState.putLong("startDate", startDate.getTime());
+        if (endDate != null)
+            outState.putLong("endDate", endDate.getTime());
+        outState.putParcelableArrayList("report", (ArrayList<? extends Parcelable>) resultReport);
+    }
+    //---------------------------------------------------------------------------------------------- onSaveInstanceState
+
 
 }

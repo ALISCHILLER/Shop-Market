@@ -126,6 +126,7 @@ public abstract class BaseInvoiceBalanceReportFragment<T extends ProductInvoiveB
         activity = getVaranegarActvity();
         if (activity == null)
             return;
+
         initView(view);
         setOnListener();
     }

@@ -10,6 +10,7 @@ import java.util.List;
 import retrofit2.Call;
 
 public class InvoiceBalanceReportFragment extends BaseInvoiceBalanceReportFragment<ProductInvoiveBalanceReportModel> {
+
     @Override
     protected Call<List<ProductInvoiveBalanceReportModel>> reportApi() {
         return new ReportApi(getContext()).product(Collections.singletonList

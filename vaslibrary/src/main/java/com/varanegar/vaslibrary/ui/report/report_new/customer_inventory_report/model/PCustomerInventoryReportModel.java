@@ -1,6 +1,5 @@
 package com.varanegar.vaslibrary.ui.report.report_new.customer_inventory_report.model;
 
-import com.google.gson.annotations.SerializedName;
 import com.varanegar.framework.database.model.BaseModel;
 import com.varanegar.processor.annotations.Column;
 import com.varanegar.processor.annotations.Table;
@@ -37,10 +36,5 @@ public class PCustomerInventoryReportModel extends BaseModel {
     public String productGroupName ;
     @Column
     public String productGroupNameID ;
-
-    @Override
-    public String toString() {
-        return customerName;
-    }
 
 }
