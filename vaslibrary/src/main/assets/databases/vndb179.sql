@@ -1,5 +1,5 @@
 --create CheckCustomerCredit
-CREATE TABLE "CustomerCallOrderLines"
+CREATE TABLE "CheckCustomerCredit"
 (
  UniqueId TEXT NOT NULL COLLATE NOCAS,
  customerBackOfficeCode TEXT,

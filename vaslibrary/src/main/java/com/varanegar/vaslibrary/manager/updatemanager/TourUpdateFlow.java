@@ -188,7 +188,8 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                 }
                 if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist))
                     tasks.add(new TourAsyncTask() {
-                        CustomerRemainPerLineManager customerRemainPerLineManager = new CustomerRemainPerLineManager(getContext());
+                        CustomerRemainPerLineManager customerRemainPerLineManager = new
+                                CustomerRemainPerLineManager(getContext());
 
                         @Override
                         public void run(UpdateCall call) {
@@ -365,7 +366,8 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                 tasks.add(new SimpleTourAsyncTask() {
                     @Override
                     public void run(UpdateCall call) {
-                        CustomerMainSubTypeManager customerMainSubTypeManager = new CustomerMainSubTypeManager(getContext());
+                        CustomerMainSubTypeManager customerMainSubTypeManager =
+                                new CustomerMainSubTypeManager(getContext());
                         customerMainSubTypeManager.sync(call);
                     }
 
