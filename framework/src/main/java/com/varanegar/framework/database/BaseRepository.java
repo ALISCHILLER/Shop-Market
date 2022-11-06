@@ -103,6 +103,48 @@ public class BaseRepository<T extends BaseModel> {
         }
     }
 
+    public long insertIfNotExist(@NonNull Iterable<T> items) throws NullPointerException {
+        long i = 0;
+        if (!items.iterator().hasNext()) {
+            Timber.wtf("Inserting an empty list of %s ", items.getClass().getName());
+            throw new IllegalArgumentException(String.format("Inserting an empty list. %s", items.getClass().getName()));
+        }
+        final SQLiteDatabase database = dbHandler.getWritableDatabase();
+        database.execSQL("PRAGMA foreign_keys=ON");
+        ContentValues contentValues = null;
+        boolean insertPolicy = contentValuesMapper.getUniqueIdGenerationPolicy().contains("Insert");
+        boolean updatePolicy = contentValuesMapper.getUniqueIdGenerationPolicy().contains("Update");
+        try {
+            database.beginTransaction();
+            for (T item : items) {
+                if (item.UniqueId != null) {
+                    Cursor cursor = database.rawQuery("SELECT * FROM " + getTblName() + " WHERE UniqueId = ?", new String[]{item.UniqueId.toString()});
+                    if (cursor.getCount() == 0) {
+                        if (insertPolicy && item.UniqueId == null)
+                            item.UniqueId = UUID.randomUUID();
+                        contentValues = contentValuesMapper.map(item);
+                        database.insertOrThrow(contentValuesMapper.getTblName(), null, contentValues);
+                        i++;
+                    }
+                    cursor.close();
+                } else {
+                    Timber.wtf("UniqueId of %s  is null", item.getClass().getName());
+                    throw new NullPointerException(String.format("UniqueId of %s  is null", item.getClass().getName()));
+                }
+            }
+            database.setTransactionSuccessful();
+            return i;
+        } catch (Exception ex) {
+            if (contentValues != null)
+                Timber.wtf(ex, "Model = " + contentValuesMapper.getTblName() + " Content values = " + contentValues.toString());
+            else
+                Timber.wtf(ex, "Model = " + contentValuesMapper.getTblName());
+            throw ex;
+        } finally {
+            database.endTransaction();
+        }
+    }
+
     public long insertOrUpdate(@NonNull Iterable<T> items) throws NullPointerException {
         long i = 0;
         if (!items.iterator().hasNext()) {

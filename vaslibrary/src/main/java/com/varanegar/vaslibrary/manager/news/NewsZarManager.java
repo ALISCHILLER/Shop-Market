@@ -43,12 +43,8 @@ public class NewsZarManager extends BaseManager<NewsData_Model> {
                 try {
                     NewsData_ModelRepository repository = new
                             NewsData_ModelRepository();
-                    if (result != null && result.size() > 0) {
-                        repository.deleteAll();
-                        repository.insertOrUpdate(result);
-                    } else {
-                        repository.deleteAll();
-                    }
+                    if (result != null && result.size() > 0)
+                        repository.insertIfNotExist(result);
                     updateCall.success();
                 }catch (Exception e){
                     Timber.e(e);
@@ -88,6 +84,7 @@ public class NewsZarManager extends BaseManager<NewsData_Model> {
             try {
                 NewsData_ModelRepository repository = new
                         NewsData_ModelRepository();
+                item.IsRead = true;
                 repository.insertOrUpdate(item);
             } catch (Exception e){
                 Timber.e(e);
