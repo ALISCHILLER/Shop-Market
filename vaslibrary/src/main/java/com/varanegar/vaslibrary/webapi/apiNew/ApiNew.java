@@ -2,6 +2,8 @@ package com.varanegar.vaslibrary.webapi.apiNew;
 
 import android.content.Context;
 
+import com.varanegar.vaslibrary.model.CheckCustomerCreditsModel;
+import com.varanegar.vaslibrary.model.newmodel.checkCustomerCredits.CheckCustomerCreditModel;
 import com.varanegar.vaslibrary.ui.fragment.news_fragment.model.NewsData_Model;
 import com.varanegar.vaslibrary.webapi.BaseApi;
 import com.varanegar.vaslibrary.webapi.TokenType;
@@ -47,5 +49,12 @@ public class ApiNew extends BaseApi implements InApiNew {
         InApiNew api = getRetrofitBuilder(TokenType.UserToken)
                 .build().create(InApiNew.class);
         return api.getProductNotAllowed(customerId);
+    }
+
+    @Override
+    public Call<List<CheckCustomerCreditModel>> CheckCustomerCredits(List<String> customerCode) {
+        InApiNew api = getRetrofitBuilder(TokenType.UserToken)
+                .build().create(InApiNew.class);
+        return api.CheckCustomerCredits(customerCode);
     }
 }

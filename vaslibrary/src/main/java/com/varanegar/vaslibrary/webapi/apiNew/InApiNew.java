@@ -1,5 +1,7 @@
 package com.varanegar.vaslibrary.webapi.apiNew;
 
+import com.varanegar.vaslibrary.model.CheckCustomerCreditsModel;
+import com.varanegar.vaslibrary.model.newmodel.checkCustomerCredits.CheckCustomerCreditModel;
 import com.varanegar.vaslibrary.ui.fragment.news_fragment.model.NewsData_Model;
 import com.varanegar.vaslibrary.webapi.apiNew.modelNew.PinRequestViewModel;
 import com.varanegar.vaslibrary.webapi.apiNew.modelNew.RoleCodeCustomerRequestViewModel;
@@ -35,4 +37,8 @@ public interface InApiNew {
     Call<List<CustomerNotAllowProductModel>>getProductNotAllowed(
             @Body List<String> customerId
     );
+
+    @GET("api/v2/ngt/customer/CheckCustomerCredits")
+    Call<List<CheckCustomerCreditModel>>CheckCustomerCredits (
+            @Query("CustomersId") List<String> customerCode);
 }
