@@ -29,6 +29,8 @@ public interface ITourApi {
     @GET("api/v2/ngt/tour/sync/toursent")
     Call<ResponseBody> confirmTourSent(@Query("id") String tourId);
 
+
+    //ارسال تور ویزیت  ارسال عملیات
     @POST("api/v2/ngt/tour/sync/savedata")
     Call<ResponseBody> saveTourData(@Body SyncGetTourViewModel syncGetTourViewModel, @Query("DeviceSettingCode") String DeviceSettingCode);
 
