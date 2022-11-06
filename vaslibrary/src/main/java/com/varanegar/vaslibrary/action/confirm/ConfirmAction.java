@@ -11,6 +11,9 @@ import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.database.DbException;
 import com.varanegar.framework.network.Connectivity;
+import com.varanegar.framework.network.listeners.ApiError;
+import com.varanegar.framework.network.listeners.WebCallBack;
+import com.varanegar.framework.util.HelperMethods;
 import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
@@ -25,11 +28,13 @@ import com.varanegar.vaslibrary.action.VasActionsAdapter;
 import com.varanegar.vaslibrary.base.BackupManager;
 import com.varanegar.vaslibrary.base.SubsystemType;
 import com.varanegar.vaslibrary.base.SubsystemTypeId;
+import com.varanegar.vaslibrary.manager.CustomerCallOrderOrderViewManager;
 import com.varanegar.vaslibrary.manager.RequestReportViewManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.customeractiontimemanager.CustomerActionTimeManager;
 import com.varanegar.vaslibrary.manager.customeractiontimemanager.CustomerActions;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallOrderManager;
+import com.varanegar.vaslibrary.manager.customercall.CustomerCallOrderPreviewManager;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallReturnManager;
 import com.varanegar.vaslibrary.manager.customercall.CustomerPrintCountManager;
 import com.varanegar.vaslibrary.manager.customercallmanager.CustomerCallManager;
@@ -52,17 +57,24 @@ import com.varanegar.vaslibrary.manager.tourmanager.TourManager;
 import com.varanegar.vaslibrary.model.RequestReportView.RequestReportViewModel;
 import com.varanegar.vaslibrary.model.call.CustomerCallInvoiceModel;
 import com.varanegar.vaslibrary.model.call.CustomerCallOrderModel;
+import com.varanegar.vaslibrary.model.call.CustomerCallOrderPreviewModel;
 import com.varanegar.vaslibrary.model.call.CustomerCallReturnModel;
 import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.model.customercall.CustomerCallType;
 import com.varanegar.vaslibrary.model.location.LocationModel;
+import com.varanegar.vaslibrary.model.newmodel.checkCustomerCredits.CheckCustomerCreditModel;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
 import com.varanegar.vaslibrary.ui.fragment.settlement.CustomerPayment;
+import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
+import com.varanegar.vaslibrary.webapi.apiNew.ApiNew;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import okhttp3.Request;
+import retrofit2.Call;
 import timber.log.Timber;
 
 /**
@@ -196,7 +208,62 @@ public class ConfirmAction extends CheckPathAction {
         setRunning(true);
 
 
+
+
         if (!isConfirmed()) {
+
+
+            List<CustomerCallOrderPreviewModel> callOrderPreviewModels =new
+                    CustomerCallOrderPreviewManager(getActivity()).getCustomerCallOrders(getSelectedId());
+
+            if (callOrderPreviewModels.get(0).TotalPrice!=null) {
+                CustomerModel customerModel=new CustomerManager(getActivity()).getItem(getSelectedId());
+                //  List<String> customerCode= Collections.singletonList(customerModel.CustomerCode);
+                List<String> customerCode= Collections.singletonList("0014032092");
+                ApiNew apiNew =new ApiNew(getActivity());
+                Call<List<CheckCustomerCreditModel>> call= apiNew.CheckCustomerCredits(customerCode);
+                apiNew.runWebRequest(call, new WebCallBack<List<CheckCustomerCreditModel>>() {
+                    @Override
+                    protected void onFinish() {
+
+                    }
+
+                    @Override
+                    protected void onSuccess(List<CheckCustomerCreditModel> result, Request request) {
+
+                        if (result.size() > 0) {
+                            Currency total = Currency.ZERO;
+                            if (callOrderPreviewModels.get(0).TotalPrice != null) {
+                                total = total.add(callOrderPreviewModels.get(0).TotalPrice);
+                                final Currency finalTotal = total;
+                                int totalePrice = HelperMethods.currencyToInt(finalTotal);
+                                int customerCreditLimit = HelperMethods
+                                        .currencyToInt(result.get(0).CustomerCreditLimit);
+                                if (totalePrice > customerCreditLimit) {
+                                    showErrorMessage(R.string.customerCredit);
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    protected void onApiFailure(ApiError error, Request request) {
+                        Timber.e(String.valueOf(error));
+                        String err = WebApiErrorBody.log(error, getActivity());
+                        showErrorMessage(err);
+                    }
+
+                    @Override
+                    protected void onNetworkFailure(Throwable t, Request request) {
+                        Timber.e(t);
+                        showErrorMessage(R.string.network_error);
+                        setRunning(false);
+                        return;
+                    }
+                });
+
+            }
+
             if (SysConfigManager.hasTracking(getActivity()) &&
                     TrackingLicense.isValid(getActivity())) {
                 android.location.LocationManager manager =
@@ -292,6 +359,7 @@ public class ConfirmAction extends CheckPathAction {
                                             customerCallOrderModel.UniqueId.toString()
                                                     .equals(customerCallModel.ExtraField1)));
 
+
             boolean paymentTypeIsEmpty = false;
             for (CustomerCallOrderModel customerCallOrderModel : callOrderModels)
                 if (customerCallOrderModel.OrderPaymentTypeUniqueId == null) {
@@ -304,6 +372,7 @@ public class ConfirmAction extends CheckPathAction {
                 setRunning(false);
                 return;
             }
+
 
             if (callOrderModels.size() > 0 &&
                     confirmedCallOrders.size() != callOrderModels.size()) {
