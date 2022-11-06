@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
+
 import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.database.querybuilder.Query;
 import com.varanegar.framework.util.Linq;
@@ -41,6 +43,8 @@ public class CustomerSummaryViewHolder extends BaseViewHolder<CustomerPathViewMo
     private LinearLayout descriptionLayout;
     private TextView descriptionTextView;
     private BackOfficeType backOfficeType;
+    private final CardView cardViewCustomerStatus;
+    private final CardView cardViewZarShop;
     //private ImageUrlViewDialog customerImageView;
 
     public CustomerSummaryViewHolder(View itemView, BaseRecyclerAdapter<CustomerPathViewModel> recyclerAdapter, BackOfficeType backOfficeType) {
@@ -57,6 +61,8 @@ public class CustomerSummaryViewHolder extends BaseViewHolder<CustomerPathViewMo
         customerCodeTextView = (TextView) itemView.findViewById(R.id.customer_code_text_view);
         descriptionLayout = itemView.findViewById(R.id.description_layout);
         descriptionTextView = itemView.findViewById(R.id.order_description_text_view);
+        cardViewCustomerStatus = itemView.findViewById(R.id.cardViewCustomerStatus);
+        cardViewZarShop = itemView.findViewById(R.id.cardViewZarShop);
         this.backOfficeType = backOfficeType;
     }
 
@@ -94,6 +100,14 @@ public class CustomerSummaryViewHolder extends BaseViewHolder<CustomerPathViewMo
                     getContext().startActivity(intent);
             }
         });
+
+        if (customerModel.IsZarShopCustomer != null &&
+                customerModel.IsZarShopCustomer.equalsIgnoreCase("y")) {
+            cardViewZarShop.setVisibility(View.VISIBLE);
+        } else {
+            cardViewZarShop.setVisibility(View.GONE);
+        }
+
         customerAddressTextView.setText(customerModel.Address);
         storeNameTextView.setText(customerModel.StoreName);
         customerCodeTextView.setText("(" + customerModel.CustomerCode + ")");
@@ -141,6 +155,7 @@ public class CustomerSummaryViewHolder extends BaseViewHolder<CustomerPathViewMo
         CustomerCallManager callManager = new CustomerCallManager(getContext());
         customerStatusTextView.setText(callManager.getName(calls, VaranegarApplication.is(VaranegarApplication.AppId.Contractor)));
         customerStatusTextView.setBackgroundColor(callManager.getColor(calls, VaranegarApplication.is(VaranegarApplication.AppId.Contractor)));
+        cardViewCustomerStatus.setCardBackgroundColor(callManager.getColor(calls, VaranegarApplication.is(VaranegarApplication.AppId.Contractor)));
         boolean isConfirmed = callManager.isConfirmed(calls);
         if (isConfirmed)
             customerStatusTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_done_white_24dp, 0);

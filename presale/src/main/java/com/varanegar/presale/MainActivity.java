@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.framework.util.jobscheduler.JobSchedulerService;
@@ -75,7 +78,7 @@ public class MainActivity extends VasActivity {
 
     //---------------------------------------------------------------------------------------------- onSaveInstanceState
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean("firstCreation", true);
     }

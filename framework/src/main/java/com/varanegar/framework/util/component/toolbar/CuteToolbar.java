@@ -119,6 +119,7 @@ public class CuteToolbar extends LinearLayout {
         };
         if (buttonsRecyclerView != null)
             buttonsRecyclerView.setAdapter(adapter);
+        expand();
     }
 
     @Override

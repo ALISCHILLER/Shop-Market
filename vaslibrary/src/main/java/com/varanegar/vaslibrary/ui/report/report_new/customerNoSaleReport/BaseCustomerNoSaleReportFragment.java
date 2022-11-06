@@ -267,9 +267,11 @@ public abstract class BaseCustomerNoSaleReportFragment<T extends CustomerNoSaleM
     //---------------------------------------------------------------------------------------------- getStartDateString
     protected String getStartDateString() {
         JalaliCalendar calendar = new JalaliCalendar();
+        calendar.add(Calendar.DATE, -60);
         String YEAR = String.valueOf(calendar.get(Calendar.YEAR));
-        int MONTH = calendar.get(Calendar.MONTH) + 1;
-        return YEAR + "/" + MONTH + "/" + "01";
+        int MONTH = calendar.get(Calendar.MONTH);
+        int DAY = calendar.get(Calendar.DAY_OF_MONTH);
+        return YEAR + "/" + MONTH + "/" + DAY;
     }
     //---------------------------------------------------------------------------------------------- getStartDateString
 

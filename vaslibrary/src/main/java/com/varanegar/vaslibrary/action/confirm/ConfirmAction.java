@@ -218,8 +218,8 @@ public class ConfirmAction extends CheckPathAction {
 
             if (callOrderPreviewModels.get(0).TotalPrice!=null) {
                 CustomerModel customerModel=new CustomerManager(getActivity()).getItem(getSelectedId());
-                //  List<String> customerCode= Collections.singletonList(customerModel.CustomerCode);
-                List<String> customerCode= Collections.singletonList("0014032092");
+                List<String> customerCode= Collections.singletonList(customerModel.CustomerCode);
+              //  List<String> customerCode= Collections.singletonList("0014032092");
                 ApiNew apiNew =new ApiNew(getActivity());
                 Call<List<CheckCustomerCreditModel>> call= apiNew.CheckCustomerCredits(customerCode);
                 apiNew.runWebRequest(call, new WebCallBack<List<CheckCustomerCreditModel>>() {

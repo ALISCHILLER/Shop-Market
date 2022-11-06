@@ -181,7 +181,7 @@ public abstract class VasActivity extends MainVaranegarActivity implements EasyH
             registerReceiver(tepBroadCast, intentFilter);
         }
 
-        Thread.setDefaultUncaughtExceptionHandler((thread, e) -> handleUncaughtException(e));
+//        Thread.setDefaultUncaughtExceptionHandler((thread, e) -> handleUncaughtException(e));
     }
     //---------------------------------------------------------------------------------------------- onCreate
 

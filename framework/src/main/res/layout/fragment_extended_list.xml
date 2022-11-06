@@ -79,6 +79,7 @@
                         android:layout_gravity="start"
                         android:background="@android:drawable/edit_text"
                         android:gravity="start|center_vertical"
+                        android:hint="@string/search"
                         android:inputType="text"
                         android:minWidth="150dp"
                         android:paddingLeft="60dp" />

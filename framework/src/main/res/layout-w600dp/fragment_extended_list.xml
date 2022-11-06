@@ -79,7 +79,8 @@
                         android:gravity="start|center_vertical"
                         android:inputType="text"
                         android:minWidth="150dp"
-                        android:paddingLeft="60dp" />
+                        android:paddingLeft="60dp"
+                        android:hint="@string/search"/>
 
 
                     <LinearLayout

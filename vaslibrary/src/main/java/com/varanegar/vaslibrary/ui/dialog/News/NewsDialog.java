@@ -47,8 +47,6 @@ public class NewsDialog extends CuteDialogWithToolbar {
 
     //---------------------------------------------------------------------------------------------- setSlideAdapter
     public void setSlideAdapter() {
-        news.add(news.get(0));
-        news.add(news.get(0));
         SliderNewsAdapter adapter = new SliderNewsAdapter(news);
         imageSlider.setSliderAdapter(adapter);
         imageSlider.setIndicatorAnimation(IndicatorAnimationType.WORM); //set indicator animation by using IndicatorAnimationType. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
