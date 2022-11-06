@@ -5,7 +5,6 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.varanegar.framework.database.BaseManager;
-import com.varanegar.framework.database.BaseRepository;
 import com.varanegar.framework.database.DbException;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
@@ -16,7 +15,6 @@ import com.varanegar.vaslibrary.manager.updatemanager.UpdateCall;
 import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.model.newmodel.checkCustomerCredits.CheckCustomerCreditModel;
 import com.varanegar.vaslibrary.model.newmodel.checkCustomerCredits.CheckCustomerCreditModelRepository;
-import com.varanegar.vaslibrary.ui.fragment.news_fragment.model.NewsData_Model;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.apiNew.ApiNew;
 
@@ -30,19 +28,20 @@ public class CheckCustomerCreditManager extends BaseManager<CheckCustomerCreditM
     public CheckCustomerCreditManager(@NonNull Context context) {
         super(context, new CheckCustomerCreditModelRepository());
     }
+
+   private Call<List<CheckCustomerCreditModel>> call;
     public void sync(final UpdateCall updateCall) {
-        try {
+
             List<String> customerCode = null;
-            deleteAll();
+          //  deleteAll();
             ApiNew apiNew=new ApiNew(getContext());
             CustomerManager customerManager=new CustomerManager(getContext());
             List<CustomerModel> customerModels=customerManager.getAll();
             for (CustomerModel customerModel:
                     customerModels) {
-
                 customerCode.add(customerModel.CustomerCode);
             }
-            Call<List<CheckCustomerCreditModel>> call=apiNew.CheckCustomerCredits(customerCode);
+           call=apiNew.CheckCustomerCredits(customerCode);
 
             apiNew.runWebRequest(call, new WebCallBack<List<CheckCustomerCreditModel>>() {
                 @Override
@@ -65,10 +64,8 @@ public class CheckCustomerCreditManager extends BaseManager<CheckCustomerCreditM
                             updateCall.failure(getContext().getString(R.string.data_error));
                         }
 
-
-
                     }
-
+                    updateCall.success();
                 }
 
                 @Override
@@ -83,13 +80,13 @@ public class CheckCustomerCreditManager extends BaseManager<CheckCustomerCreditM
                     updateCall.failure(getContext().getString(R.string.network_error));
                 }
             });
-        }catch (DbException e) {
-            Timber.e(e);
-            updateCall.failure(getContext().getString(R.string.error_deleting_old_data));
-        }
+
     }
 
-
+    public void cancelSync() {
+        if (call != null && !call.isCanceled() && call.isExecuted())
+            call.cancel();
+    }
 
 
 }
