@@ -18,4 +18,6 @@ public class NewsData_Model extends BaseModel {
     public String publishDate;
     @Column
     public String publishPDate;
+    @Column
+    public boolean IsRead;
 }

@@ -189,12 +189,17 @@ public class MainActivity extends VasActivity {
     //---------------------------------------------------------------------------------------------- showDialogNews
     private void showDialogNews() {
         NewsZarManager manager = new NewsZarManager(this);
-        List<NewsData_Model> news = manager.getAllNewNews();
-        NewsDialog dialog = new NewsDialog(news);
-        dialog.setTitle(getString(com.varanegar.vaslibrary.R.string.news_zar));
-        dialog.setCancelable(true);
-        dialog.setClosable(true);
-        dialog.show(getSupportFragmentManager(), "NewsDialog");
+        List<NewsData_Model> news = manager.getUnReadNews();
+        if (news.size() > 0) {
+            manager.readNews(news);
+            try {
+                NewsDialog dialog = new NewsDialog(news);
+                dialog.setTitle(getString(com.varanegar.vaslibrary.R.string.news_zar));
+                dialog.setCancelable(true);
+                dialog.setClosable(true);
+                dialog.show(getSupportFragmentManager(), "NewsDialog");
+            } catch (Exception ignored) {}
+        }
     }
     //---------------------------------------------------------------------------------------------- showDialogNews
 

@@ -56,6 +56,8 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
     private final TextView customerLevelTextView;
     private final TextView customerActivityTextView;
     private final CardView cardViewCustomerStatus;
+    private final CardView cardViewZarShop;
+    private final ImageView imageViewZarShop;
     //private ImageUrlViewDialog customerImageView;
 
     //---------------------------------------------------------------------------------------------- CustomerSummaryMultipanViewHolder
@@ -83,6 +85,8 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
         customerActivityTextView = itemView.findViewById(R.id.customer_activity_text_view);
         customerGroupTextView = itemView.findViewById(R.id.customer_group_text_view);
         cardViewCustomerStatus = itemView.findViewById(R.id.cardViewCustomerStatus);
+        cardViewZarShop = itemView.findViewById(R.id.cardViewZarShop);
+        imageViewZarShop = itemView.findViewById(R.id.imageViewZarShop);
         this.backOfficeType = backOfficeType;
     }
     //---------------------------------------------------------------------------------------------- CustomerSummaryMultipanViewHolder
@@ -105,6 +109,15 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
         customerTelTextView.setText(customerModel.Phone);
         storeNameTextView.setText(customerModel.StoreName);
         codeNagesh_Str = customerModel.CodeNaghsh;
+
+        if (customerModel.IsZarShopCustomer != null &&
+                customerModel.IsZarShopCustomer.equalsIgnoreCase("y")) {
+            cardViewZarShop.setVisibility(View.VISIBLE);
+            imageViewZarShop.setVisibility(View.VISIBLE);
+        } else {
+            cardViewZarShop.setVisibility(View.GONE);
+            imageViewZarShop.setVisibility(View.GONE);
+        }
 
 
         if (calls == null)

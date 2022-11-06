@@ -112,6 +112,29 @@ public abstract class CustomersFragment
 
     protected abstract VaranegarFragment getContentTargetDetailFragment();
 
+    //---------------------------------------------------------------------------------------------- onCreate
+    @Override
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Timber.d("Customers fragment created");
+        Log.d(TAG, "onCreate: called");
+        setTitle(getString(R.string.customers_list));
+        setAdvancedSearch(0, null);
+
+        if (savedInstanceState != null)
+            barcode = savedInstanceState.getString("dd003d32-4f05-423f-b7ba-3ccc9f54fb39");
+
+        if (!isLowMemory())
+            wipeOldPriceData();
+        try {
+            backOfficeType = new SysConfigManager(getContext()).getBackOfficeType();
+        } catch (UnknownBackOfficeException e) {
+            Timber.e(e);
+        }
+    }
+    //---------------------------------------------------------------------------------------------- onCreate
+
+
 
     //---------------------------------------------------------------------------------------------- onCreateContentFragment
     @Override
@@ -245,28 +268,6 @@ public abstract class CustomersFragment
     }
     //---------------------------------------------------------------------------------------------- onPause
 
-
-    //---------------------------------------------------------------------------------------------- onCreate
-    @Override
-    public void onCreate(@Nullable final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Timber.d("Customers fragment created");
-        Log.d(TAG, "onCreate: called");
-        setTitle(getString(R.string.customers_list));
-        setAdvancedSearch(0, null);
-
-        if (savedInstanceState != null)
-            barcode = savedInstanceState.getString("dd003d32-4f05-423f-b7ba-3ccc9f54fb39");
-
-        if (!isLowMemory())
-            wipeOldPriceData();
-        try {
-            backOfficeType = new SysConfigManager(getContext()).getBackOfficeType();
-        } catch (UnknownBackOfficeException e) {
-            Timber.e(e);
-        }
-    }
-    //---------------------------------------------------------------------------------------------- onCreate
 
 
     //---------------------------------------------------------------------------------------------- onSaveInstanceState

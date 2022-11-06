@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.varanegar.framework.database.BaseManager;
 import com.varanegar.framework.database.querybuilder.Query;
+import com.varanegar.framework.database.querybuilder.criteria.Criteria;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.vaslibrary.R;
@@ -72,12 +73,26 @@ public class NewsZarManager extends BaseManager<NewsData_Model> {
     //---------------------------------------------------------------------------------------------- sync
 
 
-    //---------------------------------------------------------------------------------------------- getAllNewNews
-    public List<NewsData_Model> getAllNewNews() {
+    //---------------------------------------------------------------------------------------------- getUnReadNews
+    public List<NewsData_Model> getUnReadNews() {
         Query query = new Query();
-        query.from(NewsData_.NewsData_Tbl);
+        query.from(NewsData_.NewsData_Tbl).whereAnd(Criteria.equals(NewsData_.IsRead,0));
         return getItems(query);
     }
-    //---------------------------------------------------------------------------------------------- getAllNewNews
+    //---------------------------------------------------------------------------------------------- getUnReadNews
+
+
+    //---------------------------------------------------------------------------------------------- readNews
+    public void readNews(List<NewsData_Model> items) {
+        for (NewsData_Model item : items)
+            try {
+                NewsData_ModelRepository repository = new
+                        NewsData_ModelRepository();
+                repository.insertOrUpdate(item);
+            } catch (Exception e){
+                Timber.e(e);
+            }
+    }
+    //---------------------------------------------------------------------------------------------- readNews
 
 }
