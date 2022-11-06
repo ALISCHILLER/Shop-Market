@@ -42,7 +42,6 @@ import com.varanegar.vaslibrary.manager.VisitTemplatePathCustomerManager;
 import com.varanegar.vaslibrary.manager.bank.BankManager;
 import com.varanegar.vaslibrary.manager.c_shipToparty.CustomerShipToPartyManager;
 import com.varanegar.vaslibrary.manager.catalogmanager.CatalogManager;
-import com.varanegar.vaslibrary.manager.checkCustomerCreditmanger.CheckCustomerCreditManager;
 import com.varanegar.vaslibrary.manager.city.CityManager;
 import com.varanegar.vaslibrary.manager.contractpricemanager.ContractPriceManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerActivityManager;

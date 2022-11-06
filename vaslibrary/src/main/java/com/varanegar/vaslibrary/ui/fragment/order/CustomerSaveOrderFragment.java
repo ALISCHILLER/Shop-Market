@@ -597,7 +597,9 @@ public class CustomerSaveOrderFragment extends VisitFragment
 
                     if (VaranegarApplication.is(VaranegarApplication.AppId.Contractor)) {
                         saveContractorEventLocation();
-                        InvoicePrintHelper printContractor = new InvoicePrintHelper(Objects.requireNonNull(getVaranegarActvity()), customerId, OrderPrintType.contractor);
+                        InvoicePrintHelper printContractor = new InvoicePrintHelper(Objects
+                                .requireNonNull(getVaranegarActvity()), customerId,
+                                OrderPrintType.contractor);
                         printContractor.start(null);
                     }
 
@@ -2223,11 +2225,14 @@ public class CustomerSaveOrderFragment extends VisitFragment
     }
 
     private void setupOrderAdapter() {
-        HashMap<UUID, ProductUnitViewManager.ProductUnits> productUnits = new ProductUnitViewManager(getContext()).getUnitSet(ProductType.isForSale);
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("SortOrders", Context.MODE_PRIVATE);
+        HashMap<UUID, ProductUnitViewManager.ProductUnits> productUnits = new
+                ProductUnitViewManager(getContext()).getUnitSet(ProductType.isForSale);
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("SortOrders",
+                Context.MODE_PRIVATE);
         OrderOption<CustomerCallOrderOrderViewModel> item = orderOptions
                 .get(sharedPreferences.getInt("OrderOptionsPosition", 0));
-        orderAdapter = new OrderAdapter(this, customerCallOrderModel, productUnitsHashMap, productUnits, item, onItemQtyChangedHandler);
+        orderAdapter = new OrderAdapter(this, customerCallOrderModel, productUnitsHashMap,
+                productUnits, item, onItemQtyChangedHandler);
     }
 
     void onEditItem(final CustomerCallOrderOrderViewModel

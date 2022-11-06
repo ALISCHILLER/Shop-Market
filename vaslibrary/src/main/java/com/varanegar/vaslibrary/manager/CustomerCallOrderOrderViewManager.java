@@ -39,7 +39,8 @@ public class CustomerCallOrderOrderViewManager extends BaseManager<CustomerCallO
     }
 
     private void setOrderBy(OrderBy orderBy) {
-        SharedPreferences.Editor editor = getContext().getSharedPreferences("CustomerCallOrderOrderViewManager", Context.MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = getContext()
+                .getSharedPreferences("CustomerCallOrderOrderViewManager", Context.MODE_PRIVATE).edit();
         if (orderBy.getType() == OrderType.ASC)
             editor.putString("orderType", "ASC");
         else
@@ -51,7 +52,8 @@ public class CustomerCallOrderOrderViewManager extends BaseManager<CustomerCallO
     @Nullable
     public OrderBy getOrderBy() {
         try {
-            SharedPreferences sharedPreferences = getContext().getSharedPreferences("CustomerCallOrderOrderViewManager", Context.MODE_PRIVATE);
+            SharedPreferences sharedPreferences = getContext()
+                    .getSharedPreferences("CustomerCallOrderOrderViewManager", Context.MODE_PRIVATE);
             String orderType = sharedPreferences.getString("orderType", "ASC");
             String orderColumn = sharedPreferences.getString("orderColumn", "ProductName");
             HashMap<String, ModelProjection<CustomerCallOrderOrderViewModel>> columns = CustomerCallOrderOrderView.CustomerCallOrderOrderViewTbl.getColumns();
