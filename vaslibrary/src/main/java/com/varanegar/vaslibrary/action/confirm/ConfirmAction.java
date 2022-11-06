@@ -5,11 +5,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.util.Log;
-
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.database.DbException;
@@ -314,6 +311,7 @@ public class ConfirmAction extends CheckPathAction {
                 setRunning(false);
                 return;
             }
+
 
             CustomerCallReturnManager callReturnManager =
                     new CustomerCallReturnManager(getActivity());

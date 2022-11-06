@@ -11,15 +11,14 @@ import java.util.UUID;
 /**
  * Created by A.Soleymani on 11/05/2022.
  */
-@Table
-public class CheckCustomerCreditModel extends BaseModel {
 
-    @Column
+public class CheckCustomerCreditModel {
+
     public  String customerBackOfficeCode;
-    @Column
+
     public Currency CustomerCreditLimit;
-    @Column
+
     public Currency customerUsedCredit;
-    @Column
+
     public Currency customerRemainCredit;
 }
