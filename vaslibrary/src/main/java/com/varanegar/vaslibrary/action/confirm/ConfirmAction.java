@@ -197,6 +197,8 @@ public class ConfirmAction extends CheckPathAction {
     @Override
     public void run() {
         setRunning(true);
+
+
         if (!isConfirmed()) {
             if (SysConfigManager.hasTracking(getActivity()) &&
                     TrackingLicense.isValid(getActivity())) {

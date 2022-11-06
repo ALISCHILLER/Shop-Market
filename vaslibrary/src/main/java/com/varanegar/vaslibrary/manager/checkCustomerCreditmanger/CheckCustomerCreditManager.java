@@ -18,6 +18,7 @@ import com.varanegar.vaslibrary.model.newmodel.checkCustomerCredits.CheckCustome
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.apiNew.ApiNew;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Request;
@@ -31,9 +32,9 @@ public class CheckCustomerCreditManager extends BaseManager<CheckCustomerCreditM
 
    private Call<List<CheckCustomerCreditModel>> call;
     public void sync(final UpdateCall updateCall) {
-
-            List<String> customerCode = null;
-          //  deleteAll();
+        try {
+            List<String> customerCode =new ArrayList<>();
+            deleteAll();
             ApiNew apiNew=new ApiNew(getContext());
             CustomerManager customerManager=new CustomerManager(getContext());
             List<CustomerModel> customerModels=customerManager.getAll();
@@ -80,7 +81,10 @@ public class CheckCustomerCreditManager extends BaseManager<CheckCustomerCreditM
                     updateCall.failure(getContext().getString(R.string.network_error));
                 }
             });
-
+        }catch (DbException e) {
+            Timber.e(e);
+            updateCall.failure(getContext().getString(R.string.error_deleting_old_data));
+        }
     }
 
     public void cancelSync() {
