@@ -54,6 +54,7 @@ public class SaveOrderAction extends CheckDistanceAction {
         super(activity, adapter, selectedId);
         icon = R.drawable.ic_thumb_up_white_24dp;
         this.CustomerLevelId = CustomerLevelId;
+        setAnimation(true);
     }
 
     @Nullable

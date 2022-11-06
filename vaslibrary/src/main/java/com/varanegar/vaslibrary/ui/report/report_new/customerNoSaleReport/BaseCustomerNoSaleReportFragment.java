@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,13 +16,12 @@ import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarFragment;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
+import com.varanegar.framework.util.component.PairedItems;
 import com.varanegar.framework.util.component.SimpleToolbar;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.framework.util.datetime.DateFormat;
 import com.varanegar.framework.util.datetime.DateHelper;
-import com.varanegar.framework.util.datetime.JalaliCalendar;
-
 import com.varanegar.framework.util.report.ReportView;
 import com.varanegar.framework.util.report.SimpleReportAdapter;
 import com.varanegar.vaslibrary.R;
@@ -60,6 +60,12 @@ public abstract class BaseCustomerNoSaleReportFragment<T extends CustomerNoSaleM
     private final List<String> product_group = new ArrayList<>();
     private SimpleReportAdapter<T> adapter;
     private List<T> resultReport;
+    private Date startDate;
+    private Date endDate;
+    private PairedItems startDatePairedItems;
+    private PairedItems endDatePairedItems;
+    private ImageView imageViewStartCalender;
+    private ImageView imageViewEndCalender;
 
     protected abstract SimpleReportAdapter<T> createAdapter();
 
@@ -86,6 +92,8 @@ public abstract class BaseCustomerNoSaleReportFragment<T extends CustomerNoSaleM
             @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (savedInstanceState != null) {
+            long start = savedInstanceState.getLong("startDate", 0);
+            long end = savedInstanceState.getLong("endDate", 0);
             /*
              * مجبور شدم این کار رو بکنم چون مدل اصلی کل پروژه از Parcelable ارث بری نکرده بود
              * */
@@ -99,6 +107,12 @@ public abstract class BaseCustomerNoSaleReportFragment<T extends CustomerNoSaleM
             } catch (Exception ignored) {
 
             }
+
+            if (start != 0 && end != 0) {
+                startDate = new Date(start);
+                endDate = new Date(end);
+            }
+
         }
 
         activity = getVaranegarActvity();
@@ -115,9 +129,19 @@ public abstract class BaseCustomerNoSaleReportFragment<T extends CustomerNoSaleM
         buttonReport = view.findViewById(R.id.buttonReport);
         reportView = view.findViewById(R.id.review_report_view);
         toolbar = view.findViewById(R.id.toolbar);
+        startDatePairedItems = view.findViewById(R.id.start_date_item);
+        endDatePairedItems = view.findViewById(R.id.end_date_item);
+        imageViewStartCalender = view.findViewById(R.id.start_calendar_image_view);
+        imageViewEndCalender = view.findViewById(R.id.end_calendar_image_view);
         multiSelectSpinnerWithSearch = view.findViewById(R.id.multipleItemSelectionSpinnerr);
         setUpMultiSelectSpinnerWithSearch(getKeyPairBoolData());
         toolbar.setTitle(getTitle());
+
+        if (startDate != null)
+            setDateToDatePairedItems(startDatePairedItems, startDate);
+
+        if (endDate != null)
+            setDateToDatePairedItems(endDatePairedItems, endDate);
 
         if (resultReport != null)
             setReportAdapter();
@@ -130,8 +154,58 @@ public abstract class BaseCustomerNoSaleReportFragment<T extends CustomerNoSaleM
         buttonReport.setOnClickListener(view15 -> requestCustomerNoSaleReport());
         toolbar.setOnBackClickListener(view12 -> activity.popFragment());
         toolbar.setOnMenuClickListener(view1 -> activity.openDrawer());
+        imageViewStartCalender.setOnClickListener(v -> clickOnStartCalender());
+        imageViewEndCalender.setOnClickListener(v -> clickOnEndCalender());
     }
     //---------------------------------------------------------------------------------------------- setOnListener
+
+
+    //---------------------------------------------------------------------------------------------- clickOnStartCalender
+    private void clickOnStartCalender() {
+        DateHelper.showDatePicker(activity,
+                VasHelperMethods.getSysConfigLocale(getContext()), calendar -> {
+                    if (calendar.getTime().after(new Date())) {
+                        showErrorDialog(getString(R.string.date_could_not_be_after_now));
+                        return;
+                    }
+                    if (endDate != null && endDate.before(calendar.getTime())) {
+                        showErrorDialog(getString(R.string.end_date_could_not_be_before_start_date));
+                        return;
+                    }
+                    startDate = calendar.getTime();
+                    setDateToDatePairedItems(startDatePairedItems, startDate);
+                });
+    }
+    //---------------------------------------------------------------------------------------------- clickOnStartCalender
+
+
+    //---------------------------------------------------------------------------------------------- clickOnEndCalender
+    private void clickOnEndCalender() {
+        DateHelper.showDatePicker(activity,
+                VasHelperMethods.getSysConfigLocale(getContext()), calendar -> {
+                    if (calendar.getTime().after(new Date())) {
+                        showErrorDialog(getString(R.string.date_could_not_be_after_now));
+                        return;
+                    }
+                    if (startDate != null && startDate.after(calendar.getTime())) {
+                        showErrorDialog(getString(R.string.start_date_could_not_be_after_end_date));
+                        return;
+                    }
+                    endDate = calendar.getTime();
+                    setDateToDatePairedItems(endDatePairedItems, endDate);
+                });
+    }
+    //---------------------------------------------------------------------------------------------- clickOnEndCalender
+
+
+    //---------------------------------------------------------------------------------------------- setDateToDatePairedItems
+    private void setDateToDatePairedItems(PairedItems pairedItems, Date date) {
+        pairedItems.setValue(DateHelper.toString(
+                date,
+                DateFormat.Date,
+                VasHelperMethods.getSysConfigLocale(getContext())));
+    }
+    //---------------------------------------------------------------------------------------------- setDateToDatePairedItems
 
 
     //---------------------------------------------------------------------------------------------- setUpMultiSelectSpinnerWithSearch
@@ -266,21 +340,32 @@ public abstract class BaseCustomerNoSaleReportFragment<T extends CustomerNoSaleM
 
     //---------------------------------------------------------------------------------------------- getStartDateString
     protected String getStartDateString() {
-        JalaliCalendar calendar = new JalaliCalendar();
-        calendar.add(Calendar.DATE, -60);
-        String YEAR = String.valueOf(calendar.get(Calendar.YEAR));
-        int MONTH = calendar.get(Calendar.MONTH);
-        int DAY = calendar.get(Calendar.DAY_OF_MONTH);
-        return YEAR + "/" + MONTH + "/" + DAY;
+        return DateHelper.toString(getStartDate(), DateFormat.Date,
+                VasHelperMethods.getSysConfigLocale(getContext()));
     }
     //---------------------------------------------------------------------------------------------- getStartDateString
 
 
     //---------------------------------------------------------------------------------------------- getEndDateString
     protected String getEndDateString() {
-        return DateHelper.toString(getEndDate(), DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext()));
+        return DateHelper.toString(getEndDate(), DateFormat.Date,
+                VasHelperMethods.getSysConfigLocale(getContext()));
     }
     //---------------------------------------------------------------------------------------------- getEndDateString
+
+
+    //---------------------------------------------------------------------------------------------- getStartDate
+    protected Date getStartDate() {
+        return startDate == null ? DateHelper.Min : startDate;
+    }
+    //---------------------------------------------------------------------------------------------- getStartDate
+
+
+    //---------------------------------------------------------------------------------------------- getEndDate
+    protected Date getEndDate() {
+        return endDate == null ? new Date() : endDate;
+    }
+    //---------------------------------------------------------------------------------------------- getEndDate
 
 
     //---------------------------------------------------------------------------------------------- getProduct_group
@@ -289,19 +374,6 @@ public abstract class BaseCustomerNoSaleReportFragment<T extends CustomerNoSaleM
     }
     //---------------------------------------------------------------------------------------------- getProduct_group
 
-
-    //---------------------------------------------------------------------------------------------- getStartDate
-    protected Date getStartDate() {
-        return DateHelper.Min;
-    }
-    //---------------------------------------------------------------------------------------------- getStartDate
-
-
-    //---------------------------------------------------------------------------------------------- getEndDate
-    protected Date getEndDate() {
-        return new Date();
-    }
-    //---------------------------------------------------------------------------------------------- getEndDate
 
 
     //---------------------------------------------------------------------------------------------- getAdapter
@@ -329,6 +401,10 @@ public abstract class BaseCustomerNoSaleReportFragment<T extends CustomerNoSaleM
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        if (startDate != null)
+            outState.putLong("startDate", startDate.getTime());
+        if (endDate != null)
+            outState.putLong("endDate", endDate.getTime());
         outState.putParcelableArrayList("report", (ArrayList<? extends Parcelable>) resultReport);
     }
     //---------------------------------------------------------------------------------------------- onSaveInstanceState

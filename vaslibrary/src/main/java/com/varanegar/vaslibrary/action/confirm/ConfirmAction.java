@@ -93,6 +93,7 @@ public class ConfirmAction extends CheckPathAction {
     public ConfirmAction(MainVaranegarActivity activity, ActionsAdapter adapter, UUID selectedId) {
         super(activity, adapter, selectedId);
         icon = R.drawable.ic_check_box_black_24dp;
+        setAnimation(true);
     }
 
     private boolean isConfirmed() {
@@ -216,7 +217,9 @@ public class ConfirmAction extends CheckPathAction {
             List<CustomerCallOrderPreviewModel> callOrderPreviewModels =new
                     CustomerCallOrderPreviewManager(getActivity()).getCustomerCallOrders(getSelectedId());
 
-            if (callOrderPreviewModels.get(0).TotalPrice!=null) {
+            if (callOrderPreviewModels != null &&
+                    callOrderPreviewModels.size() > 0 &&
+                    callOrderPreviewModels.get(0).TotalPrice!=null) {
                 CustomerModel customerModel=new CustomerManager(getActivity()).getItem(getSelectedId());
                 List<String> customerCode= Collections.singletonList(customerModel.CustomerCode);
               //  List<String> customerCode= Collections.singletonList("0014032092");

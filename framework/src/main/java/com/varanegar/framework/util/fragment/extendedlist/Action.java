@@ -20,6 +20,7 @@ public abstract class Action implements Serializable {
     private String isEnabled;
     private int oldOrientation;
     public static Action currentAction;
+    private boolean isAnimation = false;
 
     public String getIsEnabled() {
         return isEnabled;
@@ -87,6 +88,15 @@ public abstract class Action implements Serializable {
     protected abstract String isEnabled();
 
     protected abstract boolean isDone();
+
+
+    public boolean isAnimation() {
+        return isAnimation;
+    }
+
+    public void setAnimation(boolean animation) {
+        isAnimation = animation;
+    }
 
     /**
      * @return Returns Null if this action is not force.

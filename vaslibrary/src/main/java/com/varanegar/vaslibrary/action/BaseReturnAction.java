@@ -51,6 +51,7 @@ public class BaseReturnAction extends CheckDistanceAction {
     public BaseReturnAction(MainVaranegarActivity activity, ActionsAdapter adapter, UUID selectedId) {
         super(activity, adapter, selectedId);
         icon = R.drawable.ic_thumb_down_white_24dp;
+        setAnimation(true);
     }
 
     @Override

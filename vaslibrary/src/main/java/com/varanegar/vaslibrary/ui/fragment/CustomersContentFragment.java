@@ -387,6 +387,7 @@ public class CustomersContentFragment extends VaranegarFragment {
     protected void addActions(@NonNull List<Action> actions) {
         //  دکمه ویرایش مشتری در صحه نمایش مشتری درpresale
         if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+
             EditCustomerAction editCustomerAction =
                     new EditCustomerAction(getVaranegarActvity(), actionsAdapter, getSelectedId());
             editCustomerAction.setActionCallBack(() -> {

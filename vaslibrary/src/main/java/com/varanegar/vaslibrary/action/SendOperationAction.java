@@ -37,6 +37,7 @@ public class SendOperationAction extends CheckPathAction {
                                ActionsAdapter adapter, UUID selectedId) {
         super(activity, adapter, selectedId);
         icon = R.drawable.ic_check_box_black_24dp;
+        setAnimation(true);
     }
 
     @Override
