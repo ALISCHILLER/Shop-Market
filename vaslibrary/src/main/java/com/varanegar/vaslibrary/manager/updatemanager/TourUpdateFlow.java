@@ -893,39 +893,6 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                 }
             });
 
-            if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
-                tasks.add(new TourAsyncTask() {
-
-                    CheckCustomerCreditManager CustomerCredit = new
-                            CheckCustomerCreditManager(getContext());
-
-                    @Override
-                    public void run(UpdateCall call) {
-                        CustomerCredit.sync(call);
-                    }
-
-                    @Override
-                    public String name() {
-                        return "CustomerCredit";
-                    }
-
-                    @Override
-                    public int group() {
-                        return R.string.customer_info;
-                    }
-
-                    @Override
-                    public int queueId() {
-                        return 2;
-                    }
-
-                    @Override
-                    public void cancel() {
-                        if (CustomerCredit != null)
-                            CustomerCredit.cancelSync();
-                    }
-                });
-            }
             tasks.add(new TourAsyncTask() {
                 CustomerNotAllowProductManager notAllowProductManager = new
                         CustomerNotAllowProductManager(getContext());

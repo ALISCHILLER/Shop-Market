@@ -84,7 +84,9 @@ public class CustomerCallOrderManager extends BaseManager<CustomerCallOrderModel
 
     public List<CustomerCallOrderModel> getCustomerCallOrders(UUID customerUniqueId) {
         Query query = new Query();
-        query.from(CustomerCallOrder.CustomerCallOrderTbl).whereAnd(Criteria.equals(CustomerCallOrder.CustomerUniqueId, customerUniqueId.toString()));
+        query.from(CustomerCallOrder.CustomerCallOrderTbl)
+                .whereAnd(Criteria.equals(CustomerCallOrder.CustomerUniqueId,
+                        customerUniqueId.toString()));
         return getItems(query);
     }
 
