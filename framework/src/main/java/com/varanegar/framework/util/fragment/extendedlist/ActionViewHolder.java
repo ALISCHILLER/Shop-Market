@@ -67,7 +67,7 @@ class ActionViewHolder extends RecyclerView.ViewHolder {
                 && action.isAnimation()) {
                     Context context = linearLayoutParent.getContext();
                     Resources resources = context.getResources();
-                    linearLayoutParent.setBackgroundColor(resources.getColor(R.color.light_green2));
+                    linearLayoutParent.setBackgroundColor(resources.getColor(R.color.light_green));
                     linearLayoutParent.startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_repaet));
                 } else
                     linearLayoutParent.setBackgroundColor(Color.TRANSPARENT);
