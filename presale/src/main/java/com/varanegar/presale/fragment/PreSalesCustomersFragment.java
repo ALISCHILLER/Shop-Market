@@ -437,7 +437,7 @@ public class PreSalesCustomersFragment extends CustomersFragment {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putInt("SaveVersion", currentVersion);
             editor.apply();
-            if (currentVersion != saveVersion && saveVersion > 0)
+            if (currentVersion != saveVersion)
                 showDialogNewFeatures();
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();

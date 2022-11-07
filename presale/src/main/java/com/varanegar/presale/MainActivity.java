@@ -78,9 +78,9 @@ public class MainActivity extends VasActivity {
         TourManager tourManager = new TourManager(this);
         if (tourManager.isTourAvailable())
             pushFragment(new PreSalesCustomersFragment());
-        else if (tourManager.isTourSending()) {
+        else if (tourManager.isTourSending())
             pushFragment(new PreSalesSendTourFragment());
-        } else
+        else
             pushFragment(new PreSalesTourReportFragment());
     }
     //---------------------------------------------------------------------------------------------- checkTourAvailable
