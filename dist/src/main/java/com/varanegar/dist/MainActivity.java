@@ -30,11 +30,7 @@ public class MainActivity extends VasActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        boolean firstCreation = false;
-        if (savedInstanceState != null)
-            firstCreation = savedInstanceState.getBoolean("firstCreation", false);
-        if (!firstCreation)
-            checkVersionIsUpdated();
+        checkUserLogin();
 
         SharedPreferences sharedPreferences = getApplicationContext()
                 .getSharedPreferences("Firebase_Token", Context.MODE_PRIVATE);
@@ -56,53 +52,6 @@ public class MainActivity extends VasActivity {
     }
     //---------------------------------------------------------------------------------------------- onCreate
 
-
-    //---------------------------------------------------------------------------------------------- checkVersionIsUpdated
-    private void checkVersionIsUpdated() {
-        try {
-            int currentVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
-            SharedPreferences sharedPreferences = getApplicationContext()
-                    .getSharedPreferences("ApplicationVersion", Context.MODE_PRIVATE);
-            int saveVersion = sharedPreferences.getInt("SaveVersion", 0);
-            if (currentVersion != saveVersion && saveVersion > 0) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt("SaveVersion", currentVersion);
-                editor.apply();
-                showDialogNewFeatures();
-            } else
-                checkUserLogin();
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-            checkUserLogin();
-        }
-
-    }
-    //---------------------------------------------------------------------------------------------- checkVersionIsUpdated
-
-
-    //---------------------------------------------------------------------------------------------- showDialogNewFeatures
-    private void showDialogNewFeatures() {
-        StringBuilder text = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(getAssets().open("newFeature.txt")))) {
-            String mLine;
-            while ((mLine = reader.readLine()) != null) {
-                text.append(mLine);
-                text.append('\n');
-            }
-            CuteMessageDialog dialog = new CuteMessageDialog(this);
-            dialog.setIcon(Icon.Info);
-            dialog.setCancelable(false);
-            dialog.setTitle(com.varanegar.vaslibrary.R.string.newFeatures);
-            dialog.setMessage(text.toString());
-            dialog.setPositiveButton(com.varanegar.vaslibrary.R.string.iUnderstood, view -> checkUserLogin());
-            dialog.show();
-        } catch (IOException e) {
-            Timber.e("Error reading file new feature " + e.getMessage());
-            checkUserLogin();
-        }
-    }
-    //---------------------------------------------------------------------------------------------- showDialogNewFeatures
 
 
     //---------------------------------------------------------------------------------------------- checkUserLogin

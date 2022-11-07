@@ -36,11 +36,7 @@ public class MainActivity extends VasActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        boolean firstCreation = false;
-        if (savedInstanceState != null)
-            firstCreation = savedInstanceState.getBoolean("firstCreation", false);
-        if (!firstCreation)
-            checkVersionIsUpdated();
+        checkVersionIsUpdated();
 
         String newString;
         if (savedInstanceState == null) {
@@ -90,10 +86,10 @@ public class MainActivity extends VasActivity {
             SharedPreferences sharedPreferences = getApplicationContext()
                     .getSharedPreferences("ApplicationVersion", Context.MODE_PRIVATE);
             int saveVersion = sharedPreferences.getInt("SaveVersion", 0);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt("SaveVersion", currentVersion);
+            editor.apply();
             if (currentVersion != saveVersion && saveVersion > 0) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt("SaveVersion", currentVersion);
-                editor.apply();
                 showDialogNewFeatures();
             } else
                 checkUserLogin();
