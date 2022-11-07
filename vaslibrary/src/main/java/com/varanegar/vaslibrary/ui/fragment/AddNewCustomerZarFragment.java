@@ -3,17 +3,13 @@ package com.varanegar.vaslibrary.ui.fragment;
 import static android.app.Activity.RESULT_OK;
 
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.ArrayMap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,17 +18,22 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.otaliastudios.cameraview.CameraListener;
+import com.otaliastudios.cameraview.CameraUtils;
+import com.otaliastudios.cameraview.CameraView;
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.MutableData;
 import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.base.VaranegarFragment;
-import com.varanegar.framework.database.DbException;
+import com.varanegar.framework.base.questionnaire.controls.AttachImageDialog;
 import com.varanegar.framework.network.Connectivity;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
@@ -42,30 +43,20 @@ import com.varanegar.framework.util.component.PairedItemsEditable;
 import com.varanegar.framework.util.component.PairedItemsSpinner;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
-import com.varanegar.framework.util.datetime.DateFormat;
-import com.varanegar.framework.util.datetime.DateHelper;
 import com.varanegar.framework.validation.FormValidator;
 import com.varanegar.framework.validation.ValidationError;
-import com.varanegar.framework.validation.ValidationException;
 import com.varanegar.framework.validation.ValidationListener;
 import com.varanegar.framework.validation.annotations.IraniNationalCodeChecker;
 import com.varanegar.framework.validation.annotations.LengthChecker;
 import com.varanegar.framework.validation.annotations.MobileNumberChecker;
 import com.varanegar.framework.validation.annotations.NotEmptyChecker;
-import com.varanegar.framework.validation.annotations.NotNullChecker;
-import com.varanegar.framework.validation.annotations.PhoneNumberChecker;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.manager.DataForRegisterManager;
 import com.varanegar.vaslibrary.manager.PaymentOrderTypeManager;
 import com.varanegar.vaslibrary.manager.UserManager;
-import com.varanegar.vaslibrary.manager.customer.CustomerManager;
-import com.varanegar.vaslibrary.manager.image.ImageManager;
-import com.varanegar.vaslibrary.manager.image.ImageType;
 import com.varanegar.vaslibrary.manager.picture.PictureCustomerViewManager;
 import com.varanegar.vaslibrary.manager.tourmanager.TourManager;
-import com.varanegar.vaslibrary.manager.updatemanager.CustomersUpdateFlow;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateCall;
-import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.model.dataforregister.DataForRegisterModel;
 import com.varanegar.vaslibrary.model.paymentTypeOrder.PaymentTypeOrderModel;
 import com.varanegar.vaslibrary.model.tour.TourModel;
@@ -80,18 +71,16 @@ import com.varanegar.vaslibrary.webapi.customer.CustomerApi;
 import com.varanegar.vaslibrary.webapi.customer.SyncGuidViewModel;
 import com.varanegar.vaslibrary.webapi.customer.SyncZarGetNewCustomerViewModel;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
-
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -142,6 +131,28 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
 
     private List<RoleCodeViewModel> roleCodeViewModels;
 
+
+    private LinearLayout header_linear_layout;
+    private RelativeLayout main_layout;
+    private CameraView cameraView;
+    public AttachImageDialog.OnAttachment onAttachment;
+
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        cameraView.stop();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        cameraView.destroy();
+    }
+
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -185,7 +196,6 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
                 dialog.setMessage(getString(R.string.taking_picture_of) + "کارت ملی " + " " + getString(R.string.is_mandatory));
                 dialog.setPositiveButton(R.string.ok, null);
                 dialog.show();
-                return;
             }
         });
         return view;
@@ -194,6 +204,7 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
     @Override
     public void onResume() {
         super.onResume();
+        cameraView.start();
         Object lat = VaranegarApplication
                 .getInstance().tryRetrieve("ZAR_CUST_LAT", true);
         if (lat != null)
@@ -251,12 +262,7 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
                 new NotEmptyChecker());
         request_codenaghsh = view.findViewById(R.id.request_codenaghsh);
 
-        request_codenaghsh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getDataCodeNaghsh();
-            }
-        });
+        request_codenaghsh.setOnClickListener(v -> getDataCodeNaghsh());
 
         personNamePairedItem = view.findViewById(R.id.person_name_paired_item);
         validator.addField(personNamePairedItem, getString(R.string.person_name_label), new NotEmptyChecker());
@@ -318,13 +324,41 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
         telPairedItem = view.findViewById(R.id.tel_paired_item);
 
         economicCodePairedItem = view.findViewById(R.id.economic_code_paired_item);
+
+       /**گرفتن عکس*/
         nationalCardPic = view.findViewById(R.id.national_card_pic);
-        nationalCardPic.setOnClickListener(new View.OnClickListener() {
+        main_layout = view.findViewById(R.id.main_layout);
+        header_linear_layout = view.findViewById(R.id.header_linear_layout);
+        FloatingActionButton take_picture = view.findViewById(R.id.take_picture);
+        cameraView = view.findViewById(R.id.camera_view);
+        nationalCardPic.setOnClickListener(v -> {
+            //    dispatchTakePictureIntent();
+            main_layout.setVisibility(View.VISIBLE);
+            header_linear_layout.setVisibility(View.GONE);
+        });
+
+        cameraView.addCameraListener(new CameraListener() {
             @Override
-            public void onClick(View v) {
-                dispatchTakePictureIntent();
+            public void onPictureTaken(byte[] picture) {
+                CameraUtils.decodeBitmap(picture, bitmap -> {
+                    persistImage(bitmap,"fh");
+                    nationalCardPic.setImageBitmap(bitmap);
+                    if (onAttachment != null)
+                        onAttachment.onDone();
+
+                    main_layout.setVisibility(View.GONE);
+                    header_linear_layout.setVisibility(View.VISIBLE);
+                });
             }
         });
+        take_picture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cameraView.capturePicture();
+            }
+        });
+
+
         nationalCodePairedItem = view.findViewById(R.id.national_code_paired_item);
         validator.addField(nationalCodePairedItem, getString(R.string.customer_national_code), new IraniNationalCodeChecker());
 
@@ -897,7 +931,7 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
                 SingleChoiceDialog(getContext(), "کد نقش مورد نظر را انتخاب کنید", data);
         singleChoiceDialog.setCancelable(false);
         singleChoiceDialog.addItemClickListener(this);
-        singleChoiceDialog.show(getActivity().getSupportFragmentManager(),
+        singleChoiceDialog.show(requireActivity().getSupportFragmentManager(),
                 "Single Choice Dialog");
     }
 
@@ -919,6 +953,19 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
         progressDialog.setCancelable(false);
         progressDialog.show();
     }
+    private void persistImage(Bitmap bitmap, String name) {
+        File filesDir = getContext().getFilesDir();
+        file = new File(filesDir, name + ".jpg");
 
+        OutputStream os;
+        try {
+            os = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
+            os.flush();
+            os.close();
+        } catch (Exception e) {
+            Log.e(getClass().getSimpleName(), "Error writing bitmap", e);
+        }
+    }
 
 }
