@@ -96,7 +96,7 @@ public class CustomerUpdateAction extends CheckPathAction {
                             cuteMessageDialog.setMessage(R.string.updated_day_customers);
                             cuteMessageDialog.setPositiveButton(R.string.ok, view -> refresh());
                             cuteMessageDialog.show();
-
+                            runActionCallBack();
                     }
 
                     @Override
