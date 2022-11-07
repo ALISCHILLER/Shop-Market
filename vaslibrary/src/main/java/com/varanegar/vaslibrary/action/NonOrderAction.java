@@ -37,6 +37,7 @@ public class NonOrderAction extends CheckDistanceAction {
     public NonOrderAction(MainVaranegarActivity activity, ActionsAdapter adapter, UUID selectedId) {
         super(activity, adapter, selectedId);
         icon = R.drawable.ic_pan_tool_black_24dp;
+        setAnimation(true);
     }
 
     @Nullable

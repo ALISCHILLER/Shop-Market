@@ -24,15 +24,6 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarActivity;
 import com.varanegar.framework.base.VaranegarApplication;
@@ -133,7 +124,6 @@ public class CustomersContentFragment extends VaranegarFragment {
     private RecyclerView actionsRecyclerView;
     private final ArrayList<OnItemUpdateListener> onItemUpdateListeners = new ArrayList<>();
     private String pin;
-    private PairedItems pairedItemAddress;
 
 
     //---------------------------------------------------------------------------------------------- interface
@@ -269,7 +259,7 @@ public class CustomersContentFragment extends VaranegarFragment {
     public void onViewCreated(@NonNull final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        pairedItemAddress = view.findViewById(R.id.customer_address_paired_item);
+        PairedItems pairedItemAddress = view.findViewById(R.id.customer_address_paired_item);
 
         if (getContext() == null || getVaranegarActvity() == null) return;
 
@@ -540,7 +530,8 @@ public class CustomersContentFragment extends VaranegarFragment {
         });
         actions.add(sendOperationAction);
 
-/*        VpnAction vpnAction = new VpnAction(
+/*
+        VpnAction vpnAction = new VpnAction(
                 getVaranegarActvity(),
                 actionsAdapter,
                 getSelectedId());
@@ -550,7 +541,8 @@ public class CustomersContentFragment extends VaranegarFragment {
 
             }
         });
-        actions.add(vpnAction);*/
+        actions.add(vpnAction);
+*/
 
 
         CustomerUpdateAction customerUpdateAction = new CustomerUpdateAction(
@@ -694,18 +686,10 @@ public class CustomersContentFragment extends VaranegarFragment {
                 progressView.start();
             else {
                 progressView.finish();
-                boldCurrentAction();
             }
         }
     }
     //---------------------------------------------------------------------------------------------- loading
-
-
-    //---------------------------------------------------------------------------------------------- boldCurrentAction
-    private void boldCurrentAction() {
-
-    }
-    //---------------------------------------------------------------------------------------------- boldCurrentAction
 
 
 
