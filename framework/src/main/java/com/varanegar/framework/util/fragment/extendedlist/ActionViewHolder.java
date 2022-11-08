@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -32,11 +31,11 @@ class ActionViewHolder extends RecyclerView.ViewHolder {
     private final MainVaranegarActivity activity;
     private final ImageView doneImageView;
     private final ProgressBar progressBar;
-    private ImageView actionImageViewDisabled;
-    private ActionsAdapter adapter;
-    private TextView actionNameTextView;
-    private ImageView actionImageView;
-    private LinearLayout linearLayoutParent;
+    private final ImageView actionImageViewDisabled;
+    private final ActionsAdapter adapter;
+    private final TextView actionNameTextView;
+    private final ImageView actionImageView;
+    private final LinearLayout linearLayoutParent;
     boolean isClickable = true;
 
     public ActionViewHolder(MainVaranegarActivity activity, View itemView, ActionsAdapter adapter) {
