@@ -3,15 +3,11 @@ package com.varanegar.vaslibrary.ui.fragment.new_fragment.edit_new_zar;
 import static android.app.Activity.RESULT_OK;
 
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -40,7 +36,6 @@ import com.varanegar.framework.base.questionnaire.controls.AttachImageDialog;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.util.Linq;
-import com.varanegar.framework.util.component.CuteDialog;
 import com.varanegar.framework.util.component.PairedItemsEditable;
 import com.varanegar.framework.util.component.PairedItemsSpinner;
 import com.varanegar.framework.util.component.SearchBox;
@@ -71,7 +66,6 @@ import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.model.dataforregister.DataForRegisterModel;
 import com.varanegar.vaslibrary.ui.dialog.EditCustomerZarFragmentDialog;
 import com.varanegar.vaslibrary.ui.dialog.new_dialog.SingleChoiceDialog;
-import com.varanegar.vaslibrary.ui.fragment.CustomersContentFragment;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.apiNew.ApiNew;
 import com.varanegar.vaslibrary.webapi.apiNew.modelNew.RoleCodeCustomerRequestViewModel;
@@ -84,13 +78,13 @@ import com.varanegar.vaslibrary.webapi.ping.PingApi;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import okhttp3.Request;
@@ -999,7 +993,7 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment implements 
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File storageDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".jpg",         /* suffix */
@@ -1026,7 +1020,7 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment implements 
 
             if (file != null) {
                 photoURI = FileProvider.getUriForFile(getContext(),
-                        getActivity().getPackageName() + ".provider",
+                        requireActivity().getPackageName() + ".provider",
                         file);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
@@ -1041,9 +1035,9 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment implements 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Toast.makeText(getContext(), "Image saved", Toast.LENGTH_SHORT).show();
-            Bitmap bitmap = null;
+            Bitmap bitmap;
             try {
-                bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), photoURI);
+                bitmap = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), photoURI);
                 nationalCardPic.setImageBitmap(bitmap);
 
             } catch (IOException e) {
@@ -1092,9 +1086,9 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment implements 
     }
 
     public void setSharedPer() {
-        SharedPreferences sharedPreferences = getContext()
+        SharedPreferences sharedPreferences = requireContext()
                 .getSharedPreferences("preferred_local", Context.MODE_PRIVATE);
-        sharedPreferences.edit().putString(customer.UniqueId.toString(), "true").apply();
+        sharedPreferences.edit().putString(Objects.requireNonNull(customer.UniqueId).toString(), "true").apply();
     }
 
     private void showResaltDialog(String err) {
@@ -1133,36 +1127,9 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment implements 
         }
     }
 
-    public void copy() {
-        try {
-            file = createImageFile();
-        } catch (IOException ex) {
-
-        }
-
-        if (file != null) {
-            photoURI = FileProvider.getUriForFile(getContext(),
-                    getActivity().getPackageName() + ".provider",
-                    file);
-        }
-
-        try (InputStream in = getContext().getContentResolver().openInputStream(photoURI);
-             OutputStream out = new FileOutputStream(file)) {
-            // Transfer bytes from in to out
-            byte[] buf = new byte[1024];
-            int len;
-            while ((len = in.read(buf)) > 0) {
-                out.write(buf, 0, len);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
 
     private void persistImage(Bitmap bitmap, String name) {
-        File filesDir = getContext().getFilesDir();
+        File filesDir = requireContext().getFilesDir();
         file = new File(filesDir, name + ".jpg");
 
         OutputStream os;

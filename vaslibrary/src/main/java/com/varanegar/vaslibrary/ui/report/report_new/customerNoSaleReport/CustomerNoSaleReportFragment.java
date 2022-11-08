@@ -28,7 +28,7 @@ public class CustomerNoSaleReportFragment extends BaseCustomerNoSaleReportFragme
 
     @Override
     protected String getTitle() {
-        return "مشتریان بدون خرید ماه جاری";
+        return "مشتریان بدون خرید ";
     }
 
     @Override

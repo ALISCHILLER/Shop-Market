@@ -140,7 +140,7 @@ public class PreSalesCustomersFragment extends CustomersFragment {
             activity.pushFragment(fragment, false);
         }));
 
-        reports.addItem(new DrawerItem(activity, "مشتریان بدون خرید ماه جاری").setClickListener(v -> {
+        reports.addItem(new DrawerItem(activity, "مشتریان بدون خرید ").setClickListener(v -> {
             CustomerNoSaleReportFragment fragment = new CustomerNoSaleReportFragment();
             activity.pushFragment(fragment, true);
         }));
