@@ -244,6 +244,12 @@
                             android:orientation="horizontal"
                             app:title="@string/customer_total_order" />
 
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/customer_total_order_paired_item"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:title="@string/customer_total_order" />
 
                     </LinearLayout>
                 </ScrollView>

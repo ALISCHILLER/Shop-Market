@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarActivity;
 import com.varanegar.framework.base.VaranegarApplication;
@@ -43,6 +45,9 @@ import com.varanegar.vaslibrary.manager.customer.CustomerBarcodeManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.customercallmanager.CustomerCallManager;
 import com.varanegar.vaslibrary.manager.customercardex.CustomerCardexTempManager;
+import com.varanegar.vaslibrary.manager.locationmanager.LogLevel;
+import com.varanegar.vaslibrary.manager.locationmanager.LogType;
+import com.varanegar.vaslibrary.manager.locationmanager.TrackingLogManager;
 import com.varanegar.vaslibrary.manager.oldinvoicemanager.CustomerOldInvoiceDetailTempManager;
 import com.varanegar.vaslibrary.manager.oldinvoicemanager.CustomerOldInvoiceHeaderTempManager;
 import com.varanegar.vaslibrary.manager.oldinvoicemanager.OldInvoiceManager;
@@ -455,6 +460,23 @@ public abstract class CustomersFragment
                 final MainVaranegarActivity activity = getVaranegarActvity();
                 if (activity == null || activity.isFinishing())
                     return;
+
+
+
+                android.location.LocationManager manager =
+                        (android.location.LocationManager) getActivity()
+                                .getSystemService(Context.LOCATION_SERVICE);
+                boolean gps = manager
+                        .isProviderEnabled(android.location.LocationManager.GPS_PROVIDER);
+                if (!gps) {
+                    TrackingLogManager.addLog(
+                            getActivity(),
+                            LogType.PROVIDER,
+                            LogLevel.Error, "خاموش بودن جی پی اس در زمان ثبت مشتری!");
+                    activity.showSnackBar(R.string.please_turn_on_location,
+                            MainVaranegarActivity.Duration.Short);
+                    return;
+                }
                 OwnerKeysWrapper ownerKeysWrapper = sysConfigManager.readOwnerKeys();
                 if (ownerKeysWrapper.isZarMakaron()) {
                     AddNewCustomerZarFragment fragment = new AddNewCustomerZarFragment();
@@ -463,6 +485,8 @@ public abstract class CustomersFragment
                     AddNewCustomerFragment fragment = new AddNewCustomerFragment();
                     activity.pushFragment(fragment);
                 }
+
+
             });
             buttons.add(addCustomerBtn);
         }

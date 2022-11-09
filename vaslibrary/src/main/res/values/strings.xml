@@ -215,6 +215,7 @@
     <string name="tracking">مسیر یابی و \n فاصله تا مشتری</string>
     <string name="customerLocationIsEmpty">موقعیت مشتری نامشخص است \n از منوی کنار روی (ثبت موقعیت) بزنید</string>
     <string name="customer_total_order">مجموع سفارش</string>
+    <string name="group_product_rashtai">رشته ای </string>
     <string name="customer_status">وضعیت</string>
     <string name="accept">تایید</string>
     <string name="customers_count">تعداد مشتریان</string>

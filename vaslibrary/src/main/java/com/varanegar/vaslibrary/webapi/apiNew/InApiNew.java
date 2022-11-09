@@ -2,6 +2,7 @@ package com.varanegar.vaslibrary.webapi.apiNew;
 
 import com.varanegar.vaslibrary.model.CheckCustomerCreditsModel;
 import com.varanegar.vaslibrary.model.newmodel.checkCustomerCredits.CheckCustomerCreditModel;
+import com.varanegar.vaslibrary.model.newmodel.customergrouplastsalesreport.CustomerGroupLastSalesReportModel;
 import com.varanegar.vaslibrary.ui.fragment.news_fragment.model.NewsData_Model;
 import com.varanegar.vaslibrary.webapi.apiNew.modelNew.PinRequestViewModel;
 import com.varanegar.vaslibrary.webapi.apiNew.modelNew.RoleCodeCustomerRequestViewModel;
@@ -41,4 +42,10 @@ public interface InApiNew {
     @GET("api/v2/ngt/customer/CheckCustomerCredits")
     Call<List<CheckCustomerCreditModel>>CheckCustomerCredits (
             @Query("CustomersId") List<String> customerCode);
+
+    @GET("api/v2/ngt/ReviewReport/CustomerGroupLastsalesReport")
+    Call<List<CustomerGroupLastSalesReportModel>>CustomerLastSaleReport (
+            @Query("DealersId") List<String> dealersId,
+            @Query("StartDate") String startDate,
+            @Query("EndDate") String endDate);
 }

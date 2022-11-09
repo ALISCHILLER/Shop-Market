@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.varanegar.vaslibrary.model.CheckCustomerCreditsModel;
 import com.varanegar.vaslibrary.model.newmodel.checkCustomerCredits.CheckCustomerCreditModel;
+import com.varanegar.vaslibrary.model.newmodel.customergrouplastsalesreport.CustomerGroupLastSalesReportModel;
 import com.varanegar.vaslibrary.ui.fragment.news_fragment.model.NewsData_Model;
 import com.varanegar.vaslibrary.webapi.BaseApi;
 import com.varanegar.vaslibrary.webapi.TokenType;
@@ -57,4 +58,16 @@ public class ApiNew extends BaseApi implements InApiNew {
                 .build().create(InApiNew.class);
         return api.CheckCustomerCredits(customerCode);
     }
+
+    @Override
+    public Call<List<CustomerGroupLastSalesReportModel>> CustomerLastSaleReport
+            (List<String> dealersId,
+             String startDate,
+             String endDate) {
+        InApiNew api = getRetrofitBuilder(TokenType.UserToken)
+                .build().create(InApiNew.class);
+        return api.CustomerLastSaleReport(dealersId,startDate,endDate);
+    }
+
+
 }

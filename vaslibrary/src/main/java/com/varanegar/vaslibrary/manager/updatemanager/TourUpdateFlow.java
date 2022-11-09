@@ -51,6 +51,7 @@ import com.varanegar.vaslibrary.manager.customer.CustomerLevelManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.customercallmanager.TaskPriorityManager;
 import com.varanegar.vaslibrary.manager.customercardex.CustomerCardexManager;
+import com.varanegar.vaslibrary.manager.customergrouplastsalesreportmanager.CustomerGroupLastSalesReportManager;
 import com.varanegar.vaslibrary.manager.dealer.DealerManager;
 import com.varanegar.vaslibrary.manager.discountmanager.DiscountVnLiteManager;
 import com.varanegar.vaslibrary.manager.discountmanager.ProductTaxInfoManager;
@@ -892,6 +893,38 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                 }
             });
 
+            if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)){
+                tasks.add(new TourAsyncTask() {
+                    CustomerGroupLastSalesReportManager cancelSync = new
+                            CustomerGroupLastSalesReportManager(getContext());
+
+                    @Override
+                    public void run(UpdateCall call) {
+                        cancelSync.sync(call);
+                    }
+
+                    @Override
+                    public String name() {
+                        return "CustomerGroupLastSalesReportManager";
+                    }
+
+                    @Override
+                    public int group() {
+                        return R.string.customer_info;
+                    }
+
+                    @Override
+                    public int queueId() {
+                        return 2;
+                    }
+
+                    @Override
+                    public void cancel() {
+                        if (cancelSync != null)
+                            cancelSync.cancelSync();
+                    }
+                });
+            }
             tasks.add(new TourAsyncTask() {
                 CustomerNotAllowProductManager notAllowProductManager = new
                         CustomerNotAllowProductManager(getContext());
