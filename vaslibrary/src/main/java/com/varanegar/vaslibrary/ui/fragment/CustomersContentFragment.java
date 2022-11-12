@@ -70,6 +70,7 @@ import com.varanegar.vaslibrary.manager.customeractiontimemanager.CustomerAction
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallOrderPreviewManager;
 import com.varanegar.vaslibrary.manager.customercallmanager.CustomerCallManager;
 import com.varanegar.vaslibrary.manager.customercallmanager.TaskPriorityManager;
+import com.varanegar.vaslibrary.manager.customergrouplastsalesreportmanager.CustomerGroupLastSalesReportManager;
 import com.varanegar.vaslibrary.manager.oldinvoicemanager.CustomerOldInvoiceHeaderManager;
 import com.varanegar.vaslibrary.manager.productorderviewmanager.ProductOrderViewManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.BackOfficeType;
@@ -86,6 +87,7 @@ import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.model.customercall.CustomerCallModel;
 import com.varanegar.vaslibrary.model.customercall.TaskPriorityModel;
 import com.varanegar.vaslibrary.model.customeroldInvoice.CustomerOldInvoiceHeaderModel;
+import com.varanegar.vaslibrary.model.newmodel.customergrouplastsalesreport.CustomerGroupLastSalesReportModel;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.model.tour.TourModel;
 import com.varanegar.vaslibrary.ui.dialog.InsertPinDialog;
@@ -117,6 +119,9 @@ public class CustomersContentFragment extends VaranegarFragment {
     private VasActionsAdapter actionsAdapter;
     private SimpleToolbar simpleToolbar;
     private PairedItems code_naghsh_paired_item;
+    private PairedItems sale_date_pasta,sale_date_form,sale_date_jumbo,sale_date_lasagna
+            ,sale_date_nest,sale_date_ash,sale_date_flour,sale_date_cake,sale_date_seven,
+            sale_date_vegan,sale_date_protein;
     protected VasActionsAdapter getActionsAdapter() {
         return actionsAdapter;
     }
@@ -739,6 +744,87 @@ public class CustomersContentFragment extends VaranegarFragment {
                                     code_naghsh_paired_item = view.
                                             findViewById(R.id.code_naghsh_paired_item);
                                     code_naghsh_paired_item.setVisibility(View.VISIBLE);
+
+                                  /// آخرین خرید گروه کالا
+                                    sale_date_pasta=view.
+                                            findViewById(R.id.sale_date_pasta);
+                                    sale_date_form=view.
+                                            findViewById(R.id.sale_date_form);
+
+                                    sale_date_jumbo=view.
+                                            findViewById(R.id.sale_date_jumbo);
+                                    sale_date_lasagna=view.
+                                            findViewById(R.id.sale_date_lasagna);
+                                    sale_date_nest=view.
+                                            findViewById(R.id.sale_date_nest);
+                                    sale_date_ash=view.
+                                            findViewById(R.id.sale_date_ash);
+                                    sale_date_flour=view.
+                                            findViewById(R.id.sale_date_flour);
+
+                                    sale_date_cake=view.
+                                            findViewById(R.id.sale_date_cake);
+                                    sale_date_seven=view.
+                                            findViewById(R.id.sale_date_seven);
+                                    sale_date_vegan=view.
+                                            findViewById(R.id.sale_date_vegan);
+                                    sale_date_protein=view.
+                                            findViewById(R.id.sale_date_vegan);
+                                    List<CustomerGroupLastSalesReportModel>   lastSalesReportModel=
+                                            getLastSalesReport(getSelectedId(),
+                                            31002);
+
+                                    for (CustomerGroupLastSalesReportModel salesReportModel:
+                                            lastSalesReportModel) {
+                                        if (salesReportModel.productGroupCode ==31001)
+                                            if (salesReportModel.lastSaleProductGroup !=null)
+                                            sale_date_pasta.setValue(salesReportModel
+                                                    .lastSaleProductGroup);
+                                        if (salesReportModel.productGroupCode ==31002)
+                                            if (salesReportModel.lastSaleProductGroup !=null)
+                                            sale_date_form.setValue(salesReportModel
+                                                    .lastSaleProductGroup);
+                                        if (salesReportModel.productGroupCode ==31003)
+                                            if (salesReportModel.lastSaleProductGroup !=null)
+                                            sale_date_jumbo.setValue(salesReportModel
+                                                    .lastSaleProductGroup);
+                                        if (salesReportModel.productGroupCode ==31004)
+                                            if (salesReportModel.lastSaleProductGroup !=null)
+                                                sale_date_nest.setValue(salesReportModel
+                                                        .lastSaleProductGroup);
+                                        if (salesReportModel.productGroupCode ==31005)
+                                            if (salesReportModel.lastSaleProductGroup !=null)
+                                            sale_date_lasagna.setValue(salesReportModel
+                                                    .lastSaleProductGroup);
+                                        if (salesReportModel.productGroupCode ==31006)
+                                            if (salesReportModel.lastSaleProductGroup !=null)
+                                                sale_date_cake.setValue(salesReportModel
+                                                    .lastSaleProductGroup);
+                                        if (salesReportModel.productGroupCode ==31007)
+                                            if (salesReportModel.lastSaleProductGroup !=null)
+                                                sale_date_ash.setValue(salesReportModel
+                                                        .lastSaleProductGroup);
+                                        if (salesReportModel.productGroupCode ==31008)
+                                            if (salesReportModel.lastSaleProductGroup !=null)
+                                                sale_date_flour.setValue(salesReportModel
+                                                        .lastSaleProductGroup);
+                                        if (salesReportModel.productGroupCode ==31011)
+                                            if (salesReportModel.lastSaleProductGroup !=null)
+                                                sale_date_seven.setValue(salesReportModel
+                                                        .lastSaleProductGroup);
+                                        if (salesReportModel.productGroupCode ==31012)
+                                            if (salesReportModel.lastSaleProductGroup !=null)
+                                                sale_date_vegan.setValue(salesReportModel
+                                                        .lastSaleProductGroup);
+                                        if (salesReportModel.productGroupCode ==31014)
+                                            if (salesReportModel.lastSaleProductGroup !=null)
+                                                sale_date_protein.setValue(salesReportModel
+                                                        .lastSaleProductGroup);
+
+                                    }
+
+
+
                                     if (customer.CodeNaghsh != null && !customer.CodeNaghsh.isEmpty()) {
                                         code_naghsh_paired_item.setValue(customer.CodeNaghsh);
                                     } else {
@@ -1053,4 +1139,10 @@ public class CustomersContentFragment extends VaranegarFragment {
     }
     //---------------------------------------------------------------------------------------------- onActivityCreated
 
+    private List<CustomerGroupLastSalesReportModel> getLastSalesReport(UUID customerCode,int productGrupCode){
+        List<CustomerGroupLastSalesReportModel> lastSalesReportModel=new
+                CustomerGroupLastSalesReportManager(getContext())
+                .getAll(getSelectedId(),productGrupCode);
+        return lastSalesReportModel;
+    }
 }

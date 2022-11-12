@@ -3,83 +3,60 @@ package com.varanegar.vaslibrary.model.newmodel.customergrouplastsalesreport;
 import com.varanegar.framework.database.model.BaseModel;
 import com.varanegar.processor.annotations.Column;
 import com.varanegar.processor.annotations.Table;
+import java.math.BigDecimal;
+import java.util.UUID;
 
 @Table
 public class CustomerGroupLastSalesReportModel extends BaseModel {
-
     @Column
-    public String ProductBackOfficeCode ;
-
-    public String CustomerGroup ;
+    public UUID customerUniqeID ;
     @Column
-    public String CustomerCode ;
+    public String productBackOfficeCode ;
     @Column
-    public String CustomerGroupTXT ;
+    public String customerGroup ;
     @Column
-    public String CustomerActivity;
+    public String customerGroupTXT ;
     @Column
-    public String CustomerActivityTXT ;
-
-    public double NETWeight ;
-
-    public double NETCount_CA ;
-
-    public double NETCount_EA ;
-
-    public String ProductGroupName  ;
-
-    public int ProductGroupCode ;
-
-    public double WeightProductGroup ;
-
-
-
-    public double Reshteh ;
-
-    public double Formi ;
-
-    public double Jumbo ;
-
-    public double Ashianeh ;
-
-    public double Lazania ;
-
-    public double PodrKeik ;
-
-    public double ReshtehAsh ;
-
-    public double Ard ;
-
-    public double HaftGhaleh ;
-
-    public double vegan ;
-
-    public double protoeen ;
-
-
+    public String customerActivity;
     @Column
-    public String LastSaleProductGroup ;
+    public String customerActivityTXT ;
     @Column
-    public String LastSaleProductGroup_Reshteh ;
+    public BigDecimal netWeight ;
     @Column
-    public String LastSaleProductGroup_Formi ;
+    public BigDecimal netCount_CA ;
     @Column
-    public String LastSaleProductGroup_Jumbo ;
+    public BigDecimal netCount_EA ;
     @Column
-    public String LastSaleProductGroup_Ashianeh ;
+    public String productGroupName  ;
     @Column
-    public String LastSaleProductGroup_Lazania ;
+    public int productGroupCode ;
     @Column
-    public String LastSaleProductGroup_PodrKeik ;
+    public BigDecimal weightProductGroup ;
     @Column
-    public String LastSaleProductGroup_ReshtehAsh ;
+    public String customerCode;
     @Column
-    public String LastSaleProductGroup_Ard ;
+    public BigDecimal reshteh;
     @Column
-    public String LastSaleProductGroup_HaftGhaleh ;
+    public BigDecimal formi ;
     @Column
-    public String LastSaleProductGroup_vegan ;
+    public BigDecimal jumbo ;
     @Column
-    public String LastSaleProductGroup_protoeen ;
-    
+    public BigDecimal ashianeh;
+    @Column
+    public BigDecimal lazania;
+    @Column
+    public BigDecimal podrKeik;
+    @Column
+    public BigDecimal reshtehAsh;
+    @Column
+    public BigDecimal ard;
+    @Column
+    public BigDecimal haftGhaleh;
+    @Column
+    public BigDecimal vegan;
+    @Column
+    public BigDecimal protoeen;
+    @Column
+    public String lastSaleProductGroup;
+
 }

@@ -400,8 +400,11 @@ public class LocationManager extends BaseManager<LocationModel> {
         final UserModel userModel = UserManager.readFromFile(getContext());
         final TourModel tourModel = new TourManager(getContext()).loadTour();
         if (userModel != null && tourModel != null) {
-            final FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
-            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            final FusedLocationProviderClient fusedLocationProviderClient =
+                    LocationServices.getFusedLocationProviderClient(getContext());
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(),
+                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 onLocationUpdated.onFailed("Permission denied");
                 return;
             }
@@ -412,7 +415,8 @@ public class LocationManager extends BaseManager<LocationModel> {
                             @Override
                             public void onConnected(@Nullable Bundle bundle) {
 
-                                fusedLocationProviderClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, new CancellationToken() {
+                                fusedLocationProviderClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY,
+                                        new CancellationToken() {
                                     @Override
                                     public boolean isCancellationRequested() {
                                         return false;
@@ -426,7 +430,11 @@ public class LocationManager extends BaseManager<LocationModel> {
                                 }).addOnSuccessListener(location -> {
                                     if (location != null) {
                                         if (location.getTime() < 1556668800000L) {
-                                            TrackingLogManager.addLog(getContext(), LogType.POINT_TIME, LogLevel.Error, "{" + location.getLatitude() + "  " + location.getLongitude() + "} Gps Time is wrong : " + DateHelper.toString(new Date(location.getTime()), DateFormat.Complete, Locale.getDefault()));
+                                            TrackingLogManager.addLog(getContext(), LogType.POINT_TIME,
+                                                    LogLevel.Error, "{" + location.getLatitude() + "  " +
+                                                            location.getLongitude() + "} Gps Time is wrong : " +
+                                                            DateHelper.toString(new Date(location.getTime()),
+                                                                    DateFormat.Complete, Locale.getDefault()));
                                             location.setTime(new Date().getTime());
                                         }
 

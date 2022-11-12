@@ -54,10 +54,15 @@ import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.manager.DataForRegisterManager;
 import com.varanegar.vaslibrary.manager.PaymentOrderTypeManager;
 import com.varanegar.vaslibrary.manager.UserManager;
+import com.varanegar.vaslibrary.manager.locationmanager.LocationManager;
+import com.varanegar.vaslibrary.manager.locationmanager.LogLevel;
+import com.varanegar.vaslibrary.manager.locationmanager.LogType;
+import com.varanegar.vaslibrary.manager.locationmanager.TrackingLogManager;
 import com.varanegar.vaslibrary.manager.picture.PictureCustomerViewManager;
 import com.varanegar.vaslibrary.manager.tourmanager.TourManager;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateCall;
 import com.varanegar.vaslibrary.model.dataforregister.DataForRegisterModel;
+import com.varanegar.vaslibrary.model.location.LocationModel;
 import com.varanegar.vaslibrary.model.paymentTypeOrder.PaymentTypeOrderModel;
 import com.varanegar.vaslibrary.model.tour.TourModel;
 import com.varanegar.vaslibrary.model.user.UserModel;
@@ -198,7 +203,43 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
                 dialog.show();
             }
         });
+
+        //گرفتن لوکیشن
+        new LocationManager(getActivity())
+                .getLocation(new LocationManager.OnLocationUpdated() {
+                    @Override
+                    public void onSucceeded(LocationModel location) {
+                        if (location.Longitude>0){
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailed(String error) {
+                        TrackingLogManager.addLog(
+                                getActivity(),
+                                LogType.POINT,
+                                LogLevel.Error,
+                                " در زمان تایید عملیات پوینت دریافت نشد!",
+                                error);
+                        showErrorMessage(error);
+                    }
+                });
+
+
+
         return view;
+    }
+
+    void showErrorMessage(String error) {
+            CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+            dialog.setTitle(R.string.error);
+            dialog.setMessage(error);
+            dialog.setIcon(Icon.Error);
+            dialog.setPositiveButton(R.string.ok, null);
+            dialog.show();
+
     }
 
     @Override

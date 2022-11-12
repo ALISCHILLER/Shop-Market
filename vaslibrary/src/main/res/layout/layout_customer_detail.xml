@@ -319,6 +319,141 @@
                             </LinearLayout>
 
 
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <com.varanegar.framework.util.component.PairedItems
+                                    android:id="@+id/sale_date_pasta"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal"
+                                    app:singleLine="true"
+                                    app:title=" تاریخ خرید رشته ای" />
+
+                                <com.varanegar.framework.util.component.PairedItems
+                                    android:id="@+id/sale_date_form"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal"
+                                    app:singleLine="true"
+                                    app:title=" تاریخ خرید فرمی" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <com.varanegar.framework.util.component.PairedItems
+                                    android:id="@+id/sale_date_jumbo"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal"
+                                    app:singleLine="true"
+                                    app:title=" تاریخ خرید جامبو" />
+
+                                <com.varanegar.framework.util.component.PairedItems
+                                    android:id="@+id/sale_date_lasagna"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal"
+                                    app:singleLine="true"
+                                    app:title="تاریخ خرید لازانیا" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <com.varanegar.framework.util.component.PairedItems
+                                    android:id="@+id/sale_date_nest"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal"
+                                    app:singleLine="true"
+                                    app:title=" تاریخ خرید آشیانه ای" />
+
+                                <com.varanegar.framework.util.component.PairedItems
+                                    android:id="@+id/sale_date_flour"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal"
+                                    app:singleLine="true"
+                                    app:title=" تاریخ خرید آرد" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <com.varanegar.framework.util.component.PairedItems
+                                    android:id="@+id/sale_date_ash"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal"
+                                    app:singleLine="true"
+                                    app:title=" تاریخ خرید رشته آش" />
+
+
+
+                                <com.varanegar.framework.util.component.PairedItems
+                                    android:id="@+id/sale_date_cake"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal"
+                                    app:singleLine="true"
+                                    app:title="تاریخ خرید پودرکیک" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <com.varanegar.framework.util.component.PairedItems
+                                    android:id="@+id/sale_date_seven"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal"
+                                    app:singleLine="true"
+                                    app:title=" تاریخ خرید هفت غله" />
+                                <com.varanegar.framework.util.component.PairedItems
+                                    android:id="@+id/sale_date_vegan"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal"
+                                    app:singleLine="true"
+                                    app:title="  تاریخ خرید وگان" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <com.varanegar.framework.util.component.PairedItems
+                                    android:id="@+id/sale_date_protein"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="horizontal"
+                                    app:singleLine="true"
+                                    app:title="تاریخ خرید پروتئینه" />
+                            </LinearLayout>
+
                         </LinearLayout>
                     </LinearLayout>
                 </ScrollView>
