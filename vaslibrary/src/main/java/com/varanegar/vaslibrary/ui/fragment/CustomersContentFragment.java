@@ -119,12 +119,13 @@ public class CustomersContentFragment extends VaranegarFragment {
     private VasActionsAdapter actionsAdapter;
     private SimpleToolbar simpleToolbar;
     private PairedItems code_naghsh_paired_item;
-    private PairedItems sale_date_pasta,sale_date_form,sale_date_jumbo,sale_date_lasagna
-            ,sale_date_nest,sale_date_ash,sale_date_flour,sale_date_cake,sale_date_seven,
-            sale_date_vegan,sale_date_protein;
+    private PairedItems sale_date_pasta, sale_date_form, sale_date_jumbo, sale_date_lasagna, sale_date_nest, sale_date_ash, sale_date_flour, sale_date_cake, sale_date_seven,
+            sale_date_vegan, sale_date_protein;
+
     protected VasActionsAdapter getActionsAdapter() {
         return actionsAdapter;
     }
+
     private boolean isLoading;
     private RecyclerView actionsRecyclerView;
     private final ArrayList<OnItemUpdateListener> onItemUpdateListeners = new ArrayList<>();
@@ -257,7 +258,6 @@ public class CustomersContentFragment extends VaranegarFragment {
     //---------------------------------------------------------------------------------------------- onCreateView
 
 
-
     //---------------------------------------------------------------------------------------------- onViewCreated
     @SuppressLint("PotentialBehaviorOverride")
     @Override
@@ -374,7 +374,6 @@ public class CustomersContentFragment extends VaranegarFragment {
         outState.putString("a129ef75-77ce-432a-8982-6bcab0bf7b51", getSelectedId().toString());
     }
     //---------------------------------------------------------------------------------------------- onSaveInstanceState
-
 
 
     //---------------------------------------------------------------------------------------------- addActions
@@ -604,7 +603,6 @@ public class CustomersContentFragment extends VaranegarFragment {
     //---------------------------------------------------------------------------------------------- onBackPressed
 
 
-
     //---------------------------------------------------------------------------------------------- sortActions
     private void sortActions(List<Action> actions) {
         if (getContext() == null) return;
@@ -632,7 +630,6 @@ public class CustomersContentFragment extends VaranegarFragment {
         });
     }
     //---------------------------------------------------------------------------------------------- sortActions
-
 
 
     //---------------------------------------------------------------------------------------------- getSelectedId
@@ -697,7 +694,6 @@ public class CustomersContentFragment extends VaranegarFragment {
     //---------------------------------------------------------------------------------------------- loading
 
 
-
     //---------------------------------------------------------------------------------------------- updateCustomer
     protected void updateCustomer() {
         if (isResumed() && !isRemoving()) {
@@ -745,84 +741,84 @@ public class CustomersContentFragment extends VaranegarFragment {
                                             findViewById(R.id.code_naghsh_paired_item);
                                     code_naghsh_paired_item.setVisibility(View.VISIBLE);
 
-                                  /// آخرین خرید گروه کالا
-                                    sale_date_pasta=view.
+                                    /// آخرین خرید گروه کالا
+                                    sale_date_pasta = view.
                                             findViewById(R.id.sale_date_pasta);
-                                    sale_date_form=view.
+                                    sale_date_form = view.
                                             findViewById(R.id.sale_date_form);
 
-                                    sale_date_jumbo=view.
+                                    sale_date_jumbo = view.
                                             findViewById(R.id.sale_date_jumbo);
-                                    sale_date_lasagna=view.
+                                    sale_date_lasagna = view.
                                             findViewById(R.id.sale_date_lasagna);
-                                    sale_date_nest=view.
+                                    sale_date_nest = view.
                                             findViewById(R.id.sale_date_nest);
-                                    sale_date_ash=view.
+                                    sale_date_ash = view.
                                             findViewById(R.id.sale_date_ash);
-                                    sale_date_flour=view.
+                                    sale_date_flour = view.
                                             findViewById(R.id.sale_date_flour);
 
-                                    sale_date_cake=view.
+                                    sale_date_cake = view.
                                             findViewById(R.id.sale_date_cake);
-                                    sale_date_seven=view.
+                                    sale_date_seven = view.
                                             findViewById(R.id.sale_date_seven);
-                                    sale_date_vegan=view.
+                                    sale_date_vegan = view.
                                             findViewById(R.id.sale_date_vegan);
-                                    sale_date_protein=view.
+                                    sale_date_protein = view.
                                             findViewById(R.id.sale_date_vegan);
-                                    List<CustomerGroupLastSalesReportModel>   lastSalesReportModel=
+                                    List<CustomerGroupLastSalesReportModel> lastSalesReportModel =
                                             getLastSalesReport(getSelectedId(),
-                                            31002);
+                                                    31002);
 
-                                    for (CustomerGroupLastSalesReportModel salesReportModel:
-                                            lastSalesReportModel) {
-                                        if (salesReportModel.productGroupCode ==31001)
-                                            if (salesReportModel.lastSaleProductGroup !=null)
-                                            sale_date_pasta.setValue(salesReportModel
-                                                    .lastSaleProductGroup);
-                                        if (salesReportModel.productGroupCode ==31002)
-                                            if (salesReportModel.lastSaleProductGroup !=null)
-                                            sale_date_form.setValue(salesReportModel
-                                                    .lastSaleProductGroup);
-                                        if (salesReportModel.productGroupCode ==31003)
-                                            if (salesReportModel.lastSaleProductGroup !=null)
-                                            sale_date_jumbo.setValue(salesReportModel
-                                                    .lastSaleProductGroup);
-                                        if (salesReportModel.productGroupCode ==31004)
-                                            if (salesReportModel.lastSaleProductGroup !=null)
-                                                sale_date_nest.setValue(salesReportModel
-                                                        .lastSaleProductGroup);
-                                        if (salesReportModel.productGroupCode ==31005)
-                                            if (salesReportModel.lastSaleProductGroup !=null)
-                                            sale_date_lasagna.setValue(salesReportModel
-                                                    .lastSaleProductGroup);
-                                        if (salesReportModel.productGroupCode ==31006)
-                                            if (salesReportModel.lastSaleProductGroup !=null)
-                                                sale_date_cake.setValue(salesReportModel
-                                                    .lastSaleProductGroup);
-                                        if (salesReportModel.productGroupCode ==31007)
-                                            if (salesReportModel.lastSaleProductGroup !=null)
-                                                sale_date_ash.setValue(salesReportModel
-                                                        .lastSaleProductGroup);
-                                        if (salesReportModel.productGroupCode ==31008)
-                                            if (salesReportModel.lastSaleProductGroup !=null)
-                                                sale_date_flour.setValue(salesReportModel
-                                                        .lastSaleProductGroup);
-                                        if (salesReportModel.productGroupCode ==31011)
-                                            if (salesReportModel.lastSaleProductGroup !=null)
-                                                sale_date_seven.setValue(salesReportModel
-                                                        .lastSaleProductGroup);
-                                        if (salesReportModel.productGroupCode ==31012)
-                                            if (salesReportModel.lastSaleProductGroup !=null)
-                                                sale_date_vegan.setValue(salesReportModel
-                                                        .lastSaleProductGroup);
-                                        if (salesReportModel.productGroupCode ==31014)
-                                            if (salesReportModel.lastSaleProductGroup !=null)
-                                                sale_date_protein.setValue(salesReportModel
-                                                        .lastSaleProductGroup);
+                                    if (lastSalesReportModel != null && !lastSalesReportModel.isEmpty())
+                                        for (CustomerGroupLastSalesReportModel salesReportModel :
+                                                lastSalesReportModel) {
+                                            if (salesReportModel.productGroupCode == 31001)
+                                                if (salesReportModel.lastSaleProductGroup != null)
+                                                    sale_date_pasta.setValue(salesReportModel
+                                                            .lastSaleProductGroup);
+                                            if (salesReportModel.productGroupCode == 31002)
+                                                if (salesReportModel.lastSaleProductGroup != null)
+                                                    sale_date_form.setValue(salesReportModel
+                                                            .lastSaleProductGroup);
+                                            if (salesReportModel.productGroupCode == 31003)
+                                                if (salesReportModel.lastSaleProductGroup != null)
+                                                    sale_date_jumbo.setValue(salesReportModel
+                                                            .lastSaleProductGroup);
+                                            if (salesReportModel.productGroupCode == 31004)
+                                                if (salesReportModel.lastSaleProductGroup != null)
+                                                    sale_date_nest.setValue(salesReportModel
+                                                            .lastSaleProductGroup);
+                                            if (salesReportModel.productGroupCode == 31005)
+                                                if (salesReportModel.lastSaleProductGroup != null)
+                                                    sale_date_lasagna.setValue(salesReportModel
+                                                            .lastSaleProductGroup);
+                                            if (salesReportModel.productGroupCode == 31006)
+                                                if (salesReportModel.lastSaleProductGroup != null)
+                                                    sale_date_cake.setValue(salesReportModel
+                                                            .lastSaleProductGroup);
+                                            if (salesReportModel.productGroupCode == 31007)
+                                                if (salesReportModel.lastSaleProductGroup != null)
+                                                    sale_date_ash.setValue(salesReportModel
+                                                            .lastSaleProductGroup);
+                                            if (salesReportModel.productGroupCode == 31008)
+                                                if (salesReportModel.lastSaleProductGroup != null)
+                                                    sale_date_flour.setValue(salesReportModel
+                                                            .lastSaleProductGroup);
+                                            if (salesReportModel.productGroupCode == 31011)
+                                                if (salesReportModel.lastSaleProductGroup != null)
+                                                    sale_date_seven.setValue(salesReportModel
+                                                            .lastSaleProductGroup);
+                                            if (salesReportModel.productGroupCode == 31012)
+                                                if (salesReportModel.lastSaleProductGroup != null)
+                                                    sale_date_vegan.setValue(salesReportModel
+                                                            .lastSaleProductGroup);
+                                            if (salesReportModel.productGroupCode == 31014)
+                                                if (salesReportModel.lastSaleProductGroup != null)
+                                                    sale_date_protein.setValue(salesReportModel
+                                                            .lastSaleProductGroup);
 
-                                    }
-
+                                        }
 
 
                                     if (customer.CodeNaghsh != null && !customer.CodeNaghsh.isEmpty()) {
@@ -985,7 +981,6 @@ public class CustomersContentFragment extends VaranegarFragment {
     //---------------------------------------------------------------------------------------------- updateCustomer
 
 
-
     //---------------------------------------------------------------------------------------------- addOnItemUpdateListener
     public void addOnItemUpdateListener(OnItemUpdateListener onItemUpdateListener) {
         onItemUpdateListeners.add(onItemUpdateListener);
@@ -1101,7 +1096,6 @@ public class CustomersContentFragment extends VaranegarFragment {
     //---------------------------------------------------------------------------------------------- printFailed
 
 
-
     //---------------------------------------------------------------------------------------------- onStop
     @Override
     public void onStop() {
@@ -1109,7 +1103,6 @@ public class CustomersContentFragment extends VaranegarFragment {
         Runtime.getRuntime().gc();
     }
     //---------------------------------------------------------------------------------------------- onStop
-
 
 
     //---------------------------------------------------------------------------------------------- onDestroy
@@ -1120,7 +1113,6 @@ public class CustomersContentFragment extends VaranegarFragment {
         Runtime.getRuntime().gc();
     }
     //---------------------------------------------------------------------------------------------- onDestroy
-
 
 
     //---------------------------------------------------------------------------------------------- onLowMemory
@@ -1139,10 +1131,10 @@ public class CustomersContentFragment extends VaranegarFragment {
     }
     //---------------------------------------------------------------------------------------------- onActivityCreated
 
-    private List<CustomerGroupLastSalesReportModel> getLastSalesReport(UUID customerCode,int productGrupCode){
-        List<CustomerGroupLastSalesReportModel> lastSalesReportModel=new
+    private List<CustomerGroupLastSalesReportModel> getLastSalesReport(UUID customerCode, int productGrupCode) {
+        List<CustomerGroupLastSalesReportModel> lastSalesReportModel = new
                 CustomerGroupLastSalesReportManager(getContext())
-                .getAll(getSelectedId(),productGrupCode);
+                .getAll(getSelectedId(), productGrupCode);
         return lastSalesReportModel;
     }
 }
