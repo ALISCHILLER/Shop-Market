@@ -58,11 +58,13 @@ public class SupervisorApi extends BaseApi implements ISupervisorApi {
 
     @Override
     public Call<List<OrderStatusReport>> OrderStatusReport(OrderStatusModel orderStatusModel) {
-        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).OrderStatusReport(orderStatusModel);
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class)
+                .OrderStatusReport(orderStatusModel);
     }
     @Override
     public Call<List<ReturnDealerModel>> GetReturnReport(OrderStatusModel param) {
-        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build().create(ISupervisorApi.class).GetReturnReport(param);
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).GetReturnReport(param);
     }
 
 
