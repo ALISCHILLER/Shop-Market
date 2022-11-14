@@ -160,7 +160,9 @@ public class ImageManager extends BaseManager<ImageModel> {
         return path;
     }
 
-    public String saveImage(Bitmap bitmap, int quality, UUID tokenId, ImageType type, String fileName, boolean isDefault) throws IOException, ValidationException, DbException {
+    public String saveImage(Bitmap bitmap, int quality, UUID tokenId, ImageType type,
+                            String fileName, boolean isDefault) throws IOException,
+            ValidationException, DbException {
         ImageModel imageModel = new ImageModel();
         imageModel.IsDefault = isDefault;
         imageModel.UniqueId = UUID.randomUUID();

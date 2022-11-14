@@ -142,6 +142,7 @@ public abstract class TourReportFragment extends PopupFragment implements Virtua
     private View tourProgressLayout;
     private boolean isCanceled;
     private View view;
+    private PairedItems total_seller_balance ;
     private PingApi pingApi;
     private AppVersionApi appVersionApi;
     public static final String IS_VIRTUAL = "IS_VIRTUAL";

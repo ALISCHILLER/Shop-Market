@@ -29,7 +29,14 @@
                 android:padding="@dimen/padding_default"
                 android:src="@drawable/back_icon" />
 
-
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabVoice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_small"
+                android:layout_gravity="center_vertical"
+                app:fabSize="mini"
+                app:srcCompat="@drawable/ic_voice" />
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -61,6 +68,7 @@
                     android:tint="?attr/colorPrimary"
                     android:tintMode="src_atop"
                     android:visibility="gone" />
+
             </RelativeLayout>
 
             <LinearLayout

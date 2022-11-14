@@ -766,11 +766,13 @@ public class CustomersContentFragment extends VaranegarFragment {
                                             findViewById(R.id.sale_date_vegan);
                                     sale_date_protein = view.
                                             findViewById(R.id.sale_date_vegan);
-                                    List<CustomerGroupLastSalesReportModel> lastSalesReportModel =
-                                            getLastSalesReport(getSelectedId(),
+                                    List<CustomerGroupLastSalesReportModel> lastSalesReportModel=
+                                            getLastSalesReports(getSelectedId(),
                                                     31002);
 
+
                                     if (lastSalesReportModel != null && !lastSalesReportModel.isEmpty())
+
                                         for (CustomerGroupLastSalesReportModel salesReportModel :
                                                 lastSalesReportModel) {
                                             if (salesReportModel.productGroupCode == 31001)
@@ -1131,10 +1133,12 @@ public class CustomersContentFragment extends VaranegarFragment {
     }
     //---------------------------------------------------------------------------------------------- onActivityCreated
 
-    private List<CustomerGroupLastSalesReportModel> getLastSalesReport(UUID customerCode, int productGrupCode) {
+    private List<CustomerGroupLastSalesReportModel> getLastSalesReports(UUID customerCode, int productGrupCode) {
         List<CustomerGroupLastSalesReportModel> lastSalesReportModel = new
                 CustomerGroupLastSalesReportManager(getContext())
                 .getAll(getSelectedId(), productGrupCode);
         return lastSalesReportModel;
     }
+
+
 }

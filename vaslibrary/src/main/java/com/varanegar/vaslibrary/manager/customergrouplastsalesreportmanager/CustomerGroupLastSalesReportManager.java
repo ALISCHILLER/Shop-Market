@@ -42,6 +42,16 @@ public class CustomerGroupLastSalesReportManager extends
         return getItems(query);
     }
 
+
+    public CustomerGroupLastSalesReportModel getItem (UUID customerCode,int productGroup) {
+        Query query=new Query()
+                .from(CustomerGroupLastSalesReport.CustomerGroupLastSalesReportTbl)
+                .whereAnd(Criteria.equals(CustomerGroupLastSalesReport.customerUniqeID,customerCode
+                        .toString()).and(Criteria.equals(
+                                CustomerGroupLastSalesReport.productGroupCode,productGroup)));
+        return getItem(query);
+    }
+
     private Call<List<CustomerGroupLastSalesReportModel>> call;
     public void sync(final UpdateCall updateCall) {
         List<String> dealerId =new ArrayList<>();

@@ -47,7 +47,9 @@ public class PictureFileManager extends BaseManager<PictureFileModel> {
         pictureFileModel.Height = height;
         pictureFileModel.IsPortrait = isPortrait;
         ImageManager imageManager = new ImageManager(getContext());
-        imageManager.saveImage(bitmap, 30, selectedSubject.CustomerId, ImageType.CustomerCallPicture, pictureFileModel.FileId + ".png", true);
+        imageManager.saveImage(bitmap, 30, selectedSubject.CustomerId,
+                ImageType.CustomerCallPicture,
+                pictureFileModel.FileId + ".png", true);
 //        FileOutputStream out = null;
 //        out = getContext().openFileOutput(getPictureFileName(pictureFileModel), Context.MODE_PRIVATE);
 //        bitmap.compress(Bitmap.CompressFormat.JPEG, 30, out);

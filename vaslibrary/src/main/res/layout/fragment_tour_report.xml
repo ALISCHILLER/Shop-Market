@@ -103,6 +103,13 @@
                             android:orientation="horizontal"
                             app:singleLine="true"
                             app:title="@string/total_customers_count" />
+                        <com.varanegar.framework.util.component.PairedItems
+                            android:id="@+id/total_seller_balance"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:singleLine="true"
+                            app:title="مانده فروشنده" />
 
                         <com.varanegar.framework.util.component.PairedItems
                             android:id="@+id/today_sum_of_ordered_paired_items"

@@ -248,7 +248,9 @@ public class OnHandQtyManager extends BaseManager<OnHandQtyModel> {
                     try {
                         if (renew && VaranegarApplication.is(VaranegarApplication.AppId.HotSales)) {
                             List<WarehouseProductQtyViewModel> conflictProducts = new ArrayList<>();
-                            List<WarehouseProductQtyViewModel> warehouseProductQtyViewModels = new WarehouseProductQtyViewManager(getContext()).getItems(WarehouseProductQtyViewManager.getAll());
+                            List<WarehouseProductQtyViewModel> warehouseProductQtyViewModels = new
+                                    WarehouseProductQtyViewManager(getContext())
+                                    .getItems(WarehouseProductQtyViewManager.getAll());
                             HashMap<UUID, BigDecimal> newOnHandQty = new HashMap<>();
                             for (OnHandQtyModel newOnHandQtyModel :
                                     result) {

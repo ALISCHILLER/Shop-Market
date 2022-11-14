@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
@@ -23,7 +24,14 @@
             android:layout_gravity="center_vertical"
             android:padding="@dimen/padding_small"
             android:src="@drawable/back_icon" />
-
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabVoice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_small"
+            android:layout_gravity="center_vertical"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_voice" />
         <EditText
             android:id="@+id/product_search_edit_text"
             android:layout_width="0dp"

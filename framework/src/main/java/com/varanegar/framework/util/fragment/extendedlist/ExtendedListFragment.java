@@ -64,7 +64,8 @@ public abstract class ExtendedListFragment<DataModel extends BaseModel,SPIN_TYPE
     }
 
     @Nullable
-    protected abstract VaranegarFragment onCreateContentFragment(UUID selectedItem, LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState);
+    protected abstract VaranegarFragment onCreateContentFragment(UUID selectedItem, LayoutInflater
+            inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState);
 
     protected abstract BaseRecyclerAdapter<DataModel> createRecyclerAdapter();
 
@@ -90,7 +91,9 @@ public abstract class ExtendedListFragment<DataModel extends BaseModel,SPIN_TYPE
     FrameLayout contentFrameLayout;
 
     @Override
-    protected View onCreateContentView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    protected View onCreateContentView(@NonNull LayoutInflater inflater,
+                                       @Nullable ViewGroup container,
+                                       @Nullable Bundle savedInstanceState) {
         this.savedInstanceState = savedInstanceState;
         return inflater.inflate(R.layout.fragment_extended_list, container, false);
     }
@@ -101,7 +104,9 @@ public abstract class ExtendedListFragment<DataModel extends BaseModel,SPIN_TYPE
         /**
          * چک کردن بارکد اسکن شده در دیتابیس و سرچ در لیست
          */
-        String result = VaranegarApplication.getInstance().tryRetrieve("dd003d32-4f05-423f-b7ba-3ccc9f54fb39", true);
+        String result = VaranegarApplication.getInstance()
+                .tryRetrieve("dd003d32-4f05-423f-b7ba-3ccc9f54fb39",
+                true);
         Log.d(TAG, "onResume: result = "+result);
         if (result != null){
             searchEditText.setText(result);
@@ -141,7 +146,8 @@ public abstract class ExtendedListFragment<DataModel extends BaseModel,SPIN_TYPE
             filterSpinner.setVisibility(View.GONE);
         int spinnerPosition = 0;
         try {
-            spinnerPosition = VaranegarApplication.getInstance().retrieve("2efe82ac-392f-405d-ba77-ea29b6825b16", false);
+            spinnerPosition = VaranegarApplication.getInstance().retrieve(
+                    "2efe82ac-392f-405d-ba77-ea29b6825b16", false);
         } catch (RuntimeException ignored) {
 
         }
@@ -164,8 +170,10 @@ public abstract class ExtendedListFragment<DataModel extends BaseModel,SPIN_TYPE
             }
         });
         RecyclerView optionsRecyclerView = (RecyclerView) view.findViewById(R.id.options_recycler_view);
-        optionsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        filtersAdapter = new FiltersAdapter(getContext(), UUID.fromString("8575dd8c-571f-4930-8bee-a12c66e2eb69"), 0, createFilterOptions());
+        optionsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),
+                LinearLayoutManager.HORIZONTAL, false));
+        filtersAdapter = new FiltersAdapter(getContext(),
+                UUID.fromString("8575dd8c-571f-4930-8bee-a12c66e2eb69"), 0, createFilterOptions());
         filtersAdapter.setOnItemClickListener(new FiltersAdapter.OnItemClickListener() {
             @Override
             public void onClick(int position) {

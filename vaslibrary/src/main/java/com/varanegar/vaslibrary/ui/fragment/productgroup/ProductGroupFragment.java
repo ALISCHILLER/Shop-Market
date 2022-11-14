@@ -1,15 +1,19 @@
 package com.varanegar.vaslibrary.ui.fragment.productgroup;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.speech.RecognizerIntent;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -33,6 +37,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.database.DbException;
@@ -209,6 +214,7 @@ public class ProductGroupFragment extends VisitFragment {
     private ProductSimpleOrderViewHolder.OnPriceChanged onPriceChangedListener;
     private ProductOrderViewManager productOrderViewManager;
     private ArrayList<String> recommendedProductIds;
+    private FloatingActionButton fabVoice;
 
     private boolean isContractor() {
         return VaranegarApplication.is(VaranegarApplication.AppId.Contractor);
@@ -544,6 +550,7 @@ public class ProductGroupFragment extends VisitFragment {
         View view = inflater.inflate(R.layout.fragment_product_group_list, container, false);
         recommendBtn = view.findViewById(R.id.recommend_btn);
         recProgress = view.findViewById(R.id.rec_progress);
+        fabVoice=view.findViewById(R.id.fabVoice);
         searchImageView = view.findViewById(R.id.search_image_view);
         toolbarLayout = view.findViewById(R.id.toolbar_layout);
         searchLayout = view.findViewById(R.id.search_layout);
@@ -558,7 +565,38 @@ public class ProductGroupFragment extends VisitFragment {
                     searchLayout.setVisibility(View.VISIBLE);
                 }
             });
+
+
+        fabVoice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String language =  "fa-IR";
+                Intent intent=new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,language);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, language);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, language);
+                intent.putExtra(RecognizerIntent.EXTRA_ONLY_RETURN_LANGUAGE_PREFERENCE, language);
+
+                try {
+                    startActivityForResult(intent,5000);
+                } catch (Exception e){
+
+                }
+            }
+        });
         return view;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 5000) {
+            if (requestCode != RESULT_OK && null != data) {
+                ArrayList<String> result =
+                        data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                searchEditText.setText(result.get(0));
+            }
+        }
     }
 
     boolean isPortrait() {

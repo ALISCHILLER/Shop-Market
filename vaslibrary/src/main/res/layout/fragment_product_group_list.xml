@@ -94,7 +94,14 @@
                         android:paddingLeft="50dp"
                         android:paddingRight="@dimen/padding_default"
                         android:paddingTop="@dimen/padding_default" />
-
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/fabVoice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/padding_small"
+                        android:layout_gravity="center_vertical"
+                        app:fabSize="mini"
+                        app:srcCompat="@drawable/ic_voice" />
                     <ImageView
                         android:id="@+id/clear_search_image_view"
                         android:layout_width="wrap_content"
