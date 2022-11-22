@@ -53,7 +53,8 @@ public class PreSalesCustomersFragment extends CustomersFragment {
         addReportToCutePresaleToolbar();
         addUpdateToCutePresaleToolbar();
         setVisibleImageViewMenuIcon(View.GONE);
-        getButtonsToolbar().getLinearLayoutToolbarProfile().addView(new PreSalesTourReportDrawerItem(getVaranegarActvity()));
+        getButtonsToolbar().getLinearLayoutToolbarProfile()
+                .addView(new PreSalesTourReportDrawerItem(getVaranegarActvity()));
         checkVersionIsUpdated();
 //        setDrawerAdapter(new PreSalesDrawerAdapter(getVaranegarActvity()));
     }

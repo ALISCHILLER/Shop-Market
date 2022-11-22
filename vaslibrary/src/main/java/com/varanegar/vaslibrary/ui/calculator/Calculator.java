@@ -67,6 +67,10 @@ public class Calculator extends FrameLayout {
         setBulkUnit(calculatorUnits.getBulkUnit());
         setupAdapter();
     }
+    public void setvalue(String txt){
+        if (checkDecimalPlaces())
+        strValue = strValue +txt;
+    }
 
     public BigDecimal getTotal() {
         BigDecimal total = BigDecimal.ZERO;
@@ -158,6 +162,7 @@ public class Calculator extends FrameLayout {
                 strValue = calcTotalQty();
                 totalQtyTextView.setTypeface(null, Typeface.BOLD);
                 totalQtyTextViewLabel.setTypeface(null, Typeface.BOLD);
+
             }
         }
     };

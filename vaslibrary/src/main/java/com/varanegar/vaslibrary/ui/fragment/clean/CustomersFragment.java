@@ -18,8 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarActivity;
 import com.varanegar.framework.base.VaranegarApplication;
@@ -80,6 +78,7 @@ import com.varanegar.vaslibrary.ui.fragment.AddNewCustomerFragment;
 import com.varanegar.vaslibrary.ui.fragment.AddNewCustomerZarFragment;
 import com.varanegar.vaslibrary.ui.fragment.TourReportFragment;
 import com.varanegar.vaslibrary.ui.fragment.UserLocationFragment;
+import com.varanegar.vaslibrary.ui.fragment.new_fragment.helpfragment.Program_Help_fragment;
 import com.varanegar.vaslibrary.ui.viewholders.CustomerSummaryMultipanViewHolder;
 import com.varanegar.vaslibrary.ui.viewholders.CustomerSummaryViewHolder;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
@@ -354,11 +353,9 @@ public abstract class CustomersFragment
                 UserLocationFragment fragment = new UserLocationFragment();
                 activity.pushFragment(fragment);
             } else {
-                activity
-                        .showSnackBar(
+                activity.showSnackBar(
                                 R.string.please_turn_on_location,
-                                MainVaranegarActivity.Duration.Short);
-            }
+                                MainVaranegarActivity.Duration.Short);}
         });
         if (!VaranegarApplication
                 .is(VaranegarApplication.AppId.Contractor))
@@ -772,16 +769,31 @@ public abstract class CustomersFragment
         });
         buttons.add(updateCustomersBtn);
 
-/*        CuteButton oldInvoiceBtn = new CuteButton();
+       CuteButton oldInvoiceBtn = new CuteButton();
         oldInvoiceBtn.setTitle(R.string.update_customers_history);
         oldInvoiceBtn.setIcon(R.drawable.ic_old_invoice_white_36dp);
         oldInvoiceBtn.setEnabled(() -> new TourManager(getContext()).isTourAvailable());
         oldInvoiceBtn.setOnClickListener(() -> updateCustomerOldInvoices(
                 false,
                 false));
-        buttons.add(oldInvoiceBtn);*/
 
+        buttons.add(oldInvoiceBtn);
 
+        CuteButton program_help = new CuteButton();
+        program_help.setIcon(R.drawable.ic_help_black_24dp);
+        program_help.setEnabled(() -> new TourManager(getContext()).isTourAvailable());
+        program_help.setTitle(R.string.program_help);
+        program_help.setOnClickListener(() -> {
+            Program_Help_fragment program_Help_fragment=new Program_Help_fragment();
+            final MainVaranegarActivity activity = getVaranegarActvity();
+            Bundle bundle = new Bundle();
+            bundle.putInt("item_Expandable", 1);
+            program_Help_fragment.setArguments(bundle);
+            if (activity == null || activity.isFinishing())
+                return;
+                activity.pushFragment(program_Help_fragment);
+        });
+        buttons.add(program_help);
 
 
 

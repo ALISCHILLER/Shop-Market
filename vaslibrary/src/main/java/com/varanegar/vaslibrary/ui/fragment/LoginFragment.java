@@ -69,6 +69,9 @@ import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.model.user.UserModelRepository;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
 import com.varanegar.vaslibrary.ui.dialog.ImportDialogFragment;
+import com.varanegar.vaslibrary.ui.fragment.new_fragment.helpfragment.Program_Help_fragment;
+import com.varanegar.vaslibrary.ui.fragment.new_fragment.videoPlayer.MediaPlayerFragment;
+import com.varanegar.vaslibrary.ui.report.report_new.customer_inventory_report.CustomerInventoryReportFragment;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
 
 import java.util.Date;
@@ -92,6 +95,7 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
     ActionProcessButton loginButton;
     ImageView settingsImageView;
     ImageView usersImageView;
+    TextView txt_education_media;
 
 
     @DrawableRes
@@ -159,6 +163,22 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
                 } catch (SecurityException ex) {
                     Timber.e(ex);
                 }
+            }
+        });
+        txt_education_media= (TextView) view.findViewById(R.id.txt_education_media);
+        txt_education_media.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                MediaPlayerFragment fragment = new MediaPlayerFragment();
+//                Bundle bundle = new Bundle();
+//                bundle.putString("urlPlayer", "http://5.160.125.98:8080/content/presale_full.mp4");
+//                fragment.setArguments(bundle);
+                Program_Help_fragment Program_Help_fragment=new Program_Help_fragment();
+
+                final MainVaranegarActivity activity = getVaranegarActvity();
+                if (activity == null || activity.isFinishing())
+                    return;
+                activity.pushFragment(Program_Help_fragment);
             }
         });
         TextView localeTextView = (TextView) view.findViewById(R.id.language_text_view);

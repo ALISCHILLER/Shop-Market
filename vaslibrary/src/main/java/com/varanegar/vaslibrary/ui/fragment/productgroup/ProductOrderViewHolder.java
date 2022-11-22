@@ -212,7 +212,8 @@ public class ProductOrderViewHolder extends BaseViewHolder<ProductOrderViewModel
             qtyLayout.setVisibility(View.GONE);
         }
 
-        if (productOrderViewModel.TotalQty.compareTo(BigDecimal.ZERO) == 0 || VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
+        if (productOrderViewModel.TotalQty.compareTo(BigDecimal.ZERO) == 0 ||
+                VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
             totalOrderQtyTextView.setVisibility(View.INVISIBLE);
             equalsTextView.setVisibility(View.INVISIBLE);
             usanceDayLayout.setVisibility(View.GONE);

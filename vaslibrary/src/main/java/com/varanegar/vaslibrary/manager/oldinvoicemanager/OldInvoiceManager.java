@@ -93,7 +93,9 @@ public class OldInvoiceManager {
         dateString = DateHelper.toString(date, DateFormat.MicrosoftDateTime, Locale.US);
     }
 
-    public void sync(final Boolean firstTime, final boolean onlyDiscount, @Nullable Date startDate, @Nullable Date endDate, @Nullable UUID customerId, final UpdateCall call) {
+    public void sync(final Boolean firstTime, final boolean onlyDiscount,
+                     @Nullable Date startDate, @Nullable Date endDate,
+                     @Nullable UUID customerId, final UpdateCall call) {
         Preferences preferences = new Preferences(context);
         if (customerId == null) {
             preferences.clearPreferences(Preferences.InvoiceSelection);
@@ -110,7 +112,12 @@ public class OldInvoiceManager {
             try {
                 BackOfficeType backOfficeType = sysConfigManager.getBackOfficeType();
                 if (backOfficeType == BackOfficeType.Varanegar) {
-                    customerOldInvoiceHeaderApi.runWebRequest(customerOldInvoiceHeaderApi.invoiceSQLite(tourModel.UniqueId.toString(), userModel.UniqueId.toString(), dateString, sysConfigModel.Value, !onlyDiscount, VaranegarApplication.getInstance().getAppId()), new WebCallBack<ResponseBody>() {
+                    customerOldInvoiceHeaderApi.runWebRequest(customerOldInvoiceHeaderApi
+                            .invoiceSQLite(tourModel.UniqueId.toString(),
+                                    userModel.UniqueId.toString(), dateString,
+                                    sysConfigModel.Value, !onlyDiscount,
+                                    VaranegarApplication.getInstance().getAppId()),
+                            new WebCallBack<ResponseBody>() {
                         @Override
                         protected void onFinish() {
 

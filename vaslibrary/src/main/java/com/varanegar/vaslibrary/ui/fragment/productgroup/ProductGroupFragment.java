@@ -167,7 +167,8 @@ public class ProductGroupFragment extends VisitFragment {
 
     private View recommendBtn;
     private View recProgress;
-
+    int possitonitem;
+    String productNumber;
     enum OrderLineViewType {
         Calculator,
         SimpleMode
@@ -596,6 +597,12 @@ public class ProductGroupFragment extends VisitFragment {
                         data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                 searchEditText.setText(result.get(0));
             }
+        }else if (requestCode == 4000){
+            ArrayList<String> result =
+                    data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            productNumber=result.get(0);
+            showCalculator(possitonitem);
+
         }
     }
 
@@ -1821,6 +1828,7 @@ public class ProductGroupFragment extends VisitFragment {
     }
 
     void showCalculator(final int position) {
+        possitonitem=position;
         final ProductOrderViewModel productOrderViewModel = productsAdapter.get(position);
         if (productOrderViewModel.UniqueId == null) {
             Timber.wtf("ProductUnitId of product order view is null");
@@ -1864,10 +1872,20 @@ public class ProductGroupFragment extends VisitFragment {
                 onHandQtyStock.HasAllocation = productOrderViewModel.HasAllocation;
                 BaseUnit bulkUnit = calculatorHelper.getBulkQtyUnit(customerCallOrderOrderViewModel);
                 CalculatorUnits calculatorUnits = calculatorHelper.generateCalculatorUnits(productOrderViewModel.UniqueId, orderLineQtyModels, bulkUnit, ProductType.isForSale);
-                if (productOrderViewModel.ExpDate == null)
-                    orderCalculatorForm.setArguments(productOrderViewModel.UniqueId, productOrderViewModel.ProductName, calculatorUnits, productOrderViewModel.Price, productOrderViewModel.UserPrice, onHandQtyStock, customerId, callOrderId);
-                else
-                    orderCalculatorForm.setArguments(productOrderViewModel.UniqueId, productOrderViewModel.ProductName, CalculatorBatchUnits.generate(getContext(), productOrderViewModel, customerCallOrderOrderViewModel == null ? null : customerCallOrderOrderViewModel.UniqueId, productOrderViewModel.Price, productOrderViewModel.PriceId, productOrderViewModel.UserPrice), productOrderViewModel.UserPrice, onHandQtyStock, customerId, callOrderId);
+                if (productOrderViewModel.ExpDate == null) {
+                    orderCalculatorForm.setArguments(productOrderViewModel.UniqueId,
+                            productOrderViewModel.ProductName, calculatorUnits, productOrderViewModel.Price,
+                            productOrderViewModel.UserPrice, onHandQtyStock, customerId, callOrderId);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("productNumber", productNumber);
+                    orderCalculatorForm.setArguments(bundle);
+                }else
+                    orderCalculatorForm.setArguments(productOrderViewModel.UniqueId,
+                            productOrderViewModel.ProductName, CalculatorBatchUnits.generate(getContext(),
+                                    productOrderViewModel, customerCallOrderOrderViewModel == null ? null :
+                                            customerCallOrderOrderViewModel.UniqueId, productOrderViewModel.Price,
+                                    productOrderViewModel.PriceId, productOrderViewModel.UserPrice), productOrderViewModel.UserPrice,
+                            onHandQtyStock, customerId, callOrderId);
                 orderCalculatorForm.onCalcFinish = new OrderCalculatorForm.OnCalcFinish() {
                     @Override
                     public void run(List<DiscreteUnit> discreteUnits, BaseUnit bulkUnit, @Nullable List<BatchQty> batchQtyList) {

@@ -335,7 +335,8 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
                 new LengthChecker(10, 10, false));
 
         mobilePairedItem = view.findViewById(R.id.mobile_paired_item);
-        validator.addField(mobilePairedItem, getString(R.string.mobile_label_supervisor), new MobileNumberChecker());
+        validator.addField(mobilePairedItem, getString(R.string.mobile_label_supervisor),
+                new MobileNumberChecker());
 
         code_naghsh_paired_item = view.findViewById(R.id.code_naghsh_paired_item);
         validator.addField(code_naghsh_paired_item, getString(R.string.code_naghsh));

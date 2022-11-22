@@ -474,6 +474,7 @@
     <string name="cancel_return_request">انصراف از برگشتی</string>
     <string name="order_is_empty">درخواست خالی است !</string>
     <string name="update_day_customers">بروزرسانی مشتریان روز</string>
+    <string name="program_help">راهنمای برنامه</string>
     <string name="return_reason_label">علت برگشتی :</string>
     <string name="return_product_type_label">نوع برگشتی :</string>
     <string name="return_with_reference">برگشتی با مبنا</string>
@@ -1551,4 +1552,6 @@
         <item>Five</item>
         <item>Six</item>
     </string-array>
+
+
 </resources>

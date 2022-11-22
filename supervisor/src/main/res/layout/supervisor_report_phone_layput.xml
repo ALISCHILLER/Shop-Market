@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/padding_default"
         android:paddingLeft="@dimen/padding_default"
+        android:visibility="gone"
         android:paddingRight="@dimen/padding_default"
         android:src="@drawable/ic_mobile_green_24dp" />
     <ImageView

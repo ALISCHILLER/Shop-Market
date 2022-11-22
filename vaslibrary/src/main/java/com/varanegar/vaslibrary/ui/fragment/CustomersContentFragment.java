@@ -119,7 +119,8 @@ public class CustomersContentFragment extends VaranegarFragment {
     private VasActionsAdapter actionsAdapter;
     private SimpleToolbar simpleToolbar;
     private PairedItems code_naghsh_paired_item;
-    private PairedItems sale_date_pasta, sale_date_form, sale_date_jumbo, sale_date_lasagna, sale_date_nest, sale_date_ash, sale_date_flour, sale_date_cake, sale_date_seven,
+    private PairedItems sale_date_pasta, sale_date_form, sale_date_jumbo, sale_date_lasagna,
+            sale_date_nest, sale_date_ash, sale_date_flour, sale_date_cake, sale_date_seven,
             sale_date_vegan, sale_date_protein;
 
     protected VasActionsAdapter getActionsAdapter() {
@@ -283,7 +284,8 @@ public class CustomersContentFragment extends VaranegarFragment {
 
 
         buttonTracking.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(Locale.US, "geo:%.8f,%.8f", customer.Latitude, customer.Longitude)));
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(Locale.US,
+                    "geo:%.8f,%.8f", customer.Latitude, customer.Longitude)));
             startActivity(Intent.createChooser(intent, "یک برنامه مسیریاب انتخاب کنید"));
         });
 

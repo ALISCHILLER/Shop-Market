@@ -15,7 +15,7 @@ ext.versionType = null // stable(null), beta, snapshot, ...
 android {
 
         compileSdkVersion 30
-        buildToolsVersion "30.0.3"
+        buildToolsVersion = "30.0.3"
 
         defaultConfig {
             applicationId "com.varanegar.presale"
@@ -83,10 +83,13 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'androidx.multidex:multidex:2.0.1'
-
     // Firebase Cloud Messaging (Java)Firebase dependencies
     implementation platform('com.google.firebase:firebase-bom:29.1.0')
     implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.android.exoplayer:exoplayer:2.15.0'
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.15.0'
+    implementation 'com.google.android.exoplayer:exoplayer-dash:2.15.0'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.15.0'
 }
 
 tasks.whenTaskAdded { task ->

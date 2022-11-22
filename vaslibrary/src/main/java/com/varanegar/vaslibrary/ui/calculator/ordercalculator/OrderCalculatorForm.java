@@ -1,7 +1,13 @@
 package com.varanegar.vaslibrary.ui.calculator.ordercalculator;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.util.HelperMethods;
 import com.varanegar.framework.util.Linq;
@@ -27,6 +34,7 @@ import com.varanegar.framework.util.recycler.selectionlistadapter.BaseSelectionR
 import com.varanegar.java.util.Currency;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.manager.OnHandQtyManager;
+import com.varanegar.vaslibrary.manager.canvertType.ConvertFaNumType;
 import com.varanegar.vaslibrary.manager.customerpricemanager.CustomerPriceManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
@@ -68,7 +76,7 @@ public class OrderCalculatorForm extends CuteDialog {
     private UUID callOrderId;
     private CalculatorBatchUnits orderedBatchUnits;
     private UUID productId;
-
+    private FloatingActionButton fabVoice;
     public void setMaxValue(BigDecimal maxValue) {
         this.maxValue = maxValue;
     }
@@ -144,6 +152,28 @@ public class OrderCalculatorForm extends CuteDialog {
 
     public OnCalcFinish onCalcFinish;
 
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        setCancelable(false);
+//         if (requestCode == 4000){
+//            ArrayList<String> result =
+//                    data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+//
+//        }
+//    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        onActivityResult(requestCode, resultCode, data);
+        setCancelable(false);
+         if (requestCode == 4000){
+            ArrayList<String> result =
+                    data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+        }
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -153,6 +183,27 @@ public class OrderCalculatorForm extends CuteDialog {
                 dismiss();
             }
         });
+        fabVoice=view.findViewById(R.id.fabVoice);
+
+        setCancelable(false);
+        fabVoice.setOnClickListener(v -> {
+            String language = "fa-IR";
+            Intent intent=new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,language);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, language);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, language);
+            intent.putExtra(RecognizerIntent.EXTRA_ONLY_RETURN_LANGUAGE_PREFERENCE, language);
+            try {
+                final Fragment callingFragment = getActivity().getFragmentManager()
+                        .findFragmentById(R.id.li);
+                getParentFragment().startActivityForResult(intent,4000);
+            } catch (Exception e){
+            }
+        });
+        String numberProduct=getArguments().getString("productNumber","");
+
+        if (numberProduct !=null &&!numberProduct.isEmpty())
+            calculator.setvalue(ConvertFaNumType.convert(numberProduct));
 
         SysConfigManager sysConfigManager = new SysConfigManager(getContext());
         final SysConfigModel showStockLevel = sysConfigManager.read(ConfigKey.ShowStockLevel, SysConfigManager.cloud);
@@ -204,6 +255,7 @@ public class OrderCalculatorForm extends CuteDialog {
                                 inventoryQtyTextView.setVisibility(View.GONE);
                         }
                         calculator.setUnits(selectedUnit.calculatorUnits);
+
                     }
                 }
             });

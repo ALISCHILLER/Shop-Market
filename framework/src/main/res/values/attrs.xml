@@ -114,4 +114,10 @@
         <attr name="additionalFlipsCount" format="integer" />
         <attr name="cameraHeight" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="ExpandableLayout">
+        <attr name="parentLayout" format="integer" />
+        <attr name="childLayout" format="integer" />
+    </declare-styleable>
+
 </resources>
