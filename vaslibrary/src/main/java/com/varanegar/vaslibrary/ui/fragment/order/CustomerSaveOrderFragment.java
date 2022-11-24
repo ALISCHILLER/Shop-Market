@@ -2105,21 +2105,34 @@ public class CustomerSaveOrderFragment extends VisitFragment
             alert.setPositiveButton(R.string.ok, null);
             alert.show();
         } else {
-            PaymentManager paymentManager = new PaymentManager(context);
-            SysConfigManager sysConfigManager = new SysConfigManager(context);
-            ConfigMap configMap = sysConfigManager.read(SysConfigManager.cloud);
-            CustomerPayment customerPayment = paymentManager.calculateCustomerPayment(customerId);
-            String maxMinCheckError = paymentManager.checkMinMaxOrderAndInvoiceAmount(customerPayment, configMap, callOrderId);
-            if (!maxMinCheckError.equals("")) {
-                CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
-                dialog.setIcon(Icon.Error);
-                dialog.setTitle(R.string.error);
-                dialog.setMessage(maxMinCheckError);
-                dialog.setPositiveButton(R.string.ok, null);
-                dialog.show();
-                return;
+            // checkCodeNaghsh
+            if (checkCodeNaghsh()) {
+                PaymentManager paymentManager = new PaymentManager(context);
+                SysConfigManager sysConfigManager = new SysConfigManager(context);
+                ConfigMap configMap = sysConfigManager.read(SysConfigManager.cloud);
+                CustomerPayment customerPayment = paymentManager.calculateCustomerPayment(customerId);
+                String maxMinCheckError = paymentManager.checkMinMaxOrderAndInvoiceAmount(customerPayment, configMap, callOrderId);
+                if (!maxMinCheckError.equals("")) {
+                    CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
+                    dialog.setIcon(Icon.Error);
+                    dialog.setTitle(R.string.error);
+                    dialog.setMessage(maxMinCheckError);
+                    dialog.setPositiveButton(R.string.ok, null);
+                    dialog.show();
+                    return;
+                }
+                checkEmphaticItemsAndTrySave();
+            }else {
+
+                    CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(getContext());
+                    cuteMessageDialog.setIcon(Icon.Error);
+                    cuteMessageDialog.setTitle(R.string.error);
+                    cuteMessageDialog.setMessage(R.string.the_customer_not_code);
+                    cuteMessageDialog.setNegativeButton(R.string.ok, null);
+                    cuteMessageDialog.show();
+                    return;
+
             }
-            checkEmphaticItemsAndTrySave();
         }
     }
 

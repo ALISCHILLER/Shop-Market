@@ -771,7 +771,7 @@ public class AddNewCustomerZarFragment extends VaranegarFragment implements Vali
 
         UserModel um = UserManager.readFromFile(getContext());
         if (um != null) {
-            syncGetNewCustomerViewModel.DealerId = um.UniqueId;
+            syncGetNewCustomerViewModel.DealerUniqueId = um.UniqueId;
         }
 
         TourManager tourManager = new TourManager(getContext());

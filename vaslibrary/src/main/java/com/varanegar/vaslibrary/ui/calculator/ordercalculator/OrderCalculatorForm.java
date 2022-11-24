@@ -77,6 +77,7 @@ public class OrderCalculatorForm extends CuteDialog {
     private CalculatorBatchUnits orderedBatchUnits;
     private UUID productId;
     private FloatingActionButton fabVoice;
+    private String _voicetoText;
     public void setMaxValue(BigDecimal maxValue) {
         this.maxValue = maxValue;
     }
@@ -88,7 +89,10 @@ public class OrderCalculatorForm extends CuteDialog {
     }
 
 
-    public void setArguments(@NonNull UUID productId, @NonNull String productName, @NonNull CalculatorUnits calculatorUnits, @NonNull Currency unitPrice, @NonNull Currency userPrice, @NonNull OnHandQtyStock onHandQtyStock, @NonNull UUID customerId, @NonNull UUID callOrderId) {
+    public void setArguments(@NonNull UUID productId, @NonNull String productName,
+                             @NonNull CalculatorUnits calculatorUnits, @NonNull Currency unitPrice,
+                             @NonNull Currency userPrice, @NonNull OnHandQtyStock onHandQtyStock,
+                             @NonNull UUID customerId, @NonNull UUID callOrderId) {
         this.calculatorUnits = calculatorUnits;
         this.productName = productName;
         this.productId = productId;
@@ -99,7 +103,52 @@ public class OrderCalculatorForm extends CuteDialog {
         this.callOrderId = callOrderId;
     }
 
-    public void setArguments(@NonNull UUID productId, @NonNull String productName, @NonNull List<CalculatorBatchUnits> calculatorBatchUnits, @NonNull Currency userPrice, @NonNull OnHandQtyStock onHandQtyStock, @NonNull UUID customerId, UUID callOrderId) {
+    public void setArguments(String voicetoText){
+        if (voicetoText!=null&&!voicetoText.isEmpty()){
+            if (voicetoText.contains("عدد")){
+                voicetoText= voicetoText.replace("عدد","");
+                voicetoText= ConvertFaNumType.convert(voicetoText);
+                voicetoText= voicetoText.replaceAll("[^0-9]", "");
+                if (voicetoText!=null &&!voicetoText.isEmpty()) {
+                    calculatorUnits.getDiscreteUnits().get(1).value = Double.parseDouble(voicetoText);
+                    this._voicetoText = ConvertFaNumType.convert(voicetoText);
+                }
+            } if (voicetoText.contains("کارتن")||voicetoText.contains("کارتون")||voicetoText.contains("کارت")){
+                voicetoText= voicetoText.replace("کارتون","");
+                voicetoText= ConvertFaNumType.convert(voicetoText);
+                if (voicetoText.contains("یک"))
+                    voicetoText="1";
+                if (voicetoText.contains("دو"))
+                    voicetoText="2";
+                if (voicetoText.contains("سه"))
+                    voicetoText="3";
+                if (voicetoText.contains("چهار"))
+                    voicetoText="4";
+                if (voicetoText.contains("پنج"))
+                    voicetoText="5";
+                if (voicetoText.contains("شش"))
+                    voicetoText="6";
+                if (voicetoText.contains("هفت"))
+                    voicetoText="7";
+                if (voicetoText.contains("هشت"))
+                    voicetoText="8";
+                if (voicetoText.contains("نه"))
+                    voicetoText="9";
+                if (voicetoText.contains("ده"))
+                    voicetoText="10";
+                voicetoText= voicetoText.replaceAll("[^0-9]", "");
+                if (voicetoText!=null &&!voicetoText.isEmpty()) {
+                    calculatorUnits.getDiscreteUnits().get(0).value = Double.parseDouble(voicetoText);
+                    this._voicetoText = ConvertFaNumType.convert(voicetoText);
+                }
+            }
+        }
+    }
+
+    public void setArguments(@NonNull UUID productId, @NonNull String productName,
+                             @NonNull List<CalculatorBatchUnits> calculatorBatchUnits,
+                             @NonNull Currency userPrice, @NonNull OnHandQtyStock onHandQtyStock,
+                             @NonNull UUID customerId, UUID callOrderId) {
         if (calculatorBatchUnits.size() == 0)
             throw new IllegalArgumentException("");
         SysConfigManager sysConfigManager = new SysConfigManager(getContext());
@@ -152,16 +201,7 @@ public class OrderCalculatorForm extends CuteDialog {
 
     public OnCalcFinish onCalcFinish;
 
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        setCancelable(false);
-//         if (requestCode == 4000){
-//            ArrayList<String> result =
-//                    data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-//
-//        }
-//    }
+
 
 
     @Override
@@ -198,12 +238,14 @@ public class OrderCalculatorForm extends CuteDialog {
                         .findFragmentById(R.id.li);
                 getParentFragment().startActivityForResult(intent,4000);
             } catch (Exception e){
+
             }
         });
-        String numberProduct=getArguments().getString("productNumber","");
 
-        if (numberProduct !=null &&!numberProduct.isEmpty())
-            calculator.setvalue(ConvertFaNumType.convert(numberProduct));
+//        String numberProduct=getArguments().getString("productNumber","");
+//
+//        if (numberProduct !=null &&!numberProduct.isEmpty())
+//            calculator.setvalue(ConvertFaNumType.convert(numberProduct));
 
         SysConfigManager sysConfigManager = new SysConfigManager(getContext());
         final SysConfigModel showStockLevel = sysConfigManager.read(ConfigKey.ShowStockLevel, SysConfigManager.cloud);
@@ -218,6 +260,7 @@ public class OrderCalculatorForm extends CuteDialog {
         productNameTextView.setText(productName);
         calculator = (Calculator) view.findViewById(R.id.calculator);
         LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.batch_linear_layout);
+
 
         if (batchesAdapter != null) {
             BigDecimal totalQty = BigDecimal.ZERO;
@@ -586,6 +629,8 @@ public class OrderCalculatorForm extends CuteDialog {
                 }
             }
         };
+        if (_voicetoText!=null &&!_voicetoText.isEmpty())
+            calculator.setvalue(_voicetoText);
     }
 
     private void checkMaxValue() throws Exception {

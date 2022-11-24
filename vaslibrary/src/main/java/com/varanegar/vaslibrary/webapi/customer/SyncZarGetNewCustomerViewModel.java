@@ -35,7 +35,7 @@ public class SyncZarGetNewCustomerViewModel {
     public String KVGR1;
     @SerializedName("KVGR2")
     public String KVGR2;
-    public UUID DealerId;
+    public UUID DealerUniqueId;
     public UUID PathId;
     public String PaymentTypeId;
     public String CustomerCode;

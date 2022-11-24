@@ -168,7 +168,7 @@ public class ProductGroupFragment extends VisitFragment {
     private View recommendBtn;
     private View recProgress;
     int possitonitem;
-    String productNumber;
+    private String voicetoText;
     enum OrderLineViewType {
         Calculator,
         SimpleMode
@@ -598,10 +598,12 @@ public class ProductGroupFragment extends VisitFragment {
                 searchEditText.setText(result.get(0));
             }
         }else if (requestCode == 4000){
-            ArrayList<String> result =
-                    data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            productNumber=result.get(0);
-            showCalculator(possitonitem);
+            if (requestCode != RESULT_OK && null != data) {
+                ArrayList<String> result =
+                        data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                voicetoText = result.get(0);
+                showCalculator(possitonitem);
+            }
 
         }
     }
@@ -1873,12 +1875,14 @@ public class ProductGroupFragment extends VisitFragment {
                 BaseUnit bulkUnit = calculatorHelper.getBulkQtyUnit(customerCallOrderOrderViewModel);
                 CalculatorUnits calculatorUnits = calculatorHelper.generateCalculatorUnits(productOrderViewModel.UniqueId, orderLineQtyModels, bulkUnit, ProductType.isForSale);
                 if (productOrderViewModel.ExpDate == null) {
-                    orderCalculatorForm.setArguments(productOrderViewModel.UniqueId,
+                    orderCalculatorForm.setArguments(
+                            productOrderViewModel.UniqueId,
                             productOrderViewModel.ProductName, calculatorUnits, productOrderViewModel.Price,
                             productOrderViewModel.UserPrice, onHandQtyStock, customerId, callOrderId);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("productNumber", productNumber);
-                    orderCalculatorForm.setArguments(bundle);
+
+                    orderCalculatorForm.setArguments(voicetoText);
+                  
+                
                 }else
                     orderCalculatorForm.setArguments(productOrderViewModel.UniqueId,
                             productOrderViewModel.ProductName, CalculatorBatchUnits.generate(getContext(),
@@ -1886,16 +1890,14 @@ public class ProductGroupFragment extends VisitFragment {
                                             customerCallOrderOrderViewModel.UniqueId, productOrderViewModel.Price,
                                     productOrderViewModel.PriceId, productOrderViewModel.UserPrice), productOrderViewModel.UserPrice,
                             onHandQtyStock, customerId, callOrderId);
-                orderCalculatorForm.onCalcFinish = new OrderCalculatorForm.OnCalcFinish() {
-                    @Override
-                    public void run(List<DiscreteUnit> discreteUnits, BaseUnit bulkUnit, @Nullable List<BatchQty> batchQtyList) {
-                        onAdd(position, productOrderViewModel.UniqueId, discreteUnits, bulkUnit, null, batchQtyList);
-                    }
-                };
+                orderCalculatorForm.onCalcFinish = (discreteUnits, bulkUnit1, batchQtyList) ->
+                        onAdd(position, productOrderViewModel.UniqueId, discreteUnits, bulkUnit1,
+                                null, batchQtyList);
 
                 orderCalculatorForm.show(getChildFragmentManager(), "645c790c-e979-460e-94e5-5c8ae1c36c5a");
             } catch (ProductUnitViewManager.UnitNotFoundException e) {
-                getVaranegarActvity().showSnackBar(R.string.no_unit_for_product, MainVaranegarActivity.Duration.Short);
+                getVaranegarActvity().showSnackBar(R.string.no_unit_for_product,
+                        MainVaranegarActivity.Duration.Short);
                 Timber.e(e, "product unit not found in product group fragment");
             }
         }
