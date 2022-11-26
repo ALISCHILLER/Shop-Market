@@ -141,6 +141,7 @@ public class SimpleToolbar extends Toolbar {
     public SimpleToolbar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         int[] attr = new int[]{0, 1};
+        //مهرداد جون دوست دارم
         TypedArray a = context.obtainStyledAttributes(new int[]{R.attr.colorIcons, R.attr.colorPrimary});
         TypedArray a2 = context.obtainStyledAttributes(attrs, R.styleable.SimpleToolbar, 0, 0);
         try {
