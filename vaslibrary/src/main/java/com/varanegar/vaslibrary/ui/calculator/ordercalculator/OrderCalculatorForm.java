@@ -108,6 +108,26 @@ public class OrderCalculatorForm extends CuteDialog {
             if (voicetoText.contains("عدد")){
                 voicetoText= voicetoText.replace("عدد","");
                 voicetoText= ConvertFaNumType.convert(voicetoText);
+                if (voicetoText.contains("یک"))
+                    voicetoText="1";
+                if (voicetoText.contains("دو"))
+                    voicetoText="2";
+                if (voicetoText.contains("سه"))
+                    voicetoText="3";
+                if (voicetoText.contains("چهار"))
+                    voicetoText="4";
+                if (voicetoText.contains("پنج"))
+                    voicetoText="5";
+                if (voicetoText.contains("شش"))
+                    voicetoText="6";
+                if (voicetoText.contains("هفت"))
+                    voicetoText="7";
+                if (voicetoText.contains("هشت"))
+                    voicetoText="8";
+                if (voicetoText.contains("نه"))
+                    voicetoText="9";
+                if (voicetoText.contains("ده"))
+                    voicetoText="10";
                 voicetoText= voicetoText.replaceAll("[^0-9]", "");
                 if (voicetoText!=null &&!voicetoText.isEmpty()) {
                     calculatorUnits.getDiscreteUnits().get(1).value = Double.parseDouble(voicetoText);

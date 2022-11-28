@@ -1,11 +1,16 @@
 package com.varanegar.framework.util.fragment.extendedlist;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.speech.RecognizerIntent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -18,6 +23,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.varanegar.framework.R;
 import com.varanegar.framework.base.ProgressFragment;
 import com.varanegar.framework.base.VaranegarApplication;
@@ -51,7 +57,7 @@ public abstract class ExtendedListFragment<DataModel extends BaseModel,SPIN_TYPE
     private CuteToolbar buttonsToolbar;
     private FiltersAdapter filtersAdapter;
     private PairedItemsSpinner filterSpinner;
-
+    private FloatingActionButton fabVoice;
     public void setTitle(String title) {
         this.title = title;
         if (titleTextView != null)
@@ -131,6 +137,7 @@ public abstract class ExtendedListFragment<DataModel extends BaseModel,SPIN_TYPE
         List<CuteButton> buttons = onCreateCuteToolbar();
         buttonsToolbar.setButtons(buttons);
         titleTextView = (TextView) view.findViewById(R.id.title_text_view);
+
         titleTextView.setText(title);
         advancedSearchImageView = (ImageView) view.findViewById(R.id.advanced_search_image_view);
         if (advancedSearch != null) {
@@ -201,7 +208,24 @@ public abstract class ExtendedListFragment<DataModel extends BaseModel,SPIN_TYPE
 
             }
         });
+        fabVoice=view.findViewById(R.id.fabVoice);
+        fabVoice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String language =  "fa-IR";
+                Intent intent=new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,language);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, language);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, language);
+                intent.putExtra(RecognizerIntent.EXTRA_ONLY_RETURN_LANGUAGE_PREFERENCE, language);
 
+                try {
+                    startActivityForResult(intent,6000);
+                } catch (Exception e){
+
+                }
+            }
+        });
         adapter = createRecyclerAdapter();
         runFilter(searchText, filtersAdapter.getSelectedFilters(), filterSpinner.getSelectedItem());
         adapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClick<DataModel>() {
@@ -232,7 +256,19 @@ public abstract class ExtendedListFragment<DataModel extends BaseModel,SPIN_TYPE
 
     private View.OnClickListener advancedSearch;
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 6000) {
+            if (requestCode != RESULT_OK && null != data) {
+                ArrayList<String> result =
+                        data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                String txt=result.get(0);
+                txt= txt.replace("ک","ك");
+                searchEditText.setText(txt);
+            }
+        }
+    }
 
     private int advancedSearchDrawable;
 

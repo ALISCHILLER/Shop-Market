@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+
 import com.varanegar.framework.util.jobscheduler.JobSchedulerService;
 import com.varanegar.presale.firebase.MyFirebaseMessagingService;
 import com.varanegar.presale.fragment.PreSalesCustomersFragment;
@@ -30,7 +32,12 @@ public class MainActivity extends VasActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        checkUserLogin();
+        boolean firstCreation = false;
+        if (savedInstanceState != null)
+            firstCreation = savedInstanceState.getBoolean("firstCreation", false);
+        if (!firstCreation)
+            checkUserLogin();
+
         SharedPreferences sharedPreferences = getApplicationContext()
                 .getSharedPreferences("Firebase_Token", Context.MODE_PRIVATE);
         String oldToken = sharedPreferences
@@ -134,4 +141,11 @@ public class MainActivity extends VasActivity {
     //---------------------------------------------------------------------------------------------- showDialogNews
 
 
+    //---------------------------------------------------------------------------------------------- onSaveInstanceState
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("firstCreation", true);
+    }
+    //---------------------------------------------------------------------------------------------- onSaveInstanceState
 }

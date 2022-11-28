@@ -93,7 +93,14 @@
                         android:orientation="horizontal"
                         android:paddingBottom="@dimen/padding_xsmall"
                         android:paddingTop="@dimen/padding_xxsmall">
-
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/fabVoice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/padding_small"
+                            android:layout_gravity="center_vertical"
+                            app:fabSize="mini"
+                            app:srcCompat="@drawable/ic_voice" />
                         <com.varanegar.framework.util.component.PairedItemsSpinner
                             android:id="@+id/filter_spinner"
                             android:layout_width="150dp"
