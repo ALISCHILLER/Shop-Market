@@ -21,19 +21,19 @@ public class Help {
         switch (item) {
             case 0:
                 Help b00=new Help("آموزش لاگین و دریافت تنظیمات",
-                        "http://5.160.125.98:8080/content/presale_full.mp4");
-                Help b01=new Help("آموزش گرفتن تور",
-                        "http://5.160.125.98:8080/content/presale_full.mp4");
+                        "http://5.160.125.98:8080/content/videos/Login_Setting.mp4");
+                Help b01=new Help("آموزش صفحه گرفتن تور",
+                        "http://5.160.125.98:8080/content/videos/GetToure.mp4");
                 Help b02=new Help("آموزش صفحه لیست مشتریان",
-                        "http://5.160.125.98:8080/content/presale_full.mp4");
+                        "http://5.160.125.98:8080/content/videos/List_customer.mp4");
                 Help b03=new Help("آموزش صفحه مشتریان ",
-                        "http://5.160.125.98:8080/content/presale_full.mp4");
+                        "http://5.160.125.98:8080/content/videos/Customer_camera.mp4");
                 Help b04=new Help("آموزش ثبت سفارش و ثبت برگشتی",
-                        "http://5.160.125.98:8080/content/presale_full.mp4");
+                        "http://5.160.125.98:8080/content/videos/Order registration and return registration.mp4");
                 Help b05=new Help("آموزش ثبت مشتری",
-                        "http://5.160.125.98:8080/content/presale_full.mp4");
+                        "http://5.160.125.98:8080/content/videos/Customer_camera.mp4");
                 Help b06=new Help("آموزش ویرایش مشتری",
-                        "http://5.160.125.98:8080/content/presale_full.mp4");
+                        "http://5.160.125.98:8080/content/videos/Customer_camera.mp4");
                 helps.add(b00);
                 helps.add(b01);
                 helps.add(b02);

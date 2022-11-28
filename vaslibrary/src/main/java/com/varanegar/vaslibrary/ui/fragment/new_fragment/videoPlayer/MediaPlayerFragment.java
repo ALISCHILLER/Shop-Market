@@ -65,11 +65,13 @@ public class MediaPlayerFragment extends VaranegarFragment {
 
     private void   releasePlayer(){
         simpleExoPlayer.stop();
+        simpleExoPlayer.clearMediaItems();
 
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        releasePlayer();
     }
 }
