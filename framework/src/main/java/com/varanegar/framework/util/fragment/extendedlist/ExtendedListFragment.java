@@ -265,6 +265,7 @@ public abstract class ExtendedListFragment<DataModel extends BaseModel,SPIN_TYPE
                         data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                 String txt=result.get(0);
                 txt= txt.replace("ک","ك");
+                txt= txt.replace("ی","ي");
                 searchEditText.setText(txt);
             }
         }
