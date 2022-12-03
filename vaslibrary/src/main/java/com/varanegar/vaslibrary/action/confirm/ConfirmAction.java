@@ -242,8 +242,10 @@ public class ConfirmAction extends CheckPathAction {
                                 int totalePrice = HelperMethods.currencyToInt(finalTotal);
                                 int customerCreditLimit = HelperMethods
                                         .currencyToInt(result.get(0).CustomerCreditLimit);
-                                if (totalePrice > customerCreditLimit) {
-                                    showErrorMessage(R.string.customerCredit);
+                               if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)){
+                                    if (totalePrice > customerCreditLimit) {
+                                        showErrorMessage(R.string.customerCredit);
+                                    }
                                 }
                             }
                         }

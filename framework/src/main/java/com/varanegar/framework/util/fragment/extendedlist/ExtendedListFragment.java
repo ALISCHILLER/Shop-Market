@@ -46,7 +46,8 @@ import java.util.UUID;
  * سرچ در لیست مشتریان با  بارکد
  * Search Barcode
  */
-public abstract class ExtendedListFragment<DataModel extends BaseModel,SPIN_TYPE> extends ProgressFragment {
+public abstract class ExtendedListFragment<DataModel extends BaseModel,SPIN_TYPE>
+        extends ProgressFragment {
     private static final String TAG = "ExtendedListFragment";
     private String searchText;
     EditText searchEditText;

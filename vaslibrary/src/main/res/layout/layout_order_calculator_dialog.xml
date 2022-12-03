@@ -153,6 +153,31 @@
                     android:layout_height="wrap_content" />
             </LinearLayout>
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linearLayoutParent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="@dimen/padding_small">
+                <TextView
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/red"
+                    android:text="شرح جوایز:" />
+                <TextView
+                    android:id="@+id/promtion_qty_text_view"
+                    style="@android:style/TextAppearance.DeviceDefault.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"  />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
     <com.varanegar.vaslibrary.ui.calculator.Calculator

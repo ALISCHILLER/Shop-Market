@@ -150,10 +150,12 @@ public class OrderAdapter extends BaseRecyclerAdapter<CustomerCallOrderOrderView
                         if (customerCallOrderOrderViewModel.ExpDate == null)
                             orderCalculatorForm.setArguments(customerCallOrderOrderViewModel.ProductId,
                                     customerCallOrderOrderViewModel.ProductName,
-                                    calculatorHelper.generateCalculatorUnits(customerCallOrderOrderViewModel.ProductId, orderLineQtyModels, bulkUnit, ProductType.isForSale),
-                                    customerCallOrderOrderViewModel.UnitPrice, customerCallOrderOrderViewModel.UserPrice, onHandQtyStock,
+                                    calculatorHelper.generateCalculatorUnits(customerCallOrderOrderViewModel.ProductId,
+                                            orderLineQtyModels, bulkUnit, ProductType.isForSale),
+                                    customerCallOrderOrderViewModel.UnitPrice,
+                                    customerCallOrderOrderViewModel.UserPrice, onHandQtyStock,
                                     customerId,
-                                    callOrderId);
+                                    callOrderId,"");
                         else {
                             ProductOrderViewModel productOrderViewModel = new ProductOrderViewManager(getActivity()).getLine(customerId,
                                     callOrderId,
@@ -170,7 +172,7 @@ public class OrderAdapter extends BaseRecyclerAdapter<CustomerCallOrderOrderView
                                     customerCallOrderOrderViewModel.UserPrice,
                                     onHandQtyStock,
                                     customerId,
-                                    callOrderId);
+                                    callOrderId,productOrderViewModel.PrizeComment);
                         }
 
                         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist))

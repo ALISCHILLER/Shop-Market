@@ -1733,7 +1733,8 @@ public class CustomerSaveOrderFragment extends VisitFragment
                                         .generateCalculatorUnits(productOrderViewModel.UniqueId,
                                                 orderLineQtyModels, bulkUnit, ProductType.isForSale),
                                 productOrderViewModel.Price, productOrderViewModel.UserPrice,
-                                onHandQtyStock, customerId, callOrderId);
+                                onHandQtyStock, customerId, callOrderId,
+                                productOrderViewModel.PrizeComment);
                     else
                         orderCalculatorForm.setArguments(productOrderViewModel.UniqueId,
                                 productOrderViewModel.ProductName,
@@ -1742,7 +1743,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
                                                 customerCallOrderOrderViewModel.UniqueId,
                                         productOrderViewModel.Price, productOrderViewModel.PriceId,
                                         productOrderViewModel.UserPrice), productOrderViewModel.UserPrice,
-                                onHandQtyStock, customerId, callOrderId);
+                                onHandQtyStock, customerId, callOrderId,productOrderViewModel.PrizeComment);
                     orderCalculatorForm.onCalcFinish = (discreteUnits, bulkUnit1, batchQtyList) ->
                             onAddItem(productOrderViewModel, discreteUnits, bulkUnit1, batchQtyList);
                     orderCalculatorForm.show(getChildFragmentManager(), "2af40365-a4db-4afb-bb13-2a9896803d92");

@@ -90,7 +90,9 @@ public class GroupCatalogFragment extends VaranegarFragment {
             showStockLevel = sysConfigManager.read(ConfigKey.ShowStockLevel, SysConfigManager.cloud);
             orderPointCheckType = sysConfigManager.read(ConfigKey.OrderPointCheckType, SysConfigManager.cloud);
             catalogOrdersHashMap = new HashMap<>();
-            List<ProductOrderViewModel> orderViewModelList = new ProductOrderViewManager(getActivity()).getItems(ProductOrderViewManager.getAll(null, customerId, callOrderId, null, null, false, new OrderBy(ProductOrderView.CatalogOrderOf, OrderType.ASC)));
+            List<ProductOrderViewModel> orderViewModelList = new ProductOrderViewManager(getActivity())
+                    .getItems(ProductOrderViewManager
+                    .getAll(null, customerId, callOrderId, null, null, false, new OrderBy(ProductOrderView.CatalogOrderOf, OrderType.ASC)));
             Linq.forEach(orderViewModelList, new Linq.Consumer<ProductOrderViewModel>() {
                 @Override
                 public void run(ProductOrderViewModel item) {

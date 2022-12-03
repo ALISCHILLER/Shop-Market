@@ -189,9 +189,24 @@ public class FastOrderProductsDialog extends CuteDialogWithToolbar {
                         onHandQtyStock.HasAllocation = productOrderViewModel.HasAllocation;
                         BaseUnit bulkUnit = calculatorHelper.getBulkQtyUnit(customerCallOrderOrderViewModel);
                         if (productOrderViewModel.ExpDate == null)
-                            orderCalculatorForm.setArguments(productOrderViewModel.UniqueId, productOrderViewModel.ProductName, calculatorHelper.generateCalculatorUnits(productOrderViewModel.UniqueId, orderLineQtyModels, bulkUnit, ProductType.isForSale), productOrderViewModel.Price, productOrderViewModel.UserPrice, onHandQtyStock, customerId, callOrderId);
+                            orderCalculatorForm.setArguments(productOrderViewModel.UniqueId,
+                                    productOrderViewModel.ProductName,
+                                    calculatorHelper.generateCalculatorUnits(productOrderViewModel.UniqueId,
+                                            orderLineQtyModels, bulkUnit, ProductType.isForSale),
+                                    productOrderViewModel.Price, productOrderViewModel.UserPrice,
+                                    onHandQtyStock, customerId, callOrderId,productOrderViewModel.PrizeComment);
                         else
-                            orderCalculatorForm.setArguments(productOrderViewModel.UniqueId, productOrderViewModel.ProductName, CalculatorBatchUnits.generate(getContext(), productOrderViewModel, customerCallOrderOrderViewModel == null ? null : customerCallOrderOrderViewModel.UniqueId, productOrderViewModel.Price, productOrderViewModel.PriceId, productOrderViewModel.UserPrice), productOrderViewModel.UserPrice, onHandQtyStock, customerId, callOrderId);
+                            orderCalculatorForm.setArguments(productOrderViewModel.UniqueId,
+                                    productOrderViewModel.ProductName,
+                                    CalculatorBatchUnits.generate(getContext(),
+                                            productOrderViewModel,
+                                            customerCallOrderOrderViewModel == null ? null :
+                                                    customerCallOrderOrderViewModel.UniqueId,
+                                            productOrderViewModel.Price,
+                                            productOrderViewModel.PriceId,
+                                            productOrderViewModel.UserPrice),
+                                    productOrderViewModel.UserPrice, onHandQtyStock,
+                                    customerId, callOrderId,productOrderViewModel.PrizeComment);
                         orderCalculatorForm.onCalcFinish = new OrderCalculatorForm.OnCalcFinish() {
                             @Override
                             public void run(List<DiscreteUnit> discreteUnits, BaseUnit bulkUnit, @Nullable List<BatchQty> batchQtyList) {

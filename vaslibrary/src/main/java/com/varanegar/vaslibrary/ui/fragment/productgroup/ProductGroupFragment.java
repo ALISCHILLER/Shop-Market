@@ -223,7 +223,25 @@ public class ProductGroupFragment extends VisitFragment {
 //        .read(ConfigKey.SimplePresale, SysConfigManager.cloud);
 //        return SysConfigManager.compare(sysConfigModel, true);
     }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 5000) {
+            if (requestCode != RESULT_OK && null != data) {
+                ArrayList<String> result =
+                        data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                searchEditText.setText(result.get(0));
+            }
+        }else if (requestCode == 4000){
+            if (requestCode != RESULT_OK && null != data) {
+                ArrayList<String> result =
+                        data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                voicetoText = result.get(0);
+                showCalculator(possitonitem);
+            }
 
+        }
+    }
     void onAdd(final int position, final UUID productId, final List<DiscreteUnit> discreteUnits,
                final BaseUnit bulkUnit, @Nullable final FreeReasonModel freeReason,
                @Nullable final List<BatchQty> batchQtyList) {
@@ -588,25 +606,7 @@ public class ProductGroupFragment extends VisitFragment {
         return view;
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 5000) {
-            if (requestCode != RESULT_OK && null != data) {
-                ArrayList<String> result =
-                        data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                searchEditText.setText(result.get(0));
-            }
-        }else if (requestCode == 4000){
-            if (requestCode != RESULT_OK && null != data) {
-                ArrayList<String> result =
-                        data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                voicetoText = result.get(0);
-                showCalculator(possitonitem);
-            }
 
-        }
-    }
 
     boolean isPortrait() {
         return searchImageView != null;
@@ -1100,7 +1100,9 @@ public class ProductGroupFragment extends VisitFragment {
                         productsList = productOrderViewManager.getItems(ProductOrderViewManager
                                 .getAllFreeItems(null, customerId, callOrderId, null, inStock, null));
                     else
-                        productsList = productOrderViewManager.getItems(ProductOrderViewManager.getAllFreeItems(null, customerId, callOrderId, null, null, null));
+                        productsList = productOrderViewManager.getItems(ProductOrderViewManager
+                                .getAllFreeItems(null, customerId, callOrderId,
+                                        null, null, null));
                 } else if (selectedFilter == FilterType.UnSold) {
                     if (new UpdateManager(getContext()).getLog(UpdateKey.CustomerOldInvoice).equals(MIN_DATE)) {
                         getActivity().runOnUiThread(new Runnable() {
@@ -1878,9 +1880,15 @@ public class ProductGroupFragment extends VisitFragment {
                     orderCalculatorForm.setArguments(
                             productOrderViewModel.UniqueId,
                             productOrderViewModel.ProductName, calculatorUnits, productOrderViewModel.Price,
-                            productOrderViewModel.UserPrice, onHandQtyStock, customerId, callOrderId);
+                            productOrderViewModel.UserPrice, onHandQtyStock, customerId, callOrderId
+                            ,productOrderViewModel.PrizeComment);
 
-                    orderCalculatorForm.setArguments(voicetoText);
+                    if (voicetoText!=null && !voicetoText.isEmpty()) {
+                        orderCalculatorForm.setArguments(voicetoText);
+                        voicetoText="";
+                    }
+
+
                   
                 
                 }else
@@ -1889,7 +1897,7 @@ public class ProductGroupFragment extends VisitFragment {
                                     productOrderViewModel, customerCallOrderOrderViewModel == null ? null :
                                             customerCallOrderOrderViewModel.UniqueId, productOrderViewModel.Price,
                                     productOrderViewModel.PriceId, productOrderViewModel.UserPrice), productOrderViewModel.UserPrice,
-                            onHandQtyStock, customerId, callOrderId);
+                            onHandQtyStock, customerId, callOrderId,productOrderViewModel.PrizeComment);
                 orderCalculatorForm.onCalcFinish = (discreteUnits, bulkUnit1, batchQtyList) ->
                         onAdd(position, productOrderViewModel.UniqueId, discreteUnits, bulkUnit1,
                                 null, batchQtyList);

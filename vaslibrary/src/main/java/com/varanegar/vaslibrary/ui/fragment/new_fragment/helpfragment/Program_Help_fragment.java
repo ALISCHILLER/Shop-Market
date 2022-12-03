@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -35,8 +36,9 @@ public class Program_Help_fragment extends VaranegarFragment {
             ,"آموزش ویدئوی توزیع"};
 
 
-   
-    
+    Button btn;
+    FloatingSearchView floating_search_view;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +64,7 @@ public class Program_Help_fragment extends VaranegarFragment {
             }
         });
 
+
         expandableLayout.setCollapseListener(new ExpandCollapseListener.CollapseListener<HelpCategory>() {
             @Override
             public void onCollapsed(int parentIndex, HelpCategory parent, View view) {
@@ -70,19 +73,20 @@ public class Program_Help_fragment extends VaranegarFragment {
             }
         });
 
-        FloatingSearchView floating_search_view =view.findViewById(R.id.floating_search_view);
-        floating_search_view.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
-            @Override
-            public void onSearchTextChanged(String oldQuery, final String newQuery) {
 
-                //get suggestions based on newQuery
+       floating_search_view =view.findViewById(R.id.floating_search_view);
+        floating_search_view.setOnQueryChangeListener((oldQuery, newQuery) -> {
 
-                //pass them on to the search view
-                Log.e("TAG", "onSearchTextChanged:"+newQuery );
-                expandableLayout.filterChildren(obj ->
-                        ((Help) obj).name.toLowerCase().contains(newQuery.toString().toLowerCase()));
-            }
+            //get suggestions based on newQuery
+
+            //pass them on to the search view
+            Log.e("TAG", "onSearchTextChanged:"+newQuery );
+            expandableLayout.filterChildren(obj ->
+                    ((Help) obj).name.toLowerCase().contains(newQuery.toString().toLowerCase()));
         });
+
+
+
 
 //        editText.addTextChangedListener(new TextWatcher() {
 //            @Override

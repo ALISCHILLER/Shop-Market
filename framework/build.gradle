@@ -45,4 +45,6 @@ dependencies {
     api 'com.otaliastudios:cameraview:1.2.3'
     api 'com.squareup.retrofit2:converter-simplexml:2.1.0'
 
+    implementation 'com.github.arimorty:floatingsearchview:2.1.1'
+
 }

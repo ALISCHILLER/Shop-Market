@@ -26,5 +26,7 @@
     <color name="no_emphatic">#FFA8A8</color>
     <color name="light_green">#ADE7B1</color>
     <color name="light_green2">#C3E8C6</color>
+    <color name="yellow_li">#F8FF20</color>
+
 
 </resources>

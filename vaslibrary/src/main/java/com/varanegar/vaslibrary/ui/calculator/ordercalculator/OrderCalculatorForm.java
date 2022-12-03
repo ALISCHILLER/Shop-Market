@@ -6,12 +6,14 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -27,6 +29,7 @@ import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.util.component.CuteDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
+import com.varanegar.framework.util.fragment.extendedlist.Action;
 import com.varanegar.framework.util.recycler.BaseRecyclerAdapter;
 import com.varanegar.framework.util.recycler.BaseRecyclerView;
 import com.varanegar.framework.util.recycler.BaseViewHolder;
@@ -62,6 +65,7 @@ import timber.log.Timber;
 public class OrderCalculatorForm extends CuteDialog {
     private CalculatorUnits calculatorUnits;
     private String productName;
+    private String PrizeComment;
     private Calculator calculator;
     private Currency unitPrice;
     private Currency userPrice;
@@ -89,19 +93,7 @@ public class OrderCalculatorForm extends CuteDialog {
     }
 
 
-    public void setArguments(@NonNull UUID productId, @NonNull String productName,
-                             @NonNull CalculatorUnits calculatorUnits, @NonNull Currency unitPrice,
-                             @NonNull Currency userPrice, @NonNull OnHandQtyStock onHandQtyStock,
-                             @NonNull UUID customerId, @NonNull UUID callOrderId) {
-        this.calculatorUnits = calculatorUnits;
-        this.productName = productName;
-        this.productId = productId;
-        this.unitPrice = unitPrice;
-        this.userPrice = userPrice;
-        this.onHandQtyStock = onHandQtyStock;
-        this.customerId = customerId;
-        this.callOrderId = callOrderId;
-    }
+
 
     public void setArguments(String voicetoText){
         if (voicetoText!=null&&!voicetoText.isEmpty()){
@@ -164,11 +156,26 @@ public class OrderCalculatorForm extends CuteDialog {
             }
         }
     }
-
+    public void setArguments(@NonNull UUID productId, @NonNull String productName,
+                             @NonNull CalculatorUnits calculatorUnits, @NonNull Currency unitPrice,
+                             @NonNull Currency userPrice, @NonNull OnHandQtyStock onHandQtyStock,
+                             @NonNull UUID customerId, @NonNull UUID callOrderId,
+                             String PrizeComment) {
+        this.calculatorUnits = calculatorUnits;
+        this.productName = productName;
+        this.productId = productId;
+        this.unitPrice = unitPrice;
+        this.userPrice = userPrice;
+        this.onHandQtyStock = onHandQtyStock;
+        this.customerId = customerId;
+        this.callOrderId = callOrderId;
+        this.PrizeComment=PrizeComment;
+    }
     public void setArguments(@NonNull UUID productId, @NonNull String productName,
                              @NonNull List<CalculatorBatchUnits> calculatorBatchUnits,
                              @NonNull Currency userPrice, @NonNull OnHandQtyStock onHandQtyStock,
-                             @NonNull UUID customerId, UUID callOrderId) {
+                             @NonNull UUID customerId, UUID callOrderId,
+                             String PrizeComment) {
         if (calculatorBatchUnits.size() == 0)
             throw new IllegalArgumentException("");
         SysConfigManager sysConfigManager = new SysConfigManager(getContext());
@@ -194,6 +201,7 @@ public class OrderCalculatorForm extends CuteDialog {
         this.onHandQtyStock = onHandQtyStock;
         this.customerId = customerId;
         this.callOrderId = callOrderId;
+        this.PrizeComment=PrizeComment;
         batchesAdapter = new BaseSelectionRecyclerAdapter<CalculatorBatchUnits>(getVaranegarActvity(), calculatorBatchUnits, false) {
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -244,6 +252,19 @@ public class OrderCalculatorForm extends CuteDialog {
             }
         });
         fabVoice=view.findViewById(R.id.fabVoice);
+
+        LinearLayout linearLayoutParent = view.findViewById(R.id.linearLayoutParent);
+       TextView promtion_qty_text_view=view.findViewById(R.id.promtion_qty_text_view);
+        if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+            if (PrizeComment != null && !PrizeComment.isEmpty()) {
+                linearLayoutParent.setBackgroundColor(getContext().getResources().getColor(R.color.yellow_li));
+                linearLayoutParent.startAnimation(AnimationUtils.loadAnimation(getContext(),
+                        com.varanegar.framework.R.anim.bounce));
+                promtion_qty_text_view.setText(PrizeComment);
+            } else
+                linearLayoutParent.setVisibility(View.GONE);
+
+        }
 
         setCancelable(false);
         fabVoice.setOnClickListener(v -> {

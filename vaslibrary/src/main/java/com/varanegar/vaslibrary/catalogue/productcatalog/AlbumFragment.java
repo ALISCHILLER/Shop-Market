@@ -1,8 +1,12 @@
 package com.varanegar.vaslibrary.catalogue.productcatalog;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -83,8 +87,12 @@ import timber.log.Timber;
 public class AlbumFragment extends ProgressFragment {
     UUID customerId;
     UUID callOrderId;
+    private String voicetoText;
     private ViewPager mainViewPager;
     private ViewPager backViewPager;
+    private ProductOrderViewModel productOrderViewModelVoice;
+    private int positionVoice;
+    private CatalogModel catalogModelVoice;
     private MainPagerAdapter mainPagerAdapter;
     private BackgroundPagerAdapter backgroundPagerAdapter;
     private PagerAdapterInfoMap pagerAdapterInfoMap;
@@ -100,6 +108,20 @@ public class AlbumFragment extends ProgressFragment {
     private UUID lastProductId;
     private View infoButton;
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+      if (requestCode == 4000){
+            if (requestCode != RESULT_OK && null != data) {
+                ArrayList<String> result =
+                        data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                voicetoText = result.get(0);
+                ShowCalculator(productOrderViewModelVoice,positionVoice,catalogModelVoice);
+            }
+
+        }
+    }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -405,97 +427,10 @@ public class AlbumFragment extends ProgressFragment {
                         dialog.setPositiveButton(R.string.ok, null);
                         dialog.show();
                     } else {
-                        CustomerCallOrderOrderViewModel customerCallOrderOrderViewModel = new CustomerCallOrderOrderViewModelRepository().getItem(
-                                new Query().from(CustomerCallOrderOrderView.CustomerCallOrderOrderViewTbl)
-                                        .whereAnd(Criteria.equals(CustomerCallOrderOrderView.OrderUniqueId, callOrderId))
-                                        .whereAnd(Criteria.equals(CustomerCallOrderOrderView.ProductId, productOrderViewModel.UniqueId))
-                        );
-                        List<OrderLineQtyModel> orderLineQtyModels = new ArrayList<>();
-                        if (customerCallOrderOrderViewModel != null)
-                            orderLineQtyModels = new OrderLineQtyManager(getContext())
-                                    .getQtyLines(customerCallOrderOrderViewModel.UniqueId);
-                        OrderCalculatorForm orderCalculatorForm = new OrderCalculatorForm();
-                        try {
-                            CalculatorHelper calculatorHelper = new CalculatorHelper(getContext());
-
-                            final OnHandQtyStock onHandQtyStock = new OnHandQtyStock();
-                            ProductUnitsViewManager productUnitsViewManager = new ProductUnitsViewManager(getContext());
-                            ProductUnitsViewModel productUnitsViewModel = productUnitsViewManager.getItem(productOrderViewModel.UniqueId);
-                            onHandQtyStock.ConvertFactors = productUnitsViewModel.ConvertFactor;
-                            onHandQtyStock.UnitNames = productUnitsViewModel.UnitName;
-                            if (productOrderViewModel.OnHandQty == null)
-                                productOrderViewModel.OnHandQty = BigDecimal.ZERO;
-                            onHandQtyStock.OnHandQty = productOrderViewModel.OnHandQty;
-                            if (productOrderViewModel.RemainedAfterReservedQty == null)
-                                productOrderViewModel.RemainedAfterReservedQty = BigDecimal.ZERO;
-                            onHandQtyStock.RemainedAfterReservedQty = productOrderViewModel.RemainedAfterReservedQty;
-                            if (productOrderViewModel.OrderPoint == null)
-                                productOrderViewModel.OrderPoint = BigDecimal.ZERO;
-                            onHandQtyStock.OrderPoint = productOrderViewModel.OrderPoint;
-                            if (productOrderViewModel.ProductTotalOrderedQty == null)
-                                productOrderViewModel.ProductTotalOrderedQty = BigDecimal.ZERO;
-                            onHandQtyStock.ProductTotalOrderedQty = productOrderViewModel.ProductTotalOrderedQty;
-                            if (productOrderViewModel.RequestBulkQty == null)
-                                onHandQtyStock.TotalQty = productOrderViewModel.TotalQty == null ? BigDecimal.ZERO : productOrderViewModel.TotalQty;
-                            else
-                                onHandQtyStock.TotalQty = productOrderViewModel.TotalQtyBulk == null ? BigDecimal.ZERO : productOrderViewModel.TotalQtyBulk;
-                            onHandQtyStock.HasAllocation = productOrderViewModel.HasAllocation;
-                            BaseUnit bulkUnit = calculatorHelper.getBulkQtyUnit(customerCallOrderOrderViewModel);
-                            if (productOrderViewModel.ExpDate == null)
-                                orderCalculatorForm.setArguments(productOrderViewModel.UniqueId, productOrderViewModel.ProductName, calculatorHelper.generateCalculatorUnits(productOrderViewModel.UniqueId, orderLineQtyModels, bulkUnit, ProductType.isForSale), productOrderViewModel.Price, productOrderViewModel.UserPrice, onHandQtyStock, customerId, callOrderId);
-                            else
-                                orderCalculatorForm.setArguments(productOrderViewModel.UniqueId, productOrderViewModel.ProductName, CalculatorBatchUnits.generate(getContext(), productOrderViewModel, customerCallOrderOrderViewModel == null ? null : customerCallOrderOrderViewModel.UniqueId, productOrderViewModel.Price, productOrderViewModel.PriceId, productOrderViewModel.UserPrice), productOrderViewModel.UserPrice, onHandQtyStock, customerId, callOrderId);
-                            orderCalculatorForm.onCalcFinish = (discreteUnits, bulkUnit1, batchQtyList) -> {
-                                try {
-                                    ProductOrderViewManager.checkOnHandQty(getContext(), onHandQtyStock, discreteUnits, bulkUnit1);
-                                    //manager customerid productid
-                                    CustomerNotAllowProductManager.checkNotAllowed(getContext()
-                                            ,customerId,catalogModel.ProductId);
-                                    onAdd(productOrderViewModel, discreteUnits, bulkUnit1, position, batchQtyList);
-                                } catch (OnHandQtyWarning e) {
-                                    Timber.e(e);
-                                    CuteMessageDialog dialog = new CuteMessageDialog(getContext());
-                                    dialog.setTitle(R.string.warning);
-                                    dialog.setMessage(e.getMessage());
-                                    dialog.setIcon(Icon.Warning);
-                                    dialog.setPositiveButton(R.string.ok, v1 -> {
-                                        try {
-                                            onAdd(productOrderViewModel, discreteUnits, bulkUnit1, position, batchQtyList);
-                                        } catch (Exception ex) {
-                                            Timber.e(ex);
-                                            CuteMessageDialog dialog1 = new CuteMessageDialog(getContext());
-                                            dialog1.setTitle(R.string.error);
-                                            dialog1.setMessage(R.string.error_saving_request);
-                                            dialog1.setIcon(Icon.Error);
-                                            dialog1.setPositiveButton(R.string.ok, null);
-                                            dialog1.show();
-                                        }
-                                    });
-                                    dialog.setNegativeButton(R.string.cancel, null);
-                                    dialog.show();
-                                } catch (OnHandQtyError e) {
-                                    Timber.e(e);
-                                    CuteMessageDialog dialog = new CuteMessageDialog(getContext());
-                                    dialog.setTitle(R.string.error);
-                                    dialog.setMessage(e.getMessage());
-                                    dialog.setIcon(Icon.Error);
-                                    dialog.setPositiveButton(R.string.ok, null);
-                                    dialog.show();
-                                } catch (Exception e) {
-                                    Timber.e(e);
-                                    CuteMessageDialog dialog = new CuteMessageDialog(getContext());
-                                    dialog.setTitle(R.string.error);
-                                    dialog.setMessage(R.string.error_saving_request);
-                                    dialog.setIcon(Icon.Error);
-                                    dialog.setPositiveButton(R.string.ok, null);
-                                    dialog.show();
-                                }
-                            };
-                            orderCalculatorForm.show(getVaranegarActvity().getSupportFragmentManager(), "dc38bc80-72d4-4f10-8a1b-0d6c02e663bf");
-                        } catch (ProductUnitViewManager.UnitNotFoundException e) {
-                            getVaranegarActvity().showSnackBar(R.string.no_unit_for_product, MainVaranegarActivity.Duration.Short);
-                            Timber.e(e, "product unit not found in product group fragment");
-                        }
+                        productOrderViewModelVoice=productOrderViewModel;
+                        positionVoice=position;
+                        catalogModelVoice=catalogModel;
+                        ShowCalculator(productOrderViewModel,position,catalogModel);
                     }
                 }
             } else {
@@ -536,4 +471,114 @@ public class AlbumFragment extends ProgressFragment {
         mainPagerAdapter.refreshView(productOrderViewModel, position);
         backgroundPagerAdapter.refreshView(productOrderViewModel, position);
     }
+
+   private void ShowCalculator(ProductOrderViewModel productOrderViewModel,
+                               int position, CatalogModel catalogModel){
+       CustomerCallOrderOrderViewModel customerCallOrderOrderViewModel = new CustomerCallOrderOrderViewModelRepository().getItem(
+               new Query().from(CustomerCallOrderOrderView.CustomerCallOrderOrderViewTbl)
+                       .whereAnd(Criteria.equals(CustomerCallOrderOrderView.OrderUniqueId, callOrderId))
+                       .whereAnd(Criteria.equals(CustomerCallOrderOrderView.ProductId, productOrderViewModel.UniqueId))
+       );
+       List<OrderLineQtyModel> orderLineQtyModels = new ArrayList<>();
+       if (customerCallOrderOrderViewModel != null)
+           orderLineQtyModels = new OrderLineQtyManager(getContext())
+                   .getQtyLines(customerCallOrderOrderViewModel.UniqueId);
+       OrderCalculatorForm orderCalculatorForm = new OrderCalculatorForm();
+       try {
+           CalculatorHelper calculatorHelper = new CalculatorHelper(getContext());
+
+           final OnHandQtyStock onHandQtyStock = new OnHandQtyStock();
+           ProductUnitsViewManager productUnitsViewManager = new ProductUnitsViewManager(getContext());
+           ProductUnitsViewModel productUnitsViewModel = productUnitsViewManager.getItem(productOrderViewModel.UniqueId);
+           onHandQtyStock.ConvertFactors = productUnitsViewModel.ConvertFactor;
+           onHandQtyStock.UnitNames = productUnitsViewModel.UnitName;
+           if (productOrderViewModel.OnHandQty == null)
+               productOrderViewModel.OnHandQty = BigDecimal.ZERO;
+           onHandQtyStock.OnHandQty = productOrderViewModel.OnHandQty;
+           if (productOrderViewModel.RemainedAfterReservedQty == null)
+               productOrderViewModel.RemainedAfterReservedQty = BigDecimal.ZERO;
+           onHandQtyStock.RemainedAfterReservedQty = productOrderViewModel.RemainedAfterReservedQty;
+           if (productOrderViewModel.OrderPoint == null)
+               productOrderViewModel.OrderPoint = BigDecimal.ZERO;
+           onHandQtyStock.OrderPoint = productOrderViewModel.OrderPoint;
+           if (productOrderViewModel.ProductTotalOrderedQty == null)
+               productOrderViewModel.ProductTotalOrderedQty = BigDecimal.ZERO;
+           onHandQtyStock.ProductTotalOrderedQty = productOrderViewModel.ProductTotalOrderedQty;
+           if (productOrderViewModel.RequestBulkQty == null)
+               onHandQtyStock.TotalQty = productOrderViewModel.TotalQty == null ? BigDecimal.ZERO : productOrderViewModel.TotalQty;
+           else
+               onHandQtyStock.TotalQty = productOrderViewModel.TotalQtyBulk == null ? BigDecimal.ZERO : productOrderViewModel.TotalQtyBulk;
+           onHandQtyStock.HasAllocation = productOrderViewModel.HasAllocation;
+           BaseUnit bulkUnit = calculatorHelper.getBulkQtyUnit(customerCallOrderOrderViewModel);
+           if (productOrderViewModel.ExpDate == null)
+               orderCalculatorForm.setArguments(productOrderViewModel.UniqueId, productOrderViewModel.ProductName,
+                       calculatorHelper.generateCalculatorUnits(productOrderViewModel.UniqueId,
+                               orderLineQtyModels, bulkUnit
+                               , ProductType.isForSale),
+                       productOrderViewModel.Price,
+                       productOrderViewModel.UserPrice, onHandQtyStock, customerId
+                       , callOrderId,productOrderViewModel.PrizeComment);
+           else
+               orderCalculatorForm.setArguments(productOrderViewModel.UniqueId,
+                       productOrderViewModel.ProductName,
+                       CalculatorBatchUnits.generate(getContext(),
+                               productOrderViewModel,
+                               customerCallOrderOrderViewModel == null ? null : customerCallOrderOrderViewModel.UniqueId,
+                               productOrderViewModel.Price, productOrderViewModel.PriceId,
+                               productOrderViewModel.UserPrice),
+                       productOrderViewModel.UserPrice,
+                       onHandQtyStock, customerId, callOrderId
+                       ,productOrderViewModel.PrizeComment);
+           orderCalculatorForm.onCalcFinish = (discreteUnits, bulkUnit1, batchQtyList) -> {
+               try {
+                   ProductOrderViewManager.checkOnHandQty(getContext(), onHandQtyStock, discreteUnits, bulkUnit1);
+                   //manager customerid productid
+                   CustomerNotAllowProductManager.checkNotAllowed(getContext()
+                           ,customerId,catalogModel.ProductId);
+                   onAdd(productOrderViewModel, discreteUnits, bulkUnit1, position, batchQtyList);
+               } catch (OnHandQtyWarning e) {
+                   Timber.e(e);
+                   CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+                   dialog.setTitle(R.string.warning);
+                   dialog.setMessage(e.getMessage());
+                   dialog.setIcon(Icon.Warning);
+                   dialog.setPositiveButton(R.string.ok, v1 -> {
+                       try {
+                           onAdd(productOrderViewModel, discreteUnits, bulkUnit1, position, batchQtyList);
+                       } catch (Exception ex) {
+                           Timber.e(ex);
+                           CuteMessageDialog dialog1 = new CuteMessageDialog(getContext());
+                           dialog1.setTitle(R.string.error);
+                           dialog1.setMessage(R.string.error_saving_request);
+                           dialog1.setIcon(Icon.Error);
+                           dialog1.setPositiveButton(R.string.ok, null);
+                           dialog1.show();
+                       }
+                   });
+                   dialog.setNegativeButton(R.string.cancel, null);
+                   dialog.show();
+               } catch (OnHandQtyError e) {
+                   Timber.e(e);
+                   CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+                   dialog.setTitle(R.string.error);
+                   dialog.setMessage(e.getMessage());
+                   dialog.setIcon(Icon.Error);
+                   dialog.setPositiveButton(R.string.ok, null);
+                   dialog.show();
+               } catch (Exception e) {
+                   Timber.e(e);
+                   CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+                   dialog.setTitle(R.string.error);
+                   dialog.setMessage(R.string.error_saving_request);
+                   dialog.setIcon(Icon.Error);
+                   dialog.setPositiveButton(R.string.ok, null);
+                   dialog.show();
+               }
+           };
+           orderCalculatorForm.show(getVaranegarActvity().getSupportFragmentManager(), "dc38bc80-72d4-4f10-8a1b-0d6c02e663bf");
+       } catch (ProductUnitViewManager.UnitNotFoundException e) {
+           getVaranegarActvity().showSnackBar(R.string.no_unit_for_product, MainVaranegarActivity.Duration.Short);
+           Timber.e(e, "product unit not found in product group fragment");
+       }
+   }
 }
