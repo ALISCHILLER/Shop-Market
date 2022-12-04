@@ -69,7 +69,11 @@ public class ProductGroupCatalogProductOrderViewHolder extends BaseViewHolder<Pr
     private final TextView customerPriceTextView;
     private UUID callOrderId;
 
-    public ProductGroupCatalogProductOrderViewHolder(View itemView, BaseRecyclerAdapter<ProductOrderViewModel> recyclerAdapter, Context context, SysConfigModel showStockLevel, SysConfigModel orderPointCheckType, UUID callOrderId, UUID customerId) {
+    public ProductGroupCatalogProductOrderViewHolder(View itemView,
+                                                     BaseRecyclerAdapter<ProductOrderViewModel> recyclerAdapter,
+                                                     Context context, SysConfigModel showStockLevel,
+                                                     SysConfigModel orderPointCheckType,
+                                                     UUID callOrderId, UUID customerId) {
         super(itemView, recyclerAdapter, context);
         this.showStockLevel = showStockLevel;
         this.orderPointCheckType = orderPointCheckType;
@@ -78,8 +82,6 @@ public class ProductGroupCatalogProductOrderViewHolder extends BaseViewHolder<Pr
         productPriceTextView = (TextView) itemView.findViewById(R.id.product_price_text_view);
         stockLevelTextView = (TextView) itemView.findViewById(R.id.stock_level_text_view);
         customerPriceTextView = (TextView) itemView.findViewById(R.id.product_customer_price_text_view);
-
-
         deleteView = itemView.findViewById(R.id.delete_image_view);
         this.callOrderId = callOrderId;
         this.customerId = customerId;
@@ -185,32 +187,31 @@ public class ProductGroupCatalogProductOrderViewHolder extends BaseViewHolder<Pr
                             productOrderViewModel.ProductTotalOrderedQty = BigDecimal.ZERO;
                         onHandQtyStock.ProductTotalOrderedQty = productOrderViewModel.ProductTotalOrderedQty;
                         if (productOrderViewModel.RequestBulkQty == null)
-                            onHandQtyStock.TotalQty = productOrderViewModel.TotalQty == null ? BigDecimal.ZERO : productOrderViewModel.TotalQty;
+                            onHandQtyStock.TotalQty = productOrderViewModel.TotalQty == null
+                                    ? BigDecimal.ZERO : productOrderViewModel.TotalQty;
                         else
-                            onHandQtyStock.TotalQty = productOrderViewModel.TotalQtyBulk == null ? BigDecimal.ZERO : productOrderViewModel.TotalQtyBulk;
+                            onHandQtyStock.TotalQty = productOrderViewModel.TotalQtyBulk == null
+                                    ? BigDecimal.ZERO : productOrderViewModel.TotalQtyBulk;
                         onHandQtyStock.HasAllocation = productOrderViewModel.HasAllocation;
                         CalculatorHelper calculatorHelper = new CalculatorHelper(getContext());
                         BaseUnit bulkUnit = calculatorHelper.getBulkQtyUnit(customerCallOrderOrderViewModel);
-                        if (productOrderViewModel.ExpDate == null)
+                        if (productOrderViewModel.ExpDate == null){
                             orderCalculatorForm.setArguments(productOrderViewModel.UniqueId, productOrderViewModel.ProductName,
                                     calculatorHelper.generateCalculatorUnits(productOrderViewModel.UniqueId,
                                             orderLineQtyModels, bulkUnit, ProductType.isForSale),
                                     productOrderViewModel.Price, productOrderViewModel.UserPrice,
                                     onHandQtyStock, customerId, callOrderId,productOrderViewModel.PrizeComment);
-                        else
+                        }else {
                             orderCalculatorForm.setArguments(productOrderViewModel.UniqueId,
                                     productOrderViewModel.ProductName, CalculatorBatchUnits.generate(getContext(),
                                             productOrderViewModel,
                                             customerCallOrderOrderViewModel == null ? null : customerCallOrderOrderViewModel.UniqueId,
                                             productOrderViewModel.Price, productOrderViewModel.PriceId, productOrderViewModel.UserPrice),
                                     productOrderViewModel.UserPrice, onHandQtyStock, customerId, callOrderId
-                                    ,productOrderViewModel.PrizeComment);
-                        orderCalculatorForm.onCalcFinish = new OrderCalculatorForm.OnCalcFinish() {
-                            @Override
-                            public void run(List<DiscreteUnit> discreteUnits, BaseUnit bulkUnit, @Nullable List<BatchQty> batchQtyList) {
-                                onAdd(productOrderViewModel, discreteUnits, bulkUnit, batchQtyList, onHandQtyStock);
-                            }
-                        };
+                                    , productOrderViewModel.PrizeComment);
+                        }
+                        orderCalculatorForm.onCalcFinish = (discreteUnits, bulkUnit1, batchQtyList)
+                                -> onAdd(productOrderViewModel, discreteUnits, bulkUnit1, batchQtyList, onHandQtyStock);
                         orderCalculatorForm.show(recyclerAdapter.getActivity().getSupportFragmentManager(), "dc38bc80-72d4-4f10-8a1b-0d6c02e663bf");
                     } catch (ProductUnitViewManager.UnitNotFoundException e) {
                         Toast.makeText(getContext(), R.string.no_unit_for_product, Toast.LENGTH_SHORT).show();

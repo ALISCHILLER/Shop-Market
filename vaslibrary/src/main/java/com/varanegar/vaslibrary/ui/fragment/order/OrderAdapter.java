@@ -157,7 +157,8 @@ public class OrderAdapter extends BaseRecyclerAdapter<CustomerCallOrderOrderView
                                     customerId,
                                     callOrderId,"");
                         else {
-                            ProductOrderViewModel productOrderViewModel = new ProductOrderViewManager(getActivity()).getLine(customerId,
+                            ProductOrderViewModel productOrderViewModel = new
+                                    ProductOrderViewManager(getActivity()).getLine(customerId,
                                     callOrderId,
                                     customerCallOrderOrderViewModel.ProductId,
                                     false);
@@ -165,7 +166,8 @@ public class OrderAdapter extends BaseRecyclerAdapter<CustomerCallOrderOrderView
                                     customerCallOrderOrderViewModel.ProductName,
                                     CalculatorBatchUnits.generate(getActivity(),
                                             productOrderViewModel,
-                                            customerCallOrderOrderViewModel == null ? null : customerCallOrderOrderViewModel.UniqueId,
+                                            customerCallOrderOrderViewModel == null ? null
+                                                    : customerCallOrderOrderViewModel.UniqueId,
                                             productOrderViewModel.Price,
                                             productOrderViewModel.PriceId,
                                             productOrderViewModel.UserPrice),
@@ -178,7 +180,8 @@ public class OrderAdapter extends BaseRecyclerAdapter<CustomerCallOrderOrderView
                         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist))
                             orderCalculatorForm.setMaxValue(customerCallOrderOrderViewModel.OriginalTotalQty);
 
-                        orderCalculatorForm.onCalcFinish = (discreteUnits, bulkUnit1, batchQtyList) -> fragment.onEditItem(customerCallOrderOrderViewModel, discreteUnits, bulkUnit1, batchQtyList);
+                        orderCalculatorForm.onCalcFinish = (discreteUnits, bulkUnit1, batchQtyList) ->
+                                fragment.onEditItem(customerCallOrderOrderViewModel, discreteUnits, bulkUnit1, batchQtyList);
                         orderCalculatorForm.show(fragment.getChildFragmentManager(), "a383a846-118d-4161-a4ea-3d1518468d1e");
                     } catch (ProductUnitViewManager.UnitNotFoundException ex) {
                         MainVaranegarActivity activity = (MainVaranegarActivity) getActivity();

@@ -1,14 +1,18 @@
 package com.varanegar.vaslibrary.ui.fragment.order;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.speech.RecognizerIntent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -293,7 +297,8 @@ public class CustomerSaveOrderFragment extends VisitFragment
     private boolean last = false;
 
     int defaultPayment = -1;
-
+    private String voicetoText;
+    private ProductOrderViewModel productOrderViewModelVoice;
     List<DiscountOrderPrizeViewModel> orderPrizeList = new ArrayList<>();
 
     public void setArguments(UUID customerId, UUID callOrderId, UUID customerLevelId) {
@@ -1693,67 +1698,8 @@ public class CustomerSaveOrderFragment extends VisitFragment
             productSearchBox.show(getVaranegarActvity().getSupportFragmentManager(), "ProductSearchBox");
             productSearchBox.setOnItemSelectedListener((position, productOrderViewModel) -> {
                 productSearchBox.dismiss();
-                final CustomerCallOrderOrderViewModel customerCallOrderOrderViewModel = Linq.findFirst(orderAdapter.getItems(),
-                        item -> item.ProductId.equals(productOrderViewModel.UniqueId));
-
-                List<OrderLineQtyModel> orderLineQtyModels = new ArrayList<>();
-                OrderLineQtyManager orderLineQtyManager = new OrderLineQtyManager(context);
-                if (customerCallOrderOrderViewModel != null) {
-                    orderLineQtyModels = orderLineQtyManager.getQtyLines(customerCallOrderOrderViewModel.UniqueId);
-                }
-                OrderCalculatorForm orderCalculatorForm = new OrderCalculatorForm();
-                try {
-                    final CalculatorHelper calculatorHelper = new CalculatorHelper(context);
-                    final OnHandQtyStock onHandQtyStock = new OnHandQtyStock();
-                    ProductUnitsViewModel productUnitsViewModel = productUnitsHashMap.get(productOrderViewModel.UniqueId);
-                    onHandQtyStock.ConvertFactors = Objects.requireNonNull(productUnitsViewModel).ConvertFactor;
-                    onHandQtyStock.UnitNames = productUnitsViewModel.UnitName;
-                    if (productOrderViewModel.OnHandQty == null)
-                        productOrderViewModel.OnHandQty = BigDecimal.ZERO;
-                    onHandQtyStock.OnHandQty = productOrderViewModel.OnHandQty;
-                    if (productOrderViewModel.RemainedAfterReservedQty == null)
-                        productOrderViewModel.RemainedAfterReservedQty = BigDecimal.ZERO;
-                    onHandQtyStock.RemainedAfterReservedQty = productOrderViewModel.RemainedAfterReservedQty;
-                    if (productOrderViewModel.OrderPoint == null)
-                        productOrderViewModel.OrderPoint = BigDecimal.ZERO;
-                    onHandQtyStock.OrderPoint = productOrderViewModel.OrderPoint;
-                    if (productOrderViewModel.ProductTotalOrderedQty == null)
-                        productOrderViewModel.ProductTotalOrderedQty = BigDecimal.ZERO;
-                    onHandQtyStock.ProductTotalOrderedQty = productOrderViewModel.ProductTotalOrderedQty;
-                    if (productOrderViewModel.RequestBulkQty == null)
-                        onHandQtyStock.TotalQty = productOrderViewModel.TotalQty == null ? BigDecimal.ZERO : productOrderViewModel.TotalQty;
-                    else
-                        onHandQtyStock.TotalQty = productOrderViewModel.TotalQtyBulk == null ? BigDecimal.ZERO : productOrderViewModel.TotalQtyBulk;
-                    onHandQtyStock.HasAllocation = productOrderViewModel.HasAllocation;
-                    BaseUnit bulkUnit = calculatorHelper.getBulkQtyUnit(customerCallOrderOrderViewModel);
-                    if (productOrderViewModel.ExpDate == null)
-                        orderCalculatorForm.setArguments(Objects
-                                        .requireNonNull(productOrderViewModel.UniqueId),
-                                productOrderViewModel.ProductName, calculatorHelper
-                                        .generateCalculatorUnits(productOrderViewModel.UniqueId,
-                                                orderLineQtyModels, bulkUnit, ProductType.isForSale),
-                                productOrderViewModel.Price, productOrderViewModel.UserPrice,
-                                onHandQtyStock, customerId, callOrderId,
-                                productOrderViewModel.PrizeComment);
-                    else
-                        orderCalculatorForm.setArguments(productOrderViewModel.UniqueId,
-                                productOrderViewModel.ProductName,
-                                CalculatorBatchUnits.generate(getContext(), productOrderViewModel,
-                                        customerCallOrderOrderViewModel == null ? null :
-                                                customerCallOrderOrderViewModel.UniqueId,
-                                        productOrderViewModel.Price, productOrderViewModel.PriceId,
-                                        productOrderViewModel.UserPrice), productOrderViewModel.UserPrice,
-                                onHandQtyStock, customerId, callOrderId,productOrderViewModel.PrizeComment);
-                    orderCalculatorForm.onCalcFinish = (discreteUnits, bulkUnit1, batchQtyList) ->
-                            onAddItem(productOrderViewModel, discreteUnits, bulkUnit1, batchQtyList);
-                    orderCalculatorForm.show(getChildFragmentManager(), "2af40365-a4db-4afb-bb13-2a9896803d92");
-                } catch (ProductUnitViewManager.UnitNotFoundException e) {
-                    MainVaranegarActivity activity = getVaranegarActvity();
-                    if (activity != null && !activity.isFinishing() && isResumed()) {
-                        activity.showSnackBar(R.string.no_unit_for_product, MainVaranegarActivity.Duration.Short);
-                    }
-                    Timber.e(e);
-                }
+                productOrderViewModelVoice=productOrderViewModel;
+                showCalculator(productOrderViewModel);
             });
         });
         searchButton.setIcon(R.drawable.ic_search_white_36dp);
@@ -3707,6 +3653,90 @@ public class CustomerSaveOrderFragment extends VisitFragment
             dialog.setIcon(Icon.Error);
             dialog.setPositiveButton(R.string.ok, null);
             dialog.show();
+        }
+    }
+    private void showCalculator(ProductOrderViewModel productOrderViewModel) {
+        if (productOrderViewModel != null){
+            final CustomerCallOrderOrderViewModel customerCallOrderOrderViewModel =
+                    Linq.findFirst(orderAdapter.getItems(),
+                            item -> item.ProductId.equals(productOrderViewModel.UniqueId));
+
+        List<OrderLineQtyModel> orderLineQtyModels = new ArrayList<>();
+        OrderLineQtyManager orderLineQtyManager = new OrderLineQtyManager(context);
+        if (customerCallOrderOrderViewModel != null) {
+            orderLineQtyModels = orderLineQtyManager.getQtyLines(customerCallOrderOrderViewModel.UniqueId);
+        }
+        OrderCalculatorForm orderCalculatorForm = new OrderCalculatorForm();
+        try {
+            final CalculatorHelper calculatorHelper = new CalculatorHelper(context);
+            final OnHandQtyStock onHandQtyStock = new OnHandQtyStock();
+            ProductUnitsViewModel productUnitsViewModel = productUnitsHashMap.get(productOrderViewModel.UniqueId);
+            onHandQtyStock.ConvertFactors = Objects.requireNonNull(productUnitsViewModel).ConvertFactor;
+            onHandQtyStock.UnitNames = productUnitsViewModel.UnitName;
+            if (productOrderViewModel.OnHandQty == null)
+                productOrderViewModel.OnHandQty = BigDecimal.ZERO;
+            onHandQtyStock.OnHandQty = productOrderViewModel.OnHandQty;
+            if (productOrderViewModel.RemainedAfterReservedQty == null)
+                productOrderViewModel.RemainedAfterReservedQty = BigDecimal.ZERO;
+            onHandQtyStock.RemainedAfterReservedQty = productOrderViewModel.RemainedAfterReservedQty;
+            if (productOrderViewModel.OrderPoint == null)
+                productOrderViewModel.OrderPoint = BigDecimal.ZERO;
+            onHandQtyStock.OrderPoint = productOrderViewModel.OrderPoint;
+            if (productOrderViewModel.ProductTotalOrderedQty == null)
+                productOrderViewModel.ProductTotalOrderedQty = BigDecimal.ZERO;
+            onHandQtyStock.ProductTotalOrderedQty = productOrderViewModel.ProductTotalOrderedQty;
+            if (productOrderViewModel.RequestBulkQty == null)
+                onHandQtyStock.TotalQty = productOrderViewModel.TotalQty == null ? BigDecimal.ZERO : productOrderViewModel.TotalQty;
+            else
+                onHandQtyStock.TotalQty = productOrderViewModel.TotalQtyBulk == null ? BigDecimal.ZERO : productOrderViewModel.TotalQtyBulk;
+            onHandQtyStock.HasAllocation = productOrderViewModel.HasAllocation;
+            BaseUnit bulkUnit = calculatorHelper.getBulkQtyUnit(customerCallOrderOrderViewModel);
+            if (productOrderViewModel.ExpDate == null) {
+                orderCalculatorForm.setArguments(Objects
+                                .requireNonNull(productOrderViewModel.UniqueId),
+                        productOrderViewModel.ProductName, calculatorHelper
+                                .generateCalculatorUnits(productOrderViewModel.UniqueId,
+                                        orderLineQtyModels, bulkUnit, ProductType.isForSale),
+                        productOrderViewModel.Price, productOrderViewModel.UserPrice,
+                        onHandQtyStock, customerId, callOrderId,
+                        productOrderViewModel.PrizeComment);
+                if (voicetoText != null && !voicetoText.isEmpty()) {
+                    orderCalculatorForm.setArguments(voicetoText);
+                    voicetoText = "";
+                }
+            } else
+                orderCalculatorForm.setArguments(productOrderViewModel.UniqueId,
+                        productOrderViewModel.ProductName,
+                        CalculatorBatchUnits.generate(getContext(), productOrderViewModel,
+                                customerCallOrderOrderViewModel == null ? null :
+                                        customerCallOrderOrderViewModel.UniqueId,
+                                productOrderViewModel.Price, productOrderViewModel.PriceId,
+                                productOrderViewModel.UserPrice), productOrderViewModel.UserPrice,
+                        onHandQtyStock, customerId, callOrderId, productOrderViewModel.PrizeComment);
+            orderCalculatorForm.onCalcFinish = (discreteUnits, bulkUnit1, batchQtyList) ->
+                    onAddItem(productOrderViewModel, discreteUnits, bulkUnit1, batchQtyList);
+            orderCalculatorForm.show(getChildFragmentManager(), "2af40365-a4db-4afb-bb13-2a9896803d92");
+        } catch (ProductUnitViewManager.UnitNotFoundException e) {
+            MainVaranegarActivity activity = getVaranegarActvity();
+            if (activity != null && !activity.isFinishing() && isResumed()) {
+                activity.showSnackBar(R.string.no_unit_for_product, MainVaranegarActivity.Duration.Short);
+            }
+            Timber.e(e);
+        }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 4000){
+            if (requestCode != RESULT_OK && null != data) {
+                ArrayList<String> result =
+                        data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                voicetoText = result.get(0);
+                showCalculator(productOrderViewModelVoice);
+            }
+
         }
     }
 }

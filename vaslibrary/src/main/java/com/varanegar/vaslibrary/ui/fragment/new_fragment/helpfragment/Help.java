@@ -30,10 +30,10 @@ public class Help {
                         "http://5.160.125.98:8080/content/videos/Customer_camera.mp4");
                 Help b04=new Help("آموزش ثبت سفارش و ثبت برگشتی",
                         "http://5.160.125.98:8080/content/videos/Order registration and return registration.mp4");
-                Help b05=new Help("آموزش ثبت مشتری",
-                        "http://5.160.125.98:8080/content/videos/Customer_camera.mp4");
+                Help b05=new Help("آموزش پاک کردن داده کلیر کش",
+                        "http://5.160.125.98:8080/content/videos/clear-data.mp4");
                 Help b06=new Help("آموزش ویرایش مشتری",
-                        "http://5.160.125.98:8080/content/videos/Customer_camera.mp4");
+                        "http://5.160.125.98:8080/content/videos/Edit_Customr_image_nationalCode.mp4");
                 helps.add(b00);
                 helps.add(b01);
                 helps.add(b02);

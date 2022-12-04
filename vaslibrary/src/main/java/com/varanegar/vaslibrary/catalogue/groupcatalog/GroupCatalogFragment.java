@@ -344,7 +344,9 @@ public class GroupCatalogFragment extends VaranegarFragment {
                     @Override
                     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_product_album_batch_item, parent, false);
-                        return new ProductGroupCatalogProductOrderViewHolder(view, this, getActivity(), showStockLevel, orderPointCheckType, callOrderId, customerId);
+                        return new ProductGroupCatalogProductOrderViewHolder(view,
+                                this, getActivity(), showStockLevel,
+                                orderPointCheckType, callOrderId, customerId);
                     }
                 };
             } else {
