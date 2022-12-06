@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.varanegar.vaslibrary.model.CheckCustomerCreditsModel;
 import com.varanegar.vaslibrary.model.newmodel.checkCustomerCredits.CheckCustomerCreditModel;
+import com.varanegar.vaslibrary.model.newmodel.commodity_rationing.CommodityRationingModel;
 import com.varanegar.vaslibrary.model.newmodel.customergrouplastsalesreport.CustomerGroupLastSalesReportModel;
 import com.varanegar.vaslibrary.ui.fragment.news_fragment.model.NewsData_Model;
 import com.varanegar.vaslibrary.webapi.BaseApi;
@@ -67,6 +68,13 @@ public class ApiNew extends BaseApi implements InApiNew {
         InApiNew api = getRetrofitBuilder(TokenType.UserToken)
                 .build().create(InApiNew.class);
         return api.CustomerLastSaleReport(dealersId,startDate,endDate);
+    }
+
+    @Override
+    public Call<List<CommodityRationingModel>> getCommodityRationin() {
+        InApiNew api = getRetrofitBuilder(TokenType.UserToken)
+                .build().create(InApiNew.class);
+        return api.getCommodityRationin();
     }
 
 

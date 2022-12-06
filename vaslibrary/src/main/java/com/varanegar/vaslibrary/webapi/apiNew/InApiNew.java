@@ -2,6 +2,7 @@ package com.varanegar.vaslibrary.webapi.apiNew;
 
 import com.varanegar.vaslibrary.model.CheckCustomerCreditsModel;
 import com.varanegar.vaslibrary.model.newmodel.checkCustomerCredits.CheckCustomerCreditModel;
+import com.varanegar.vaslibrary.model.newmodel.commodity_rationing.CommodityRationingModel;
 import com.varanegar.vaslibrary.model.newmodel.customergrouplastsalesreport.CustomerGroupLastSalesReportModel;
 import com.varanegar.vaslibrary.ui.fragment.news_fragment.model.NewsData_Model;
 import com.varanegar.vaslibrary.webapi.apiNew.modelNew.PinRequestViewModel;
@@ -48,4 +49,8 @@ public interface InApiNew {
             @Query("DealersId") List<String> dealersId,
             @Query("StartDate") String startDate,
             @Query("EndDate") String endDate);
+
+
+    @GET("api/v2/ngt/Quotas/sync/loaddata?date=2022/04/17")
+    Call<List<CommodityRationingModel>>getCommodityRationin();
 }

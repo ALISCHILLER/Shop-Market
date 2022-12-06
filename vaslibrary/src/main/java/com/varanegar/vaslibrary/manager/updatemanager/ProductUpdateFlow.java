@@ -3,12 +3,14 @@ package com.varanegar.vaslibrary.manager.updatemanager;
 import android.content.Context;
 import androidx.annotation.NonNull;
 
+import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.manager.OnHandQtyManager;
 import com.varanegar.vaslibrary.manager.ProductBoGroupManager;
 import com.varanegar.vaslibrary.manager.ProductGroupManager;
 import com.varanegar.vaslibrary.manager.ProductManager;
 import com.varanegar.vaslibrary.manager.discountmanager.ProductTaxInfoManager;
+import com.varanegar.vaslibrary.manager.newmanager.commodity_rationing.CommodityRationingManager;
 import com.varanegar.vaslibrary.manager.productUnit.ProductUnitManager;
 import com.varanegar.vaslibrary.promotion.V3.DiscountInitializeHandler;
 import com.varanegar.vaslibrary.promotion.V3.DiscountInitializeHandlerV3;
@@ -74,6 +76,33 @@ public class ProductUpdateFlow extends UpdateFlow {
                 return 0;
             }
         });
+
+
+        if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)){
+            tasks.add(new SimpleTourAsyncTask() {
+                @Override
+                public void run(UpdateCall call) {
+                    CommodityRationingManager rationingManager = new
+                            CommodityRationingManager(getContext());
+                    rationingManager.sync(call);
+                }
+
+                @Override
+                public String name() {
+                    return "CommodityRationing";
+                }
+
+                @Override
+                public int group() {
+                    return R.string.product_info;
+                }
+
+                @Override
+                public int queueId() {
+                    return 1;
+                }
+            });
+        }
 
         tasks.add(new SimpleTourAsyncTask() {
             @Override
