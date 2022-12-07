@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.varanegar.framework.base.VaranegarApplication;
+import com.varanegar.framework.database.querybuilder.Query;
+import com.varanegar.framework.database.querybuilder.from.From;
 import com.varanegar.framework.util.HelperMethods;
 import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.util.component.CuteDialog;
@@ -31,9 +33,16 @@ import com.varanegar.java.util.Currency;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.manager.OnHandQtyManager;
 import com.varanegar.vaslibrary.manager.canvertType.ConvertFaNumType;
+import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.customerpricemanager.CustomerPriceManager;
+import com.varanegar.vaslibrary.manager.newmanager.commodity_rationing.CommodityRationingManager;
+import com.varanegar.vaslibrary.manager.newmanager.commodity_rationing.CommodityRationingViewModel;
+import com.varanegar.vaslibrary.manager.newmanager.commodity_rationing.Product_RationingManager;
+import com.varanegar.vaslibrary.manager.newmanager.commodity_rationing.Product_RationingViewModel;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
+import com.varanegar.vaslibrary.model.customer.CustomerModel;
+import com.varanegar.vaslibrary.model.newmodel.commodity_rationing.Product_RationingModel;
 import com.varanegar.vaslibrary.model.onhandqty.OnHandQtyStock;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.ui.calculator.BaseUnit;
@@ -653,9 +662,12 @@ public class OrderCalculatorForm extends CuteDialog {
                     } else {
                         try {
                             checkMaxValue();
+
+                            if ( checkCommodityRationing()){
                             dismiss();
                             if (onCalcFinish != null)
                                 onCalcFinish.run(calculator.getUnits(), calculator.getBulkUnit(), null);
+                        }
                         } catch (Exception e) {
                             Timber.e(e);
                         }
@@ -667,6 +679,40 @@ public class OrderCalculatorForm extends CuteDialog {
             calculator.setvalue(_voicetoText);
     }
 
+    private Boolean  checkCommodityRationing(){
+        Product_RationingManager rationingManager=new Product_RationingManager(getContext());
+        Product_RationingViewModel productRationingViewModel=new Product_RationingViewModel();
+        productRationingViewModel= rationingManager.getProduct_Rationing(productId);
+        if (productRationingViewModel!=null){
+            CustomerModel customerModel=new CustomerManager(getContext()).getCustomer(customerId);
+            CommodityRationingViewModel viewModel=new
+                    CommodityRationingManager(getContext()).getCheckRationin(productRationingViewModel.quotasUniqueId,
+                    customerModel.CustomerLevelId,customerModel.CustomerActivityId,
+                    customerModel.CustomerCategoryId);
+
+            if (viewModel!=null){
+               BigDecimal sum= calculator.getTotal();
+                int i= new Double(String.valueOf(sum)).intValue();
+                if (productRationingViewModel.quantity < i) {
+                    CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+                    dialog.setIcon(Icon.Error);
+                    dialog.setMessage("مقدار وارد شده بیش از حد مجاز است!"+
+                            "مقدار مجاز :"+productRationingViewModel.quantity);
+                    dialog.setTitle(R.string.error);
+                    dialog.setPositiveButton(R.string.ok, null);
+                    dialog.show();
+                    try {
+                        throw new Exception("Maximum value is " + sum +
+                                " but the entered value is " + productRationingViewModel.quantity);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
     private void checkMaxValue() throws Exception {
         if (maxValue != null) {
             BigDecimal total = calculator.getBulkUnit() == null ? calculator.getTotal() : calculator.getBulkUnit().getQty();

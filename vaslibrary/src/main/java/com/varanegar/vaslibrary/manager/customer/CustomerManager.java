@@ -81,6 +81,12 @@ public class CustomerManager extends BaseManager<CustomerModel> {
         super(context, new CustomerModelRepository());
     }
 
+    public CustomerModel getCustomer(UUID customerId){
+        Query query = new Query();
+        query.from(Customer.CustomerTbl)
+                .whereAnd(Criteria.contains(Customer.UniqueId, String.valueOf(customerId)));
+        return getItem(query);
+    }
     public List<CustomerModel> getAll() {
         Query query = new Query();
         query.from(Customer.CustomerTbl).orderByAscending(Customer.rowIndex);

@@ -63,6 +63,7 @@ import com.varanegar.vaslibrary.manager.goodspackagemanager.GoodsPackageManager;
 import com.varanegar.vaslibrary.manager.image.ImageManager;
 import com.varanegar.vaslibrary.manager.image.LogoManager;
 import com.varanegar.vaslibrary.manager.newmanager.commodity_rationing.CommodityRationingManager;
+import com.varanegar.vaslibrary.manager.newmanager.dealercommission.DealerCommissionDataManager;
 import com.varanegar.vaslibrary.manager.picture.PictureCustomerHistoryManager;
 
 import com.varanegar.vaslibrary.manager.picture.PictureSubjectZarManager;
@@ -740,6 +741,33 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     return 0;
                 }
             });
+
+            if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)){
+
+                tasks.add(new SimpleTourAsyncTask() {
+                    @Override
+                    public void run(UpdateCall call) {
+                        DealerCommissionDataManager dealerCommissionDataManager = new
+                                DealerCommissionDataManager(getContext());
+                        dealerCommissionDataManager.sync(call);
+                    }
+
+                    @Override
+                    public String name() {
+                        return "DealerCommissionData";
+                    }
+
+                    @Override
+                    public int group() {
+                        return R.string.base_info;
+                    }
+
+                    @Override
+                    public int queueId() {
+                        return 1;
+                    }
+                });
+            }
 
             tasks.add(new SimpleTourAsyncTask() {
                 @Override

@@ -2,6 +2,7 @@ package com.varanegar.vaslibrary.webapi.apiNew;
 
 import android.content.Context;
 
+import com.varanegar.vaslibrary.manager.newmanager.dealercommission.DealerCommissionDataModel;
 import com.varanegar.vaslibrary.model.CheckCustomerCreditsModel;
 import com.varanegar.vaslibrary.model.newmodel.checkCustomerCredits.CheckCustomerCreditModel;
 import com.varanegar.vaslibrary.model.newmodel.commodity_rationing.CommodityRationingModel;
@@ -71,10 +72,17 @@ public class ApiNew extends BaseApi implements InApiNew {
     }
 
     @Override
-    public Call<List<CommodityRationingModel>> getCommodityRationin() {
+    public Call<List<CommodityRationingModel>> getCommodityRationin(String dealersId) {
         InApiNew api = getRetrofitBuilder(TokenType.UserToken)
                 .build().create(InApiNew.class);
-        return api.getCommodityRationin();
+        return api.getCommodityRationin(dealersId);
+    }
+
+    @Override
+    public Call<DealerCommissionDataModel> getDealerCommissionData(String dealersId) {
+        InApiNew api = getRetrofitBuilder(TokenType.UserToken)
+                .build().create(InApiNew.class);
+        return api.getDealerCommissionData(dealersId);
     }
 
 
