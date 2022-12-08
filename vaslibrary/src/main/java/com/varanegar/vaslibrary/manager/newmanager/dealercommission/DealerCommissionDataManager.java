@@ -7,12 +7,15 @@ import androidx.annotation.NonNull;
 import com.varanegar.framework.database.BaseManager;
 import com.varanegar.framework.database.BaseRepository;
 import com.varanegar.framework.database.DbException;
+import com.varanegar.framework.database.querybuilder.Query;
+import com.varanegar.framework.database.querybuilder.criteria.Criteria;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.validation.ValidationException;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.manager.UserManager;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateCall;
+import com.varanegar.vaslibrary.model.customer.CustomerActivity;
 import com.varanegar.vaslibrary.model.newmodel.commodity_rationing.CommodityRationingModel;
 import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
@@ -30,6 +33,11 @@ public class DealerCommissionDataManager extends BaseManager<DealerCommissionDat
     }
 
 
+    public DealerCommissionDataModel getAll(){
+        Query query = new Query();
+        query.from(DealerCommissionData.DealerCommissionDataTbl);
+        return getItem(query);
+    }
 
 
     public void sync(final UpdateCall updateCall) {

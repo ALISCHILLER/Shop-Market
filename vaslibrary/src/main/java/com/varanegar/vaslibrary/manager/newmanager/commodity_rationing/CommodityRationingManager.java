@@ -131,9 +131,8 @@ public class CommodityRationingManager extends BaseManager<CommodityRationingVie
                         Timber.e(e);
                         updateCall.failure(getContext().getString(R.string.data_error));
                     }
-
-
                 }
+                updateCall.success();
             }
 
             @Override

@@ -48,4 +48,11 @@
     <color name="theme_secondary_text_inverted">#8affffff</color>
     <color name="theme_icons">#FFFFFF</color>
     <color name="theme_divider">#B6B6B6</color>
+
+    <color name="bg_line">#E7E7E7</color>
+
+    <color name="cell_background_color">#ffffff</color>
+    <color name="header_line_color">@android:color/holo_red_light</color>
+
+    <color name="table_view_default_text_color">#0a0a0a</color>
 </resources>

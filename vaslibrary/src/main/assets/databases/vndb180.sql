@@ -28,12 +28,13 @@ PRIMARY KEY ("uniqueId" ASC));
 --- CREATE TABLE DealerCommissionDataModel
 CREATE TABLE "DealerCommissionData" (
 "uniqueId"  TEXT NOT NULL COLLATE NOCASE ,
+"CenterName"  TEXT  ,
 "Year"  int ,
 "Month"  int ,
 "DealerCode"  TEXT  ,
-"CenterName"  TEXT  ,
 "DealerName"  TEXT,
 "SpaghettiTarget"  int,
+"ShapedTarget"  int,
 "LasagnaTarget"  int,
 "NestTarget"  int,
 "JumboTarget"  int,

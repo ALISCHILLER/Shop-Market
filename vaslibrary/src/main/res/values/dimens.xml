@@ -19,4 +19,14 @@
     <dimen name="card_corner_radius">10dp</dimen>
     <dimen name="search_view_inset">5dp</dimen>
     <dimen name="sliding_search_view_header_height">250dp</dimen>
+
+
+
+    <dimen name="cell_height">40dp</dimen>
+    <dimen name="row_header_width">55dp</dimen>
+    <dimen name="text_size">13sp</dimen>
+
+    <!-- Overriding the default values of the tableView -->
+    <dimen name="default_row_header_width">55dp</dimen>
+    <dimen name="default_column_header_height">40dp</dimen>
 </resources>

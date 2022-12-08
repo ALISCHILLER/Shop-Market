@@ -20,6 +20,8 @@ public class DealerCommissionDataModel extends BaseModel {
     @Column
     public int SpaghettiTarget;
     @Column
+    public int ShapedTarget;
+    @Column
     public int LasagnaTarget;
     @Column
     public int NestTarget ;
