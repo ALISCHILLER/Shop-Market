@@ -26,7 +26,7 @@
               xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="wrap_content"
-              android:layout_height="@dimen/cell_height"
+              android:layout_height="@dimen/cell_heightt"
               android:background="@color/cell_background_color"
               android:gravity="center"
               android:orientation="vertical">

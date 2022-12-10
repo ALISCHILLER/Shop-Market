@@ -129,10 +129,10 @@
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/pie_chart"
-        android:layout_width="@dimen/_300sdp"
-        android:layout_height="@dimen/_300sdp"
-        android:layout_below="@+id/tableview"
+        android:layout_width="@dimen/_200sdp"
+        android:layout_height="@dimen/_200sdp"
         android:layout_centerInParent="true"
+        android:layout_below="@+id/tableview"
         android:visibility="visible" />
 
 

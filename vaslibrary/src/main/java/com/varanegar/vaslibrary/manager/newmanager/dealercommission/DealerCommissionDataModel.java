@@ -93,4 +93,10 @@ public class DealerCommissionDataModel extends BaseModel {
     public int LpscPayment ;
     @Column
     public int FinalPayment ;
+    @Column
+    public int FinalTarget ;
+    @Column
+    public int FinalSales ;
+    @Column
+    public int FinalAchive ;
 }

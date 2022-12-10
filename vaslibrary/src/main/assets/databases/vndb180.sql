@@ -71,4 +71,7 @@ CREATE TABLE "DealerCommissionData" (
 "HitRatePayment"  int,
 "LpscPayment"  int,
 "FinalPayment"  int,
+"FinalTarget"  int,
+"FinalAchive"  int,
+"FinalSales"  int,
 PRIMARY KEY ("uniqueId" ASC));

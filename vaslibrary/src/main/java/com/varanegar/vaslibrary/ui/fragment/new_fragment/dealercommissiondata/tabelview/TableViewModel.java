@@ -110,7 +110,7 @@ public class TableViewModel {
             ColumnHeader header9 = new ColumnHeader(String.valueOf(9), "CoverageRatePayment ");
             ColumnHeader header10 = new ColumnHeader(String.valueOf(10), "HitRatePayment ");
             ColumnHeader header11 = new ColumnHeader(String.valueOf(11), "LpscPayment ");
-            ColumnHeader header12 = new ColumnHeader(String.valueOf(12), "آخرین پرداختی ");
+            ColumnHeader header12 = new ColumnHeader(String.valueOf(12), "جمع کل");
             list.add(header);
             list.add(header2);
             list.add(header3);
@@ -123,6 +123,7 @@ public class TableViewModel {
             list.add(header10);
             list.add(header11);
             list.add(header12);
+
 
 
         return list;
