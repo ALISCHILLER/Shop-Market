@@ -165,9 +165,8 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
                 pieChart.animateY(1500);
                 PieData pieData = new PieData(pieDataSet);
                 pieChart.setData(pieData);
-                Legend l = pieChart.getLegend();
-                l.setTextSize(15.00f);
-                l.setMaxSizePercent(12);
+                pieChart.getLegend().setEnabled(false);
+
             }
         }
         //mTableView.setHasFixedWidth(true);
