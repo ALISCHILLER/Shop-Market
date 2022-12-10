@@ -33,6 +33,7 @@ CREATE TABLE "DealerCommissionData" (
 "Month"  int ,
 "DealerCode"  TEXT  ,
 "DealerName"  TEXT,
+"LastUpdate"  TEXT,
 "SpaghettiTarget"  int,
 "ShapedTarget"  int,
 "LasagnaTarget"  int,

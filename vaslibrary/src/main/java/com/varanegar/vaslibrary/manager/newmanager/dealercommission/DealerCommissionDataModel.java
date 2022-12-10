@@ -18,6 +18,8 @@ public class DealerCommissionDataModel extends BaseModel {
     @Column
     public String DealerName;
     @Column
+    public String LastUpdate;
+    @Column
     public int SpaghettiTarget;
     @Column
     public int ShapedTarget;

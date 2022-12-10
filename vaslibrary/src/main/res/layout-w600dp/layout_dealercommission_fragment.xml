@@ -139,7 +139,7 @@
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/pie_chart"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="230dp"
         android:layout_below="@+id/tableview"
         android:layout_marginTop="10dp"
         android:visibility="visible"
@@ -147,4 +147,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_container" />
+
+    <TextView
+        android:id="@+id/textViewDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/pie_chart"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:textSize="@dimen/_10sdp"
+        android:textStyle="bold"
+        android:text="آخرین بروز رسانی"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

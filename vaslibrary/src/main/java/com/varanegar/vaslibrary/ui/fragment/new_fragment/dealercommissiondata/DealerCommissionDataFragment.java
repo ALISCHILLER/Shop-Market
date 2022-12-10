@@ -56,7 +56,7 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
     private TableView mTableView;
     private Spinner moodFilter, genderFilter;
     private ImageButton previousButton, nextButton;
-    private TextView tablePaginationDetails;
+    private TextView tablePaginationDetails, textViewDate;
     private BarChart chart;
     @Nullable
     private Filter mTableFilter; // This is used for filtering the table.
@@ -64,6 +64,7 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
     private Pagination mPagination; // This is used for paginating the table.
 
     private boolean mPaginationEnabled = false;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +80,8 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
                 R.layout.layout_dealercommission_fragment, container, false);
         EditText searchField = view.findViewById(R.id.query_string);
         searchField.addTextChangedListener(mSearchTextWatcher);
+
+        textViewDate = view.findViewById(R.id.textViewDate);
 
         moodFilter = view.findViewById(R.id.mood_spinner);
         moodFilter.setOnItemSelectedListener(mItemSelectionListener);
@@ -126,8 +129,6 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
     }
 
 
-
-
     private void initializeTableView() {
         // Create TableView View model class  to group view models of TableView
         TableViewModel tableViewModel = new TableViewModel();
@@ -143,11 +144,16 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
 
         // Load the dummy data to the TableView
 
-        DealerCommissionDataModel dealerCommissionDataModel= new
+        DealerCommissionDataModel dealerCommissionDataModel = new
                 DealerCommissionDataManager(getContext()).getAll();
 
 
-        if (dealerCommissionDataModel!=null) {
+        if (dealerCommissionDataModel != null) {
+
+            if (dealerCommissionDataModel.LastUpdate != null)
+                textViewDate.setText("تاریخ آخرین بروزرسانی : " + dealerCommissionDataModel.LastUpdate);
+            else
+                textViewDate.setText("");
             mTableView.setShowCornerView(false);
             mTableView.setRowHeaderWidth(165);
 
@@ -174,14 +180,14 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
                 title.add("رشته آش");
 
                 ArrayList<BarEntry> values = new ArrayList<>();
-                values.add(new BarEntry(0,dealerCommissionDataModel.SpaghettiAchive,"رشته ای"));
-                values.add(new BarEntry(1,dealerCommissionDataModel.LasagnaAchive, "لازانیا"));
-                values.add(new BarEntry(2,dealerCommissionDataModel.NestAchive, "آشیانه"));
-                values.add(new BarEntry(3,dealerCommissionDataModel.JumboAchive, "جامبو"));
-                values.add(new BarEntry(4,dealerCommissionDataModel.CakePowderAchive, "پودرکیک"));
-                values.add(new BarEntry(5,dealerCommissionDataModel.FlourAchive, " آرد"));
-                values.add(new BarEntry(6,dealerCommissionDataModel.ShapedAchive, " فرمی"));
-                values.add(new BarEntry(7,dealerCommissionDataModel.PottageAchive, " رشته آش"));
+                values.add(new BarEntry(0, dealerCommissionDataModel.SpaghettiAchive, "رشته ای"));
+                values.add(new BarEntry(1, dealerCommissionDataModel.LasagnaAchive, "لازانیا"));
+                values.add(new BarEntry(2, dealerCommissionDataModel.NestAchive, "آشیانه"));
+                values.add(new BarEntry(3, dealerCommissionDataModel.JumboAchive, "جامبو"));
+                values.add(new BarEntry(4, dealerCommissionDataModel.CakePowderAchive, "پودرکیک"));
+                values.add(new BarEntry(5, dealerCommissionDataModel.FlourAchive, " آرد"));
+                values.add(new BarEntry(6, dealerCommissionDataModel.ShapedAchive, " فرمی"));
+                values.add(new BarEntry(7, dealerCommissionDataModel.PottageAchive, " رشته آش"));
 
                 XAxis xAxis = chart.getXAxis();
                 xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -257,8 +263,6 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
     }
 
 
-
-
     private void setData(ArrayList<BarEntry> values) {
 
         BarDataSet set1;
@@ -305,198 +309,210 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
         for (int i = 0; i < 4; i++) {
             List<Cell> cellList = new ArrayList<>();
             for (int j = 1; j < 13; j++) {
-                
+
                 Cell cell;
-                if (i==0){
-                    if (j==1){
-                        cell=new Cell("1",dealerCommissionDataModel.SpaghettiTarget);
-                        cellList.add(cell);
-                    }if (j==2){
-                        cell=new Cell("2",dealerCommissionDataModel.LasagnaTarget);
-                        cellList.add(cell);
-                    } if (j==3){
-                        cell=new Cell("1",dealerCommissionDataModel.NestTarget);
+                if (i == 0) {
+                    if (j == 1) {
+                        cell = new Cell("1", dealerCommissionDataModel.SpaghettiTarget);
                         cellList.add(cell);
                     }
-                    if (j==4){
-                        cell=new Cell("1",dealerCommissionDataModel.JumboTarget);
+                    if (j == 2) {
+                        cell = new Cell("2", dealerCommissionDataModel.LasagnaTarget);
                         cellList.add(cell);
                     }
-                    if (j==5){
-                        cell=new Cell("1",dealerCommissionDataModel.CakePowderTarget);
+                    if (j == 3) {
+                        cell = new Cell("1", dealerCommissionDataModel.NestTarget);
                         cellList.add(cell);
                     }
-                    if (j==6){
-                        cell=new Cell("1",dealerCommissionDataModel.FlourTarget);
+                    if (j == 4) {
+                        cell = new Cell("1", dealerCommissionDataModel.JumboTarget);
                         cellList.add(cell);
                     }
-                    if (j==7){
-                        cell=new Cell("1",dealerCommissionDataModel.ShapedTarget);
+                    if (j == 5) {
+                        cell = new Cell("1", dealerCommissionDataModel.CakePowderTarget);
                         cellList.add(cell);
                     }
-                    if (j==8){
-                        cell=new Cell("1",dealerCommissionDataModel.PottageTarget);
+                    if (j == 6) {
+                        cell = new Cell("1", dealerCommissionDataModel.FlourTarget);
                         cellList.add(cell);
                     }
-                    if (j==9){
-                        cell=new Cell("1","");
-                        cellList.add(cell);
-                    }if (j==10){
-                        cell=new Cell("2","");
-                        cellList.add(cell);
-                    } if (j==11){
-                        cell=new Cell("1","");
+                    if (j == 7) {
+                        cell = new Cell("1", dealerCommissionDataModel.ShapedTarget);
                         cellList.add(cell);
                     }
-                    if (j==12){
-                        cell=new Cell("1",dealerCommissionDataModel.FinalTarget);
+                    if (j == 8) {
+                        cell = new Cell("1", dealerCommissionDataModel.PottageTarget);
                         cellList.add(cell);
                     }
-
-                }
-                else if (i==1){
-                    if (j==1){
-                        cell=new Cell("1",dealerCommissionDataModel.SpaghettiSales);
-                        cellList.add(cell);
-                    }if (j==2){
-                        cell=new Cell("2",dealerCommissionDataModel.LasagnaSales);
-                        cellList.add(cell);
-                    } if (j==3){
-                        cell=new Cell("1",dealerCommissionDataModel.NestSales);
+                    if (j == 9) {
+                        cell = new Cell("1", "");
                         cellList.add(cell);
                     }
-                    if (j==4){
-                        cell=new Cell("1",dealerCommissionDataModel.JumboSales);
+                    if (j == 10) {
+                        cell = new Cell("2", "");
                         cellList.add(cell);
                     }
-                    if (j==5){
-                        cell=new Cell("1",dealerCommissionDataModel.CakePowderSales);
+                    if (j == 11) {
+                        cell = new Cell("1", "");
                         cellList.add(cell);
                     }
-                    if (j==6){
-                        cell=new Cell("1",dealerCommissionDataModel.FlourSales);
-                        cellList.add(cell);
-                    }
-                    if (j==7){
-                        cell=new Cell("1",dealerCommissionDataModel.ShapedSales);
-                        cellList.add(cell);
-                    }
-                    if (j==8){
-                        cell=new Cell("1",dealerCommissionDataModel.PottageSales);
+                    if (j == 12) {
+                        cell = new Cell("1", dealerCommissionDataModel.FinalTarget);
                         cellList.add(cell);
                     }
 
-
-
-                    if (j==9){
-                        cell=new Cell("1","");
-                        cellList.add(cell);
-                    }if (j==10){
-                        cell=new Cell("2","");
-                        cellList.add(cell);
-                    } if (j==11){
-                        cell=new Cell("1","");
+                } else if (i == 1) {
+                    if (j == 1) {
+                        cell = new Cell("1", dealerCommissionDataModel.SpaghettiSales);
                         cellList.add(cell);
                     }
-                    if (j==12){
-                        cell=new Cell("1",dealerCommissionDataModel.FinalSales);
+                    if (j == 2) {
+                        cell = new Cell("2", dealerCommissionDataModel.LasagnaSales);
                         cellList.add(cell);
                     }
-
-                }
-                else if (i==2){
-                    if (j==1){
-                        cell=new Cell("1",dealerCommissionDataModel.SpaghettiAchive + " %");
-                        cellList.add(cell);
-                    }if (j==2){
-                        cell=new Cell("2",dealerCommissionDataModel.LasagnaAchive + " %");
-                        cellList.add(cell);
-                    } if (j==3){
-                        cell=new Cell("1",dealerCommissionDataModel.NestAchive + " %");
+                    if (j == 3) {
+                        cell = new Cell("1", dealerCommissionDataModel.NestSales);
                         cellList.add(cell);
                     }
-                    if (j==4){
-                        cell=new Cell("1",dealerCommissionDataModel.JumboAchive + " %");
+                    if (j == 4) {
+                        cell = new Cell("1", dealerCommissionDataModel.JumboSales);
                         cellList.add(cell);
                     }
-                    if (j==5){
-                        cell=new Cell("1",dealerCommissionDataModel.CakePowderAchive + " %");
+                    if (j == 5) {
+                        cell = new Cell("1", dealerCommissionDataModel.CakePowderSales);
                         cellList.add(cell);
                     }
-                    if (j==6){
-                        cell=new Cell("1",dealerCommissionDataModel.FlourAchive + " %");
+                    if (j == 6) {
+                        cell = new Cell("1", dealerCommissionDataModel.FlourSales);
                         cellList.add(cell);
                     }
-                    if (j==7){
-                        cell=new Cell("1",dealerCommissionDataModel.ShapedAchive + " %");
+                    if (j == 7) {
+                        cell = new Cell("1", dealerCommissionDataModel.ShapedSales);
                         cellList.add(cell);
                     }
-                    if (j==8){
-                        cell=new Cell("1",dealerCommissionDataModel.PottageAchive + " %");
-                        cellList.add(cell);
-                    }
-                    if (j==9){
-                        cell=new Cell("1","");
-                        cellList.add(cell);
-                    }if (j==10){
-                        cell=new Cell("2","");
-                        cellList.add(cell);
-                    } if (j==11){
-                        cell=new Cell("1","");
-                        cellList.add(cell);
-                    }
-                    if (j==12){
-                        cell=new Cell("1",dealerCommissionDataModel.FinalAchive + " %");
-                        cellList.add(cell);
-                    }
-                }
-                else if (i==3){
-                    if (j==1){
-                        cell=new Cell("1",dealerCommissionDataModel.SpaghettiPayment);
-                        cellList.add(cell);
-                    }if (j==2){
-                        cell=new Cell("2",dealerCommissionDataModel.LasagnaPayment);
-                        cellList.add(cell);
-                    } if (j==3){
-                        cell=new Cell("1",dealerCommissionDataModel.NestPayment);
-                        cellList.add(cell);
-                    }
-                    if (j==4){
-                        cell=new Cell("1",dealerCommissionDataModel.JumboTarget);
-                        cellList.add(cell);
-                    }
-                    if (j==5){
-                        cell=new Cell("1",dealerCommissionDataModel.CakePowderTarget);
-                        cellList.add(cell);
-                    }
-                    if (j==6){
-                        cell=new Cell("1",dealerCommissionDataModel.FlourPayment);
-                        cellList.add(cell);
-                    }
-                    if (j==7){
-                        cell=new Cell("1",dealerCommissionDataModel.SpaghettiPayment);
-                        cellList.add(cell);
-                    }
-                    if (j==8){
-                        cell=new Cell("1",dealerCommissionDataModel.PottagePayment);
+                    if (j == 8) {
+                        cell = new Cell("1", dealerCommissionDataModel.PottageSales);
                         cellList.add(cell);
                     }
 
-                    if (j==9){
-                        cell=new Cell("1", HelperMethods.currencyToString(Currency
+
+                    if (j == 9) {
+                        cell = new Cell("1", "");
+                        cellList.add(cell);
+                    }
+                    if (j == 10) {
+                        cell = new Cell("2", "");
+                        cellList.add(cell);
+                    }
+                    if (j == 11) {
+                        cell = new Cell("1", "");
+                        cellList.add(cell);
+                    }
+                    if (j == 12) {
+                        cell = new Cell("1", dealerCommissionDataModel.FinalSales);
+                        cellList.add(cell);
+                    }
+
+                } else if (i == 2) {
+                    if (j == 1) {
+                        cell = new Cell("1", dealerCommissionDataModel.SpaghettiAchive + " %");
+                        cellList.add(cell);
+                    }
+                    if (j == 2) {
+                        cell = new Cell("2", dealerCommissionDataModel.LasagnaAchive + " %");
+                        cellList.add(cell);
+                    }
+                    if (j == 3) {
+                        cell = new Cell("1", dealerCommissionDataModel.NestAchive + " %");
+                        cellList.add(cell);
+                    }
+                    if (j == 4) {
+                        cell = new Cell("1", dealerCommissionDataModel.JumboAchive + " %");
+                        cellList.add(cell);
+                    }
+                    if (j == 5) {
+                        cell = new Cell("1", dealerCommissionDataModel.CakePowderAchive + " %");
+                        cellList.add(cell);
+                    }
+                    if (j == 6) {
+                        cell = new Cell("1", dealerCommissionDataModel.FlourAchive + " %");
+                        cellList.add(cell);
+                    }
+                    if (j == 7) {
+                        cell = new Cell("1", dealerCommissionDataModel.ShapedAchive + " %");
+                        cellList.add(cell);
+                    }
+                    if (j == 8) {
+                        cell = new Cell("1", dealerCommissionDataModel.PottageAchive + " %");
+                        cellList.add(cell);
+                    }
+                    if (j == 9) {
+                        cell = new Cell("1", "");
+                        cellList.add(cell);
+                    }
+                    if (j == 10) {
+                        cell = new Cell("2", "");
+                        cellList.add(cell);
+                    }
+                    if (j == 11) {
+                        cell = new Cell("1", "");
+                        cellList.add(cell);
+                    }
+                    if (j == 12) {
+                        cell = new Cell("1", dealerCommissionDataModel.FinalAchive + " %");
+                        cellList.add(cell);
+                    }
+                } else if (i == 3) {
+                    if (j == 1) {
+                        cell = new Cell("1", dealerCommissionDataModel.SpaghettiPayment);
+                        cellList.add(cell);
+                    }
+                    if (j == 2) {
+                        cell = new Cell("2", dealerCommissionDataModel.LasagnaPayment);
+                        cellList.add(cell);
+                    }
+                    if (j == 3) {
+                        cell = new Cell("1", dealerCommissionDataModel.NestPayment);
+                        cellList.add(cell);
+                    }
+                    if (j == 4) {
+                        cell = new Cell("1", dealerCommissionDataModel.JumboTarget);
+                        cellList.add(cell);
+                    }
+                    if (j == 5) {
+                        cell = new Cell("1", dealerCommissionDataModel.CakePowderTarget);
+                        cellList.add(cell);
+                    }
+                    if (j == 6) {
+                        cell = new Cell("1", dealerCommissionDataModel.FlourPayment);
+                        cellList.add(cell);
+                    }
+                    if (j == 7) {
+                        cell = new Cell("1", dealerCommissionDataModel.SpaghettiPayment);
+                        cellList.add(cell);
+                    }
+                    if (j == 8) {
+                        cell = new Cell("1", dealerCommissionDataModel.PottagePayment);
+                        cellList.add(cell);
+                    }
+
+                    if (j == 9) {
+                        cell = new Cell("1", HelperMethods.currencyToString(Currency
                                 .valueOf(dealerCommissionDataModel.CoverageRatePayment)));
                         cellList.add(cell);
-                    }if (j==10){
-                        cell=new Cell("2",HelperMethods.currencyToString(Currency
+                    }
+                    if (j == 10) {
+                        cell = new Cell("2", HelperMethods.currencyToString(Currency
                                 .valueOf(dealerCommissionDataModel.HitRatePayment)));
                         cellList.add(cell);
-                    } if (j==11){
-                        cell=new Cell("1",HelperMethods.currencyToString(Currency
+                    }
+                    if (j == 11) {
+                        cell = new Cell("1", HelperMethods.currencyToString(Currency
                                 .valueOf(dealerCommissionDataModel.LpscPayment)));
                         cellList.add(cell);
                     }
-                    if (j==12){
-                        cell=new Cell("1",HelperMethods.currencyToString(Currency
+                    if (j == 12) {
+                        cell = new Cell("1", HelperMethods.currencyToString(Currency
                                 .valueOf(dealerCommissionDataModel.FinalPayment)));
                         cellList.add(cell);
                     }
