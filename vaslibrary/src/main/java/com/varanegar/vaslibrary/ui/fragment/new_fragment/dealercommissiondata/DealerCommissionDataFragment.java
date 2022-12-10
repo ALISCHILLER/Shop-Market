@@ -15,16 +15,27 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.evrencoskun.tableview.TableView;
 import com.evrencoskun.tableview.filter.Filter;
 import com.evrencoskun.tableview.pagination.Pagination;
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.base.VaranegarFragment;
@@ -46,7 +57,7 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
     private Spinner moodFilter, genderFilter;
     private ImageButton previousButton, nextButton;
     private TextView tablePaginationDetails;
-    private PieChart pieChart;
+    private BarChart chart;
     @Nullable
     private Filter mTableFilter; // This is used for filtering the table.
     @Nullable
@@ -83,7 +94,7 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
         nextButton = view.findViewById(R.id.next_button);
         EditText pageNumberField = view.findViewById(R.id.page_number_text);
         tablePaginationDetails = view.findViewById(R.id.table_details);
-         pieChart = (PieChart) view.findViewById(R.id.pie_chart);
+        chart = (BarChart) view.findViewById(R.id.pie_chart);
         if (mPaginationEnabled) {
             tableTestContainer.setVisibility(View.VISIBLE);
             itemsPerPage.setOnItemSelectedListener(onItemsPerPageSelectedListener);
@@ -144,9 +155,69 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
                     .getRowHeaderList(), getCellListForSortingTest(dealerCommissionDataModel));
 
 
-            if (pieChart != null) {
-                pieChart.setVisibility(View.VISIBLE);
-                List<PieEntry> entries = new ArrayList<>();
+            if (chart != null) {
+                chart.setDrawBarShadow(false);
+                chart.setDrawValueAboveBar(true);
+                chart.getDescription().setEnabled(false);
+                chart.setPinchZoom(false);
+                chart.setDrawGridBackground(false);
+
+
+                List<String> title = new ArrayList<>();
+                title.add("رشته ای");
+                title.add("لازانیا");
+                title.add("آشیانه");
+                title.add("جامبو");
+                title.add("پودرکیک");
+                title.add("آرد");
+                title.add("فرمی");
+                title.add("رشته آش");
+
+                ArrayList<BarEntry> values = new ArrayList<>();
+                values.add(new BarEntry(0,dealerCommissionDataModel.SpaghettiAchive,"رشته ای"));
+                values.add(new BarEntry(1,dealerCommissionDataModel.LasagnaAchive, "لازانیا"));
+                values.add(new BarEntry(2,dealerCommissionDataModel.NestAchive, "آشیانه"));
+                values.add(new BarEntry(3,dealerCommissionDataModel.JumboAchive, "جامبو"));
+                values.add(new BarEntry(4,dealerCommissionDataModel.CakePowderAchive, "پودرکیک"));
+                values.add(new BarEntry(5,dealerCommissionDataModel.FlourAchive, " آرد"));
+                values.add(new BarEntry(6,dealerCommissionDataModel.ShapedAchive, " فرمی"));
+                values.add(new BarEntry(7,dealerCommissionDataModel.PottageAchive, " رشته آش"));
+
+                XAxis xAxis = chart.getXAxis();
+                xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                xAxis.setDrawGridLines(false);
+                xAxis.setGranularity(1f); // only intervals of 1 day
+                xAxis.setLabelCount(8);
+                xAxis.setValueFormatter(new ValueFormatter() {
+                    @Override
+                    public String getFormattedValue(float value) {
+                        return title.get((int) value % title.size());
+                    }
+                });
+
+
+                YAxis leftAxis = chart.getAxisLeft();
+                leftAxis.setLabelCount(8, false);
+                //leftAxis.setValueFormatter(custom);
+                leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);
+                leftAxis.setSpaceTop(15f);
+                leftAxis.setAxisMinimum(0f);
+
+                YAxis rightAxis = chart.getAxisRight();
+                rightAxis.setDrawGridLines(false);
+                rightAxis.setLabelCount(8, false);
+                //rightAxis.setValueFormatter(custom);
+                rightAxis.setSpaceTop(15f);
+                rightAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
+
+
+                chart.getLegend().setEnabled(false);
+
+
+                chart.setVisibility(View.VISIBLE);
+                setData(values);
+
+/*                List<PieEntry> entries = new ArrayList<>();
                     entries.add(new PieEntry(dealerCommissionDataModel.SpaghettiAchive,"رشته ای"));
                     entries.add(new PieEntry(dealerCommissionDataModel.LasagnaAchive, "لازانیا"));
                     entries.add(new PieEntry(dealerCommissionDataModel.NestAchive, "آشیانه"));
@@ -165,7 +236,7 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
                 pieChart.animateY(1500);
                 PieData pieData = new PieData(pieDataSet);
                 pieChart.setData(pieData);
-                pieChart.getLegend().setEnabled(false);
+                pieChart.getLegend().setEnabled(false);*/
 
             }
         }
@@ -184,6 +255,49 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
         mTableView.setColumnWidth(5, 500);*/
 
     }
+
+
+
+
+    private void setData(ArrayList<BarEntry> values) {
+
+        BarDataSet set1;
+
+        if (chart.getData() != null &&
+                chart.getData().getDataSetCount() > 0) {
+            set1 = (BarDataSet) chart.getData().getDataSetByIndex(0);
+            set1.setValues(values);
+            chart.getData().notifyDataChanged();
+            chart.notifyDataSetChanged();
+
+        } else {
+            set1 = new BarDataSet(values, "The year 2017");
+
+            set1.setDrawIcons(false);
+
+            List<Integer> colors = new ArrayList<>();
+            colors.add(ContextCompat.getColor(requireContext(), android.R.color.holo_orange_light));
+            colors.add(ContextCompat.getColor(requireContext(), android.R.color.holo_blue_light));
+            colors.add(ContextCompat.getColor(requireContext(), android.R.color.holo_purple));
+            colors.add(ContextCompat.getColor(requireContext(), android.R.color.holo_blue_dark));
+            colors.add(ContextCompat.getColor(requireContext(), android.R.color.holo_green_light));
+            colors.add(ContextCompat.getColor(requireContext(), android.R.color.holo_orange_light));
+            colors.add(ContextCompat.getColor(requireContext(), android.R.color.holo_blue_light));
+            colors.add(ContextCompat.getColor(requireContext(), android.R.color.holo_green_dark));
+
+            set1.setColors(colors);
+
+            ArrayList<IBarDataSet> dataSets = new ArrayList<>();
+            dataSets.add(set1);
+
+            BarData data = new BarData(dataSets);
+            data.setValueTextSize(10f);
+            data.setBarWidth(0.9f);
+
+            chart.setData(data);
+        }
+    }
+
 
     private List<List<Cell>> getCellListForSortingTest(DealerCommissionDataModel dealerCommissionDataModel) {
 
@@ -292,33 +406,33 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
                 }
                 else if (i==2){
                     if (j==1){
-                        cell=new Cell("1",dealerCommissionDataModel.SpaghettiAchive);
+                        cell=new Cell("1",dealerCommissionDataModel.SpaghettiAchive + " %");
                         cellList.add(cell);
                     }if (j==2){
-                        cell=new Cell("2",dealerCommissionDataModel.LasagnaAchive);
+                        cell=new Cell("2",dealerCommissionDataModel.LasagnaAchive + " %");
                         cellList.add(cell);
                     } if (j==3){
-                        cell=new Cell("1",dealerCommissionDataModel.NestAchive);
+                        cell=new Cell("1",dealerCommissionDataModel.NestAchive + " %");
                         cellList.add(cell);
                     }
                     if (j==4){
-                        cell=new Cell("1",dealerCommissionDataModel.JumboAchive);
+                        cell=new Cell("1",dealerCommissionDataModel.JumboAchive + " %");
                         cellList.add(cell);
                     }
                     if (j==5){
-                        cell=new Cell("1",dealerCommissionDataModel.CakePowderAchive);
+                        cell=new Cell("1",dealerCommissionDataModel.CakePowderAchive + " %");
                         cellList.add(cell);
                     }
                     if (j==6){
-                        cell=new Cell("1",dealerCommissionDataModel.FlourAchive);
+                        cell=new Cell("1",dealerCommissionDataModel.FlourAchive + " %");
                         cellList.add(cell);
                     }
                     if (j==7){
-                        cell=new Cell("1",dealerCommissionDataModel.ShapedAchive);
+                        cell=new Cell("1",dealerCommissionDataModel.ShapedAchive + " %");
                         cellList.add(cell);
                     }
                     if (j==8){
-                        cell=new Cell("1",dealerCommissionDataModel.PottageAchive);
+                        cell=new Cell("1",dealerCommissionDataModel.PottageAchive + " %");
                         cellList.add(cell);
                     }
                     if (j==9){
@@ -332,7 +446,7 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
                         cellList.add(cell);
                     }
                     if (j==12){
-                        cell=new Cell("1",dealerCommissionDataModel.FinalAchive);
+                        cell=new Cell("1",dealerCommissionDataModel.FinalAchive + " %");
                         cellList.add(cell);
                     }
                 }

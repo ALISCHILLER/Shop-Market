@@ -127,9 +127,9 @@
 
     </com.evrencoskun.tableview.TableView>
 
-    <com.github.mikephil.charting.charts.PieChart
+    <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/pie_chart"
-        android:layout_width="@dimen/_300sdp"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/_300sdp"
         android:layout_below="@+id/tableview"
         android:layout_centerInParent="true"
