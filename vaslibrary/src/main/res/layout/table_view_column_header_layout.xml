@@ -27,11 +27,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layoutDirection="ltr"
-    android:textDirection="ltr"
+    android:layout_width="101dp"
     android:layout_height="@dimen/cell_height"
-    android:background="@color/cell_background_color"
+    android:background="@color/header_line_color"
     android:orientation="vertical">
 
     <FrameLayout
@@ -54,8 +52,8 @@
                 android:layout_gravity="center"
                 android:layout_weight="4"
                 android:gravity="center"
-                android:textColor="@color/table_view_default_text_color"
-                android:textSize="15sp"
+                android:textColor="@color/theme_primary_text"
+                android:textSize="10sp"
                 tools:text="Header Data"/>
 
             <ImageButton
@@ -75,7 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_gravity="bottom"
-            android:background="@color/header_line_color"/>
+            android:background="@color/theme_secondary_text"/>
     </FrameLayout>
 </LinearLayout>
 

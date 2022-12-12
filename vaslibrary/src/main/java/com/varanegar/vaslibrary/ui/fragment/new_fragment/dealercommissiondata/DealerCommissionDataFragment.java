@@ -1,43 +1,29 @@
 package com.varanegar.vaslibrary.ui.fragment.new_fragment.dealercommissiondata;
 
+import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.Spinner;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-
 import com.evrencoskun.tableview.TableView;
-import com.evrencoskun.tableview.filter.Filter;
-import com.evrencoskun.tableview.pagination.Pagination;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.Description;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
-import com.varanegar.framework.base.VaranegarApplication;
+import com.google.android.material.tabs.TabLayout;
 import com.varanegar.framework.base.VaranegarFragment;
 import com.varanegar.framework.util.HelperMethods;
 import com.varanegar.java.util.Currency;
@@ -48,26 +34,30 @@ import com.varanegar.vaslibrary.ui.fragment.new_fragment.dealercommissiondata.ta
 import com.varanegar.vaslibrary.ui.fragment.new_fragment.dealercommissiondata.tabelview.TableViewListener;
 import com.varanegar.vaslibrary.ui.fragment.new_fragment.dealercommissiondata.tabelview.TableViewModel;
 import com.varanegar.vaslibrary.ui.fragment.new_fragment.dealercommissiondata.tabelview.model.Cell;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class DealerCommissionDataFragment extends VaranegarFragment {
     private TableView mTableView;
-    private Spinner moodFilter, genderFilter;
-    private ImageButton previousButton, nextButton;
-    private TextView tablePaginationDetails, textViewDate;
+    private TextView  textViewDate;
+    private LinearLayout layout_pie_chart,layout_idBarChart;
     private BarChart chart;
-    @Nullable
-    private Filter mTableFilter; // This is used for filtering the table.
-    @Nullable
-    private Pagination mPagination; // This is used for paginating the table.
-
-    private boolean mPaginationEnabled = false;
+    private TabLayout reportsTabLayout;
+    private RelativeLayout fragment_container;
+    // variable for our bar chart
+    BarChart barChart;
+    // variable for our bar data set.
+    BarDataSet barDataSet1, barDataSet2;
+    // array list for storing entries.
+    ArrayList barEntries;
+    // creating a string array for displaying productGroup.
+    String[] productGroup = new String[]{"رشته ای", "لازانیا", "آشیانه",  "جامبو", "پودرکیک", "" +
+            "آرد","فرمی","رشته آش"};
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
     @Nullable
@@ -78,56 +68,134 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
             @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(
                 R.layout.layout_dealercommission_fragment, container, false);
-        EditText searchField = view.findViewById(R.id.query_string);
-        searchField.addTextChangedListener(mSearchTextWatcher);
-
         textViewDate = view.findViewById(R.id.textViewDate);
-
-        moodFilter = view.findViewById(R.id.mood_spinner);
-        moodFilter.setOnItemSelectedListener(mItemSelectionListener);
-
-        genderFilter = view.findViewById(R.id.gender_spinner);
-        genderFilter.setOnItemSelectedListener(mItemSelectionListener);
-
-        Spinner itemsPerPage = view.findViewById(R.id.items_per_page_spinner);
-
-        View tableTestContainer = view.findViewById(R.id.table_test_container);
-
-        previousButton = view.findViewById(R.id.previous_button);
-        nextButton = view.findViewById(R.id.next_button);
-        EditText pageNumberField = view.findViewById(R.id.page_number_text);
-        tablePaginationDetails = view.findViewById(R.id.table_details);
+        layout_pie_chart=view.findViewById(R.id.layout_pie_chart);
+        layout_idBarChart=view.findViewById(R.id.layout_idBarChart);
         chart = (BarChart) view.findViewById(R.id.pie_chart);
-        if (mPaginationEnabled) {
-            tableTestContainer.setVisibility(View.VISIBLE);
-            itemsPerPage.setOnItemSelectedListener(onItemsPerPageSelectedListener);
-
-            previousButton.setOnClickListener(mClickListener);
-            nextButton.setOnClickListener(mClickListener);
-            pageNumberField.addTextChangedListener(onPageTextChanged);
-        } else {
-            tableTestContainer.setVisibility(View.GONE);
-        }
-
         // Let's get TableView
         mTableView = view.findViewById(R.id.tableview);
+        fragment_container = view.findViewById(R.id.fragment_container);
+        barChart = view.findViewById(R.id.idBarChart);
+        reportsTabLayout = view.findViewById(R.id.reports_tab_layout);
+        layout_pie_chart = view.findViewById(R.id.layout_pie_chart);
+        layout_idBarChart = view.findViewById(R.id.layout_idBarChart);
+
+        reportsTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if(tab.getPosition()==0){
+                    fragment_container.setVisibility(View.VISIBLE);
+                    layout_pie_chart.setVisibility(View.GONE);
+                    layout_idBarChart.setVisibility(View.GONE);
+                }if(tab.getPosition()==1){
+                    fragment_container.setVisibility(View.GONE);
+                    layout_pie_chart.setVisibility(View.VISIBLE);
+                    layout_idBarChart.setVisibility(View.GONE);
+                }
+                if(tab.getPosition()==2){
+                    fragment_container.setVisibility(View.GONE);
+                    layout_pie_chart.setVisibility(View.GONE);
+                    layout_idBarChart.setVisibility(View.VISIBLE);
+                }
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+
+
 
         initializeTableView();
+        // initializing variable for bar chart.
 
-        if (mPaginationEnabled) {
-            mTableFilter = new Filter(mTableView); // Create an instance of a Filter and pass the
-            // created TableView.
-
-            // Create an instance for the TableView pagination and pass the created TableView.
-            mPagination = new Pagination(mTableView);
-
-            // Sets the pagination listener of the TableView pagination to handle
-            // pagination actions. See onTableViewPageTurnedListener variable declaration below.
-            mPagination.setOnTableViewPageTurnedListener(onTableViewPageTurnedListener);
-        }
         return view;
     }
 
+    private void setChartSale( DealerCommissionDataModel dealerCommissionDataModel){
+        // creating a new bar data set.
+        barDataSet1 = new BarDataSet(getBarEntriesOne(dealerCommissionDataModel), "هدف");
+        barDataSet1.setColor(getContext().getApplicationContext().getResources().getColor(R.color.blue_normal));
+        barDataSet2 = new BarDataSet(getBarEntriesTwo(dealerCommissionDataModel), "فروش");
+        barDataSet2.setColor(Color.BLUE);
+
+        // below line is to add bar data set to our bar data.
+        BarData data = new BarData(barDataSet1, barDataSet2);
+
+        // after adding data to our bar data we
+        // are setting that data to our bar chart.
+        barChart.setData(data);
+
+        // below line is to remove description
+        // label of our bar chart.
+      //  barChart.getDescription().setEnabled(false);
+
+        // below line is to get x axis
+        // of our bar chart.
+        XAxis xAxis = barChart.getXAxis();
+
+        // below line is to set value formatter to our x-axis and
+        // we are adding our productGroup to our x axis.
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(productGroup));
+
+        // below line is to set center axis
+        // labels to our bar chart.
+        xAxis.setCenterAxisLabels(true);
+
+        // below line is to set position
+        // to our x-axis to bottom.
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+
+        // below line is to set granularity
+        // to our x axis labels.
+      //  xAxis.setGranularity(1);
+
+        // below line is to enable
+        // granularity to our x axis.
+       // xAxis.setGranularityEnabled(true);
+
+        // below line is to make our
+        // bar chart as draggable.
+      //  barChart.setDragEnabled(true);
+
+        // below line is to make visible
+        // range for our bar chart.
+     //   barChart.setVisibleXRangeMaximum(2);
+
+        // below line is to add bar
+        // space to our chart.
+        float barSpace = 0.1f;
+        // below line is use to add group
+        // spacing to our bar chart.
+        float groupSpace = 0.5f;
+        // we are setting width of
+        // bar in below line.
+        data.setBarWidth(0.15f);
+
+        // below line is to set minimum
+        // axis to our chart.
+        barChart.getXAxis().setAxisMinimum(0);
+
+        // below line is to
+        // animate our chart.
+        barChart.animate();
+
+        // below line is to group bars
+        // and add spacing to it.
+        barChart.groupBars(0f, groupSpace, barSpace);
+
+        // below line is to invalidate
+        // our bar chart.
+        barChart.invalidate();
+    }
 
     private void initializeTableView() {
         // Create TableView View model class  to group view models of TableView
@@ -147,7 +215,7 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
         DealerCommissionDataModel dealerCommissionDataModel = new
                 DealerCommissionDataManager(getContext()).getAll();
 
-
+        chart.setVisibility(View.GONE);
         if (dealerCommissionDataModel != null) {
 
             if (dealerCommissionDataModel.LastUpdate != null)
@@ -156,7 +224,8 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
                 textViewDate.setText("");
             mTableView.setShowCornerView(false);
             mTableView.setRowHeaderWidth(165);
-
+            mTableView.setMinimumWidth(200);
+            setChartSale(dealerCommissionDataModel);
             tableViewAdapter.setAllItems(tableViewModel.getColumnHeaderList(), tableViewModel
                     .getRowHeaderList(), getCellListForSortingTest(dealerCommissionDataModel));
 
@@ -223,46 +292,10 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
                 chart.setVisibility(View.VISIBLE);
                 setData(values);
 
-/*                List<PieEntry> entries = new ArrayList<>();
-                    entries.add(new PieEntry(dealerCommissionDataModel.SpaghettiAchive,"رشته ای"));
-                    entries.add(new PieEntry(dealerCommissionDataModel.LasagnaAchive, "لازانیا"));
-                    entries.add(new PieEntry(dealerCommissionDataModel.NestAchive, "آشیانه"));
-                    entries.add(new PieEntry(dealerCommissionDataModel.JumboAchive, "جامبو"));
-                    entries.add(new PieEntry(dealerCommissionDataModel.CakePowderAchive, "پودرکیک"));
-                    entries.add(new PieEntry(dealerCommissionDataModel.FlourAchive, " آرد"));
-                    entries.add(new PieEntry(dealerCommissionDataModel.ShapedAchive, " فرمی"));
-                    entries.add(new PieEntry(dealerCommissionDataModel.PottageAchive, " رشته آش"));
-
-                PieDataSet pieDataSet = new PieDataSet(entries, "");
-                pieDataSet.setValueTextSize(20);
-                pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-                Description description = new Description();
-                description.setText("");
-                pieChart.setDescription(description);
-                pieChart.animateY(1500);
-                PieData pieData = new PieData(pieDataSet);
-                pieChart.setData(pieData);
-                pieChart.getLegend().setEnabled(false);*/
-
             }
         }
-        //mTableView.setHasFixedWidth(true);
-
-        /*for (int i = 0; i < mTableViewModel.getCellList().size(); i++) {
-            mTableView.setColumnWidth(i, 200);
-        }*)
-
-        //mTableView.setColumnWidth(0, -2);
-        //mTableView.setColumnWidth(1, -2);
-
-        /*mTableView.setColumnWidth(2, 200);
-        mTableView.setColumnWidth(3, 300);
-        mTableView.setColumnWidth(4, 400);
-        mTableView.setColumnWidth(5, 500);*/
 
     }
-
-
     private void setData(ArrayList<BarEntry> values) {
 
         BarDataSet set1;
@@ -301,8 +334,6 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
             chart.setData(data);
         }
     }
-
-
     private List<List<Cell>> getCellListForSortingTest(DealerCommissionDataModel dealerCommissionDataModel) {
 
         List<List<Cell>> list = new ArrayList<>();
@@ -523,181 +554,38 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
 
         return list;
     }
+    // array list for first set
+    private ArrayList<BarEntry> getBarEntriesOne(DealerCommissionDataModel dealerCommissionDataModel) {
 
-    public void filterTable(@NonNull String filter) {
-        // Sets a filter to the table, this will filter ALL the columns.
-        if (mTableFilter != null) {
-            mTableFilter.set(filter);
-        }
+        // creating a new array list
+        barEntries = new ArrayList<>();
+        // adding new entry to our array list with bar
+        // entry and passing x and y axis value to it.
+        barEntries.add(new BarEntry(1f, dealerCommissionDataModel.SpaghettiTarget));
+        barEntries.add(new BarEntry(2f, dealerCommissionDataModel.LasagnaTarget));
+        barEntries.add(new BarEntry(3f, dealerCommissionDataModel.NestTarget));
+        barEntries.add(new BarEntry(4f, dealerCommissionDataModel.JumboTarget));
+        barEntries.add(new BarEntry(5f, dealerCommissionDataModel.CakePowderTarget));
+        barEntries.add(new BarEntry(6f, dealerCommissionDataModel.FlourTarget));
+        barEntries.add(new BarEntry(7f, dealerCommissionDataModel.ShapedTarget));
+        barEntries.add(new BarEntry(8f, dealerCommissionDataModel.PottageTarget));
+        return barEntries;
     }
+    // array list for second set.
+    private ArrayList<BarEntry> getBarEntriesTwo(DealerCommissionDataModel dealerCommissionDataModel) {
 
-    public void filterTableForMood(@NonNull String filter) {
-        // Sets a filter to the table, this will only filter a specific column.
-        // In the example data, this will filter the mood column.
-        if (mTableFilter != null) {
-            mTableFilter.set(TableViewModel.MOOD_COLUMN_INDEX, filter);
-        }
+        // creating a new array list
+        barEntries = new ArrayList<>();
+        // adding new entry to our array list with bar
+        // entry and passing x and y axis value to it.
+        barEntries.add(new BarEntry(1f, dealerCommissionDataModel.SpaghettiSales));
+        barEntries.add(new BarEntry(2f, dealerCommissionDataModel.LasagnaSales));
+        barEntries.add(new BarEntry(3f, dealerCommissionDataModel.NestSales));
+        barEntries.add(new BarEntry(4f, dealerCommissionDataModel.JumboSales));
+        barEntries.add(new BarEntry(5f, dealerCommissionDataModel.CakePowderSales));
+        barEntries.add(new BarEntry(6f, dealerCommissionDataModel.FlourSales));
+        barEntries.add(new BarEntry(7f, dealerCommissionDataModel.ShapedSales));
+        barEntries.add(new BarEntry(8f, dealerCommissionDataModel.PottageSales));
+        return barEntries;
     }
-
-    public void filterTableForGender(@NonNull String filter) {
-        // Sets a filter to the table, this will only filter a specific column.
-        // In the example data, this will filter the gender column.
-        if (mTableFilter != null) {
-            mTableFilter.set(TableViewModel.GENDER_COLUMN_INDEX, filter);
-        }
-    }
-
-    // The following four methods below: nextTablePage(), previousTablePage(),
-    // goToTablePage(int page) and setTableItemsPerPage(int itemsPerPage)
-    // are for controlling the TableView pagination.
-    public void nextTablePage() {
-        if (mPagination != null) {
-            mPagination.nextPage();
-        }
-    }
-
-    public void previousTablePage() {
-        if (mPagination != null) {
-            mPagination.previousPage();
-        }
-    }
-
-    public void goToTablePage(int page) {
-        if (mPagination != null) {
-            mPagination.goToPage(page);
-        }
-    }
-
-    public void setTableItemsPerPage(int itemsPerPage) {
-        if (mPagination != null) {
-            mPagination.setItemsPerPage(itemsPerPage);
-        }
-    }
-
-    // Handler for the changing of pages in the paginated TableView.
-    @NonNull
-    private final Pagination.OnTableViewPageTurnedListener onTableViewPageTurnedListener = new
-            Pagination.OnTableViewPageTurnedListener() {
-                @Override
-                public void onPageTurned(int numItems, int itemsStart, int itemsEnd) {
-                    int currentPage = mPagination.getCurrentPage();
-                    int pageCount = mPagination.getPageCount();
-                    previousButton.setVisibility(View.VISIBLE);
-                    nextButton.setVisibility(View.VISIBLE);
-
-                    if (currentPage == 1 && pageCount == 1) {
-                        previousButton.setVisibility(View.INVISIBLE);
-                        nextButton.setVisibility(View.INVISIBLE);
-                    }
-
-                    if (currentPage == 1) {
-                        previousButton.setVisibility(View.INVISIBLE);
-                    }
-
-                    if (currentPage == pageCount) {
-                        nextButton.setVisibility(View.INVISIBLE);
-                    }
-
-                    tablePaginationDetails.setText(getString(R.string.table_pagination_details, String
-                            .valueOf(currentPage), String.valueOf(itemsStart), String.valueOf(itemsEnd)));
-
-                }
-            };
-
-    @NonNull
-    private final AdapterView.OnItemSelectedListener mItemSelectionListener = new AdapterView
-            .OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            // 0. index is for empty item of spinner.
-            if (position > 0) {
-
-                String filter = Integer.toString(position);
-
-                if (parent == moodFilter) {
-                    filterTableForMood(filter);
-                } else if (parent == genderFilter) {
-                    filterTableForGender(filter);
-                }
-            }
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-            // Left empty intentionally.
-        }
-    };
-
-    @NonNull
-    private final TextWatcher mSearchTextWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            filterTable(String.valueOf(s));
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-        }
-    };
-
-    @NonNull
-    private final AdapterView.OnItemSelectedListener onItemsPerPageSelectedListener = new AdapterView
-            .OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            int itemsPerPage;
-            if ("All".equals(parent.getItemAtPosition(position).toString())) {
-                itemsPerPage = 0;
-            } else {
-                itemsPerPage = Integer.parseInt(parent.getItemAtPosition(position).toString());
-            }
-
-            setTableItemsPerPage(itemsPerPage);
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-        }
-    };
-
-    @NonNull
-    private final View.OnClickListener mClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (v == previousButton) {
-                previousTablePage();
-            } else if (v == nextButton) {
-                nextTablePage();
-            }
-        }
-    };
-
-    @NonNull
-    private final TextWatcher onPageTextChanged = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            int page;
-            if (TextUtils.isEmpty(s)) {
-                page = 1;
-            } else {
-                page = Integer.parseInt(String.valueOf(s));
-            }
-
-            goToTablePage(page);
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-        }
-    };
-
-
 }

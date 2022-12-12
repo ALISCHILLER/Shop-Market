@@ -2,22 +2,24 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:screenOrientation="landscape"
     android:layout_height="match_parent"
+    android:screenOrientation="landscape"
+    android:background="@color/stroke_border"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-   >
+    tools:ignore="MissingDefaultResource">
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/reports_tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@color/colorPrimary"
         app:layout_constraintTop_toTopOf="parent"
-        app:tabIndicatorColor="?attr/colorPrimaryDark"
+        app:tabIndicatorColor="@color/yellow"
         app:tabPadding="@dimen/padding_default"
-        app:tabSelectedTextColor="?attr/colorPrimaryDark"
-        app:tabTextColor="?attr/colorPrimary">
+        app:tabTextAppearance="@style/TabTheme"
+        app:tabSelectedTextColor="@color/yellow"
+        app:tabTextColor="@color/white">
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
@@ -41,6 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"
         android:background="@color/bg_line"
         android:focusableInTouchMode="true"
         android:layoutDirection="ltr"

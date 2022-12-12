@@ -107,9 +107,9 @@ public class TableViewModel {
             ColumnHeader header6 = new ColumnHeader(String.valueOf(6), "آرد");
             ColumnHeader header7 = new ColumnHeader(String.valueOf(7), "فرمی");
             ColumnHeader header8 = new ColumnHeader(String.valueOf(8), "رشته آش ");
-            ColumnHeader header9 = new ColumnHeader(String.valueOf(9), "CoverageRatePayment ");
-            ColumnHeader header10 = new ColumnHeader(String.valueOf(10), "HitRatePayment ");
-            ColumnHeader header11 = new ColumnHeader(String.valueOf(11), "LpscPayment ");
+            ColumnHeader header9 = new ColumnHeader(String.valueOf(9), "CoverageRate");
+            ColumnHeader header10 = new ColumnHeader(String.valueOf(10), "HitRate");
+            ColumnHeader header11 = new ColumnHeader(String.valueOf(11), "Lpsc");
             ColumnHeader header12 = new ColumnHeader(String.valueOf(12), "جمع کل");
             list.add(header);
             list.add(header2);

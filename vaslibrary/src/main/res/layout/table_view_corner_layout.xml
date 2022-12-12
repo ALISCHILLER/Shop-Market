@@ -21,10 +21,12 @@
  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  ~ SOFTWARE.
   -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="@dimen/row_header_width"
-                android:layout_height="@dimen/cell_height"
-                android:background="@color/cell_background_color">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/row_header_width"
+    android:layout_height="@dimen/cell_height"
+    android:background="@color/header_line_color"
+               >
 
     <TextView
         android:layout_width="wrap_content"
@@ -32,7 +34,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:text="پورسانت"
-        android:textColor="@color/table_view_default_text_color"
+        android:textColor="@color/theme_primary_text_inverted"
         android:textSize="@dimen/text_size"/>
 
     <View
@@ -45,5 +47,5 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/header_line_color"/>
+        android:background="@color/theme_primary_text_inverted"/>
 </RelativeLayout>

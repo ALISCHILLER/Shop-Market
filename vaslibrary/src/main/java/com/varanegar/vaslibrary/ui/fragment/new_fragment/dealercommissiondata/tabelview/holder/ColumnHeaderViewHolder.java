@@ -38,6 +38,7 @@ import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractSorterViewH
 import com.evrencoskun.tableview.sort.SortState;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.ui.fragment.new_fragment.dealercommissiondata.tabelview.model.ColumnHeader;
+import com.varanegar.vaslibrary.ui.qtyview.QtyView;
 
 /**
  * Created by evrencoskun on 23/10/2017.
@@ -77,7 +78,8 @@ public class ColumnHeaderViewHolder extends AbstractSorterViewHolder {
         // Then you should consider the below lines. Otherwise, you can remove them.
 
         // It is necessary to remeasure itself.
-        column_header_container.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        //column_header_container.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
+
         column_header_textview.requestLayout();
     }
 
@@ -106,7 +108,7 @@ public class ColumnHeaderViewHolder extends AbstractSorterViewHolder {
         super.onSortingStatusChanged(sortState);
 
         // It is necessary to remeasure itself.
-        column_header_container.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
+       // column_header_container.getLayoutParams().width = LinearLayout.LayoutParams.WRAP_CONTENT;
 
         controlSortState(sortState);
 
