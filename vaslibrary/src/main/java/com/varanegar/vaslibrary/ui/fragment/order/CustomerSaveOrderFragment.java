@@ -2292,7 +2292,9 @@ public class CustomerSaveOrderFragment extends VisitFragment
         }
     }
 
-    private void add(CustomerCallOrderOrderViewModel customerCallOrderOrderViewModel, List<DiscreteUnit> discreteUnits, BaseUnit bulkUnit, List<BatchQty> batchQtyList, @Nullable UUID editReasonId) throws ValidationException, DbException {
+    private void add(CustomerCallOrderOrderViewModel customerCallOrderOrderViewModel, List<DiscreteUnit>
+            discreteUnits, BaseUnit bulkUnit, List<BatchQty> batchQtyList,
+                     @Nullable UUID editReasonId) throws ValidationException, DbException {
         FreeReasonModel freeReasonModel = null;
         if (customerCallOrderOrderViewModel.FreeReasonId != null)
             freeReasonModel = new FreeReasonManager(context).getItem(customerCallOrderOrderViewModel.FreeReasonId);

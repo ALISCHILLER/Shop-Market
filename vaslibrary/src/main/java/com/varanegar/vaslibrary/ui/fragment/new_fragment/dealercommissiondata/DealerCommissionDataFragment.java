@@ -1,5 +1,6 @@
 package com.varanegar.vaslibrary.ui.fragment.new_fragment.dealercommissiondata;
 
+import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -57,7 +58,6 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
     @Nullable
@@ -68,6 +68,11 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
             @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(
                 R.layout.layout_dealercommission_fragment, container, false);
+        Activity a = getActivity();
+        if(a != null){
+            a.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+        }
         textViewDate = view.findViewById(R.id.textViewDate);
         layout_pie_chart=view.findViewById(R.id.layout_pie_chart);
         layout_idBarChart=view.findViewById(R.id.layout_idBarChart);
@@ -120,7 +125,16 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
         return view;
     }
 
-    private void setChartSale( DealerCommissionDataModel dealerCommissionDataModel){
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Activity a = getActivity();
+        if(a != null){
+            a.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        }
+    }
+
+    private void setChartSale(DealerCommissionDataModel dealerCommissionDataModel){
         // creating a new bar data set.
         barDataSet1 = new BarDataSet(getBarEntriesOne(dealerCommissionDataModel), "هدف");
         barDataSet1.setColor(getContext().getApplicationContext().getResources().getColor(R.color.blue_normal));

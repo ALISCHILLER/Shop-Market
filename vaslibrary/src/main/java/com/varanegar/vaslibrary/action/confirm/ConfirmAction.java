@@ -5,6 +5,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.view.View;
+
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import com.varanegar.framework.base.MainVaranegarActivity;
@@ -65,6 +68,7 @@ import com.varanegar.vaslibrary.model.location.LocationModel;
 import com.varanegar.vaslibrary.model.newmodel.checkCustomerCredits.CheckCustomerCreditModel;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
+import com.varanegar.vaslibrary.ui.fragment.new_fragment.product_comparison.Product_Comparison_Fragment;
 import com.varanegar.vaslibrary.ui.fragment.settlement.CustomerPayment;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.apiNew.ApiNew;
@@ -208,119 +212,36 @@ public class ConfirmAction extends CheckPathAction {
     public void run() {
         setRunning(true);
 
-
-
-
         if (!isConfirmed()) {
-
-
-            List<CustomerCallOrderPreviewModel> callOrderPreviewModels =new
-                    CustomerCallOrderPreviewManager(getActivity()).getCustomerCallOrders(getSelectedId());
-
-            if (callOrderPreviewModels != null &&
-                    callOrderPreviewModels.size() > 0 &&
-                    callOrderPreviewModels.get(0).TotalPrice!=null) {
-                CustomerModel customerModel=new CustomerManager(getActivity()).getItem(getSelectedId());
-                List<String> customerCode= Collections.singletonList(customerModel.CustomerCode);
-              //  List<String> customerCode= Collections.singletonList("0014032092");
-                ApiNew apiNew =new ApiNew(getActivity());
-                Call<List<CheckCustomerCreditModel>> call= apiNew.CheckCustomerCredits(customerCode);
-                apiNew.runWebRequest(call, new WebCallBack<List<CheckCustomerCreditModel>>() {
-                    @Override
-                    protected void onFinish() {
-
-                    }
-
-                    @Override
-                    protected void onSuccess(List<CheckCustomerCreditModel> result, Request request) {
-
-                        if (result.size() > 0) {
-                            Currency total = Currency.ZERO;
-                            if (callOrderPreviewModels.get(0).TotalPrice != null) {
-                                total = total.add(callOrderPreviewModels.get(0).TotalPrice);
-                                final Currency finalTotal = total;
-                                int totalePrice = HelperMethods.currencyToInt(finalTotal);
-                                int customerCreditLimit = HelperMethods
-                                        .currencyToInt(result.get(0).CustomerCreditLimit);
-                               if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)){
-                                    if (totalePrice > customerCreditLimit) {
-                                        showErrorMessage(R.string.customerCredit);
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    @Override
-                    protected void onApiFailure(ApiError error, Request request) {
-                        Timber.e(String.valueOf(error));
-                        String err = WebApiErrorBody.log(error, getActivity());
-                        showErrorMessage(err);
-                    }
-
-                    @Override
-                    protected void onNetworkFailure(Throwable t, Request request) {
-                        Timber.e(t);
-                        showErrorMessage(R.string.network_error);
-                        setRunning(false);
-                        return;
-                    }
-                });
-
-            }
-
-            if (SysConfigManager.hasTracking(getActivity()) &&
-                    TrackingLicense.isValid(getActivity())) {
-                android.location.LocationManager manager =
-                        (android.location.LocationManager) getActivity()
-                                .getSystemService(Context.LOCATION_SERVICE);
-                boolean gps = manager
-                        .isProviderEnabled(android.location.LocationManager.GPS_PROVIDER);
-                if (!gps) {
-                    TrackingLogManager.addLog(
-                            getActivity(),
-                            LogType.PROVIDER,
-                            LogLevel.Error, "خاموش بودن جی پی اس در زمان تایید عملیات!");
-                    showErrorMessage(R.string.please_turn_on_location);
+            CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
+            dialog.setTitle("تایید عملیات");
+            dialog.setMessage(R.string.are_you_sure);
+            dialog.setIcon(Icon.Info);
+            dialog.setPositiveButton(R.string.yes, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    tConfirm();
+                }
+            });
+            dialog.setNegativeButton(R.string.no, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     setRunning(false);
-                    return;
                 }
-                if (android.os.Build.VERSION.SDK_INT >=
-                        android.os.Build.VERSION_CODES.M) {
-                    int locationPermission =
-                            getActivity()
-                                    .checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
-                    if (locationPermission != PackageManager.PERMISSION_GRANTED) {
-                        TrackingLogManager.addLog(
-                                getActivity(),
-                                LogType.LOCATION_SETTINGS,
-                                LogLevel.Error,
-                                "مجوز دسترسی به موقعیت در زمان تایید عملبات وجود ندارد!");
-                        showErrorMessage(R.string.coearse_location_permission_denied);
-                        setRunning(false);
-                        return;
-                    }
-                }
-                new LocationManager(getActivity())
-                        .getLocation(new LocationManager.OnLocationUpdated() {
-                            @Override
-                            public void onSucceeded(LocationModel location) {
-                                confirm();
-                            }
+            });
+            dialog.setNeutralButton(R.string.comparison_product, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setRunning(false);
+                    Product_Comparison_Fragment product_comparison_fragment =new
+                            Product_Comparison_Fragment();
 
-                            @Override
-                            public void onFailed(String error) {
-                                TrackingLogManager.addLog(
-                                        getActivity(),
-                                        LogType.POINT,
-                                        LogLevel.Error,
-                                        " در زمان تایید عملیات پوینت دریافت نشد!",
-                                        error);
-                                setRunning(false);
-                                showErrorMessage(error);
-                            }
-                        });
-            } else confirm();
+                    product_comparison_fragment.setArguments(getSelectedId());
+                    getActivity().pushFragment(product_comparison_fragment);
+                }
+            });
+            dialog.show();
+
         } else {
             SysConfigModel cancelRegistration =
                     getCloudConfig(ConfigKey.CancelRegistration);
@@ -337,6 +258,115 @@ public class ConfirmAction extends CheckPathAction {
                 cancelConfirm();
             }
         }
+    }
+    private void tConfirm() {
+
+        List<CustomerCallOrderPreviewModel> callOrderPreviewModels =new
+                CustomerCallOrderPreviewManager(getActivity()).getCustomerCallOrders(getSelectedId());
+        if (callOrderPreviewModels != null &&
+                callOrderPreviewModels.size() > 0 &&
+                callOrderPreviewModels.get(0).TotalPrice!=null) {
+            CustomerModel customerModel=new CustomerManager(getActivity()).getItem(getSelectedId());
+            List<String> customerCode= Collections.singletonList(customerModel.CustomerCode);
+            //  List<String> customerCode= Collections.singletonList("0014032092");
+            ApiNew apiNew =new ApiNew(getActivity());
+            Call<List<CheckCustomerCreditModel>> call= apiNew.CheckCustomerCredits(customerCode);
+            apiNew.runWebRequest(call, new WebCallBack<List<CheckCustomerCreditModel>>() {
+                @Override
+                protected void onFinish() {
+
+                }
+
+                @Override
+                protected void onSuccess(List<CheckCustomerCreditModel> result, Request request) {
+
+                    if (result.size() > 0) {
+                        Currency total = Currency.ZERO;
+                        if (callOrderPreviewModels.get(0).TotalPrice != null) {
+                            total = total.add(callOrderPreviewModels.get(0).TotalPrice);
+                            final Currency finalTotal = total;
+                            int totalePrice = HelperMethods.currencyToInt(finalTotal);
+                            int customerCreditLimit = HelperMethods
+                                    .currencyToInt(result.get(0).CustomerCreditLimit);
+                            if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)){
+                                if (totalePrice > customerCreditLimit) {
+                                    showErrorMessage(R.string.customerCredit);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                protected void onApiFailure(ApiError error, Request request) {
+                    Timber.e(String.valueOf(error));
+                    String err = WebApiErrorBody.log(error, getActivity());
+                    showErrorMessage(err);
+                }
+
+                @Override
+                protected void onNetworkFailure(Throwable t, Request request) {
+                    Timber.e(t);
+                    showErrorMessage(R.string.network_error);
+                    setRunning(false);
+                    return;
+                }
+            });
+
+        }
+
+        if (SysConfigManager.hasTracking(getActivity()) &&
+                TrackingLicense.isValid(getActivity())) {
+            android.location.LocationManager manager =
+                    (android.location.LocationManager) getActivity()
+                            .getSystemService(Context.LOCATION_SERVICE);
+            boolean gps = manager
+                    .isProviderEnabled(android.location.LocationManager.GPS_PROVIDER);
+            if (!gps) {
+                TrackingLogManager.addLog(
+                        getActivity(),
+                        LogType.PROVIDER,
+                        LogLevel.Error, "خاموش بودن جی پی اس در زمان تایید عملیات!");
+                showErrorMessage(R.string.please_turn_on_location);
+                setRunning(false);
+                return;
+            }
+            if (android.os.Build.VERSION.SDK_INT >=
+                    android.os.Build.VERSION_CODES.M) {
+                int locationPermission =
+                        getActivity()
+                                .checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+                if (locationPermission != PackageManager.PERMISSION_GRANTED) {
+                    TrackingLogManager.addLog(
+                            getActivity(),
+                            LogType.LOCATION_SETTINGS,
+                            LogLevel.Error,
+                            "مجوز دسترسی به موقعیت در زمان تایید عملبات وجود ندارد!");
+                    showErrorMessage(R.string.coearse_location_permission_denied);
+                    setRunning(false);
+                    return;
+                }
+            }
+            new LocationManager(getActivity())
+                    .getLocation(new LocationManager.OnLocationUpdated() {
+                        @Override
+                        public void onSucceeded(LocationModel location) {
+                            confirm();
+                        }
+
+                        @Override
+                        public void onFailed(String error) {
+                            TrackingLogManager.addLog(
+                                    getActivity(),
+                                    LogType.POINT,
+                                    LogLevel.Error,
+                                    " در زمان تایید عملیات پوینت دریافت نشد!",
+                                    error);
+                            setRunning(false);
+                            showErrorMessage(error);
+                        }
+                    });
+        } else confirm();
     }
 
     private void confirm() {

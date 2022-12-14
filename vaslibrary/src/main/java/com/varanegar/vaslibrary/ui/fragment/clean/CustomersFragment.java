@@ -6,10 +6,12 @@ import static com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey.EndDev
 import static com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey.StartDeviceWorkingHour;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -124,7 +126,10 @@ public abstract class CustomersFragment
         Log.d(TAG, "onCreate: called");
         setTitle(getString(R.string.customers_list));
         setAdvancedSearch(0, null);
-
+        Activity a = getActivity();
+        if(a != null){
+            a.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        }
         if (savedInstanceState != null)
             barcode = savedInstanceState.getString("dd003d32-4f05-423f-b7ba-3ccc9f54fb39");
 
@@ -148,7 +153,10 @@ public abstract class CustomersFragment
             LayoutInflater inflater,
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
-
+        Activity a = getActivity();
+        if(a != null){
+            a.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        }
         SysConfigManager sysConfigManager = new SysConfigManager(getContext());
         SysConfigModel deviceWorkingHour =
                 sysConfigManager.read(DeviceWorkingHour, SysConfigManager.cloud);
@@ -225,6 +233,10 @@ public abstract class CustomersFragment
         if (!new TourManager(getContext()).isTourAvailable()) {
             Objects.requireNonNull(getVaranegarActvity()).putFragment(getProfileFragment());
             return;
+        }
+        Activity a = getActivity();
+        if(a != null){
+            a.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
         }
         try {
             CustomerCardexTempManager cardexTempManager =
@@ -931,6 +943,7 @@ public abstract class CustomersFragment
     public BaseViewHolder<CustomerPathViewModel> createListItemViewHolder(
             ViewGroup parent,
             int viewType) {
+        MainVaranegarActivity mainVaranegarActivity=getVaranegarActvity();
         if (multipan) {
             View view = LayoutInflater
                     .from(parent.getContext())
@@ -938,7 +951,9 @@ public abstract class CustomersFragment
             return new CustomerSummaryMultipanViewHolder(
                     view,
                     getAdapter(),
-                    backOfficeType);
+                    backOfficeType,
+                    mainVaranegarActivity
+                    );
         } else {
             View view = LayoutInflater
                     .from(parent.getContext())

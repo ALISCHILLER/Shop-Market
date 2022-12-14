@@ -200,6 +200,7 @@
     <string name="txt_assure_to_delete_cust_order">با انجام اين عمل سفارش مشتري حذف مي شود، یا وضعیت ثبت شده برای مشتری تغییر می کند، آيا مطمئن هستيد؟</string>
     <string name="txt_assure_to_delete_cust_order_and_payment">با انجام اين عمل سفارش و پرداخت های مشتري حذف مي شود، یا وضعیت ثبت شده برای مشتری تغییر می کند، آيا مطمئن هستيد؟</string>
     <string name="no">خیر</string>
+    <string name="comparison_product">مقایسه کالاها</string>
     <string name="txt_non_visit_reason">علت عدم ویزیت</string>
     <string name="txt_alert_cancel">انصراف</string>
     <string name="user_name_or_password_is_wrong">نام کاربری یا کلمه عبور اشتباه است</string>

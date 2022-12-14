@@ -1,6 +1,7 @@
 package com.varanegar.vaslibrary.ui.viewholders;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Paint;
@@ -11,8 +12,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.kaelli.niceratingbar.NiceRatingBar;
+import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.util.HelperMethods;
 import com.varanegar.framework.util.Linq;
@@ -27,6 +31,7 @@ import com.varanegar.vaslibrary.model.customer.CustomerActivityModel;
 import com.varanegar.vaslibrary.model.customer.CustomerLevelModel;
 import com.varanegar.vaslibrary.model.customercall.CustomerCallModel;
 import com.varanegar.vaslibrary.model.customerpathview.CustomerPathViewModel;
+import com.varanegar.vaslibrary.ui.dialog.StarDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,13 +63,16 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
     private final CardView cardViewCustomerStatus;
     private final CardView cardViewZarShop;
     private final ImageView imageViewZarShop;
+    private  NiceRatingBar ratting_bar;
     //private ImageUrlViewDialog customerImageView;
-
+    private  MainVaranegarActivity _activity;
     //---------------------------------------------------------------------------------------------- CustomerSummaryMultipanViewHolder
     public CustomerSummaryMultipanViewHolder(View itemView,
                                              BaseRecyclerAdapter<CustomerPathViewModel>
                                                      recyclerAdapter,
-                                             BackOfficeType backOfficeType) {
+                                             BackOfficeType backOfficeType,
+                                             MainVaranegarActivity context
+                                             ) {
         super(itemView, recyclerAdapter, recyclerAdapter.getActivity());
         customerNameTextView = (TextView) itemView.findViewById(R.id.customer_name_text_view);
         customerAddressTextView = (TextView) itemView.findViewById(R.id.customer_address_text_view);
@@ -87,7 +95,9 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
         cardViewCustomerStatus = itemView.findViewById(R.id.cardViewCustomerStatus);
         cardViewZarShop = itemView.findViewById(R.id.cardViewZarShop);
         imageViewZarShop = itemView.findViewById(R.id.imageViewZarShop);
+        ratting_bar = itemView.findViewById(R.id.ratting_bar);
         this.backOfficeType = backOfficeType;
+        this._activity=context;
     }
     //---------------------------------------------------------------------------------------------- CustomerSummaryMultipanViewHolder
 
@@ -109,7 +119,19 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
         customerTelTextView.setText(customerModel.Phone);
         storeNameTextView.setText(customerModel.StoreName);
         codeNagesh_Str = customerModel.CodeNaghsh;
+        if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)){
+            ratting_bar.setVisibility(View.VISIBLE);
+            ratting_bar.setRating(customerModel.DegreeStar);
+            ratting_bar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    StarDialog starDialog=new StarDialog();
+                    starDialog.setValues(customerModel.DegreeStar);
+                    starDialog.show(_activity.getSupportFragmentManager(), "StarDialog");
+                }
+            });
 
+        }
         if (customerModel.IsZarShopCustomer != null &&
                 customerModel.IsZarShopCustomer.equalsIgnoreCase("y")) {
             cardViewZarShop.setVisibility(View.VISIBLE);

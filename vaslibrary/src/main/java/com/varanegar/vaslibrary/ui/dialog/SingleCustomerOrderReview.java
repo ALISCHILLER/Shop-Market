@@ -15,7 +15,8 @@ import com.varanegar.vaslibrary.R;
 
 public class SingleCustomerOrderReview extends CuteDialogWithToolbar {
     @Override
-    public View onCreateDialogView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateDialogView(LayoutInflater inflater, @Nullable ViewGroup container,
+                                   @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_single_customer_review,container,false);
         return view;
     }

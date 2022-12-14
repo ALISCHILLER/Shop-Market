@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.kaelli.niceratingbar.NiceRatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:padding="@dimen/padding_left_right_small"
+            app:nrb_ratingStatus="Disable"
+            app:nrb_starEmptyResource="@drawable/ic_filled_star_24"
+            app:nrb_starFullResource="@drawable/ic_golden_star"
+            app:nrb_starImageHeight="20dp"
+            app:nrb_starImagePadding="2dp"
+            app:nrb_starImageWidth="23dp"
+            app:nrb_starTotal="3" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:padding="@dimen/padding_left_right_small"
+            android:text="مشتری در بازه سه ماه 3 بار یا بیشتر خرید داشته" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout1">
+
+        <com.kaelli.niceratingbar.NiceRatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:padding="@dimen/padding_left_right_small"
+            app:nrb_rating="2"
+            app:nrb_ratingStatus="Disable"
+            app:nrb_starEmptyResource="@drawable/ic_filled_star_24"
+            app:nrb_starFullResource="@drawable/ic_golden_star"
+            app:nrb_starImageHeight="20dp"
+            app:nrb_starImagePadding="2dp"
+            app:nrb_starImageWidth="23dp"
+            app:nrb_starTotal="3" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:padding="@dimen/padding_left_right_small"
+            android:text="مشتری در بازه دو ماه 2 بار خرید داشته"
+           />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+
+        <com.kaelli.niceratingbar.NiceRatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:padding="@dimen/padding_left_right_small"
+            app:nrb_rating="1"
+            app:nrb_ratingStatus="Disable"
+            app:nrb_starEmptyResource="@drawable/ic_filled_star_24"
+            app:nrb_starFullResource="@drawable/ic_golden_star"
+            app:nrb_starImageHeight="20dp"
+            app:nrb_starImagePadding="2dp"
+            app:nrb_starImageWidth="23dp"
+            app:nrb_starTotal="3" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:padding="@dimen/padding_left_right_small"
+            android:text="مشتری در بازه یک ماه 1 بار خرید داشته"
+            />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/text_star"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/red"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
+
+    <TextView
+        android:id="@+id/ok_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_weight="0.30"
+        android:gravity="center"
+        android:padding="@dimen/padding_default"
+        android:text="@string/ok"
+        android:textColor="?attr/colorPrimaryDark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_star" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ok_text_view" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

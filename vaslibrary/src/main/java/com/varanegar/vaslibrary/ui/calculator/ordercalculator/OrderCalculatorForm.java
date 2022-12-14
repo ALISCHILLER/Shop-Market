@@ -675,8 +675,8 @@ public class OrderCalculatorForm extends CuteDialog {
                 }
             }
         };
-        if (_voicetoText!=null &&!_voicetoText.isEmpty())
-            calculator.setvalue(_voicetoText);
+//        if (_voicetoText!=null &&!_voicetoText.isEmpty())
+//            calculator.setvalue(_voicetoText);
     }
 
     private Boolean  checkCommodityRationing(){

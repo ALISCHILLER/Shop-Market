@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:screenOrientation="landscape"
     android:background="@color/stroke_border"
+    android:layoutDirection="ltr"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:ignore="MissingDefaultResource">
@@ -46,8 +47,6 @@
         android:layout_marginBottom="5dp"
         android:background="@color/bg_line"
         android:focusableInTouchMode="true"
-        android:layoutDirection="ltr"
-        android:textDirection="ltr"
         app:layout_constraintBottom_toTopOf="@+id/textViewDate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

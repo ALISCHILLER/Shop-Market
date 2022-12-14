@@ -78,4 +78,5 @@ dependencies {
     implementation 'com.github.evrencoskun:TableView:v0.8.9.4'
 
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation 'com.github.KaelLi1989:NiceRatingBar:1.0.0'
 }

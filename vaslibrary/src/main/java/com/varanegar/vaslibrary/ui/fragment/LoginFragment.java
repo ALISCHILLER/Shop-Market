@@ -70,8 +70,6 @@ import com.varanegar.vaslibrary.model.user.UserModelRepository;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
 import com.varanegar.vaslibrary.ui.dialog.ImportDialogFragment;
 import com.varanegar.vaslibrary.ui.fragment.new_fragment.helpfragment.Program_Help_fragment;
-import com.varanegar.vaslibrary.ui.fragment.new_fragment.videoPlayer.MediaPlayerFragment;
-import com.varanegar.vaslibrary.ui.report.report_new.customer_inventory_report.CustomerInventoryReportFragment;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
 
 import java.util.Date;
@@ -300,7 +298,8 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
         });
         loginButton.setOnClickListener(view12 -> {
 //                Intent intent = new Intent(Intent.ACTION_VIEW);
-//                intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/download/" + "Sepehr_varanegar.apk")), "application/vnd.android.package-archive");
+//                intent.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory()
+//                + "/download/" + "Sepehr_varanegar.apk")), "application/vnd.android.package-archive");
 //                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                startActivity(intent);
 
@@ -500,9 +499,12 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
                 getVaranegarActvity().showSnackBar(R.string.device_id_is_not_available, MainVaranegarActivity.Duration.Short);
                 return;
             }
-            TrackingLogManager.addLog(getActivity(), LogType.LICENSE, LogLevel.Info, "Device IMEI = " + deviceId);
-            com.varanegar.vaslibrary.manager.locationmanager.LocationManager locationManager = new com.varanegar.vaslibrary.manager.locationmanager.LocationManager(getContext());
-            locationManager.downloadTrackingLicense(deviceId, new com.varanegar.vaslibrary.manager.locationmanager.LocationManager.DownloadCallBack() {
+            TrackingLogManager.addLog(getActivity(), LogType.LICENSE, LogLevel.Info,
+                    "Device IMEI = " + deviceId);
+            com.varanegar.vaslibrary.manager.locationmanager.LocationManager locationManager =
+                    new com.varanegar.vaslibrary.manager.locationmanager.LocationManager(getContext());
+            locationManager.downloadTrackingLicense(deviceId, new
+                    com.varanegar.vaslibrary.manager.locationmanager.LocationManager.DownloadCallBack() {
                 @Override
                 public void done() {
 

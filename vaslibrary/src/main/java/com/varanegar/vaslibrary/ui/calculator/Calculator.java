@@ -67,46 +67,6 @@ public class Calculator extends FrameLayout {
         setBulkUnit(calculatorUnits.getBulkUnit());
         setupAdapter();
     }
-    public void setvalue(String txt){
-//        if (checkDecimalPlaces()&&txt!=null&&!txt.isEmpty()) {
-//            setupAdapter();
-//            strValue = strValue + txt;
-//            selectedUnit = valuesAdapter.selectDefault();
-//            if (!strValue.isEmpty()) {
-//                while (!strValue.isEmpty() && strValue.startsWith("0")) {
-//                    if (strValue.length() > 1 && strValue.charAt(1) != '.')
-//                        strValue = strValue.replace("0", "");
-//                    else
-//                        break;
-//                }
-//            }
-//            if (strValue.isEmpty())
-//                strValue = "0";
-//
-//            if (strValue.startsWith("."))
-//                strValue = "0" + strValue;
-//            if (selectedUnit != null)
-//                selectedUnit.value = Double.parseDouble(strValue);
-//            else if (!isBulk()) {
-//                totalQtyTextView.setText(strValue);
-//            }
-//
-//            if (bulkUnit != null && bulkUnit.Readonly)
-//                bulkUnit.value = Math.round(totalQty() * 1000.0) / 1000.0;
-//
-//            valuesAdapter.notifyDataSetChanged();
-//            if (!totalQtySelected) {
-//                if (!isBulk())
-//                    totalQtyTextView.setText(calcTotalQty());
-//                qtyTextView.setText(strValue);
-//            } else if (!isBulk()) {
-//                calcUnits();
-//            }
-//
-//            if (onValueChangeListener != null)
-//                onValueChangeListener.onValueChange(valuesAdapter.getItems(), bulkUnit);
-//        }
-    }
 
     public BigDecimal getTotal() {
         BigDecimal total = BigDecimal.ZERO;

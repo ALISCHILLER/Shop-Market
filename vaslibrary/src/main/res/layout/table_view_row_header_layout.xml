@@ -28,11 +28,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/header_line_color"
     android:layout_width="@dimen/row_header_width"
+    android:layoutDirection="rtl"
     android:layout_height="@dimen/cell_heightt">
 
     <LinearLayout
         android:id="@+id/row_header_container"
         android:layout_width="match_parent"
+
         android:layout_height="match_parent"
         android:background="@color/header_line_color"
         android:gravity="center_vertical"
