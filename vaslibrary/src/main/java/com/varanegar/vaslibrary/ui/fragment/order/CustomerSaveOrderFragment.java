@@ -117,6 +117,8 @@ import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.EditOrderLocat
 import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.OrderActivityEventViewModel;
 import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.OrderLineActivityEventViewModel;
 import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.OrderLocationViewModel;
+import com.varanegar.vaslibrary.manager.newmanager.customerXmounthsalereport.CustomerXMounthSaleReportManager;
+import com.varanegar.vaslibrary.manager.newmanager.customerXmounthsalereport.CustomerXMounthSaleReportModel;
 import com.varanegar.vaslibrary.manager.orderprizemanager.OrderPrizeManager;
 import com.varanegar.vaslibrary.manager.paymentmanager.PaymentManager;
 import com.varanegar.vaslibrary.manager.paymentmanager.paymenttypes.PaymentType;
@@ -184,6 +186,7 @@ import com.varanegar.vaslibrary.ui.dialog.InsertPinDialog;
 import com.varanegar.vaslibrary.ui.dialog.MultiInvoiceVectorDialog;
 import com.varanegar.vaslibrary.ui.dialog.ValueEditorDialog;
 import com.varanegar.vaslibrary.ui.dialog.choiceprize.ChoicePrizesDialog;
+import com.varanegar.vaslibrary.ui.dialog.new_dialog.Ml_dialog1;
 import com.varanegar.vaslibrary.ui.drawer.CustomerReportsDrawerAdapter;
 import com.varanegar.vaslibrary.ui.fragment.VisitFragment;
 import com.varanegar.vaslibrary.ui.fragment.productgroup.ProductGroupFragment;
@@ -1667,7 +1670,50 @@ public class CustomerSaveOrderFragment extends VisitFragment
                 cuteMessageDialog.setNegativeButton(R.string.ok, null);
                 cuteMessageDialog.show();
             } else {
-                saveOrder();
+                if (orderAdapter.size() > 0) {
+                    CustomerXMounthSaleReportManager customerXMounthSaleReportManager =
+                            new CustomerXMounthSaleReportManager(getContext());
+                    List<CustomerXMounthSaleReportModel> xMounthSaleReportModelss=new ArrayList<>();
+                    xMounthSaleReportModelss.clear();
+                    List<CustomerXMounthSaleReportModel> xMounthSaleReportModels =
+                            customerXMounthSaleReportManager.getAll(customer.UniqueId);
+                    xMounthSaleReportModelss = xMounthSaleReportModels;
+                    if (xMounthSaleReportModels.size() > 0) {
+
+                        for (CustomerCallOrderOrderViewModel item : orderAdapter.getItems()) {
+                            for (int i=0;i<xMounthSaleReportModels.size();i++) {
+                                if (item.ProductCode.equals(xMounthSaleReportModels.get(i).ProductCode)) {
+                                    xMounthSaleReportModelss.remove(xMounthSaleReportModels.get(i));
+                                }
+                            }
+                        }
+
+                        if (xMounthSaleReportModelss.size() > 0) {
+                            Ml_dialog1 ml_dialog1 = new Ml_dialog1();
+                            ml_dialog1.setValues(xMounthSaleReportModelss);
+                            ml_dialog1.show(getChildFragmentManager(), "Ml_dialog1");
+                            ml_dialog1.setOnResult(new InsertPinDialog.OnResult() {
+                                @Override
+                                public void done() {
+                                    saveOrder();
+                                }
+
+                                @Override
+                                public void failed(String error) {
+
+                                }
+                            });
+                        } else {
+                            saveOrder();
+                        }
+
+                    } else {
+                        saveOrder();
+                    }
+                }else {
+                    saveOrder();
+                }
+
             }
         });
 

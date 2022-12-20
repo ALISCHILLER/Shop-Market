@@ -26,6 +26,7 @@ import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.DeviceReportLo
 import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.DeviceReportViewModel;
 import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.StartTourEventViewModel;
 import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.StartTourLocationViewModel;
+import com.varanegar.vaslibrary.manager.newmanager.customerXmounthsalereport.CustomerXMounthSaleReportModelRepository;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.OwnerKeysWrapper;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
@@ -69,6 +70,9 @@ public abstract class SyncService extends Service {
 
             @Override
             protected void onSuccess() {
+                CustomerXMounthSaleReportModelRepository xMounthSaleReportModelRepository=new
+                        CustomerXMounthSaleReportModelRepository();
+                xMounthSaleReportModelRepository.deleteAll();
                 if (tourManager.isTourDownloading()) {
                     Timber.d("Trying to confirm tour started!");
                     confirmSent = true;

@@ -5,6 +5,7 @@ import com.varanegar.vaslibrary.model.CheckCustomerCreditsModel;
 import com.varanegar.vaslibrary.model.newmodel.checkCustomerCredits.CheckCustomerCreditModel;
 import com.varanegar.vaslibrary.model.newmodel.commodity_rationing.CommodityRationingModel;
 import com.varanegar.vaslibrary.model.newmodel.customergrouplastsalesreport.CustomerGroupLastSalesReportModel;
+import com.varanegar.vaslibrary.model.product.ProductModel;
 import com.varanegar.vaslibrary.ui.fragment.news_fragment.model.NewsData_Model;
 import com.varanegar.vaslibrary.webapi.apiNew.modelNew.PinRequestViewModel;
 import com.varanegar.vaslibrary.webapi.apiNew.modelNew.RoleCodeCustomerRequestViewModel;
@@ -61,5 +62,11 @@ public interface InApiNew {
     Call<DealerCommissionDataModel>getDealerCommissionData(
             @Query("dealerId") String dealersId
     );
+
+
+    @GET("api/v2/ngt/ReviewReport/CustomerXMounthSaleReport")
+    Call<List<ProductModel>>CustomerXMounthSaleReport (
+            @Query("CustomersCode") String customersCode);
+
 
 }

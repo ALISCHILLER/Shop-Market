@@ -770,6 +770,7 @@
     <string name="new_request">درخواست جدید</string>
     <string name="customers_history">سوابق مشتری</string>
     <string name="updating_customer_history">بروزرسانی سوابق مشتری</string>
+    <string name="updating_customer_data">بروزرسانی اطلاعات مشتری</string>
     <string name="customer_history_updated">سوابق مشتری با موفقیت بروزرسانی شد</string>
     <string name="do_you_update_old_invoices">آیا مایل هستید سوابق مشتری بروز شود؟</string>
     <string name="update_customers_history">بروزرسانی سوابق مشتری</string>

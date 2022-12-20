@@ -55,7 +55,8 @@ public class CameraAction extends CheckDistanceAction {
         if (getCallManager().isLackOfVisit(getCalls()))
             return getActivity().getString(R.string.customer_is_not_visited);
         TaskPriorityModel taskPriorityModel = getTaskPriorities().get(getTaskUniqueId());
-        if (((VasActionsAdapter) getAdapter()).checkPriorities() && taskPriorityModel != null && !taskPriorityModel.IsEnabled && isMandatory() == null)
+        if (((VasActionsAdapter) getAdapter()).checkPriorities() && taskPriorityModel != null
+                && !taskPriorityModel.IsEnabled && isMandatory() == null)
             return getActivity().getString(R.string.the_action_is_disabled_for_you);
         return null;
     }

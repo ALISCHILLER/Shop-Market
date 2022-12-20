@@ -49,12 +49,6 @@ public class CommodityRationingManager extends BaseManager<CommodityRationingVie
                                 .or(Criteria.contains(CommodityRationingView.customerCategoryIds, String.valueOf(customerCategoryIds)))
 
                 );
-//
-//
-//                .whereAnd(Criteria.contains(CommodityRationingView.UniqueId, String.valueOf(quotasUniqueId))
-//                        .or(Criteria.contains(CommodityRationingView.customerLevelIds, String.valueOf(customerLevelIds))
-//                                .or(Criteria.contains(CommodityRationingView.customerActivityIds, String.valueOf(customerActivityIds)))
-//                                .or(Criteria.contains(CommodityRationingView.customerCategoryIds, String.valueOf(customerCategoryIds)))));
         return getItem(query);
     }
 

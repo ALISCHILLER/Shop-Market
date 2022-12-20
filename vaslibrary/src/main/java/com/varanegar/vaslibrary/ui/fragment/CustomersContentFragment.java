@@ -1,16 +1,20 @@
 package com.varanegar.vaslibrary.ui.fragment;
 
+import static android.app.Activity.RESULT_OK;
 import static com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey.CheckCustomerStock;
 import static varanegar.com.discountcalculatorlib.utility.JalaliCalendar.jalaliToGregorian;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.speech.RecognizerIntent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,10 +28,13 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarActivity;
 import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.base.VaranegarFragment;
+import com.varanegar.framework.network.listeners.ApiError;
+import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.util.HelperMethods;
 import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.util.component.PairedItems;
@@ -60,6 +67,7 @@ import com.varanegar.vaslibrary.action.SaveOrderAction;
 import com.varanegar.vaslibrary.action.SetCustomerLocationAction;
 import com.varanegar.vaslibrary.action.VasActionsAdapter;
 import com.varanegar.vaslibrary.action.newAcation.CustomerUpdateAction;
+import com.varanegar.vaslibrary.action.newAcation.VoiceAcation;
 import com.varanegar.vaslibrary.manager.CustomerPathViewManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerActivityManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerCategoryManager;
@@ -71,6 +79,8 @@ import com.varanegar.vaslibrary.manager.customercall.CustomerCallOrderPreviewMan
 import com.varanegar.vaslibrary.manager.customercallmanager.CustomerCallManager;
 import com.varanegar.vaslibrary.manager.customercallmanager.TaskPriorityManager;
 import com.varanegar.vaslibrary.manager.customergrouplastsalesreportmanager.CustomerGroupLastSalesReportManager;
+import com.varanegar.vaslibrary.manager.newmanager.customerXmounthsalereport.CustomerXMounthSaleReportManager;
+import com.varanegar.vaslibrary.manager.newmanager.customerXmounthsalereport.CustomerXMounthSaleReportModel;
 import com.varanegar.vaslibrary.manager.oldinvoicemanager.CustomerOldInvoiceHeaderManager;
 import com.varanegar.vaslibrary.manager.productorderviewmanager.ProductOrderViewManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.BackOfficeType;
@@ -88,11 +98,15 @@ import com.varanegar.vaslibrary.model.customercall.CustomerCallModel;
 import com.varanegar.vaslibrary.model.customercall.TaskPriorityModel;
 import com.varanegar.vaslibrary.model.customeroldInvoice.CustomerOldInvoiceHeaderModel;
 import com.varanegar.vaslibrary.model.newmodel.customergrouplastsalesreport.CustomerGroupLastSalesReportModel;
+import com.varanegar.vaslibrary.model.product.ProductModel;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.model.tour.TourModel;
 import com.varanegar.vaslibrary.ui.dialog.InsertPinDialog;
+import com.varanegar.vaslibrary.ui.dialog.new_dialog.Ml_dialog1;
 import com.varanegar.vaslibrary.ui.drawer.CustomerReportsDrawerAdapter;
 import com.varanegar.vaslibrary.ui.fragment.new_fragment.edit_new_zar.Edit_New_Customer_ZarFragment;
+import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
+import com.varanegar.vaslibrary.webapi.apiNew.ApiNew;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -105,6 +119,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Request;
+import retrofit2.Call;
 import timber.log.Timber;
 import varanegar.com.discountcalculatorlib.utility.JalaliCalendar;
 
@@ -122,7 +138,7 @@ public class CustomersContentFragment extends VaranegarFragment {
     private PairedItems sale_date_pasta, sale_date_form, sale_date_jumbo, sale_date_lasagna,
             sale_date_nest, sale_date_ash, sale_date_flour, sale_date_cake, sale_date_seven,
             sale_date_vegan, sale_date_protein;
-
+    private ProgressDialog discountProgressDialog;
     protected VasActionsAdapter getActionsAdapter() {
         return actionsAdapter;
     }
@@ -157,6 +173,7 @@ public class CustomersContentFragment extends VaranegarFragment {
             throw new NullPointerException("customer id not found : " + getSelectedId().toString());
         }
         View view = inflater.inflate(R.layout.layout_customer_detail, viewGroup, false);
+
 
         /*
           برای نمایش پیام ویزیتور به موزع استفاده از Arguments
@@ -254,6 +271,8 @@ public class CustomersContentFragment extends VaranegarFragment {
             }
         });
 
+
+
         return view;
     }
     //---------------------------------------------------------------------------------------------- onCreateView
@@ -282,7 +301,45 @@ public class CustomersContentFragment extends VaranegarFragment {
             location_text_view.setVisibility(View.VISIBLE);
         }
 
+        CustomerXMounthSaleReportManager customerXMounthSaleReportManager=
+                new CustomerXMounthSaleReportManager(getContext());
+        List<CustomerXMounthSaleReportModel> xMounthSaleReportModels=
+                customerXMounthSaleReportManager.getAll(customer.UniqueId);
 
+
+        ApiNew apiNew=new ApiNew(getContext());
+        Call<List<ProductModel>> call = apiNew
+                .CustomerXMounthSaleReport(customer.CustomerCode);
+        if (xMounthSaleReportModels.size()==0) {
+            showProgressDialog();
+            apiNew.runWebRequest(call, new WebCallBack<List<ProductModel>>() {
+                @Override
+                protected void onFinish() {
+                    dismissProgressDialog();
+                }
+
+                @Override
+                protected void onSuccess(List<ProductModel> result, Request request) {
+
+                    if (result.size() > 0) {
+                        customerXMounthSaleReportManager.save(customer.UniqueId, result);
+                    }
+                }
+
+                @Override
+                protected void onApiFailure(ApiError error, Request request) {
+                    String err = WebApiErrorBody.log(error, getContext());
+                    showErrorDialog(err);
+                    Log.e("err", String.valueOf(err));
+                }
+
+                @Override
+                protected void onNetworkFailure(Throwable t, Request request) {
+                    showErrorDialog(getString(R.string.connection_to_server_failed));
+                }
+            });
+
+        }
         buttonTracking.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(Locale.US,
                     "geo:%.8f,%.8f", customer.Latitude, customer.Longitude)));
@@ -550,6 +607,14 @@ public class CustomersContentFragment extends VaranegarFragment {
         actions.add(vpnAction);
 */
 
+        VoiceAcation voiceAcation=new VoiceAcation(
+                getVaranegarActvity(),
+                actionsAdapter,
+                getSelectedId());
+        voiceAcation.setActionCallBack(() -> {
+            voiceIntent();
+                });
+        actions.add(voiceAcation);
 
         CustomerUpdateAction customerUpdateAction = new CustomerUpdateAction(
                 getVaranegarActvity(),
@@ -1143,4 +1208,115 @@ public class CustomersContentFragment extends VaranegarFragment {
     }
 
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 3000) {
+            if (requestCode != RESULT_OK && null != data) {
+                ArrayList<String> result =
+                        data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                String txt = result.get(0);
+                if(txt.contains("درخواست فروش")){
+                    SaveOrderAction saveOrderAction = new SaveOrderAction(
+                            getVaranegarActvity(),
+                            getActionsAdapter(),
+                            getSelectedId(),
+                            customer.CustomerLevelId);
+                    goToAction(saveOrderAction);
+
+                }else if (txt.contains("ویرایش مشتری")){
+                    goToAction(new EditCustomerAction(  getVaranegarActvity(),
+                            getActionsAdapter(),
+                            getSelectedId()));
+                }else if (txt.contains("ثبت موقعیت")){
+                    goToAction(new SetCustomerLocationAction(  getVaranegarActvity(),
+                            getActionsAdapter(),
+                            getSelectedId()));
+                }else if (txt.contains("عدم ویزیت")){
+                    goToAction(new NonVisitAction(  getVaranegarActvity(),
+                            getActionsAdapter(),
+                            getSelectedId()));
+                }else if (txt.contains("موجودی مشتری")){
+                    goToAction(new CustomerInventoryAction(  getVaranegarActvity(),
+                            getActionsAdapter(),
+                            getSelectedId()));
+                }else if (txt.contains(" گزارش موجودی مشتری")){
+                    goToAction(new CustomerInventoryReportAction(  getVaranegarActvity(),
+                            getActionsAdapter(),
+                            getSelectedId()));
+                }else if (txt.contains("درخواست برگشتی")){
+                    goToAction(new BaseReturnAction(  getVaranegarActvity(),
+                            getActionsAdapter(),
+                            getSelectedId()));
+                }
+            }
+        }
+    }
+
+
+    public void goToAction(Action action){
+        action.refresh();
+        Timber.d("Action " + action.getClass().getName() + " clicked.");
+        if (!action.isRunning()) {
+            String error = action.getIsEnabled();
+            if (error == null) {
+                Timber.d("Action " + action.getClass().getName() + " run.");
+                action.run();
+            } else {
+                Timber.d("Action " + action.getClass().getName() + " is disabled, reason = " + error);
+                CuteMessageDialog dialog = new CuteMessageDialog(getActivity());
+                dialog.setMessage(error);
+                dialog.setTitle(com.varanegar.framework.R.string.error);
+                dialog.setIcon(Icon.Error);
+                dialog.setPositiveButton(com.varanegar.framework.R.string.ok, null);
+                dialog.show();
+            }
+        } else {
+            Timber.d("Action " + action.getClass().getName() + " ignored because it is running currently.");
+
+        }
+    }
+
+    private void voiceIntent(){
+        String language =  "fa-IR";
+        Intent intent=new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,language);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, language);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, language);
+        intent.putExtra(RecognizerIntent.EXTRA_ONLY_RETURN_LANGUAGE_PREFERENCE, language);
+        try {
+            startActivityForResult(intent, 3000);
+        } catch (Exception e){
+        }
+    }
+
+
+    private void showProgressDialog() {
+        discountProgressDialog = new ProgressDialog(getActivity());
+        discountProgressDialog.setMessage(getString(R.string.updating_customer_data));
+        discountProgressDialog.setCancelable(false);
+        discountProgressDialog.show();
+    }
+    private void showErrorDialog(String err) {
+        if (isResumed()) {
+            Context context = getContext();
+            if (context != null) {
+                CuteMessageDialog dialog = new CuteMessageDialog(context);
+                dialog.setTitle(R.string.error);
+                dialog.setIcon(Icon.Error);
+                dialog.setMessage(err);
+                dialog.setPositiveButton(R.string.ok, null);
+                dialog.show();
+            }
+        }
+    }
+    private void dismissProgressDialog() {
+        if (discountProgressDialog != null && discountProgressDialog.isShowing()) {
+            try {
+                discountProgressDialog.dismiss();
+            } catch (Exception ignored) {
+                Timber.e(ignored);
+            }
+        }
+    }
 }

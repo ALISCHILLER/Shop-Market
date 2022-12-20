@@ -126,7 +126,7 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
                 @Override
                 public void onClick(View v) {
                     StarDialog starDialog=new StarDialog();
-                    starDialog.setValues(customerModel.DegreeStar);
+                    starDialog.setValues(customerModel.DegreeStar,customerModel.CustomerName);
                     starDialog.show(_activity.getSupportFragmentManager(), "StarDialog");
                 }
             });

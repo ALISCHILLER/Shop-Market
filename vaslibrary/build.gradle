@@ -79,4 +79,10 @@ dependencies {
 
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.github.KaelLi1989:NiceRatingBar:1.0.0'
+
+
+
+
+    implementation 'com.microsoft.signalr:signalr:1.0.0'
+    implementation 'org.slf4j:slf4j-jdk14:1.7.25'
 }

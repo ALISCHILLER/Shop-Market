@@ -18,8 +18,10 @@ public class StarDialog extends CuteDialogWithToolbar {
 
     private TextView text_star;
     private int degreeStar;
-    public void setValues(int degreeStar) {
+    private String customerName;
+    public void setValues(int degreeStar,String customerName) {
         this.degreeStar = degreeStar;
+        this.customerName=customerName;
     }
     @Override
     public View onCreateDialogView(@NonNull LayoutInflater inflater,
@@ -30,7 +32,7 @@ public class StarDialog extends CuteDialogWithToolbar {
         setTitle("اطلاعات فاکتور");
         text_star=view.findViewById(R.id.text_star);
         TextView okTv = view.findViewById(R.id.ok_text_view);
-        text_star.setText("تعداد فاکتورهای مشتری در بازه سه ماه"+ " "+degreeStar+" "+"بار می باشد");
+        text_star.setText("تعداد فاکتورهای" +" "+ customerName +" "+  "در بازه سه ماه"+" "+degreeStar+" "+"بار می باشد");
 
 
         okTv.setOnClickListener(view12 -> {
