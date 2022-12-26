@@ -31,7 +31,7 @@ import timber.log.Timber;
 public class LocationProviderJob implements Job {
     @Override
     public Long getInterval() {
-        return 900L;
+        return 9L;
     }
 
     @Override

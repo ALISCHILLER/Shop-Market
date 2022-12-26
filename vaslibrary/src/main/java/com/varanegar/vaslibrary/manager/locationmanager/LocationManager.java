@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -47,6 +48,8 @@ import com.varanegar.vaslibrary.manager.customeractiontimemanager.CustomerAction
 import com.varanegar.vaslibrary.manager.customeractiontimemanager.CustomerActions;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallOrderManager;
 import com.varanegar.vaslibrary.manager.customercallmanager.CustomerCallManager;
+import com.varanegar.vaslibrary.manager.locationmanager.newtacking.RemoteSignalREmitter;
+import com.varanegar.vaslibrary.manager.locationmanager.newtacking.SignalRListener;
 import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.BaseEventLocationViewModel;
 import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.DeviceEventViewModel;
 import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.DeviceReportLocationViewModel;
@@ -101,35 +104,40 @@ import timber.log.Timber;
  * Created by A.Torabi on 8/9/2017.
  */
 
-public class LocationManager extends BaseManager<LocationModel> {
+public class LocationManager extends BaseManager<LocationModel> implements RemoteSignalREmitter {
 
     private static final int POINT_SEND_LIMIT = 60;
     private static Long waitTime;
     private static Boolean isWait;
-
+    private SignalRListener signalRListener;
     public static LocationRequest getLocationRequest(Context context) {
         SysConfigManager sysConfigManager = new SysConfigManager(context);
         SysConfigModel trackingInterval = sysConfigManager.read(ConfigKey.TrackingInterval, SysConfigManager.cloud);
         SysConfigModel trackingMaxWaitTime = sysConfigManager.read(ConfigKey.TrackingWaitTime, SysConfigManager.cloud);
         SysConfigModel trackingSmallestDisplacement = sysConfigManager.read(ConfigKey.TrackingSmallestDisplacement, SysConfigManager.cloud);
-        int interval = SysConfigManager.getIntValue(trackingInterval, 40);
-        int maxWaitTime = SysConfigManager.getIntValue(trackingMaxWaitTime, 300);
-        int smallestDisplacement = SysConfigManager.getIntValue(trackingSmallestDisplacement, 20);
+     //   int interval = SysConfigManager.getIntValue(trackingInterval, 40);
+        int interval = 0;
+        //int maxWaitTime = SysConfigManager.getIntValue(trackingMaxWaitTime, 300);
+        int maxWaitTime = 0;
+//        int smallestDisplacement = SysConfigManager.getIntValue(trackingSmallestDisplacement, 20);
+        int smallestDisplacement =0;
         TrackingLicense trackingLicense = TrackingLicense.readLicense(context);
         if (trackingLicense != null) {
             interval = Math.max(interval, trackingLicense.getTimeInterval());
             smallestDisplacement = Math.max(smallestDisplacement, trackingLicense.getMinDistance());
         }
         LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setInterval(interval * 1000);
-        locationRequest.setMaxWaitTime(maxWaitTime * 1000);
+        locationRequest.setInterval(interval * 0);
+        locationRequest.setMaxWaitTime(maxWaitTime * 0);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setSmallestDisplacement(smallestDisplacement);
         return locationRequest;
     }
 
     public static String getLocationInfo(android.location.Location location) {
-        return "Point time:" + DateHelper.toString(new Date(location.getTime()), DateFormat.Complete, Locale.US) + " Latitude: " + location.getLatitude() + " Longitude: " + location.getLongitude() + " Provider: " + location.getProvider();
+        return "Point time:" + DateHelper.toString(new Date(location.getTime()),
+                DateFormat.Complete, Locale.US) + " Latitude: " + location.getLatitude() +
+                " Longitude: " + location.getLongitude() + " Provider: " + location.getProvider();
     }
 
     @Nullable
@@ -352,6 +360,8 @@ public class LocationManager extends BaseManager<LocationModel> {
     }
 
 
+
+
     public interface OnLocationUpdated {
         void onSucceeded(LocationModel location);
 
@@ -429,7 +439,7 @@ public class LocationManager extends BaseManager<LocationModel> {
                                     }
                                 }).addOnSuccessListener(location -> {
                                     if (location != null) {
-                                        if (location.getTime() < 1556668800000L) {
+                                        if (location.getTime() < 1L) {
                                             TrackingLogManager.addLog(getContext(), LogType.POINT_TIME,
                                                     LogLevel.Error, "{" + location.getLatitude() + "  " +
                                                             location.getLongitude() + "} Gps Time is wrong : " +
@@ -714,6 +724,9 @@ public class LocationManager extends BaseManager<LocationModel> {
     }
 
     public synchronized void tryToSendAll(@Nullable SendLocationListener callback) {
+        signalRListener=new SignalRListener(this,"");
+        signalRListener.startConnection();
+
         if (hasSemaphore())
             return;
         setSemaphore();
@@ -745,85 +758,87 @@ public class LocationManager extends BaseManager<LocationModel> {
                 return item.EventType != null || item.Accuracy < 2000;
            }
         }); */
-        if (locations.size() > 0) {
-            if (!Connectivity.isConnected(getContext())) {
-                TrackingLogManager.addLog(getContext(), LogType.SUBMIT_POINT, LogLevel.Error, "No Internet connection " + locations.size() + " نقطه ارسال نشد." + " تاریخ پوینت ها از " + DateHelper.toString(locations.get(0).Date, DateFormat.Complete, Locale.getDefault()) + " تا " + DateHelper.toString(locations.get(locations.size() - 1).Date, DateFormat.Complete, Locale.getDefault()));
-                removeSemaphore();
-                sendReport();
-                return;
-            }
-            final TrackingRequestModel trackingRequestModel = createTrackingRequestModel(locations);
-            TrackingApi trackingApi = new TrackingApi(getContext());
-            trackingApi.runWebRequest(trackingApi.sendPoint(trackingRequestModel), new WebCallBack<Boolean>() {
-                @Override
-                protected void onFinish() {
-
-                }
-
-                @Override
-                protected void onSuccess(Boolean result, Request request) {
-                    Timber.i("LocationManager trackingApi onSuccess SendPoint1 " + request + "result = " +result);
-                    TrackingLogManager.addLog(getContext(), LogType.SUBMIT_POINT, LogLevel.Info, locations.size() + " نقطه ارسال شد." + " تاریخ پوینت ها از " + DateHelper.toString(locations.get(0).Date, DateFormat.Complete, Locale.getDefault()) + " تا " + DateHelper.toString(locations.get(locations.size() - 1).Date, DateFormat.Complete, Locale.getDefault()));
-                    Date date = new Date();
-                    for (LocationModel locationModel :
-                            locations) {
-                        locationModel.IsSend = true;
-                        locationModel.LastRetryTime = date;
-
-                    }
-                    try {
-                        update(locations);
-                        removeSemaphore();
-                        sendReport();
-                        if (locations.size() == POINT_SEND_LIMIT) // Probably we have more points to send se we start this task again
-                            JobScheduler.resetJob(SendTrackingPointsServiceJob.class, getContext());
-                    } catch (Exception e) {
-                        Timber.i("LocationManager SendPoint1 Exception "+e.getMessage());
-                        removeSemaphore();
-                        sendReport();
-                    }
-                }
-
-                @Override
-                protected void onApiFailure(ApiError error, Request request) {
-                    removeSemaphore();
-                    TrackingLogManager.addLog(getContext(), LogType.SUBMIT_POINT, LogLevel.Error, locations.size() + " نقطه ارسال نشد." + " تاریخ پوینت ها از " + DateHelper.toString(locations.get(0).Date, DateFormat.Complete, Locale.getDefault()) + " تا " + DateHelper.toString(locations.get(locations.size() - 1).Date, DateFormat.Complete, Locale.getDefault()), error.getMessage());
-                    sendReport();
-                    Date date = new Date();
-                    for (LocationModel location :
-                            locations) {
-                        location.LastRetryTime = date;
-                    }
-                    try {
-                        update(locations);
-                    } catch (Exception e) {
-                        Timber.e(e);
-                    }
-                    if(callback!=null)
-                        callback.onSendFailed();
-                }
-
-                @Override
-                protected void onNetworkFailure(Throwable t, Request request) {
-                    removeSemaphore();
-                    TrackingLogManager.addLog(getContext(), LogType.SUBMIT_POINT, LogLevel.Error, locations.size() + " نقطه ارسال نشد." + " تاریخ پوینت ها از " + DateHelper.toString(locations.get(0).Date, DateFormat.Complete, Locale.getDefault()) + " تا " + DateHelper.toString(locations.get(locations.size() - 1).Date, DateFormat.Complete, Locale.getDefault()), t.getMessage());
-                    sendReport();
-                    Date date = new Date();
-                    for (LocationModel location :
-                            locations) {
-                        location.LastRetryTime = date;
-                    }
-                    try {
-                        update(locations);
-                    } catch (Exception e) {
-                        Timber.e(e);
-                    }
-                }
-            });
-        } else {
-            removeSemaphore();
-            sendReport();
-        }
+//        if (locations.size() > 0) {
+//            if (!Connectivity.isConnected(getContext())) {
+//                TrackingLogManager.addLog(getContext(), LogType.SUBMIT_POINT, LogLevel.Error, "No Internet connection " + locations.size() + " نقطه ارسال نشد." + " تاریخ پوینت ها از " + DateHelper.toString(locations.get(0).Date, DateFormat.Complete, Locale.getDefault()) + " تا " + DateHelper.toString(locations.get(locations.size() - 1).Date, DateFormat.Complete, Locale.getDefault()));
+//                removeSemaphore();
+//                sendReport();
+//                return;
+//            }
+//
+//
+//            final TrackingRequestModel trackingRequestModel = createTrackingRequestModel(locations);
+//            TrackingApi trackingApi = new TrackingApi(getContext());
+//            trackingApi.runWebRequest(trackingApi.sendPoint(trackingRequestModel), new WebCallBack<Boolean>() {
+//                @Override
+//                protected void onFinish() {
+//
+//                }
+//
+//                @Override
+//                protected void onSuccess(Boolean result, Request request) {
+//                    Timber.i("LocationManager trackingApi onSuccess SendPoint1 " + request + "result = " +result);
+//                    TrackingLogManager.addLog(getContext(), LogType.SUBMIT_POINT, LogLevel.Info, locations.size() + " نقطه ارسال شد." + " تاریخ پوینت ها از " + DateHelper.toString(locations.get(0).Date, DateFormat.Complete, Locale.getDefault()) + " تا " + DateHelper.toString(locations.get(locations.size() - 1).Date, DateFormat.Complete, Locale.getDefault()));
+//                    Date date = new Date();
+//                    for (LocationModel locationModel :
+//                            locations) {
+//                        locationModel.IsSend = true;
+//                        locationModel.LastRetryTime = date;
+//
+//                    }
+//                    try {
+//                        update(locations);
+//                        removeSemaphore();
+//                        sendReport();
+//                        if (locations.size() == POINT_SEND_LIMIT) // Probably we have more points to send se we start this task again
+//                            JobScheduler.resetJob(SendTrackingPointsServiceJob.class, getContext());
+//                    } catch (Exception e) {
+//                        Timber.i("LocationManager SendPoint1 Exception "+e.getMessage());
+//                        removeSemaphore();
+//                        sendReport();
+//                    }
+//                }
+//
+//                @Override
+//                protected void onApiFailure(ApiError error, Request request) {
+//                    removeSemaphore();
+//                    TrackingLogManager.addLog(getContext(), LogType.SUBMIT_POINT, LogLevel.Error, locations.size() + " نقطه ارسال نشد." + " تاریخ پوینت ها از " + DateHelper.toString(locations.get(0).Date, DateFormat.Complete, Locale.getDefault()) + " تا " + DateHelper.toString(locations.get(locations.size() - 1).Date, DateFormat.Complete, Locale.getDefault()), error.getMessage());
+//                    sendReport();
+//                    Date date = new Date();
+//                    for (LocationModel location :
+//                            locations) {
+//                        location.LastRetryTime = date;
+//                    }
+//                    try {
+//                        update(locations);
+//                    } catch (Exception e) {
+//                        Timber.e(e);
+//                    }
+//                    if(callback!=null)
+//                        callback.onSendFailed();
+//                }
+//
+//                @Override
+//                protected void onNetworkFailure(Throwable t, Request request) {
+//                    removeSemaphore();
+//                    TrackingLogManager.addLog(getContext(), LogType.SUBMIT_POINT, LogLevel.Error, locations.size() + " نقطه ارسال نشد." + " تاریخ پوینت ها از " + DateHelper.toString(locations.get(0).Date, DateFormat.Complete, Locale.getDefault()) + " تا " + DateHelper.toString(locations.get(locations.size() - 1).Date, DateFormat.Complete, Locale.getDefault()), t.getMessage());
+//                    sendReport();
+//                    Date date = new Date();
+//                    for (LocationModel location :
+//                            locations) {
+//                        location.LastRetryTime = date;
+//                    }
+//                    try {
+//                        update(locations);
+//                    } catch (Exception e) {
+//                        Timber.e(e);
+//                    }
+//                }
+//            });
+//        } else {
+//            removeSemaphore();
+//            sendReport();
+//        }
     }
 
     private void sendReport() {
@@ -1269,4 +1284,51 @@ public class LocationManager extends BaseManager<LocationModel> {
             }
         }
     }
+
+
+    @Override
+    public void onConnectToSignalR() {
+        Log.e("onConnectToSignalR", "onConnectToSignalR: ");
+        signalRListener.DistJoinGroup();
+        sendLocationSignalR();
+    }
+
+    @Override
+    public void onErrorConnectToSignalR() {
+        Log.e("onErrorConnectToSignalR", "onErrorConnectToSignalR: ");
+    }
+
+    @Override
+    public void onReConnectToSignalR() {
+        Log.e("onReConnectToSignalR", "onReConnectToSignalR: ");
+        signalRListener=new SignalRListener(this,"");
+        signalRListener.startConnection();
+    }
+
+   public void sendLocationSignalR(){
+       TourManager tourManager = new TourManager(getContext());
+       TourModel tourModel = tourManager.loadTour();
+       new LocationManager(getContext())
+               .getLocation(new LocationManager.OnLocationUpdated() {
+                   @Override
+                   public void onSucceeded(LocationModel location) {
+                       if (location.Longitude>0){
+                           signalRListener.sendVisitorLocation(tourModel.UniqueId,
+                                   String.valueOf(location.Latitude),
+                                   String.valueOf(location.Longitude));
+                       }
+
+                   }
+
+                   @Override
+                   public void onFailed(String error) {
+                       TrackingLogManager.addLog(
+                               getContext(),
+                               LogType.POINT,
+                               LogLevel.Error,
+                               " در زمان تایید عملیات پوینت دریافت نشد!",
+                               error);
+                   }
+               });
+   }
 }

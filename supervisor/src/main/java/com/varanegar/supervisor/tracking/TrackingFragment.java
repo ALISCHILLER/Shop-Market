@@ -20,7 +20,7 @@ import com.varanegar.supervisor.R;
  * Created by A.Torabi on 6/7/2018.
  */
 
-public class TrackingFragment extends IMainPageFragment {
+public class TrackingFragment extends IMainPageFragment  {
 
     MapFragment mapFragment = new MapFragment();
 //    TableFragment tableFragment = new TableFragment();
@@ -67,6 +67,8 @@ public class TrackingFragment extends IMainPageFragment {
     }
 
 
+
+
     class TabsPagerAdapter extends FragmentPagerAdapter {
 
 
@@ -87,4 +89,5 @@ public class TrackingFragment extends IMainPageFragment {
             return 1;
         }
     }
+
 }

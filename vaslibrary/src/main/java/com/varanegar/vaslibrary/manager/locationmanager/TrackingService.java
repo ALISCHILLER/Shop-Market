@@ -11,6 +11,7 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -35,6 +36,8 @@ import com.varanegar.vaslibrary.manager.Area;
 import com.varanegar.vaslibrary.manager.RegionAreaPointManager;
 import com.varanegar.vaslibrary.manager.Transition;
 import com.varanegar.vaslibrary.manager.UserManager;
+import com.varanegar.vaslibrary.manager.locationmanager.newtacking.RemoteSignalREmitter;
+import com.varanegar.vaslibrary.manager.locationmanager.newtacking.SignalRListener;
 import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.TransitionEventLocationViewModel;
 import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.TransitionEventViewModel;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
@@ -58,7 +61,7 @@ import timber.log.Timber;
  * Created by A.Torabi on 8/9/2017.
  */
 
-public class TrackingService extends IntentService {
+public class TrackingService extends IntentService{
 
 
     private LocationManager locationManager;
@@ -68,6 +71,8 @@ public class TrackingService extends IntentService {
     private static ArrayDeque<String> lastLocations = new ArrayDeque<>(500);
     private GoogleApiClient googleApiClient;
     private static boolean isConnected;
+    private SignalRListener signalRListener;
+
 
     public TrackingService() {
         super("TrackingService");
@@ -94,24 +99,28 @@ public class TrackingService extends IntentService {
                     TrackingLogManager.addLog(this, LogType.LOCATION_SETTINGS, LogLevel.Error, "Background Permission denied");
             }
         } else {
+
             start();
+
         }
     }
 
 
     public static void savePoint(Context context, Location location) {
+
         TrackingLogManager.addLog(context, LogType.POINT, LogLevel.Info, "{" + location.getLatitude() + "  " + location.getLongitude() + "} Provider=" + location.getProvider() + " Gps time=" + DateHelper.toString(new Date(location.getTime()), DateFormat.Time, Locale.getDefault()) + " Tablet time=" + DateHelper.toString(new Date(), DateFormat.Time, Locale.getDefault()));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             if (location.isFromMockProvider()) {
                 TrackingLogManager.addLog(context, LogType.MOCK_PROVIDER, LogLevel.Error, "پوینت تقلبی!");
             }
         }
-        if (location.getAccuracy() > 100) {
+        if (location.getAccuracy() > 100000) {
             TrackingLogManager.addLog(context, LogType.INACCURATE_POINT, LogLevel.Warning, " دقت " + location.getAccuracy());
         }
 
-        if (location.getTime() < 1556668800000L) {
-            TrackingLogManager.addLog(context, LogType.POINT_TIME, LogLevel.Error, "{" + location.getLatitude() + "  " + location.getLongitude() + "} Gps Time is wrong : " + DateHelper.toString(new Date(location.getTime()), DateFormat.Complete, Locale.getDefault()));
+        if (location.getTime() < 1L) {
+            TrackingLogManager.addLog(context, LogType.POINT_TIME, LogLevel.Error, "{" +
+                    location.getLatitude() + "  " + location.getLongitude() + "} Gps Time is wrong : " + DateHelper.toString(new Date(location.getTime()), DateFormat.Complete, Locale.getDefault()));
             location.setTime(new Date().getTime());
         }
 
@@ -124,7 +133,7 @@ public class TrackingService extends IntentService {
                     + DateHelper.toString(new Date(), DateFormat.Complete, Locale.getDefault()));
             TimeApi api = new TimeApi(context);
             api.checkTime(message -> TrackingLogManager.addLog(context, LogType.INVALID_TIME, LogLevel.Info, message));
-            location.setTime(new Date().getTime());
+           location.setTime(new Date().getTime());
         }
 
         TourModel tourModel = new TourManager(context).loadTour();
@@ -170,11 +179,13 @@ public class TrackingService extends IntentService {
     }
 
     private void start() {
+
         locationManager = new LocationManager(this);
         if (SysConfigManager.hasTracking(this)) {
             try {
                 TrackingLogManager.addLog(this, LogType.PROVIDER, LogLevel.Info, "starting location provider");
-
+                TourManager tourManager = new TourManager(this);
+                TourModel tourModel = tourManager.loadTour();
                 if (googleApiClient != null && !googleApiClient.isConnected())
                     isConnected = false;
 
@@ -189,11 +200,15 @@ public class TrackingService extends IntentService {
                                     if (googleApiClient != null && isConnected) {
                                         TrackingLogManager.addLog(TrackingService.this, LogType.PROVIDER, LogLevel.Info, "google api connected");
                                         try {
-                                            if (ActivityCompat.checkSelfPermission(TrackingService.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(TrackingService.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                                                TrackingLogManager.addLog(TrackingService.this, LogType.LOCATION_SETTINGS, LogLevel.Error, "Permission denied");
+                                            if (ActivityCompat.checkSelfPermission(TrackingService.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                                                    != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(TrackingService.this,
+                                                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                                TrackingLogManager.addLog(TrackingService.this, LogType.LOCATION_SETTINGS, LogLevel.Error,
+                                                        "Permission denied");
                                                 return;
                                             }
-                                            FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(TrackingService.this);
+                                            FusedLocationProviderClient fusedLocationProviderClient =
+                                                    LocationServices.getFusedLocationProviderClient(TrackingService.this);
                                             fusedLocationProviderClient.requestLocationUpdates(LocationManager.getLocationRequest(TrackingService.this),
                                                     new LocationCallback() {
                                                         @Override
@@ -229,7 +244,8 @@ public class TrackingService extends IntentService {
                                                     }).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
-                                                    SysConfigModel waitingControl = new SysConfigManager(TrackingService.this).read(ConfigKey.WaitingControl, SysConfigManager.cloud);
+                                                    SysConfigModel waitingControl = new SysConfigManager(TrackingService.this)
+                                                            .read(ConfigKey.WaitingControl, SysConfigManager.cloud);
                                                     if (SysConfigManager.compare(waitingControl, true)) {
                                                         Intent intent = new Intent(TrackingService.this, TransitionReceiverBroadcast.class);
                                                         intent.setAction(TransitionReceiverBroadcast.INTENT_ACTION);
@@ -293,4 +309,7 @@ public class TrackingService extends IntentService {
             return false;
         }
     }
+
+
+
 }

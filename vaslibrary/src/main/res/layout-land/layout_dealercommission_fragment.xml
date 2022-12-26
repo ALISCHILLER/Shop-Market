@@ -39,18 +39,74 @@
     </com.google.android.material.tabs.TabLayout>
 
 
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/white"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reports_tab_layout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="عملکرد و پورسانت محصولات پاستا- زرماکارون"
+            android:textColor="@color/colorPrimary" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="#000000" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  1401/09/27تاریخ به روز رسانی"
+            android:textColor="@color/colorPrimary" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_margin="5dp"
+            android:layout_height="wrap_content"
+            android:background="#000000" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="رتبه در تیم 1"
+            android:textColor="@color/colorPrimary" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="#000000" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="رتبه در کل کشور 9"
+            android:textColor="@color/colorPrimary" />
+
+
+    </LinearLayout>
+
     <RelativeLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="15dp"
         android:layout_marginBottom="5dp"
         android:background="@color/bg_line"
         android:focusableInTouchMode="true"
         app:layout_constraintBottom_toTopOf="@+id/textViewDate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/reports_tab_layout">
+        app:layout_constraintTop_toBottomOf="@id/header">
+
 
         <com.evrencoskun.tableview.TableView
             android:id="@+id/tableview"
@@ -121,6 +177,7 @@
         android:text="آخرین بروز رسانی"
         android:textSize="@dimen/_10sdp"
         android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

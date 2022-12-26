@@ -1,4 +1,4 @@
-package com.varanegar.vaslibrary.manager.locationmanager.newtacking;
+package com.varanegar.supervisor.tracking.newtacking;
 
 import android.util.Log;
 
@@ -17,11 +17,11 @@ public class SignalRListener {
 
     private static SignalRListener instance;
     private final HubConnection hubConnection;
-    private final RemoteSignalREmitter remoteSignalREmitter;
+    private final RemoteSignalREmitterSuper remoteSignalREmitter;
     private Thread thread;
 
     //---------------------------------------------------------------------------------------------- SignalRListener
-    public SignalRListener(RemoteSignalREmitter remoteSignalREmitter, String token) {
+    public SignalRListener(RemoteSignalREmitterSuper remoteSignalREmitter, String token) {
         this.remoteSignalREmitter = remoteSignalREmitter;
 
         String url = "http://5.160.125.98:1364/realtimenotification?access_token=" + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIzZmE4NWY2NC01NzE3LTQ1NjItYjNmYy0yYzk2M2Y2NmFmYTYiLCJWaXNpdG9ySWQiOiIzZmE4NWY2NC01NzE3LTQ1NjItYjNmYy0yYzk2M2Y2NmFmYTYiLCJTdXBlcnZpc29ySWQiOiIzZmE4NWY2NC01NzE3LTQ1NjItYjNmYy0yYzk2M2Y2NmFmYTYiLCJUb3VySWQiOiIzZmE4NWY2NC01NzE3LTQ1NjItYjNmYy0yYzk2M2Y2NmFmYTYiLCJJc0Rpc3QiOiIxIiwibmJmIjoxNjcxOTUyNzUwLCJleHAiOjE2NzIxMjU1NTAsImlhdCI6MTY3MTk1Mjc1MH0.J7FlmW47ArxD9c6KLLNBvCHHfshXhUoOqvAJLlbioqc";
@@ -31,14 +31,14 @@ public class SignalRListener {
 
         hubConnection.on(
                 "ReceiveVisitorLocation",
-                (tourId, visitorId, lat, lng) ->Log.e("ReceiveVisitorLocation",lat+lng),
+                (tourId, visitorId, lat, lng) ->this.remoteSignalREmitter.onGetPoint(lat,lng),
                 String.class, String.class, String.class, String.class);
     }
     //---------------------------------------------------------------------------------------------- SignalRListener
 
 
     //---------------------------------------------------------------------------------------------- getInstance
-    public static SignalRListener getInstance(RemoteSignalREmitter remote, String token) {
+    public static SignalRListener getInstance(RemoteSignalREmitterSuper remote, String token) {
         if (instance == null)
             instance = new SignalRListener(remote, token);
         return instance;
@@ -79,8 +79,7 @@ public class SignalRListener {
             hubConnection.send("DistJoinGroup");
     }
     public void sendVisitorLocation(UUID torId, String lat, String lon) {
-        Log.e("sendVisitorLocation",
-                hubConnection.getConnectionState()+"torId::"+torId+"lat:"+lat+"lon:"+lon);
+        Log.e("sendVisitorLocation",hubConnection.getConnectionState()+"asdasd");
         if (hubConnection.getConnectionState() == HubConnectionState.CONNECTED)
             hubConnection.send("sendVisitorLocation", torId, lat, lon);
     }
