@@ -147,7 +147,8 @@ public class CustomersContentFragment extends VaranegarFragment {
     private RecyclerView actionsRecyclerView;
     private final ArrayList<OnItemUpdateListener> onItemUpdateListeners = new ArrayList<>();
     private String pin;
-
+    long numberOfDays;
+    String dataSaleOfDays;
 
     //---------------------------------------------------------------------------------------------- interface
     public interface OnItemUpdateListener {
@@ -345,6 +346,8 @@ public class CustomersContentFragment extends VaranegarFragment {
                     "geo:%.8f,%.8f", customer.Latitude, customer.Longitude)));
             startActivity(Intent.createChooser(intent, "یک برنامه مسیریاب انتخاب کنید"));
         });
+
+
 
     }
     //---------------------------------------------------------------------------------------------- onViewCreated
@@ -989,6 +992,7 @@ public class CustomersContentFragment extends VaranegarFragment {
                                             .findViewById(
                                                     R.id.customer_last_invoice_date_paired_item))
                                             .setValue(customerOldInvoiceHeader.SalePDate);
+                                    dataSaleOfDays=customerOldInvoiceHeader.SalePDate;
                                     JalaliCalendar.YearMonthDate date =
                                             jalaliToGregorian(new JalaliCalendar
                                                     .YearMonthDate(Integer.parseInt(
@@ -1011,14 +1015,20 @@ public class CustomersContentFragment extends VaranegarFragment {
                                                         date.getYear());
                                         if (startDate == null)
                                             throw new ParseException("startDate is null", 0);
-                                        long numberOfDays = TimeUnit.DAYS
+                                         numberOfDays = TimeUnit.DAYS
                                                 .convert(new Date().getTime() -
                                                                 startDate.getTime(),
                                                         TimeUnit.MILLISECONDS);
+
                                         ((PairedItems) view
                                                 .findViewById(
                                                         R.id.customer_last_invoice_days_paired_item))
                                                 .setValue(numberOfDays + " روز");
+
+                                        if (numberOfDays>0&&numberOfDays>15){
+                                            showErrorDialog(" "+customer.CustomerName+" "
+                                                    +"بیشتر از"+numberOfDays+" روز خرید نکرده است تاریخ آخرین خرید "+dataSaleOfDays);
+                                        }
                                     } catch (ParseException e) {
                                         e.printStackTrace();
                                     }

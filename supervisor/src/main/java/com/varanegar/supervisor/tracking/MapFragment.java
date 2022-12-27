@@ -124,7 +124,7 @@ public class MapFragment extends ProgressFragment implements RemoteSignalREmitte
     List<MarkersVisitor> markersVisitors = new ArrayList<>();
     private Marker m_marker;
     private float zoom;
-
+    private Long oldtracking ;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -197,7 +197,7 @@ public class MapFragment extends ProgressFragment implements RemoteSignalREmitte
         } catch (Exception e) {
             Timber.e(e);
         }
-
+        oldtracking= Long.valueOf(0);
         List<VisitorModel> visitorModels = new VisitorManager(getContext()).getAll();
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
@@ -661,15 +661,21 @@ public class MapFragment extends ProgressFragment implements RemoteSignalREmitte
                                     ,markersVisitors.get(1).marker.getPosition().latitude,markersVisitors
                                             .get(1).marker.getPosition().longitude);
                             Log.e("calculateDistance", "run:"+i);
-                            if (i>20.504673)
-                             markersVisitors.get(1).marker.setPosition(customerPosition);
-
+                            Date date1=new Date();
+                            Long newTracking=date1.getTime();
+                            Long oldtrackingn= oldtracking+30000;
+                            if (i>20.504673&&newTracking>oldtrackingn) {
+                                oldtracking=date1.getTime();
+                                markersVisitors.get(1).marker.setPosition(customerPosition);
+                                Log.e("markersVisitors", "newTracking:"+newTracking
+                                        +"oldtracking:"+oldtracking);
+                            }
 
                             m_timerHandler.postDelayed(this, 2000);
                         }
 
                     }
-                },2000);
+                },4000);
 
     }
     private void showError(String str) {
@@ -718,7 +724,7 @@ public class MapFragment extends ProgressFragment implements RemoteSignalREmitte
                 Log.e("onGetPoint", "lat:"+lat+"lng:"+lng);
                 createMarkerLive("", lat, lng);
             }
-        },2000);
+        },4000);
     }
 
     @Override

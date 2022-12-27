@@ -50,7 +50,8 @@ public class Ml_dialog1 extends CuteDialogWithToolbar {
 
         @Override
         public void bindView(final int position) {
-            ((TextView) itemView.findViewById(R.id.center_name_id)).setText(recyclerAdapter.get(position).ProductName);
+            ((TextView) itemView.findViewById(R.id.center_name_id))
+                    .setText(recyclerAdapter.get(position).ProductName+" "+recyclerAdapter.get(position).ProductCode);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

@@ -36,6 +36,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="چارت هدف و فروش" />
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="سهم تفکیکی پورسانت" />
     </com.google.android.material.tabs.TabLayout>
 
 
@@ -45,7 +49,6 @@
         android:layout_height="60dp"
         android:background="@color/white"
         android:gravity="center"
-        app:layout_constraintBottom_toTopOf="@+id/fragment_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reports_tab_layout">
@@ -53,6 +56,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="20sp"
             android:text="عملکرد و پورسانت محصولات پاستا- زرماکارون"
             android:textColor="@color/colorPrimary" />
 
@@ -63,9 +68,9 @@
             android:background="#000000" />
 
         <TextView
+            android:id="@+id/textViewDatetabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="  1401/09/27تاریخ به روز رسانی"
             android:textColor="@color/colorPrimary" />
 
         <View
@@ -75,9 +80,9 @@
             android:background="#000000" />
 
         <TextView
+            android:id="@+id/textviewRankOnTeam"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="رتبه در تیم 1"
             android:textColor="@color/colorPrimary" />
 
         <View
@@ -87,9 +92,9 @@
             android:background="#000000" />
 
         <TextView
+            android:id="@+id/textviewRankOnGlobal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="رتبه در کل کشور 9"
             android:textColor="@color/colorPrimary" />
 
 
@@ -99,6 +104,7 @@
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
         android:background="@color/bg_line"
         android:focusableInTouchMode="true"
@@ -126,12 +132,16 @@
         android:id="@+id/layout_pie_chart"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/textViewDate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reports_tab_layout">
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        android:layout_marginBottom="5dp"
+        android:background="@color/bg_line"
+        android:focusableInTouchMode="true"
+        app:layout_constraintTop_toBottomOf="@id/header">
 
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/pie_chart"
@@ -156,7 +166,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reports_tab_layout">
+        app:layout_constraintTop_toBottomOf="@id/header">
 
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/idBarChart"
@@ -170,6 +180,34 @@
             app:layout_constraintTop_toBottomOf="@+id/fragment_container" />
     </LinearLayout>
 
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/shareCommission"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:text="سهم تفکیکی پورسانت"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/pie_chart_c"
+            android:layout_width="500dp"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_margin="@dimen/padding_default"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <TextView
         android:id="@+id/textViewDate"
         android:layout_width="wrap_content"

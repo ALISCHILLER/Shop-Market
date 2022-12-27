@@ -81,11 +81,13 @@ public class TableViewModel {
             RowHeader header = new RowHeader(String.valueOf(1), "هدف");
             RowHeader header2 = new RowHeader(String.valueOf(2), "فروش");
             RowHeader header3 = new RowHeader(String.valueOf(3), "درصددستیابی");
-            RowHeader header4 = new RowHeader(String.valueOf(4), "پرداخت");
+            RowHeader header4 = new RowHeader(String.valueOf(4), "مانده هدف کارتنی");
+            RowHeader header5 = new RowHeader(String.valueOf(5), "پرداخت");
             list.add(header);
             list.add(header2);
             list.add(header3);
             list.add(header4);
+            list.add(header5);
 
 
         return list;

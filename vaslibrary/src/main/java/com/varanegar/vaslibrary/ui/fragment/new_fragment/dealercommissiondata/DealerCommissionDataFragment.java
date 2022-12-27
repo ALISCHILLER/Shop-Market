@@ -13,24 +13,42 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+
+import com.anychart.AnyChart;
+import com.anychart.AnyChartView;
+import com.anychart.chart.common.dataentry.DataEntry;
+import com.anychart.chart.common.dataentry.ValueDataEntry;
+import com.anychart.chart.common.listener.ListenersInterface;
+import com.anychart.charts.Pie;
+import com.anychart.enums.Align;
+import com.anychart.enums.LegendLayout;
 import com.evrencoskun.tableview.TableView;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.tabs.TabLayout;
+import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.base.VaranegarFragment;
 import com.varanegar.framework.util.HelperMethods;
 import com.varanegar.java.util.Currency;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.manager.newmanager.dealercommission.DealerCommissionDataManager;
 import com.varanegar.vaslibrary.manager.newmanager.dealercommission.DealerCommissionDataModel;
+import com.varanegar.vaslibrary.print.SentTourInfoPrint.TourInfo;
 import com.varanegar.vaslibrary.ui.fragment.new_fragment.dealercommissiondata.tabelview.TableViewAdapter;
 import com.varanegar.vaslibrary.ui.fragment.new_fragment.dealercommissiondata.tabelview.TableViewListener;
 import com.varanegar.vaslibrary.ui.fragment.new_fragment.dealercommissiondata.tabelview.TableViewModel;
@@ -40,11 +58,13 @@ import java.util.List;
 
 public class DealerCommissionDataFragment extends VaranegarFragment {
     private TableView mTableView;
-    private TextView  textViewDate;
-    private LinearLayout layout_pie_chart,layout_idBarChart;
+    private TextView  textViewDate,textViewDate_tabel,text_view_RankOnTeam,text_view_RankOnGlobal;
+    private LinearLayout layout_pie_chart,layout_idBarChart,header;
     private BarChart chart;
     private TabLayout reportsTabLayout;
     private RelativeLayout fragment_container;
+    private PieChart pieChart;
+    private ConstraintLayout shareCommission;
     // variable for our bar chart
     BarChart barChart;
     // variable for our bar data set.
@@ -74,6 +94,9 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
 
         }
         textViewDate = view.findViewById(R.id.textViewDate);
+        textViewDate_tabel = view.findViewById(R.id.textViewDatetabel);
+        text_view_RankOnTeam = view.findViewById(R.id.textviewRankOnTeam);
+        text_view_RankOnGlobal = view.findViewById(R.id.textviewRankOnGlobal);
         layout_pie_chart=view.findViewById(R.id.layout_pie_chart);
         layout_idBarChart=view.findViewById(R.id.layout_idBarChart);
         chart = (BarChart) view.findViewById(R.id.pie_chart);
@@ -81,26 +104,41 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
         mTableView = view.findViewById(R.id.tableview);
         fragment_container = view.findViewById(R.id.fragment_container);
         barChart = view.findViewById(R.id.idBarChart);
+        header = view.findViewById(R.id.header);
         reportsTabLayout = view.findViewById(R.id.reports_tab_layout);
         layout_pie_chart = view.findViewById(R.id.layout_pie_chart);
         layout_idBarChart = view.findViewById(R.id.layout_idBarChart);
+        shareCommission = view.findViewById(R.id.shareCommission);
 
         reportsTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if(tab.getPosition()==0){
                     fragment_container.setVisibility(View.VISIBLE);
+                    header.setVisibility(View.VISIBLE);
                     layout_pie_chart.setVisibility(View.GONE);
                     layout_idBarChart.setVisibility(View.GONE);
+                    shareCommission.setVisibility(View.GONE);
                 }if(tab.getPosition()==1){
                     fragment_container.setVisibility(View.GONE);
                     layout_pie_chart.setVisibility(View.VISIBLE);
                     layout_idBarChart.setVisibility(View.GONE);
+                    shareCommission.setVisibility(View.GONE);
+
                 }
                 if(tab.getPosition()==2){
                     fragment_container.setVisibility(View.GONE);
                     layout_pie_chart.setVisibility(View.GONE);
+                    shareCommission.setVisibility(View.GONE);
                     layout_idBarChart.setVisibility(View.VISIBLE);
+
+                }
+                if(tab.getPosition()==3){
+                    fragment_container.setVisibility(View.GONE);
+                    layout_pie_chart.setVisibility(View.GONE);
+                    shareCommission.setVisibility(View.VISIBLE);
+                    layout_idBarChart.setVisibility(View.GONE);
+
                 }
 
             }
@@ -116,6 +154,7 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
             }
         });
 
+       pieChart = (PieChart) view.findViewById(R.id.pie_chart_c);
 
 
 
@@ -231,11 +270,25 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
 
         chart.setVisibility(View.GONE);
         if (dealerCommissionDataModel != null) {
-
-            if (dealerCommissionDataModel.LastUpdate != null)
-                textViewDate.setText("تاریخ آخرین بروزرسانی : " + dealerCommissionDataModel.LastUpdate);
-            else
+            setPieCharts(dealerCommissionDataModel);
+            if (dealerCommissionDataModel.LastUpdate != null) {
                 textViewDate.setText("");
+                textViewDate_tabel.setText("تاریخ آخرین بروزرسانی : " + dealerCommissionDataModel.LastUpdate);
+            }else {
+                textViewDate.setText("");
+               textViewDate_tabel.setText("تاریخ آخرین بروزرسانی :");
+            }
+
+            if (dealerCommissionDataModel.RankOnTeam>0){
+                text_view_RankOnTeam.setText("رتبه در تیم : " + dealerCommissionDataModel.RankOnTeam);
+            } else {
+                text_view_RankOnTeam.setText("رتبه در تیم:");
+            }
+            if (dealerCommissionDataModel.RankOnTeam>0){
+                text_view_RankOnGlobal.setText("رتبه در کل کشور : " + dealerCommissionDataModel.RankOnGlobal);
+            } else {
+                text_view_RankOnGlobal.setText("رتبه در کل کشور:");
+            }
             mTableView.setShowCornerView(false);
             mTableView.setRowHeaderWidth(165);
             mTableView.setMinimumWidth(200);
@@ -351,42 +404,50 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
     private List<List<Cell>> getCellListForSortingTest(DealerCommissionDataModel dealerCommissionDataModel) {
 
         List<List<Cell>> list = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 5; i++) {
             List<Cell> cellList = new ArrayList<>();
             for (int j = 1; j < 13; j++) {
 
                 Cell cell;
                 if (i == 0) {
                     if (j == 1) {
-                        cell = new Cell("1", dealerCommissionDataModel.SpaghettiTarget);
+                        cell = new Cell("1", HelperMethods.currencyToString(Currency
+                                .valueOf(dealerCommissionDataModel.SpaghettiTarget)));
                         cellList.add(cell);
                     }
                     if (j == 2) {
-                        cell = new Cell("2", dealerCommissionDataModel.LasagnaTarget);
+                        cell = new Cell("2", HelperMethods.currencyToString(Currency
+                                .valueOf(dealerCommissionDataModel.LasagnaTarget)));
                         cellList.add(cell);
                     }
                     if (j == 3) {
-                        cell = new Cell("1", dealerCommissionDataModel.NestTarget);
+                        cell = new Cell("1", HelperMethods.currencyToString(Currency
+                                .valueOf(dealerCommissionDataModel.NestTarget)));
                         cellList.add(cell);
                     }
                     if (j == 4) {
-                        cell = new Cell("1", dealerCommissionDataModel.JumboTarget);
+                        cell = new Cell("1",HelperMethods.currencyToString(Currency
+                                .valueOf( dealerCommissionDataModel.JumboTarget)));
                         cellList.add(cell);
                     }
                     if (j == 5) {
-                        cell = new Cell("1", dealerCommissionDataModel.CakePowderTarget);
+                        cell = new Cell("1", HelperMethods.currencyToString(Currency
+                                .valueOf(dealerCommissionDataModel.CakePowderTarget)));
                         cellList.add(cell);
                     }
                     if (j == 6) {
-                        cell = new Cell("1", dealerCommissionDataModel.FlourTarget);
+                        cell = new Cell("1", HelperMethods.currencyToString(Currency
+                                .valueOf(dealerCommissionDataModel.FlourTarget)));
                         cellList.add(cell);
                     }
                     if (j == 7) {
-                        cell = new Cell("1", dealerCommissionDataModel.ShapedTarget);
+                        cell = new Cell("1",HelperMethods.currencyToString(Currency
+                                .valueOf(dealerCommissionDataModel.ShapedTarget)));
                         cellList.add(cell);
                     }
                     if (j == 8) {
-                        cell = new Cell("1", dealerCommissionDataModel.PottageTarget);
+                        cell = new Cell("1", HelperMethods.currencyToString(Currency
+                                .valueOf(dealerCommissionDataModel.PottageTarget)));
                         cellList.add(cell);
                     }
                     if (j == 9) {
@@ -402,41 +463,50 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
                         cellList.add(cell);
                     }
                     if (j == 12) {
-                        cell = new Cell("1", dealerCommissionDataModel.FinalTarget);
+                        cell = new Cell("1", HelperMethods.currencyToString(Currency
+                                .valueOf(dealerCommissionDataModel.FinalTarget)));
                         cellList.add(cell);
                     }
 
                 } else if (i == 1) {
                     if (j == 1) {
-                        cell = new Cell("1", dealerCommissionDataModel.SpaghettiSales);
+                        cell = new Cell("1", HelperMethods.currencyToString(Currency
+                                .valueOf(dealerCommissionDataModel.SpaghettiSales)));
                         cellList.add(cell);
                     }
                     if (j == 2) {
-                        cell = new Cell("2", dealerCommissionDataModel.LasagnaSales);
+                        cell = new Cell("2", HelperMethods.currencyToString(Currency
+                                .valueOf(dealerCommissionDataModel.LasagnaSales)));
                         cellList.add(cell);
                     }
                     if (j == 3) {
-                        cell = new Cell("1", dealerCommissionDataModel.NestSales);
+                        cell = new Cell("1",HelperMethods.currencyToString(Currency
+                                .valueOf( dealerCommissionDataModel.NestSales)));
                         cellList.add(cell);
                     }
                     if (j == 4) {
-                        cell = new Cell("1", dealerCommissionDataModel.JumboSales);
+                        cell = new Cell("1", HelperMethods.currencyToString(Currency
+                                .valueOf(dealerCommissionDataModel.JumboSales)));
                         cellList.add(cell);
                     }
                     if (j == 5) {
-                        cell = new Cell("1", dealerCommissionDataModel.CakePowderSales);
+                        cell = new Cell("1", HelperMethods.currencyToString(Currency
+                                .valueOf(dealerCommissionDataModel.CakePowderSales)));
                         cellList.add(cell);
                     }
                     if (j == 6) {
-                        cell = new Cell("1", dealerCommissionDataModel.FlourSales);
+                        cell = new Cell("1", HelperMethods.currencyToString(Currency
+                                .valueOf(dealerCommissionDataModel.FlourSales)));
                         cellList.add(cell);
                     }
                     if (j == 7) {
-                        cell = new Cell("1", dealerCommissionDataModel.ShapedSales);
+                        cell = new Cell("1", HelperMethods.currencyToString(Currency
+                                .valueOf(dealerCommissionDataModel.ShapedSales)));
                         cellList.add(cell);
                     }
                     if (j == 8) {
-                        cell = new Cell("1", dealerCommissionDataModel.PottageSales);
+                        cell = new Cell("1", HelperMethods.currencyToString(Currency
+                                .valueOf(dealerCommissionDataModel.PottageSales)));
                         cellList.add(cell);
                     }
 
@@ -454,7 +524,8 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
                         cellList.add(cell);
                     }
                     if (j == 12) {
-                        cell = new Cell("1", dealerCommissionDataModel.FinalSales);
+                        cell = new Cell("1", HelperMethods.currencyToString(Currency
+                                .valueOf(dealerCommissionDataModel.FinalSales)));
                         cellList.add(cell);
                     }
 
@@ -507,37 +578,134 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
                         cell = new Cell("1", dealerCommissionDataModel.FinalAchive + " %");
                         cellList.add(cell);
                     }
-                } else if (i == 3) {
+                }else if (i==3){
                     if (j == 1) {
-                        cell = new Cell("1", dealerCommissionDataModel.SpaghettiPayment);
+                        if (dealerCommissionDataModel.SpaghettiAchive>=100){
+                            cell = new Cell("1", "0");
+                            cellList.add(cell);
+                        }else {
+                            cell = new Cell("1", dealerCommissionDataModel.SpaghettiTarget-dealerCommissionDataModel.SpaghettiSales);
+                            cellList.add(cell);
+                        }
+                    } if (j == 2) {
+                        if (dealerCommissionDataModel.LasagnaAchive>=100){
+                            cell = new Cell("1", "0");
+                            cellList.add(cell);
+                        }else {
+                            cell = new Cell("1", dealerCommissionDataModel.LasagnaTarget-dealerCommissionDataModel.LasagnaSales);
+                            cellList.add(cell);
+                        }
+                    }
+                    if (j == 3) {
+                        if (dealerCommissionDataModel.NestAchive>=100){
+                            cell = new Cell("1", "0");
+                            cellList.add(cell);
+                        }else {
+                            cell = new Cell("1", dealerCommissionDataModel.NestTarget-dealerCommissionDataModel.NestSales);
+                            cellList.add(cell);
+                        }
+                    }
+                    if (j == 4) {
+                        if (dealerCommissionDataModel.JumboAchive>=100){
+                            cell = new Cell("1", "0");
+                            cellList.add(cell);
+                        }else {
+                            cell = new Cell("1", dealerCommissionDataModel.JumboTarget-dealerCommissionDataModel.JumboSales);
+                            cellList.add(cell);
+                        }
+                    }
+                    if (j == 5) {
+                        if (dealerCommissionDataModel.CakePowderAchive>=100){
+                            cell = new Cell("1", "0");
+                            cellList.add(cell);
+                        }else {
+                            cell = new Cell("1", dealerCommissionDataModel.CakePowderTarget-dealerCommissionDataModel.CakePowderSales);
+                            cellList.add(cell);
+                        }
+                    }
+                    if (j == 6) {
+                        if (dealerCommissionDataModel.FlourAchive>=100){
+                            cell = new Cell("1", "0");
+                            cellList.add(cell);
+                        }else {
+                            cell = new Cell("1", dealerCommissionDataModel.FlourTarget-dealerCommissionDataModel.FlourSales);
+                            cellList.add(cell);
+                        }
+                    }
+                    if (j == 7) {
+                        if (dealerCommissionDataModel.ShapedAchive>=100){
+                            cell = new Cell("1", "0");
+                            cellList.add(cell);
+                        }else {
+                            cell = new Cell("1", dealerCommissionDataModel.ShapedTarget-dealerCommissionDataModel.ShapedSales);
+                            cellList.add(cell);
+                        }
+                    }
+                    if (j == 8) {
+                        if (dealerCommissionDataModel.PottageAchive>=100){
+                            cell = new Cell("1", "0");
+                            cellList.add(cell);
+                        }else {
+                            cell = new Cell("1", dealerCommissionDataModel.PottageTarget-dealerCommissionDataModel.PottageSales);
+                            cellList.add(cell);
+                        }
+                    }
+                    if (j == 9) {
+                            cell = new Cell("1", "");
+                            cellList.add(cell);
+                    }
+                    if (j == 10) {
+                        cell = new Cell("1", "");
+                        cellList.add(cell);
+                    }if (j == 11) {
+                        cell = new Cell("1", "");
+                        cellList.add(cell);
+                    }if (j == 12) {
+                        cell = new Cell("1", "");
+                        cellList.add(cell);
+                    }
+
+
+
+                } else if (i == 4) {
+                    if (j == 1) {
+                        cell = new Cell("1",HelperMethods.currencyToString(Currency
+                                .valueOf( dealerCommissionDataModel.SpaghettiPayment)));
                         cellList.add(cell);
                     }
                     if (j == 2) {
-                        cell = new Cell("2", dealerCommissionDataModel.LasagnaPayment);
+                        cell = new Cell("2", HelperMethods.currencyToString(Currency
+                                .valueOf(dealerCommissionDataModel.LasagnaPayment)));
                         cellList.add(cell);
                     }
                     if (j == 3) {
-                        cell = new Cell("1", dealerCommissionDataModel.NestPayment);
+                        cell = new Cell("1", HelperMethods.currencyToString(Currency
+                                .valueOf(dealerCommissionDataModel.NestPayment)));
                         cellList.add(cell);
                     }
                     if (j == 4) {
-                        cell = new Cell("1", dealerCommissionDataModel.JumboTarget);
+                        cell = new Cell("1", HelperMethods.currencyToString(Currency
+                                .valueOf(dealerCommissionDataModel.JumboPayment)));
                         cellList.add(cell);
                     }
                     if (j == 5) {
-                        cell = new Cell("1", dealerCommissionDataModel.CakePowderTarget);
+                        cell = new Cell("1", HelperMethods.currencyToString(Currency
+                                .valueOf(dealerCommissionDataModel.CakePowderPayment)));
                         cellList.add(cell);
                     }
                     if (j == 6) {
-                        cell = new Cell("1", dealerCommissionDataModel.FlourPayment);
+                        cell = new Cell("1", HelperMethods.currencyToString(Currency
+                                .valueOf(dealerCommissionDataModel.FlourPayment)));
                         cellList.add(cell);
                     }
                     if (j == 7) {
-                        cell = new Cell("1", dealerCommissionDataModel.SpaghettiPayment);
+                        cell = new Cell("1", HelperMethods.currencyToString(Currency
+                                .valueOf(dealerCommissionDataModel.ShapedPayment)));
                         cellList.add(cell);
                     }
                     if (j == 8) {
-                        cell = new Cell("1", dealerCommissionDataModel.PottagePayment);
+                        cell = new Cell("1", HelperMethods.currencyToString(Currency
+                                .valueOf(dealerCommissionDataModel.PottagePayment)));
                         cellList.add(cell);
                     }
 
@@ -601,5 +769,34 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
         barEntries.add(new BarEntry(7f, dealerCommissionDataModel.ShapedSales));
         barEntries.add(new BarEntry(8f, dealerCommissionDataModel.PottageSales));
         return barEntries;
+    }
+
+
+    private void setPieCharts( DealerCommissionDataModel dealerCommissionDataModel) {
+            pieChart.setVisibility(View.VISIBLE);
+            List<PieEntry> entries = new ArrayList<>();
+
+                entries.add(new PieEntry((dealerCommissionDataModel.SpaghettiPayment%dealerCommissionDataModel.FinalPayment)*100,"رشته ای"));
+                entries.add(new PieEntry((dealerCommissionDataModel.LasagnaPayment%dealerCommissionDataModel.FinalPayment)*100,"لازانیا"));
+                entries.add(new PieEntry((dealerCommissionDataModel.NestPayment%dealerCommissionDataModel.FinalPayment)*100,"آشیانه"));
+                entries.add(new PieEntry((dealerCommissionDataModel.JumboPayment%dealerCommissionDataModel.FinalPayment)*100,"جامبو"));
+                entries.add(new PieEntry((dealerCommissionDataModel.CakePowderPayment%dealerCommissionDataModel.FinalPayment)*100,"پودرکیک"));
+                entries.add(new PieEntry((dealerCommissionDataModel.FlourPayment%dealerCommissionDataModel.FinalPayment)*100,"آرد"));
+                entries.add(new PieEntry((dealerCommissionDataModel.ShapedPayment%dealerCommissionDataModel.FinalPayment)*100,"فرمی"));
+                entries.add(new PieEntry((dealerCommissionDataModel.PottagePayment%dealerCommissionDataModel.FinalPayment)*100,"رشته آش"));
+                entries.add(new PieEntry((dealerCommissionDataModel.CoverageRatePayment%dealerCommissionDataModel.FinalPayment)*100,"CoverageRate"));
+                entries.add(new PieEntry((dealerCommissionDataModel.HitRatePayment%dealerCommissionDataModel.FinalPayment)*100,"HitRate"));
+                entries.add(new PieEntry((dealerCommissionDataModel.LpscPayment%dealerCommissionDataModel.FinalPayment)*100,"Lpsc"));
+            PieDataSet pieDataSet = new PieDataSet(entries, "");
+            pieDataSet.setValueTextSize(20);
+            pieDataSet.setColors(Color.RED, Color.GREEN, Color.BLUE,Color.GRAY,Color.LTGRAY,Color.YELLOW,Color.CYAN,Color.DKGRAY,getResources().getColor(R.color.pink));
+            Description description = new Description();
+            description.setText("");
+            pieChart.setDescription(description);
+            pieChart.animateY(1500);
+            PieData pieData = new PieData(pieDataSet);
+            pieChart.setData(pieData);
+            pieChart.getLegend().setEnabled(false);
+
     }
 }

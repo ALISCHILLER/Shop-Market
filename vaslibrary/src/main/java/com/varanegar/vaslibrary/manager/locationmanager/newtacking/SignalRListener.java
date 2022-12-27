@@ -24,7 +24,7 @@ public class SignalRListener {
     public SignalRListener(RemoteSignalREmitter remoteSignalREmitter, String token) {
         this.remoteSignalREmitter = remoteSignalREmitter;
 
-        String url = "http://5.160.125.98:1364/realtimenotification?access_token=" + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIzZmE4NWY2NC01NzE3LTQ1NjItYjNmYy0yYzk2M2Y2NmFmYTYiLCJWaXNpdG9ySWQiOiIzZmE4NWY2NC01NzE3LTQ1NjItYjNmYy0yYzk2M2Y2NmFmYTYiLCJTdXBlcnZpc29ySWQiOiIzZmE4NWY2NC01NzE3LTQ1NjItYjNmYy0yYzk2M2Y2NmFmYTYiLCJUb3VySWQiOiIzZmE4NWY2NC01NzE3LTQ1NjItYjNmYy0yYzk2M2Y2NmFmYTYiLCJJc0Rpc3QiOiIxIiwibmJmIjoxNjcxOTUyNzUwLCJleHAiOjE2NzIxMjU1NTAsImlhdCI6MTY3MTk1Mjc1MH0.J7FlmW47ArxD9c6KLLNBvCHHfshXhUoOqvAJLlbioqc";
+        String url = "http://5.160.125.98:1364/realtimenotification?access_token=" + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIzZmE4NWY2NC01NzE3LTQ1NjItYjNmYy0yYzk2M2Y2NmFmYTYiLCJWaXNpdG9ySWQiOiIzZmE4NWY2NC01NzE3LTQ1NjItYjNmYy0yYzk2M2Y2NmFmYTYiLCJTdXBlcnZpc29ySWQiOiIzZmE4NWY2NC01NzE3LTQ1NjItYjNmYy0yYzk2M2Y2NmFmYTYiLCJUb3VySWQiOiIzZmE4NWY2NC01NzE3LTQ1NjItYjNmYy0yYzk2M2Y2NmFmYTYiLCJJc0Rpc3QiOiIxIiwibmJmIjoxNjcyMTE5NTIyLCJleHAiOjE2NzIyOTIzMjIsImlhdCI6MTY3MjExOTUyMn0.9L1CWnwBZNf8gKDU-s8qonAsljzl3IIQ3leYIeD92hQ";
         hubConnection = HubConnectionBuilder
                 .create(url)
                 .build();
