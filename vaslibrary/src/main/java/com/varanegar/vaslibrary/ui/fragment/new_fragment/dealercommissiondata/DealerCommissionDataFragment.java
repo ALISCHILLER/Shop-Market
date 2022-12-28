@@ -26,6 +26,7 @@ import com.anychart.enums.Align;
 import com.anychart.enums.LegendLayout;
 import com.evrencoskun.tableview.TableView;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
@@ -99,7 +100,7 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
         text_view_RankOnGlobal = view.findViewById(R.id.textviewRankOnGlobal);
         layout_pie_chart=view.findViewById(R.id.layout_pie_chart);
         layout_idBarChart=view.findViewById(R.id.layout_idBarChart);
-        chart = (BarChart) view.findViewById(R.id.pie_chart);
+        chart = view.findViewById(R.id.pie_chart);
         // Let's get TableView
         mTableView = view.findViewById(R.id.tableview);
         fragment_container = view.findViewById(R.id.fragment_container);
@@ -109,7 +110,6 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
         layout_pie_chart = view.findViewById(R.id.layout_pie_chart);
         layout_idBarChart = view.findViewById(R.id.layout_idBarChart);
         shareCommission = view.findViewById(R.id.shareCommission);
-
         reportsTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -176,9 +176,9 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
     private void setChartSale(DealerCommissionDataModel dealerCommissionDataModel){
         // creating a new bar data set.
         barDataSet1 = new BarDataSet(getBarEntriesOne(dealerCommissionDataModel), "هدف");
-        barDataSet1.setColor(getContext().getApplicationContext().getResources().getColor(R.color.blue_normal));
+        barDataSet1.setColor(Color.BLUE);
         barDataSet2 = new BarDataSet(getBarEntriesTwo(dealerCommissionDataModel), "فروش");
-        barDataSet2.setColor(Color.BLUE);
+        barDataSet2.setColor(Color.RED);
 
         // below line is to add bar data set to our bar data.
         BarData data = new BarData(barDataSet1, barDataSet2);
@@ -270,7 +270,7 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
 
         chart.setVisibility(View.GONE);
         if (dealerCommissionDataModel != null) {
-            setPieCharts(dealerCommissionDataModel);
+
             if (dealerCommissionDataModel.LastUpdate != null) {
                 textViewDate.setText("");
                 textViewDate_tabel.setText("تاریخ آخرین بروزرسانی : " + dealerCommissionDataModel.LastUpdate);
@@ -295,7 +295,7 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
             setChartSale(dealerCommissionDataModel);
             tableViewAdapter.setAllItems(tableViewModel.getColumnHeaderList(), tableViewModel
                     .getRowHeaderList(), getCellListForSortingTest(dealerCommissionDataModel));
-
+            setPieCharts(dealerCommissionDataModel);
 
             if (chart != null) {
                 chart.setDrawBarShadow(false);
@@ -382,11 +382,11 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
             List<Integer> colors = new ArrayList<>();
             colors.add(ContextCompat.getColor(requireContext(), android.R.color.holo_orange_light));
             colors.add(ContextCompat.getColor(requireContext(), android.R.color.holo_blue_light));
+            colors.add(ContextCompat.getColor(requireContext(), android.R.color.holo_red_light));
             colors.add(ContextCompat.getColor(requireContext(), android.R.color.holo_purple));
-            colors.add(ContextCompat.getColor(requireContext(), android.R.color.holo_blue_dark));
             colors.add(ContextCompat.getColor(requireContext(), android.R.color.holo_green_light));
-            colors.add(ContextCompat.getColor(requireContext(), android.R.color.holo_orange_light));
-            colors.add(ContextCompat.getColor(requireContext(), android.R.color.holo_blue_light));
+            colors.add(ContextCompat.getColor(requireContext(), android.R.color.holo_red_dark));
+            colors.add(ContextCompat.getColor(requireContext(), android.R.color.holo_blue_dark));
             colors.add(ContextCompat.getColor(requireContext(), android.R.color.holo_green_dark));
 
             set1.setColors(colors);
@@ -776,20 +776,43 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
             pieChart.setVisibility(View.VISIBLE);
             List<PieEntry> entries = new ArrayList<>();
 
-                entries.add(new PieEntry((dealerCommissionDataModel.SpaghettiPayment%dealerCommissionDataModel.FinalPayment)*100,"رشته ای"));
-                entries.add(new PieEntry((dealerCommissionDataModel.LasagnaPayment%dealerCommissionDataModel.FinalPayment)*100,"لازانیا"));
-                entries.add(new PieEntry((dealerCommissionDataModel.NestPayment%dealerCommissionDataModel.FinalPayment)*100,"آشیانه"));
-                entries.add(new PieEntry((dealerCommissionDataModel.JumboPayment%dealerCommissionDataModel.FinalPayment)*100,"جامبو"));
-                entries.add(new PieEntry((dealerCommissionDataModel.CakePowderPayment%dealerCommissionDataModel.FinalPayment)*100,"پودرکیک"));
-                entries.add(new PieEntry((dealerCommissionDataModel.FlourPayment%dealerCommissionDataModel.FinalPayment)*100,"آرد"));
-                entries.add(new PieEntry((dealerCommissionDataModel.ShapedPayment%dealerCommissionDataModel.FinalPayment)*100,"فرمی"));
-                entries.add(new PieEntry((dealerCommissionDataModel.PottagePayment%dealerCommissionDataModel.FinalPayment)*100,"رشته آش"));
-                entries.add(new PieEntry((dealerCommissionDataModel.CoverageRatePayment%dealerCommissionDataModel.FinalPayment)*100,"CoverageRate"));
-                entries.add(new PieEntry((dealerCommissionDataModel.HitRatePayment%dealerCommissionDataModel.FinalPayment)*100,"HitRate"));
-                entries.add(new PieEntry((dealerCommissionDataModel.LpscPayment%dealerCommissionDataModel.FinalPayment)*100,"Lpsc"));
+
+            if (getMuth(dealerCommissionDataModel.SpaghettiPayment,dealerCommissionDataModel.FinalPayment)>0)
+                entries.add(new PieEntry(100*dealerCommissionDataModel.SpaghettiPayment/dealerCommissionDataModel.FinalPayment,"رشته ای"));
+            if (getMuth(dealerCommissionDataModel.LasagnaPayment,dealerCommissionDataModel.FinalPayment)>0)
+                entries.add(new PieEntry((100*dealerCommissionDataModel.LasagnaPayment/dealerCommissionDataModel.FinalPayment),"لازانیا"));
+            if (getMuth(dealerCommissionDataModel.NestPayment,dealerCommissionDataModel.FinalPayment)>0)
+                entries.add(new PieEntry((100*dealerCommissionDataModel.NestPayment/dealerCommissionDataModel.FinalPayment),"آشیانه"));
+            if (getMuth(dealerCommissionDataModel.JumboPayment,dealerCommissionDataModel.FinalPayment)*100>0)
+                entries.add(new PieEntry((100*dealerCommissionDataModel.JumboPayment/dealerCommissionDataModel.FinalPayment),"جامبو"));
+            if (getMuth(dealerCommissionDataModel.CakePowderPayment,dealerCommissionDataModel.FinalPayment)>0)
+                entries.add(new PieEntry((100*dealerCommissionDataModel.CakePowderPayment/dealerCommissionDataModel.FinalPayment),"پودرکیک"));
+
+            if (getMuth(dealerCommissionDataModel.FlourPayment,dealerCommissionDataModel.FinalPayment)>0)
+                entries.add(new PieEntry((100*dealerCommissionDataModel.FlourPayment/dealerCommissionDataModel.FinalPayment),"آرد"));
+            if (getMuth(dealerCommissionDataModel.ShapedPayment,dealerCommissionDataModel.FinalPayment)>0)
+                entries.add(new PieEntry((100*dealerCommissionDataModel.ShapedPayment/dealerCommissionDataModel.FinalPayment),"فرمی"));
+            if (getMuth(dealerCommissionDataModel.PottagePayment,dealerCommissionDataModel.FinalPayment)>0)
+                entries.add(new PieEntry((100*dealerCommissionDataModel.PottagePayment/dealerCommissionDataModel.FinalPayment),"رشته آش"));
+            if (getMuth(dealerCommissionDataModel.CoverageRatePayment,dealerCommissionDataModel.FinalPayment)>0)
+                entries.add(new PieEntry((100*dealerCommissionDataModel.CoverageRatePayment/dealerCommissionDataModel.FinalPayment),"CoverageRate"));
+            if (getMuth(dealerCommissionDataModel.HitRatePayment,dealerCommissionDataModel.FinalPayment)>0)
+                entries.add(new PieEntry((100*dealerCommissionDataModel.HitRatePayment/dealerCommissionDataModel.FinalPayment),"HitRate"));
+            if (getMuth(dealerCommissionDataModel.LpscPayment,dealerCommissionDataModel.FinalPayment)>0)
+                entries.add(new PieEntry((100*dealerCommissionDataModel.LpscPayment/dealerCommissionDataModel.FinalPayment),"Lpsc"));
             PieDataSet pieDataSet = new PieDataSet(entries, "");
             pieDataSet.setValueTextSize(20);
-            pieDataSet.setColors(Color.RED, Color.GREEN, Color.BLUE,Color.GRAY,Color.LTGRAY,Color.YELLOW,Color.CYAN,Color.DKGRAY,getResources().getColor(R.color.pink));
+            pieDataSet.setColors(
+                    getResources().getColor(R.color.pink)
+                    ,getResources().getColor(R.color.orange)
+                    ,getResources().getColor(R.color.blue)
+                    ,getResources().getColor(R.color.green)
+                    ,getResources().getColor(R.color.gradientOrange)
+                    ,getResources().getColor(R.color.gradientViolet)
+                    ,getResources().getColor(R.color.gradientLightOrange2)
+                    ,getResources().getColor(R.color.zarShop)
+                    ,getResources().getColor(R.color.gradientLightGreen)
+            );
             Description description = new Description();
             description.setText("");
             pieChart.setDescription(description);
@@ -798,5 +821,13 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
             pieChart.setData(pieData);
             pieChart.getLegend().setEnabled(false);
 
+    }
+
+
+    public int getMuth(int i ,int y){
+        if(i>0&&y>0)
+            return 100*i/y;
+        else
+            return 0;
     }
 }

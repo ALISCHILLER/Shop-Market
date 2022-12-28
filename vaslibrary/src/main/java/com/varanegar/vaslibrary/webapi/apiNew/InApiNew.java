@@ -1,5 +1,6 @@
 package com.varanegar.vaslibrary.webapi.apiNew;
 
+import com.varanegar.vaslibrary.manager.newmanager.CustomerSumMoneyAndWeightReport.CustomerSumMoneyAndWeightReportModel;
 import com.varanegar.vaslibrary.manager.newmanager.dealercommission.DealerCommissionDataModel;
 import com.varanegar.vaslibrary.model.CheckCustomerCreditsModel;
 import com.varanegar.vaslibrary.model.newmodel.checkCustomerCredits.CheckCustomerCreditModel;
@@ -68,5 +69,11 @@ public interface InApiNew {
     Call<List<ProductModel>>CustomerXMounthSaleReport (
             @Query("CustomersCode") String customersCode);
 
+    @GET("api/v2/ngt/ReviewReport/CustomerGroupSimilarProductsalesReport")
+    Call<List<ProductModel>>CustomerGroupSimilarProductsalesReport (
+            @Query("CustomersCode") String customersCode);
+    @GET("api/v2/ngt/ReviewReport/CustomerSumMoneyAndWeightReport")
+    Call<List<CustomerSumMoneyAndWeightReportModel>>CustomerSumMoneyAndWeightReport (
+            @Query("CustomersCode") String customersCode);
 
 }

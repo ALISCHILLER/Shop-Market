@@ -79,8 +79,13 @@ import com.varanegar.vaslibrary.manager.customercall.CustomerCallOrderPreviewMan
 import com.varanegar.vaslibrary.manager.customercallmanager.CustomerCallManager;
 import com.varanegar.vaslibrary.manager.customercallmanager.TaskPriorityManager;
 import com.varanegar.vaslibrary.manager.customergrouplastsalesreportmanager.CustomerGroupLastSalesReportManager;
+import com.varanegar.vaslibrary.manager.newmanager.CustomerSumMoneyAndWeightReport.CustomerSumMoneyAndWeightReportManager;
+import com.varanegar.vaslibrary.manager.newmanager.CustomerSumMoneyAndWeightReport.CustomerSumMoneyAndWeightReportModel;
+import com.varanegar.vaslibrary.manager.newmanager.customerGroupSimilarProductsalesReport.CustomerGroupSimilarProductsalesReportManager;
+import com.varanegar.vaslibrary.manager.newmanager.customerGroupSimilarProductsalesReport.CustomerGroupSimilarProductsalesReportModel;
 import com.varanegar.vaslibrary.manager.newmanager.customerXmounthsalereport.CustomerXMounthSaleReportManager;
 import com.varanegar.vaslibrary.manager.newmanager.customerXmounthsalereport.CustomerXMounthSaleReportModel;
+import com.varanegar.vaslibrary.manager.newmanager.dataCustomersContentManager.DataCustomerContentManager;
 import com.varanegar.vaslibrary.manager.oldinvoicemanager.CustomerOldInvoiceHeaderManager;
 import com.varanegar.vaslibrary.manager.productorderviewmanager.ProductOrderViewManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.BackOfficeType;
@@ -103,6 +108,7 @@ import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.model.tour.TourModel;
 import com.varanegar.vaslibrary.ui.dialog.InsertPinDialog;
 import com.varanegar.vaslibrary.ui.dialog.new_dialog.Ml_dialog1;
+import com.varanegar.vaslibrary.ui.dialog.new_dialog.Ml_dialog2;
 import com.varanegar.vaslibrary.ui.drawer.CustomerReportsDrawerAdapter;
 import com.varanegar.vaslibrary.ui.fragment.new_fragment.edit_new_zar.Edit_New_Customer_ZarFragment;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
@@ -308,35 +314,24 @@ public class CustomersContentFragment extends VaranegarFragment {
                 customerXMounthSaleReportManager.getAll(customer.UniqueId);
 
 
-        ApiNew apiNew=new ApiNew(getContext());
-        Call<List<ProductModel>> call = apiNew
-                .CustomerXMounthSaleReport(customer.CustomerCode);
+
         if (xMounthSaleReportModels.size()==0) {
             showProgressDialog();
-            apiNew.runWebRequest(call, new WebCallBack<List<ProductModel>>() {
+
+
+
+            DataCustomerContentManager.getCustomerXMounthSaleRepor(getContext() ,customer, new DataCustomerContentManager.Callback() {
                 @Override
-                protected void onFinish() {
+                public void onSuccess() {
                     dismissProgressDialog();
+                    Ml_dialog2();
+
                 }
 
                 @Override
-                protected void onSuccess(List<ProductModel> result, Request request) {
-
-                    if (result.size() > 0) {
-                        customerXMounthSaleReportManager.save(customer.UniqueId, result);
-                    }
-                }
-
-                @Override
-                protected void onApiFailure(ApiError error, Request request) {
-                    String err = WebApiErrorBody.log(error, getContext());
-                    showErrorDialog(err);
-                    Log.e("err", String.valueOf(err));
-                }
-
-                @Override
-                protected void onNetworkFailure(Throwable t, Request request) {
-                    showErrorDialog(getString(R.string.connection_to_server_failed));
+                public void onError(String error) {
+                    dismissProgressDialog();
+                    showErrorDialog(error);
                 }
             });
 
@@ -353,6 +348,17 @@ public class CustomersContentFragment extends VaranegarFragment {
     //---------------------------------------------------------------------------------------------- onViewCreated
 
 
+    private void Ml_dialog2(){
+        List<CustomerGroupSimilarProductsalesReportModel> xMounthSaleReportModels=
+                new CustomerGroupSimilarProductsalesReportManager(getContext()).getAll(customer.UniqueId);
+
+       CustomerSumMoneyAndWeightReportModel sumMoneyAndWeightReportModels=
+                new CustomerSumMoneyAndWeightReportManager(getContext()).getAll(customer.UniqueId);
+        Ml_dialog2 ml_dialog2=new Ml_dialog2();
+        ml_dialog2.setValues(xMounthSaleReportModels,sumMoneyAndWeightReportModels);
+        ml_dialog2.show(getChildFragmentManager(), "Ml_dialog1");
+
+    }
     //---------------------------------------------------------------------------------------------- onResume
     @Override
     public void onResume() {
