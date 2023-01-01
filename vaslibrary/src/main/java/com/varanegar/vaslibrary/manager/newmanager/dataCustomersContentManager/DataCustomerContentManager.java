@@ -122,6 +122,7 @@ public class DataCustomerContentManager {
                         new CustomerSumMoneyAndWeightReportManager(context);
                 if (result.size() > 0) {
                     customerSumMoneyAndWeightReportManager.save(customer.UniqueId,result);
+                    callback.onSuccess();
                 }
                 callback.onSuccess();
             }

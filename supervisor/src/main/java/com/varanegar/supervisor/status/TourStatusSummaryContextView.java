@@ -105,7 +105,7 @@ class TourStatusSummaryContextView extends ItemContextView<TourStatusSummaryView
                                         dialog1.setTitle(R.string.tour_sent);
                                         dialog1.show();
 
-                                        sendpoint();
+                                        //sendpoint();
 
                                     }
 

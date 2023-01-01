@@ -184,7 +184,7 @@ public class SendOperationAction extends CheckPathAction {
                                             dialog.setPositiveButton(R.string.ok, null);
                                             dialog.show();
                                             runActionCallBack();
-                                            sendpoint();
+                                          //  sendpoint();
                                         });
                                     }
 
