@@ -2,6 +2,7 @@ package com.varanegar.vaslibrary.webapi.apiNew;
 
 import android.content.Context;
 
+import com.varanegar.vaslibrary.manager.customergrouplastsalesreportmanager.ReviewReportRequestViewModel;
 import com.varanegar.vaslibrary.manager.newmanager.CustomerSumMoneyAndWeightReport.CustomerSumMoneyAndWeightReportModel;
 import com.varanegar.vaslibrary.manager.newmanager.dealercommission.DealerCommissionDataModel;
 import com.varanegar.vaslibrary.model.CheckCustomerCreditsModel;
@@ -64,13 +65,10 @@ public class ApiNew extends BaseApi implements InApiNew {
     }
 
     @Override
-    public Call<List<CustomerGroupLastSalesReportModel>> CustomerLastSaleReport
-            (List<String> dealersId,
-             String startDate,
-             String endDate) {
+    public Call<List<CustomerGroupLastSalesReportModel>> CustomerLastSaleReport(List<String> customerCode) {
         InApiNew api = getRetrofitBuilder(TokenType.UserToken)
                 .build().create(InApiNew.class);
-        return api.CustomerLastSaleReport(dealersId,startDate,endDate);
+        return api.CustomerLastSaleReport(customerCode);
     }
 
     @Override

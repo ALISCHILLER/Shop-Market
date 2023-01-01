@@ -6,6 +6,6 @@ public class JobPair {
 
     public JobPair(Job job) {
         this.job = job;
-        this.time = 0L;
+        this.time = 0l;
     }
 }

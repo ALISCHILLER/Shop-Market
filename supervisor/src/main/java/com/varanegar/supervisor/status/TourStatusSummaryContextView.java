@@ -260,6 +260,7 @@ class TourStatusSummaryContextView extends ItemContextView<TourStatusSummaryView
             public void onSendFailed() {
                 //send log to server
                 Timber.e("not Send Point");
+
             }
         });
     }

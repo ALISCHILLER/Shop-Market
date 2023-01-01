@@ -26,7 +26,7 @@ public class TourModel extends BaseModel {
     public boolean IsVirtual;
     public String AgentMobile;
     public List<PinHelper> Pins;
-
+    public String ZarNotificationToken ;
     public TourModel() {
         Pins=new ArrayList<>();
     }

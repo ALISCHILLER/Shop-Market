@@ -571,7 +571,12 @@ public class TourManager {
                             result.Status = TourStatus.Downloading;
                             if (VaranegarApplication.is(VaranegarApplication.AppId.Dist))
                                 result.DayVisitPathId = VisitTemplatePathCustomerManager.getDefaultDistributionPathId();
+                            if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)){
+                                SharedPreferences sharedconditionCustomer = context.getSharedPreferences("Presale", Context.MODE_PRIVATE);
+                                sharedconditionCustomer.edit().putString("ZarNotificationToken", String.valueOf(result.ZarNotificationToken)).apply();
+                             }
                             result.StartTime = new Date();
+
                             saveTour(result, context);
                             Timber.i("tourId = " + result.UniqueId.toString());
                             updateCall.success();

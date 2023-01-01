@@ -24,14 +24,14 @@ public class SignalRListener {
     public SignalRListener(RemoteSignalREmitterSuper remoteSignalREmitter, String token) {
         this.remoteSignalREmitter = remoteSignalREmitter;
 
-        String url = "http://5.160.125.98:1364/realtimenotification?access_token=" + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIzZmE4NWY2NC01NzE3LTQ1NjItYjNmYy0yYzk2M2Y2NmFmYTYiLCJWaXNpdG9ySWQiOiIzZmE4NWY2NC01NzE3LTQ1NjItYjNmYy0yYzk2M2Y2NmFmYTYiLCJTdXBlcnZpc29ySWQiOiIzZmE4NWY2NC01NzE3LTQ1NjItYjNmYy0yYzk2M2Y2NmFmYTYiLCJUb3VySWQiOiIzZmE4NWY2NC01NzE3LTQ1NjItYjNmYy0yYzk2M2Y2NmFmYTYiLCJJc0Rpc3QiOiIxIiwibmJmIjoxNjcyMTE5NTIyLCJleHAiOjE2NzIyOTIzMjIsImlhdCI6MTY3MjExOTUyMn0.9L1CWnwBZNf8gKDU-s8qonAsljzl3IIQ3leYIeD92hQ";
+        String url = "http://5.160.125.98:1364/realtimenotification?access_token=" + token;
         hubConnection = HubConnectionBuilder
                 .create(url)
                 .build();
 
         hubConnection.on(
                 "ReceiveVisitorLocation",
-                (tourId, visitorId, lat, lng) ->this.remoteSignalREmitter.onGetPoint(lat,lng),
+                (tourId, visitorId, lat, lng) ->this.remoteSignalREmitter.onGetPoint(lat,lng,visitorId),
                 String.class, String.class, String.class, String.class);
     }
     //---------------------------------------------------------------------------------------------- SignalRListener
@@ -79,7 +79,7 @@ public class SignalRListener {
             hubConnection.send("DistJoinGroup");
     }
     public void sendVisitorLocation(UUID torId, String lat, String lon) {
-        Log.e("sendVisitorLocation",hubConnection.getConnectionState()+"asdasd");
+        Log.e("sendVisitorLocation",hubConnection.getConnectionState()+"torId");
         if (hubConnection.getConnectionState() == HubConnectionState.CONNECTED)
             hubConnection.send("sendVisitorLocation", torId, lat, lon);
     }

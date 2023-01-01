@@ -88,7 +88,16 @@
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimary" />
 
-
+        <View
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="#000000" />
+        <TextView
+            android:id="@+id/textviewMonth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary" />
     </LinearLayout>
     <RelativeLayout
         android:id="@+id/fragment_container"

@@ -20,7 +20,7 @@ public class SendTrackingPointsServiceJob implements Job {
 
     @Override
     public Long getInterval() {
-        return 120L;
+        return 10L;
     }
 
     @Override

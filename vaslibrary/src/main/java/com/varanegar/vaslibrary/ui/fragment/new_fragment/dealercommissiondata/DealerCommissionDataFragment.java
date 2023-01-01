@@ -59,7 +59,8 @@ import java.util.List;
 
 public class DealerCommissionDataFragment extends VaranegarFragment {
     private TableView mTableView;
-    private TextView  textViewDate,textViewDate_tabel,text_view_RankOnTeam,text_view_RankOnGlobal;
+    private TextView  textViewDate,textViewDate_tabel,text_view_RankOnTeam
+            ,text_view_RankOnGlobal,textviewMonth;
     private LinearLayout layout_pie_chart,layout_idBarChart,header;
     private BarChart chart;
     private TabLayout reportsTabLayout;
@@ -110,6 +111,7 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
         layout_pie_chart = view.findViewById(R.id.layout_pie_chart);
         layout_idBarChart = view.findViewById(R.id.layout_idBarChart);
         shareCommission = view.findViewById(R.id.shareCommission);
+        textviewMonth = view.findViewById(R.id.textviewMonth);
         reportsTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -182,7 +184,7 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
 
         // below line is to add bar data set to our bar data.
         BarData data = new BarData(barDataSet1, barDataSet2);
-
+        data.setValueTextSize(23f);
         // after adding data to our bar data we
         // are setting that data to our bar chart.
         barChart.setData(data);
@@ -206,7 +208,7 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
         // below line is to set position
         // to our x-axis to bottom.
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-
+        xAxis.setTextSize(15f);
         // below line is to set granularity
         // to our x axis labels.
       //  xAxis.setGranularity(1);
@@ -289,6 +291,12 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
             } else {
                 text_view_RankOnGlobal.setText("رتبه در کل کشور:");
             }
+            if (dealerCommissionDataModel.Month>0){
+                textviewMonth.setText("ماه : " + dealerCommissionDataModel.Month);
+            } else {
+                textviewMonth.setText("ماه:");
+            }
+
             mTableView.setShowCornerView(false);
             mTableView.setRowHeaderWidth(165);
             mTableView.setMinimumWidth(200);
@@ -330,6 +338,7 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
                 xAxis.setDrawGridLines(false);
                 xAxis.setGranularity(1f); // only intervals of 1 day
                 xAxis.setLabelCount(8);
+                xAxis.setTextSize(15f);
                 xAxis.setValueFormatter(new ValueFormatter() {
                     @Override
                     public String getFormattedValue(float value) {
@@ -346,17 +355,20 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
                 leftAxis.setAxisMinimum(0f);
 
                 YAxis rightAxis = chart.getAxisRight();
+
                 rightAxis.setDrawGridLines(false);
                 rightAxis.setLabelCount(8, false);
+
                 //rightAxis.setValueFormatter(custom);
                 rightAxis.setSpaceTop(15f);
                 rightAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
 
 
-                chart.getLegend().setEnabled(false);
+                chart.getLegend().setEnabled(true);
 
 
                 chart.setVisibility(View.VISIBLE);
+
                 setData(values);
 
             }
@@ -371,11 +383,12 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
                 chart.getData().getDataSetCount() > 0) {
             set1 = (BarDataSet) chart.getData().getDataSetByIndex(0);
             set1.setValues(values);
+            set1.setValueTextSize(23f);
             chart.getData().notifyDataChanged();
             chart.notifyDataSetChanged();
 
         } else {
-            set1 = new BarDataSet(values, "The year 2017");
+            set1 = new BarDataSet(values, "چارت درصد دستیابی");
 
             set1.setDrawIcons(false);
 
@@ -395,9 +408,14 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
             dataSets.add(set1);
 
             BarData data = new BarData(dataSets);
-            data.setValueTextSize(10f);
-            data.setBarWidth(0.9f);
-
+            data.setValueFormatter(new ValueFormatter() {
+                @Override
+                public String getFormattedValue(float value) {
+                    return HelperMethods.convertToOrFromPersianDigits(value+"%");
+                }
+            });
+            data.setValueTextSize(24f);
+            data.setBarWidth(0.15f);
             chart.setData(data);
         }
     }
@@ -802,6 +820,12 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
                 entries.add(new PieEntry((100*dealerCommissionDataModel.LpscPayment/dealerCommissionDataModel.FinalPayment),"Lpsc"));
             PieDataSet pieDataSet = new PieDataSet(entries, "");
             pieDataSet.setValueTextSize(20);
+            pieDataSet.setValueFormatter(new ValueFormatter() {
+                @Override
+                public String getFormattedValue(float value) {
+                    return HelperMethods.convertToOrFromPersianDigits(value+"%");
+                }
+            });
             pieDataSet.setColors(
                     getResources().getColor(R.color.pink)
                     ,getResources().getColor(R.color.orange)
@@ -814,7 +838,7 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
                     ,getResources().getColor(R.color.gradientLightGreen)
             );
             Description description = new Description();
-            description.setText("");
+            description.setText("%");
             pieChart.setDescription(description);
             pieChart.animateY(1500);
             PieData pieData = new PieData(pieDataSet);

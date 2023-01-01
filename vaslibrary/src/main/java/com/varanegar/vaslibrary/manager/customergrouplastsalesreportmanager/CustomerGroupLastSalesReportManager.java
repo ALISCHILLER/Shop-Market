@@ -13,7 +13,9 @@ import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.validation.ValidationException;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.manager.UserManager;
+import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateCall;
+import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.model.newmodel.customergrouplastsalesreport.CustomerGroupLastSalesReport;
 import com.varanegar.vaslibrary.model.newmodel.customergrouplastsalesreport.CustomerGroupLastSalesReportModel;
 import com.varanegar.vaslibrary.model.newmodel.customergrouplastsalesreport.CustomerGroupLastSalesReportModelRepository;
@@ -55,16 +57,23 @@ public class CustomerGroupLastSalesReportManager extends
     private Call<List<CustomerGroupLastSalesReportModel>> call;
     public void sync(final UpdateCall updateCall) {
         List<String> dealerId =new ArrayList<>();
+        List<String> customersCode =new ArrayList<>();
         UserModel userModel = UserManager.readFromFile(getContext());
         if (userModel == null || userModel.UniqueId == null) {
             updateCall.failure(getContext().getString(R.string.user_not_found));
             return;
         }
-        dealerId.add(userModel.UniqueId.toString());
-        ApiNew apiNew=new ApiNew(getContext());
+        List<CustomerModel> customerModels=new CustomerManager(getContext()).getAll();
 
+
+        for (CustomerModel customerCode:
+        customerModels) {
+            customersCode.add(customerCode.CustomerCode);
+        }
+
+        ApiNew apiNew=new ApiNew(getContext());
         Call<List<CustomerGroupLastSalesReportModel>> call = apiNew
-                .CustomerLastSaleReport(dealerId,"","");
+                .CustomerLastSaleReport(customersCode);
 
         apiNew.runWebRequest(call, new WebCallBack<List<CustomerGroupLastSalesReportModel>>() {
             @Override

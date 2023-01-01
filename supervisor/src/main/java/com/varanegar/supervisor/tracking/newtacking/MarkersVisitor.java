@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class MarkersVisitor {
-    public UUID VisitorId;
+    public String VisitorId;
     public Marker marker;
+    public Long oldtrackingn;
 }

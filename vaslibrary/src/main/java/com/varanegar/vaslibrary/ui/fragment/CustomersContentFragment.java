@@ -308,34 +308,7 @@ public class CustomersContentFragment extends VaranegarFragment {
             location_text_view.setVisibility(View.VISIBLE);
         }
 
-        CustomerXMounthSaleReportManager customerXMounthSaleReportManager=
-                new CustomerXMounthSaleReportManager(getContext());
-        List<CustomerXMounthSaleReportModel> xMounthSaleReportModels=
-                customerXMounthSaleReportManager.getAll(customer.UniqueId);
 
-
-
-        if (xMounthSaleReportModels.size()==0) {
-            showProgressDialog();
-
-
-
-            DataCustomerContentManager.getCustomerXMounthSaleRepor(getContext() ,customer, new DataCustomerContentManager.Callback() {
-                @Override
-                public void onSuccess() {
-                    dismissProgressDialog();
-                    Ml_dialog2();
-
-                }
-
-                @Override
-                public void onError(String error) {
-                    dismissProgressDialog();
-                    showErrorDialog(error);
-                }
-            });
-
-        }
         buttonTracking.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(String.format(Locale.US,
                     "geo:%.8f,%.8f", customer.Latitude, customer.Longitude)));
@@ -348,17 +321,9 @@ public class CustomersContentFragment extends VaranegarFragment {
     //---------------------------------------------------------------------------------------------- onViewCreated
 
 
-    private void Ml_dialog2(){
-        List<CustomerGroupSimilarProductsalesReportModel> xMounthSaleReportModels=
-                new CustomerGroupSimilarProductsalesReportManager(getContext()).getAll(customer.UniqueId);
 
-       CustomerSumMoneyAndWeightReportModel sumMoneyAndWeightReportModels=
-                new CustomerSumMoneyAndWeightReportManager(getContext()).getAll(customer.UniqueId);
-        Ml_dialog2 ml_dialog2=new Ml_dialog2();
-        ml_dialog2.setValues(xMounthSaleReportModels,sumMoneyAndWeightReportModels);
-        ml_dialog2.show(getChildFragmentManager(), "Ml_dialog1");
 
-    }
+
     //---------------------------------------------------------------------------------------------- onResume
     @Override
     public void onResume() {
@@ -422,6 +387,7 @@ public class CustomersContentFragment extends VaranegarFragment {
             }
         }, 300);
         new Handler().postDelayed(this::updateCustomer, 600);
+
     }
     //---------------------------------------------------------------------------------------------- onResume
 
@@ -1031,13 +997,14 @@ public class CustomersContentFragment extends VaranegarFragment {
                                                         R.id.customer_last_invoice_days_paired_item))
                                                 .setValue(numberOfDays + " روز");
 
-                                        if (numberOfDays>0&&numberOfDays>15){
-                                            showErrorDialog(" "+customer.CustomerName+" "
-                                                    +"بیشتر از"+numberOfDays+" روز خرید نکرده است تاریخ آخرین خرید "+dataSaleOfDays);
-                                        }
+
                                     } catch (ParseException e) {
                                         e.printStackTrace();
                                     }
+
+                                }
+                                if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+                                    checkSale();
                                 }
                                 ((PairedItems) view
                                         .findViewById(R.id.customer_total_order_paired_item))
@@ -1333,6 +1300,71 @@ public class CustomersContentFragment extends VaranegarFragment {
             } catch (Exception ignored) {
                 Timber.e(ignored);
             }
+        }
+    }
+    private void Ml_dialog2(){
+        List<CustomerGroupSimilarProductsalesReportModel> xMounthSaleReportModels=
+                new CustomerGroupSimilarProductsalesReportManager(getContext()).getAll(customer.UniqueId);
+
+        CustomerSumMoneyAndWeightReportModel sumMoneyAndWeightReportModels=
+                new CustomerSumMoneyAndWeightReportManager(getContext()).getAll(customer.UniqueId);
+        if (xMounthSaleReportModels.size()>0||sumMoneyAndWeightReportModels!=null||numberOfDays>15) {
+            Ml_dialog2 ml_dialog2 = new Ml_dialog2();
+            ml_dialog2.setValues(xMounthSaleReportModels, sumMoneyAndWeightReportModels,
+                    customer.CustomerName, dataSaleOfDays, numberOfDays);
+            ml_dialog2.show(getChildFragmentManager(), "Ml_dialog1");
+            ml_dialog2.setOnResult(new InsertPinDialog.OnResult() {
+                @Override
+                public void done() {
+                }
+
+                @Override
+                public void failed(String error) {
+
+                }
+            });
+
+        }
+    }
+
+    public void numberOfDays(){
+        if (numberOfDays > 0 && numberOfDays > 15) {
+            showErrorDialog(" " + customer.CustomerName + " "
+                    + "بیشتر از" + numberOfDays + " روز خرید نکرده است تاریخ آخرین خرید " + dataSaleOfDays);
+        }
+    }
+    private void checkSale(){
+        CustomerXMounthSaleReportManager customerXMounthSaleReportManager=
+                new CustomerXMounthSaleReportManager(getContext());
+        List<CustomerXMounthSaleReportModel> xMounthSaleReportModels=
+                customerXMounthSaleReportManager.getAll(customer.UniqueId);
+
+        List<CustomerGroupSimilarProductsalesReportModel> productsalesReportModels=
+                new CustomerGroupSimilarProductsalesReportManager(getContext()).getAll(customer.UniqueId);
+
+        CustomerSumMoneyAndWeightReportModel sumMoneyAndWeightReportModels=
+                new CustomerSumMoneyAndWeightReportManager(getContext()).getAll(customer.UniqueId);
+
+        if (xMounthSaleReportModels.size()==0&&
+                productsalesReportModels.size()==0&&
+                sumMoneyAndWeightReportModels==null) {
+            showProgressDialog();
+            DataCustomerContentManager.getCustomerXMounthSaleRepor(getContext() ,customer, new DataCustomerContentManager.Callback() {
+                @Override
+                public void onSuccess() {
+                    dismissProgressDialog();
+                    Ml_dialog2();
+                }
+
+                @Override
+                public void onError(String error) {
+                    dismissProgressDialog();
+                    showErrorDialog(error);
+                }
+            });
+
+        }else {
+            Ml_dialog2();
         }
     }
 }

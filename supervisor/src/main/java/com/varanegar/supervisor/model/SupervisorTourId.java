@@ -35,6 +35,5 @@ public class SupervisorTourId {
     public boolean isPhoneSale;
     @Nullable
     public ArrayList<String> pins;
-
-
+    public String ZarNotificationToken ;
 }

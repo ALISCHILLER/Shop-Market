@@ -2,6 +2,7 @@ package com.varanegar.supervisor.tracking;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Address;
@@ -190,8 +191,8 @@ public class MapFragment extends ProgressFragment implements RemoteSignalREmitte
         mapView = view.findViewById(R.id.map_view);
         mapView.onCreate(savedInstanceState);
         mapView.onResume(); // needed to getUnits the map to display immediately
-        signalRListener=new SignalRListener(this,"");
-        signalRListener.startConnection();
+
+        connectSignalR();
         try {
             MapsInitializer.initialize(getContext());
         } catch (Exception e) {
@@ -203,28 +204,11 @@ public class MapFragment extends ProgressFragment implements RemoteSignalREmitte
             @Override
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
-                final LatLng locationA = new LatLng(35.908571, 50.819672);
-                List<VisitorModel>  visitorModels = new VisitorManager(getContext()).getAll();
-                for (VisitorModel visitorModel:visitorModels){
-                    MarkersVisitor markersVisitor =new MarkersVisitor();
-                 Marker marker = googleMap.addMarker(new MarkerOptions()
-                         .position(locationA));
-                    int icon = R.drawable.ic_location_supervisor;
-                    BitmapDescriptor bitmap = BitmapDescriptorFactory.fromResource(icon);
-                    marker.setTitle(visitorModel.Name);
-                    marker.setIcon(bitmap);
-                    markersVisitor.VisitorId=visitorModel.UniqueId;
-                    markersVisitor.marker=marker;
-                    markersVisitors.add(markersVisitor);
-                }
-
-                m_marker = googleMap.addMarker(new MarkerOptions()
-                        .position(locationA));
-                int icon = R.drawable.ic_location_supervisor;
-                BitmapDescriptor bitmap = BitmapDescriptorFactory.fromResource(icon);
-                m_marker.setTag("انجردی");
-                m_marker.setIcon(bitmap);
+                LatLng iran = new LatLng(32.4279, 53.6880);
                 try {
+                    mMap.setMinZoomPreference(6.0f);
+                    mMap.setMaxZoomPreference(20.0f);
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLng(iran));
                     mapHelper.setGoogleMap(googleMap);
                     googleMap.setMyLocationEnabled(true);
                     googleMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
@@ -240,6 +224,7 @@ public class MapFragment extends ProgressFragment implements RemoteSignalREmitte
                             if (googleMap.getCameraPosition().zoom != zoom) {
                                 zoom = googleMap.getCameraPosition().zoom;
                                 refreshMarkers();
+
                             }
                         }
                     });
@@ -252,11 +237,14 @@ public class MapFragment extends ProgressFragment implements RemoteSignalREmitte
                             return false;
                         }
                     });
+                    addMarkerVisitor();
                 } catch (SecurityException ex) {
                     Timber.e(ex);
                 }
             }
         });
+
+
         return view;
     }
 
@@ -649,33 +637,38 @@ public class MapFragment extends ProgressFragment implements RemoteSignalREmitte
 
     public void createMarkerLive(String visitorId,String lat, String lng){
 
-                m_timerHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (lat!=null && lng!=null) {
-                            LatLng customerPosition = new LatLng(Double.parseDouble(String.valueOf(lat)), Double.parseDouble(String.valueOf(lng)));
+                m_timerHandler.postDelayed(() -> {
+                    if (lat!=null && lng!=null) {
+                        LatLng customerPosition = new LatLng(Double.parseDouble(String.valueOf(lat)), Double.parseDouble(String.valueOf(lng)));
 
-                            Log.e("onGetPointMarkerLive", "lat:"+lat+"lng:"+lng);
+                        Log.e("onGetPointMarkerLive", "lat:"+lat+"lng:"+lng);
 
-                            float i=calculateDistance(customerPosition.latitude,customerPosition.longitude
-                                    ,markersVisitors.get(1).marker.getPosition().latitude,markersVisitors
-                                            .get(1).marker.getPosition().longitude);
-                            Log.e("calculateDistance", "run:"+i);
-                            Date date1=new Date();
-                            Long newTracking=date1.getTime();
-                            Long oldtrackingn= oldtracking+30000;
-                            if (i>20.504673&&newTracking>oldtrackingn) {
-                                oldtracking=date1.getTime();
-                                markersVisitors.get(1).marker.setPosition(customerPosition);
-                                Log.e("markersVisitors", "newTracking:"+newTracking
-                                        +"oldtracking:"+oldtracking);
+                        for (int i= 0;i < markersVisitors.size(); i++) {
+                            MarkersVisitor markersVisitor=markersVisitors.get(i);
+                            if (markersVisitor.VisitorId.equals(visitorId)) {
+                                    float f = calculateDistance(customerPosition.latitude, customerPosition.longitude
+                                            , markersVisitor.marker.getPosition().latitude,
+                                            markersVisitor.marker.getPosition().longitude);
+
+                                    Log.e("calculateDistance", "run:" + f);
+                                    Date date1 = new Date();
+                                    Long newTracking = date1.getTime();
+                                    Long oldtrackingn = markersVisitor.oldtrackingn + 10000;
+                                    if (f > 20 && newTracking > oldtrackingn) {
+                                        markersVisitor.oldtrackingn = date1.getTime();
+                                        markersVisitor.marker.setPosition(customerPosition);
+                                        Log.e("markersVisitors", "newTracking:" + newTracking
+                                                + "oldtracking:" + oldtracking);
+                                        markersVisitors.set(i, markersVisitor);
+                                    }
+
                             }
 
-                            m_timerHandler.postDelayed(this, 2000);
-                        }
 
+                        }
                     }
-                },4000);
+
+                },5000);
 
     }
     private void showError(String str) {
@@ -708,6 +701,7 @@ public class MapFragment extends ProgressFragment implements RemoteSignalREmitte
     public void onConnectToSignalR() {
         Log.e("onConnectToSignalR", "onConnectToSignalR: ");
         signalRListener.DistJoinGroup();
+
     }
 
     @Override
@@ -716,22 +710,17 @@ public class MapFragment extends ProgressFragment implements RemoteSignalREmitte
     }
 
     @Override
-    public void onGetPoint(String lat, String lng) {
+    public void onGetPoint(String lat, String lng,String visitorId) {
 
-        m_timerHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Log.e("onGetPoint", "lat:"+lat+"lng:"+lng);
-                createMarkerLive("", lat, lng);
-            }
-        },4000);
+                Log.e("onGetPoint", "visitorId"+visitorId+"lat:"+lat+"lng:"+lng);
+                createMarkerLive(visitorId, lat, lng);
+
     }
 
     @Override
     public void onReConnectToSignalR() {
         Log.e("onReConnectToSignalR", "onReConnectToSignalR: ");
-        signalRListener=new SignalRListener(this,"");
-        signalRListener.startConnection();
+        connectSignalR();
     }
     public final static double AVERAGE_RADIUS_OF_EARTH = 6371;
     public float calculateDistance(double userLat, double userLng, double venueLat, double venueLng) {
@@ -750,6 +739,31 @@ public class MapFragment extends ProgressFragment implements RemoteSignalREmitte
 //
 //        return dist;
 
+    }
+    
+    public void addMarkerVisitor(){
+        final LatLng locationA = new LatLng(0, 0);
+        List<VisitorModel>  visitorModels = new VisitorManager(getContext()).getAll();
+        for (VisitorModel visitorModel:visitorModels){
+            MarkersVisitor markersVisitor =new MarkersVisitor();
+            Marker marker = googleMap.addMarker(new MarkerOptions().position(locationA));
+            int icon = R.drawable.ic_location_supervisor;
+            BitmapDescriptor bitmap = BitmapDescriptorFactory.fromResource(icon);
+            marker.setTitle(visitorModel.Name);
+            marker.setIcon(bitmap);
+            markersVisitor.VisitorId= String.valueOf(visitorModel.UniqueId);
+            markersVisitor.marker=marker;
+            markersVisitor.oldtrackingn= Long.valueOf(0);
+            markersVisitors.add(markersVisitor);
+        }
+    }
+    public  void  connectSignalR(){
+        SharedPreferences sharedconditionCustomer = getContext().getSharedPreferences("SupervisorId", Context.MODE_PRIVATE);
+        String token =sharedconditionCustomer.getString("ZarNotificationToken","");
+        if (token!=null &&!token.isEmpty()) {
+            signalRListener = new SignalRListener(this, token);
+            signalRListener.startConnection();
+        }
     }
 
 }

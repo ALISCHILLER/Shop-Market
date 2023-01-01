@@ -630,6 +630,7 @@ public class DataManager {
                 if (result.uniqueId != null) {
                     SharedPreferences sharedconditionCustomer = context.getSharedPreferences("SupervisorId", Context.MODE_PRIVATE);
                     sharedconditionCustomer.edit().putString("SupervisorIduniqueId", String.valueOf(result.uniqueId)).apply();
+                    sharedconditionCustomer.edit().putString("ZarNotificationToken", String.valueOf(result.ZarNotificationToken)).apply();
                 }
 
                 getsupervisorCustomers(visitorModel, callback, context);

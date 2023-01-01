@@ -24,6 +24,7 @@ import com.varanegar.vaslibrary.manager.locationmanager.TrackingLicense;
 import com.varanegar.vaslibrary.manager.locationmanager.TrackingLogManager;
 import com.varanegar.vaslibrary.manager.locationmanager.TrackingService;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
+import com.varanegar.vaslibrary.manager.tourmanager.TourManager;
 
 import timber.log.Timber;
 
@@ -61,10 +62,13 @@ public class TrackingServiceJob implements Job {
                  * فعال کردن سرویس ارسال  لوکیشن
                  */
                 if (SysConfigManager.hasTracking(context)) {
-                    if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
-                        Intent trackingService = new Intent(context, TrackingService.class);
-                        context.startService(trackingService);
-                        getOnePoint(context);
+                    if (new TourManager(context).isTourAvailable()) {
+                        if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+
+                            Intent trackingService = new Intent(context, TrackingService.class);
+                            context.startService(trackingService);
+                            getOnePoint(context);
+                        }
                     }
                 }else {
                     Timber.d("Tracking config is false");

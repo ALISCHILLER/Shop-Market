@@ -78,6 +78,7 @@ import com.varanegar.vaslibrary.model.location.LocationModel;
 import com.varanegar.vaslibrary.model.location.LocationModelRepository;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.model.tour.TourModel;
+import com.varanegar.vaslibrary.model.tour.TourStatus;
 import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.timezone.TimeApi;
@@ -724,8 +725,19 @@ public class LocationManager extends BaseManager<LocationModel> implements Remot
     }
 
     public synchronized void tryToSendAll(@Nullable SendLocationListener callback) {
-        signalRListener=new SignalRListener(this,"");
-        signalRListener.startConnection();
+
+
+        if (new TourManager(getContext()).isTourAvailable()) {
+
+            if (signalRListener==null) {
+                if (signalRListener != null)
+                    signalRListener.stopConnection();
+                SharedPreferences sharedconditionCustomer = getContext().getSharedPreferences("Presale", Context.MODE_PRIVATE);
+                String token = sharedconditionCustomer.getString("ZarNotificationToken", "");
+                signalRListener = new SignalRListener(this, token);
+                signalRListener.startConnection();
+            }
+        }
 
         if (hasSemaphore())
             return;
@@ -1301,8 +1313,12 @@ public class LocationManager extends BaseManager<LocationModel> implements Remot
     @Override
     public void onReConnectToSignalR() {
         Log.e("onReConnectToSignalR", "onReConnectToSignalR: ");
-        signalRListener=new SignalRListener(this,"");
-        signalRListener.startConnection();
+        SharedPreferences sharedconditionCustomer = getContext().getSharedPreferences("Presale", Context.MODE_PRIVATE);
+        String token =sharedconditionCustomer.getString("ZarNotificationToken","");
+        if (new TourManager(getContext()).isTourAvailable()) {
+            signalRListener = new SignalRListener(this, token);
+            signalRListener.startConnection();
+        }
     }
 
    public void sendLocationSignalR(){
@@ -1316,6 +1332,7 @@ public class LocationManager extends BaseManager<LocationModel> implements Remot
                            signalRListener.sendVisitorLocation(tourModel.UniqueId,
                                    String.valueOf(location.Latitude),
                                    String.valueOf(location.Longitude));
+                           signalRListener.stopConnection();
                        }
 
                    }

@@ -62,9 +62,9 @@ public abstract class JobScheduler extends BroadcastReceiver {
         long lastTime = sharedPreferences.getLong("LAST_TIME", 0);
         if (isExact) {
             sharedPreferences.edit().putLong("LAST_TIME", SystemClock.elapsedRealtime()).apply();
-            JobManager.initializeExact(context, this.getClass(), 1);
-        } else if (SystemClock.elapsedRealtime() - lastTime > 1)
-            JobManager.initializeExact(context, this.getClass(), 1);
+            JobManager.initializeExact(context, this.getClass(), 6000);
+        } else if (SystemClock.elapsedRealtime() - lastTime > 9000)
+            JobManager.initializeExact(context, this.getClass(), 900);
         this.context = context;
         new Thread(new Runnable() {
             @Override
@@ -76,7 +76,7 @@ public abstract class JobScheduler extends BroadcastReceiver {
                 final Long elapsedRealtime = SystemClock.elapsedRealtime();
                 for (final JobPair pair :
                         tasks) {
-                   // if (elapsedRealtime - pair.time >= pair.job.getInterval() * 1000) {
+                    if (elapsedRealtime - pair.time >= pair.job.getInterval() * 1000) {
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -84,7 +84,7 @@ public abstract class JobScheduler extends BroadcastReceiver {
                             }
                         });
                         pair.time = elapsedRealtime;
-                   // }
+                    }
                 }
             }
         }).start();

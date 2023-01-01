@@ -1690,7 +1690,8 @@ public class CustomerSaveOrderFragment extends VisitFragment
 
                         if (xMounthSaleReportModelss.size() > 0) {
                             Ml_dialog1 ml_dialog1 = new Ml_dialog1();
-                            ml_dialog1.setValues(xMounthSaleReportModelss);
+
+                            ml_dialog1.setValues(xMounthSaleReportModelss,customer.CustomerName);
                             ml_dialog1.show(getChildFragmentManager(), "Ml_dialog1");
                             ml_dialog1.setOnResult(new InsertPinDialog.OnResult() {
                                 @Override

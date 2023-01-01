@@ -26,8 +26,10 @@ public class Ml_dialog1 extends CuteDialogWithToolbar {
     private View view;
     private BaseRecyclerAdapter<CustomerXMounthSaleReportModel> adapter;
     private List<CustomerXMounthSaleReportModel> productModel;
-    public void setValues(List<CustomerXMounthSaleReportModel> ProductModel) {
+    private String _customerName;
+    public void setValues(List<CustomerXMounthSaleReportModel> ProductModel,String customerName) {
         this.productModel=ProductModel;
+        this._customerName=customerName;
     }
     private InsertPinDialog.OnResult onResult;
 
@@ -67,6 +69,8 @@ public class Ml_dialog1 extends CuteDialogWithToolbar {
 
         view = inflater.inflate(R.layout.layout_ml_dialog1, container, false);
         TextView okTv = view.findViewById(R.id.ok_text_view);
+        TextView txt_title = view.findViewById(R.id.txt_title);
+        txt_title.setText("کالا های خریداری نشده این فاکتور براساس فاکتورهای سه ماه قبلی "+" "+_customerName);
         BaseRecyclerView centerRecycler = (BaseRecyclerView) view.findViewById(R.id.center_recycler_view);
         adapter = new BaseRecyclerAdapter<CustomerXMounthSaleReportModel>(getVaranegarActvity(), productModel) {
             @Override

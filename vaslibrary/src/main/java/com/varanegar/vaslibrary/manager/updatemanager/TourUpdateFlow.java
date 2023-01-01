@@ -6,6 +6,7 @@ import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 
 import com.varanegar.framework.base.VaranegarApplication;
+import com.varanegar.framework.database.DbException;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.manager.CountyManager;
 import com.varanegar.vaslibrary.manager.CustExtraFieldManager;
@@ -62,7 +63,10 @@ import com.varanegar.vaslibrary.manager.goodspackageitemmanager.GoodsPackageItem
 import com.varanegar.vaslibrary.manager.goodspackagemanager.GoodsPackageManager;
 import com.varanegar.vaslibrary.manager.image.ImageManager;
 import com.varanegar.vaslibrary.manager.image.LogoManager;
+import com.varanegar.vaslibrary.manager.newmanager.CustomerSumMoneyAndWeightReport.CustomerSumMoneyAndWeightReportManager;
 import com.varanegar.vaslibrary.manager.newmanager.commodity_rationing.CommodityRationingManager;
+import com.varanegar.vaslibrary.manager.newmanager.customerGroupSimilarProductsalesReport.CustomerGroupSimilarProductsalesReportManager;
+import com.varanegar.vaslibrary.manager.newmanager.customerXmounthsalereport.CustomerXMounthSaleReportManager;
 import com.varanegar.vaslibrary.manager.newmanager.dealercommission.DealerCommissionDataManager;
 import com.varanegar.vaslibrary.manager.picture.PictureCustomerHistoryManager;
 
@@ -105,6 +109,13 @@ public abstract class TourUpdateFlow extends UpdateFlow {
         try {
             SysConfigManager sysConfigManager = new SysConfigManager(getContext());
             SysConfigModel simplePresale = sysConfigManager.read(ConfigKey.SimplePresale, SysConfigManager.cloud);
+            try {
+                new CustomerXMounthSaleReportManager(getContext()).deleteAll();
+                new CustomerGroupSimilarProductsalesReportManager(getContext()).deleteAll();
+                new CustomerSumMoneyAndWeightReportManager(getContext()).deleteAll();
+            } catch (DbException e) {
+                e.printStackTrace();
+            }
             boolean isSimpleMode = SysConfigManager.compare(simplePresale, true) || VaranegarApplication.is(VaranegarApplication.AppId.Contractor);
             BackOfficeType backOfficeType = sysConfigManager.getBackOfficeType();
             if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
@@ -922,6 +933,37 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                 }
             });
 
+
+            tasks.add(new TourAsyncTask() {
+                CustomerNotAllowProductManager notAllowProductManager = new
+                        CustomerNotAllowProductManager(getContext());
+
+                @Override
+                public void run(UpdateCall call) {
+                    notAllowProductManager.sync(call);
+                }
+
+                @Override
+                public String name() {
+                    return "ProductGroup";
+                }
+
+                @Override
+                public int group() {
+                    return R.string.product_info;
+                }
+
+                @Override
+                public int queueId() {
+                    return 2;
+                }
+
+                @Override
+                public void cancel() {
+                    if (notAllowProductManager != null)
+                        notAllowProductManager.cancelSync();
+                }
+            });
             if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)){
                 tasks.add(new TourAsyncTask() {
                     CustomerGroupLastSalesReportManager cancelSync = new
@@ -954,37 +996,6 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     }
                 });
             }
-            tasks.add(new TourAsyncTask() {
-                CustomerNotAllowProductManager notAllowProductManager = new
-                        CustomerNotAllowProductManager(getContext());
-
-                @Override
-                public void run(UpdateCall call) {
-                    notAllowProductManager.sync(call);
-                }
-
-                @Override
-                public String name() {
-                    return "ProductGroup";
-                }
-
-                @Override
-                public int group() {
-                    return R.string.product_info;
-                }
-
-                @Override
-                public int queueId() {
-                    return 2;
-                }
-
-                @Override
-                public void cancel() {
-                    if (notAllowProductManager != null)
-                        notAllowProductManager.cancelSync();
-                }
-            });
-
             tasks.add(new TourAsyncTask() {
                 ProductGroupManager productGroupManager = new ProductGroupManager(getContext());
 

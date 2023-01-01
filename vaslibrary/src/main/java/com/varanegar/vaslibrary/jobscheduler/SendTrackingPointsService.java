@@ -16,6 +16,7 @@ import androidx.core.app.NotificationCompat;
 import com.varanegar.framework.util.jobscheduler.SchedulerActivity;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.manager.locationmanager.LocationManager;
+import com.varanegar.vaslibrary.manager.tourmanager.TourManager;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -43,8 +44,10 @@ public class SendTrackingPointsService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         pool.execute(() -> {
-            LocationManager locationManager = new LocationManager(SendTrackingPointsService.this);
-            locationManager.tryToSendAll(null);
+            if (new TourManager(getApplicationContext()).isTourAvailable()) {
+                LocationManager locationManager = new LocationManager(SendTrackingPointsService.this);
+                locationManager.tryToSendAll(null);
+            }
         });
     }
 

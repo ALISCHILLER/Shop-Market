@@ -1,5 +1,6 @@
 package com.varanegar.vaslibrary.webapi.apiNew;
 
+import com.varanegar.vaslibrary.manager.customergrouplastsalesreportmanager.ReviewReportRequestViewModel;
 import com.varanegar.vaslibrary.manager.newmanager.CustomerSumMoneyAndWeightReport.CustomerSumMoneyAndWeightReportModel;
 import com.varanegar.vaslibrary.manager.newmanager.dealercommission.DealerCommissionDataModel;
 import com.varanegar.vaslibrary.model.CheckCustomerCreditsModel;
@@ -47,11 +48,10 @@ public interface InApiNew {
     Call<List<CheckCustomerCreditModel>>CheckCustomerCredits (
             @Query("CustomersId") List<String> customerCode);
 
-    @GET("api/v2/ngt/ReviewReport/CustomerGroupLastsalesReport")
+    @POST("api/v2/ngt/ReviewReport/CustomerGroupLastsalesReport")
     Call<List<CustomerGroupLastSalesReportModel>>CustomerLastSaleReport (
-            @Query("DealersId") List<String> dealersId,
-            @Query("StartDate") String startDate,
-            @Query("EndDate") String endDate);
+            @Body List<String> customerCode
+    );
 
 
     @GET("api/v2/ngt/Quotas/sync/loaddata")

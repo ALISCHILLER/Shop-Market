@@ -15,12 +15,13 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/txt_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimaryLight"
             android:gravity="center"
             android:padding="@dimen/padding_default"
-            android:text="کالا های خرید نشده" />
+            android:text="کالا های خرید نشده براساس فاکتورهای سه ماه قبلی " />
 
         <com.varanegar.framework.util.recycler.BaseRecyclerView
             android:id="@+id/center_recycler_view"
