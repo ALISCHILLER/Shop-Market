@@ -1363,8 +1363,9 @@ public class CustomersContentFragment extends VaranegarFragment {
                 }
             });
 
-        }else {
-            Ml_dialog2();
         }
+//        else {
+//            Ml_dialog2();
+//        }
     }
 }

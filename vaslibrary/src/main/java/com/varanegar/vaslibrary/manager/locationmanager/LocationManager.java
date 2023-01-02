@@ -116,20 +116,20 @@ public class LocationManager extends BaseManager<LocationModel> implements Remot
         SysConfigModel trackingInterval = sysConfigManager.read(ConfigKey.TrackingInterval, SysConfigManager.cloud);
         SysConfigModel trackingMaxWaitTime = sysConfigManager.read(ConfigKey.TrackingWaitTime, SysConfigManager.cloud);
         SysConfigModel trackingSmallestDisplacement = sysConfigManager.read(ConfigKey.TrackingSmallestDisplacement, SysConfigManager.cloud);
-     //   int interval = SysConfigManager.getIntValue(trackingInterval, 40);
-        int interval = 0;
-        //int maxWaitTime = SysConfigManager.getIntValue(trackingMaxWaitTime, 300);
-        int maxWaitTime = 0;
-//        int smallestDisplacement = SysConfigManager.getIntValue(trackingSmallestDisplacement, 20);
-        int smallestDisplacement =0;
+        int interval = SysConfigManager.getIntValue(trackingInterval, 40);
+       // int interval = 0;
+       // int maxWaitTime = SysConfigManager.getIntValue(trackingMaxWaitTime, 300);
+        int maxWaitTime = 50000;
+        int smallestDisplacement = SysConfigManager.getIntValue(trackingSmallestDisplacement, 20);
+       // int smallestDisplacement =0;
         TrackingLicense trackingLicense = TrackingLicense.readLicense(context);
         if (trackingLicense != null) {
             interval = Math.max(interval, trackingLicense.getTimeInterval());
             smallestDisplacement = Math.max(smallestDisplacement, trackingLicense.getMinDistance());
         }
         LocationRequest locationRequest = LocationRequest.create();
-        locationRequest.setInterval(interval * 0);
-        locationRequest.setMaxWaitTime(maxWaitTime * 0);
+        locationRequest.setInterval(interval * 1000);
+        locationRequest.setMaxWaitTime(maxWaitTime * 1000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setSmallestDisplacement(smallestDisplacement);
         return locationRequest;
@@ -440,7 +440,7 @@ public class LocationManager extends BaseManager<LocationModel> implements Remot
                                     }
                                 }).addOnSuccessListener(location -> {
                                     if (location != null) {
-                                        if (location.getTime() < 1L) {
+                                        if (location.getTime() < 20000l) {
                                             TrackingLogManager.addLog(getContext(), LogType.POINT_TIME,
                                                     LogLevel.Error, "{" + location.getLatitude() + "  " +
                                                             location.getLongitude() + "} Gps Time is wrong : " +
@@ -457,8 +457,8 @@ public class LocationManager extends BaseManager<LocationModel> implements Remot
                                                     + " Tablet Time : "
                                                     + DateHelper.toString(new Date(), DateFormat.Complete, Locale.getDefault()));
                                             TimeApi api = new TimeApi(getContext());
-                                            api.checkTime(message -> TrackingLogManager.addLog(getContext(), LogType.INVALID_TIME, LogLevel.Info, message));
-                                            location.setTime(new Date().getTime());
+                                           // api.checkTime(message -> TrackingLogManager.addLog(getContext(), LogType.INVALID_TIME, LogLevel.Info, message));
+                                          //  location.setTime(new Date().getTime());
                                         }
 
                                         TrackingLogManager.addLog(getContext(), LogType.POINT, LogLevel.Info, "{" + location.getLatitude() + "  " + location.getLongitude() + "}");
@@ -1313,12 +1313,12 @@ public class LocationManager extends BaseManager<LocationModel> implements Remot
     @Override
     public void onReConnectToSignalR() {
         Log.e("onReConnectToSignalR", "onReConnectToSignalR: ");
-        SharedPreferences sharedconditionCustomer = getContext().getSharedPreferences("Presale", Context.MODE_PRIVATE);
-        String token =sharedconditionCustomer.getString("ZarNotificationToken","");
-        if (new TourManager(getContext()).isTourAvailable()) {
-            signalRListener = new SignalRListener(this, token);
-            signalRListener.startConnection();
-        }
+//        SharedPreferences sharedconditionCustomer = getContext().getSharedPreferences("Presale", Context.MODE_PRIVATE);
+//        String token =sharedconditionCustomer.getString("ZarNotificationToken","");
+//        if (new TourManager(getContext()).isTourAvailable()) {
+//            signalRListener = new SignalRListener(this, token);
+//            signalRListener.startConnection();
+//        }
     }
 
    public void sendLocationSignalR(){

@@ -14,18 +14,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.kaelli.niceratingbar.NiceRatingBar
+
+        <RatingBar
+            android:id="@+id/simpleRatingBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:padding="@dimen/padding_left_right_small"
-            app:nrb_ratingStatus="Disable"
-            app:nrb_starEmptyResource="@drawable/ic_filled_star_24"
-            app:nrb_starFullResource="@drawable/ic_golden_star"
-            app:nrb_starImageHeight="20dp"
-            app:nrb_starImagePadding="2dp"
-            app:nrb_starImageWidth="23dp"
-            app:nrb_starTotal="3" />
+            android:numStars="3"
+            android:rating="3"
+            android:stepSize="1.0"
+            android:isIndicator="true"
+            />
 
         <TextView
             android:layout_width="wrap_content"
@@ -45,19 +44,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout1">
 
-        <com.kaelli.niceratingbar.NiceRatingBar
+        <RatingBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:padding="@dimen/padding_left_right_small"
-            app:nrb_rating="2"
-            app:nrb_ratingStatus="Disable"
-            app:nrb_starEmptyResource="@drawable/ic_filled_star_24"
-            app:nrb_starFullResource="@drawable/ic_golden_star"
-            app:nrb_starImageHeight="20dp"
-            app:nrb_starImagePadding="2dp"
-            app:nrb_starImageWidth="23dp"
-            app:nrb_starTotal="3" />
+            android:numStars="3"
+            android:rating="2"
+            android:stepSize="1.0"
+            android:isIndicator="true"
+            />
 
         <TextView
             android:layout_width="wrap_content"
@@ -76,19 +71,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
-        <com.kaelli.niceratingbar.NiceRatingBar
+        <RatingBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:padding="@dimen/padding_left_right_small"
-            app:nrb_rating="1"
-            app:nrb_ratingStatus="Disable"
-            app:nrb_starEmptyResource="@drawable/ic_filled_star_24"
-            app:nrb_starFullResource="@drawable/ic_golden_star"
-            app:nrb_starImageHeight="20dp"
-            app:nrb_starImagePadding="2dp"
-            app:nrb_starImageWidth="23dp"
-            app:nrb_starTotal="3" />
+            android:numStars="3"
+            android:rating="1"
+            android:stepSize="1.0"
+            android:isIndicator="true"
+            />
 
         <TextView
             android:layout_width="wrap_content"

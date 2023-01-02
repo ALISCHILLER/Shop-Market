@@ -9,7 +9,7 @@
     <LinearLayout
         android:id="@+id/centers_linear"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="320dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
         app:layout_constraintTop_toTopOf="parent">
@@ -26,7 +26,7 @@
         <com.varanegar.framework.util.recycler.BaseRecyclerView
             android:id="@+id/center_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent" />
     </LinearLayout>
 
     <LinearLayout

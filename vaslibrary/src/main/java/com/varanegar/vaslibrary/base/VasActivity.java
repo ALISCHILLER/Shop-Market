@@ -541,7 +541,7 @@ public abstract class VasActivity extends MainVaranegarActivity implements EasyH
                 !SysConfigManager.hasTracking(this))
             return;
         TimeApi timeApi = new TimeApi(VasActivity.this);
-        timeApi.checkTime(this::changeTimeSettings);
+      //  timeApi.checkTime(this::changeTimeSettings);
     }
     //---------------------------------------------------------------------------------------------- checkTime
 

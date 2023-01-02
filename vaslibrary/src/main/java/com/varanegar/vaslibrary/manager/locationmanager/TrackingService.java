@@ -114,11 +114,11 @@ public class TrackingService extends IntentService{
                 TrackingLogManager.addLog(context, LogType.MOCK_PROVIDER, LogLevel.Error, "پوینت تقلبی!");
             }
         }
-        if (location.getAccuracy() > 100000) {
+        if (location.getAccuracy() > 100) {
             TrackingLogManager.addLog(context, LogType.INACCURATE_POINT, LogLevel.Warning, " دقت " + location.getAccuracy());
         }
 
-        if (location.getTime() < 1L) {
+        if (location.getTime() < 20000L) {
             TrackingLogManager.addLog(context, LogType.POINT_TIME, LogLevel.Error, "{" +
                     location.getLatitude() + "  " + location.getLongitude() + "} Gps Time is wrong : " + DateHelper.toString(new Date(location.getTime()), DateFormat.Complete, Locale.getDefault()));
             location.setTime(new Date().getTime());
@@ -132,8 +132,8 @@ public class TrackingService extends IntentService{
                     + " Tablet Time : "
                     + DateHelper.toString(new Date(), DateFormat.Complete, Locale.getDefault()));
             TimeApi api = new TimeApi(context);
-            api.checkTime(message -> TrackingLogManager.addLog(context, LogType.INVALID_TIME, LogLevel.Info, message));
-           location.setTime(new Date().getTime());
+           // api.checkTime(message -> TrackingLogManager.addLog(context, LogType.INVALID_TIME, LogLevel.Info, message));
+          // location.setTime(new Date().getTime());
         }
 
         TourModel tourModel = new TourManager(context).loadTour();

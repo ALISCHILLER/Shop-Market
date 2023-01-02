@@ -31,7 +31,7 @@ import timber.log.Timber;
 public class LocationProviderJob implements Job {
     @Override
     public Long getInterval() {
-        return 9L;
+        return 900L;
     }
 
     @Override
@@ -81,7 +81,7 @@ public class LocationProviderJob implements Job {
     }
 
     private void checkTime(final Context context) {
-        TimeApi timeApi = new TimeApi(context);
-        timeApi.checkTime((String log) -> TrackingLogManager.addLog(context, LogType.INVALID_TIME, LogLevel.Info,log ));
+      //  TimeApi timeApi = new TimeApi(context);
+      //  timeApi.checkTime((String log) -> TrackingLogManager.addLog(context, LogType.INVALID_TIME, LogLevel.Info,log ));
     }
 }

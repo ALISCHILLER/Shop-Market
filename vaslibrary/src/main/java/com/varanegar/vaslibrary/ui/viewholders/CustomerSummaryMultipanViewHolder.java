@@ -7,9 +7,11 @@ import android.content.pm.PackageManager;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Build;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -63,7 +65,7 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
     private final CardView cardViewCustomerStatus;
     private final CardView cardViewZarShop;
     private final ImageView imageViewZarShop;
-    private  NiceRatingBar ratting_bar;
+    RatingBar simpleRatingBar;
     //private ImageUrlViewDialog customerImageView;
     private  MainVaranegarActivity _activity;
     //---------------------------------------------------------------------------------------------- CustomerSummaryMultipanViewHolder
@@ -95,7 +97,9 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
         cardViewCustomerStatus = itemView.findViewById(R.id.cardViewCustomerStatus);
         cardViewZarShop = itemView.findViewById(R.id.cardViewZarShop);
         imageViewZarShop = itemView.findViewById(R.id.imageViewZarShop);
-        ratting_bar = itemView.findViewById(R.id.ratting_bar);
+
+        simpleRatingBar =itemView.findViewById(R.id.simpleRatingBar); // initiate a rating bar
+
         this.backOfficeType = backOfficeType;
         this._activity=context;
     }
@@ -120,17 +124,31 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
         storeNameTextView.setText(customerModel.StoreName);
         codeNagesh_Str = customerModel.CodeNaghsh;
         if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)){
-            ratting_bar.setVisibility(View.VISIBLE);
-            ratting_bar.setRating(customerModel.DegreeStar);
-            ratting_bar.setOnClickListener(new View.OnClickListener() {
+//            ratting_bar.setVisibility(View.VISIBLE);
+////            ratting_bar.setRating(customerModel.DegreeStar);
+//            ratting_bar.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    StarDialog starDialog=new StarDialog();
+//                    starDialog.setValues(customerModel.DegreeStar,customerModel.CustomerName);
+//                    starDialog.show(_activity.getSupportFragmentManager(), "StarDialog");
+//                }
+//            });
+            simpleRatingBar.setVisibility(View.VISIBLE);
+            simpleRatingBar.setNumStars(3);
+
+            simpleRatingBar.setRating(customerModel.DegreeStar);
+            simpleRatingBar.setOnTouchListener(new View.OnTouchListener() {
                 @Override
-                public void onClick(View v) {
-                    StarDialog starDialog=new StarDialog();
-                    starDialog.setValues(customerModel.DegreeStar,customerModel.CustomerName);
-                    starDialog.show(_activity.getSupportFragmentManager(), "StarDialog");
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                        StarDialog starDialog = new StarDialog();
+                        starDialog.setValues(customerModel.DegreeStar, customerModel.CustomerName);
+                        starDialog.show(_activity.getSupportFragmentManager(), "StarDialog");
+                    }
+                    return  true;
                 }
             });
-
         }
         if (customerModel.IsZarShopCustomer != null &&
                 customerModel.IsZarShopCustomer.equalsIgnoreCase("y")) {
