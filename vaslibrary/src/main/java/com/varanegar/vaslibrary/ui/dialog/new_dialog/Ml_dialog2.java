@@ -93,7 +93,9 @@ public class Ml_dialog2 extends CuteDialogWithToolbar {
         if (productModel!=null &&productModel.size()==0) {
             text_title.setVisibility(View.GONE);
             centers_linear.setVisibility(View.GONE);
-
+        }
+        if(productModel!=null &&productModel.size()>0) {
+            text_title.setText("کالا خریداری شده مشتریان مشابه تعداد کالا:"+""+productModel.size());
         }
         if (_sumMoneyAndWeightReportModels!=null) {
             String money= HelperMethods.currencyToString(Currency.valueOf(Double.parseDouble(_sumMoneyAndWeightReportModels.Money_Sum)));

@@ -650,11 +650,11 @@ public class MapFragment extends ProgressFragment implements RemoteSignalREmitte
                                             , markersVisitor.marker.getPosition().latitude,
                                             markersVisitor.marker.getPosition().longitude);
 
-                                    Log.e("calculateDistance", "run:" + f);
+                                    Log.e("calculateDistance", "onGetPointrun:" + f);
                                     Date date1 = new Date();
                                     Long newTracking = date1.getTime();
-                                    Long oldtrackingn = markersVisitor.oldtrackingn + 10000;
-                                    if (f > 20 && newTracking > oldtrackingn) {
+                                    Long oldtrackingn = markersVisitor.oldtrackingn + 5000;
+                                    if (f > 5 && newTracking > oldtrackingn) {
                                         markersVisitor.oldtrackingn = date1.getTime();
                                         markersVisitor.marker.setPosition(customerPosition);
                                         Log.e("markersVisitors", "newTracking:" + newTracking
@@ -712,7 +712,7 @@ public class MapFragment extends ProgressFragment implements RemoteSignalREmitte
     @Override
     public void onGetPoint(String lat, String lng,String visitorId) {
 
-                Log.e("onGetPoint", "visitorId"+visitorId+"lat:"+lat+"lng:"+lng);
+                Log.e("onGetPoint", "visitorId:"+visitorId+"lat:"+lat+"lng:"+lng);
                 createMarkerLive(visitorId, lat, lng);
 
     }

@@ -35,9 +35,15 @@ public class EmphaticProductModel extends BaseModel {
     @Column
     public UUID CustomerActivityId;
     @Column
+    public String CustomerActivityUniqueIds;
+    @Column
     public UUID CustomerCategoryId;
     @Column
+    public String CustomerCategoryUniqueIds;
+    @Column
     public UUID CustomerLevelId;
+    @Column
+    public String CustomerLevelUniqueIds;
     @Column
     public UUID SaleOfficeId;
     @Column
@@ -54,6 +60,7 @@ public class EmphaticProductModel extends BaseModel {
     public BigDecimal PackageCount;
     @Column
     public UUID saleAreaUniqueId;
+
     public List<EmphaticProductCountModel> emphasisProductDetails;
     @Column
     public boolean IsEmphasis;

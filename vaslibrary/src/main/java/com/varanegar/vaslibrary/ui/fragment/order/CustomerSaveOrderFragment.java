@@ -2993,17 +2993,19 @@ public class CustomerSaveOrderFragment extends VisitFragment
             for (EmphaticProductCountModel emphatic : emphaticProductCountModels) {
                 for (CustomerCallOrderOrderViewModel item : orderAdapter.getItems()) {
                     emphaticProductModel = emphaticProductManager.getItemByRoleId(emphatic.RuleId);
-                    if (emphaticProductModel.CustomerCategoryId != null || emphaticProductModel.CustomerLevelId != null
-                            || emphaticProductModel.CustomerActivityId!=null) {
-                        emphaticProductCategory=emphaticProductManager.getCustomerCategory(customer.CustomerCategoryId);
-                        emphaticProductLevel=emphaticProductManager.getCustomerLevel(customer.CustomerLevelId);
-                        emphaticProductActivity=emphaticProductManager.getCustomerActivity(customer.CustomerActivityId);
+                    if (emphaticProductModel.CustomerCategoryUniqueIds != null && emphaticProductModel.CustomerLevelUniqueIds != null
+                            && emphaticProductModel.CustomerActivityUniqueIds!=null) {
 
-                        if(emphaticProductCategory !=null ||emphaticProductLevel !=null||emphaticProductActivity!=null){
+                        emphaticProductCategory=emphaticProductManager.getCustomerCategory(String.valueOf(customer.CustomerCategoryId));
+                        emphaticProductLevel=emphaticProductManager.getCustomerLevel(String.valueOf(customer.CustomerLevelId));
+                        emphaticProductActivity=emphaticProductManager.getCustomerActivity(String.valueOf(customer.CustomerActivityId));
+                        if(emphaticProductCategory !=null && emphaticProductLevel !=null && emphaticProductActivity!=null){
                             is=true;
+                        }else {
+                            is=false;
                         }
                     }else{
-                        is=true;
+                        is=false;
                     }
                     if(is){
                     if (emphatic.ProductId.equals(item.ProductId)) {

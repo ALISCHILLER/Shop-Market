@@ -70,7 +70,7 @@ public class Ml_dialog1 extends CuteDialogWithToolbar {
         view = inflater.inflate(R.layout.layout_ml_dialog1, container, false);
         TextView okTv = view.findViewById(R.id.ok_text_view);
         TextView txt_title = view.findViewById(R.id.txt_title);
-        txt_title.setText("کالا های خریداری نشده این فاکتور براساس فاکتورهای سه ماه قبلی "+" "+_customerName);
+        txt_title.setText("کالا های خریداری نشده این فاکتور براساس فاکتورهای سه ماه قبلی "+" "+_customerName+" "+"تعداد کالا:"+productModel.size());
         BaseRecyclerView centerRecycler = (BaseRecyclerView) view.findViewById(R.id.center_recycler_view);
         adapter = new BaseRecyclerAdapter<CustomerXMounthSaleReportModel>(getVaranegarActvity(), productModel) {
             @Override

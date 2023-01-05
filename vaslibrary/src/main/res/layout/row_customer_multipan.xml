@@ -102,6 +102,7 @@
                                 android:layout_height="wrap_content"
                                 android:numStars="3"
                                 android:visibility="gone"
+                                android:theme="@style/RatingBar"
                                 android:isIndicator="true"
                                 />
                         </LinearLayout>

@@ -106,6 +106,7 @@
                                 android:numStars="3"
                                 android:rating="3"
                                 android:visibility="gone"
+                                android:theme="@style/RatingBar"
                                 android:stepSize="1.0"
                                 android:isIndicator="true"
                                 />

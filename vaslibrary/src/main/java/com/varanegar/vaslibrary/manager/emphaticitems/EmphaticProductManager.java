@@ -136,16 +136,16 @@ public class EmphaticProductManager extends BaseManager<EmphaticProductModel> {
     public EmphaticProductModel getItemByRoleId(UUID roleId) {
         return getItem(new Query().from(EmphaticProduct.EmphaticProductTbl).whereAnd(Criteria.equals(EmphaticProduct.UniqueId, roleId)));
     }
-    public EmphaticProductModel getCustomerCategory(UUID roleId) {
-        return getItem(new Query().from(EmphaticProduct.EmphaticProductTbl).whereAnd(Criteria.equals(EmphaticProduct.CustomerCategoryId, roleId)));
+    public EmphaticProductModel     getCustomerCategory(String roleId) {
+        return getItem(new Query().from(EmphaticProduct.EmphaticProductTbl).whereAnd(Criteria.contains(EmphaticProduct.CustomerCategoryUniqueIds, roleId)));
     }
 
-    public EmphaticProductModel getCustomerLevel(UUID roleId) {
-        return getItem(new Query().from(EmphaticProduct.EmphaticProductTbl).whereAnd(Criteria.equals(EmphaticProduct.CustomerLevelId, roleId)));
+    public EmphaticProductModel getCustomerLevel(String roleId) {
+        return getItem(new Query().from(EmphaticProduct.EmphaticProductTbl).whereAnd(Criteria.contains(EmphaticProduct.CustomerLevelUniqueIds, roleId)));
     }
 
-    public EmphaticProductModel getCustomerActivity(UUID roleId) {
-        return getItem(new Query().from(EmphaticProduct.EmphaticProductTbl).whereAnd(Criteria.equals(EmphaticProduct.CustomerActivityId, roleId)));
+    public EmphaticProductModel getCustomerActivity(String roleId) {
+        return getItem(new Query().from(EmphaticProduct.EmphaticProductTbl).whereAnd(Criteria.contains(EmphaticProduct.CustomerActivityUniqueIds, roleId)));
     }
 
 }
