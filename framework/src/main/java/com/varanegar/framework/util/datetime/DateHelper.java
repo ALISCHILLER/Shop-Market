@@ -109,6 +109,13 @@ public class DateHelper {
         int seconds = m % 60;
         return toString(hours) + ":" + toString(minutes) + ":" + toString(seconds);
     }
+    public static String getTimeHMString(long timeOffset) {
+        int hours = (int) (timeOffset / 3600);
+        int m = (int) (timeOffset % 3600);
+        int minutes = m / 60;
+        int seconds = m % 60;
+        return toString(hours) + ":" + toString(minutes);
+    }
 
     public interface OnDateSelected {
         void run(Calendar calendar);

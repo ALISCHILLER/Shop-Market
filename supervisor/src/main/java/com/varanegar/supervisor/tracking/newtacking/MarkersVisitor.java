@@ -7,6 +7,7 @@ import java.util.UUID;
 
 public class MarkersVisitor {
     public String VisitorId;
+    public String nameVisitor;
     public Marker marker;
     public Long oldtrackingn;
 }

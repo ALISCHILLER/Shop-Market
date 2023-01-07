@@ -94,11 +94,14 @@ import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.WifiOnLocation
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import okhttp3.Request;
@@ -644,8 +647,8 @@ public class MapFragment extends ProgressFragment implements RemoteSignalREmitte
                         Log.e("onGetPointMarkerLive", "lat:"+lat+"lng:"+lng);
 
                         for (int i= 0;i < markersVisitors.size(); i++) {
-                            MarkersVisitor markersVisitor=markersVisitors.get(i);
-                            if (markersVisitor.VisitorId.equals(visitorId)) {
+                            if (markersVisitors.get(i).VisitorId.equals(visitorId)) {
+                                MarkersVisitor markersVisitor=markersVisitors.get(i);
                                     float f = calculateDistance(customerPosition.latitude, customerPosition.longitude
                                             , markersVisitor.marker.getPosition().latitude,
                                             markersVisitor.marker.getPosition().longitude);
@@ -657,6 +660,9 @@ public class MapFragment extends ProgressFragment implements RemoteSignalREmitte
                                     if (f > 5 && newTracking > oldtrackingn) {
                                         markersVisitor.oldtrackingn = date1.getTime();
                                         markersVisitor.marker.setPosition(customerPosition);
+                                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
+                                        String time = simpleDateFormat.format(date1);
+                                        markersVisitor.marker.setTitle(markersVisitor.nameVisitor+" "+time);
                                         Log.e("markersVisitors", "newTracking:" + newTracking
                                                 + "oldtracking:" + oldtracking);
                                         markersVisitors.set(i, markersVisitor);
@@ -671,6 +677,8 @@ public class MapFragment extends ProgressFragment implements RemoteSignalREmitte
                 },5000);
 
     }
+
+
     private void showError(String str) {
         Context context = getContext();
         if (context != null) {
@@ -753,6 +761,7 @@ public class MapFragment extends ProgressFragment implements RemoteSignalREmitte
             marker.setIcon(bitmap);
             markersVisitor.VisitorId= String.valueOf(visitorModel.UniqueId);
             markersVisitor.marker=marker;
+            markersVisitor.nameVisitor=visitorModel.Name;
             markersVisitor.oldtrackingn= Long.valueOf(0);
             markersVisitors.add(markersVisitor);
         }
@@ -766,4 +775,10 @@ public class MapFragment extends ProgressFragment implements RemoteSignalREmitte
         }
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (signalRListener!=null)
+            signalRListener.stopConnection();
+    }
 }
