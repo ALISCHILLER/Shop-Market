@@ -229,17 +229,6 @@ public class ConfirmAction extends CheckPathAction {
                     setRunning(false);
                 }
             });
-            dialog.setNeutralButton(R.string.comparison_product, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setRunning(false);
-                    Product_Comparison_Fragment product_comparison_fragment =new
-                            Product_Comparison_Fragment();
-
-                    product_comparison_fragment.setArguments(getSelectedId());
-                    getActivity().pushFragment(product_comparison_fragment);
-                }
-            });
             dialog.show();
 
         } else {

@@ -257,6 +257,7 @@ public class ProductOrderViewHolder extends BaseViewHolder<ProductOrderViewModel
                 }else
                     productNameTextView.setText(Html.fromHtml(productName + " ( " + activity.getString(R.string.NOemphatic_count) + HelperMethods.bigDecimalToString(productOrderViewModel.EmphaticProductCount) + " )"));
             }
+
                 if (productOrderViewModel.EmphaticType == EmphasisType.Deterrent) {
                 productNameTextView.setTextColor(HelperMethods.getColor(getContext(), R.color.red));
             } else if (productOrderViewModel.EmphaticType == EmphasisType.Warning) {
