@@ -933,7 +933,32 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                 }
             });
 
+            if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)){
+                tasks.add(new SimpleTourAsyncTask() {
+                    @Override
+                    public void run(UpdateCall call) {
+                        CustomerXMounthSaleReportManager xMounthSaleReportManager =
+                                new CustomerXMounthSaleReportManager(getContext());
 
+                        xMounthSaleReportManager.sync(call);
+                    }
+
+                    @Override
+                    public String name() {
+                        return "Customer";
+                    }
+
+                    @Override
+                    public int group() {
+                        return R.string.customer_info;
+                    }
+
+                    @Override
+                    public int queueId() {
+                        return 2;
+                    }
+                });
+            }
             tasks.add(new TourAsyncTask() {
                 CustomerNotAllowProductManager notAllowProductManager = new
                         CustomerNotAllowProductManager(getContext());

@@ -8,7 +8,7 @@ import java.util.UUID;
 public class CustomerXMounthSaleReportModel extends BaseModel {
 
     @Column
-    public UUID customerUniqueId;
+    public String customerCode;
     @Column
     public String ProductName;
     @Column

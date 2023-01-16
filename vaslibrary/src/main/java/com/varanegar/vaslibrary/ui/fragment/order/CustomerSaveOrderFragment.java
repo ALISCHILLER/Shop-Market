@@ -1662,7 +1662,8 @@ public class CustomerSaveOrderFragment extends VisitFragment
                     return;
                 }
             }
-            if (VaranegarApplication.is(VaranegarApplication.AppId.Contractor) && otherDiscount.compareTo(orderAmount.TotalAmount) > 0) {
+            if (VaranegarApplication.is(VaranegarApplication.AppId.Contractor) &&
+                    otherDiscount.compareTo(orderAmount.TotalAmount) > 0) {
                 CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(getContext());
                 cuteMessageDialog.setIcon(Icon.Error);
                 cuteMessageDialog.setTitle(R.string.error);
@@ -1670,51 +1671,51 @@ public class CustomerSaveOrderFragment extends VisitFragment
                 cuteMessageDialog.setNegativeButton(R.string.ok, null);
                 cuteMessageDialog.show();
             } else {
-                if (orderAdapter.size() > 0) {
-                    CustomerXMounthSaleReportManager customerXMounthSaleReportManager =
-                            new CustomerXMounthSaleReportManager(getContext());
-                    List<CustomerXMounthSaleReportModel> xMounthSaleReportModelss=new ArrayList<>();
-                    xMounthSaleReportModelss.clear();
-                    List<CustomerXMounthSaleReportModel> xMounthSaleReportModels =
-                            customerXMounthSaleReportManager.getAll(customer.UniqueId);
-                    xMounthSaleReportModelss = xMounthSaleReportModels;
-                    if (xMounthSaleReportModels.size() > 0) {
-
-                        for (CustomerCallOrderOrderViewModel item : orderAdapter.getItems()) {
-                            for (int i=0;i<xMounthSaleReportModels.size();i++) {
-                                if (item.ProductCode.equals(xMounthSaleReportModels.get(i).ProductCode)) {
-                                    xMounthSaleReportModelss.remove(xMounthSaleReportModels.get(i));
-                                }
-                            }
-                        }
-
-                        if (xMounthSaleReportModelss.size() > 0) {
-                            Ml_dialog1 ml_dialog1 = new Ml_dialog1();
-
-                            ml_dialog1.setValues(xMounthSaleReportModelss,customer.CustomerName);
-                            ml_dialog1.show(getChildFragmentManager(), "Ml_dialog1");
-                            ml_dialog1.setOnResult(new InsertPinDialog.OnResult() {
-                                @Override
-                                public void done() {
-                                    saveOrder();
-                                }
-
-                                @Override
-                                public void failed(String error) {
-
-                                }
-                            });
-                        } else {
-                            saveOrder();
-                        }
-
-                    } else {
-                        saveOrder();
-                    }
-                }else {
-                    saveOrder();
-                }
-
+//                if (orderAdapter.size() > 0) {
+//                    CustomerXMounthSaleReportManager customerXMounthSaleReportManager =
+//                            new CustomerXMounthSaleReportManager(getContext());
+//                    List<CustomerXMounthSaleReportModel> xMounthSaleReportModelss=new ArrayList<>();
+//                    xMounthSaleReportModelss.clear();
+//                    List<CustomerXMounthSaleReportModel> xMounthSaleReportModels =
+//                            customerXMounthSaleReportManager.getAll(customer.CustomerCode);
+//                    xMounthSaleReportModelss = xMounthSaleReportModels;
+//                    if (xMounthSaleReportModels.size() > 0) {
+//
+//                        for (CustomerCallOrderOrderViewModel item : orderAdapter.getItems()) {
+//                            for (int i=0;i<xMounthSaleReportModels.size();i++) {
+//                                if (item.ProductCode.equals(xMounthSaleReportModels.get(i).ProductCode)) {
+//                                    xMounthSaleReportModelss.remove(xMounthSaleReportModels.get(i));
+//                                }
+//                            }
+//                        }
+//
+//                        if (xMounthSaleReportModelss.size() > 0) {
+//                            Ml_dialog1 ml_dialog1 = new Ml_dialog1();
+//
+//                            ml_dialog1.setValues(xMounthSaleReportModelss,customer.CustomerName);
+//                            ml_dialog1.show(getChildFragmentManager(), "Ml_dialog1");
+//                            ml_dialog1.setOnResult(new InsertPinDialog.OnResult() {
+//                                @Override
+//                                public void done() {
+//                                    saveOrder();
+//                                }
+//
+//                                @Override
+//                                public void failed(String error) {
+//
+//                                }
+//                            });
+//                        } else {
+//                            saveOrder();
+//                        }
+//
+//                    } else {
+//                        saveOrder();
+//                    }
+//                }else {
+//                    saveOrder();
+//                }
+                saveOrder();
             }
         });
 
@@ -2993,7 +2994,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
             for (EmphaticProductCountModel emphatic : emphaticProductCountModels) {
                 for (CustomerCallOrderOrderViewModel item : orderAdapter.getItems()) {
                     emphaticProductModel = emphaticProductManager.getItemByRoleId(emphatic.RuleId);
-                    if (emphaticProductModel.CustomerCategoryUniqueIds != null && emphaticProductModel.CustomerLevelUniqueIds != null
+                    if (emphaticProductModel !=null && emphaticProductModel.CustomerCategoryUniqueIds != null && emphaticProductModel.CustomerLevelUniqueIds != null
                             && emphaticProductModel.CustomerActivityUniqueIds!=null) {
 
                         emphaticProductCategory=emphaticProductManager.getCustomerCategory(String.valueOf(customer.CustomerCategoryId));

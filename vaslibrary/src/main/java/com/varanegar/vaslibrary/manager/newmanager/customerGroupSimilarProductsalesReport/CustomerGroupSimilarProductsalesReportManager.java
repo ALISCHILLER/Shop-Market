@@ -23,30 +23,16 @@ public class CustomerGroupSimilarProductsalesReportManager extends BaseManager<C
     public CustomerGroupSimilarProductsalesReportManager(@NonNull Context context) {
         super(context, new CustomerGroupSimilarProductsalesReportModelRepository());
     }
-    public List<CustomerGroupSimilarProductsalesReportModel> getAll(UUID customerUniqueId){
+    public List<CustomerGroupSimilarProductsalesReportModel> getAll(String customerUniqueId){
         Query query = new Query();
         query.from(From.table(CustomerGroupSimilarProductsalesReport.CustomerGroupSimilarProductsalesReportTbl))
-                .whereAnd(Criteria.contains(CustomerGroupSimilarProductsalesReport.customerUniqueId,
+                .whereAnd(Criteria.contains(CustomerGroupSimilarProductsalesReport.customerCode,
                         String.valueOf(customerUniqueId)));
         return getItems(query);
     }
-    public void save(UUID customerUniqueId, List<ProductModel> result){
-
-        List<CustomerGroupSimilarProductsalesReportModel>  productsalesReportModels=new ArrayList<>();
-        for (ProductModel productModel:
-                result) {
-            CustomerGroupSimilarProductsalesReportModel customerXMounthSaleReportModel=
-                    new CustomerGroupSimilarProductsalesReportModel();
-            customerXMounthSaleReportModel.UniqueId= productModel.UniqueId;
-            customerXMounthSaleReportModel.ProductCode=productModel.ProductCode;
-            customerXMounthSaleReportModel.ProductName=productModel.ProductName;
-            customerXMounthSaleReportModel.customerUniqueId=customerUniqueId;
-            productsalesReportModels.add(customerXMounthSaleReportModel);
-        }
-
-
+    public void save(UUID customerUniqueId, List<CustomerGroupSimilarProductsalesReportModel> result){
         try {
-            insertOrUpdate(productsalesReportModels);
+            insertOrUpdate(result);
         } catch (ValidationException e) {
             e.printStackTrace();
         } catch (DbException e) {

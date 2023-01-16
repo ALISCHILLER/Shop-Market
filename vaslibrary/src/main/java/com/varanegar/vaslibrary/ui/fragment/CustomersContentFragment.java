@@ -14,7 +14,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,14 +26,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarActivity;
 import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.base.VaranegarFragment;
-import com.varanegar.framework.network.listeners.ApiError;
-import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.util.HelperMethods;
 import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.util.component.PairedItems;
@@ -67,6 +62,7 @@ import com.varanegar.vaslibrary.action.SaveOrderAction;
 import com.varanegar.vaslibrary.action.SetCustomerLocationAction;
 import com.varanegar.vaslibrary.action.VasActionsAdapter;
 import com.varanegar.vaslibrary.action.newAcation.CustomerUpdateAction;
+import com.varanegar.vaslibrary.action.newAcation.GroupSimilarProductAction;
 import com.varanegar.vaslibrary.action.newAcation.VoiceAcation;
 import com.varanegar.vaslibrary.manager.CustomerPathViewManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerActivityManager;
@@ -103,16 +99,13 @@ import com.varanegar.vaslibrary.model.customercall.CustomerCallModel;
 import com.varanegar.vaslibrary.model.customercall.TaskPriorityModel;
 import com.varanegar.vaslibrary.model.customeroldInvoice.CustomerOldInvoiceHeaderModel;
 import com.varanegar.vaslibrary.model.newmodel.customergrouplastsalesreport.CustomerGroupLastSalesReportModel;
-import com.varanegar.vaslibrary.model.product.ProductModel;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.model.tour.TourModel;
 import com.varanegar.vaslibrary.ui.dialog.InsertPinDialog;
-import com.varanegar.vaslibrary.ui.dialog.new_dialog.Ml_dialog1;
 import com.varanegar.vaslibrary.ui.dialog.new_dialog.Ml_dialog2;
+import com.varanegar.vaslibrary.ui.dialog.new_dialog.Ml_dialog3;
 import com.varanegar.vaslibrary.ui.drawer.CustomerReportsDrawerAdapter;
 import com.varanegar.vaslibrary.ui.fragment.new_fragment.edit_new_zar.Edit_New_Customer_ZarFragment;
-import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
-import com.varanegar.vaslibrary.webapi.apiNew.ApiNew;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -125,8 +118,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Request;
-import retrofit2.Call;
 import timber.log.Timber;
 import varanegar.com.discountcalculatorlib.utility.JalaliCalendar;
 
@@ -314,6 +305,7 @@ public class CustomersContentFragment extends VaranegarFragment {
                     "geo:%.8f,%.8f", customer.Latitude, customer.Longitude)));
             startActivity(Intent.createChooser(intent, "یک برنامه مسیریاب انتخاب کنید"));
         });
+
 
 
 
@@ -582,15 +574,27 @@ public class CustomersContentFragment extends VaranegarFragment {
         actions.add(vpnAction);
 */
 
-        VoiceAcation voiceAcation=new VoiceAcation(
-                getVaranegarActvity(),
-                actionsAdapter,
-                getSelectedId());
-        voiceAcation.setActionCallBack(() -> {
-            voiceIntent();
-                });
-        actions.add(voiceAcation);
+        if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+            VoiceAcation voiceAcation = new VoiceAcation(
+                    getVaranegarActvity(),
+                    actionsAdapter,
+                    getSelectedId());
+            voiceAcation.setActionCallBack(() -> {
+                voiceIntent();
+            });
+            actions.add(voiceAcation);
 
+//            GroupSimilarProductAction similarProductAction = new GroupSimilarProductAction(
+//                    getVaranegarActvity(),
+//                    actionsAdapter,
+//                    getSelectedId());
+//            similarProductAction.setActionCallBack(() -> {
+//                Ml_dialog3();
+//            });
+//            actions.add(similarProductAction);
+
+
+        }
         CustomerUpdateAction customerUpdateAction = new CustomerUpdateAction(
                 getVaranegarActvity(),
                 actionsAdapter,
@@ -1003,9 +1007,7 @@ public class CustomersContentFragment extends VaranegarFragment {
                                     }
 
                                 }
-                                if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
-                                    checkSale();
-                                }
+
                                 ((PairedItems) view
                                         .findViewById(R.id.customer_total_order_paired_item))
                                         .setValue(HelperMethods.currencyToString(finalTotal));
@@ -1023,6 +1025,10 @@ public class CustomersContentFragment extends VaranegarFragment {
                                 else
                                     view.findViewById(R.id.other_information_btn)
                                             .setVisibility(View.GONE);
+                            }
+                            if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+                                Ml_dialog2();
+                                saveTime("true");
                             }
                         });
                     }
@@ -1191,6 +1197,21 @@ public class CustomersContentFragment extends VaranegarFragment {
     }
 
 
+
+
+    private void voiceIntent(){
+        String language =  "fa-IR";
+        Intent intent=new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,language);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, language);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, language);
+        intent.putExtra(RecognizerIntent.EXTRA_ONLY_RETURN_LANGUAGE_PREFERENCE, language);
+        try {
+            startActivityForResult(intent, 3000);
+        } catch (Exception e){
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -1231,6 +1252,49 @@ public class CustomersContentFragment extends VaranegarFragment {
                     goToAction(new BaseReturnAction(  getVaranegarActvity(),
                             getActionsAdapter(),
                             getSelectedId()));
+                }else if (txt.contains("عکس مشتری")){
+                    goToAction(new CameraAction(  getVaranegarActvity(),
+                            getActionsAdapter(),
+                            getSelectedId()));
+                }else if (txt.contains("پرسشنامه")){
+                    goToAction(new CustomerQuestionnaireAction(  getVaranegarActvity(),
+                            getActionsAdapter(),
+                            getSelectedId()));
+                }else if (txt.contains("درخواست فروش")){
+                    goToAction(new SaveOrderAction(  getVaranegarActvity(),
+                            getActionsAdapter(),
+                            getSelectedId(),customer.CustomerLevelId));
+                }else if (txt.contains("عدم سفارش")){
+                    goToAction(new NonOrderAction(  getVaranegarActvity(),
+                            getActionsAdapter(),
+                            getSelectedId()));
+                }else if (txt.contains("تایید عملیات")){
+                    ConfirmAction confirmAction=new ConfirmAction(
+                            getVaranegarActvity(),
+                            actionsAdapter,
+                            getSelectedId());
+                    goToAction(confirmAction);
+                    confirmAction.setActionCallBack(() -> {
+                        updateItem();
+                        updateCustomer();
+                    });
+                }else if (txt.contains("حذف عملیات")){
+                    DeleteAction deleteAction=new DeleteAction(getVaranegarActvity(),
+                            getActionsAdapter(),
+                            getSelectedId());
+                    goToAction(deleteAction);
+                    deleteAction.setActionCallBack(() -> {
+                        updateItem();
+                        updateCustomer();
+                    });
+                }else if (txt.contains("ارسال عملیات مشتری")){
+                    goToAction(new SendOperationAction(  getVaranegarActvity(),
+                            getActionsAdapter(),
+                            getSelectedId()));
+                }else if (txt.contains("بروزرسانی مشتریان روز")){
+                    goToAction(new CustomerUpdateAction(  getVaranegarActvity(),
+                            getActionsAdapter(),
+                            getSelectedId()));
                 }
             }
         }
@@ -1259,21 +1323,6 @@ public class CustomersContentFragment extends VaranegarFragment {
 
         }
     }
-
-    private void voiceIntent(){
-        String language =  "fa-IR";
-        Intent intent=new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,language);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, language);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, language);
-        intent.putExtra(RecognizerIntent.EXTRA_ONLY_RETURN_LANGUAGE_PREFERENCE, language);
-        try {
-            startActivityForResult(intent, 3000);
-        } catch (Exception e){
-        }
-    }
-
-
     private void showProgressDialog() {
         discountProgressDialog = new ProgressDialog(getActivity());
         discountProgressDialog.setMessage(getString(R.string.updating_customer_data));
@@ -1303,16 +1352,17 @@ public class CustomersContentFragment extends VaranegarFragment {
         }
     }
     private void Ml_dialog2(){
-        List<CustomerGroupSimilarProductsalesReportModel> xMounthSaleReportModels=
-                new CustomerGroupSimilarProductsalesReportManager(getContext()).getAll(customer.UniqueId);
+        List<CustomerXMounthSaleReportModel> xMounthSaleReportModels=
+                new CustomerXMounthSaleReportManager(getContext()).getAll(customer.CustomerCode);
 
         CustomerSumMoneyAndWeightReportModel sumMoneyAndWeightReportModels=
-                new CustomerSumMoneyAndWeightReportManager(getContext()).getAll(customer.UniqueId);
+                new CustomerSumMoneyAndWeightReportManager(getContext()).getAll(customer.CustomerCode);
+
         if (xMounthSaleReportModels.size()>0||sumMoneyAndWeightReportModels!=null||numberOfDays>15) {
             Ml_dialog2 ml_dialog2 = new Ml_dialog2();
             ml_dialog2.setValues(xMounthSaleReportModels, sumMoneyAndWeightReportModels,
                     customer.CustomerName, dataSaleOfDays, numberOfDays);
-            ml_dialog2.show(getChildFragmentManager(), "Ml_dialog1");
+            ml_dialog2.show(getChildFragmentManager(), "Ml_dialog2");
             ml_dialog2.setOnResult(new InsertPinDialog.OnResult() {
                 @Override
                 public void done() {
@@ -1327,45 +1377,43 @@ public class CustomersContentFragment extends VaranegarFragment {
         }
     }
 
+    private void Ml_dialog3(){
+        List<CustomerGroupSimilarProductsalesReportModel> customerGroupSimilar=new
+                CustomerGroupSimilarProductsalesReportManager(getContext()).getAll(customer.CustomerCode);
+        if (customerGroupSimilar.size() > 0) {
+            Ml_dialog3 ml_dialog3 = new Ml_dialog3();
+            ml_dialog3.setValues(customerGroupSimilar, customer.CustomerName);
+            ml_dialog3.show(getChildFragmentManager(), "Ml_dialog3");
+            ml_dialog3.setOnResult(new InsertPinDialog.OnResult() {
+                @Override
+                public void done() {
+
+                }
+
+                @Override
+                public void failed(String error) {
+
+                }
+            });
+        }else {
+            final MainVaranegarActivity activity = getVaranegarActvity();
+            activity.showSnackBar(
+                    R.string.null_data,
+                    MainVaranegarActivity.Duration.Short);
+        }
+    }
     public void numberOfDays(){
         if (numberOfDays > 0 && numberOfDays > 15) {
             showErrorDialog(" " + customer.CustomerName + " "
                     + "بیشتر از" + numberOfDays + " روز خرید نکرده است تاریخ آخرین خرید " + dataSaleOfDays);
         }
     }
-    private void checkSale(){
-        CustomerXMounthSaleReportManager customerXMounthSaleReportManager=
-                new CustomerXMounthSaleReportManager(getContext());
-        List<CustomerXMounthSaleReportModel> xMounthSaleReportModels=
-                customerXMounthSaleReportManager.getAll(customer.UniqueId);
 
-        List<CustomerGroupSimilarProductsalesReportModel> productsalesReportModels=
-                new CustomerGroupSimilarProductsalesReportManager(getContext()).getAll(customer.UniqueId);
 
-        CustomerSumMoneyAndWeightReportModel sumMoneyAndWeightReportModels=
-                new CustomerSumMoneyAndWeightReportManager(getContext()).getAll(customer.UniqueId);
 
-        if (xMounthSaleReportModels.size()==0&&
-                productsalesReportModels.size()==0&&
-                sumMoneyAndWeightReportModels==null) {
-            showProgressDialog();
-            DataCustomerContentManager.getCustomerXMounthSaleRepor(getContext() ,customer, new DataCustomerContentManager.Callback() {
-                @Override
-                public void onSuccess() {
-                    dismissProgressDialog();
-                    Ml_dialog2();
-                }
-
-                @Override
-                public void onError(String error) {
-                    dismissProgressDialog();
-                    showErrorDialog(error);
-                }
-            });
-
-        }
-//        else {
-//            Ml_dialog2();
-//        }
+    protected void saveTime(String sessionId) {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("VdmClient", Context.MODE_PRIVATE);
+        sharedPreferences.edit().putString(customer.CustomerCode, sessionId).apply();
     }
+
 }

@@ -2,16 +2,17 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/centers_linear"
-        android:layout_width="match_parent"
-        android:layout_height="320dp"
+        android:layout_width="411dp"
+        android:layout_height="220dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
+        app:layout_constraintBottom_toTopOf="@+id/centers_linear1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
@@ -21,10 +22,135 @@
             android:background="?attr/colorPrimaryLight"
             android:gravity="center"
             android:padding="@dimen/padding_default"
-            android:text="کالا های خرید نشده براساس فاکتورهای سه ماه قبلی " />
+            android:text="فاکتور " />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+         >
+
+            <TextView
+                android:layout_width="205dp"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorPrimaryLight"
+                android:gravity="right"
+                android:textAlignment="center"
+                android:padding="@dimen/padding_default"
+                android:text="نام کالا " />
+
+            <TextView
+                android:layout_width="205dp"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorPrimaryLight"
+                android:gravity="left"
+                android:textAlignment="center"
+                android:padding="@dimen/padding_default"
+                android:text="تعداد" />
+
+
+        </LinearLayout>
 
         <com.varanegar.framework.util.recycler.BaseRecyclerView
             android:id="@+id/center_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/centers_linear1"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/centers_linear2"
+        app:layout_constraintTop_toBottomOf="@+id/centers_linear">
+
+        <TextView
+            android:id="@+id/txt_title1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimaryLight"
+            android:gravity="center"
+            android:padding="@dimen/padding_default"
+            android:text="مرجوعی" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            >
+
+            <TextView
+                android:layout_width="205dp"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorPrimaryLight"
+                android:gravity="right"
+                android:textAlignment="center"
+                android:padding="@dimen/padding_default"
+                android:text="نام کالا " />
+
+            <TextView
+                android:layout_width="205dp"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorPrimaryLight"
+                android:gravity="left"
+                android:textAlignment="center"
+                android:padding="@dimen/padding_default"
+                android:text="تعداد" />
+
+
+        </LinearLayout>
+        <com.varanegar.framework.util.recycler.BaseRecyclerView
+            android:id="@+id/center_recycler_view1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/centers_linear2"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
+        app:layout_constraintTop_toBottomOf="@+id/centers_linear1">
+
+        <TextView
+            android:id="@+id/txt_title2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimaryLight"
+            android:gravity="center"
+            android:padding="@dimen/padding_default"
+            android:text="مرجوعی" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            >
+
+            <TextView
+                android:layout_width="205dp"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorPrimaryLight"
+                android:gravity="right"
+                android:textAlignment="center"
+                android:padding="@dimen/padding_default"
+                android:text="نام کالا " />
+
+            <TextView
+                android:layout_width="205dp"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorPrimaryLight"
+                android:gravity="left"
+                android:textAlignment="center"
+                android:padding="@dimen/padding_default"
+                android:text="تعداد" />
+
+
+        </LinearLayout>
+        <com.varanegar.framework.util.recycler.BaseRecyclerView
+            android:id="@+id/center_recycler_view2"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
@@ -36,7 +162,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="15dp"
         android:layout_weight="0.1"
-        app:layout_constraintTop_toBottomOf="@+id/centers_linear">
+        app:layout_constraintTop_toBottomOf="@+id/centers_linear2">
 
         <TextView
             android:id="@+id/ok_text_view"

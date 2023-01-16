@@ -5,20 +5,22 @@ import com.varanegar.java.util.Currency;
 import com.varanegar.processor.annotations.Column;
 import com.varanegar.processor.annotations.Table;
 
-import java.util.Date;
-import java.util.UUID;
-
 /**
  * Created by A.Soleymani on 11/05/2022.
  */
 
-public class CheckCustomerCreditModel {
 
+@Table
+public class CheckCustomerCreditModel extends BaseModel {
+
+    @Column
     public  String customerBackOfficeCode;
-
+    @Column
     public Currency CustomerCreditLimit;
-
+    @Column
     public Currency customerUsedCredit;
-
+    @Column
     public Currency customerRemainCredit;
+    @Column
+    public String customerCode;
 }

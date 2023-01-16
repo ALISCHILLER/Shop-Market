@@ -217,8 +217,13 @@ public class ReportsFragment extends IMainPageFragment {
                                     }
 
                                     productModelRepository.deleteAll();
-                                    productModelRepository.
-                                            insert(list);
+                                    try {
+                                        productModelRepository.
+                                                insert(list);
+                                    }catch (Exception e){
+
+                                    }
+
                                 }else {
                                     productModelRepository.deleteAll();
                                 }
@@ -236,8 +241,12 @@ public class ReportsFragment extends IMainPageFragment {
                                     }
 
                                     productModelRepository.deleteAll();
+                                    try {
                                     productModelRepository.
                                             insert(list);
+                                }catch (Exception e){
+
+                                }
                                 }else {
                                     productModelRepository.deleteAll();
                                 }
@@ -258,8 +267,13 @@ public class ReportsFragment extends IMainPageFragment {
                                     }
 
                                     noSaleModelRepository.deleteAll();
-                                    noSaleModelRepository.
+
+                                    try {
+                                        noSaleModelRepository.
                                             insert(list);
+                                    }catch (Exception e){
+
+                                }
                                 }else {
                                     noSaleModelRepository.deleteAll();
                                 }

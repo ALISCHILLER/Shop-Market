@@ -350,6 +350,7 @@
     <string name="location_is_not_available">در حال حاضر دسترسی به مکان شما امکان پذیر نیست</string>
     <string name="you_are_here">شما اینجا هستید</string>
     <string name="please_turn_on_location">سیستم موقعیت یاب خاموش است</string>
+    <string name="null_data">داده ای یافت نشد</string>
     <string name="your_current_address">آدرس کنونی شما</string>
     <string name="show_all_customers">نمایش همه مشتری ها</string>
     <string name="show_today_customers">نمایش مشتریان امروز</string>

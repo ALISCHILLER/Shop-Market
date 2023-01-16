@@ -781,4 +781,11 @@ public class MapFragment extends ProgressFragment implements RemoteSignalREmitte
         if (signalRListener!=null)
             signalRListener.stopConnection();
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (signalRListener!=null)
+            signalRListener.stopConnection();
+    }
 }

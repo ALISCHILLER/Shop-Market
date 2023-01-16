@@ -13,6 +13,6 @@ public class CustomerSumMoneyAndWeightReportModel extends BaseModel {
     @Column
     public String Weight_Sum ;
     @Column
-    public String CustomerId ;
+    public String CustomerCode ;
 
 }

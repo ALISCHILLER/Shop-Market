@@ -131,6 +131,32 @@
 
 
         <LinearLayout
+            android:id="@+id/download_apk_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_small"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/download_apk_view"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/btn_background"
+                android:padding="@dimen/padding_default"
+                android:src="@drawable/ic_stat_name" />
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Small"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/download_apk" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/backup_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

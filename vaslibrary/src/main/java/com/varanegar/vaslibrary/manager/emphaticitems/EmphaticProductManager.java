@@ -54,6 +54,11 @@ public class EmphaticProductManager extends BaseManager<EmphaticProductModel> {
     }
 
     private void save(final UpdateCall updateCall) {
+        try {
+            deleteAll();
+        } catch (DbException e) {
+            updateCall.failure(getContext().getString(R.string.failed_to_delete_old_emphatic_items));
+        }
         EmphaticProductApi emphaticProductApi = new EmphaticProductApi(getContext());
         emphaticProductApi.runWebRequest(emphaticProductApi.getAll(), new WebCallBack<List<EmphaticProductModel>>() {
             @Override

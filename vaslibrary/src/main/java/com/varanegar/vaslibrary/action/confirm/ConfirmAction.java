@@ -47,6 +47,7 @@ import com.varanegar.vaslibrary.manager.locationmanager.LogType;
 import com.varanegar.vaslibrary.manager.locationmanager.OnSaveLocation;
 import com.varanegar.vaslibrary.manager.locationmanager.TrackingLicense;
 import com.varanegar.vaslibrary.manager.locationmanager.TrackingLogManager;
+import com.varanegar.vaslibrary.manager.newmanager.checkCustomerCreditsManager.CheckCustomerCreditManager;
 import com.varanegar.vaslibrary.manager.paymentmanager.PaymentManager;
 import com.varanegar.vaslibrary.manager.paymentmanager.exceptions.ControlPaymentException;
 import com.varanegar.vaslibrary.manager.paymentmanager.exceptions.ThirdPartyControlPaymentChangedException;
@@ -252,56 +253,29 @@ public class ConfirmAction extends CheckPathAction {
 
         List<CustomerCallOrderPreviewModel> callOrderPreviewModels =new
                 CustomerCallOrderPreviewManager(getActivity()).getCustomerCallOrders(getSelectedId());
-        if (callOrderPreviewModels != null &&
+        CheckCustomerCreditModel CustomerCreditLimit=
+                new CheckCustomerCreditManager(getActivity()).getItem(getCustomer().CustomerCode);
+        if (CustomerCreditLimit !=null&&
+                CustomerCreditLimit.CustomerCreditLimit !=null&&
+                callOrderPreviewModels != null &&
                 callOrderPreviewModels.size() > 0 &&
                 callOrderPreviewModels.get(0).TotalPrice!=null) {
-            CustomerModel customerModel=new CustomerManager(getActivity()).getItem(getSelectedId());
-            List<String> customerCode= Collections.singletonList(customerModel.CustomerCode);
-            //  List<String> customerCode= Collections.singletonList("0014032092");
-            ApiNew apiNew =new ApiNew(getActivity());
-            Call<List<CheckCustomerCreditModel>> call= apiNew.CheckCustomerCredits(customerCode);
-            apiNew.runWebRequest(call, new WebCallBack<List<CheckCustomerCreditModel>>() {
-                @Override
-                protected void onFinish() {
 
-                }
-
-                @Override
-                protected void onSuccess(List<CheckCustomerCreditModel> result, Request request) {
-
-                    if (result.size() > 0) {
-                        Currency total = Currency.ZERO;
-                        if (callOrderPreviewModels.get(0).TotalPrice != null) {
-                            total = total.add(callOrderPreviewModels.get(0).TotalPrice);
-                            final Currency finalTotal = total;
-                            int totalePrice = HelperMethods.currencyToInt(finalTotal);
-                            int customerCreditLimit = HelperMethods
-                                    .currencyToInt(result.get(0).CustomerCreditLimit);
-                            if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)){
-                                if (totalePrice > customerCreditLimit) {
-                                    showErrorMessage(R.string.customerCredit);
-                                }
-                            }
-                        }
+            Currency total = Currency.ZERO;
+            if (callOrderPreviewModels.get(0).TotalPrice != null) {
+                total = total.add(callOrderPreviewModels.get(0).TotalPrice);
+                final Currency finalTotal = total;
+                int totalePrice = HelperMethods.currencyToInt(finalTotal);
+                int customerCreditLimit = HelperMethods
+                        .currencyToInt(CustomerCreditLimit.CustomerCreditLimit);
+                if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+                    if (totalePrice > customerCreditLimit) {
+                        showErrorMessage(R.string.customerCredit);
                     }
                 }
 
-                @Override
-                protected void onApiFailure(ApiError error, Request request) {
-                    Timber.e(String.valueOf(error));
-                    String err = WebApiErrorBody.log(error, getActivity());
-                    showErrorMessage(err);
-                }
 
-                @Override
-                protected void onNetworkFailure(Throwable t, Request request) {
-                    Timber.e(t);
-                    showErrorMessage(R.string.network_error);
-                    setRunning(false);
-                    return;
-                }
-            });
-
+            }
         }
 
         if (SysConfigManager.hasTracking(getActivity()) &&

@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.varanegar.vaslibrary.manager.customergrouplastsalesreportmanager.ReviewReportRequestViewModel;
 import com.varanegar.vaslibrary.manager.newmanager.CustomerSumMoneyAndWeightReport.CustomerSumMoneyAndWeightReportModel;
+import com.varanegar.vaslibrary.manager.newmanager.customerGroupSimilarProductsalesReport.CustomerGroupSimilarProductsalesReportModel;
+import com.varanegar.vaslibrary.manager.newmanager.customerXmounthsalereport.CustomerXMounthSaleReportModel;
 import com.varanegar.vaslibrary.manager.newmanager.dealercommission.DealerCommissionDataModel;
 import com.varanegar.vaslibrary.model.CheckCustomerCreditsModel;
 import com.varanegar.vaslibrary.model.newmodel.checkCustomerCredits.CheckCustomerCreditModel;
@@ -86,21 +88,21 @@ public class ApiNew extends BaseApi implements InApiNew {
     }
 
     @Override
-    public Call<List<ProductModel>> CustomerXMounthSaleReport(String customersCode) {
+    public Call<List<CustomerXMounthSaleReportModel>> CustomerXMounthSaleReport(List<String> customersCode) {
         InApiNew api = getRetrofitBuilder(TokenType.UserToken)
                 .build().create(InApiNew.class);
         return api.CustomerXMounthSaleReport(customersCode);
     }
 
     @Override
-    public Call<List<ProductModel>> CustomerGroupSimilarProductsalesReport(String customersCode) {
+    public Call<List<CustomerGroupSimilarProductsalesReportModel>> CustomerGroupSimilarProductsalesReport(List<String> customersCode) {
         InApiNew api = getRetrofitBuilder(TokenType.UserToken)
                 .build().create(InApiNew.class);
         return api.CustomerGroupSimilarProductsalesReport(customersCode);
     }
 
     @Override
-    public Call<List<CustomerSumMoneyAndWeightReportModel>> CustomerSumMoneyAndWeightReport(String customersCode) {
+    public Call<List<CustomerSumMoneyAndWeightReportModel>> CustomerSumMoneyAndWeightReport(List<String> customersCode) {
         InApiNew api = getRetrofitBuilder(TokenType.UserToken)
                 .build().create(InApiNew.class);
         return api.CustomerSumMoneyAndWeightReport(customersCode);

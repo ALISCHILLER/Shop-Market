@@ -28,14 +28,14 @@ import java.util.List;
 
 public class Ml_dialog2 extends CuteDialogWithToolbar {
     private View view;
-    private BaseRecyclerAdapter<CustomerGroupSimilarProductsalesReportModel> adapter;
-    private List<CustomerGroupSimilarProductsalesReportModel> productModel;
+    private BaseRecyclerAdapter<CustomerXMounthSaleReportModel> adapter;
+    private List<CustomerXMounthSaleReportModel> productModel;
     CustomerSumMoneyAndWeightReportModel _sumMoneyAndWeightReportModels;
     private String _customerName;
     private String _dataSaleOfDays;
     private long _numberOfDays;
     public void setValues(
-            List<CustomerGroupSimilarProductsalesReportModel> ProductModel
+            List<CustomerXMounthSaleReportModel> ProductModel
             ,CustomerSumMoneyAndWeightReportModel sumMoneyAndWeightReportModels,
             String CustomerName,String dataSaleOfDays,long numberOfDays)
     {
@@ -58,9 +58,9 @@ public class Ml_dialog2 extends CuteDialogWithToolbar {
     public void setOnResult(InsertPinDialog.OnResult onResult){
         this.onResult = onResult;
     }
-    private class CenterSysConfigViewHolder extends BaseViewHolder<CustomerGroupSimilarProductsalesReportModel> {
+    private class CenterSysConfigViewHolder extends BaseViewHolder<CustomerXMounthSaleReportModel> {
 
-        public CenterSysConfigViewHolder(View itemView, BaseRecyclerAdapter<CustomerGroupSimilarProductsalesReportModel>
+        public CenterSysConfigViewHolder(View itemView, BaseRecyclerAdapter<CustomerXMounthSaleReportModel>
                 recyclerAdapter, Context context) {
             super(itemView, recyclerAdapter, context);
         }
@@ -95,7 +95,7 @@ public class Ml_dialog2 extends CuteDialogWithToolbar {
             centers_linear.setVisibility(View.GONE);
         }
         if(productModel!=null &&productModel.size()>0) {
-            text_title.setText("کالا خریداری شده مشتریان مشابه تعداد کالا:"+""+productModel.size());
+            text_title.setText("کالا خریداری شده سه ماه قبلی مشتری تعداد کالا :"+""+productModel.size());
         }
         if (_sumMoneyAndWeightReportModels!=null) {
             String money= HelperMethods.currencyToString(Currency.valueOf(Double.parseDouble(_sumMoneyAndWeightReportModels.Money_Sum)));
@@ -114,7 +114,7 @@ public class Ml_dialog2 extends CuteDialogWithToolbar {
             txt_numberOfDays.setVisibility(View.GONE);
         }
         BaseRecyclerView centerRecycler = (BaseRecyclerView) view.findViewById(R.id.center_recycler_view);
-        adapter = new BaseRecyclerAdapter<CustomerGroupSimilarProductsalesReportModel>(getVaranegarActvity(), productModel) {
+        adapter = new BaseRecyclerAdapter<CustomerXMounthSaleReportModel>(getVaranegarActvity(), productModel) {
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.center_owners_row,

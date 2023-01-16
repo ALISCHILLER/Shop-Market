@@ -87,9 +87,9 @@ public class CustomerGroupLastSalesReportManager extends
 
                     try {
                         deleteAll();
-                        if (result.size()>0)
-                        insertOrUpdate(result);
-
+                        if (result.size()>0) {
+                            insertOrUpdate(result);
+                        }
                     } catch (ValidationException e) {
                         Timber.e(e);
                         updateCall.failure(getContext().getString(R.string.data_validation_failed));

@@ -2,8 +2,11 @@ package com.varanegar.supervisor.getTour_fragment;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +16,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 
+import com.varanegar.framework.base.AppVersionInfo;
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarFragment;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
+import com.varanegar.framework.util.component.ProgressView;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.supervisor.DataManager;
@@ -34,18 +40,23 @@ import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.ui.dialog.TrackingLicenseFragment;
 import com.varanegar.vaslibrary.ui.fragment.vpnfragment.VpnDialogFragment;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
+import com.varanegar.vaslibrary.webapi.appversion.ApkDownloadCallBack;
+import com.varanegar.vaslibrary.webapi.appversion.AppVersionApi;
+import com.varanegar.vaslibrary.webapi.appversion.VersionApiCallBack;
+import com.varanegar.vaslibrary.webapi.ping.PingApi;
 
+import java.io.File;
 import java.util.UUID;
 
 import okhttp3.Request;
 import timber.log.Timber;
 
 public class Get_Tour_Fragment extends VaranegarFragment {
-
+    private View view;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_get_tour_supervisor, container, false);
+        view= inflater.inflate(R.layout.fragment_get_tour_supervisor, container, false);
         SysConfigManager sysConfigManager = new SysConfigManager(getContext());
         SysConfigModel localServerAddressConfig = sysConfigManager.read(ConfigKey.LocalServerAddress, SysConfigManager.local);
         SysConfigModel validServerAddressConfig = sysConfigManager.read(ConfigKey.ValidServerAddress, SysConfigManager.local);
@@ -259,6 +270,9 @@ public class Get_Tour_Fragment extends VaranegarFragment {
 
             }
         });
+        view.findViewById(R.id.download_apk_view).setOnClickListener(v -> {
+            DownloadApk();
+        });
         return view;
     }
     private void endProgress() {
@@ -304,4 +318,148 @@ public class Get_Tour_Fragment extends VaranegarFragment {
             dialog.show();
         }
     }
+
+    protected void startProgress(int title, int message) {
+        if (view != null) {
+            ProgressView progressView = ((ProgressView) (view));
+            progressView.setMessage(message);
+            progressView.setTitle(title);
+            progressView.setMessage(message);
+            progressView.start();
+        }
+    }
+    private void DownloadApk(){
+
+
+        final ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage(getString(R.string.downloading_apk));
+        progressDialog.show();
+        PingApi pingApi = new PingApi();
+        pingApi.refreshBaseServerUrl(getContext(), new PingApi.PingCallback() {
+
+            @Override
+            public void done(String ipAddress) {
+                final MainVaranegarActivity activity = getVaranegarActvity();
+                if (activity != null && !activity.isFinishing()) {
+                    AppVersionApi appVersionApi = new AppVersionApi(activity);
+                    appVersionApi.getLatestVersion(new VersionApiCallBack() {
+                        @Override
+                        public void onSuccess(final AppVersionInfo versionInfo) {
+                            MainVaranegarActivity activity = getVaranegarActvity();
+                            if (activity != null && !activity.isFinishing()) {
+                                try {
+                                    int versionCode = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0).versionCode;
+                                    if (versionInfo.VersionCode > versionCode) {
+                                        CuteMessageDialog dialog = new CuteMessageDialog(activity);
+                                        dialog.setIcon(Icon.Info);
+                                        dialog.setCancelable(false);
+                                        dialog.setTitle(com.varanegar.vaslibrary.R.string.new_version_exist);
+                                        dialog.setMessage(com.varanegar.vaslibrary.R.string.please_download_the_newest_version);
+                                        dialog.setPositiveButton(com.varanegar.vaslibrary.R.string.download, view -> {
+                                            startProgress(com.varanegar.vaslibrary.R.string.please_wait, com.varanegar.vaslibrary.R.string.downloading_apk);
+                                            appVersionApi.downloadAndSave(versionInfo.FileName, new ApkDownloadCallBack() {
+                                                @Override
+                                                public void onSuccess(String apkPath) {
+                                                    progressDialog.dismiss();
+                                                    MainVaranegarActivity activity1 = getVaranegarActvity();
+                                                    if (activity1 != null && !activity1.isFinishing()) {
+                                                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                                                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                                                            intent.setDataAndType(Uri.fromFile(new File(apkPath)), "application/vnd.android.package-archive");
+                                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                        } else {
+                                                            Uri fileUri = FileProvider.getUriForFile(requireContext(), requireContext().getPackageName() + ".provider", new File(apkPath));
+                                                            intent.setDataAndType(fileUri, "application/vnd.android.package-archive");
+                                                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                                        }
+                                                        startActivity(intent);
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onFailure(String err) {
+                                                    progressDialog.dismiss();
+                                                    MainVaranegarActivity activity1 = getVaranegarActvity();
+                                                    if (activity1 != null && !activity1.isFinishing()) {
+                                                        CuteMessageDialog dialog1 = new CuteMessageDialog(activity1);
+                                                        dialog1.setIcon(Icon.Error);
+                                                        dialog1.setTitle(com.varanegar.vaslibrary.R.string.error);
+                                                        dialog1.setMessage(com.varanegar.vaslibrary.R.string.error_downloading_apk);
+                                                        dialog1.setPositiveButton(com.varanegar.vaslibrary.R.string.ok, null);
+                                                        dialog1.show();
+                                                    }
+                                                }
+
+                                            });
+                                        });
+//                                        dialog.setNegativeButton(R.string.cancel, view -> {
+//                                            finishProgress();
+//                                            getTourImageView.setEnabled(true);
+//                                        });
+                                        dialog.show();
+                                    } else{
+                                        progressDialog.dismiss();
+                                        MainVaranegarActivity activity1 = getVaranegarActvity();
+                                        if (activity1 != null && !activity1.isFinishing()) {
+                                            CuteMessageDialog dialog1 = new CuteMessageDialog(activity1);
+                                            dialog1.setIcon(Icon.Error);
+                                            dialog1.setTitle(com.varanegar.vaslibrary.R.string.error);
+                                            dialog1.setMessage(com.varanegar.vaslibrary.R.string.not_download_apk);
+                                            dialog1.setPositiveButton(com.varanegar.vaslibrary.R.string.ok, null);
+                                            dialog1.show();
+                                        }
+
+                                    }
+
+                                } catch (PackageManager.NameNotFoundException e) {
+                                    Timber.e(e);
+
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(String error) {
+                            progressDialog.dismiss();
+                            MainVaranegarActivity activity1 = getVaranegarActvity();
+                            if (activity1 != null && !activity1.isFinishing()) {
+                                CuteMessageDialog dialog1 = new CuteMessageDialog(activity1);
+                                dialog1.setIcon(Icon.Error);
+                                dialog1.setTitle(com.varanegar.vaslibrary.R.string.error);
+                                dialog1.setMessage(com.varanegar.vaslibrary.R.string.not_download_apk);
+                                dialog1.setPositiveButton(com.varanegar.vaslibrary.R.string.ok, null);
+                                dialog1.show();
+                            }
+                        }
+
+                        @Override
+                        public void onCancel() {
+                            progressDialog.dismiss();
+                            MainVaranegarActivity activity = getVaranegarActvity();
+                            if (activity != null && !activity.isFinishing());
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void failed() {
+                progressDialog.dismiss();
+                MainVaranegarActivity activity = getVaranegarActvity();
+                if (activity != null && !activity.isFinishing()) {
+                    if (isResumed()) {
+                        CuteMessageDialog dialog = new CuteMessageDialog(activity);
+                        dialog.setIcon(Icon.Error);
+                        dialog.setTitle(com.varanegar.vaslibrary.R.string.error);
+                        dialog.setMessage(com.varanegar.vaslibrary.R.string.error_connecting_to_server);
+                        dialog.setPositiveButton(com.varanegar.vaslibrary.R.string.ok, null);
+                        dialog.show();
+                    }
+                }
+            }
+        });
+
+    }
+
 }

@@ -24,30 +24,17 @@ public class CustomerSumMoneyAndWeightReportManager extends BaseManager<Customer
     public CustomerSumMoneyAndWeightReportManager(@NonNull Context context) {
         super(context, new CustomerSumMoneyAndWeightReportModelRepository());
     }
-    public CustomerSumMoneyAndWeightReportModel getAll(UUID customerUniqueId){
+    public CustomerSumMoneyAndWeightReportModel getAll(String customerUniqueId){
         Query query = new Query();
         query.from(From.table(CustomerSumMoneyAndWeightReport.CustomerSumMoneyAndWeightReportTbl))
-                .whereAnd(Criteria.contains(CustomerSumMoneyAndWeightReport.CustomerId,
+                .whereAnd(Criteria.contains(CustomerSumMoneyAndWeightReport.CustomerCode,
                         String.valueOf(customerUniqueId)));
         return getItem(query);
     }
     public void save(UUID customerUniqueId, List<CustomerSumMoneyAndWeightReportModel> result){
 
-        List<CustomerSumMoneyAndWeightReportModel>  sumMoneyAndWeightReportModels=new ArrayList<>();
-        for (CustomerSumMoneyAndWeightReportModel sumMoneyAndWeightReportModel:
-                result) {
-            CustomerSumMoneyAndWeightReportModel sumMoneyAndWeightReportModel1=
-                    new CustomerSumMoneyAndWeightReportModel();
-            sumMoneyAndWeightReportModel1.UniqueId= sumMoneyAndWeightReportModel.UniqueId;
-            sumMoneyAndWeightReportModel1.Money_Sum= sumMoneyAndWeightReportModel.Money_Sum;
-            sumMoneyAndWeightReportModel1.Weight_Sum= sumMoneyAndWeightReportModel.Weight_Sum;
-            sumMoneyAndWeightReportModel1.CustomerId= String.valueOf(customerUniqueId);
-            sumMoneyAndWeightReportModels.add(sumMoneyAndWeightReportModel1);
-        }
-
-
         try {
-            insertOrUpdate(sumMoneyAndWeightReportModels);
+            insertOrUpdate(result);
         } catch (ValidationException e) {
             e.printStackTrace();
         } catch (DbException e) {

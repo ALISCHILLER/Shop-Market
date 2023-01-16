@@ -2,6 +2,8 @@ package com.varanegar.vaslibrary.webapi.apiNew;
 
 import com.varanegar.vaslibrary.manager.customergrouplastsalesreportmanager.ReviewReportRequestViewModel;
 import com.varanegar.vaslibrary.manager.newmanager.CustomerSumMoneyAndWeightReport.CustomerSumMoneyAndWeightReportModel;
+import com.varanegar.vaslibrary.manager.newmanager.customerGroupSimilarProductsalesReport.CustomerGroupSimilarProductsalesReportModel;
+import com.varanegar.vaslibrary.manager.newmanager.customerXmounthsalereport.CustomerXMounthSaleReportModel;
 import com.varanegar.vaslibrary.manager.newmanager.dealercommission.DealerCommissionDataModel;
 import com.varanegar.vaslibrary.model.CheckCustomerCreditsModel;
 import com.varanegar.vaslibrary.model.newmodel.checkCustomerCredits.CheckCustomerCreditModel;
@@ -44,9 +46,9 @@ public interface InApiNew {
             @Body List<String> customerId
     );
 
-    @GET("api/v2/ngt/customer/CheckCustomerCredits")
+    @POST("api/v2/ngt/customer/CheckCustomerCredits")
     Call<List<CheckCustomerCreditModel>>CheckCustomerCredits (
-            @Query("CustomersId") List<String> customerCode);
+            @Body List<String> customerCode);
 
     @POST("api/v2/ngt/ReviewReport/CustomerGroupLastsalesReport")
     Call<List<CustomerGroupLastSalesReportModel>>CustomerLastSaleReport (
@@ -65,15 +67,17 @@ public interface InApiNew {
     );
 
 
-    @GET("api/v2/ngt/ReviewReport/CustomerXMounthSaleReport")
-    Call<List<ProductModel>>CustomerXMounthSaleReport (
-            @Query("CustomersCode") String customersCode);
+    @POST("api/v2/ngt/ReviewReport/CustomerXMounthSaleReport")
+    Call<List<CustomerXMounthSaleReportModel>>CustomerXMounthSaleReport (
+            @Body  List<String> customersCode);
 
-    @GET("api/v2/ngt/ReviewReport/CustomerGroupSimilarProductsalesReport")
-    Call<List<ProductModel>>CustomerGroupSimilarProductsalesReport (
-            @Query("CustomersCode") String customersCode);
-    @GET("api/v2/ngt/ReviewReport/CustomerSumMoneyAndWeightReport")
+    @POST("api/v2/ngt/ReviewReport/CustomerGroupSimilarProductsalesReport")
+    Call<List<CustomerGroupSimilarProductsalesReportModel>>CustomerGroupSimilarProductsalesReport (
+            @Body  List<String> customersCode);
+
+
+    @POST("api/v2/ngt/ReviewReport/CustomerSumMoneyAndWeightReport")
     Call<List<CustomerSumMoneyAndWeightReportModel>>CustomerSumMoneyAndWeightReport (
-            @Query("CustomersCode") String customersCode);
+            @Body List<String> customersCode);
 
 }
