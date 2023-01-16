@@ -1412,7 +1412,7 @@ public class CustomersContentFragment extends VaranegarFragment {
 
 
     protected void saveTime(String sessionId) {
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("VdmClient", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("time mldialog", Context.MODE_PRIVATE);
         sharedPreferences.edit().putString(customer.CustomerCode, sessionId).apply();
     }
 
