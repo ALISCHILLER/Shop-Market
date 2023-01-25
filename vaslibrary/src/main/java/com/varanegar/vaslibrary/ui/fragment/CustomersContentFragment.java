@@ -1027,8 +1027,11 @@ public class CustomersContentFragment extends VaranegarFragment {
                                             .setVisibility(View.GONE);
                             }
                             if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
-                                Ml_dialog2();
-                                saveTime("true");
+                                if (getldialog()) {
+                                    Ml_dialog2();
+                                    savemldialog(false);
+                                }
+
                             }
                         });
                     }
@@ -1411,9 +1414,15 @@ public class CustomersContentFragment extends VaranegarFragment {
 
 
 
-    protected void saveTime(String sessionId) {
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("time mldialog", Context.MODE_PRIVATE);
-        sharedPreferences.edit().putString(customer.CustomerCode, sessionId).apply();
+    protected void savemldialog(Boolean sessionId) {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("mldialog", Context.MODE_PRIVATE);
+        sharedPreferences.edit().putBoolean(customer.CustomerCode, sessionId).apply();
+    }
+
+    protected Boolean getldialog() {
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("mldialog", Context.MODE_PRIVATE);
+        Boolean  mldialog =sharedPreferences.getBoolean(customer.CustomerCode,true);
+        return mldialog;
     }
 
 }

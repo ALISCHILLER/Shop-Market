@@ -214,7 +214,7 @@ public class PromotionHandlerV3 {
                     onlineData.SalePDate=SalePDate;
                     onlineData.DocPDate=DocPDate;
                     /**
-                     * محاسبه تخفیف جوایز
+                     * پیش نمایش توزیع محاسبه تخفیف جوایز
                      */
                     Call<DiscountOutputOnline> call = calcPromotionAPI.getDistOnlinePromotion(onlineData,
                             GlobalVariables.getCalcDiscount(),

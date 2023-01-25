@@ -21,7 +21,9 @@ public interface ITourApi {
     Call<TourModel> getTour(@Query("tourNo") String tourNo);
 
     @GET("api/v2/ngt/tour/daytour")
-    Call<TourModel> getTour(@Query("dealerId") String dealerId, @Query("DeviceSettingNo") String DeviceSettingNo, @Query("SubSystemTypeUniqueId") String SubSystemTypeUniqueId);
+    Call<TourModel> getTour(@Query("dealerId") String dealerId,
+                            @Query("DeviceSettingNo") String DeviceSettingNo,
+                            @Query("SubSystemTypeUniqueId") String SubSystemTypeUniqueId);
 
     @GET("api/v2/ngt/tour/sync/tourreceived")
     Call<ResponseBody> confirmTourReceived(@Query("id") String tourId, @Query("DeviceSettingNo") String DeviceSettingNo);

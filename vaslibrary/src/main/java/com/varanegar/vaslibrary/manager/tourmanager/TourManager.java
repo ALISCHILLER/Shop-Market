@@ -551,7 +551,8 @@ public class TourManager {
         SysConfigManager sysConfigManager = new SysConfigManager(context);
         SysConfigModel settingsId = sysConfigManager.read(ConfigKey.SettingsId, SysConfigManager.local);
         if (tourNo == null) {
-            tourApi.runWebRequest(tourApi.getTour(dealerId, settingsId.Value, VaranegarApplication.getInstance().getAppId().toString()), new WebCallBack<TourModel>() {
+            tourApi.runWebRequest(tourApi.getTour(dealerId, settingsId.Value,
+                    VaranegarApplication.getInstance().getAppId().toString()), new WebCallBack<TourModel>() {
                 @Override
                 protected void onFinish() {
 

@@ -633,7 +633,14 @@ public class SettlementFragment extends VisitFragment {
             customerRemain = customer.CustomerRemain;
         oldRemainItems.setValue(HelperMethods.currencyToString(customerRemain));
         Currency creditPayment = paymentManager.getCreditPayment(customerId) != null ? paymentManager.getCreditPayment(customerId).Amount : Currency.ZERO;
-        oldRemainAfterPaymentItems.setValue(HelperMethods.currencyToString(customerRemain.add(customerPayment.getTotalAmount(false).subtract(customerPayment.getOldInvoicesAmount()).subtract(totalPayment.subtract(creditPayment)))));
+
+        /**
+         * باقی مانده مبلغ
+         */
+        oldRemainAfterPaymentItems.setValue(HelperMethods.currencyToString(customerRemain
+                .add(customerPayment.getTotalAmount(false)
+                        .subtract(customerPayment.getOldInvoicesAmount())
+                        .subtract(totalPayment.subtract(creditPayment)))));
         usanceDayItems.setValue(String.valueOf(paymentManager.getUsanceDay(customerId)));
         usanceRefItems.setValue(String.valueOf(paymentManager.getUsanceRef(customerId)));
         usancePayItems.setValue(HelperMethods.doubleToString(paymentManager.calculateUsancePay(customerId)));

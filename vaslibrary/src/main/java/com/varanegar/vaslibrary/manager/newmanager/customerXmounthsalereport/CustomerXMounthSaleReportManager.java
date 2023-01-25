@@ -1,6 +1,7 @@
 package com.varanegar.vaslibrary.manager.newmanager.customerXmounthsalereport;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -40,6 +41,7 @@ import java.util.UUID;
 
 import okhttp3.Request;
 import retrofit2.Call;
+import timber.log.Timber;
 
 public class CustomerXMounthSaleReportManager extends BaseManager<CustomerXMounthSaleReportModel> {
 
@@ -73,27 +75,78 @@ public class CustomerXMounthSaleReportManager extends BaseManager<CustomerXMount
         for (CustomerModel customerModel:customersCod) {
             customersCode.add(customerModel.CustomerCode);
         }
-        DataCustomerContentManager.getCustomerXMounthSaleRepor(getContext(),
-                null,customersCode,
-                new DataCustomerContentManager.Callback() {
-                    @Override
-                    public void onSuccess() {
-                      updateCall.success();
-                    }
+        try {
+            SharedPreferences sharedPreferences = getContext().getSharedPreferences("mldialog", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.commit();
+        }catch (Exception e){
+            Log.e("err", String.valueOf(e)+"خطا در ذخیره سازی CustomerXMounthSaleReport");
+        }
 
-                    @Override
-                    public void onError(String error) {
-                        updateCall.error(error);
+
+        ApiNew apiNew=new ApiNew(getContext());
+        Call<List<CustomerXMounthSaleReportModel>> call = apiNew
+                .CustomerXMounthSaleReport(customersCode);
+
+        apiNew.runWebRequest(call, new WebCallBack<List<CustomerXMounthSaleReportModel>>() {
+            @Override
+            protected void onFinish() {
+            }
+
+            @Override
+            protected void onSuccess(List<CustomerXMounthSaleReportModel> result, Request request) {
+                CustomerXMounthSaleReportManager customerXMounthSaleReportManager=
+                        new CustomerXMounthSaleReportManager(getContext());
+
+
+                CustomerXMounthSaleReportModelRepository repository=
+                        new CustomerXMounthSaleReportModelRepository();
+                if (result.size() > 0) {
+                    try {
+                        repository.deleteAll();
+                        repository.insert(result);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Timber.e(e);
+                        Log.e("err", String.valueOf(e)+"خطا در ذخیره سازی CustomerXMounthSaleReport");
+                        updateCall.failure("خطا در ذخیره سازی CustomerXMounthSaleReport");
                     }
-                });
+                }
+                CustomerGroupSimilarProductsalesReport(getContext(), updateCall, null,customersCode);
+            }
+
+            @Override
+            protected void onApiFailure(ApiError error, Request request) {
+                String err = WebApiErrorBody.log(error, getContext());
+                Log.e("err", String.valueOf(err));
+                updateCall.failure(err+" "+"CustomerXMounthSaleReport");
+
+            }
+
+            @Override
+            protected void onNetworkFailure(Throwable t, Request request) {
+                updateCall.failure(getContext().getString(R.string.connection_to_server_failed));
+            }
+        });
+//        DataCustomerContentManager.getCustomerXMounthSaleRepor(getContext(),
+//                null,customersCode,
+//                new DataCustomerContentManager.Callback() {
+//                    @Override
+//                    public void onSuccess() {
+//                      updateCall.success();
+//                    }
+//
+//                    @Override
+//                    public void onError(String error) {
+//                        updateCall.error(error);
+//                    }
+//                });
     }
-
-
-
 
     public static void CustomerGroupSimilarProductsalesReport(
             final Context context,
-            final DataCustomerContentManager.Callback callback,
+            UpdateCall callback,
             CustomerModel customer,
             List<String> customersCode) {
         ApiNew apiNew=new ApiNew(context);
@@ -118,8 +171,9 @@ public class CustomerXMounthSaleReportManager extends BaseManager<CustomerXMount
                         repository.insert(result);
                     } catch (Exception e) {
                         e.printStackTrace();
+                        Timber.e(e);
                         Log.e("err", String.valueOf(e));
-                        callback.onError("خطا در ذخیره سازی CustomerGroupSimilarProductsalesReport");
+                        callback.error("خطا در ذخیره سازی CustomerGroupSimilarProductsalesReport");
                     }
                 }
                 CustomerSumMoneyAndWeightReport(context, callback, customer,customersCode);
@@ -128,20 +182,22 @@ public class CustomerXMounthSaleReportManager extends BaseManager<CustomerXMount
             @Override
             protected void onApiFailure(ApiError error, Request request) {
                 String err = WebApiErrorBody.log(error, context);
-                callback.onError(err);
                 Log.e("err", String.valueOf(err));
+                callback.failure(err+" "+"CustomerGroupSimilarProductsalesReport");
+
             }
 
             @Override
             protected void onNetworkFailure(Throwable t, Request request) {
-                callback.onError(context.getString(R.string.connection_to_server_failed));
+                callback.failure(context.getString(R.string.connection_to_server_failed));
             }
         });
     }
 
+
     public static void CustomerSumMoneyAndWeightReport(
             final Context context,
-            final DataCustomerContentManager.Callback callback,
+            UpdateCall callback,
             CustomerModel customer,
             List<String> customersCode) {
         ApiNew apiNew=new ApiNew(context);
@@ -156,7 +212,7 @@ public class CustomerXMounthSaleReportManager extends BaseManager<CustomerXMount
 
             @Override
             protected void onSuccess(List<CustomerSumMoneyAndWeightReportModel> result, Request request) {
-                CustomerSumMoneyAndWeightReportManager customerSumMoneyAndWeightReportManager=
+                CustomerSumMoneyAndWeightReportManager  customerSumMoneyAndWeightReportManager=
                         new CustomerSumMoneyAndWeightReportManager(context);
                 CustomerSumMoneyAndWeightReportModelRepository sumMoneyAndWeightRepor =
                         new CustomerSumMoneyAndWeightReportModelRepository();
@@ -167,7 +223,8 @@ public class CustomerXMounthSaleReportManager extends BaseManager<CustomerXMount
                         sumMoneyAndWeightRepor.insert(result);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        callback.onError("خطا در ذخیره سازی customerSumMoneyAndWeightReport");
+                        Timber.e(e);
+                        callback.failure("خطا در ذخیره سازی customerSumMoneyAndWeightReport");
                     }
 
                     CheckCustomerCredit(context, callback, customer,customersCode);
@@ -178,20 +235,22 @@ public class CustomerXMounthSaleReportManager extends BaseManager<CustomerXMount
             @Override
             protected void onApiFailure(ApiError error, Request request) {
                 String err = WebApiErrorBody.log(error, context);
-                callback.onError(err);
                 Log.e("err", String.valueOf(err));
+                callback.failure(err+" "+"CustomerSumMoneyAndWeightReport");
+
             }
 
             @Override
             protected void onNetworkFailure(Throwable t, Request request) {
-                callback.onError(context.getString(R.string.connection_to_server_failed));
+                callback.failure(context.getString(R.string.connection_to_server_failed));
             }
         });
     }
 
+
     public static void CheckCustomerCredit(
             final Context context,
-            final DataCustomerContentManager.Callback callback,
+            UpdateCall callback,
             CustomerModel customer,
             List<String> customersCode){
 
@@ -215,28 +274,27 @@ public class CustomerXMounthSaleReportManager extends BaseManager<CustomerXMount
                         repository.insert(result);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        callback.onError("خطا در ذخیره سازی customerSumMoneyAndWeightReport");
+                        Timber.e(e);
+                        callback.failure("خطا در ذخیره سازی CheckCustomerCredit");
                     }
                 }
-                callback.onSuccess();
+                callback.success();
             }
 
             @Override
             protected void onApiFailure(ApiError error, Request request) {
                 String err = WebApiErrorBody.log(error, context);
-                callback.onError(err);
                 Log.e("err", String.valueOf(err));
+                callback.failure(err+" "+"CheckCustomerCredit");
+
             }
 
             @Override
             protected void onNetworkFailure(Throwable t, Request request) {
-                callback.onError(context.getString(R.string.connection_to_server_failed));
+                callback.failure(context.getString(R.string.connection_to_server_failed));
             }
         });
     }
-
-
-
 
 
 
