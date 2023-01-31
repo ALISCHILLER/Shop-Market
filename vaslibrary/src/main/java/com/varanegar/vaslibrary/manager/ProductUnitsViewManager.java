@@ -5,6 +5,8 @@ import androidx.annotation.NonNull;
 
 import com.varanegar.framework.database.BaseManager;
 import com.varanegar.framework.database.querybuilder.Query;
+import com.varanegar.framework.database.querybuilder.criteria.Criteria;
+import com.varanegar.framework.database.querybuilder.from.From;
 import com.varanegar.vaslibrary.model.productunitsview.ProductUnitsView;
 import com.varanegar.vaslibrary.model.productunitsview.ProductUnitsViewModel;
 import com.varanegar.vaslibrary.model.productunitsview.ProductUnitsViewModelRepository;
@@ -31,4 +33,6 @@ public class ProductUnitsViewManager extends BaseManager<ProductUnitsViewModel> 
         }
         return hashMap;
     }
+
+
 }

@@ -3,6 +3,7 @@ package com.varanegar.vaslibrary.webapi.apiNew;
 import com.varanegar.vaslibrary.manager.customergrouplastsalesreportmanager.ReviewReportRequestViewModel;
 import com.varanegar.vaslibrary.manager.newmanager.CustomerSumMoneyAndWeightReport.CustomerSumMoneyAndWeightReportModel;
 import com.varanegar.vaslibrary.manager.newmanager.customerGroupSimilarProductsalesReport.CustomerGroupSimilarProductsalesReportModel;
+import com.varanegar.vaslibrary.manager.newmanager.customerLastBill.CustomerLastBillModel;
 import com.varanegar.vaslibrary.manager.newmanager.customerXmounthsalereport.CustomerXMounthSaleReportModel;
 import com.varanegar.vaslibrary.manager.newmanager.dealercommission.DealerCommissionDataModel;
 import com.varanegar.vaslibrary.model.CheckCustomerCreditsModel;
@@ -69,6 +70,10 @@ public interface InApiNew {
 
     @POST("api/v2/ngt/ReviewReport/CustomerXMounthSaleReport")
     Call<List<CustomerXMounthSaleReportModel>>CustomerXMounthSaleReport (
+            @Body  List<String> customersCode);
+
+    @POST("api/v2/ngt/ReviewReport/CustomerLastBill")
+    Call<List<CustomerLastBillModel>>CustomerLastBill (
             @Body  List<String> customersCode);
 
     @POST("api/v2/ngt/ReviewReport/CustomerGroupSimilarProductsalesReport")

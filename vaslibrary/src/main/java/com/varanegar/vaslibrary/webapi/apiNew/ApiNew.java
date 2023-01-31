@@ -5,6 +5,7 @@ import android.content.Context;
 import com.varanegar.vaslibrary.manager.customergrouplastsalesreportmanager.ReviewReportRequestViewModel;
 import com.varanegar.vaslibrary.manager.newmanager.CustomerSumMoneyAndWeightReport.CustomerSumMoneyAndWeightReportModel;
 import com.varanegar.vaslibrary.manager.newmanager.customerGroupSimilarProductsalesReport.CustomerGroupSimilarProductsalesReportModel;
+import com.varanegar.vaslibrary.manager.newmanager.customerLastBill.CustomerLastBillModel;
 import com.varanegar.vaslibrary.manager.newmanager.customerXmounthsalereport.CustomerXMounthSaleReportModel;
 import com.varanegar.vaslibrary.manager.newmanager.dealercommission.DealerCommissionDataModel;
 import com.varanegar.vaslibrary.model.CheckCustomerCreditsModel;
@@ -92,6 +93,13 @@ public class ApiNew extends BaseApi implements InApiNew {
         InApiNew api = getRetrofitBuilder(TokenType.UserToken)
                 .build().create(InApiNew.class);
         return api.CustomerXMounthSaleReport(customersCode);
+    }
+
+    @Override
+    public Call<List<CustomerLastBillModel>> CustomerLastBill(List<String> customersCode) {
+        InApiNew api = getRetrofitBuilder(TokenType.UserToken)
+                .build().create(InApiNew.class);
+        return api.CustomerLastBill(customersCode);
     }
 
     @Override

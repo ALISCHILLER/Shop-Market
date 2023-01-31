@@ -7,6 +7,7 @@ import com.varanegar.framework.database.BaseManager;
 import com.varanegar.framework.database.DbException;
 import com.varanegar.framework.database.querybuilder.Query;
 import com.varanegar.framework.database.querybuilder.criteria.Criteria;
+import com.varanegar.framework.database.querybuilder.from.From;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.util.HelperMethods;
@@ -28,6 +29,8 @@ import com.varanegar.vaslibrary.model.product.ProductModel;
 import com.varanegar.vaslibrary.model.productUnit.ProductUnit;
 import com.varanegar.vaslibrary.model.productUnit.ProductUnitModel;
 import com.varanegar.vaslibrary.model.productUnit.ProductUnitModelRepository;
+import com.varanegar.vaslibrary.model.productunitsview.ProductUnitsView;
+import com.varanegar.vaslibrary.model.productunitsview.ProductUnitsViewModel;
 import com.varanegar.vaslibrary.model.unit.Unit;
 import com.varanegar.vaslibrary.model.unit.UnitModel;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
@@ -142,6 +145,7 @@ public class ProductUnitManager extends BaseManager<ProductUnitModel>
                         }
                     } else {
                         try {
+                            deleteAll();
                             sync(result);
                             new UpdateManager(getContext()).addLog(UpdateKey.ProductUnit);
                             Timber.i("Updating productunit completed");
@@ -181,7 +185,11 @@ public class ProductUnitManager extends BaseManager<ProductUnitModel>
         query.from(ProductUnit.ProductUnitTbl).whereAnd(Criteria.equals(ProductUnit.ProductId, productId).and(Criteria.equals(ProductUnit.UnitId, unitId)));
         return getItem(query);
     }
-
+    public List<ProductUnitModel> getproductId(UUID productId){
+        Query query=new Query();
+        query.from(From.table(ProductUnit.ProductUnitTbl)).whereAnd(Criteria.contains(ProductUnit.ProductId, String.valueOf(productId)));
+        return getItems(query);
+    }
 
     public void mUpdate(){
         BigDecimal decimal = new BigDecimal(3);

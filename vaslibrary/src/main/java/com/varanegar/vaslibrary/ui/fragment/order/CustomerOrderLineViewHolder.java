@@ -14,12 +14,27 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.util.HelperMethods;
+import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.util.recycler.BaseRecyclerAdapter;
 import com.varanegar.framework.util.recycler.BaseViewHolder;
 import com.varanegar.java.util.Currency;
 import com.varanegar.vaslibrary.R;
+import com.varanegar.vaslibrary.base.VasHelperMethods;
+import com.varanegar.vaslibrary.manager.CallOrderLineBatchQtyDetailManager;
+import com.varanegar.vaslibrary.manager.CustomerCallOrderOrderViewManager;
+import com.varanegar.vaslibrary.manager.ProductBatchOnHandQtyManager;
+import com.varanegar.vaslibrary.manager.ProductType;
+import com.varanegar.vaslibrary.manager.ProductUnitViewManager;
+import com.varanegar.vaslibrary.manager.ProductUnitsViewManager;
+import com.varanegar.vaslibrary.model.CallOrderLineBatchQtyDetailModel;
 import com.varanegar.vaslibrary.model.customerCallOrderOrderView.CustomerCallOrderOrderViewModel;
+import com.varanegar.vaslibrary.model.productUnitView.ProductUnitViewModel;
+import com.varanegar.vaslibrary.model.productbatchonhandqtymodel.ProductBatchOnHandQtyModel;
+import com.varanegar.vaslibrary.model.productunitsview.ProductUnitsViewModel;
 import com.varanegar.vaslibrary.ui.calculator.BaseUnit;
+import com.varanegar.vaslibrary.ui.calculator.CalculatorHelper;
+import com.varanegar.vaslibrary.ui.calculator.CalculatorUnits;
+import com.varanegar.vaslibrary.ui.calculator.DiscreteUnit;
 import com.varanegar.vaslibrary.ui.qtyview.QtyView;
 
 import java.math.BigDecimal;
@@ -68,6 +83,58 @@ public class CustomerOrderLineViewHolder extends BaseViewHolder<CustomerCallOrde
         productNameTextView.setText(product.ProductName);
         productCodeTextView.setText(product.ProductCode);
 
+        ProductUnitsViewManager productUnitsViewManager = new ProductUnitsViewManager(getContext());
+        ProductUnitsViewModel productUnitsViewModel = productUnitsViewManager.getItem(product.ProductId);
+        if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
+
+
+                ProductUnitViewManager productUnitViewManager = new ProductUnitViewManager(getContext());
+                try {
+                    List<ProductUnitViewModel> unitViewModels = productUnitViewManager.getProductUnits(product.ProductId, ProductType.isForSale);
+
+
+                    List<DiscreteUnit> units = VasHelperMethods.chopTotalQty(product.TotalQty, unitViewModels, false);
+                    String UnitNames = null;
+                    String ConvertFactors = null;
+                    String UnitIds = null;
+                    String qtys = null;
+                    for (DiscreteUnit discreteUnit :
+                            units) {
+                        if (discreteUnit.value > 0) {
+                            if (UnitNames!=null) {
+                                UnitNames = UnitNames + ":" + discreteUnit.Name;
+                            }else {
+                                UnitNames = discreteUnit.Name;
+                            }
+                            if (ConvertFactors!=null) {
+                                ConvertFactors = ConvertFactors + ":" + discreteUnit.ConvertFactor;
+                            }else {
+                                ConvertFactors = String.valueOf(discreteUnit.ConvertFactor);
+                            }
+                            if (UnitIds!=null) {
+                                UnitIds = UnitIds + ":" + discreteUnit.ProductUnitId;
+                            }else{
+                                UnitIds = String.valueOf(discreteUnit.ProductUnitId);
+                            }
+                            if (qtys!=null) {
+                                qtys = qtys + ":" + discreteUnit.value;
+                            }else {
+                                qtys = String.valueOf(discreteUnit.value);
+                            }
+                        }
+                    }
+
+
+                    product.UnitName = UnitNames;
+                    product.ConvertFactor = ConvertFactors;
+                    product.UnitId = UnitIds;
+                    product.Qty = qtys;
+
+                } catch (ProductUnitViewManager.UnitNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+        }
         if (product.OnHandQty == null)
             product.OnHandQty = BigDecimal.ZERO;
         if (product.RemainedAfterReservedQty == null)
@@ -109,13 +176,15 @@ public class CustomerOrderLineViewHolder extends BaseViewHolder<CustomerCallOrde
             priceTextView.setText(HelperMethods.currencyToString(product.PromotionUnitPrice));
         else
             priceTextView.setText(HelperMethods.currencyToString(product.UnitPrice));
-        totalOrderQtyTextView.setText(HelperMethods.bigDecimalToString(product.TotalQty));
+            totalOrderQtyTextView.setText(HelperMethods.bigDecimalToString(product.TotalQty));
+
         rowTextView.setText(String.valueOf(position + 1));
 
         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
             if (product.IsPromoLine && product.OriginalTotalQty == null)
                 valueTextView.setText("--");
             else {
+
                 double totalQty = product.TotalQty == null ? 0 : product.TotalQty.doubleValue();
                 double originalQty = product.OriginalTotalQty == null ? 0 : product.OriginalTotalQty.doubleValue();
                 valueTextView.setText(HelperMethods.doubleToString(originalQty - totalQty));

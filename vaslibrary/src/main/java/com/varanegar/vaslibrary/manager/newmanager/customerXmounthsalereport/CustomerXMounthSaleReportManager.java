@@ -7,7 +7,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.varanegar.framework.database.BaseManager;
-import com.varanegar.framework.database.BaseRepository;
+
 import com.varanegar.framework.database.DbException;
 import com.varanegar.framework.database.querybuilder.Query;
 import com.varanegar.framework.database.querybuilder.criteria.Criteria;
@@ -15,7 +15,6 @@ import com.varanegar.framework.database.querybuilder.from.From;
 import com.varanegar.framework.network.listeners.ApiError;
 import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.validation.ValidationException;
-import com.varanegar.processor.annotations.Column;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.newmanager.CustomerSumMoneyAndWeightReport.CustomerSumMoneyAndWeightReportManager;
@@ -26,6 +25,8 @@ import com.varanegar.vaslibrary.manager.newmanager.commodity_rationing.Commodity
 import com.varanegar.vaslibrary.manager.newmanager.customerGroupSimilarProductsalesReport.CustomerGroupSimilarProductsalesReportManager;
 import com.varanegar.vaslibrary.manager.newmanager.customerGroupSimilarProductsalesReport.CustomerGroupSimilarProductsalesReportModel;
 import com.varanegar.vaslibrary.manager.newmanager.customerGroupSimilarProductsalesReport.CustomerGroupSimilarProductsalesReportModelRepository;
+import com.varanegar.vaslibrary.manager.newmanager.customerLastBill.CustomerLastBillModel;
+import com.varanegar.vaslibrary.manager.newmanager.customerLastBill.CustomerLastBillModelRepository;
 import com.varanegar.vaslibrary.manager.newmanager.dataCustomersContentManager.DataCustomerContentManager;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateCall;
 import com.varanegar.vaslibrary.model.customer.CustomerModel;
@@ -278,7 +279,8 @@ public class CustomerXMounthSaleReportManager extends BaseManager<CustomerXMount
                         callback.failure("خطا در ذخیره سازی CheckCustomerCredit");
                     }
                 }
-                callback.success();
+                CustomerLastBill(context, callback, customer,customersCode);
+
             }
 
             @Override
@@ -296,7 +298,55 @@ public class CustomerXMounthSaleReportManager extends BaseManager<CustomerXMount
         });
     }
 
+    public static void CustomerLastBill(
+            final Context context,
+            UpdateCall callback,
+            CustomerModel customer,
+            List<String> customersCode){
 
+        ApiNew apiNew =new ApiNew(context);
+        Call<List<CustomerLastBillModel>> call= apiNew.CustomerLastBill(customersCode);
+
+        apiNew.runWebRequest(call, new WebCallBack<List<CustomerLastBillModel>>() {
+            @Override
+            protected void onFinish() {
+
+            }
+
+            @Override
+            protected void onSuccess(List<CustomerLastBillModel> result, Request request) {
+
+                CustomerLastBillModelRepository repository =
+                        new CustomerLastBillModelRepository();
+                if (result.size() > 0) {
+                    try {
+                        repository.deleteAll();
+                        repository.insert(result);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Timber.e(e);
+                        callback.failure("خطا در ذخیره سازی CustomerLastBill");
+                    }
+                }
+                callback.success();
+            }
+
+            @Override
+            protected void onApiFailure(ApiError error, Request request) {
+                String err = WebApiErrorBody.log(error, context);
+                Log.e("err", String.valueOf(err));
+                callback.failure(err+" "+"CustomerLastBill");
+
+            }
+
+            @Override
+            protected void onNetworkFailure(Throwable t, Request request) {
+                callback.failure(context.getString(R.string.connection_to_server_failed));
+            }
+        });
+
+
+    }
 
 
 

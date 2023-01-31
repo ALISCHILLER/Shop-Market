@@ -10,6 +10,7 @@ import com.varanegar.framework.database.BaseManager;
 import com.varanegar.framework.database.model.ModelProjection;
 import com.varanegar.framework.database.querybuilder.Query;
 import com.varanegar.framework.database.querybuilder.criteria.Criteria;
+import com.varanegar.framework.database.querybuilder.from.From;
 import com.varanegar.framework.util.HelperMethods;
 import com.varanegar.framework.util.Linq;
 import com.varanegar.java.util.Currency;
@@ -245,7 +246,12 @@ public class CustomerCallOrderOrderViewManager extends BaseManager<CustomerCallO
     public static Query getAll() {
         return new Query().from(CustomerCallOrderOrderView.CustomerCallOrderOrderViewTbl);
     }
-
+    public CustomerCallOrderOrderViewModel getOrderLine(@NonNull UUID productId) {
+        Query query=new Query();
+        query.from(From.table(CustomerCallOrderOrderView.CustomerCallOrderOrderViewTbl)).whereAnd(Criteria.contains(
+                CustomerCallOrderOrderView.ProductId, String.valueOf(productId)));
+       return getItem(query) ;
+    }
     public int getLinesCount(UUID orderId) {
         Query query = new Query();
         query.from(CustomerCallOrderOrderView.CustomerCallOrderOrderViewTbl).whereAnd(Criteria.equals(CustomerCallOrderOrderView.OrderUniqueId, orderId.toString()));

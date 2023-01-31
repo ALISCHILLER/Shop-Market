@@ -177,6 +177,8 @@ public class ProductManager extends BaseManager<ProductModel> {
     private void insertToProductTable(boolean forUpdate, List<ProductModel> result,
                                       ProductApi productApi, String dealerId, UpdateCall updateCall) {
         try {
+            if (!forUpdate)
+                deleteAll();
             sync(result);
             new UpdateManager(getContext()).addLog(UpdateKey.Product);
             Timber.i(result.size() + " rows of product updated");

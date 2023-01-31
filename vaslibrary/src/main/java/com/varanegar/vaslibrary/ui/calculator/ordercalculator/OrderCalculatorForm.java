@@ -367,6 +367,7 @@ public class OrderCalculatorForm extends CuteDialog {
             }
 
             if (selective) {
+                //محاسبه عدد تعداد
                 calculator.setUnits(selectedUnit.calculatorUnits);
                 batchesAdapter.select(0);
                 CustomerPriceManager customerPriceManager = new CustomerPriceManager(getContext());

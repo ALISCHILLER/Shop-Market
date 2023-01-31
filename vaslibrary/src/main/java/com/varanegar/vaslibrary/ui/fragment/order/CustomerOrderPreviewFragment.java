@@ -31,7 +31,9 @@ import com.varanegar.framework.util.recycler.ItemContextView;
 import com.varanegar.framework.validation.ValidationException;
 import com.varanegar.java.util.Currency;
 import com.varanegar.vaslibrary.R;
+import com.varanegar.vaslibrary.base.VasHelperMethods;
 import com.varanegar.vaslibrary.manager.ProductManager;
+import com.varanegar.vaslibrary.manager.ProductType;
 import com.varanegar.vaslibrary.manager.ProductUnitViewManager;
 import com.varanegar.vaslibrary.manager.PromotionException;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
@@ -48,11 +50,13 @@ import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.model.discountSDS.DiscountItemCountModel;
 import com.varanegar.vaslibrary.model.orderprize.OrderPrizeModel;
 import com.varanegar.vaslibrary.model.product.ProductModel;
+import com.varanegar.vaslibrary.model.productUnitView.ProductUnitViewModel;
 import com.varanegar.vaslibrary.promotion.CalcPromotion;
 import com.varanegar.vaslibrary.promotion.CustomerCallOrderLinePromotion;
 import com.varanegar.vaslibrary.promotion.CustomerCallOrderPromotion;
 import com.varanegar.vaslibrary.promotion.PromotionCallback;
 import com.varanegar.vaslibrary.ui.calculator.BaseUnit;
+import com.varanegar.vaslibrary.ui.calculator.DiscreteUnit;
 import com.varanegar.vaslibrary.ui.dialog.choiceprize.ChoicePrizesDialog;
 import com.varanegar.vaslibrary.ui.fragment.VisitFragment;
 import com.varanegar.vaslibrary.ui.qtyview.QtyView;
@@ -260,7 +264,9 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                     else
                         adjustmentPriceTextView.setVisibility(View.GONE);
                 }
-                if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales) && customerCallOrderPromotion.LinesWithPromo != null && customerCallOrderPromotion.LinesWithPromo.size() > 0) {
+                if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales) &&
+                        customerCallOrderPromotion.LinesWithPromo != null &&
+                        customerCallOrderPromotion.LinesWithPromo.size() > 0) {
                     try {
                         CallOrderLineManager callOrderLineManager = new CallOrderLineManager(getContext());
                         callOrderLineManager.updateLineWithPromotionForPreSales(callOrderId, customerCallOrderPromotion);
@@ -505,6 +511,56 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                 SysConfigManager sysConfigManager = new SysConfigManager(getActivity());
                 BackOfficeType backOfficeType = sysConfigManager.getBackOfficeType();
                 final CustomerCallOrderLinePromotion p = recyclerAdapter.get(position);
+
+                if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
+                    if (!p.QtyCaption.contains(":")&&p.UnitName.equals("EA")) {
+                        ProductUnitViewManager productUnitViewManager = new ProductUnitViewManager(getContext());
+                        try {
+                            List<ProductUnitViewModel> unitViewModels = productUnitViewManager.getProductUnits(p.ProductId, ProductType.isForSale);
+
+                            BigDecimal b = new BigDecimal(p.QtyCaption);
+
+                            List<DiscreteUnit> units = VasHelperMethods.chopTotalQty(b, unitViewModels, false);
+                            String UnitNames = null;
+                            String ConvertFactors = null;
+                            String UnitIds = null;
+                            String qtys = null;
+                            for (DiscreteUnit discreteUnit :
+                                    units) {
+                                if (discreteUnit.value > 0) {
+                                    if (UnitNames != null) {
+                                        UnitNames = UnitNames + ":" + discreteUnit.Name;
+                                    } else {
+                                        UnitNames = discreteUnit.Name;
+                                    }
+                                    if (ConvertFactors != null) {
+                                        ConvertFactors = ConvertFactors + ":" + discreteUnit.ConvertFactor;
+                                    } else {
+                                        ConvertFactors = String.valueOf(discreteUnit.ConvertFactor);
+                                    }
+                                    if (UnitIds != null) {
+                                        UnitIds = UnitIds + ":" + discreteUnit.ProductUnitId;
+                                    } else {
+                                        UnitIds = String.valueOf(discreteUnit.ProductUnitId);
+                                    }
+                                    if (qtys != null) {
+                                        qtys = qtys + ":" + discreteUnit.value;
+                                    } else {
+                                        qtys = String.valueOf(discreteUnit.value);
+                                    }
+                                }
+                            }
+
+
+                            p.UnitName = UnitNames;
+                            p.QtyCaption = qtys;
+
+
+                        } catch (ProductUnitViewManager.UnitNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
 
                 if (backOfficeType == BackOfficeType.ThirdParty) {
                     if (mainLayout != null)

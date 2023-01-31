@@ -15,7 +15,10 @@ public class CalcOnlinePromotionAPI extends BaseApi implements ICalcOnlinePromot
     }
 
     @Override
-    public Call<DiscountOutputOnline> getDistOnlinePromotion(PreSaleEvcHeaderViewModel order, boolean calcDiscount, boolean calcSaleRestriction, boolean calcPaymentType) {
+    public Call<DiscountOutputOnline> getDistOnlinePromotion(PreSaleEvcHeaderViewModel order,
+                                                             boolean calcDiscount,
+                                                             boolean calcSaleRestriction,
+                                                             boolean calcPaymentType) {
         ICalcOnlinePromotionAPI api = getRetrofitBuilder().build().create(ICalcOnlinePromotionAPI.class);
         return api.getDistOnlinePromotion(order, calcDiscount, calcSaleRestriction, calcPaymentType);
     }

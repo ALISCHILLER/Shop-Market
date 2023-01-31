@@ -117,6 +117,8 @@ import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.EditOrderLocat
 import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.OrderActivityEventViewModel;
 import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.OrderLineActivityEventViewModel;
 import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.OrderLocationViewModel;
+import com.varanegar.vaslibrary.manager.newmanager.customerLastBill.CustomerLastBillManager;
+import com.varanegar.vaslibrary.manager.newmanager.customerLastBill.CustomerLastBillModel;
 import com.varanegar.vaslibrary.manager.newmanager.customerXmounthsalereport.CustomerXMounthSaleReportManager;
 import com.varanegar.vaslibrary.manager.newmanager.customerXmounthsalereport.CustomerXMounthSaleReportModel;
 import com.varanegar.vaslibrary.manager.orderprizemanager.OrderPrizeManager;
@@ -1454,7 +1456,9 @@ public class CustomerSaveOrderFragment extends VisitFragment
                             @Override
                             protected void onSuccess() {
                                 prepareCalculations();
+
                                 stopProductStockLevelProgressDialog();
+                                CustomerLastBillView();
                             }
 
                             @Override
@@ -1466,7 +1470,13 @@ public class CustomerSaveOrderFragment extends VisitFragment
                                     dialog.setMessage(error);
                                     dialog.setTitle(R.string.error);
                                     dialog.setIcon(Icon.Error);
-                                    dialog.setPositiveButton(R.string.ok, null);
+                                    dialog.setPositiveButton(R.string.ok,
+                                            new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            CustomerLastBillView();
+                                        }
+                                    });
                                     dialog.show();
                                 }
                             }
@@ -1490,6 +1500,30 @@ public class CustomerSaveOrderFragment extends VisitFragment
             prepareCalculations();
         }
 
+
+
+
+    }
+
+    private void CustomerLastBillView(){
+        List<CustomerLastBillModel> customerLastBillModel=new
+                CustomerLastBillManager(context).getAll(customer.CustomerCode);
+        if (customerLastBillModel.size() > 0) {
+            Ml_dialog1 ml_dialog1 = new Ml_dialog1();
+
+            ml_dialog1.setValues(customerLastBillModel,customer.CustomerName);
+            ml_dialog1.show(getChildFragmentManager(), "Ml_dialog1");
+            ml_dialog1.setOnResult(new InsertPinDialog.OnResult() {
+                @Override
+                public void done() {
+                }
+
+                @Override
+                public void failed(String error) {
+
+                }
+            });
+        }
     }
 
     protected void loadCalls() {
@@ -1671,50 +1705,6 @@ public class CustomerSaveOrderFragment extends VisitFragment
                 cuteMessageDialog.setNegativeButton(R.string.ok, null);
                 cuteMessageDialog.show();
             } else {
-//                if (orderAdapter.size() > 0) {
-//                    CustomerXMounthSaleReportManager customerXMounthSaleReportManager =
-//                            new CustomerXMounthSaleReportManager(getContext());
-//                    List<CustomerXMounthSaleReportModel> xMounthSaleReportModelss=new ArrayList<>();
-//                    xMounthSaleReportModelss.clear();
-//                    List<CustomerXMounthSaleReportModel> xMounthSaleReportModels =
-//                            customerXMounthSaleReportManager.getAll(customer.CustomerCode);
-//                    xMounthSaleReportModelss = xMounthSaleReportModels;
-//                    if (xMounthSaleReportModels.size() > 0) {
-//
-//                        for (CustomerCallOrderOrderViewModel item : orderAdapter.getItems()) {
-//                            for (int i=0;i<xMounthSaleReportModels.size();i++) {
-//                                if (item.ProductCode.equals(xMounthSaleReportModels.get(i).ProductCode)) {
-//                                    xMounthSaleReportModelss.remove(xMounthSaleReportModels.get(i));
-//                                }
-//                            }
-//                        }
-//
-//                        if (xMounthSaleReportModelss.size() > 0) {
-//                            Ml_dialog1 ml_dialog1 = new Ml_dialog1();
-//
-//                            ml_dialog1.setValues(xMounthSaleReportModelss,customer.CustomerName);
-//                            ml_dialog1.show(getChildFragmentManager(), "Ml_dialog1");
-//                            ml_dialog1.setOnResult(new InsertPinDialog.OnResult() {
-//                                @Override
-//                                public void done() {
-//                                    saveOrder();
-//                                }
-//
-//                                @Override
-//                                public void failed(String error) {
-//
-//                                }
-//                            });
-//                        } else {
-//                            saveOrder();
-//                        }
-//
-//                    } else {
-//                        saveOrder();
-//                    }
-//                }else {
-//                    saveOrder();
-//                }
                 saveOrder();
             }
         });
@@ -3155,7 +3145,9 @@ public class CustomerSaveOrderFragment extends VisitFragment
                 }
                 if ((!isInOrder || result.getError() != null || result.getWarning() != null) &&
                         !SysConfigManager.compare(new SysConfigManager(getContext())
-                                .read(ConfigKey.SimplePresale, SysConfigManager.cloud), true)) {
+                                .read(ConfigKey.SimplePresale, SysConfigManager.cloud), true)&&
+                        VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+
                     FastOrderProductsDialog dialog = new FastOrderProductsDialog();
                     dialog.setProductOrderViewModels(productList);
                     Bundle bundle = new Bundle();
