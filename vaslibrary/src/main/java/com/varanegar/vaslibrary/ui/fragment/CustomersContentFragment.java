@@ -595,19 +595,21 @@ public class CustomersContentFragment extends VaranegarFragment {
 
 
         }
-        CustomerUpdateAction customerUpdateAction = new CustomerUpdateAction(
-                getVaranegarActvity(),
-                actionsAdapter,
-                getSelectedId());
-        customerUpdateAction.setActionCallBack(() -> {
-            if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
-                customer = new CustomerManager(getContext()).getItem(getSelectedId());
-                if (customer.CodeNaghsh != null && !customer.CodeNaghsh.isEmpty()) {
-                    code_naghsh_paired_item.setValue(customer.CodeNaghsh);
+        if(VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+            CustomerUpdateAction customerUpdateAction = new CustomerUpdateAction(
+                    getVaranegarActvity(),
+                    actionsAdapter,
+                    getSelectedId());
+            customerUpdateAction.setActionCallBack(() -> {
+                if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+                    customer = new CustomerManager(getContext()).getItem(getSelectedId());
+                    if (customer.CodeNaghsh != null && !customer.CodeNaghsh.isEmpty()) {
+                        code_naghsh_paired_item.setValue(customer.CodeNaghsh);
+                    }
                 }
-            }
-        });
-        actions.add(customerUpdateAction);
+            });
+            actions.add(customerUpdateAction);
+        }
 
     }
     //---------------------------------------------------------------------------------------------- addActions
