@@ -256,6 +256,10 @@ public class OrderCalculatorForm extends CuteDialog {
         fabVoice=view.findViewById(R.id.fabVoice);
 
         LinearLayout linearLayoutParent = view.findViewById(R.id.linearLayoutParent);
+
+        if(VaranegarApplication.is(VaranegarApplication.AppId.Dist)){
+            linearLayoutParent.setVisibility(View.GONE);
+        }
        TextView promtion_qty_text_view=view.findViewById(R.id.promtion_qty_text_view);
         if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
             if (PrizeComment != null && !PrizeComment.isEmpty()) {
