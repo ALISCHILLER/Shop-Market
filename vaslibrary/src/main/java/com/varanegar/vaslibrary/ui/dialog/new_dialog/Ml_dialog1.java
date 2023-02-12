@@ -201,7 +201,7 @@ public class Ml_dialog1 extends CuteDialogWithToolbar {
 
         @Override
         public void bindView(final int position) {
-            if (recyclerAdapter.get(position).TypeSum.equals("X")) {
+            if (productModel2!=null &&recyclerAdapter.get(position).TypeSum.equals("X")) {
 
                 ((TextView) itemView.findViewById(R.id.product_name_id))
                         .setText(Objects.requireNonNull(recyclerAdapter.get(position)).ProductName + " " +

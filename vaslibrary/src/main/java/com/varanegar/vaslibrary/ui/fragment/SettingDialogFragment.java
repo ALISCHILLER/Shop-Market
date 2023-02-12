@@ -213,8 +213,8 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
         sysConfigManager = new SysConfigManager(getContext());
         firstExternalIpEditText.setEnabled(false);
         localIpEditText.setEnabled(false);
-        firstExternalIpEditText.setText("5.160.125.98:8080");
-        localIpEditText.setText("5.160.125.98:8080");
+        firstExternalIpEditText.setText("192.168.50.152:8585");
+        localIpEditText.setText("192.168.50.152:8585");
 
         sharedconditionCustomer = getActivity().getSharedPreferences("OpenVPN", Context.MODE_PRIVATE);
         vpn_profile=view.findViewById(R.id.vpn_profile);

@@ -74,6 +74,7 @@ import com.varanegar.vaslibrary.ui.fragment.settlement.CustomerPayment;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.apiNew.ApiNew;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -372,8 +373,15 @@ public class ConfirmAction extends CheckPathAction {
             }
 
 
+            ArrayList<CustomerCallOrderModel> secondList=new ArrayList<>();
+            ArrayList<CustomerCallOrderModel> firstList=new ArrayList<>();
+
             if (callOrderModels.size() > 0 &&
                     confirmedCallOrders.size() != callOrderModels.size()) {
+                firstList.addAll(callOrderModels);
+                secondList.addAll(confirmedCallOrders);
+                firstList.removeAll(secondList);
+
                 showErrorMessage(R.string.there_is_an_unconfirmed_order);
                 setRunning(false);
                 return;
