@@ -105,7 +105,7 @@ public class CalcPromotion {
                         DiscountCallOrderData disCallData;
                         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist))
                             disCallData = PromotionHandlerV3.distCalcPromotionOnlineSDS(null, callData.toDiscount(context), context,
-                                    null,null);
+                                    null,null,null);
                         else
                             disCallData = PromotionHandlerV3.calcPromotionOnlineSDS(null, callData.toDiscount(context), context);
 
@@ -358,9 +358,10 @@ public class CalcPromotion {
         try {
             String DocPDate=callInvoiceModel.DocPDate;
             String SalePDate=callInvoiceModel.SalePDate;
+            String ZTERM=callInvoiceModel.ZTERM;
 
             if (GlobalVariables.isCalcOnline())
-                disCallData = PromotionHandlerV3.distCalcPromotionOnlineSDS(orderPrizeList, callData.toDiscount(context), context,SalePDate,DocPDate);
+                disCallData = PromotionHandlerV3.distCalcPromotionOnlineSDS(orderPrizeList, callData.toDiscount(context), context,SalePDate,DocPDate,ZTERM);
             else {
                 DiscountInitializeHandler disc = DiscountInitializeHandlerV3.getDiscountHandler(context);
                 //DiscountCalculatorHandler.init(disc, callData.BackOfficeOrderId, null);

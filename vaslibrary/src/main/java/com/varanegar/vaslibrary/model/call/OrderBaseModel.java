@@ -161,4 +161,6 @@ public class OrderBaseModel extends BaseModel {
     @Column
     public String SalePDate;
 
+    public String ZTERM;
+
 }

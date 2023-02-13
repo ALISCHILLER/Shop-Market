@@ -85,7 +85,7 @@ public class CustomerCallInvoiceModel extends OrderBaseModel {
         customerCallOrderModel.TotalAmountNutCheque=TotalAmountNutCheque;
         customerCallOrderModel.TotalAmountNutCash =TotalAmountNutCash;
         customerCallOrderModel.TotalAmountNutImmediate =TotalAmountNutImmediate;
-
+        customerCallOrderModel.ZTERM=ZTERM;
 
         return customerCallOrderModel;
     }

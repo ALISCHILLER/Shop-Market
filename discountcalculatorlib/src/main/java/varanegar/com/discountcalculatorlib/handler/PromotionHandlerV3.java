@@ -179,7 +179,8 @@ public class PromotionHandlerV3 {
             final DiscountCallOrderData discountCallOrderData,
             final Context context,
             String SalePDate,
-            String  DocPDate
+            String  DocPDate,
+            String  ZTERM
             ) throws InterruptedException {
         final String[] errorMessage = {null};
         final Thread thread = new Thread(new Runnable() {
@@ -213,7 +214,8 @@ public class PromotionHandlerV3 {
                     hasChoicePrize = false;
                     onlineData.SalePDate=SalePDate;
                     onlineData.DocPDate=DocPDate;
-                  
+                    onlineData.ZTERM=ZTERM;
+
                     Call<DiscountOutputOnline> call = calcPromotionAPI.getDistOnlinePromotion(onlineData,
                             GlobalVariables.getCalcDiscount(),
                             GlobalVariables.getCalcSaleRestriction(),

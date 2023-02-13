@@ -22,6 +22,7 @@ public class PreSaleEvcHeaderViewModel {
     public int RefId;
     public String DocPDate;
     public String SalePDate;
+    public String ZTERM;
     public List<DiscountCallOrderLineDataOnline> PreSaleEvcDetails;
     public List<DiscountOrderPrizeViewModel> OrderPrizeList;
     public List<Integer> SelIds;
