@@ -1422,7 +1422,7 @@ public class CustomersContentFragment extends VaranegarFragment {
     }
 
     protected Boolean getldialog() {
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences("mldialog", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(   "mldialog", Context.MODE_PRIVATE);
         Boolean  mldialog =sharedPreferences.getBoolean(customer.CustomerCode,true);
         return mldialog;
     }

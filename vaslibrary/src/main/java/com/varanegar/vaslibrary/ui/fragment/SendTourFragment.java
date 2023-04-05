@@ -41,6 +41,7 @@ import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.manager.tourmanager.TourManager;
 import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.model.customercall.CustomerCallType;
+import com.varanegar.vaslibrary.model.customerpathview.CustomerPathViewModel;
 import com.varanegar.vaslibrary.model.onhandqty.OnHandQty;
 import com.varanegar.vaslibrary.model.onhandqty.OnHandQtyModel;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
@@ -486,9 +487,17 @@ public abstract class SendTourFragment extends PopupFragment {
                 !VaranegarApplication.is(VaranegarApplication.AppId.Contractor)) {
             final CuteMessageDialog dialog =
                     new CuteMessageDialog(getContext());
+
+            List<CustomerPathViewModel> list=customerPathViewManager.getItems();
+            String s="";
+            for (CustomerPathViewModel model:
+                 list) {
+                s=s+" "+model.CustomerName;
+            }
             dialog.setTitle(R.string.alert);
             dialog.setIcon(Icon.Warning);
-            dialog.setMessage(R.string.visit_incomplete_operation_customers);
+            String message="برخی  از مشتریان دارای وضعیت عملیات ناقص هستند. لطفا عملیات مشتریان را تایید کنید مشتریان :"+""+s;
+            dialog.setMessage(message);
             dialog.setPositiveButton(R.string.ok, null);
             dialog.show();
         } else {

@@ -453,6 +453,11 @@ public class CustomerPathViewManager extends BaseManager<CustomerPathViewModel> 
         return (getItems(hasOperationCustomers(tourModel.DayVisitPathId, false, false)).size() > 0);
     }
 
+    public List<CustomerPathViewModel>  getItems(){
+        TourManager tourManager = new TourManager(getContext());
+        TourModel tourModel = tourManager.loadTour();
+        return getItems(hasOperationCustomers(tourModel.DayVisitPathId, false, false));
+    }
     public Query hasOperationCustomers(UUID visitPathId, boolean checkActive, boolean confirmed) {
         Query query = new Query();
         query.select(Projection.column(CustomerPathView.CustomerPathViewTbl, CustomerPathView.All));

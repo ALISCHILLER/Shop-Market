@@ -227,9 +227,9 @@ public class CustomerXMounthSaleReportManager extends BaseManager<CustomerXMount
                         Timber.e(e);
                         callback.failure("خطا در ذخیره سازی customerSumMoneyAndWeightReport");
                     }
-
-                    CheckCustomerCredit(context, callback, customer,customersCode);
                 }
+
+                CheckCustomerCredit(context, callback, customer,customersCode);
 
             }
 

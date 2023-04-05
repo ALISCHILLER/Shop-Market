@@ -54,7 +54,7 @@
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:switchPadding="@dimen/padding_default"
-                android:text="@string/last_position" />
+                android:text="موقعیت زنده" />
 
             <Switch
                 android:layout_margin="@dimen/padding_default"
@@ -62,14 +62,7 @@
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:switchPadding="@dimen/padding_default"
-                android:text="@string/last_event" />
-            <Switch
-                android:layout_margin="@dimen/padding_default"
-                android:id="@+id/live_location_switch"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:switchPadding="@dimen/padding_default"
-                android:text="موقعیت زنده" />
+                android:text="  مسیریابی" />
 
         </LinearLayout>
 

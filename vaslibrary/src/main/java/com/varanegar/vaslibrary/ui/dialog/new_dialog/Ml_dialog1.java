@@ -112,11 +112,15 @@ public class Ml_dialog1 extends CuteDialogWithToolbar {
                         || lastBillModel.Type.equals("ZRFI")) {
                     productModel2.add(lastBillModel);
                     centers_linear1.setVisibility(View.VISIBLE);
+
                 }
-                if (lastBillModel.TypeSum.equals("X")) {
-                    productModel3.add(lastBillModel);
-                    centers_linear2.setVisibility(View.VISIBLE);
+                if (productModel2!=null &&productModel2.size()>0) {
+                    if (lastBillModel.TypeSum.equals("X")) {
+                        productModel3.add(lastBillModel);
+                        centers_linear2.setVisibility(View.VISIBLE);
+                    }
                 }
+
 
             }
         }else {
@@ -201,7 +205,7 @@ public class Ml_dialog1 extends CuteDialogWithToolbar {
 
         @Override
         public void bindView(final int position) {
-            if (productModel2!=null &&recyclerAdapter.get(position).TypeSum.equals("X")) {
+            if (productModel2!=null&&productModel2.size()>0 &&recyclerAdapter.get(position).TypeSum.equals("X")) {
 
                 ((TextView) itemView.findViewById(R.id.product_name_id))
                         .setText(Objects.requireNonNull(recyclerAdapter.get(position)).ProductName + " " +

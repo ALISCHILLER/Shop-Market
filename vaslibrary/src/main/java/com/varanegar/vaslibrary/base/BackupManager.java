@@ -29,6 +29,7 @@ import com.varanegar.vaslibrary.manager.sysconfigmanager.OwnerKeysNotFoundExcept
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.manager.tourmanager.TourManager;
 import com.varanegar.vaslibrary.model.tour.TourModel;
+import com.varanegar.vaslibrary.model.tour.TourStatus;
 import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.backupapi.BackupApi;
@@ -247,6 +248,8 @@ public class BackupManager {
                     TourModel tourModel = tourManager.loadTour();
                     if (tourModel != null) {
                         tourModel.IsFromBackup = true;
+//                        if (VaranegarApplication.is(VaranegarApplication.AppId.Dist))
+                            tourModel.Status= TourStatus.Confirmed;
                         tourManager.saveTour(tourModel, context);
                     }
                 } else if (entryName.equals("user.dat")) {

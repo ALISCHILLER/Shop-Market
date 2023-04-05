@@ -18,6 +18,7 @@ import com.varanegar.supervisor.model.changeOrdersStatus.ChangeOrdersStatusmMode
 import com.varanegar.supervisor.model.reviewreport.ReviewreportModel;
 import com.varanegar.supervisor.model.tracking.RouteMapModel;
 import com.varanegar.supervisor.model.tracking.RouteMapPostModel;
+import com.varanegar.supervisor.tracking.GpsTrackingJsonModel;
 import com.varanegar.supervisor.webapi.model_new.datamanager.CustomerPinModel;
 import com.varanegar.supervisor.webapi.model_new.send_pincode.PinRequestViewModel;
 import com.varanegar.supervisor.webapi.model_old.CustomerCallViewModel;
@@ -165,6 +166,12 @@ public class SupervisorApi extends BaseApi implements ISupervisorApi {
     public Call<List<NewsData_Model>> getNewsData() {
         return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
                 .create(ISupervisorApi.class).getNewsData();
+    }
+
+    @Override
+    public Call<List<GpsTrackingJsonModel>> getGpsTrackingJson(GpsTrackingJsonModel gpsTrackingJsonModel) {
+        return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
+                .create(ISupervisorApi.class).getGpsTrackingJson(gpsTrackingJsonModel);
     }
 
     @Override

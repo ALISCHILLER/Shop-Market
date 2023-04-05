@@ -5,13 +5,19 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.os.Handler;
@@ -38,6 +44,8 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.varanegar.framework.base.ProgressFragment;
 import com.varanegar.framework.network.Connectivity;
 import com.varanegar.framework.network.listeners.ApiError;
@@ -93,6 +101,10 @@ import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.WifiOffLocatio
 import com.varanegar.vaslibrary.manager.locationmanager.viewmodel.WifiOnLocationViewModel;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -100,6 +112,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.UUID;
@@ -134,6 +147,8 @@ public class MapFragment extends ProgressFragment implements RemoteSignalREmitte
         super.onCreate(savedInstanceState);
         geocoder = new Geocoder(getContext(), Locale.getDefault());
         mapHelper = new MapHelper(getActivity());
+
+
 
     }
 
@@ -248,8 +263,11 @@ public class MapFragment extends ProgressFragment implements RemoteSignalREmitte
         });
 
 
+
         return view;
     }
+
+
 
     private void refreshMarkers() {
         if (_markers.size() > 0) {
@@ -410,94 +428,146 @@ public class MapFragment extends ProgressFragment implements RemoteSignalREmitte
     }
 
     public void showMarkers() {
-        if (mapHelper == null)
+        if (mapHelper == null || googleMap == null)
             return;
+
         mapHelper.removeMarkers();
         final TrackingConfig trackingConfig = new TrackingConfig(getContext());
-        final SupervisorApi api = new SupervisorApi(getContext());
-        if (!trackingConfig.isTracking()) {
-            final PersonnelPointsParam param = new PersonnelPointsParam();
-            param.mDate = trackingConfig.getTrackingDate();
-            param.FromTime = trackingConfig.getFromTime();
-            param.ToTime = trackingConfig.getToTime();
-            param.PersonelIds = trackingConfig.getPersonnelIds();
-            param.StopTime = trackingConfig.getWaitTime();
+        if (trackingConfig.getStatusType() == StatusType.Event) {
 
 
-            Set<UUID> trackingActivityTypes = trackingConfig.getTrackingActivityTypes();
-            param.Order = trackingActivityTypes.contains(EventTypeId.Order);
-            param.LackOrder = trackingActivityTypes.contains(EventTypeId.LackOfOrder);
-            param.LackVisit = trackingActivityTypes.contains(EventTypeId.LackOfVisit);
-            param.Wait = trackingActivityTypes.contains(EventTypeId.Wait);
-            param.GpsPowerOff = trackingActivityTypes.contains(EventTypeId.GpsOff);
-            param.GpsPowerOn = trackingActivityTypes.contains(EventTypeId.GpsOn);
-            param.BattryLow = trackingActivityTypes.contains(EventTypeId.BatteryLow);
-            param.EnterPath = trackingActivityTypes.contains(EventTypeId.EnterVisitDay);
-            param.ExitPath = trackingActivityTypes.contains(EventTypeId.ExitVisitDay);
-            param.EnterRigion = trackingActivityTypes.contains(EventTypeId.EnterRegion);
-            param.ExitRigion = trackingActivityTypes.contains(EventTypeId.ExitRegion);
-            param.OpernTour = trackingActivityTypes.contains(EventTypeId.StartTour);
-            param.CloseTour = trackingActivityTypes.contains(EventTypeId.SendTour);
-            param.ExitCompany = trackingActivityTypes.contains(EventTypeId.ExitCompany);
-            param.WifiPowerOff = trackingActivityTypes.contains(EventTypeId.WifiOff);
-            param.WifiPowerOn = trackingActivityTypes.contains(EventTypeId.WifiOn);
-            param.EnterCompany = trackingActivityTypes.contains(EventTypeId.EnterCompany);
-            param.MobileDataOff = trackingActivityTypes.contains(EventTypeId.MobileDataOff);
-            param.MobileDataOn = trackingActivityTypes.contains(EventTypeId.MobileDataOn);
+            final SupervisorApi api = new SupervisorApi(getContext());
 
+            if (signalRListener != null)
+                signalRListener.stopConnection();
+
+
+            SharedPreferences sharedPreferences = getContext().getSharedPreferences("SupervisorId", Context.MODE_PRIVATE);
+            UUID userModel = UUID.fromString(sharedPreferences.getString("SupervisorIduniqueId", null));
             startProgress(R.string.please_wait, R.string.downloading_data);
-            api.runWebRequest(api.loadPersonnelPath(param), new WebCallBack<List<MasterEventViewModel>>() {
+            GpsTrackingJsonModel gpsTrackingJsonModel = new GpsTrackingJsonModel();
+            List<UUID> dealerId = trackingConfig.getPersonnelIds();
+            List<String> dealerIds = new ArrayList<>();
+            for (UUID u : dealerId) {
+                dealerIds.add(String.valueOf(u));
+                if (gpsTrackingJsonModel.DealerId != null) {
+                    gpsTrackingJsonModel.DealerId = gpsTrackingJsonModel.DealerId + "," + u;
+                } else {
+                    gpsTrackingJsonModel.DealerId = String.valueOf(u);
+                }
+
+            }
+            gpsTrackingJsonModel.DealerIds=dealerIds;
+            gpsTrackingJsonModel.SupervisorId = userModel;
+            gpsTrackingJsonModel.createdDate =trackingConfig.getStatusDate();
+            gpsTrackingJsonModel.createdDate_str =DateHelper.toString(trackingConfig.getStatusDate(),DateFormat.Complete,Locale.US);
+            api.runWebRequest(api.getGpsTrackingJson(gpsTrackingJsonModel), new WebCallBack<List<GpsTrackingJsonModel>>() {
                 @Override
                 protected void onFinish() {
                     finishProgress();
                 }
 
                 @Override
-                protected void onSuccess(final List<MasterEventViewModel> paths, Request request) {
-                    api.runWebRequest(api.loadPersonnelEvents(param), new WebCallBack<List<EventViewModel>>() {
-                        @Override
-                        protected void onFinish() {
+                protected void onSuccess(List<GpsTrackingJsonModel> result, Request request) {
+                    if (result != null) {
+                        JSONObject object = null;
+                        try {
 
+                            JSONArray array = new JSONArray();
+                            LatLng latlon = null;
+//                                for (GpsTrackingJsonModel trackingJsonModel :
+//                                        result) {
+//                                    array = new JSONArray(trackingJsonModel.Json_str);
+//                                    for (int i = 0; i < array.length(); i++) {
+//                                        object = array.getJSONObject(i);
+//                                        double lat = Double.parseDouble(object.getString("Lat"));
+//                                        double lon = Double.parseDouble(object.getString("Long"));
+//                                        latlon = new LatLng(lat, lon);
+//                                        Marker marker = googleMap.addMarker(new MarkerOptions().position(latlon));
+//                                        marker.setTitle(object.getString("CreatedDate") + "-" + " " + i);
+//                                        options.add(latlon);
+//
+//                                        if (i==0||i==array.length()-1) {
+//                                            marker.setIcon(bitmapDescriptorFromVector(getContext(), R.drawable.ic__metro_location_1));
+//                                        }else {
+//                                            marker.setIcon(bitmapDescriptorFromVector(getContext(), R.drawable.ic__metro_location));
+//                                        }
+//                                    }
+//                                }
+                                 for (int i=0;i<dealerIds.size();i++){
+                                     int [] arrayColors={
+                                             getResources().getColor(R.color.line1),
+                                             Color.BLUE,
+                                             Color.RED,
+                                             getResources().getColor(R.color.gradientLightGreen),
+                                             getResources().getColor(R.color.gradientViolet),
+                                             getResources().getColor(R.color.Maroon),
+                                             getResources().getColor(R.color.OrangeRed),
+                                             getResources().getColor(R.color.Indigo),
+                                             getResources().getColor(R.color.MidnightBlue),
+                                             getResources().getColor(R.color.Black),
+                                             getResources().getColor(R.color.pink),
+                                             getResources().getColor(R.color.zarShop),
+                                             getResources().getColor(R.color.Navy),
+                                             getResources().getColor(R.color.DarkRed),
+                                             getResources().getColor(R.color.DarkSlateGray),
+                                             getResources().getColor(R.color.gradientLightOrange),
+                                             getResources().getColor(R.color.Teal),
+                                             getResources().getColor(R.color.MediumBlue),
+                                             getResources().getColor(R.color.Crimson),
+
+                                     };
+                                     PolylineOptions options = new PolylineOptions()
+                                             .width(6f).color(arrayColors[i]);
+                                    for (GpsTrackingJsonModel trackingJsonModel :
+                                            result) {
+                                        if (dealerIds.get(i).equals(trackingJsonModel.DealerId.toLowerCase())){
+                                            array = new JSONArray(trackingJsonModel.Json_str);
+                                            for (int j = 0; j < array.length(); j++) {
+                                                VisitorModel visitorModel=new VisitorManager(getContext())
+                                                        .getVisitor(trackingJsonModel.DealerId.toLowerCase());
+                                                object = array.getJSONObject(j);
+                                                double lat = Double.parseDouble(object.getString("Lat"));
+                                                double lon = Double.parseDouble(object.getString("Long"));
+                                                latlon = new LatLng(lat, lon);
+                                                Marker marker = googleMap.addMarker(new MarkerOptions().position(latlon));
+                                                marker.setTitle(visitorModel.Name+" "
+                                                        +object.getString("Time") + "-" + " " + j);
+                                                options.add(latlon);
+
+                                                if (j==0) {
+                                                    marker.setIcon(bitmapDescriptorFromVector(getContext(), R.drawable.start));
+
+
+                                                }else if (j==array.length()-1){
+                                                    marker.setIcon(bitmapDescriptorFromVector(getContext(), R.drawable.stop));
+                                                }else {
+                                                    marker.setIcon(bitmapDescriptorFromVector(getContext(), R.drawable.ic__metro_location));
+                                                }
+                                            }
+                                            if (options!=null) {
+                                                Polyline polyline = googleMap.addPolyline(options);
+                                                polyline.setClickable(true);
+                                            }
+
+                                        }
+                                    }
+                                }
+
+
+
+                            float zom = 10.5F;
+                         //   googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlon, zom));
+
+
+                        } catch (JSONException e) {
+                            Timber.e(e);
+                            showError(" خطا در GpsTrackingJsonModel");
+                            e.printStackTrace();
                         }
 
-                        @Override
-                        protected void onSuccess(List<EventViewModel> events, Request request) {
-                            List<EventViewModel> allPoints = new ArrayList<>();
-                            for (MasterEventViewModel master :
-                                    paths) {
-                                if (master.points != null)
-                                    allPoints.addAll(master.points);
-                            }
-                            allPoints.addAll(events);
-                            _markers = createMarkers(allPoints, true , false);
-                            if (_markers.size() > 0) {
-                                mapHelper.setMarkers(_markers);
-                                mapHelper.setDrawLines(true);
-                                mapHelper.moveToArea(_markers);
-                                mapHelper.draw(null);
-                                mapHelper.removeOnMarkerInfoViewClickListener();
-                            }
-                        }
 
-                        @Override
-                        protected void onApiFailure(ApiError error, Request request) {
-                            Activity activity = getActivity();
-                            if (activity != null && !activity.isFinishing() && isResumed()) {
-                                String err = WebApiErrorBody.log(error, getContext());
-                                showError(err);
-                            }
-                        }
-
-                        @Override
-                        protected void onNetworkFailure(Throwable t, Request request) {
-                            Activity activity = getActivity();
-                            if (activity != null && !activity.isFinishing() && isResumed()) {
-                                Timber.e(t);
-                                showError(R.string.network_error);
-                            }
-                        }
-                    });
-
+                    }
                 }
 
                 @Override
@@ -505,86 +575,7 @@ public class MapFragment extends ProgressFragment implements RemoteSignalREmitte
                     Activity activity = getActivity();
                     if (activity != null && !activity.isFinishing() && isResumed()) {
                         Timber.e(error.getMessage());
-                        showError(error.getMessage());
-                    }
-                }
-
-                @Override
-                protected void onNetworkFailure(Throwable t, Request request) {
-                    Activity activity = getActivity();
-                    if (activity != null && !activity.isFinishing() && isResumed()) {
-                        Timber.e(t);
-                        showError(R.string.network_error);
-                    }
-                }
-            });
-        } else {
-            /**
-             * اخرین موقعیت
-             */
-            JalaliCalendar calendar = new JalaliCalendar();
-            Date d=new Date();
-            String date = DateHelper.toString(d, DateFormat.Date, Locale.getDefault());
-
-            LastPointsParam param = new LastPointsParam();
-            param.date = date;
-            param.LaststatusType = trackingConfig.getStatusType().ordinal();
-            param.PersonelIds = trackingConfig.getPersonnelIds();
-            startProgress(R.string.please_wait, R.string.downloading_data);
-            api.runWebRequest(api.loadLastPoints(param), new WebCallBack<List<EventViewModel>>() {
-                @Override
-                protected void onFinish() {
-                    finishProgress();
-                }
-
-                @Override
-                protected void onSuccess(List<EventViewModel> result, Request request) {
-
-
-
-                    if (param.LaststatusType==0) {
-                        mapHelper.removeMarkers();
-                        _markers.clear();
-                        mapHelper.removeOnMarkerInfoViewClickListener();
-                        createMarkers(result, param.LaststatusType);
-                    }else if(param.LaststatusType!=0) {
-                        _markers = createMarkers(result, new TrackingConfig(getContext()).getStatusType() == StatusType.Event, true);
-                        if (_markers.size() > 0) {
-                            mapHelper.setMarkers(_markers);
-                            mapHelper.setDrawLines(false);
-                            mapHelper.moveToArea(_markers);
-                            mapHelper.draw(null);
-                            mapHelper.setOnMarkerInfoViewClickListener(new MapHelper.OnMarkerInfoViewClickListener() {
-                                @Override
-                                public void onClick(TrackingMarker marker) {
-                                    if(param.LaststatusType!=0){
-                                    BaseLocationViewModel locationViewModel = marker.getLocationViewModel();
-                                    Activity activity = getActivity();
-                                    if (activity != null && !activity.isFinishing() && isResumed()) {
-                                        TrackingConfig trackingConfig = new TrackingConfig(activity);
-                                        trackingConfig.isTracking(true);
-                                        trackingConfig.setFromTime(6, 0);
-                                        trackingConfig.setToTime(23, 55);
-                                        trackingConfig.isMap(true);
-                                        List<UUID> customersIds = new ArrayList<>();
-                                        customersIds.add(locationViewModel.CompanyPersonnelId);
-                                        trackingConfig.removePersonnelIds();
-                                        trackingConfig.setPersonnelIds2(customersIds);
-                                        trackingConfig.setTrackingDate(new Date());
-                                        showMarkers();
-                                    }
-                                    }
-                                }
-                            });
-                        }
-                    }
-                }
-
-                @Override
-                protected void onApiFailure(ApiError error, Request request) {
-                    Activity activity = getActivity();
-                    if (activity != null && !activity.isFinishing() && isResumed()) {
-                        String err = WebApiErrorBody.log(error, activity);
+                        String err = WebApiErrorBody.log(error, getContext());
                         showError(err);
                     }
                 }
@@ -593,13 +584,204 @@ public class MapFragment extends ProgressFragment implements RemoteSignalREmitte
                 protected void onNetworkFailure(Throwable t, Request request) {
                     Activity activity = getActivity();
                     if (activity != null && !activity.isFinishing() && isResumed()) {
-                        showError(R.string.network_error);
                         Timber.e(t);
+                        showError(R.string.network_error);
                     }
+//
                 }
             });
-        }
 
+
+//            final PersonnelPointsParam param = new PersonnelPointsParam();
+//            param.mDate = trackingConfig.getTrackingDate();
+//            param.FromTime = trackingConfig.getFromTime();
+//            param.ToTime = trackingConfig.getToTime();
+//            param.PersonelIds = trackingConfig.getPersonnelIds();
+//            param.StopTime = trackingConfig.getWaitTime();
+//
+//
+//            Set<UUID> trackingActivityTypes = trackingConfig.getTrackingActivityTypes();
+//            param.Order = trackingActivityTypes.contains(EventTypeId.Order);
+//            param.LackOrder = trackingActivityTypes.contains(EventTypeId.LackOfOrder);
+//            param.LackVisit = trackingActivityTypes.contains(EventTypeId.LackOfVisit);
+//            param.Wait = trackingActivityTypes.contains(EventTypeId.Wait);
+//            param.GpsPowerOff = trackingActivityTypes.contains(EventTypeId.GpsOff);
+//            param.GpsPowerOn = trackingActivityTypes.contains(EventTypeId.GpsOn);
+//            param.BattryLow = trackingActivityTypes.contains(EventTypeId.BatteryLow);
+//            param.EnterPath = trackingActivityTypes.contains(EventTypeId.EnterVisitDay);
+//            param.ExitPath = trackingActivityTypes.contains(EventTypeId.ExitVisitDay);
+//            param.EnterRigion = trackingActivityTypes.contains(EventTypeId.EnterRegion);
+//            param.ExitRigion = trackingActivityTypes.contains(EventTypeId.ExitRegion);
+//            param.OpernTour = trackingActivityTypes.contains(EventTypeId.StartTour);
+//            param.CloseTour = trackingActivityTypes.contains(EventTypeId.SendTour);
+//            param.ExitCompany = trackingActivityTypes.contains(EventTypeId.ExitCompany);
+//            param.WifiPowerOff = trackingActivityTypes.contains(EventTypeId.WifiOff);
+//            param.WifiPowerOn = trackingActivityTypes.contains(EventTypeId.WifiOn);
+//            param.EnterCompany = trackingActivityTypes.contains(EventTypeId.EnterCompany);
+//            param.MobileDataOff = trackingActivityTypes.contains(EventTypeId.MobileDataOff);
+//            param.MobileDataOn = trackingActivityTypes.contains(EventTypeId.MobileDataOn);
+//            api.runWebRequest(api.loadPersonnelPath(param), new WebCallBack<List<MasterEventViewModel>>() {
+//                @Override
+//                protected void onFinish() {
+//                    finishProgress();
+//                }
+//
+//                @Override
+//                protected void onSuccess(final List<MasterEventViewModel> paths, Request request) {
+//                    api.runWebRequest(api.loadPersonnelEvents(param), new WebCallBack<List<EventViewModel>>() {
+//                        @Override
+//                        protected void onFinish() {
+//
+//                        }
+//
+//                        @Override
+//                        protected void onSuccess(List<EventViewModel> events, Request request) {
+//                            List<EventViewModel> allPoints = new ArrayList<>();
+//                            for (MasterEventViewModel master :
+//                                    paths) {
+//                                if (master.points != null)
+//                                    allPoints.addAll(master.points);
+//                            }
+//                            allPoints.addAll(events);
+//                            _markers = createMarkers(allPoints, true , false);
+//                            if (_markers.size() > 0) {
+//                                mapHelper.setMarkers(_markers);
+//                                mapHelper.setDrawLines(true);
+//                                mapHelper.moveToArea(_markers);
+//                                mapHelper.draw(null);
+//                                mapHelper.removeOnMarkerInfoViewClickListener();
+//                            }
+//                        }
+//
+//                        @Override
+//                        protected void onApiFailure(ApiError error, Request request) {
+//                            Activity activity = getActivity();
+//                            if (activity != null && !activity.isFinishing() && isResumed()) {
+//                                String err = WebApiErrorBody.log(error, getContext());
+//                                showError(err);
+//                            }
+//                        }
+//
+//                        @Override
+//                        protected void onNetworkFailure(Throwable t, Request request) {
+//                            Activity activity = getActivity();
+//                            if (activity != null && !activity.isFinishing() && isResumed()) {
+//                                Timber.e(t);
+//                                showError(R.string.network_error);
+//                            }
+//                        }
+//                    });
+//
+//                }
+//
+//                @Override
+//                protected void onApiFailure(ApiError error, Request request) {
+//                    Activity activity = getActivity();
+//                    if (activity != null && !activity.isFinishing() && isResumed()) {
+//                        Timber.e(error.getMessage());
+//                        showError(error.getMessage());
+//                    }
+//                }
+//
+//                @Override
+//                protected void onNetworkFailure(Throwable t, Request request) {
+//                    Activity activity = getActivity();
+//                    if (activity != null && !activity.isFinishing() && isResumed()) {
+//                        Timber.e(t);
+//                        showError(R.string.network_error);
+//                    }
+//                }
+//            });
+        } else {
+            /**
+             * اخرین موقعیت
+             */
+            addMarkerVisitor();
+            if (signalRListener != null&&!signalRListener.isConnection()) {
+                addMarkerVisitor();
+                connectSignalR();
+            }
+
+
+//            JalaliCalendar calendar = new JalaliCalendar();
+//            Date d=new Date();
+//            String date = DateHelper.toString(d, DateFormat.Date, Locale.getDefault());
+//
+//            LastPointsParam param = new LastPointsParam();
+//            param.date = date;
+//            param.LaststatusType = trackingConfig.getStatusType().ordinal();
+//            param.PersonelIds = trackingConfig.getPersonnelIds();
+//            startProgress(R.string.please_wait, R.string.downloading_data);
+//            api.runWebRequest(api.loadLastPoints(param), new WebCallBack<List<EventViewModel>>() {
+//                @Override
+//                protected void onFinish() {
+//                    finishProgress();
+//                }
+//
+//                @Override
+//                protected void onSuccess(List<EventViewModel> result, Request request) {
+//
+//
+//
+//                    if (param.LaststatusType==0) {
+//                        mapHelper.removeMarkers();
+//                        _markers.clear();
+//                        mapHelper.removeOnMarkerInfoViewClickListener();
+//                        createMarkers(result, param.LaststatusType);
+//                    }else if(param.LaststatusType!=0) {
+//                        _markers = createMarkers(result, new TrackingConfig(getContext()).getStatusType() == StatusType.Event, true);
+//                        if (_markers.size() > 0) {
+//                            mapHelper.setMarkers(_markers);
+//                            mapHelper.setDrawLines(false);
+//                            mapHelper.moveToArea(_markers);
+//                            mapHelper.draw(null);
+//                            mapHelper.setOnMarkerInfoViewClickListener(new MapHelper.OnMarkerInfoViewClickListener() {
+//                                @Override
+//                                public void onClick(TrackingMarker marker) {
+//                                    if(param.LaststatusType!=0){
+//                                    BaseLocationViewModel locationViewModel = marker.getLocationViewModel();
+//                                    Activity activity = getActivity();
+//                                    if (activity != null && !activity.isFinishing() && isResumed()) {
+//                                        TrackingConfig trackingConfig = new TrackingConfig(activity);
+//                                        trackingConfig.isTracking(true);
+//                                        trackingConfig.setFromTime(6, 0);
+//                                        trackingConfig.setToTime(23, 55);
+//                                        trackingConfig.isMap(true);
+//                                        List<UUID> customersIds = new ArrayList<>();
+//                                        customersIds.add(locationViewModel.CompanyPersonnelId);
+//                                        trackingConfig.removePersonnelIds();
+//                                        trackingConfig.setPersonnelIds2(customersIds);
+//                                        trackingConfig.setTrackingDate(new Date());
+//                                        showMarkers();
+//                                    }
+//                                    }
+//                                }
+//                            });
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                protected void onApiFailure(ApiError error, Request request) {
+//                    Activity activity = getActivity();
+//                    if (activity != null && !activity.isFinishing() && isResumed()) {
+//                        String err = WebApiErrorBody.log(error, activity);
+//                        showError(err);
+//                    }
+//                }
+//
+//                @Override
+//                protected void onNetworkFailure(Throwable t, Request request) {
+//                    Activity activity = getActivity();
+//                    if (activity != null && !activity.isFinishing() && isResumed()) {
+//                        showError(R.string.network_error);
+//                        Timber.e(t);
+//                    }
+//                }
+//            });
+//        }
+
+        }
     }
     private void createMarkers(List<EventViewModel> result,int lasttype){
         Linq.forEach(markers, new Linq.Consumer<Marker>() {
@@ -748,8 +930,19 @@ public class MapFragment extends ProgressFragment implements RemoteSignalREmitte
 //        return dist;
 
     }
-    
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, @DrawableRes int vectorDrawableResourceId) {
+        Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);
+        background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorDrawableResourceId);
+        vectorDrawable.setBounds(40, 20, vectorDrawable.getIntrinsicWidth() + 40, vectorDrawable.getIntrinsicHeight() + 20);
+        Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(), background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        background.draw(canvas);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
     public void addMarkerVisitor(){
+        markersVisitors.removeAll(markersVisitors);
         final LatLng locationA = new LatLng(0, 0);
         List<VisitorModel>  visitorModels = new VisitorManager(getContext()).getAll();
         for (VisitorModel visitorModel:visitorModels){

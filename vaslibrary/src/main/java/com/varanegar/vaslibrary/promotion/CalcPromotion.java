@@ -358,7 +358,7 @@ public class CalcPromotion {
         try {
             String DocPDate=callInvoiceModel.DocPDate;
             String SalePDate=callInvoiceModel.SalePDate;
-            String ZTERM=callInvoiceModel.ZTERM;
+            String ZTERM=callInvoiceModel.zterm;
 
             if (GlobalVariables.isCalcOnline())
                 disCallData = PromotionHandlerV3.distCalcPromotionOnlineSDS(orderPrizeList, callData.toDiscount(context), context,SalePDate,DocPDate,ZTERM);

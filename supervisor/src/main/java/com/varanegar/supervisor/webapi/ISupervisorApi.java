@@ -13,6 +13,7 @@ import com.varanegar.supervisor.model.changeOrdersStatus.ChangeOrdersStatusmMode
 import com.varanegar.supervisor.model.reviewreport.ReviewreportModel;
 import com.varanegar.supervisor.model.tracking.RouteMapModel;
 import com.varanegar.supervisor.model.tracking.RouteMapPostModel;
+import com.varanegar.supervisor.tracking.GpsTrackingJsonModel;
 import com.varanegar.supervisor.webapi.model_new.datamanager.CustomerPinModel;
 import com.varanegar.supervisor.webapi.model_new.send_pincode.PinRequestViewModel;
 import com.varanegar.supervisor.webapi.model_old.CustomerCallViewModel;
@@ -25,6 +26,7 @@ import com.varanegar.supervisor.webapi.model_old.PersonnelPointsParam;
 import com.varanegar.supervisor.webapi.model_old.TourCustomerSummaryViewModel;
 import com.varanegar.supervisor.webapi.model_old.TourStatusSummaryViewModel;
 import com.varanegar.supervisor.webapi.model_old.VisitorVisitInfoViewModel;
+import com.varanegar.vaslibrary.manager.newmanager.CustomerSumMoneyAndWeightReport.CustomerSumMoneyAndWeightReportModel;
 import com.varanegar.vaslibrary.model.CheckCustomerCreditsModel;
 import com.varanegar.vaslibrary.model.customer.SupervisorCustomerModel;
 import com.varanegar.supervisor.model.VisitorModel;
@@ -195,4 +197,10 @@ public interface ISupervisorApi {
 
     @GET("api/v2/ngt/newsletter/sync/loaddata")
     Call<List<NewsData_Model>>getNewsData();
+
+
+
+    @POST("api/v2/ngt/ReviewReport/GpsTrackingJson")
+    Call<List<GpsTrackingJsonModel>>getGpsTrackingJson (
+            @Body GpsTrackingJsonModel gpsTrackingJsonModel);
 }

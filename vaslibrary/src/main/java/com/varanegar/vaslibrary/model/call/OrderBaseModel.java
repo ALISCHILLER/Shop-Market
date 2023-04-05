@@ -160,7 +160,7 @@ public class OrderBaseModel extends BaseModel {
     public String DocPDate;
     @Column
     public String SalePDate;
-
-    public String ZTERM;
+    @Column
+    public String zterm;
 
 }
