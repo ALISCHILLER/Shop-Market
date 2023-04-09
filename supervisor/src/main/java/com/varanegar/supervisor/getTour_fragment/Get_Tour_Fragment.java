@@ -320,13 +320,13 @@ public class Get_Tour_Fragment extends VaranegarFragment {
     }
 
     protected void startProgress(int title, int message) {
-        if (view != null) {
-            ProgressView progressView = ((ProgressView) (view));
-            progressView.setMessage(message);
-            progressView.setTitle(title);
-            progressView.setMessage(message);
-            progressView.start();
-        }
+//        if (view != null) {
+//            ProgressView progressView = ((ProgressView) (view));
+//            progressView.setMessage(message);
+//            progressView.setTitle(title);
+//            progressView.setMessage(message);
+//            progressView.start();
+//        }
     }
     private void DownloadApk(){
 
