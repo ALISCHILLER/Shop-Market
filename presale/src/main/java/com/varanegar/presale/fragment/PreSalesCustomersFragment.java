@@ -28,7 +28,9 @@ import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
 import com.varanegar.vaslibrary.ui.fragment.TourReportFragment;
 import com.varanegar.vaslibrary.ui.fragment.clean.CustomersFragment;
+import com.varanegar.vaslibrary.ui.fragment.new_fragment.confectionerycommissiondata.ConfectioneryCommissionDataFragment;
 import com.varanegar.vaslibrary.ui.fragment.new_fragment.dealercommissiondata.DealerCommissionDataFragment;
+import com.varanegar.vaslibrary.ui.fragment.new_fragment.oilcommissiondata.OilCommissionDataFragment;
 import com.varanegar.vaslibrary.ui.report.ProductReportFragment;
 import com.varanegar.vaslibrary.ui.report.report_new.customerNoSaleReport.CustomerNoSaleReportFragment;
 import com.varanegar.vaslibrary.ui.report.report_new.customer_group_sales_summary.CustomerGroupSalesSummaryFragment;
@@ -118,6 +120,14 @@ public class PreSalesCustomersFragment extends CustomersFragment {
         }));
         reports.addItem(new DrawerItem(activity, "گزارش پورسانت").setClickListener(v -> {
             DealerCommissionDataFragment fragment = new DealerCommissionDataFragment();
+            activity.pushFragment(fragment, true);
+        }));
+        reports.addItem(new DrawerItem(activity, "گزارش پورسانت روغن").setClickListener(v -> {
+            OilCommissionDataFragment fragment = new OilCommissionDataFragment();
+            activity.pushFragment(fragment, true);
+        }));
+        reports.addItem(new DrawerItem(activity, "گزارش پورسانت کانفیکشنری").setClickListener(v -> {
+            ConfectioneryCommissionDataFragment fragment = new ConfectioneryCommissionDataFragment();
             activity.pushFragment(fragment, true);
         }));
         reports.addItem(new DrawerItem(activity, "گزارش وضعیت سفارش ها").setClickListener(v -> {
