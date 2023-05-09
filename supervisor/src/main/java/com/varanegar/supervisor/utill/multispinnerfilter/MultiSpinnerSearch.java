@@ -227,7 +227,7 @@ public class MultiSpinnerSearch extends AppCompatSpinner implements OnCancelList
 		 */
 		new Thread(() -> {
 			Instrumentation inst = new Instrumentation();
-			inst.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK);
+			//inst.sendKeyDownUpSync(KeyEvent.KEYCODE_BACK);
 		}).start();
 	}
 

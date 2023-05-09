@@ -753,32 +753,32 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                 }
             });
 
-            if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)){
-
-                tasks.add(new SimpleTourAsyncTask() {
-                    @Override
-                    public void run(UpdateCall call) {
-                        DealerCommissionDataManager dealerCommissionDataManager = new
-                                DealerCommissionDataManager(getContext());
-                        dealerCommissionDataManager.sync(call);
-                    }
-
-                    @Override
-                    public String name() {
-                        return "DealerCommissionData";
-                    }
-
-                    @Override
-                    public int group() {
-                        return R.string.base_info;
-                    }
-
-                    @Override
-                    public int queueId() {
-                        return 1;
-                    }
-                });
-            }
+//            if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)){
+//
+//                tasks.add(new SimpleTourAsyncTask() {
+//                    @Override
+//                    public void run(UpdateCall call) {
+//                        DealerCommissionDataManager dealerCommissionDataManager = new
+//                                DealerCommissionDataManager(getContext());
+//                        dealerCommissionDataManager.sync(call);
+//                    }
+//
+//                    @Override
+//                    public String name() {
+//                        return "DealerCommissionData";
+//                    }
+//
+//                    @Override
+//                    public int group() {
+//                        return R.string.base_info;
+//                    }
+//
+//                    @Override
+//                    public int queueId() {
+//                        return 1;
+//                    }
+//                });
+//            }
 
             tasks.add(new SimpleTourAsyncTask() {
                 @Override

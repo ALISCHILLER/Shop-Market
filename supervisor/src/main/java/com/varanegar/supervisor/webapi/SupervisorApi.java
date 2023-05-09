@@ -13,6 +13,7 @@ import com.varanegar.supervisor.customreport.orderstatus.model.orderStatusModel;
 import com.varanegar.supervisor.fragment.news_fragment.model.NewsData_Model;
 import com.varanegar.supervisor.model.ProductModel;
 import com.varanegar.supervisor.model.StatusConfigModel;
+import com.varanegar.supervisor.model.SupervisorReqParams;
 import com.varanegar.supervisor.model.SupervisorTourId;
 import com.varanegar.supervisor.model.changeOrdersStatus.ChangeOrdersStatusmModel;
 import com.varanegar.supervisor.model.reviewreport.ReviewreportModel;
@@ -323,10 +324,9 @@ public class SupervisorApi extends BaseApi implements ISupervisorApi {
     }
 
     @Override
-    public Call<List<VisitorVisitInfoViewModel>> getVisitorsVisitInfo(String supervisorId,
-                                                                      List<String> dealerId) {
+    public Call<List<VisitorVisitInfoViewModel>> getVisitorsVisitInfo(SupervisorReqParams supervisorReqParams) {
         return getRetrofitBuilder(TokenType.UserToken, getBaseUrl()).build()
-                .create(ISupervisorApi.class).getVisitorsVisitInfo(supervisorId, dealerId);
+                .create(ISupervisorApi.class).getVisitorsVisitInfo(supervisorReqParams);
     }
 
     @Nullable

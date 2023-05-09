@@ -15,6 +15,7 @@
     <color name="temperature_text">@android:color/white</color>
     <color name="tourReportBack">#5D1768</color>
     <color name="zarShop">#FFAA00</color>
+    <color name="zarShopp">#2A9C00</color>
     <color name="colorPrimary">#1C1038</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>

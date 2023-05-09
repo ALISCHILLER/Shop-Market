@@ -126,7 +126,7 @@ public class PreSalesCustomersFragment extends CustomersFragment {
             OilCommissionDataFragment fragment = new OilCommissionDataFragment();
             activity.pushFragment(fragment, true);
         }));
-        reports.addItem(new DrawerItem(activity, "گزارش پورسانت کانفیکشنری").setClickListener(v -> {
+        reports.addItem(new DrawerItem(activity, "گزارش پورسانت کانفکشنری").setClickListener(v -> {
             ConfectioneryCommissionDataFragment fragment = new ConfectioneryCommissionDataFragment();
             activity.pushFragment(fragment, true);
         }));

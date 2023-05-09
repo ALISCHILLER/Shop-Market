@@ -38,6 +38,7 @@ import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.supervisor.fragment.news_fragment.model.NewsData_;
 import com.varanegar.supervisor.fragment.news_fragment.model.NewsData_Model;
 import com.varanegar.supervisor.fragment.news_fragment.model.NewsData_ModelRepository;
+import com.varanegar.supervisor.model.SupervisorReqParams;
 import com.varanegar.supervisor.model.VisitorManager;
 import com.varanegar.supervisor.model.VisitorModel;
 import com.varanegar.supervisor.utill.dialog.BackMessageDialog;
@@ -300,8 +301,12 @@ public class SettingsFragment extends IMainPageFragment {
            listVisitor.add(String.valueOf(userModel.UniqueId));
        }
 
+        SupervisorReqParams supervisorReqParams=new SupervisorReqParams();
+       supervisorReqParams.SupervisorId=String.valueOf(userModel.UniqueId);
+       supervisorReqParams.DealersId=listVisitor;
 
-        api.runWebRequest(api.getVisitorsVisitInfo(String.valueOf(userModel.UniqueId), listVisitor), new WebCallBack<List<VisitorVisitInfoViewModel>>() {
+        api.runWebRequest(api.getVisitorsVisitInfo(supervisorReqParams)
+                , new WebCallBack<List<VisitorVisitInfoViewModel>>() {
             @Override
             protected void onFinish() {
                 Activity activity = getActivity();

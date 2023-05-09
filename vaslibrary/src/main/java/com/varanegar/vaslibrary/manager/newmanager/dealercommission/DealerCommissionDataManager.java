@@ -21,6 +21,7 @@ import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.apiNew.ApiNew;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Request;
@@ -38,13 +39,45 @@ public class DealerCommissionDataManager extends BaseManager<DealerCommissionDat
         query.from(DealerCommissionData.DealerCommissionDataTbl);
         return getItem(query);
     }
+    public void sync2(final UpdateCall updateCall) {
+        ApiNew apiNew = new ApiNew(getContext());
+        UserModel userModel = UserManager.readFromFile(getContext());
+        List<String> dealerId=new ArrayList<>();
+        dealerId.add(String.valueOf(userModel.UniqueId));
+        Call<Void> call = apiNew
+                .getEditCommissionData(dealerId);
+        apiNew.runWebRequest(call, new WebCallBack<Void>() {
+            @Override
+            protected void onFinish() {
 
+            }
+
+            @Override
+            protected void onSuccess(Void result, Request request) {
+                sync2(updateCall);
+            }
+
+            @Override
+            protected void onApiFailure(ApiError error, Request request) {
+                String err = WebApiErrorBody.log(error, getContext());
+                updateCall.failure(err);
+            }
+
+            @Override
+            protected void onNetworkFailure(Throwable t, Request request) {
+                Timber.e(t);
+                updateCall.failure(getContext().getString(R.string.network_error));
+            }
+        });
+    }
 
     public void sync(final UpdateCall updateCall) {
         ApiNew apiNew = new ApiNew(getContext());
         UserModel userModel = UserManager.readFromFile(getContext());
+        List<String> dealerId=new ArrayList<>();
+        dealerId.add(String.valueOf(userModel.UniqueId));
         Call<DealerCommissionDataModel> call = apiNew
-                .getDealerCommissionData(String.valueOf(userModel.UniqueId));
+                .getDealerCommissionData(dealerId);
         apiNew.runWebRequest(call, new WebCallBack<DealerCommissionDataModel>() {
             @Override
             protected void onFinish() {

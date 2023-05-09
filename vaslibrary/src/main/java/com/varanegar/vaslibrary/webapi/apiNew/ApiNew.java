@@ -82,10 +82,17 @@ public class ApiNew extends BaseApi implements InApiNew {
     }
 
     @Override
-    public Call<DealerCommissionDataModel> getDealerCommissionData(String dealersId) {
+    public Call<DealerCommissionDataModel> getDealerCommissionData(List<String> dealersId) {
         InApiNew api = getRetrofitBuilder(TokenType.UserToken)
                 .build().create(InApiNew.class);
         return api.getDealerCommissionData(dealersId);
+    }
+
+    @Override
+    public Call<Void> getEditCommissionData(List<String> dealersId) {
+        InApiNew api = getRetrofitBuilder(TokenType.UserToken)
+                .build().create(InApiNew.class);
+        return api.getEditCommissionData(dealersId);
     }
 
     @Override

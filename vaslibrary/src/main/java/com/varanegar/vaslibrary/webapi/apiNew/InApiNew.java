@@ -64,7 +64,11 @@ public interface InApiNew {
 
     @GET("api/v2/ngt/commissionData/GetDealerCommissionData")
     Call<DealerCommissionDataModel>getDealerCommissionData(
-            @Query("dealerId") String dealersId
+            @Query("dealersId") List<String> dealersId
+    );
+    @GET("api/v2/ngt/commissionData/EditDealerCommissionData")
+    Call<Void>getEditCommissionData(
+            @Query("dealersId") List<String> dealersId
     );
 
 

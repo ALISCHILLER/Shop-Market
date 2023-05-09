@@ -8,6 +8,7 @@ import com.varanegar.supervisor.customreport.orderstatus.model.orderStatusModel;
 import com.varanegar.supervisor.fragment.news_fragment.model.NewsData_Model;
 import com.varanegar.supervisor.model.ProductModel;
 import com.varanegar.supervisor.model.StatusConfigModel;
+import com.varanegar.supervisor.model.SupervisorReqParams;
 import com.varanegar.supervisor.model.SupervisorTourId;
 import com.varanegar.supervisor.model.changeOrdersStatus.ChangeOrdersStatusmModel;
 import com.varanegar.supervisor.model.reviewreport.ReviewreportModel;
@@ -147,18 +148,20 @@ public interface ISupervisorApi {
     @POST("api/v2/ngt/evc/supervisor")
     Call<OrderSummaryResultViewModel> getOrderPreview(@Body OrderSummaryRequestViewModel requestViewModel);
 
-    @GET("api/v2/ngt/supervisor/operation")
-    Call<List<VisitorVisitInfoViewModel>> getVisitorsVisitInfo(@Query("SupervisorId") String supervisorId, @Query("DealersId") List<String> dealerId);
-
+//    @GET("api/v2/ngt/supervisor/operation")
+//    Call<List<VisitorVisitInfoViewModel>> getVisitorsVisitInfo(@Query("SupervisorId") String supervisorId, @Query("DealersId") List<String> dealerId);
+    @POST("api/v2/ngt/supervisor/operationS")
+    Call<List<VisitorVisitInfoViewModel>> getVisitorsVisitInfo(@Body SupervisorReqParams supervisorReqParams);
     @GET("api/v2/ngt/supervisor/ToggleCustomerState")
     Call<ResponseBody> getCustomerState(@Query ("id") UUID id,@Query("State") Boolean State);
 
     @POST("api/v2/ngt/invoice/ChangeOrdersStatus")
     Call<ResponseBody> senddataorder(@Body ChangeOrdersStatusmModel changeOrdersStatusmModel);
 
-    @GET("api/v2/ngt/customer/sync/GetsupervisorCustomers")
-    Call<List<SupervisorFullCustomerModel>> getsupervisorCustomers(@Query("DealersId") List<String> DealersId);
-
+//    @GET("api/v2/ngt/customer/sync/GetsupervisorCustomers")
+//    Call<List<SupervisorFullCustomerModel>> getsupervisorCustomers(@Query("DealersId") List<String> DealersId);
+    @POST("api/v2/ngt/customer/sync/GetsupervisorCustomersS")
+    Call<List<SupervisorFullCustomerModel>> getsupervisorCustomers(@Body() List<String> DealersId);
 
     @GET("api/v2/ngt/tour/supervisor/GetTourBySupervisorId")
     Call<SupervisorTourId> getTourBySupervisorId(@Query("supervisorId") UUID supervisorId);

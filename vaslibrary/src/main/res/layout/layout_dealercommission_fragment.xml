@@ -98,6 +98,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimary" />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="#000000" />
+        <Button
+            android:id="@+id/buttonReport"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/padding_default"
+            android:layout_marginRight="@dimen/padding_default"
+            android:padding="@dimen/padding_default"
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:text="@string/createReport"
+            android:background="@drawable/btn_background"/>
     </LinearLayout>
     <RelativeLayout
         android:id="@+id/fragment_container"

@@ -2,7 +2,6 @@
 <!--
  ~ MIT License
  ~
- ~ Copyright (c) 2021 Evren Coşkun
  ~
  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
  ~ of this software and associated documentation files (the "Software"), to deal
@@ -23,38 +22,30 @@
  ~ SOFTWARE.
   -->
 <RelativeLayout
-    android:id="@+id/root"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/header_line_color"
     android:layout_width="@dimen/row_header_width"
-    android:layoutDirection="rtl"
-    android:layout_height="@dimen/cell_heightt">
+    android:layout_height="@dimen/cell_height"
+    android:background="@color/con"
+    >
 
-    <LinearLayout
-        android:id="@+id/row_header_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/header_line_color"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/row_header_textview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:maxLines="1"
-            android:textColor="@color/theme_primary_text_inverted"
-            android:textSize="@dimen/text_size"
-            tools:text="Row Data"/>
-
-    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="پورسانت"
+        android:textColor="@color/theme_primary_text_inverted"
+        android:textSize="@dimen/text_size"/>
 
     <View
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-        android:background="@color/header_line_color"/>
+        android:background="@color/con"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/theme_primary_text_inverted"/>
 </RelativeLayout>

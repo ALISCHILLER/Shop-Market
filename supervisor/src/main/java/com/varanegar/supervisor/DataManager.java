@@ -668,13 +668,6 @@ public class DataManager {
                         repository.insert(result);
                     }
                     getProductGroup(callback, context);
-//                    SysConfigManager sysConfigManager = new SysConfigManager(context);
-//                    sysConfigManager.sync(new UpdateCall() {
-//                        @Override
-//                        protected void onFinish() {error = {WebRequest$1$1@13703}
-//                            callback.onSuccess();
-//                        }
-//                    });
                 } catch (Exception e) {
                     callback.onError(context.getString(R.string.error_saving_request));
                 }

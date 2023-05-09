@@ -423,6 +423,7 @@
     <string name="inventory_qty">موجودی</string>
     <string name="show_stock_products">کالاهای موجود</string>
     <string name="Inventory_update">بروزرسانی موجودی کالا</string>
+    <string name="y_update">بروزرسانی گزارش</string>
     <string name="calculating_prices_for_customer">در حال محاسبه قیمت</string>
     <string name="groups_all_products">گروه بندی     (همه کالاها)</string>
     <string name="local_server_ip">آدرس داخلی</string>

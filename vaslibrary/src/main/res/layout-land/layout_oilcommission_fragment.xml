@@ -14,12 +14,12 @@
         android:id="@+id/reports_tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/zarShop"
+        android:background="@color/zarShopp"
         app:layout_constraintTop_toTopOf="parent"
-        app:tabIndicatorColor="@color/red"
+        app:tabIndicatorColor="@color/zarShop"
         app:tabPadding="@dimen/padding_default"
         app:tabTextAppearance="@style/TabTheme"
-        app:tabSelectedTextColor="@color/red"
+        app:tabSelectedTextColor="@color/zarShop"
         app:tabTextColor="@color/white">
 
         <com.google.android.material.tabs.TabItem
@@ -58,8 +58,8 @@
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textSize="20sp"
-            android:text="عملکرد و پورسانت محصولات روغن"
-            android:textColor="@color/zarShop" />
+            android:text="عملکرد و پورسانت محصولات روغن(کارتن)"
+            android:textColor="@color/zarShopp" />
 
         <View
             android:layout_width="1dp"
@@ -71,7 +71,7 @@
             android:id="@+id/textViewDatetabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/zarShop" />
+            android:textColor="@color/zarShopp" />
 
         <View
             android:layout_width="1dp"
@@ -83,7 +83,7 @@
             android:id="@+id/textviewRankOnTeam"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/zarShop" />
+            android:textColor="@color/zarShopp" />
 
         <View
             android:layout_width="1dp"
@@ -95,7 +95,7 @@
             android:id="@+id/textviewRankOnGlobal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/zarShop" />
+            android:textColor="@color/zarShopp" />
         <View
             android:layout_width="1dp"
             android:layout_height="wrap_content"
@@ -105,7 +105,24 @@
             android:id="@+id/textviewMonth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/zarShop" />
+            android:textColor="@color/zarShopp" />
+        <View
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="#000000" />
+        <Button
+            android:id="@+id/buttonReport"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/padding_default"
+            android:layout_marginRight="@dimen/padding_default"
+            android:padding="@dimen/padding_default"
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:text="@string/createReport"
+            android:background="@drawable/btn_background"/>
     </LinearLayout>
 
 
