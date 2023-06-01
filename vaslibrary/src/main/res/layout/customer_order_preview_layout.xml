@@ -80,6 +80,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:visibility="gone"
                         app:title="@string/balance_of_credit" />
 
                     <com.varanegar.framework.util.component.PairedItems
@@ -87,6 +88,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:visibility="gone"
                         app:title="@string/payment_type" />
 
                     <com.varanegar.framework.util.component.PairedItems
@@ -107,11 +109,12 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        app:title="@string/net_amount" />
+                        app:title="@string/discount_amount" />
 
                     <com.varanegar.framework.util.component.PairedItems
                         android:id="@+id/discount_amount_paired_items"
                         android:layout_width="0dp"
+                        android:visibility="gone"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         app:title="@string/discount_amount" />

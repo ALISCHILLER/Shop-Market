@@ -20,7 +20,8 @@ public interface IQuestionnaireApi {
      * @return
      */
     @GET("api/v2/ngt/questionnaire/sync/loaddata")
-    Call<List<QuestionnaireHeaderViewModel>> getQuestionnaireHeaders(@Query("date") String date ,@Query("SubSystemType") UUID SubSystemType);
+    Call<List<QuestionnaireHeaderViewModel>> getQuestionnaireHeaders(@Query("date") String date
+            ,@Query("SubSystemType") UUID SubSystemType);
 
     /**
      * تاریخچه پرس شنانمه های که جواد داده

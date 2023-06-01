@@ -19,6 +19,7 @@ public interface IAccountManager {
             @Field("scope") String scope,
             @Field("DeviceId") String deviceId,
             @Field("Token") String token,
-            @Field("vpnUser") String vpnUser
+            @Field("vpnUser") String vpnUser,
+            @Field("SystemTypeId") String SystemTypeId
     );
 }

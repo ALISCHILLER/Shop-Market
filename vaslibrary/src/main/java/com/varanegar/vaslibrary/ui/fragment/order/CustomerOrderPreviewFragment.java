@@ -732,10 +732,11 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
 
                 if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
                     String grossAmountValue = p.IsRequestFreeItem ? "0" : HelperMethods.currencyToString(p.UnitPrice == null ? Currency.ZERO : p.UnitPrice.multiply(p.TotalRequestQty));
-                    String discount = HelperMethods.currencyToString((p.InvoiceDis1 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis1)
-                            .add((p.InvoiceDis2 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis2))
-                            .add((p.InvoiceDis3 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis3))
-                            .add((p.InvoiceDisOther == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDisOther)));
+//                    String discount = HelperMethods.currencyToString((p.InvoiceDis1 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis1)
+//                            .add((p.InvoiceDis2 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis2))
+//                            .add((p.InvoiceDis3 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis3))
+//                            .add((p.InvoiceDisOther == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDisOther)));
+                    String discount=HelperMethods.currencyToString(p.TakhfifatKol);
                     String addValue = HelperMethods.currencyToString((p.InvoiceAdd1 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceAdd1)
                             .add((p.InvoiceAdd2 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceAdd2)).add((p.InvoiceAddOther == null ? new Currency(BigDecimal.ZERO) : p.InvoiceAddOther)));
                     if (backOfficeType.equals(BackOfficeType.ThirdParty)) {

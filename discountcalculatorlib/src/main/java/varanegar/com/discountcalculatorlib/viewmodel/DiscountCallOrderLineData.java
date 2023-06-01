@@ -43,6 +43,8 @@ public class DiscountCallOrderLineData {
     public BigDecimal unitPrice;
     public BigDecimal invoiceTotalQty;
     public BigDecimal invoiceBigQty;
+
+    public BigDecimal TakhfifatKol;
     public long invoiceBigQtyId;
     public String invoiceBigQtyName;
     public BigDecimal invoiceSmallQty;
@@ -320,6 +322,7 @@ public class DiscountCallOrderLineData {
         this.invoiceDis1 = onlinedata.evcItemDis1;
         this.invoiceDis2 = onlinedata.evcItemDis2;
         this.invoiceDis3 = onlinedata.evcItemDis3;
+        this.TakhfifatKol= onlinedata.TakhfifatKol;
         this.totalInvoiceAdd1Amount = onlinedata.evcItemAdd1;
         this.totalInvoiceAdd2Amount = onlinedata.evcItemAdd2;
 
@@ -347,6 +350,7 @@ public class DiscountCallOrderLineData {
          */
         if (GlobalVariables.getIsThirdParty() && VaranegarApplication.is(VaranegarApplication.AppId.Dist) && (onlinedata.disRef == null || onlinedata.disRef == 0) && baseData != null) {
             this.unitPrice = baseData.unitPrice;
+
             this.totalInvoiceAmount = unitPrice.multiply(invoiceTotalQty);
             this.totalInvoiceDiscount = (baseData.unitPrice.multiply(invoiceTotalQty)).subtract(onlinedata.amount);
         } else {

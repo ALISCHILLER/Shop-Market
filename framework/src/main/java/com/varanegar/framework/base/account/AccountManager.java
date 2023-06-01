@@ -32,7 +32,11 @@ public class AccountManager implements IAccountManager {
     public void getAuthToken(final Account account, String scope,
                              final OnTokenAcquired onTokenAcquired, final OnError onError) {
 
-        getToken(account.username, account.password,"password", scope,account.deviceId,account.token,account.vpnUser)
+        getToken(account.username, account.password,"password",
+                scope,account.deviceId,
+                account.token,
+                "1e67dfff-e23d-461f-83ea-ba0974a46c1d",
+                "1e67dfff-e23d-461f-83ea-ba0974a46c1d")
                 .enqueue(new Callback<Token>() {
                     @Override
                     public void onResponse(Call<Token> call, Response<Token> response) {
@@ -68,7 +72,8 @@ public class AccountManager implements IAccountManager {
                                 @Field("scope") String scope,
                                 @Field("DeviceId") String deviceId,
                                 @Field("Token") String token,
-                                @Field("vpnUser") String vpnUser
+                                @Field("vpnUser") String vpnUser,
+                                @Field("SystemTypeId") String SystemTypeId
                                 ) {
         if (baseUrl == null || baseUrl.isEmpty())
             throw new RuntimeException("Base Url has not been set.");
@@ -77,7 +82,7 @@ public class AccountManager implements IAccountManager {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         IAccountManager iAccountManager = retrofit.create(IAccountManager.class);
-        return iAccountManager.getToken(username, password, grantType, scope,deviceId,token,vpnUser);
+        return iAccountManager.getToken(username, password, grantType, scope,deviceId,token,vpnUser,SystemTypeId);
     }
 
     public void writeToFile(Token token, Context context, String fileName) {

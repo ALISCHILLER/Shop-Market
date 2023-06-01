@@ -56,4 +56,5 @@ public class OutputOnlineDetails {
 
     public BigDecimal cashDiscount;
     public BigDecimal chequeDiscount;
+    public BigDecimal TakhfifatKol;
 }

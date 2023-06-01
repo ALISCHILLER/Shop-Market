@@ -21,6 +21,8 @@ import com.varanegar.vaslibrary.ui.calculator.ordercalculator.BatchQty;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -67,7 +69,8 @@ public class CallOrderLineBatchQtyDetailManager extends BaseManager<CallOrderLin
     @SubsystemType(id = SubsystemTypeId.Dist)
     public void updatePromoLineBatchQty(@NonNull UUID callOrderLineId, BigDecimal newQty) throws ValidationException, DbException {
         CallInvoiceLineBatchQtyDetailManager callInvoiceLineBatchQtyDetailManager = new CallInvoiceLineBatchQtyDetailManager(getContext());
-        List<CallInvoiceLineBatchQtyDetailModel> callInvoiceLineBatchQtyDetailModels = callInvoiceLineBatchQtyDetailManager.getItems(new Query().from(CallInvoiceLineBatchQtyDetail.CallInvoiceLineBatchQtyDetailTbl).whereAnd(Criteria.equals(CallInvoiceLineBatchQtyDetail.CustomerCallOrderLineUniqueId, callOrderLineId.toString())));
+        List<CallInvoiceLineBatchQtyDetailModel> callInvoiceLineBatchQtyDetailModels =
+                callInvoiceLineBatchQtyDetailManager.getItems(new Query().from(CallInvoiceLineBatchQtyDetail.CallInvoiceLineBatchQtyDetailTbl).whereAnd(Criteria.equals(CallInvoiceLineBatchQtyDetail.CustomerCallOrderLineUniqueId, callOrderLineId.toString())));
         if (callInvoiceLineBatchQtyDetailModels.size() > 0) {
             delete(Criteria.equals(CallOrderLineBatchQtyDetail.CustomerCallOrderLineUniqueId, callOrderLineId.toString()));
             BigDecimal oldQty = BigDecimal.ZERO;
@@ -76,17 +79,42 @@ public class CallOrderLineBatchQtyDetailManager extends BaseManager<CallOrderLin
                 oldQty = oldQty.add(item.Qty);
             }
             BigDecimal subValue = oldQty.subtract(newQty);
-            for (CallInvoiceLineBatchQtyDetailModel item :
-                    callInvoiceLineBatchQtyDetailModels) {
-                if (subValue.compareTo(BigDecimal.ZERO) <= 0)
-                    break;
-                if (item.Qty.compareTo(subValue) >= 0) {
-                    item.Qty = item.Qty.subtract(subValue);
-                    subValue = BigDecimal.ZERO;
-                } else {
-                    item.Qty = BigDecimal.ZERO;
-                    subValue = subValue.subtract(item.Qty);
+            if (callInvoiceLineBatchQtyDetailModels.size() == 1 || oldQty == newQty ||
+                    newQty.compareTo(BigDecimal.ZERO) <= 0) {
+                for (CallInvoiceLineBatchQtyDetailModel item :
+                        callInvoiceLineBatchQtyDetailModels) {
+                    if (subValue.compareTo(BigDecimal.ZERO) <= 0)
+                        break;
+                    if (item.Qty.compareTo(subValue) >= 0) {
+                        item.Qty = item.Qty.subtract(subValue);
+                        subValue = BigDecimal.ZERO;
+                    } else {
+                        item.Qty = BigDecimal.ZERO;
+                        subValue = subValue.subtract(item.Qty);
+                    }
                 }
+            } else {
+//               Collections.sort(callInvoiceLineBatchQtyDetailModels, (o1, o2) -> {
+//                   return o2.Qty.compareTo(o1.Qty);
+//               });
+
+                
+                int postion = 0;
+                BigDecimal simolate = newQty;
+                for (int i = 0; i < callInvoiceLineBatchQtyDetailModels.size(); i++) {
+                    BigDecimal qty = callInvoiceLineBatchQtyDetailModels.get(i).Qty;
+                    if (qty.compareTo(simolate) >= 0) {
+                        postion = i;
+                        callInvoiceLineBatchQtyDetailModels.get(i).Qty = simolate;
+                        break;
+                    } else {
+                        simolate.subtract(qty);
+                    }
+                }
+
+                if (postion + 1 < callInvoiceLineBatchQtyDetailModels.size())
+                    for (int i = postion + 1; i < callInvoiceLineBatchQtyDetailModels.size(); i++)
+                        callInvoiceLineBatchQtyDetailModels.get(i).Qty = BigDecimal.ZERO;
             }
             List<CallOrderLineBatchQtyDetailModel> callOrderLineBatchQtyDetailModels = new ArrayList<>();
             for (CallInvoiceLineBatchQtyDetailModel item :

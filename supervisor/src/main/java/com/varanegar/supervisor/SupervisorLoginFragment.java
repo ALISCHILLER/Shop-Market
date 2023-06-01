@@ -261,6 +261,7 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
                 final UserModel user = userManager.getUsers(username);
                 String deviceId=getDeviceid();
                 final String password = HelperMethods.convertToEnglishNumbers(passwordEditText.getText().toString().trim());
+                final String usernames =userNameEditText.getText().toString().trim();
                 if (user != null) {
                     userManager.login(user.UserName, password,deviceId,token,usernameVpn
                             , new OnTokenAcquired() {
