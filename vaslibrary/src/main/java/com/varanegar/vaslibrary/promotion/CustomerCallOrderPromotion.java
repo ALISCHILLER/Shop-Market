@@ -121,6 +121,7 @@ public class CustomerCallOrderPromotion {
     public OrderTypeEnum DocumentType;
     public Currency TotalAmountNutCash;
     public Currency TotalAmountNutCheque;
+    public Currency TotalDiscont;
     public Currency TotalAmountNutImmediate;
     public Currency TotalCashDiscount;
 
@@ -267,7 +268,7 @@ public class CustomerCallOrderPromotion {
         this.TotalAmountNutCheque = Currency.ZERO;
         this.TotalAmountNutImmediate = Currency.ZERO;
         this.TotalCashDiscount =Currency.ZERO;
-
+        this.TotalDiscont =Currency.ZERO;
         if (dis.callLineItemDataWithPromo == null)
             dis.callLineItemDataWithPromo = new ArrayList<>();
         for (DiscountCallOrderLineData item :dis.callLineItemDataWithPromo) {
@@ -291,6 +292,7 @@ public class CustomerCallOrderPromotion {
                 this.TotalInvoiceAdd1 = this.TotalInvoiceAdd1.add(calitem.InvoiceAdd1);
                 this.TotalAmountNutCash = this.TotalAmountNutCash.add(calitem.AmountNutCash);
                 this.TotalAmountNutCheque = this.TotalAmountNutCheque.add(calitem.AmountNutCheque);
+                this.TotalDiscont = this.TotalDiscont.add(calitem.TakhfifatKol);
                 this.TotalAmountNutImmediate = this.TotalAmountNutImmediate.add(calitem.AmountNutImmediate);
                 this.TotalCashDiscount = this.TotalCashDiscount.add(calitem.CashDiscount);
             }

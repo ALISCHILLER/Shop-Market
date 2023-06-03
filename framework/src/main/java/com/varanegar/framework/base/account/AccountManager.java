@@ -35,8 +35,8 @@ public class AccountManager implements IAccountManager {
         getToken(account.username, account.password,"password",
                 scope,account.deviceId,
                 account.token,
-                "1e67dfff-e23d-461f-83ea-ba0974a46c1d",
-                "1e67dfff-e23d-461f-83ea-ba0974a46c1d")
+                account.vpnUser,
+                "")
                 .enqueue(new Callback<Token>() {
                     @Override
                     public void onResponse(Call<Token> call, Response<Token> response) {

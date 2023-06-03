@@ -68,11 +68,15 @@ public class CustomerCallOrderLinePromotion extends BaseModel {
     public Currency InvoiceAmount;
     public Currency InvoiceNetAmount;
     public Currency InvoiceDis1;
+    public Currency custPrice;
     public Currency InvoiceDis2;
     public Currency InvoiceDis3;
     public Currency InvoiceDisOther;
     public Currency InvoiceAdd1;
     public Currency TakhfifatKol;
+    public Currency Fee;
+    public Currency FeeKol;
+    public String zterm;
     public Currency InvoiceAdd2;
     public Currency InvoiceAddOther;
     public Currency InvoiceTax;
@@ -130,6 +134,10 @@ public class CustomerCallOrderLinePromotion extends BaseModel {
         this.PayDuration = lineData.PayDuration;
         this.RuleNo = lineData.RuleNo;
         this.TakhfifatKol= new Currency(lineData.TakhfifatKol == null ? BigDecimal.ZERO : lineData.TakhfifatKol);
+        this.custPrice= new Currency(lineData.custPrice == null ? BigDecimal.ZERO : lineData.custPrice);
+        this.Fee= new Currency(lineData.Fee == null ? BigDecimal.ZERO : lineData.Fee);
+        this.FeeKol= new Currency(lineData.FeeKol == null ? BigDecimal.ZERO : lineData.FeeKol);
+        this.zterm= lineData.zterm;
         this.InvoiceAmount = lineData.totalInvoiceAmount != null ? new Currency(lineData.totalInvoiceAmount) : new Currency(0);
         this.InvoiceNetAmount = new Currency(lineData.totalInvoiceNetAmount);
         this.InvoiceAdd1 = new Currency(

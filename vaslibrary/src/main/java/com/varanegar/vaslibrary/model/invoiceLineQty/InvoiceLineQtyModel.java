@@ -17,4 +17,10 @@ public class InvoiceLineQtyModel extends BaseQtyModel {
     @Column
     public UUID OrderLineUniqueId;
 
+    @Column
+    public String Vrkme;
+
+    @Column
+    public UUID UnitUniqueId;
+
 }

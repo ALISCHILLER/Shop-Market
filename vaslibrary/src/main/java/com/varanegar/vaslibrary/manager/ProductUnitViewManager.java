@@ -35,6 +35,9 @@ public class ProductUnitViewManager extends BaseManager<ProductUnitViewModel> {
         return query;
     }
 
+    public List<ProductUnitViewModel> getProductUnits(){
+        return getItems(getAll());
+    }
     @NonNull
     public List<ProductUnitViewModel> getProductUnits(@NonNull UUID productId, ProductType productType) throws UnitNotFoundException, IllegalArgumentException {
         Query query = new Query();

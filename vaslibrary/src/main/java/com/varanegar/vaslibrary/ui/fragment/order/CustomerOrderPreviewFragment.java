@@ -646,6 +646,15 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                             .add((p.InvoiceAdd2 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceAdd2))
                             .add((p.InvoiceAddOther == null ? new Currency(BigDecimal.ZERO) : p.InvoiceAddOther));
 
+                Currency amuntFol=Currency.ZERO;
+
+                if (p.zterm.equals("PT01"))
+                    amuntFol=p.AmountNutImmediate;
+                else if (p.zterm.equals("PTCH"))
+                    amuntFol=p.AmountNutCheque;
+                else if (p.zterm.equals("PTCA"))
+                    amuntFol=p.AmountNutCash;
+
                 if (backOfficeType == BackOfficeType.ThirdParty && VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
                     if (p.DiscountRef == 0) {
                         CustomerCallOrderLinePromotion baseLine = Linq.findFirst(customerCallOrderPromotion.Lines, new Linq.Criteria<CustomerCallOrderLinePromotion>() {
@@ -660,32 +669,35 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                         if (p.IsRequestFreeItem)
                             txtvUnitPrice.setText(p.FreeReasonName);
                         else {
-                            txtvUnitPrice.setText(HelperMethods.currencyToString(baseLine.UnitPrice));
+                            txtvUnitPrice.setText(HelperMethods.currencyToString(baseLine.Fee));
                             thirdPartyDiscountTextView.setText(HelperMethods.currencyToString((baseLine.UnitPrice.multiply(p.TotalRequestQty).subtract(totalPrice))));
                         }
                     } else {
                         if (p.IsRequestFreeItem)
                             txtvUnitPrice.setText(p.FreeReasonName);
                         else
-                            txtvUnitPrice.setText(HelperMethods.currencyToString(p.UnitPrice));
+                            txtvUnitPrice.setText(HelperMethods.currencyToString(p.Fee));
                     }
                 } else {
                     if (p.IsRequestFreeItem)
                         txtvUnitPrice.setText(p.FreeReasonName);
                     else
-                        txtvUnitPrice.setText(HelperMethods.currencyToString(p.UnitPrice));
+                        txtvUnitPrice.setText(HelperMethods.currencyToString(p.Fee));
                 }
 
                 if (!backOfficeType.equals(BackOfficeType.ThirdParty)) {
                     txtValue.setText(p.IsRequestFreeItem ? getString(R.string.multiplication_sign) : HelperMethods.currencyToString(totalPrice));
                 } else {
                     Currency valueAmount = p.UnitPrice == null ? Currency.ZERO : p.UnitPrice.multiply(p.TotalRequestQty);
+
                     valueAmount = valueAmount
                             .subtract((p.InvoiceDis1 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis1))
                             .subtract((p.InvoiceDis2 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis2))
                             .subtract((p.InvoiceDis3 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis3))
                             .subtract((p.InvoiceDisOther == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDisOther));
-                    thirdPartyValueTextView.setText(HelperMethods.currencyToString(valueAmount));
+
+                    Currency custPrice = p.custPrice == null ? Currency.ZERO : p.custPrice;
+                    thirdPartyValueTextView.setText(HelperMethods.currencyToString(custPrice));
                 }
                 txtvRow.setText(position + 1 + "");
 
@@ -731,7 +743,13 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                 new QtyView().build(llyorderQty, units);
 
                 if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
-                    String grossAmountValue = p.IsRequestFreeItem ? "0" : HelperMethods.currencyToString(p.UnitPrice == null ? Currency.ZERO : p.UnitPrice.multiply(p.TotalRequestQty));
+
+
+                    String grossAmountValue = p.IsRequestFreeItem ? "0" :
+                            HelperMethods.currencyToString(p.UnitPrice == null
+                                    ? Currency.ZERO : p.UnitPrice.multiply(p.TotalRequestQty));
+
+                    String feeKol=HelperMethods.currencyToString(p.FeeKol);
 //                    String discount = HelperMethods.currencyToString((p.InvoiceDis1 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis1)
 //                            .add((p.InvoiceDis2 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis2))
 //                            .add((p.InvoiceDis3 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis3))
@@ -740,10 +758,10 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                     String addValue = HelperMethods.currencyToString((p.InvoiceAdd1 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceAdd1)
                             .add((p.InvoiceAdd2 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceAdd2)).add((p.InvoiceAddOther == null ? new Currency(BigDecimal.ZERO) : p.InvoiceAddOther)));
                     if (backOfficeType.equals(BackOfficeType.ThirdParty)) {
-                        thirdPartyGrossAmountTextView.setText(grossAmountValue);
+                        thirdPartyGrossAmountTextView.setText(feeKol);
                         thirdPartyDiscountTextView.setText(discount);
                         thirdPartyAddTextView.setText(addValue);
-                        thirdPartyNetAmountTextView.setText(p.IsRequestFreeItem ? getString(R.string.multiplication_sign) : HelperMethods.currencyToString(totalPrice));
+                        thirdPartyNetAmountTextView.setText(p.IsRequestFreeItem ? getString(R.string.multiplication_sign) : HelperMethods.currencyToString(amuntFol));
                     } else {
                         txtOrderAmount.setText(grossAmountValue);
                         txtDiscount.setText(discount);
@@ -883,8 +901,9 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                 payableChequePairedItems.setValue(customerCallOrderPromotion.TotalAmountNutCheque.toString());
                 payableImmediatePairedItems.setValue(customerCallOrderPromotion.TotalAmountNutImmediate.toString());
 
-                discountImmediatePairedItems.setValue(customerCallOrderPromotion.TotalAmountNutCheque.subtract(customerCallOrderPromotion.TotalAmountNutImmediate).toString());
-                orderCostPairedItems.setValue(customerCallOrderPromotion.TotalCashDiscount.toString());
+                discountImmediatePairedItems.setValue(customerCallOrderPromotion.TotalAmountNutCheque
+                        .subtract(customerCallOrderPromotion.TotalAmountNutImmediate).toString());
+                orderCostPairedItems.setValue(customerCallOrderPromotion.TotalDiscont.toString());
             }
 
             addAmountPairedItems.setValue(HelperMethods.currencyToString(customerCallOrderPromotion.TotalInvoiceAdd));
