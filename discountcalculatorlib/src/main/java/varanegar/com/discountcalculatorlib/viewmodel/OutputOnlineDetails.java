@@ -56,5 +56,8 @@ public class OutputOnlineDetails {
 
     public BigDecimal cashDiscount;
     public BigDecimal chequeDiscount;
-    public BigDecimal TakhfifatKol;
+    public BigDecimal takhfifatkol;
+    public BigDecimal fee;
+    public BigDecimal feeKol;
+    public String zterm;
 }

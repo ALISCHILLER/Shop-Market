@@ -28,4 +28,20 @@ public class InvoiceLineQtyManager extends BaseManager<InvoiceLineQtyModel> {
                 .whereAnd(Criteria.equals(InvoiceLineQty.OrderLineUniqueId, orderLineId.toString()));
         return getItems(query);
     }
+
+
+    public List<InvoiceLineQtyModel> getAll() {
+        Query query = new Query();
+        query.from(InvoiceLineQty.InvoiceLineQtyTbl);
+       return getItems(query);
+    }
+
+
+    public InvoiceLineQtyModel getLine(UUID orderLineId) {
+        Query query = new Query();
+        query.from(InvoiceLineQty.InvoiceLineQtyTbl)
+                .whereAnd(Criteria.equals(InvoiceLineQty.OrderLineUniqueId, orderLineId.toString())
+                        );
+        return getItem(query);
+    }
 }

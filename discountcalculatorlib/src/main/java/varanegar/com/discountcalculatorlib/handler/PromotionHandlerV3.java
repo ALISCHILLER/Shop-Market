@@ -3,12 +3,12 @@ package varanegar.com.discountcalculatorlib.handler;
 import android.content.Context;
 
 import com.google.gson.Gson;
-import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.network.gson.VaranegarGsonBuilder;
 import com.varanegar.framework.util.datetime.DateFormat;
 import com.varanegar.framework.util.datetime.DateHelper;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,7 +38,9 @@ import varanegar.com.discountcalculatorlib.handler.vnlite.PromotionDoEVCBySpecia
 import varanegar.com.discountcalculatorlib.handler.vnlite.PromotionDoEVCByStatuteTableVnLiteV3;
 import varanegar.com.discountcalculatorlib.handler.vnlite.PromotionFillEVCVnLiteV3;
 import varanegar.com.discountcalculatorlib.handler.vnlite.PromotionGetRetExtraValueVnLiteV3;
+import varanegar.com.discountcalculatorlib.helper.BaseUnitData;
 import varanegar.com.discountcalculatorlib.helper.DiscountDbHelper;
+import varanegar.com.discountcalculatorlib.helper.VasHelperMethodsData;
 import varanegar.com.discountcalculatorlib.utility.DiscountException;
 import varanegar.com.discountcalculatorlib.utility.GlobalVariables;
 import varanegar.com.discountcalculatorlib.utility.enumerations.BackOfficeType;
@@ -52,7 +54,9 @@ import varanegar.com.discountcalculatorlib.viewmodel.DiscountCallReturnLineData;
 import varanegar.com.discountcalculatorlib.viewmodel.DiscountOrderPrizeViewModel;
 import varanegar.com.discountcalculatorlib.viewmodel.DiscountOutputOnline;
 import varanegar.com.discountcalculatorlib.viewmodel.DiscountPrizeViewModel;
+import varanegar.com.discountcalculatorlib.viewmodel.InvoiceLineQtyModelData;
 import varanegar.com.discountcalculatorlib.viewmodel.PreSaleEvcHeaderViewModel;
+import varanegar.com.discountcalculatorlib.viewmodel.ProductUnitModelData;
 
 import static varanegar.com.discountcalculatorlib.Global.hasChoicePrize;
 import static varanegar.com.discountcalculatorlib.Global.orderPrize;
@@ -168,6 +172,7 @@ public class PromotionHandlerV3 {
      * Api پیش نمایش
      * تخفیف جوایز
      * برای برنامه توزیه یا موزع
+     *
      * @param orderPrizeList
      * @param discountCallOrderData
      * @param context
@@ -179,9 +184,12 @@ public class PromotionHandlerV3 {
             final DiscountCallOrderData discountCallOrderData,
             final Context context,
             String SalePDate,
-            String  DocPDate,
-            String  ZTERM
-            ) throws InterruptedException {
+            String DocPDate,
+            String ZTERM,
+            ArrayList<DiscountCallOrderLineData> orderProduct,
+            List<InvoiceLineQtyModelData> invoiceLineQtyModelData,
+            List<ProductUnitModelData> productUnitModelData
+    ) throws InterruptedException {
         final String[] errorMessage = {null};
         final Thread thread = new Thread(new Runnable() {
             @Override
@@ -212,9 +220,65 @@ public class PromotionHandlerV3 {
                     totallyError = "";
                     orderPrize = new ArrayList<>();
                     hasChoicePrize = false;
-                    onlineData.SalePDate=SalePDate;
-                    onlineData.DocPDate=DocPDate;
-                    onlineData.ZTERM=ZTERM;
+                    onlineData.SalePDate = SalePDate;
+                    onlineData.DocPDate = DocPDate;
+                    onlineData.ZTERM = ZTERM;
+
+                    double d = 0;
+               ;
+                    for (int i = 0; i < onlineData.PreSaleEvcDetails.size(); i++) {
+                        for (int j = 0; j < invoiceLineQtyModelData.size(); j++) {
+                                if (onlineData.PreSaleEvcDetails.get(i).OrderLineId.equals(invoiceLineQtyModelData.get(j).OrderLineUniqueId)) {
+                                    for (int x = 0; x < productUnitModelData.size(); x++) {
+                                        if (productUnitModelData.get(x).ProductId.equals(invoiceLineQtyModelData.get(j).UnitUniqueId)) {
+                                            if (productUnitModelData.get(x).UnitName.equals(invoiceLineQtyModelData.get(j).Vrkme)) {
+
+                                                d=onlineData.
+                                                        PreSaleEvcDetails.get(i).TotalQty
+                                                        .divide(BigDecimal.valueOf(productUnitModelData.get(x).ConvertFactor)).doubleValue();
+
+                                                if (d % 1 == 0) {
+                                                    onlineData.PreSaleEvcDetails.get(i).TotalQty =
+                                                            BigDecimal.valueOf(d);
+                                                    onlineData.PreSaleEvcDetails.get(i).Unit= productUnitModelData.get(x).UnitName;
+                                                } else {
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                    if (d % 1 != 0) {
+                                        for (int x = 0; x < productUnitModelData.size(); x++) {
+                                            if (productUnitModelData.get(x).ProductId.equals(invoiceLineQtyModelData.get(j).UnitUniqueId)) {
+                                                if (invoiceLineQtyModelData.get(j).Vrkme.equals("KAR")) {
+                                                    if (productUnitModelData.get(x).UnitName.equals("SHL")) {
+                                                        d = onlineData.
+                                                                PreSaleEvcDetails.get(i).TotalQty
+                                                                .divide(BigDecimal.valueOf(productUnitModelData.get(x).ConvertFactor)).doubleValue();
+                                                        if (d % 1 == 0) {
+                                                            onlineData.PreSaleEvcDetails.get(i).TotalQty =
+                                                                    BigDecimal.valueOf(d);
+                                                            onlineData.PreSaleEvcDetails.get(i).Unit = productUnitModelData.get(x).UnitName;
+                                                            break;
+                                                        } else {
+                                                            onlineData.PreSaleEvcDetails.get(i).Unit = "EA";
+                                                        }
+                                                    } else if (productUnitModelData.get(x).UnitName.equals("EA")) {
+                                                        onlineData.PreSaleEvcDetails.get(i).Unit = "EA";
+                                                    }
+                                                }else if (invoiceLineQtyModelData.get(j).Vrkme.equals("SHL")) {
+                                                    onlineData.PreSaleEvcDetails.get(i).Unit = "EA";
+                                                }
+                                            }
+                                        }
+                                    }
+
+
+                                }
+                        }
+                    }
+
 
                     Call<DiscountOutputOnline> call = calcPromotionAPI.getDistOnlinePromotion(onlineData,
                             GlobalVariables.getCalcDiscount(),

@@ -20,9 +20,11 @@ import com.varanegar.vaslibrary.exception.DistException;
 import com.varanegar.vaslibrary.manager.CustomerCallOrderOrderViewManager;
 import com.varanegar.vaslibrary.manager.CustomerCallReturnLinesViewManager;
 import com.varanegar.vaslibrary.manager.CustomerOrderTypesManager;
+import com.varanegar.vaslibrary.manager.InvoiceLineQtyManager;
 import com.varanegar.vaslibrary.manager.OrderAmount;
 import com.varanegar.vaslibrary.manager.PaymentOrderTypeManager;
 import com.varanegar.vaslibrary.manager.ProductManager;
+import com.varanegar.vaslibrary.manager.ProductUnitViewManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallInvoiceManager;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallOrderManager;
@@ -46,10 +48,12 @@ import com.varanegar.vaslibrary.model.customercallreturnlinesview.CustomerCallRe
 import com.varanegar.vaslibrary.model.customeroldInvoice.CustomerOldInvoiceHeaderModel;
 import com.varanegar.vaslibrary.model.customerprice.CustomerPriceModel;
 import com.varanegar.vaslibrary.model.discountSDS.DiscountItemCountViewModel;
+import com.varanegar.vaslibrary.model.invoiceLineQty.InvoiceLineQtyModel;
 import com.varanegar.vaslibrary.model.orderprize.OrderPrizeModel;
 import com.varanegar.vaslibrary.model.orderprizeview.OrderPrizeViewModel;
 import com.varanegar.vaslibrary.model.paymentTypeOrder.PaymentTypeOrderModel;
 import com.varanegar.vaslibrary.model.product.ProductModel;
+import com.varanegar.vaslibrary.model.productUnitView.ProductUnitViewModel;
 import com.varanegar.vaslibrary.model.returnType.ReturnType;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.promotion.V3.DiscountInitializeHandler;
@@ -79,6 +83,8 @@ import varanegar.com.discountcalculatorlib.viewmodel.DiscountCallReturnLineData;
 import varanegar.com.discountcalculatorlib.viewmodel.DiscountEvcPrizeData;
 import varanegar.com.discountcalculatorlib.viewmodel.DiscountOrderPrizeViewModel;
 import varanegar.com.discountcalculatorlib.viewmodel.DiscountPrizeViewModel;
+import varanegar.com.discountcalculatorlib.viewmodel.InvoiceLineQtyModelData;
+import varanegar.com.discountcalculatorlib.viewmodel.ProductUnitModelData;
 import varanegar.com.vdmclient.VdmInitializer;
 
 import static varanegar.com.discountcalculatorlib.Global.hasChoicePrize;
@@ -105,7 +111,8 @@ public class CalcPromotion {
                         DiscountCallOrderData disCallData;
                         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist))
                             disCallData = PromotionHandlerV3.distCalcPromotionOnlineSDS(null, callData.toDiscount(context), context,
-                                    null,null,null);
+                                    null,null,
+                                    null,null,null,null);
                         else
                             disCallData = PromotionHandlerV3.calcPromotionOnlineSDS(null, callData.toDiscount(context), context);
 
@@ -258,6 +265,12 @@ public class CalcPromotion {
                                             ArrayList<DiscountCallOrderLineData> orderProduct = populateOriginalData(context, callOrderUniqueId);
                                             List<CustomerCallInvoiceModel> callInvoiceModel= new CustomerCallInvoiceManager(context)
                                                     .getCustomerCallInvoices(callData.BackOfficeOrderId);
+
+                                            List<InvoiceLineQtyModel> lineQtyManager=new InvoiceLineQtyManager(context)
+                                                    .getQtyLines(callOrderUniqueId);
+
+
+
                                             distDiscountCalc(orderPrizeList, context, callData, disCallData, evcType, orderProduct,  callInvoiceModel.get(0));
                                             handler.post(() -> callback.onSuccess(callData));
 //                                                disCallData = DiscountCalculatorHandler.calcPromotion(callData.toDiscount(context), evcType.value(), context);
@@ -360,9 +373,58 @@ public class CalcPromotion {
             String SalePDate=callInvoiceModel.SalePDate;
             String ZTERM=callInvoiceModel.zterm;
 
-            if (GlobalVariables.isCalcOnline())
-                disCallData = PromotionHandlerV3.distCalcPromotionOnlineSDS(orderPrizeList, callData.toDiscount(context), context,SalePDate,DocPDate,ZTERM);
-            else {
+            InvoiceLineQtyManager lineQtyManager=new InvoiceLineQtyManager(context);
+
+            List<InvoiceLineQtyModel> invoiceLineQtyModels=new
+                    InvoiceLineQtyManager(context).getAll();
+
+            List<ProductUnitViewModel> productUnitViewModels=new ProductUnitViewManager(context)
+                    .getProductUnits();
+
+
+            List<ProductUnitModelData>  productUnitModelData=new ArrayList<>();
+
+
+            for (ProductUnitViewModel modelData:productUnitViewModels){
+                ProductUnitModelData  Productdata=new ProductUnitModelData();
+                Productdata.ConvertFactor=modelData.ConvertFactor;
+                Productdata.BackOfficeId=modelData.BackOfficeId;
+                Productdata.Decimal=modelData.Decimal;
+                Productdata.IsForReturn=modelData.IsForReturn;
+                Productdata.IsForSale=modelData.IsForSale;
+                Productdata.IsDefault=modelData.IsDefault;
+                Productdata.ProductCode=modelData.ProductCode;
+                Productdata.ProductId=modelData.ProductId;
+                Productdata.ProductName=modelData.ProductName;
+                Productdata.UniqueId=modelData.UniqueId;
+                Productdata.UnitId=modelData.UnitId;
+                Productdata.IsReturnDefault=modelData.IsReturnDefault;
+                Productdata.UnitRef=modelData.UnitRef;
+                Productdata.UnitName=modelData.UnitName;
+                productUnitModelData.add(Productdata);
+            }
+
+
+            List<InvoiceLineQtyModelData> invoiceLineQtyModelData=new ArrayList<>();
+
+           for (InvoiceLineQtyModel lineQtyModel:invoiceLineQtyModels){
+               InvoiceLineQtyModelData data=new InvoiceLineQtyModelData();
+               data.UniqueId=lineQtyModel.UniqueId;
+               data.UnitUniqueId=lineQtyModel.UnitUniqueId;
+               data.Qty=lineQtyModel.Qty;
+               data.Vrkme=lineQtyModel.Vrkme;
+               data.ProductUnitId=lineQtyModel.ProductUnitId;
+               data.OrderLineUniqueId=lineQtyModel.OrderLineUniqueId;
+               invoiceLineQtyModelData.add(data);
+            }
+
+
+            if (GlobalVariables.isCalcOnline()) {
+                disCallData = PromotionHandlerV3.distCalcPromotionOnlineSDS(orderPrizeList,
+                        callData.toDiscount(context), context, SalePDate, DocPDate, ZTERM,orderProduct
+                        ,invoiceLineQtyModelData,productUnitModelData);
+
+            }else {
                 DiscountInitializeHandler disc = DiscountInitializeHandlerV3.getDiscountHandler(context);
                 //DiscountCalculatorHandler.init(disc, callData.BackOfficeOrderId, null);
                 DiscountCalculatorHandler.fillInitDataIfEmpty(disc);
