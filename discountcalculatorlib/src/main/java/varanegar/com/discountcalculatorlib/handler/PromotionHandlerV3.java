@@ -9,7 +9,10 @@ import com.varanegar.framework.util.datetime.DateHelper;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+<<<<<<< HEAD
 import java.math.RoundingMode;
+=======
+>>>>>>> origin/dev
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -224,6 +227,67 @@ public class PromotionHandlerV3 {
                     onlineData.SalePDate = SalePDate;
                     onlineData.DocPDate = DocPDate;
                     onlineData.ZTERM = ZTERM;
+<<<<<<< HEAD
+=======
+
+                    double d = 0;
+               ;
+                    for (int i = 0; i < onlineData.PreSaleEvcDetails.size(); i++) {
+                        for (int j = 0; j < invoiceLineQtyModelData.size(); j++) {
+                            if (!invoiceLineQtyModelData.get(j).Vrkme.equals("EA")) {
+                                if (onlineData.PreSaleEvcDetails.get(i).OrderLineId.equals(invoiceLineQtyModelData.get(j).OrderLineUniqueId)) {
+                                    for (int x = 0; x < productUnitModelData.size(); x++) {
+                                        if (productUnitModelData.get(x).ProductId.equals(invoiceLineQtyModelData.get(j).UnitUniqueId)) {
+                                            if (productUnitModelData.get(x).UnitName.equals(invoiceLineQtyModelData.get(j).Vrkme)) {
+
+                                                d=onlineData.
+                                                        PreSaleEvcDetails.get(i).TotalQty
+                                                        .divide(BigDecimal.valueOf(productUnitModelData.get(x).ConvertFactor)).doubleValue();
+
+                                                if (d % 1 == 0) {
+                                                    onlineData.PreSaleEvcDetails.get(i).TotalQty =
+                                                            BigDecimal.valueOf(d);
+                                                    onlineData.PreSaleEvcDetails.get(i).UnitName = productUnitModelData.get(x).UnitName;
+                                                } else {
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                    if (d % 1 != 0) {
+                                        for (int x = 0; x < productUnitModelData.size(); x++) {
+                                            if (productUnitModelData.get(x).ProductId.equals(invoiceLineQtyModelData.get(j).UnitUniqueId)) {
+                                                if (invoiceLineQtyModelData.get(j).Vrkme.equals("KAR")) {
+                                                    if (productUnitModelData.get(x).UnitName.equals("SHL")) {
+                                                        d = onlineData.
+                                                                PreSaleEvcDetails.get(i).TotalQty
+                                                                .divide(BigDecimal.valueOf(productUnitModelData.get(x).ConvertFactor)).doubleValue();
+                                                        if (d % 1 == 0) {
+                                                            onlineData.PreSaleEvcDetails.get(i).TotalQty =
+                                                                    BigDecimal.valueOf(d);
+                                                            onlineData.PreSaleEvcDetails.get(i).UnitName = productUnitModelData.get(x).UnitName;
+                                                            break;
+                                                        } else {
+                                                            onlineData.PreSaleEvcDetails.get(i).UnitName = "EA";
+                                                        }
+                                                    } else if (productUnitModelData.get(x).UnitName.equals("EA")) {
+                                                        onlineData.PreSaleEvcDetails.get(i).UnitName = "EA";
+                                                    }
+                                                }else if (invoiceLineQtyModelData.get(j).Vrkme.equals("SHL")) {
+                                                    onlineData.PreSaleEvcDetails.get(i).UnitName = "EA";
+                                                }
+                                            }
+                                        }
+                                    }
+
+
+                                }
+                            }
+                        }
+                    }
+
+>>>>>>> origin/dev
 
                     double d = 0;
 

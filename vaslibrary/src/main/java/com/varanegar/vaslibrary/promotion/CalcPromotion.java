@@ -115,9 +115,15 @@ public class CalcPromotion {
                             CustomerCallReturnRequestModel model = new
                                     CustomerCallReturnRequestManager(context).getCustomerCallReturn(callData.CustomerId);
                             disCallData = PromotionHandlerV3.distCalcPromotionOnlineSDS(null, callData.toDiscount(context), context,
+<<<<<<< HEAD
                                     null, null,
                                     model.zterm, null, null, null);
                         } else
+=======
+                                    null,null,
+                                    null,null,null,null);
+                        else
+>>>>>>> origin/dev
                             disCallData = PromotionHandlerV3.calcPromotionOnlineSDS(null, callData.toDiscount(context), context);
 
                         Timber.d("finished!");
@@ -273,8 +279,12 @@ public class CalcPromotion {
                                             List<InvoiceLineQtyModel> lineQtyManager=new InvoiceLineQtyManager(context)
                                                     .getQtyLines(callOrderUniqueId);
 
+<<<<<<< HEAD
                                             CustomerCallReturnRequestModel model = new
                                                     CustomerCallReturnRequestManager(context).getCustomerCallReturn(callData.CustomerId);
+=======
+
+>>>>>>> origin/dev
 
                                             distDiscountCalc(orderPrizeList, context, callData, disCallData, evcType, orderProduct,  callInvoiceModel.get(0));
                                             handler.post(() -> callback.onSuccess(callData));

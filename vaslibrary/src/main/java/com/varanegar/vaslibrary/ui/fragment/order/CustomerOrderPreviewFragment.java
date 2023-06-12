@@ -654,8 +654,12 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                     amuntFol=p.AmountNutCheque;
                 else if (p.zterm.equals("PTCA"))
                     amuntFol=p.AmountNutCash;
+<<<<<<< HEAD
                 else if (p.zterm.equals("PT02"))
                     amuntFol=p.AmountNutCheque;
+=======
+
+>>>>>>> origin/dev
                 if (backOfficeType == BackOfficeType.ThirdParty && VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
                     if (p.DiscountRef == 0) {
                         CustomerCallOrderLinePromotion baseLine = Linq.findFirst(customerCallOrderPromotion.Lines, new Linq.Criteria<CustomerCallOrderLinePromotion>() {
@@ -697,7 +701,11 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                             .subtract((p.InvoiceDis3 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis3))
                             .subtract((p.InvoiceDisOther == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDisOther));
 
+<<<<<<< HEAD
                     Currency custPrice = p.amount == null ? Currency.ZERO : p.amount;
+=======
+                    Currency custPrice = p.custPrice == null ? Currency.ZERO : p.custPrice;
+>>>>>>> origin/dev
                     thirdPartyValueTextView.setText(HelperMethods.currencyToString(custPrice));
                 }
                 txtvRow.setText(position + 1 + "");

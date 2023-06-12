@@ -9,7 +9,11 @@ CREATE TABLE "CustomerCallOrderLinesInvoiceQtyDetail" (
 PRIMARY KEY ("UniqueId" ASC),
 CONSTRAINT "fkey1" FOREIGN KEY ("OrderLineUniqueId") REFERENCES "CustomerCallInvoiceLines" ("UniqueId") ON DELETE CASCADE ON UPDATE CASCADE,
 CONSTRAINT "fkey2" FOREIGN KEY ("ProductUnitId") REFERENCES "ProductUnit" ("UniqueId") ON DELETE CASCADE ON UPDATE CASCADE
+<<<<<<< HEAD
 );
 
 alter table CustomerCallReturn add column zterm TEXT;
 alter table CustomerCallReturnRequest add column zterm TEXT;
+=======
+);
+>>>>>>> origin/dev
