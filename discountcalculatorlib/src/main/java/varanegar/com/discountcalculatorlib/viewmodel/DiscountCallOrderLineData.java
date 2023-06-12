@@ -43,21 +43,15 @@ public class DiscountCallOrderLineData {
     public BigDecimal weight;
     public long priceId;
     public BigDecimal unitPrice;
-<<<<<<< HEAD
+
     public BigDecimal amount;
-=======
->>>>>>> origin/dev
     public BigDecimal custPrice;
     public BigDecimal invoiceTotalQty;
     public BigDecimal invoiceBigQty;
-
     public BigDecimal TakhfifatKol;
     public BigDecimal Fee;
     public BigDecimal FeeKol;
-<<<<<<< HEAD
     public BigDecimal totalQty;
-=======
->>>>>>> origin/dev
     public String zterm;
     public long invoiceBigQtyId;
     public String invoiceBigQtyName;
@@ -340,10 +334,8 @@ public class DiscountCallOrderLineData {
         this.TakhfifatKol= onlinedata.takhfifatkol;
         this.Fee= onlinedata.fee;
         this.FeeKol= onlinedata.feeKol;
-<<<<<<< HEAD
+
         this.totalQty= onlinedata.totalQty;
-=======
->>>>>>> origin/dev
         this.zterm= onlinedata.zterm;
         this.totalInvoiceAdd1Amount = onlinedata.evcItemAdd1;
         this.totalInvoiceAdd2Amount = onlinedata.evcItemAdd2;
@@ -378,12 +370,11 @@ public class DiscountCallOrderLineData {
             this.totalInvoiceAmount = unitPrice.multiply(invoiceTotalQty);
 
             if (amount!=null)
-=======
-            this.custPrice= onlinedata.custPrice;
-            this.totalInvoiceAmount = unitPrice.multiply(invoiceTotalQty);
+                this.totalInvoiceDiscount = (baseData.unitPrice.multiply(invoiceTotalQty)).subtract(onlinedata.amount);
+//      this.totalInvoiceAmount = unitPrice.multiply(invoiceTotalQty);
 
 >>>>>>> origin/dev
-            this.totalInvoiceDiscount = (baseData.unitPrice.multiply(invoiceTotalQty)).subtract(onlinedata.amount);
+
 //            this.totalInvoiceDiscount = onlinedata.takhfifatkol;
         } else {
             this.unitPrice = onlinedata.custPrice;

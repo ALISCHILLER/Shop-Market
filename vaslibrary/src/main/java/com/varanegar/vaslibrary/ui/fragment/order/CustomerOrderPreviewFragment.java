@@ -78,8 +78,9 @@ import static varanegar.com.discountcalculatorlib.Global.orderPrize;
 /**
  * Created by A.Jafarzadeh on 6/28/2017.
  */
+
 /**
- *  صفحه پیش نمایش
+ * صفحه پیش نمایش
  */
 public class CustomerOrderPreviewFragment extends VisitFragment implements ChoicePrizesDialog.choicePrizeDialogListener {
     List<DiscountItemCountModel> allDiscountItemCounts;
@@ -154,9 +155,9 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
             TextView thirdPartyAdds = view.findViewById(R.id.third_party_adds_text_view);
             TextView thirdPartythirdPartyNetAmountLayout = view.findViewById(R.id.third_party_net_amount_text_view);
 
-            CustomerModel customerModel=new CustomerManager(getContext()).getItem(customerId);
-            CustomerCallOrderModel customerCallOrderModel=new CustomerCallOrderManager(getContext()).getItem(callOrderId);
-            titleTextView.setText(getString(R.string.order_preview) + " : " +customerModel.CustomerName +" "+ customerCallOrderModel.SaleNoSDS);
+            CustomerModel customerModel = new CustomerManager(getContext()).getItem(customerId);
+            CustomerCallOrderModel customerCallOrderModel = new CustomerCallOrderManager(getContext()).getItem(callOrderId);
+            titleTextView.setText(getString(R.string.order_preview) + " : " + customerModel.CustomerName + " " + customerCallOrderModel.SaleNoSDS);
 
             payableCashPairedItems = view.findViewById(R.id.payable_cash_paired_items);
             payableChequePairedItems = view.findViewById(R.id.payable_cheque_paired_items);
@@ -240,7 +241,6 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
         }
 
 
-
     }
 
     private void calc(Boolean first) {
@@ -250,7 +250,7 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
             @Override
             public void onSuccess(CustomerCallOrderPromotion data) {
                 customerCallOrderPromotion = data;
-              //  titleTextView.setText(getString(R.string.order_preview) + " : " + customerCallOrderPromotion.CustomerName + " (" + customerCallOrderPromotion.CustomerCode + ")");
+                //  titleTextView.setText(getString(R.string.order_preview) + " : " + customerCallOrderPromotion.CustomerName + " (" + customerCallOrderPromotion.CustomerCode + ")");
 
                 for (CustomerCallOrderLinePromotion lines : customerCallOrderPromotion.LinesWithPromo) {
                     if (lines.AdjustmentPrice != null) {
@@ -513,7 +513,7 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                 final CustomerCallOrderLinePromotion p = recyclerAdapter.get(position);
 
                 if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
-                    if (!p.QtyCaption.contains(":")&&p.UnitName.equals("EA")) {
+                    if (!p.QtyCaption.contains(":") && p.UnitName.equals("EA")) {
                         ProductUnitViewManager productUnitViewManager = new ProductUnitViewManager(getContext());
                         try {
                             List<ProductUnitViewModel> unitViewModels = productUnitViewManager.getProductUnits(p.ProductId, ProductType.isForSale);
@@ -646,20 +646,20 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                             .add((p.InvoiceAdd2 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceAdd2))
                             .add((p.InvoiceAddOther == null ? new Currency(BigDecimal.ZERO) : p.InvoiceAddOther));
 
-                Currency amuntFol=Currency.ZERO;
+                Currency amuntFol = Currency.ZERO;
 
                 if (p.zterm.equals("PT01"))
-                    amuntFol=p.AmountNutImmediate;
+                    amuntFol = p.AmountNutImmediate;
                 else if (p.zterm.equals("PTCH"))
-                    amuntFol=p.AmountNutCheque;
+                    amuntFol = p.AmountNutCheque;
                 else if (p.zterm.equals("PTCA"))
-                    amuntFol=p.AmountNutCash;
-<<<<<<< HEAD
+                    amuntFol = p.AmountNutCash;
+<<<<<<<HEAD
                 else if (p.zterm.equals("PT02"))
-                    amuntFol=p.AmountNutCheque;
+                    amuntFol = p.AmountNutCheque;
 =======
 
->>>>>>> origin/dev
+>>>>>>>origin / dev
                 if (backOfficeType == BackOfficeType.ThirdParty && VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
                     if (p.DiscountRef == 0) {
                         CustomerCallOrderLinePromotion baseLine = Linq.findFirst(customerCallOrderPromotion.Lines, new Linq.Criteria<CustomerCallOrderLinePromotion>() {
@@ -701,11 +701,8 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                             .subtract((p.InvoiceDis3 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis3))
                             .subtract((p.InvoiceDisOther == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDisOther));
 
-<<<<<<< HEAD
                     Currency custPrice = p.amount == null ? Currency.ZERO : p.amount;
-=======
-                    Currency custPrice = p.custPrice == null ? Currency.ZERO : p.custPrice;
->>>>>>> origin/dev
+                  //  Currency custPrice = p.custPrice == null ? Currency.ZERO : p.custPrice;
                     thirdPartyValueTextView.setText(HelperMethods.currencyToString(custPrice));
                 }
                 txtvRow.setText(position + 1 + "");
@@ -758,12 +755,12 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                             HelperMethods.currencyToString(p.UnitPrice == null
                                     ? Currency.ZERO : p.UnitPrice.multiply(p.TotalRequestQty));
 
-                    String feeKol=HelperMethods.currencyToString(p.FeeKol);
+                    String feeKol = HelperMethods.currencyToString(p.FeeKol);
 //                    String discount = HelperMethods.currencyToString((p.InvoiceDis1 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis1)
 //                            .add((p.InvoiceDis2 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis2))
 //                            .add((p.InvoiceDis3 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis3))
 //                            .add((p.InvoiceDisOther == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDisOther)));
-                    String discount=HelperMethods.currencyToString(p.TakhfifatKol);
+                    String discount = HelperMethods.currencyToString(p.TakhfifatKol);
                     String addValue = HelperMethods.currencyToString((p.InvoiceAdd1 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceAdd1)
                             .add((p.InvoiceAdd2 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceAdd2)).add((p.InvoiceAddOther == null ? new Currency(BigDecimal.ZERO) : p.InvoiceAddOther)));
                     if (backOfficeType.equals(BackOfficeType.ThirdParty)) {
@@ -834,9 +831,8 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
     }
 
     /**
-     *
-     Discount = sum(Line.Dis1);
-     dis1 for zar
+     * Discount = sum(Line.Dis1);
+     * dis1 for zar
      */
     // todo
     // NGT-4226 - refresh discount after choice prize (we may choice a prize a with different price. it is not a good solution and it should be changed later)
