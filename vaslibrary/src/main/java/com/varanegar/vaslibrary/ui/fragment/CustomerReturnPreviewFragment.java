@@ -319,7 +319,8 @@ public class CustomerReturnPreviewFragment extends VisitFragment {
         protected LinearLayout additionalValueLayout;
         protected LinearLayout mainLayout, thirdPartyLayout;
         protected LinearLayout thirdPartyGrossAmountLayout, thirdPartyAddAmountLayout, thirdPartyNetAmountLayout;
-        protected TextView thirdPartyGrossAmountTextView, thirdPartyDiscountTextView, thirdPartyValueTextView, thirdPartyAddTextView, thirdPartyNetAmountTextView, thirdPartyValueTextViewLabel;
+        protected TextView thirdPartyGrossAmountTextView, thirdPartyDiscountTextView,
+                thirdPartyValueTextView, thirdPartyAddTextView, thirdPartyNetAmountTextView, thirdPartyValueTextViewLabel;
 
 
         public ItemViewHolder(View view, BaseRecyclerAdapter<CustomerCallOrderLinePromotion> recyclerAdapter, Context context) {

@@ -41,7 +41,7 @@ public class CustomerCallOrderLinePromotion extends BaseModel {
     public String UnitName;
     public String QtyCaption;
     public int ConvertFactory;
-
+    public Currency amount;
     public Currency UnitPrice;
     public String PriceId;
     public int SortId;
@@ -186,6 +186,7 @@ public class CustomerCallOrderLinePromotion extends BaseModel {
         else
             this.IsRequestFreeItem = false;
         this.UnitPrice = new Currency(lineData.unitPrice);
+        this.amount = new Currency(lineData.amount);
         UUID productId = UUID.fromString(new ProductManager(conext).getIdByBackofficeId(lineData.productId));
         this.ProductId = productId;
         this.ProductRef = lineData.productId;

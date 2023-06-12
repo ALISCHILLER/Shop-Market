@@ -476,7 +476,6 @@ public class PreSalesCustomersFragment extends CustomersFragment {
             }
             CuteMessageDialog dialog = new CuteMessageDialog(getContext());
             dialog.setIcon(Icon.Info);
-            dialog.setCancelable(false);
             dialog.setTitle(com.varanegar.vaslibrary.R.string.newFeatures);
             dialog.setMessage(text.toString());
             dialog.setPositiveButton(com.varanegar.vaslibrary.R.string.iUnderstood, view -> dialog.dismiss());

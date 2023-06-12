@@ -697,7 +697,7 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                             .subtract((p.InvoiceDis3 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis3))
                             .subtract((p.InvoiceDisOther == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDisOther));
 
-                    Currency custPrice = p.custPrice == null ? Currency.ZERO : p.custPrice;
+                    Currency custPrice = p.amount == null ? Currency.ZERO : p.amount;
                     thirdPartyValueTextView.setText(HelperMethods.currencyToString(custPrice));
                 }
                 txtvRow.setText(position + 1 + "");

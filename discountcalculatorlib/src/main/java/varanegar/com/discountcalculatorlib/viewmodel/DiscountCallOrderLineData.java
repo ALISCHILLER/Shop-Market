@@ -1,5 +1,7 @@
 package varanegar.com.discountcalculatorlib.viewmodel;
 
+import android.annotation.SuppressLint;
+
 import com.varanegar.framework.base.VaranegarApplication;
 
 import java.math.BigDecimal;
@@ -41,6 +43,7 @@ public class DiscountCallOrderLineData {
     public BigDecimal weight;
     public long priceId;
     public BigDecimal unitPrice;
+    public BigDecimal amount;
     public BigDecimal custPrice;
     public BigDecimal invoiceTotalQty;
     public BigDecimal invoiceBigQty;
@@ -48,6 +51,7 @@ public class DiscountCallOrderLineData {
     public BigDecimal TakhfifatKol;
     public BigDecimal Fee;
     public BigDecimal FeeKol;
+    public BigDecimal totalQty;
     public String zterm;
     public long invoiceBigQtyId;
     public String invoiceBigQtyName;
@@ -298,6 +302,7 @@ public class DiscountCallOrderLineData {
         return onlineData;
     }
 
+    @SuppressLint("SuspiciousIndentation")
     public void SetFromOnline(OutputOnlineDetails onlinedata, ArrayList<DiscountCallOrderLineData> baseDatas) {
 
         this.evcId = UUID.randomUUID().toString();/*onlinedata.evcRef.toString();*/
@@ -329,6 +334,7 @@ public class DiscountCallOrderLineData {
         this.TakhfifatKol= onlinedata.takhfifatkol;
         this.Fee= onlinedata.fee;
         this.FeeKol= onlinedata.feeKol;
+        this.totalQty= onlinedata.totalQty;
         this.zterm= onlinedata.zterm;
         this.totalInvoiceAdd1Amount = onlinedata.evcItemAdd1;
         this.totalInvoiceAdd2Amount = onlinedata.evcItemAdd2;
@@ -357,10 +363,13 @@ public class DiscountCallOrderLineData {
          */
         if (GlobalVariables.getIsThirdParty() && VaranegarApplication.is(VaranegarApplication.AppId.Dist) && (onlinedata.disRef == null || onlinedata.disRef == 0) && baseData != null) {
             this.unitPrice = baseData.unitPrice;
+            this.amount = onlinedata.amount;
             this.custPrice= onlinedata.custPrice;
             this.totalInvoiceAmount = unitPrice.multiply(invoiceTotalQty);
 
+            if (amount!=null)
             this.totalInvoiceDiscount = (baseData.unitPrice.multiply(invoiceTotalQty)).subtract(onlinedata.amount);
+//            this.totalInvoiceDiscount = onlinedata.takhfifatkol;
         } else {
             this.unitPrice = onlinedata.custPrice;
             this.totalInvoiceAmount = onlinedata.amount;

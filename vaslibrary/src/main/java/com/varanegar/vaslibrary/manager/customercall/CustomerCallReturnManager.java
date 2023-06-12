@@ -32,6 +32,8 @@ import com.varanegar.vaslibrary.model.call.ReturnLinesRequest;
 import com.varanegar.vaslibrary.model.call.ReturnLinesRequestModel;
 import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.model.customercall.CustomerCallType;
+import com.varanegar.vaslibrary.model.invoiceLineQty.InvoiceLineQty;
+import com.varanegar.vaslibrary.model.invoiceLineQty.InvoiceLineQtyModel;
 import com.varanegar.vaslibrary.model.returnType.ReturnType;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.ui.calculator.returncalculator.ReturnCalculatorItem;

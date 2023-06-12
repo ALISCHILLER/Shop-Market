@@ -9,6 +9,7 @@ import com.varanegar.framework.util.datetime.DateHelper;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -225,22 +226,24 @@ public class PromotionHandlerV3 {
                     onlineData.ZTERM = ZTERM;
 
                     double d = 0;
-               ;
-                    for (int i = 0; i < onlineData.PreSaleEvcDetails.size(); i++) {
-                        for (int j = 0; j < invoiceLineQtyModelData.size(); j++) {
+
+
+                    if (invoiceLineQtyModelData != null&&productUnitModelData!=null)
+                        for (int i = 0; i < onlineData.PreSaleEvcDetails.size(); i++) {
+                            for (int j = 0; j < invoiceLineQtyModelData.size(); j++) {
                                 if (onlineData.PreSaleEvcDetails.get(i).OrderLineId.equals(invoiceLineQtyModelData.get(j).OrderLineUniqueId)) {
                                     for (int x = 0; x < productUnitModelData.size(); x++) {
                                         if (productUnitModelData.get(x).ProductId.equals(invoiceLineQtyModelData.get(j).UnitUniqueId)) {
                                             if (productUnitModelData.get(x).UnitName.equals(invoiceLineQtyModelData.get(j).Vrkme)) {
 
-                                                d=onlineData.
+                                                d = onlineData.
                                                         PreSaleEvcDetails.get(i).TotalQty
-                                                        .divide(BigDecimal.valueOf(productUnitModelData.get(x).ConvertFactor)).doubleValue();
+                                                        .divide(BigDecimal.valueOf(productUnitModelData.get(x).ConvertFactor), RoundingMode.HALF_EVEN).doubleValue();
 
                                                 if (d % 1 == 0) {
                                                     onlineData.PreSaleEvcDetails.get(i).TotalQty =
                                                             BigDecimal.valueOf(d);
-                                                    onlineData.PreSaleEvcDetails.get(i).Unit= productUnitModelData.get(x).UnitName;
+                                                    onlineData.PreSaleEvcDetails.get(i).Unit = productUnitModelData.get(x).UnitName;
                                                 } else {
                                                     break;
                                                 }
@@ -267,7 +270,7 @@ public class PromotionHandlerV3 {
                                                     } else if (productUnitModelData.get(x).UnitName.equals("EA")) {
                                                         onlineData.PreSaleEvcDetails.get(i).Unit = "EA";
                                                     }
-                                                }else if (invoiceLineQtyModelData.get(j).Vrkme.equals("SHL")) {
+                                                } else if (invoiceLineQtyModelData.get(j).Vrkme.equals("SHL")) {
                                                     onlineData.PreSaleEvcDetails.get(i).Unit = "EA";
                                                 }
                                             }
@@ -276,10 +279,15 @@ public class PromotionHandlerV3 {
 
 
                                 }
+                            }
                         }
+
+                    if (invoiceLineQtyModelData == null&&productUnitModelData==null) {
+                        for (int i = 0; i < onlineData.PreSaleEvcDetails.size(); i++) {
+                            onlineData.PreSaleEvcDetails.get(i).Unit = "EA";
+                        }
+                        onlineData.ZTERM="PT03";
                     }
-
-
                     Call<DiscountOutputOnline> call = calcPromotionAPI.getDistOnlinePromotion(onlineData,
                             GlobalVariables.getCalcDiscount(),
                             GlobalVariables.getCalcSaleRestriction(),

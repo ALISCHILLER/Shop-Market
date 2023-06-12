@@ -31,6 +31,7 @@ public class CustomerCallReturnRequestModel extends ReturnBaseModel {
         returnModel.IsFromRequest = this.IsFromRequest;
         returnModel.ShipToPartyCode=this.ShipToPartyCode;
         returnModel.ShipToPartyUniqueId=this.ShipToPartyUniqueId;
+        returnModel.zterm=this.zterm;
         return returnModel;
     }
 }

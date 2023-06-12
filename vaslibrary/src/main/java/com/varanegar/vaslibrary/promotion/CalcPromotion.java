@@ -29,6 +29,7 @@ import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallInvoiceManager;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallOrderManager;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallReturnManager;
+import com.varanegar.vaslibrary.manager.customercall.CustomerCallReturnRequestManager;
 import com.varanegar.vaslibrary.manager.customerpricemanager.CustomerPriceManager;
 import com.varanegar.vaslibrary.manager.discountmanager.DiscountItemCountViewManager;
 import com.varanegar.vaslibrary.manager.oldinvoicemanager.CustomerOldInvoiceHeaderManager;
@@ -42,6 +43,7 @@ import com.varanegar.vaslibrary.model.CustomerOrderType.CustomerOrderTypeModel;
 import com.varanegar.vaslibrary.model.call.CustomerCallInvoiceModel;
 import com.varanegar.vaslibrary.model.call.CustomerCallOrderModel;
 import com.varanegar.vaslibrary.model.call.CustomerCallReturnModel;
+import com.varanegar.vaslibrary.model.call.CustomerCallReturnRequestModel;
 import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.model.customerCallOrderOrderView.CustomerCallOrderOrderViewModel;
 import com.varanegar.vaslibrary.model.customercallreturnlinesview.CustomerCallReturnLinesViewModel;
@@ -109,11 +111,13 @@ public class CalcPromotion {
                     DiscountCalculatorHandler.setOnlineOptions(ipAddress, true, false, false);
                     try {
                         DiscountCallOrderData disCallData;
-                        if (VaranegarApplication.is(VaranegarApplication.AppId.Dist))
+                        if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
+                            CustomerCallReturnRequestModel model = new
+                                    CustomerCallReturnRequestManager(context).getCustomerCallReturn(callData.CustomerId);
                             disCallData = PromotionHandlerV3.distCalcPromotionOnlineSDS(null, callData.toDiscount(context), context,
-                                    null,null,
-                                    null,null,null,null);
-                        else
+                                    null, null,
+                                    model.zterm, null, null, null);
+                        } else
                             disCallData = PromotionHandlerV3.calcPromotionOnlineSDS(null, callData.toDiscount(context), context);
 
                         Timber.d("finished!");
@@ -269,7 +273,8 @@ public class CalcPromotion {
                                             List<InvoiceLineQtyModel> lineQtyManager=new InvoiceLineQtyManager(context)
                                                     .getQtyLines(callOrderUniqueId);
 
-
+                                            CustomerCallReturnRequestModel model = new
+                                                    CustomerCallReturnRequestManager(context).getCustomerCallReturn(callData.CustomerId);
 
                                             distDiscountCalc(orderPrizeList, context, callData, disCallData, evcType, orderProduct,  callInvoiceModel.get(0));
                                             handler.post(() -> callback.onSuccess(callData));

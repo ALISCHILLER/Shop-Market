@@ -617,7 +617,9 @@ public class SettlementFragment extends VisitFragment {
         PaymentModel discountPaymentModel = paymentManager.getDiscountPayment(customerId);
         Currency discountAmount = discountPaymentModel != null ? discountPaymentModel.Amount : Currency.ZERO;
         totalPaymentPairedItems.setValue(HelperMethods.currencyToString(totalPayment.subtract(discountAmount)));
-        netAmountPairedItems.setValue(HelperMethods.currencyToString(customerPayment.getTotalAmount(false)));
+
+//        netAmountPairedItems.setValue(HelperMethods.currencyToString(customerPayment.getTotalAmount(false)));
+
         remainingPairedItems.setValue(HelperMethods.currencyToString(customerPayment.getTotalAmount(false).subtract(totalPayment)));
         invoiceAmountPairedItems.setValue(HelperMethods.currencyToString(paymentManager.getTotalAmountNutCheque(customerId)));
         oldInvoicesAmountPairedItems.setValue(HelperMethods.currencyToString(paymentManager.getTotalAmountNutCash(customerId)));
@@ -637,10 +639,50 @@ public class SettlementFragment extends VisitFragment {
         /**
          * باقی مانده مبلغ
          */
-        oldRemainAfterPaymentItems.setValue(HelperMethods.currencyToString(customerRemain
-                .add(customerPayment.getTotalAmount(false)
-                        .subtract(customerPayment.getOldInvoicesAmount())
-                        .subtract(totalPayment.subtract(creditPayment)))));
+//        oldRemainAfterPaymentItems.setValue(HelperMethods.currencyToString(customerRemain
+//                .add(customerPayment.getTotalAmount(false)
+//                        .subtract(customerPayment.getOldInvoicesAmount())
+//                        .subtract(totalPayment.subtract(creditPayment)))));
+
+
+        List<PaymentTypeOrderModel> paymentTypeOrderModels =
+                new ValidPayTypeManager(getContext()).getPaymentTypeOrders(customerCallOrderModels, null);
+
+
+        if (paymentTypeOrderModels!=null&&paymentTypeOrderModels.size()>0) {
+            PaymentTypeOrderModel paymentTypeOrderModel = paymentTypeOrderModels.get(0);
+            if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PT01.toString())) {
+                Currency returnVa = paymentManager.calcCashAndCheckValidAmountreturn(customerId);
+                Currency total = customerCallOrderModels.get(0).TotalAmountNutImmediate.subtract(returnVa);
+                oldRemainAfterPaymentItems.setValue(HelperMethods.currencyToString(customerRemain
+                        .add(total
+                                .subtract(customerPayment.getOldInvoicesAmount())
+                                .subtract(totalPayment.subtract(creditPayment)))));
+
+                netAmountPairedItems.setValue(HelperMethods.currencyToString(total));
+            }
+
+            if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PTCA.toString())) {
+                Currency returnVa = paymentManager.calcCashAndCheckValidAmountreturn(customerId);
+                Currency total = customerCallOrderModels.get(0).TotalAmountNutCash.subtract(returnVa);
+                oldRemainAfterPaymentItems.setValue(HelperMethods.currencyToString(customerRemain
+                        .add(total
+                                .subtract(customerPayment.getOldInvoicesAmount())
+                                .subtract(totalPayment.subtract(creditPayment)))));
+                netAmountPairedItems.setValue(HelperMethods.currencyToString(total));
+            }
+
+            if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PTCH.toString())) {
+                Currency returnVa = paymentManager.calcCashAndCheckValidAmountreturn(customerId);
+                Currency total = customerCallOrderModels.get(0).TotalAmountNutCheque.subtract(returnVa);
+                oldRemainAfterPaymentItems.setValue(HelperMethods.currencyToString(customerRemain
+                        .add(total
+                                .subtract(customerPayment.getOldInvoicesAmount())
+                                .subtract(totalPayment.subtract(creditPayment)))));
+                netAmountPairedItems.setValue(HelperMethods.currencyToString(total));
+            }
+        }
+
         usanceDayItems.setValue(String.valueOf(paymentManager.getUsanceDay(customerId)));
         usanceRefItems.setValue(String.valueOf(paymentManager.getUsanceRef(customerId)));
         usancePayItems.setValue(HelperMethods.doubleToString(paymentManager.calculateUsancePay(customerId)));
@@ -741,7 +783,10 @@ public class SettlementFragment extends VisitFragment {
                     } else if (paymentModel.PaymentType.equals(PaymentType.Cash)) {
                         CashPaymentDialog dialog = new CashPaymentDialog();
                         Currency totalPayment = paymentManager.getTotalPaid(customerId);
-                        dialog.setArguments(customerId, customerPayment.getTotalAmount(false), customerPayment.getTotalAmount(false).subtract(totalPayment), paymentModel.UniqueId, null);
+
+                        dialog.setArguments(customerId, customerPayment.getTotalAmount(false),
+                                customerPayment.getTotalAmount(false).subtract(totalPayment),
+                                paymentModel.UniqueId, null);
                         dialog.setCallBack(new PaymentDialogCallBack() {
                             @Override
                             public void saved() {

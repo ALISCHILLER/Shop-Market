@@ -533,8 +533,8 @@ public class PaymentManager extends BaseManager<PaymentModel> {
 
     public void thirdPartyControlPayments(@NonNull CustomerModel customerModel, @Nullable List<CustomerCallOrderModel> customerCallOrderModels, CustomerPayment customerPayment, boolean checkPayments) throws ControlPaymentException, ThirdPartyControlPaymentChangedException {
         if (checkPayments) {
-            if (paymentsBecomesGreaterThanTotal(customerModel.UniqueId))
-                throw new ControlPaymentException(getString(R.string.paid_amount_can_not_be_greater_than_total_amount));
+//            if (paymentsBecomesGreaterThanTotal(customerModel.UniqueId))
+//                throw new ControlPaymentException(getString(R.string.paid_amount_can_not_be_greater_than_total_amount));
         }
         if (customerCallOrderModels != null && customerCallOrderModels.size() > 0) {
             CashCheckReceiptModel payedCashCheck = getCashAndCheckPayments(customerModel.UniqueId, customerPayment);
@@ -544,19 +544,71 @@ public class PaymentManager extends BaseManager<PaymentModel> {
             CustomerCallOrderModel customerCall = customerCallOrderModels.get(0);
             PaymentTypeOrderModel paymentTypeOrderModel = paymentTypeOrderModels.get(0);
             if (checkPayments) {
-                if (paymentModels.size() > 0 || (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PT01.toString()))) {
-                    CashCheckReceiptModel validCashCheck = calcCashAndCheckValidAmount(customerModel.UniqueId);
-                    if (payedCashCheck.Cash.compareTo(validCashCheck.Cash) < 0)
-                        throw new ControlPaymentException(getString(R.string.min_valid_cash) + " " + validCashCheck.Cash + "\n" +
-                                getString(R.string.chash_payed) + " " + payedCashCheck.Cash + "\n" +
-                                getString(R.string.remian_cash) + " " + validCashCheck.Cash.subtract(payedCashCheck.Cash));
 
-                    Currency minCheckPay = validCashCheck.Check.subtract(payedCashCheck.Cash.subtract(validCashCheck.Cash));
-                    if (payedCashCheck.Check.compareTo(minCheckPay) < 0)
-                        throw new ControlPaymentException(getString(R.string.min_valid_check_and_cash) + " " + validCashCheck.Cash.add(validCashCheck.Check) + "\n" +
-                                getString(R.string.cash_check_payed) + " " + payedCashCheck.Cash.add(payedCashCheck.Check) + "\n" +
-                                getString(R.string.remain_cash_and_check) + " " + (validCashCheck.Cash.add(validCashCheck.Check).subtract(payedCashCheck.Cash.add(payedCashCheck.Check))));
+               if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PT01.toString())) {
+                   CashCheckReceiptModel validCashCheck = calcCashAndCheckValidAmount(customerModel.UniqueId);
+                   if (customerCallOrderModels.get(0).TotalAmountNutImmediate != null){
+                       Currency returnVa = calcCashAndCheckValidAmountreturn(customerModel.UniqueId);
+                   Currency total = customerCallOrderModels.get(0).TotalAmountNutImmediate.subtract(returnVa);
+                   if (payedCashCheck.Cash.compareTo(total) < 0)
+                       throw new ControlPaymentException(getString(R.string.min_valid_cash) + " " +
+                               total + "\n" +
+                               getString(R.string.chash_payed) + " " + payedCashCheck.Cash + "\n" +
+                               getString(R.string.remian_cash) + " " + total);
+
+                   if (payedCashCheck.Cash.compareTo(total) > 0)
+                       throw new ControlPaymentException("مبلغ وارده بیشتر :" + total);
+
+               }
+               }
+
+
+                if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PTCA.toString())){
+                    CashCheckReceiptModel validCashCheck = calcCashAndCheckValidAmount(customerModel.UniqueId);
+                    if (customerCallOrderModels.get(0).TotalAmountNutCash != null) {
+                        Currency returnVa = calcCashAndCheckValidAmountreturn(customerModel.UniqueId);
+                        Currency total = customerCallOrderModels.get(0).TotalAmountNutCash.subtract(returnVa);
+                        if (payedCashCheck.Check.compareTo(total) < 0)
+                            throw new ControlPaymentException(getString(R.string.min_valid_cash) + " " +
+                                    total + "\n" +
+                                    getString(R.string.chash_payed) + " " + payedCashCheck.Check + "\n" +
+                                    getString(R.string.remian_cash) + " " + total);
+
+                        if (payedCashCheck.Check.compareTo(total) > 0)
+                            throw new ControlPaymentException("مبلغ وارده بیشتر :" + total);
+                    }
                 }
+
+
+                if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PTCH.toString())){
+                    CashCheckReceiptModel returnAmount = calcCashAndCheckValidAmount(customerModel.UniqueId);
+                    if (customerCallOrderModels.get(0).TotalAmountNutCheque != null) {
+                        Currency returnVa = calcCashAndCheckValidAmountreturn(customerModel.UniqueId);
+                        Currency total = customerCallOrderModels.get(0).TotalAmountNutCheque.subtract(returnVa);
+                        if (payedCashCheck.Check.compareTo(total) < 0)
+                            throw new ControlPaymentException(getString(R.string.min_valid_cash) + " " +
+                                    total + "\n" +
+                                    getString(R.string.chash_payed) + " " + payedCashCheck.Check + "\n" +
+                                    getString(R.string.remian_cash) + " " + total);
+
+                        if (payedCashCheck.Check.compareTo(total) > 0)
+                            throw new ControlPaymentException("مبلغ وارده بیشتر :" + total);
+                    }
+                }
+
+//                if (paymentModels.size() > 0 || (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PT01.toString()))) {
+//                    CashCheckReceiptModel validCashCheck = calcCashAndCheckValidAmount(customerModel.UniqueId);
+//                    if (payedCashCheck.Cash.compareTo(validCashCheck.Cash) < 0)
+//                        throw new ControlPaymentException(getString(R.string.min_valid_cash) + " " + validCashCheck.Cash + "\n" +
+//                                getString(R.string.chash_payed) + " " + payedCashCheck.Cash + "\n" +
+//                                getString(R.string.remian_cash) + " " + validCashCheck.Cash.subtract(payedCashCheck.Cash));
+//
+//                    Currency minCheckPay = validCashCheck.Check.subtract(payedCashCheck.Cash.subtract(validCashCheck.Cash));
+//                    if (payedCashCheck.Check.compareTo(minCheckPay) < 0)
+//                        throw new ControlPaymentException(getString(R.string.min_valid_check_and_cash) + " " + validCashCheck.Cash.add(validCashCheck.Check) + "\n" +
+//                                getString(R.string.cash_check_payed) + " " + payedCashCheck.Cash.add(payedCashCheck.Check) + "\n" +
+//                                getString(R.string.remain_cash_and_check) + " " + (validCashCheck.Cash.add(validCashCheck.Check).subtract(payedCashCheck.Cash.add(payedCashCheck.Check))));
+//                }
             }
             CustomerCallManager callManager = new CustomerCallManager(getContext());
             List<CustomerCallModel> calls = callManager.loadCalls(customerModel.UniqueId);
@@ -610,26 +662,83 @@ public class PaymentManager extends BaseManager<PaymentModel> {
     }
 
     public void thirdPartyControlPaymentsAfterEvc(@NonNull CustomerModel customerModel, @Nullable List<CustomerCallOrderModel> customerCallOrderModels, CustomerPayment customerPayment) throws ControlPaymentException {
-        if (paymentsBecomesGreaterThanTotal(customerModel.UniqueId))
-            throw new ControlPaymentException(getString(R.string.paid_amount_can_not_be_greater_than_total_amount));
+//        if (paymentsBecomesGreaterThanTotal(customerModel.UniqueId))
+//            throw new ControlPaymentException(getString(R.string.paid_amount_can_not_be_greater_than_total_amount));
         if (customerCallOrderModels != null && customerCallOrderModels.size() > 0) {
             CashCheckReceiptModel payedCashCheck = getCashAndCheckPayments(customerModel.UniqueId, customerPayment);
             PaymentManager paymentManager = new PaymentManager(getContext());
             List<PaymentModel> paymentModels = paymentManager.getCustomerPayments(customerModel.UniqueId);
             List<PaymentTypeOrderModel> paymentTypeOrderModels = new ValidPayTypeManager(getContext()).getPaymentTypeOrders(customerCallOrderModels, null);
             PaymentTypeOrderModel paymentTypeOrderModel = paymentTypeOrderModels.get(0);
-            if (paymentModels.size() > 0 || (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PT01.toString()))) {
+
+
+
+
+
+
+            if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PT01.toString())){
                 CashCheckReceiptModel validCashCheck = calcCashAndCheckValidAmount(customerModel.UniqueId);
-                if (payedCashCheck.Cash.compareTo(validCashCheck.Cash) < 0)
-                    throw new ControlPaymentException(getString(R.string.min_valid_cash) + " " + validCashCheck.Cash + "\n" +
+                Currency returnVa=calcCashAndCheckValidAmountreturn(customerModel.UniqueId);
+                Currency total=customerCallOrderModels.get(0).TotalAmountNutImmediate.subtract(returnVa);
+                if (payedCashCheck.Cash.compareTo(total) < 0)
+                    throw new ControlPaymentException(getString(R.string.min_valid_cash) + " " +
+                            total + "\n" +
                             getString(R.string.chash_payed) + " " + payedCashCheck.Cash + "\n" +
-                            getString(R.string.remian_cash) + " " + validCashCheck.Cash.subtract(payedCashCheck.Cash));
-                Currency minCheckPay = validCashCheck.Check.subtract(payedCashCheck.Cash.subtract(validCashCheck.Cash));
-                if (payedCashCheck.Check.compareTo(minCheckPay) < 0)
-                    throw new ControlPaymentException(getString(R.string.min_valid_check_and_cash) + " " + validCashCheck.Cash.add(validCashCheck.Check) + "\n" +
-                            getString(R.string.cash_check_payed) + " " + payedCashCheck.Cash.add(payedCashCheck.Check) + "\n" +
-                            getString(R.string.remain_cash_and_check) + " " + (validCashCheck.Cash.add(validCashCheck.Check).subtract(payedCashCheck.Cash.add(payedCashCheck.Check))));
+                            getString(R.string.remian_cash) + " " + total);
+
+                if (payedCashCheck.Cash.compareTo(total) > 0)
+                    throw new ControlPaymentException("مبلغ وارده بیشتر :"+ total );
+
             }
+
+
+            if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PTCA.toString())){
+                CashCheckReceiptModel validCashCheck = calcCashAndCheckValidAmount(customerModel.UniqueId);
+                Currency returnVa=calcCashAndCheckValidAmountreturn(customerModel.UniqueId);
+                Currency total=customerCallOrderModels.get(0).TotalAmountNutCash.subtract(returnVa);
+                if (payedCashCheck.Check.compareTo(total) < 0)
+                    throw new ControlPaymentException(getString(R.string.min_valid_cash) + " " +
+                            total + "\n" +
+                            getString(R.string.chash_payed) + " " + payedCashCheck.Check + "\n" +
+                            getString(R.string.remian_cash) + " " + total);
+
+                if (payedCashCheck.Check.compareTo(total) > 0)
+                    throw new ControlPaymentException("مبلغ وارده بیشتر :"+total);
+
+            }
+
+
+            if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PTCH.toString())){
+                CashCheckReceiptModel returnAmount = calcCashAndCheckValidAmount(customerModel.UniqueId);
+                Currency returnVa=calcCashAndCheckValidAmountreturn(customerModel.UniqueId);
+                Currency total=customerCallOrderModels.get(0).TotalAmountNutCheque.subtract(returnVa);
+                if (payedCashCheck.Check.compareTo(total) < 0)
+                    throw new ControlPaymentException(getString(R.string.min_valid_cash) + " " +
+                            total + "\n" +
+                            getString(R.string.chash_payed) + " " + payedCashCheck.Check + "\n" +
+                            getString(R.string.remian_cash) + " " + total);
+
+                if (payedCashCheck.Check.compareTo(total) > 0)
+                    throw new ControlPaymentException("مبلغ وارده بیشتر :"+total);
+
+            }
+
+//            if (paymentModels.size() > 0 || (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PT01.toString()))) {
+//                CashCheckReceiptModel validCashCheck = calcCashAndCheckValidAmount(customerModel.UniqueId);
+//                if (payedCashCheck.Cash.compareTo(validCashCheck.Cash) < 0)
+//                    throw new ControlPaymentException(getString(R.string.min_valid_cash) + " " + validCashCheck.Cash+ "\n" +
+//                            getString(R.string.chash_payed) + " " + payedCashCheck.Cash + "\n" +
+//                            getString(R.string.remian_cash) + " " + validCashCheck.Cash.subtract(payedCashCheck.Cash));
+//                Currency minCheckPay = validCashCheck.Check.subtract(payedCashCheck.Cash.subtract(validCashCheck.Cash));
+//                if (payedCashCheck.Check.compareTo(minCheckPay) < 0)
+//                    throw new ControlPaymentException(getString(R.string.min_valid_check_and_cash) + " " + validCashCheck.Cash.add(validCashCheck.Check) + "\n" +
+//                            getString(R.string.cash_check_payed) + " " + payedCashCheck.Cash.add(payedCashCheck.Check) + "\n" +
+//                            getString(R.string.remain_cash_and_check) + " " + (validCashCheck.Cash.add(validCashCheck.Check).subtract(payedCashCheck.Cash.add(payedCashCheck.Check))));
+//            }
+
+
+
+
         }
     }
 
@@ -757,6 +866,12 @@ public class PaymentManager extends BaseManager<PaymentModel> {
         }
         return cashCheckReceiptModel;
     }
+
+    public Currency calcCashAndCheckValidAmountreturn(UUID customerId) {
+        Currency returnAmount = new CustomerCallReturnLinesViewManager(getContext()).calculateTotalAmount(customerId, null).NetAmount;
+        return returnAmount;
+    }
+
 
     /**
      * calc payed check and receipt amount
@@ -918,6 +1033,8 @@ public class PaymentManager extends BaseManager<PaymentModel> {
         SysConfigManager sysConfigManager = new SysConfigManager(getContext());
         SysConfigModel sysConfigModel = sysConfigManager.read(ConfigKey.AllowSurplusInvoiceSettlement, SysConfigManager.cloud);
         if (SysConfigManager.compare(sysConfigModel, false)) {
+
+
             return total.compareTo(paymentManager.calculateCustomerPayment(customerId).getTotalAmount(false)) > 0;
         } else return false;
     }
