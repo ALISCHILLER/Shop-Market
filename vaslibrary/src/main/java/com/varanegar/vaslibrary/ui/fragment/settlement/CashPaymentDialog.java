@@ -20,6 +20,7 @@ import com.varanegar.framework.validation.annotations.validvalue.Operator;
 import com.varanegar.java.util.Currency;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
+import com.varanegar.vaslibrary.manager.customercall.CustomerCallOrderManager;
 import com.varanegar.vaslibrary.manager.paymentmanager.PaymentManager;
 import com.varanegar.vaslibrary.manager.paymentmanager.paymenttypes.CashPayment;
 import com.varanegar.vaslibrary.manager.paymentmanager.paymenttypes.PaymentType;
@@ -27,6 +28,7 @@ import com.varanegar.vaslibrary.manager.sysconfigmanager.BackOfficeType;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.UnknownBackOfficeException;
+import com.varanegar.vaslibrary.model.call.CustomerCallOrderModel;
 import com.varanegar.vaslibrary.model.payment.PaymentModel;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.ui.fragment.settlement.invoiceinfo.InvoicePaymentInfoLayout;
@@ -47,7 +49,7 @@ public class CashPaymentDialog extends PaymentDialog {
     public PairedItemsEditable amountPairedItemsEditable;
     private InvoicePaymentInfoLayout invoicePaymentInfoLayout;
     private boolean preset;
-
+    private List<CustomerCallOrderModel> customerCallOrderModels;
     @Override
     public void onValidationSucceeded() {
         try {
@@ -138,11 +140,20 @@ public class CashPaymentDialog extends PaymentDialog {
         invoicePaymentInfoLayout = view.findViewById(R.id.invoices_info_layout);
         SysConfigModel settlementAllocation = new SysConfigManager(getContext()).read(ConfigKey.SettlementAllocation, SysConfigManager.cloud);
         int count = invoicePaymentInfoLayout.setArguments(getVaranegarActvity(), getCustomerId(), PaymentType.Cash, getPaymentId());
+        PaymentManager paymentManager = new PaymentManager(getContext());
         if (count <= 1 || !SysConfigManager.compare(settlementAllocation, true))
             invoicePaymentInfoLayout.setVisibility(View.GONE);
         amountPairedItemsEditable = view.findViewById(R.id.amount_paired_items_editable);
+
+
+        CustomerCallOrderManager customerCallOrderManager = new CustomerCallOrderManager(getContext());
+        customerCallOrderModels = customerCallOrderManager.getCustomerCallOrders(getCustomerId());
+        Currency returnVa = paymentManager.calcCashAndCheckValidAmountreturn(getCustomerId());
+        Currency total = customerCallOrderModels.get(0).TotalAmountNutImmediate.subtract(returnVa);
+
+
         if (getPaymentId() != null) {
-            PaymentManager paymentManager = new PaymentManager(getContext());
+
             PaymentModel paymentModel = paymentManager.getPaymentById(getPaymentId(), PaymentType.Cash);
             if (paymentModel != null) {
                 amountPairedItemsEditable.setValue(HelperMethods.currencyToString(paymentModel.Amount));
@@ -155,7 +166,7 @@ public class CashPaymentDialog extends PaymentDialog {
                     if (getRemainedAmount().intValue() < 0)
                         amountPairedItemsEditable.setValue("0");
                     else
-                        amountPairedItemsEditable.setValue(VasHelperMethods.currencyToString(getRemainedAmount()));
+                        amountPairedItemsEditable.setValue(VasHelperMethods.currencyToString(total));
                 }
                 refreshInvoicePaymentInfoLayout();
             }

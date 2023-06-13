@@ -63,7 +63,7 @@ public class MainActivity extends VasActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        JobSchedulerService.start(this, R.mipmap.ic_launcher, PresalesJobScheduler.class);
+        JobSchedulerService.start(this, R.mipmap.presale, PresalesJobScheduler.class);
     }
     //---------------------------------------------------------------------------------------------- onStart
 

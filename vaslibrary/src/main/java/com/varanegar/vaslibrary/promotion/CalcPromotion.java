@@ -119,7 +119,7 @@ public class CalcPromotion {
                                     model.zterm, null, null, null);
                         } else
                             disCallData = PromotionHandlerV3.
-                                    calcPromotionOnlineSDS(null, callData.toDiscount(context), context);
+                                    calcPromotionOnlineSDS(null, callData.toDiscount(context), context,null);
 
                         Timber.d("finished!");
                         callData.setFromDiscount(context, disCallData);
@@ -283,7 +283,38 @@ public class CalcPromotion {
 //                                                disCallData = DiscountCalculatorHandler.calcPromotion(callData.toDiscount(context), evcType.value(), context);
                                             //                                                disCallData = DiscountCalculatorHandler.calcPromotion(callData.toDiscount(context), evcType.value(), context);
                                         } else {
-                                            disCallData = DiscountCalculatorHandler.calcPromotion(SelIds, callData.toDiscount(context), evcType.value(), context);
+
+                                            List<ProductUnitViewModel> productUnitViewModels = new ProductUnitViewManager(context)
+                                                    .getProductUnits();
+
+
+                                            List<ProductUnitModelData> productUnitModelData = new ArrayList<>();
+
+
+                                            for (ProductUnitViewModel modelData : productUnitViewModels) {
+                                                ProductUnitModelData Productdata = new ProductUnitModelData();
+                                                Productdata.ConvertFactor = modelData.ConvertFactor;
+                                                Productdata.BackOfficeId = modelData.BackOfficeId;
+                                                Productdata.Decimal = modelData.Decimal;
+                                                Productdata.IsForReturn = modelData.IsForReturn;
+                                                Productdata.IsForSale = modelData.IsForSale;
+                                                Productdata.IsDefault = modelData.IsDefault;
+                                                Productdata.ProductCode = modelData.ProductCode;
+                                                Productdata.ProductId = modelData.ProductId;
+                                                Productdata.ProductName = modelData.ProductName;
+                                                Productdata.UniqueId = modelData.UniqueId;
+                                                Productdata.UnitId = modelData.UnitId;
+                                                Productdata.IsReturnDefault = modelData.IsReturnDefault;
+                                                Productdata.UnitRef = modelData.UnitRef;
+                                                Productdata.UnitName = modelData.UnitName;
+                                                productUnitModelData.add(Productdata);
+                                            }
+
+                                            disCallData = DiscountCalculatorHandler.calcPromotion(
+                                                    SelIds,
+                                                    callData.toDiscount(context),
+                                                    evcType.value(),
+                                                    context,productUnitModelData);
                                             Timber.d("finished!");
                                             callData.setFromDiscount(context, disCallData);
                                             if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist))
@@ -324,7 +355,9 @@ public class CalcPromotion {
                                 distDiscountCalc(null, context, callData, disCallData, evcType, orderProduct, null);
                                 handler.post(() -> callback.onSuccess(callData));
                             } else {
-                                disCallData = DiscountCalculatorHandler.calcPromotion(SelIds, callData.toDiscount(context), evcType.value(), context);
+                                disCallData = DiscountCalculatorHandler.calcPromotion(SelIds,
+                                        callData.toDiscount(context),
+                                        evcType.value(), context,null);
                                 Timber.d("finished!");
                                 callData.setFromDiscount(context, disCallData);
                                 fillOrderPrize(context, callData, callData.discountEvcPrize);

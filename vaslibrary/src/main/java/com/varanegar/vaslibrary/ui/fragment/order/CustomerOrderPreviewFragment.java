@@ -647,22 +647,22 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                             .add((p.InvoiceAddOther == null ? new Currency(BigDecimal.ZERO) : p.InvoiceAddOther));
 
                 Currency amuntFol = Currency.ZERO;
-
-                if (p.zterm.equals("PT01"))
-                    amuntFol = p.AmountNutImmediate;
-                else if (p.zterm.equals("PTCH"))
-                    amuntFol = p.AmountNutCheque;
-                else if (p.zterm.equals("PTCA"))
-                    amuntFol = p.AmountNutCash;
-<<<<<<<HEAD
-                else if (p.zterm.equals("PT02"))
-                    amuntFol = p.AmountNutCheque;
-=======
-
->>>>>>>origin / dev
+                if (p.zterm!=null&&!p.zterm.isEmpty()) {
+                    if (p.zterm.equals("PT01"))
+                        amuntFol = p.AmountNutImmediate;
+                    else if (p.zterm.equals("PTCH"))
+                        amuntFol = p.AmountNutCheque;
+                    else if (p.zterm.equals("PTCA"))
+                        amuntFol = p.AmountNutCash;
+                    else if (p.zterm.equals("PT02"))
+                        amuntFol = p.AmountNutCheque;
+                    else if (p.zterm.equals("PT03"))
+                        amuntFol = p.AmountNutPT03;
+                }
                 if (backOfficeType == BackOfficeType.ThirdParty && VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
                     if (p.DiscountRef == 0) {
-                        CustomerCallOrderLinePromotion baseLine = Linq.findFirst(customerCallOrderPromotion.Lines, new Linq.Criteria<CustomerCallOrderLinePromotion>() {
+                        CustomerCallOrderLinePromotion baseLine = Linq.findFirst(customerCallOrderPromotion.Lines,
+                                new Linq.Criteria<CustomerCallOrderLinePromotion>() {
                             @Override
                             public boolean run(CustomerCallOrderLinePromotion item) {
                                 if (item.UniqueId != null) {
@@ -674,8 +674,9 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                         if (p.IsRequestFreeItem)
                             txtvUnitPrice.setText(p.FreeReasonName);
                         else {
-                            txtvUnitPrice.setText(HelperMethods.currencyToString(baseLine.Fee));
-                            thirdPartyDiscountTextView.setText(HelperMethods.currencyToString((baseLine.UnitPrice.multiply(p.TotalRequestQty).subtract(totalPrice))));
+                            txtvUnitPrice.setText(HelperMethods.currencyToString(p.Fee));
+                            String discount = HelperMethods.currencyToString(p.TakhfifatKol);
+                            thirdPartyDiscountTextView.setText(discount);
                         }
                     } else {
                         if (p.IsRequestFreeItem)
@@ -691,7 +692,7 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                 }
 
                 if (!backOfficeType.equals(BackOfficeType.ThirdParty)) {
-                    txtValue.setText(p.IsRequestFreeItem ? getString(R.string.multiplication_sign) : HelperMethods.currencyToString(totalPrice));
+                    txtValue.setText(p.IsRequestFreeItem ? getString(R.string.multiplication_sign) : HelperMethods.currencyToString(amuntFol));
                 } else {
                     Currency valueAmount = p.UnitPrice == null ? Currency.ZERO : p.UnitPrice.multiply(p.TotalRequestQty);
 
@@ -766,7 +767,7 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                     if (backOfficeType.equals(BackOfficeType.ThirdParty)) {
                         thirdPartyGrossAmountTextView.setText(feeKol);
                         thirdPartyDiscountTextView.setText(discount);
-                        thirdPartyAddTextView.setText(addValue);
+                        thirdPartyAddTextView.setText(HelperMethods.currencyToString((p.evcItemAdd == null ? new Currency(BigDecimal.ZERO) : p.evcItemAdd)));
                         thirdPartyNetAmountTextView.setText(p.IsRequestFreeItem ? getString(R.string.multiplication_sign) : HelperMethods.currencyToString(amuntFol));
                     } else {
                         txtOrderAmount.setText(grossAmountValue);
@@ -887,8 +888,17 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                     }
                     totalDiscount = totalDiscount.add(discount);
                 }
-                orderCostPairedItems.setValue(HelperMethods.currencyToString(total.add(customerCallOrderPromotion.TotalInvoiceAdd)));
-                discountAmountPairedItems.setValue(HelperMethods.currencyToString(totalDiscount));
+                orderCostPairedItems.setValue(customerCallOrderPromotion.TotalDiscont.toString());
+                //discountAmountPairedItems.setValue(HelperMethods.currencyToString(totalDiscount));
+
+
+                payableCashPairedItems.setValue(customerCallOrderPromotion.TotalAmountNutCash.toString());
+                payableChequePairedItems.setValue(customerCallOrderPromotion.TotalAmountNutCheque.toString());
+                payableImmediatePairedItems.setValue(customerCallOrderPromotion.TotalAmountNutImmediate.toString());
+                discountImmediatePairedItems.setValue(customerCallOrderPromotion.TotalAmountNutCheque
+                        .subtract(customerCallOrderPromotion.TotalAmountNutImmediate).toString());
+                orderCostPairedItems.setValue(customerCallOrderPromotion.TotalDiscont.toString());
+                discountAmountPairedItems.setValue(HelperMethods.currencyToString(customerCallOrderPromotion.TotalInvoiceDiscount));
             } else {
                 Currency totalPriceWithPromo = Currency.ZERO;
                 Currency totalInvoiceDiscount = Currency.ZERO;
@@ -911,7 +921,7 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                 orderCostPairedItems.setValue(customerCallOrderPromotion.TotalDiscont.toString());
             }
 
-            addAmountPairedItems.setValue(HelperMethods.currencyToString(customerCallOrderPromotion.TotalInvoiceAdd));
+            addAmountPairedItems.setValue(HelperMethods.currencyToString(customerCallOrderPromotion.evcItemAddFol));
 
         } catch (UnknownBackOfficeException e) {
             Timber.e(e);

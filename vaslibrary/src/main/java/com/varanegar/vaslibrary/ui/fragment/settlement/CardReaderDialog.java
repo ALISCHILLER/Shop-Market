@@ -31,6 +31,7 @@ import com.varanegar.framework.validation.annotations.validvalue.Operator;
 import com.varanegar.java.util.Currency;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
+import com.varanegar.vaslibrary.manager.customercall.CustomerCallOrderManager;
 import com.varanegar.vaslibrary.manager.paymentmanager.PaymentManager;
 import com.varanegar.vaslibrary.manager.paymentmanager.exceptions.DuplicatePaymentException;
 import com.varanegar.vaslibrary.manager.paymentmanager.exceptions.PaymentNotFoundException;
@@ -40,6 +41,7 @@ import com.varanegar.vaslibrary.manager.sysconfigmanager.BackOfficeType;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.UnknownBackOfficeException;
+import com.varanegar.vaslibrary.model.call.CustomerCallOrderModel;
 import com.varanegar.vaslibrary.model.payment.PaymentModel;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.ui.fragment.settlement.invoiceinfo.InvoicePaymentInfoLayout;
@@ -70,7 +72,7 @@ public class CardReaderDialog extends PaymentDialog {
     private ImageView addCardReaderImageView;
     private boolean preset;
     private DeviceCardReader deviceCardReader;
-
+    private List<CustomerCallOrderModel> customerCallOrderModels;
 
     @Override
     protected void onCreateContentView(LayoutInflater inflater, ViewGroup viewGroup, @Nullable Bundle savedInstanceState) {
@@ -85,6 +87,13 @@ public class CardReaderDialog extends PaymentDialog {
         invoicePaymentInfoLayout = view.findViewById(R.id.invoices_info_layout);
         int count = invoicePaymentInfoLayout.setArguments(getVaranegarActvity(),
                 getCustomerId(), PaymentType.Card, getPaymentId());
+
+        PaymentManager paymentManager = new PaymentManager(getContext());
+        CustomerCallOrderManager customerCallOrderManager = new CustomerCallOrderManager(getContext());
+        customerCallOrderModels = customerCallOrderManager.getCustomerCallOrders(getCustomerId());
+        Currency returnVa = paymentManager.calcCashAndCheckValidAmountreturn(getCustomerId());
+        Currency total = customerCallOrderModels.get(0).TotalAmountNutImmediate.subtract(returnVa);
+
         if (count <= 1 || !SysConfigManager.compare(settlementAllocation, true))
             invoicePaymentInfoLayout.setVisibility(View.GONE);
         refNumberPairedItemsEditable = (PairedItemsEditable)
@@ -95,7 +104,7 @@ public class CardReaderDialog extends PaymentDialog {
         datePairedItems = (PairedItems) view.findViewById(R.id.date_paired_items);
 
         if (getPaymentId() != null) {
-            PaymentManager paymentManager = new PaymentManager(getContext());
+
             PaymentModel paymentModel = paymentManager.getPaymentById(getPaymentId(), PaymentType.Card);
             datePairedItems.setValue(DateHelper.toString(paymentModel.ChqDate, DateFormat.Date, VasHelperMethods.getSysConfigLocale(getContext())));
             amountPairedItemsEditable.setValue(HelperMethods.currencyToString(paymentModel.Amount));
@@ -108,7 +117,7 @@ public class CardReaderDialog extends PaymentDialog {
                 if (new SysConfigManager(getContext()).readOwnerKeys().DataOwnerKey.equalsIgnoreCase("caf5a390-cbe1-435b-bdde-1f682e004693"))
                     amountPairedItemsEditable.setValue(getCustomerRemainAmount() != null ? VasHelperMethods.currencyToString(getRemainedAmount().add(getCustomerRemainAmount())) : VasHelperMethods.currencyToString(getRemainedAmount()));
                 else
-                    amountPairedItemsEditable.setValue(VasHelperMethods.currencyToString(getRemainedAmount()));
+                    amountPairedItemsEditable.setValue(VasHelperMethods.currencyToString(total));
                 refreshInvoicePaymentInfo();
             }
         }

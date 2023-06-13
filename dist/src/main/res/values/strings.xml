@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">توزیع</string>
+    <string name="app_name">زرنگارپخش</string>
     <string name="dist_count">تعداد توزیع</string>
     <string name="distribution_tour">اطلاعات توزیع</string>
     <string name="dist_onhandqty">موجودی ماشین</string>
