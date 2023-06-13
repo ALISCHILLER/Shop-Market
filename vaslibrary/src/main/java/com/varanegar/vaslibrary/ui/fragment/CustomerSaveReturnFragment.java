@@ -106,6 +106,7 @@ import com.varanegar.vaslibrary.webapi.promotion.ReturnDisItemViewModel;
 import com.varanegar.vaslibrary.webapi.promotion.ReturnDistViewModel;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -144,7 +145,7 @@ public class CustomerSaveReturnFragment extends VisitFragment {
     private ReportView reportView;
     private ProgressDialog discountProgressDialog;
     private Activity activity;
-
+    Currency returnAmount = Currency.ZERO;
 
     private boolean isEmpty(@Nullable UUID returnId) {
         CustomerCallReturnLinesViewManager linesViewManager = new CustomerCallReturnLinesViewManager(getContext());
@@ -254,13 +255,13 @@ public class CustomerSaveReturnFragment extends VisitFragment {
         commentImageView = (ImageView) view.findViewById(R.id.comment_image_view);
         commentEditText = (EditText) view.findViewById(R.id.comment_edit_text);
 
-        shipPairedItemsSpinner=view.findViewById(R.id.ship_return_spinner);
-        if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)){
-            CustomerShipToPartyManager shipManager=new CustomerShipToPartyManager(getContext());
-            List<CustomerShipToPartyModel> ships=shipManager.getItems(customerId);
+        shipPairedItemsSpinner = view.findViewById(R.id.ship_return_spinner);
+        if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+            CustomerShipToPartyManager shipManager = new CustomerShipToPartyManager(getContext());
+            List<CustomerShipToPartyModel> ships = shipManager.getItems(customerId);
             Collections.sort(ships, (o1, o2) -> {
-                Integer a1 = o1.UniqueId.equals(o1.SoldToPartyUniqueId)?0:1;
-                Integer b1 = o2.UniqueId.equals( o2.SoldToPartyUniqueId)?0:1;
+                Integer a1 = o1.UniqueId.equals(o1.SoldToPartyUniqueId) ? 0 : 1;
+                Integer b1 = o2.UniqueId.equals(o2.SoldToPartyUniqueId) ? 0 : 1;
                 return a1.compareTo(b1);
             });
 //            Collections.sort(ships, new Comparator<CustomerShipToPartyModel>() {
@@ -271,7 +272,7 @@ public class CustomerSaveReturnFragment extends VisitFragment {
 //                }
 //            });
             shipPairedItemsSpinner.setVisibility(View.VISIBLE);
-            shipPairedItemsSpinner.setup(getChildFragmentManager(),ships, (item, text) -> {
+            shipPairedItemsSpinner.setup(getChildFragmentManager(), ships, (item, text) -> {
                 String str = HelperMethods.persian2Arabic(text);
                 if (str == null)
                     return true;
@@ -279,25 +280,23 @@ public class CustomerSaveReturnFragment extends VisitFragment {
                 return item.toString().toLowerCase().contains(str);
             });
 
-            CustomerCallReturnModel customerCallReturnModel=new CustomerCallReturnManager(getContext()).getItem(customerId);
-            if (customerCallReturnModel!=null){
-                UUID shipid=customerCallReturnModel.ShipToPartyUniqueId;
-                if (shipid!=null){
-                    for (int i=0;i<ships.size();i++){
-                        if (shipid.equals(ships.get(i).UniqueId)){
+            CustomerCallReturnModel customerCallReturnModel = new CustomerCallReturnManager(getContext()).getItem(customerId);
+            if (customerCallReturnModel != null) {
+                UUID shipid = customerCallReturnModel.ShipToPartyUniqueId;
+                if (shipid != null) {
+                    for (int i = 0; i < ships.size(); i++) {
+                        if (shipid.equals(ships.get(i).UniqueId)) {
                             shipPairedItemsSpinner.selectItem(i);
                         }
                     }
                 }
-            }else if(ships.get(0)!=null)
+            } else if (ships.get(0) != null)
                 shipPairedItemsSpinner.selectItem(0);
 
             shipPairedItemsSpinner.setOnItemSelectedListener((position, item) -> {
 
             });
         }
-
-
 
 
         SysConfigManager sysConfigManager = new SysConfigManager(getContext());
@@ -480,7 +479,12 @@ public class CustomerSaveReturnFragment extends VisitFragment {
                             editReasonDialog.onItemSelected = reasonUniqueId -> {
                                 try {
                                     revokeRequest(null, reasonUniqueId);
-                                    update();
+                                    SharedPreferences sharedPreferences = getContext().getSharedPreferences("returnTotal", Context.MODE_PRIVATE);
+                                    sharedPreferences.edit()
+                                            .putString(customerId.toString(),"0").apply();
+                                    returnAmount=Currency.ZERO;
+
+                                    update(null);
                                 } catch (Exception e) {
                                     showErrorMessage();
                                 }
@@ -488,7 +492,7 @@ public class CustomerSaveReturnFragment extends VisitFragment {
                             editReasonDialog.show(getVaranegarActvity().getSupportFragmentManager(), "EditReasonDialog");
                         } else {
                             revokeRequest(null, null);
-                            update();
+                            update(null);
                         }
                     } catch (Exception e) {
                         showErrorMessage();
@@ -634,7 +638,16 @@ public class CustomerSaveReturnFragment extends VisitFragment {
                 }
             }
         }
-        refresh();
+
+
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("returnTotal", Context.MODE_PRIVATE);
+
+        try {
+            returnAmount = Currency.parse(sharedPreferences.getString(customerId.toString(), "0"));
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        refresh(null);
     }
 
     private void removeReturnCall() {
@@ -649,7 +662,7 @@ public class CustomerSaveReturnFragment extends VisitFragment {
             } else
                 removePromotion();
             loadCalls();
-            refresh();
+            refresh(null);
         } catch (ReturnInitException e) {
             showErrorMessage(R.string.error_init_return_request);
         } catch (DbException e) {
@@ -930,7 +943,7 @@ public class CustomerSaveReturnFragment extends VisitFragment {
                             editReasonDialog.onItemSelected = reasonUniqueId -> {
                                 try {
                                     revokeRequest(null, reasonUniqueId);
-                                    update();
+                                    update(null);
                                 } catch (Exception e) {
                                     showErrorMessage();
                                 }
@@ -938,7 +951,7 @@ public class CustomerSaveReturnFragment extends VisitFragment {
                             editReasonDialog.show(getVaranegarActvity().getSupportFragmentManager(), "EditReasonDialog");
                         } else {
                             revokeRequest(null, null);
-                            update();
+                            update(null);
                         }
                     } catch (Exception e) {
                         showErrorMessage();
@@ -1018,7 +1031,7 @@ public class CustomerSaveReturnFragment extends VisitFragment {
                                     activity.runOnUiThread(() -> {
                                         try {
                                             savePromotions(data);
-                                            update();
+                                            update(data);
                                         } catch (Exception e) {
                                             showErrorMessage();
                                         } finally {
@@ -1067,7 +1080,7 @@ public class CustomerSaveReturnFragment extends VisitFragment {
                                         if (activity != null && !activity.isFinishing())
                                             activity.runOnUiThread(() -> {
                                                 dismissProgressDialog();
-                                                update();
+                                                update(null);
                                             });
                                     }
 
@@ -1085,7 +1098,7 @@ public class CustomerSaveReturnFragment extends VisitFragment {
                                         if (activity != null && !activity.isFinishing())
                                             activity.runOnUiThread(() -> {
                                                 dismissProgressDialog();
-                                                refresh();
+                                                refresh(null);
                                             });
                                     }
                                 });
@@ -1126,13 +1139,13 @@ public class CustomerSaveReturnFragment extends VisitFragment {
                         returnLinesManager.update(returnLinesModel);
                     }
                 }
-                update();
+                update(null);
             } else {
                 if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
 
-                    update();
+                    update(null);
                 }
-                update();
+                update(null);
             }
         } catch (UnknownBackOfficeException e) {
             showErrorMessage(getString(R.string.back_office_type_is_uknown));
@@ -1159,38 +1172,38 @@ public class CustomerSaveReturnFragment extends VisitFragment {
                             dismissProgressDialog();
                             showErrorMessage(result.message);
                         });
+                    } else {
+                        List<DiscountCallReturnLineData> discountCallReturnLineData = returnDisItemToDiscountCallReturnData(result.returnDisItems);
+                        returnLinesManager.savePromotion(getVaranegarActvity(), customerId, isFromRequest(), discountCallReturnLineData, new ReturnLinesManager.OnPromotionCallBack() {
+                            @Override
+                            public void onSuccess() {
+                                if (activity != null && !activity.isFinishing())
+                                    activity.runOnUiThread(() -> {
+                                        dismissProgressDialog();
+                                        update(null);
+                                    });
+                            }
+
+                            @Override
+                            public void onFailure() {
+                                if (activity != null && !activity.isFinishing())
+                                    activity.runOnUiThread(() -> {
+                                        dismissProgressDialog();
+                                        showErrorMessage();
+                                    });
+                            }
+
+                            @Override
+                            public void onCancel() {
+                                if (activity != null && !activity.isFinishing())
+                                    activity.runOnUiThread(() -> {
+                                        dismissProgressDialog();
+                                        refresh(null);
+                                    });
+                            }
+                        });
                     }
-                   else {
-                    List<DiscountCallReturnLineData> discountCallReturnLineData = returnDisItemToDiscountCallReturnData(result.returnDisItems);
-                    returnLinesManager.savePromotion(getVaranegarActvity(), customerId, isFromRequest(), discountCallReturnLineData, new ReturnLinesManager.OnPromotionCallBack() {
-                        @Override
-                        public void onSuccess() {
-                            if (activity != null && !activity.isFinishing())
-                                activity.runOnUiThread(() -> {
-                                    dismissProgressDialog();
-                                    update();
-                                });
-                        }
-
-                        @Override
-                        public void onFailure() {
-                            if (activity != null && !activity.isFinishing())
-                                activity.runOnUiThread(() -> {
-                                    dismissProgressDialog();
-                                    showErrorMessage();
-                                });
-                        }
-
-                        @Override
-                        public void onCancel() {
-                            if (activity != null && !activity.isFinishing())
-                                activity.runOnUiThread(() -> {
-                                    dismissProgressDialog();
-                                    refresh();
-                                });
-                        }
-                    });
-                } }catch (Exception ex) {
+                } catch (Exception ex) {
                     if (activity != null && !activity.isFinishing())
                         activity.runOnUiThread(() -> {
                             dismissProgressDialog();
@@ -1294,7 +1307,9 @@ public class CustomerSaveReturnFragment extends VisitFragment {
         CustomerCallReturnLinesViewManager linesViewManager = new CustomerCallReturnLinesViewManager(getContext());
         List<CustomerCallReturnLinesViewModel> lines = linesViewManager.getLines(customerId, withRef, isFromRequest());
         ReturnLinesManager returnLinesManager = new ReturnLinesManager(getContext());
-
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("returnTotal", Context.MODE_PRIVATE);
+        sharedPreferences.edit()
+                .putString(customerId.toString(), HelperMethods.currencyToString(data.AmountNutPT03Add)).apply();
         for (final CustomerCallOrderLinePromotion p :
                 data.LinesWithPromo) {
             CustomerCallReturnLinesViewModel returnLinesViewModel = Linq.findFirst(lines, item -> item.UniqueId.equals(p.UniqueId));
@@ -1339,13 +1354,13 @@ public class CustomerSaveReturnFragment extends VisitFragment {
         dismissProgressDialog();
     }
 
-    private void update() {
+    private void update(CustomerCallOrderPromotion data) {
         try {
             updateCustomerCallReturn();
             CustomerCallManager callManager = new CustomerCallManager(getContext());
             callManager.saveReturnCall(customerId, withRef, isFromRequest());
             loadCalls();
-            refresh();
+            refresh(data);
         } catch (Exception ex) {
             if (isResumed())
                 showErrorMessage();
@@ -1394,7 +1409,7 @@ public class CustomerSaveReturnFragment extends VisitFragment {
         return callManager.isConfirmed(calls);
     }
 
-    private void refresh() {
+    private void refresh(CustomerCallOrderPromotion data) {
         setupAdapter();
         loadCalls();
         toolbar.refresh();
@@ -1405,7 +1420,12 @@ public class CustomerSaveReturnFragment extends VisitFragment {
             commentEditText.setEnabled(false);
             OrderAmount amount = new CustomerCallReturnLinesViewManager(getContext()).calculateTotalAmount(customerId, withRef, isFromRequest());
             amountPairedItems.setValue(HelperMethods.currencyToString(amount.TotalAmount));
-            netAmountPairtedItems.setValue(HelperMethods.currencyToString(amount.NetAmount));
+            if (data != null)
+                netAmountPairtedItems.setValue(HelperMethods.currencyToString(data.AmountNutPT03Add));
+            else if (returnAmount.compareTo(returnAmount) == 0)
+                netAmountPairtedItems.setValue(HelperMethods.currencyToString(returnAmount));
+            else
+                netAmountPairtedItems.setValue(HelperMethods.currencyToString(amount.NetAmount));
             discountAmountPairtedItems.setValue(HelperMethods.currencyToString(amount.DiscountAmount));
             addAmountPairtedItems.setValue(HelperMethods.currencyToString(amount.AddAmount));
         } else {

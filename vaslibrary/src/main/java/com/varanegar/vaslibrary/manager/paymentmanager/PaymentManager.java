@@ -1,6 +1,7 @@
 package com.varanegar.vaslibrary.manager.paymentmanager;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -868,7 +869,14 @@ public class PaymentManager extends BaseManager<PaymentModel> {
     }
 
     public Currency calcCashAndCheckValidAmountreturn(UUID customerId) {
-        Currency returnAmount = new CustomerCallReturnLinesViewManager(getContext()).calculateTotalAmount(customerId, null).NetAmount;
+        Currency returnAmount= Currency.ZERO;
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("returnTotal", Context.MODE_PRIVATE);
+        try {
+         returnAmount = Currency.parse(sharedPreferences.getString(customerId.toString(), "0"));
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+      //  Currency returnAmount = new CustomerCallReturnLinesViewManager(getContext()).calculateTotalAmount(customerId, null).NetAmount;
         return returnAmount;
     }
 

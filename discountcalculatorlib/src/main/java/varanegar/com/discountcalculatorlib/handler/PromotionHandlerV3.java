@@ -9,11 +9,14 @@ import com.varanegar.framework.util.datetime.DateHelper;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-<<<<<<< HEAD
 import java.math.RoundingMode;
-=======
->>>>>>> origin/dev
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -74,12 +77,18 @@ public class PromotionHandlerV3 {
     }
 
 
-    public static DiscountCallOrderData calcPromotion(final List<Integer> SelIds, DiscountCallOrderData discountCallOrderData, EVCType evcType, Context context) throws DiscountException, InterruptedException {
+    public static DiscountCallOrderData calcPromotion(final List<Integer> SelIds,
+                                                      DiscountCallOrderData discountCallOrderData,
+                                                      EVCType evcType,
+                                                      Context context,
+                                                      List<ProductUnitModelData> productUnitModelData
+                                                      ) throws DiscountException, InterruptedException {
 //        try {
         if (GlobalVariables.getBackOffice().equals(BackOfficeType.VARANEGAR)) {
-            if (GlobalVariables.isCalcOnline())
-                discountCallOrderData = PromotionHandlerV3.calcPromotionOnlineSDS(SelIds, discountCallOrderData, context);
-            else
+            if (GlobalVariables.isCalcOnline()) {
+                discountCallOrderData = PromotionHandlerV3.calcPromotionOnlineSDS(SelIds,
+                        discountCallOrderData, context,productUnitModelData);
+            }  else
                 discountCallOrderData = PromotionHandlerV3.calcPromotionSDS(discountCallOrderData, evcType);
         } else {
             discountCallOrderData = PromotionHandlerV3.calcPromotionVnLite(discountCallOrderData, evcType);
@@ -227,72 +236,11 @@ public class PromotionHandlerV3 {
                     onlineData.SalePDate = SalePDate;
                     onlineData.DocPDate = DocPDate;
                     onlineData.ZTERM = ZTERM;
-<<<<<<< HEAD
-=======
+
+
 
                     double d = 0;
-               ;
-                    for (int i = 0; i < onlineData.PreSaleEvcDetails.size(); i++) {
-                        for (int j = 0; j < invoiceLineQtyModelData.size(); j++) {
-                            if (!invoiceLineQtyModelData.get(j).Vrkme.equals("EA")) {
-                                if (onlineData.PreSaleEvcDetails.get(i).OrderLineId.equals(invoiceLineQtyModelData.get(j).OrderLineUniqueId)) {
-                                    for (int x = 0; x < productUnitModelData.size(); x++) {
-                                        if (productUnitModelData.get(x).ProductId.equals(invoiceLineQtyModelData.get(j).UnitUniqueId)) {
-                                            if (productUnitModelData.get(x).UnitName.equals(invoiceLineQtyModelData.get(j).Vrkme)) {
-
-                                                d=onlineData.
-                                                        PreSaleEvcDetails.get(i).TotalQty
-                                                        .divide(BigDecimal.valueOf(productUnitModelData.get(x).ConvertFactor)).doubleValue();
-
-                                                if (d % 1 == 0) {
-                                                    onlineData.PreSaleEvcDetails.get(i).TotalQty =
-                                                            BigDecimal.valueOf(d);
-                                                    onlineData.PreSaleEvcDetails.get(i).UnitName = productUnitModelData.get(x).UnitName;
-                                                } else {
-                                                    break;
-                                                }
-                                            }
-                                        }
-
-                                    }
-                                    if (d % 1 != 0) {
-                                        for (int x = 0; x < productUnitModelData.size(); x++) {
-                                            if (productUnitModelData.get(x).ProductId.equals(invoiceLineQtyModelData.get(j).UnitUniqueId)) {
-                                                if (invoiceLineQtyModelData.get(j).Vrkme.equals("KAR")) {
-                                                    if (productUnitModelData.get(x).UnitName.equals("SHL")) {
-                                                        d = onlineData.
-                                                                PreSaleEvcDetails.get(i).TotalQty
-                                                                .divide(BigDecimal.valueOf(productUnitModelData.get(x).ConvertFactor)).doubleValue();
-                                                        if (d % 1 == 0) {
-                                                            onlineData.PreSaleEvcDetails.get(i).TotalQty =
-                                                                    BigDecimal.valueOf(d);
-                                                            onlineData.PreSaleEvcDetails.get(i).UnitName = productUnitModelData.get(x).UnitName;
-                                                            break;
-                                                        } else {
-                                                            onlineData.PreSaleEvcDetails.get(i).UnitName = "EA";
-                                                        }
-                                                    } else if (productUnitModelData.get(x).UnitName.equals("EA")) {
-                                                        onlineData.PreSaleEvcDetails.get(i).UnitName = "EA";
-                                                    }
-                                                }else if (invoiceLineQtyModelData.get(j).Vrkme.equals("SHL")) {
-                                                    onlineData.PreSaleEvcDetails.get(i).UnitName = "EA";
-                                                }
-                                            }
-                                        }
-                                    }
-
-
-                                }
-                            }
-                        }
-                    }
-
->>>>>>> origin/dev
-
-                    double d = 0;
-
-
-                    if (invoiceLineQtyModelData != null&&productUnitModelData!=null)
+                    if (invoiceLineQtyModelData != null && productUnitModelData != null)
                         for (int i = 0; i < onlineData.PreSaleEvcDetails.size(); i++) {
                             for (int j = 0; j < invoiceLineQtyModelData.size(); j++) {
                                 if (onlineData.PreSaleEvcDetails.get(i).OrderLineId.equals(invoiceLineQtyModelData.get(j).OrderLineUniqueId)) {
@@ -346,11 +294,10 @@ public class PromotionHandlerV3 {
                             }
                         }
 
-                    if (invoiceLineQtyModelData == null&&productUnitModelData==null) {
+                    if (invoiceLineQtyModelData == null && productUnitModelData == null) {
                         for (int i = 0; i < onlineData.PreSaleEvcDetails.size(); i++) {
                             onlineData.PreSaleEvcDetails.get(i).Unit = "EA";
                         }
-                        onlineData.ZTERM="PT03";
                     }
                     Call<DiscountOutputOnline> call = calcPromotionAPI.getDistOnlinePromotion(onlineData,
                             GlobalVariables.getCalcDiscount(),
@@ -399,7 +346,12 @@ public class PromotionHandlerV3 {
     /* ***************************************************************************
      * SDS
      * **************************************************************************** */
-    public static DiscountCallOrderData calcPromotionOnlineSDS(final List<Integer> SelIds, final DiscountCallOrderData discountCallOrderData, final Context context) throws DiscountException, InterruptedException {
+    public static DiscountCallOrderData calcPromotionOnlineSDS(final List<Integer> SelIds,
+                                                               final DiscountCallOrderData discountCallOrderData,
+                                                               final Context context,
+                                                               List<ProductUnitModelData> productUnitModelData
+                                                               )
+            throws DiscountException, InterruptedException {
         final String[] errorMessage = {null};
         final Thread thread = new Thread(new Runnable() {
             @Override
@@ -429,6 +381,56 @@ public class PromotionHandlerV3 {
 
                 onlineData.SelIds = SelIds;
                 onlineData.OrderDate = DateHelper.toString(new Date(), DateFormat.Date, Locale.US);
+
+                if(onlineData.PaymentUsanceRef!=null && !onlineData.PaymentUsanceRef.isEmpty())
+                onlineData.ZTERM = onlineData.PaymentUsanceRef;
+                else
+                    onlineData.ZTERM = "PT01";
+
+
+
+                if (productUnitModelData!=null)
+             Collections.sort(productUnitModelData, new Comparator<ProductUnitModelData>() {
+                    @Override
+                    public int compare(ProductUnitModelData o1, ProductUnitModelData o2) {
+                        return Double.compare(o1.getConvertFactor(), o2.getConvertFactor());
+                    }
+                });
+
+             double d;
+
+             if (productUnitModelData!=null)
+                for (int i=0;i < onlineData.PreSaleEvcDetails.size();i++){
+                    String productCode= onlineData.PreSaleEvcDetails.get(i).GoodsRef
+                            .replaceAll("^0+", "");
+                    for (int j=0;j<productUnitModelData.size();j++){
+                        if (productCode.equals(productUnitModelData.get(j).ProductCode)){
+                            d = onlineData.
+                                    PreSaleEvcDetails.get(i).TotalQty
+                                    .divide(BigDecimal.valueOf(productUnitModelData.get(j).ConvertFactor),
+                                            RoundingMode.HALF_EVEN).doubleValue();
+
+                            if (d % 1 == 0) {
+                                onlineData.PreSaleEvcDetails.get(i).TotalQty =
+                                        BigDecimal.valueOf(d);
+                                onlineData.PreSaleEvcDetails.get(i).Unit =
+                                        productUnitModelData.get(j).UnitName;
+                            }
+                        }
+                    }
+                }
+             else
+                 for (int i=0;i < onlineData.PreSaleEvcDetails.size();i++){
+                     onlineData.PreSaleEvcDetails.get(i).Unit ="EA";
+                 }
+
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd",Locale.ENGLISH);
+                String formattedDate = formatter.format(new Date());
+
+                System.out.println(formattedDate);
+                onlineData.DocPDate=formattedDate.replace("/", "");
+                onlineData.SalePDate=formattedDate.replace("/", "");
+
                 try {
                     Call<DiscountOutputOnline> call = calcPromotionAPI.getPromotion(onlineData,
                             GlobalVariables.getCalcDiscount(),

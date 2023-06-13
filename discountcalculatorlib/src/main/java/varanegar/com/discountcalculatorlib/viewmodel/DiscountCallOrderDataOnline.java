@@ -15,9 +15,11 @@ public class DiscountCallOrderDataOnline {
     public int BuyTypeRef;
     public int DisType;
     public String PaymentUsanceRef;
+    public String ZTERM;
     public int EvcType;
     public int RefId;
-
+    public String DocPDate;
+    public String SalePDate;
     public List<Integer> SelIds;
     public List<DiscountCallOrderLineDataOnline> PreSaleEvcDetails;
 }

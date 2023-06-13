@@ -32,4 +32,12 @@ public class ProductUnitModelData {
     public boolean IsReturnDefault;
     
     public int UnitRef;
+
+
+    public double getConvertFactor() {
+        return ConvertFactor;
+    }
 }
+
+
+

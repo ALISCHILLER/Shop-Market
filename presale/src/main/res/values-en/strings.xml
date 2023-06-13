@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Pre sale</string>
+    <string name="app_name">زرنگارپخش</string>
     <string name="product_unit_name">Measuring unit</string>
     <string name="save_order_request">Submit a sales application :</string>
     <string name="save_return_request">Submit a return request</string>

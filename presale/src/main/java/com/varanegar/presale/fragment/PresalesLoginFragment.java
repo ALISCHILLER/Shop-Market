@@ -12,7 +12,7 @@ import com.varanegar.vaslibrary.ui.fragment.TourReportFragment;
 public class PresalesLoginFragment extends LoginFragment {
     @Override
     protected int getAppIconId() {
-        return R.mipmap.ic_launcher;
+        return R.mipmap.presale;
     }
 
     @Override

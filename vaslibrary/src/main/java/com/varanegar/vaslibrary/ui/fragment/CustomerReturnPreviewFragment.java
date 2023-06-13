@@ -3,6 +3,7 @@ package com.varanegar.vaslibrary.ui.fragment;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -136,8 +137,13 @@ public class CustomerReturnPreviewFragment extends VisitFragment {
                             orderCostPairedItems.setValue(HelperMethods.currencyToString(total.add(data.TotalInvoiceAdd)));
                             discountAmountPairedItems.setValue(HelperMethods.currencyToString(totalDiscount));
                         } else {
-                            orderCostPairedItems.setValue(HelperMethods.currencyToString(data.TotalPriceWithPromo.add(data.TotalInvoiceAdd).subtract(data.TotalInvoiceDiscount)));
-                            discountAmountPairedItems.setValue(HelperMethods.currencyToString(data.TotalInvoiceDiscount));
+//                            orderCostPairedItems.setValue(HelperMethods.currencyToString(data.TotalPriceWithPromo.add(data.TotalInvoiceAdd).subtract(data.TotalInvoiceDiscount)));
+                            orderCostPairedItems.setValue(HelperMethods.currencyToString(data.AmountNutPT03Add));
+                            SharedPreferences sharedPreferences = getContext().getSharedPreferences("returnTotal", Context.MODE_PRIVATE);
+                            sharedPreferences.edit()
+                                    .putString(customerId.toString(),HelperMethods.currencyToString( data.AmountNutPT03Add)).apply();
+
+                            discountAmountPairedItems.setValue(HelperMethods.currencyToString(data.TotalDiscont));
                         }
 
                         adapter = new BaseRecyclerAdapter<CustomerCallOrderLinePromotion>(getVaranegarActvity(), data.LinesWithPromo) {
@@ -478,7 +484,7 @@ public class CustomerReturnPreviewFragment extends VisitFragment {
                             txtvUnitPrice.setText(p.FreeReasonName);
                         else {
                             txtvUnitPrice.setText(HelperMethods.currencyToString(baseLine.UnitPrice));
-                            thirdPartyDiscountTextView.setText(HelperMethods.currencyToString((baseLine.UnitPrice.multiply(p.TotalRequestQty).subtract(totalPrice))));
+                            thirdPartyDiscountTextView.setText(HelperMethods.currencyToString(p.TakhfifatKol));
                         }
                     } else {
                         if (p.IsRequestFreeItem)
@@ -490,7 +496,7 @@ public class CustomerReturnPreviewFragment extends VisitFragment {
                     if (p.IsRequestFreeItem)
                         txtvUnitPrice.setText(p.FreeReasonName);
                     else
-                        txtvUnitPrice.setText(HelperMethods.currencyToString(p.UnitPrice));
+                        txtvUnitPrice.setText(HelperMethods.currencyToString(p.Fee));
                 }
 
                 List<BaseUnit> units = new ArrayList<>();
@@ -517,11 +523,13 @@ public class CustomerReturnPreviewFragment extends VisitFragment {
                             .add((p.InvoiceDis2 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis2))
                             .add((p.InvoiceDis3 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis3))
                             .add((p.InvoiceDisOther == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDisOther)));
+
+
                     String addAmount = HelperMethods.currencyToString((p.InvoiceAdd1 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceAdd1)
                             .add((p.InvoiceAdd2 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceAdd2)).add((p.InvoiceAddOther == null ? new Currency(BigDecimal.ZERO) : p.InvoiceAddOther)));
                     if (backOfficeType.equals(BackOfficeType.ThirdParty)) {
-                        thirdPartyGrossAmountTextView.setText(orderAmount);
-                        thirdPartyDiscountTextView.setText(discountAmount);
+                        thirdPartyGrossAmountTextView.setText(HelperMethods.currencyToString(p.FeeKol));
+                        thirdPartyDiscountTextView.setText(HelperMethods.currencyToString(p.TakhfifatKol));
                         thirdPartyAddTextView.setText(addAmount);
                         thirdPartyNetAmountTextView.setText(p.IsRequestFreeItem ? getString(R.string.multiplication_sign) : HelperMethods.currencyToString(totalPrice));
                     } else {

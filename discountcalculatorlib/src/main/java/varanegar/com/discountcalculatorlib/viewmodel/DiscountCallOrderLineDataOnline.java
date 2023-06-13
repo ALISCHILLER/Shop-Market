@@ -17,9 +17,6 @@ public class DiscountCallOrderLineDataOnline {
     public String OrderDate;
     public UUID OrderLineId;
     public String OrderId;
-<<<<<<< HEAD
     public String Unit;
-=======
     public String UnitName;
->>>>>>> origin/dev
 }

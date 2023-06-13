@@ -520,6 +520,10 @@ public class SettlementFragment extends VisitFragment {
         poseButton.setTitle(R.string.card_reader);
         poseButton.setOnClickListener(() -> {
             CardReaderDialog dialog = new CardReaderDialog();
+
+            Currency returnVa = paymentManager.calcCashAndCheckValidAmountreturn(customerId);
+            Currency total = customerCallOrderModels.get(0).TotalAmountNutImmediate.subtract(returnVa);
+
             Currency totalPayment = paymentManager.getTotalPaid(customerId);
             dialog.setArguments(customerId, customerPayment.getTotalAmount(false),
                     customerPayment.getTotalAmount(false).subtract(totalPayment),

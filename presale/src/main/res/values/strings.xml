@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">پیش ویزیت</string>
+    <string name="app_name">زرنگارپخش</string>
     <string name="product_unit_name">واحد سنجش</string>
     <string name="save_order_request">ثبت درخواست فروش</string>
     <string name="save_return_request">ثبت درخواست برگشتی</string>
