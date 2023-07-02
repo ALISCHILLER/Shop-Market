@@ -108,7 +108,7 @@ public class CallOrderLineBatchQtyDetailManager extends BaseManager<CallOrderLin
                         callInvoiceLineBatchQtyDetailModels.get(i).Qty = simolate;
                         break;
                     } else {
-                        simolate.subtract(qty);
+                       simolate = simolate.subtract(qty);
                     }
                 }
 
