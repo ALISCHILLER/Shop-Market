@@ -2202,6 +2202,8 @@ public class TourManager {
 
                     List<SyncGetCustomerCallOrderLineBatchQtyDetailViewModel> syncGetCustomerCallOrderLineBatchQtyDetailViewModels = new ArrayList<>();
                     CallOrderLineBatchQtyDetailManager callOrderLineBatchQtyDetailManager = new CallOrderLineBatchQtyDetailManager(context);
+                    List<CallOrderLineBatchQtyDetailModel> callOrderLineBatchQtyDetailModelssA = callOrderLineBatchQtyDetailManager.getAll();
+                    List<CallOrderLineBatchQtyDetailModel> callOrderLineBatchQtyDetailModelss = callOrderLineBatchQtyDetailManager.getLineBatchQtyDetails(UUID.fromString("3a726872-5a9d-4ead-bbae-510b179733df"));
                     List<CallOrderLineBatchQtyDetailModel> callOrderLineBatchQtyDetailModels = callOrderLineBatchQtyDetailManager.getLineBatchQtyDetails(callInvoiceLineModel.UniqueId);
                     for (CallOrderLineBatchQtyDetailModel callOrderLineBatchQtyDetailModel : callOrderLineBatchQtyDetailModels) {
                         SyncGetCustomerCallOrderLineBatchQtyDetailViewModel syncGetCustomerCallOrderLineBatchQtyDetailViewModel = new SyncGetCustomerCallOrderLineBatchQtyDetailViewModel();

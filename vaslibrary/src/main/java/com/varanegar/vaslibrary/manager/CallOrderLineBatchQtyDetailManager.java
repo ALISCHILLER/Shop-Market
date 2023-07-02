@@ -35,6 +35,12 @@ public class CallOrderLineBatchQtyDetailManager extends BaseManager<CallOrderLin
         super(context, new CallOrderLineBatchQtyDetailModelRepository());
     }
 
+
+    public List<CallOrderLineBatchQtyDetailModel> getAll() {
+        Query query = new Query();
+        query.from(From.table(CallOrderLineBatchQtyDetail.CallOrderLineBatchQtyDetailTbl));
+        return getItems(query);
+    }
     public List<CallOrderLineBatchQtyDetailModel> getLineBatchQtyDetails(UUID CustomerCallOrderLineUniqueId) {
         Query query = new Query();
         query.from(From.table(CallOrderLineBatchQtyDetail.CallOrderLineBatchQtyDetailTbl)).whereAnd(Criteria.equals(CallOrderLineBatchQtyDetail.CustomerCallOrderLineUniqueId, CustomerCallOrderLineUniqueId));
@@ -98,7 +104,7 @@ public class CallOrderLineBatchQtyDetailManager extends BaseManager<CallOrderLin
 //                   return o2.Qty.compareTo(o1.Qty);
 //               });
 
-                
+
                 int postion = 0;
                 BigDecimal simolate = newQty;
                 for (int i = 0; i < callInvoiceLineBatchQtyDetailModels.size(); i++) {
@@ -108,7 +114,7 @@ public class CallOrderLineBatchQtyDetailManager extends BaseManager<CallOrderLin
                         callInvoiceLineBatchQtyDetailModels.get(i).Qty = simolate;
                         break;
                     } else {
-                        simolate.subtract(qty);
+                        simolate = simolate.subtract(qty);
                     }
                 }
 
