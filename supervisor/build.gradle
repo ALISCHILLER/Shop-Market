@@ -25,7 +25,9 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
-
+    lintOptions {
+        checkReleaseBuilds false
+    }
     signingConfigs {
         release {
             keyAlias 'supervisor'

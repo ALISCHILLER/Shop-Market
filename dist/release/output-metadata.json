@@ -10,13 +10,9 @@
     {
       "type": "SINGLE",
       "filters": [],
-      "versionCode": 30101112,
-      "versionName": "3.1.1.112",
-<<<<<<< HEAD
-      "outputFile": "varanegar.dist_V3.1.1.112_230621.apk"
-=======
-      "outputFile": "varanegar.dist_V3.1.1.112_230613.apk"
->>>>>>> origin/dev
+      "versionCode": 30101114,
+      "versionName": "3.1.1.114",
+      "outputFile": "varanegar.dist_V3.1.1.114_230704.apk"
     }
   ]
 }

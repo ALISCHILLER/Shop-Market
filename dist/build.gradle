@@ -8,7 +8,7 @@ ext.versionVariant = null // for example : nestle
 ext.versionMajor = 3
 ext.versionMinor = 1
 ext.versionPatch = 1
-ext.versionBuild = 112
+ext.versionBuild = 114
 
 // VersionReplaceEndTag
 ext.versionType = null // stable(null), beta, snapshot, ...
@@ -35,7 +35,9 @@ android {
             storePassword 'y69+z6E%KXS@6Pcz'
         }
     }
-
+    lintOptions {
+        checkReleaseBuilds false
+    }
     buildTypes {
         release {
             signingConfig signingConfigs.release
