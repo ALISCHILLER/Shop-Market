@@ -229,7 +229,7 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
         AppCompatTextView txt_reportCode;
 
 
-        date = itemView.findViewById(R.id.txtDate);
+         date = itemView.findViewById(R.id.txtDate);
         orderWeight = itemView.findViewById(R.id.txtorderWeight);
        // pendingOrderWeight = itemView.findViewById(R.id.txtpendingOrderWeight);
         inProgressOrderWeight = itemView.findViewById(R.id.txtinProgressOrderWeight);
@@ -283,7 +283,6 @@ public class TreeNodeHolder extends TreeNode.BaseNodeViewHolder<OrderStatusRepor
                 sum_inProgressOrderWeight+= itemSub.getInProgressOrderWeight();
                 sum_undeliverdOrderWeight+= itemSub.getUndeliverdOrderWeight();
                 sum_finalWeight+= itemSub.getFinalWeight();
-
             }
             txt_sum_orderWeight.setText(df.format(sum_orderWeight));
            // txt_sum_pendingOrderWeight.setText(df.format(sum_pendingOrderWeightt));

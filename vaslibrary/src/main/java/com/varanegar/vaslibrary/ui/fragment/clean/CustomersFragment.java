@@ -1125,7 +1125,7 @@ public abstract class CustomersFragment
                                 boolean onlyDiscount,
                                 final SysConfigManager sysConfigManager) {
         if (SysConfigManager.compare(firstTime, true)) {
-            updateCustomerOldInvoices(true, onlyDiscount);
+          //  updateCustomerOldInvoices(true, onlyDiscount);
         } else {
             UpdateManager updateManager = new UpdateManager(getContext());
             Date oldInvoiceDate = updateManager.getLog(UpdateKey.CustomerOldInvoice);
@@ -1191,44 +1191,43 @@ public abstract class CustomersFragment
             @Override
             public void done(String ipAddress) {
                 final OldInvoiceManager oldInvoiceManager = new OldInvoiceManager(activity);
-//                oldInvoiceManager.sync(firstTime, onlyDiscount,
-//                        null, null, null, new UpdateCall() {
-//                            @Override
-//                            protected void onFinish() {
-//                                finishProgress();
-//                            }
-//
-//                            @Override
-//                            protected void onSuccess() {
-//                                saveFirstTimeAfterGetTour(activity, true);
-//                                MainVaranegarActivity activity = getVaranegarActvity();
-//                                if (activity != null && !activity.isFinishing())
-//                                    activity.showSnackBar(R.string.customer_history_updated,
-//                                            MainVaranegarActivity.Duration.Short);
-//                            }
-//
-//                            @Override
-//                            protected void onFailure(String error) {
-//                                saveFirstTimeAfterGetTour(activity, true);
-//                                MainVaranegarActivity activity = getVaranegarActvity();
-//                                if (activity != null && !activity.isFinishing()) {
-//                                    CuteMessageDialog dialog = new CuteMessageDialog(activity);
-//                                    dialog.setMessage(error);
-//                                    dialog.setTitle(error);
-//                                    dialog.setIcon(Icon.Error);
-//                                    dialog.setPositiveButton(R.string.ok, null);
-//                                    dialog.show();
-//                                }
-//                            }
-//
-//                            @Override
-//                            protected void onError(String error) {
-//                                saveFirstTimeAfterGetTour(activity, false);
-//                                handleDiscountError(error, onlyDiscount);
-//                            }
-//                        });
+                oldInvoiceManager.syncCustomerOldInvoices(null, null,
+                        null,new UpdateCall() {
+                            @Override
+                            protected void onFinish() {
+                                finishProgress();
+                            }
 
-                finishProgress();
+                            @Override
+                            protected void onSuccess() {
+                                saveFirstTimeAfterGetTour(activity, true);
+                                MainVaranegarActivity activity = getVaranegarActvity();
+                                if (activity != null && !activity.isFinishing())
+                                    activity.showSnackBar(R.string.customer_history_updated,
+                                            MainVaranegarActivity.Duration.Short);
+                            }
+
+                            @Override
+                            protected void onFailure(String error) {
+                                saveFirstTimeAfterGetTour(activity, true);
+                                MainVaranegarActivity activity = getVaranegarActvity();
+                                if (activity != null && !activity.isFinishing()) {
+                                    CuteMessageDialog dialog = new CuteMessageDialog(activity);
+                                    dialog.setMessage(error);
+                                    dialog.setTitle(error);
+                                    dialog.setIcon(Icon.Error);
+                                    dialog.setPositiveButton(R.string.ok, null);
+                                    dialog.show();
+                                }
+                            }
+
+                            @Override
+                            protected void onError(String error) {
+                                saveFirstTimeAfterGetTour(activity, false);
+                                handleDiscountError(error, onlyDiscount);
+                            }
+                        });
+
             }
 
             @Override
