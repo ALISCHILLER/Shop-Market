@@ -71,6 +71,10 @@ public class ProductManager extends BaseManager<ProductModel> {
         return new Query().from(Product.ProductTbl).whereAnd(Criteria.equals(Product.UniqueId, productId));
     }
 
+    public ProductModel getItemProduct(UUID productId) {
+        return getItem(new Query().from(Product.ProductTbl).whereAnd(Criteria.equals(Product.UniqueId, productId)));
+    }
+
     public void sync(final boolean forUpdate, @NonNull final UpdateCall updateCall) {
         UpdateManager updateManager = new UpdateManager(getContext());
         Date date = updateManager.getLog(UpdateKey.Product);

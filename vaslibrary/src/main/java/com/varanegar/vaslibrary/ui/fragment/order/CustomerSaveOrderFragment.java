@@ -1451,7 +1451,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
                 pingApi.refreshBaseServerUrl(context, new PingApi.PingCallback() {
                     @Override
                     public void done(String ipAddress) {
-                        ProductUpdateFlow productUpdateFlow = new ProductUpdateFlow(context);
+                        ProductUpdateFlow productUpdateFlow = new ProductUpdateFlow(context,customer.CustomerCode);
                         productUpdateFlow.syncProductsAndInitPromotionDb(new UpdateCall() {
                             @Override
                             protected void onSuccess() {
@@ -1976,6 +1976,10 @@ public class CustomerSaveOrderFragment extends VisitFragment
         buttons.add(cancelBtn);
         buttons.add(okButton);
 
+
+        SysConfigManager sysConfigManager = new SysConfigManager(getContext());
+        OwnerKeysWrapper ownerKeys = sysConfigManager.readOwnerKeys();
+
         if (VaranegarApplication.is(VaranegarApplication.AppId.Contractor)) {
             CuteButton printButton = new CuteButton();
             printButton.setTitle(R.string.save_and_print);
@@ -1994,7 +1998,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
                 }
             });
             buttons.add(printButton);
-        } else {
+        } else if (!ownerKeys.DataOwnerCenterKey.equals("acd73e3d-dda7-484a-a33f-075970e4069e")){
             buttons.add(previewButton);
         }
 

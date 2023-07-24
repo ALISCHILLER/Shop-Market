@@ -70,6 +70,7 @@ import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.base.OrderOption;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
 import com.varanegar.vaslibrary.manager.CustomerCallOrderOrderViewManager;
+import com.varanegar.vaslibrary.manager.OnHandQtyManager;
 import com.varanegar.vaslibrary.manager.OrderLineQtyManager;
 import com.varanegar.vaslibrary.manager.ProductGroupManager;
 import com.varanegar.vaslibrary.manager.ProductManager;
@@ -90,6 +91,7 @@ import com.varanegar.vaslibrary.manager.productorderviewmanager.ProductOrderView
 import com.varanegar.vaslibrary.manager.sysconfigmanager.BackOfficeType;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigMap;
+import com.varanegar.vaslibrary.manager.sysconfigmanager.OwnerKeysWrapper;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.UnknownBackOfficeException;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateManager;
@@ -104,6 +106,7 @@ import com.varanegar.vaslibrary.model.customerCallOrderOrderView.CustomerCallOrd
 import com.varanegar.vaslibrary.model.customeremphaticproduct.EmphasisType;
 import com.varanegar.vaslibrary.model.freeReason.FreeReasonModel;
 import com.varanegar.vaslibrary.model.oldinvoicedetailview.OldInvoiceDetailView;
+import com.varanegar.vaslibrary.model.onhandqty.OnHandQtyModel;
 import com.varanegar.vaslibrary.model.onhandqty.OnHandQtyStock;
 import com.varanegar.vaslibrary.model.orderLineQtyModel.OrderLineQtyModel;
 import com.varanegar.vaslibrary.model.orderprize.OrderPrize;
@@ -1478,6 +1481,32 @@ public class ProductGroupFragment extends VisitFragment {
             });
         }
 
+
+
+
+
+
+
+        SysConfigManager sysConfigManager = new SysConfigManager(getContext());
+        OwnerKeysWrapper ownerKeys = sysConfigManager.readOwnerKeys();
+        if (ownerKeys.DataOwnerCenterKey.equals("acd73e3d-dda7-484a-a33f-075970e4069e")){
+            List<ProductModel> productModels=new ProductManager(getContext()).getAll();
+            List<OnHandQtyModel> qtyModels=new OnHandQtyManager(getContext()).getAll();
+            for(OnHandQtyModel onHandQtyModel:qtyModels){
+                ProductModel productModel=new ProductManager(getContext()).getItemProduct(onHandQtyModel.ProductId);
+                productModels.add(productModel);
+            }
+
+          List<ProductOrderViewModel> _productsList = new ArrayList<>();
+            for (ProductOrderViewModel model:productsList){
+                for(ProductModel productModel:productModels){
+                    if (productModel.ProductCode.equals(model.ProductCode))
+                        _productsList.add(model);
+                }
+            }
+            productsList.clear();
+            productsList.addAll(_productsList);
+        }
 
         preprocessKeyWord();
         map = new HashMap<>();

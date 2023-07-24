@@ -25,8 +25,10 @@ import varanegar.com.discountcalculatorlib.DiscountCalculatorHandler;
  */
 
 public class ProductUpdateFlow extends UpdateFlow {
-    public ProductUpdateFlow(Context context) {
+    private  String _customerCode ;
+    public ProductUpdateFlow(Context context,String customerCode) {
         super(context);
+        this._customerCode=customerCode;
     }
 
     @Override
@@ -131,7 +133,7 @@ public class ProductUpdateFlow extends UpdateFlow {
             @Override
             public void run(UpdateCall call) {
                 OnHandQtyManager onHandQtyManager = new OnHandQtyManager(getContext());
-                onHandQtyManager.sync(call,true);
+                onHandQtyManager.sync(call,true,_customerCode);
             }
 
             @Override

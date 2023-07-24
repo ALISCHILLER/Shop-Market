@@ -462,7 +462,7 @@ public class MainDrawerAdapter extends DrawerAdapter {
                     pingApi.refreshBaseServerUrl(activity, new PingApi.PingCallback() {
                         @Override
                         public void done(String ipAddress) {
-                            ProductUpdateFlow productUpdateFlow = new ProductUpdateFlow(getActivity());
+                            ProductUpdateFlow productUpdateFlow = new ProductUpdateFlow(getActivity(),null);
                             productUpdateFlow.syncProductsAndInitPromotionDb(new UpdateCall() {
                                 @Override
                                 protected void onSuccess() {

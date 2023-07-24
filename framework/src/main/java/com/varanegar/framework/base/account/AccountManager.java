@@ -36,7 +36,7 @@ public class AccountManager implements IAccountManager {
                 scope,account.deviceId,
                 account.token,
                 "1e67dfff-e23d-461f-83ea-ba0974a46c1d",
-                "1e67dfff-e23d-461f-83ea-ba0974a46c1d")
+                "")
                 .enqueue(new Callback<Token>() {
                     @Override
                     public void onResponse(Call<Token> call, Response<Token> response) {
