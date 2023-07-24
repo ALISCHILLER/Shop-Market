@@ -637,6 +637,13 @@ public class SettlementFragment extends VisitFragment {
         /**
          * باقی مانده مبلغ
          */
+
+        Currency temp1 = customerPayment.getTotalAmount(false);
+        Currency temp2 = temp1.subtract(customerPayment.getOldInvoicesAmount());
+        Currency temp3 = totalPayment.subtract(creditPayment);
+        Currency temp4 = temp2.subtract(temp3);
+
+
         oldRemainAfterPaymentItems.setValue(HelperMethods.currencyToString(customerRemain
                 .add(customerPayment.getTotalAmount(false)
                         .subtract(customerPayment.getOldInvoicesAmount())
