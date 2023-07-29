@@ -122,8 +122,8 @@ public class OnHandQtyManager extends BaseManager<OnHandQtyModel> {
 //                if (backOfficeType == BackOfficeType.Varanegar) {
                 BatchOnHandQtyApi batchOnHandQtyApi = new BatchOnHandQtyApi(getContext());
                 batchOnHandQtyApi.runWebRequest(batchOnHandQtyApi.getAll(
-                        UserManager.readFromFile(getContext()).
-                                UniqueId.toString(), sysConfigModel.Value,customerCode), new WebCallBack<ProductBatchOnHandViewModel>() {
+                        UserManager.readFromFile(getContext())
+                                .UniqueId.toString(), sysConfigModel.Value,customerCode), new WebCallBack<ProductBatchOnHandViewModel>() {
                     @Override
                     protected void onFinish() {
 

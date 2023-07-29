@@ -114,7 +114,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical"
-                        app:title="@string/discount_amount" />
+                        app:title="@string/net_amount" />
 
                     <com.varanegar.framework.util.component.PairedItems
                         android:id="@+id/discount_amount_paired_items"

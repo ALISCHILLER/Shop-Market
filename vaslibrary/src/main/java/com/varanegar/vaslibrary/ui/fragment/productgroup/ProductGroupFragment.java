@@ -1491,17 +1491,19 @@ public class ProductGroupFragment extends VisitFragment {
         OwnerKeysWrapper ownerKeys = sysConfigManager.readOwnerKeys();
         if (ownerKeys.DataOwnerCenterKey.equals("acd73e3d-dda7-484a-a33f-075970e4069e")){
             List<ProductModel> productModels=new ProductManager(getContext()).getAll();
+            List<ProductModel> _productModels=new ArrayList<>();
             List<OnHandQtyModel> qtyModels=new OnHandQtyManager(getContext()).getAll();
             for(OnHandQtyModel onHandQtyModel:qtyModels){
                 ProductModel productModel=new ProductManager(getContext()).getItemProduct(onHandQtyModel.ProductId);
-                productModels.add(productModel);
+                _productModels.add(productModel);
             }
-
-          List<ProductOrderViewModel> _productsList = new ArrayList<>();
-            for (ProductOrderViewModel model:productsList){
-                for(ProductModel productModel:productModels){
-                    if (productModel.ProductCode.equals(model.ProductCode))
-                        _productsList.add(model);
+            List<ProductOrderViewModel> _productsList = new ArrayList<>();
+            if (qtyModels.size()>0) {
+                for (ProductOrderViewModel model : productsList) {
+                    for (ProductModel productModel : _productModels) {
+                        if (productModel.ProductCode.equals(model.ProductCode))
+                            _productsList.add(model);
+                    }
                 }
             }
             productsList.clear();
