@@ -1676,8 +1676,9 @@ public class TourManager {
     private GpsTrackingsViewModel  populateGpsTrackingsViewModel(CustomerModel customerModel){
         LocationConfirmTrackingModel confirmTrackingModel=new LocationConfirmTrackingManager(context)
                 .getItem(customerModel.UniqueId);
+        TourModel tourModel = loadTour();
         GpsTrackingsViewModel gpsTrackingsViewModel=new GpsTrackingsViewModel();
-
+        gpsTrackingsViewModel.TourId= Collections.singletonList(tourModel.UniqueId);
         gpsTrackingsViewModel.Lat= Collections.singletonList(confirmTrackingModel.Lat);
         gpsTrackingsViewModel.Long= Collections.singletonList(confirmTrackingModel.Long);
         gpsTrackingsViewModel.StrCreateDate=confirmTrackingModel.StrCreateDate;
