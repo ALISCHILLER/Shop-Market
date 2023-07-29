@@ -38,4 +38,6 @@ public class SyncGetTourViewModel {
     public List<SyncGetCustomerUpdateDataViewModel> CustomerUpdates = new ArrayList<>();
     public List<SyncGetCustomerUpdateLocationViewModel> CustomerLocations = new ArrayList<>();
     public List<SyncGetRequestLineModel> RequestItemLines = new ArrayList<>();
+
+    public List<GpsTrackingsViewModel> GpsTrackings = new ArrayList<>();
 }

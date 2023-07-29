@@ -131,6 +131,8 @@ import com.varanegar.vaslibrary.model.invoiceLineQty.InvoiceLineQty;
 import com.varanegar.vaslibrary.model.invoiceLineQty.InvoiceLineQtyModel;
 import com.varanegar.vaslibrary.model.invoiceinfo.InvoicePaymentInfoViewModel;
 import com.varanegar.vaslibrary.model.location.LocationModel;
+import com.varanegar.vaslibrary.model.newmodel.locationconfirmmodel.LocationConfirmTrackingManager;
+import com.varanegar.vaslibrary.model.newmodel.locationconfirmmodel.LocationConfirmTrackingModel;
 import com.varanegar.vaslibrary.model.onhandqty.OnHandQty;
 import com.varanegar.vaslibrary.model.orderLineQtyModel.OrderLineQty;
 import com.varanegar.vaslibrary.model.orderLineQtyModel.OrderLineQtyModel;
@@ -163,6 +165,7 @@ import com.varanegar.vaslibrary.sync.SyncService;
 import com.varanegar.vaslibrary.ui.fragment.TourReportFragment;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
+import com.varanegar.vaslibrary.webapi.tour.GpsTrackingsViewModel;
 import com.varanegar.vaslibrary.webapi.tour.SyncGetCancelInvoiceViewModel;
 import com.varanegar.vaslibrary.webapi.tour.SyncGetCustomerCallCatalogViewModel;
 import com.varanegar.vaslibrary.webapi.tour.SyncGetCustomerCallOrderLineBatchQtyDetailViewModel;
@@ -202,6 +205,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -1652,6 +1656,9 @@ public class TourManager {
         SyncGetCustomerCallViewModel syncGetCustomerCallViewModel = populateCustomerCalls(customerModel);
         syncGetTourViewModel.CustomerCalls.add(syncGetCustomerCallViewModel);
 
+        GpsTrackingsViewModel gpsTrackingsViewModel=  populateGpsTrackingsViewModel(customerModel);
+
+        syncGetTourViewModel.GpsTrackings.add(gpsTrackingsViewModel);
         // Step 2 populate customer edition
         CustomerManager customerManager = new CustomerManager(context);
         SyncGetCustomerUpdateDataViewModel infoViewModel = customerManager.getCustomerUpdateDataViewModel(customerModel.UniqueId);
@@ -1666,6 +1673,17 @@ public class TourManager {
         }
     }
 
+    private GpsTrackingsViewModel  populateGpsTrackingsViewModel(CustomerModel customerModel){
+        LocationConfirmTrackingModel confirmTrackingModel=new LocationConfirmTrackingManager(context)
+                .getItem(customerModel.UniqueId);
+        GpsTrackingsViewModel gpsTrackingsViewModel=new GpsTrackingsViewModel();
+
+        gpsTrackingsViewModel.Lat= Collections.singletonList(confirmTrackingModel.Lat);
+        gpsTrackingsViewModel.Long= Collections.singletonList(confirmTrackingModel.Long);
+        gpsTrackingsViewModel.StrCreateDate=confirmTrackingModel.StrCreateDate;
+
+        return gpsTrackingsViewModel;
+    }
     private SyncGetCustomerCallViewModel populateCustomerCalls(CustomerModel customerModel) {
         SyncGetCustomerCallViewModel syncGetCustomerCallViewModel = new SyncGetCustomerCallViewModel();
         CustomerActionTimeManager customerActionTimeManager = new CustomerActionTimeManager(context);
