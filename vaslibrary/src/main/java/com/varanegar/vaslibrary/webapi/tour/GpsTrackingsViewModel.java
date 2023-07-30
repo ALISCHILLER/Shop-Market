@@ -4,19 +4,19 @@ import java.util.List;
 import java.util.UUID;
 
 public class GpsTrackingsViewModel {
-    public List<UUID> TourId ;
+    public UUID TourId ;
 
-    public List<UUID> SupervisorId ;
+    public UUID SupervisorId ;
 
-    public List<UUID> DealerId ;
+    public UUID DealerId ;
 
-    public List<String> Lat ;
+    public String Lat ;
 
-    public List<String> Long ;
+    public String Long ;
 
-    public List<UUID> DataOwnerCenterId ;
+    public UUID DataOwnerCenterId ;
 
-    public List<UUID> CustomerCall ;
+    public UUID CustomerCall ;
 
     public String StrCreateDate ;
 }

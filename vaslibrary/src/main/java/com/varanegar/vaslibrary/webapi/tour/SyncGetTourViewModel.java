@@ -39,5 +39,5 @@ public class SyncGetTourViewModel {
     public List<SyncGetCustomerUpdateLocationViewModel> CustomerLocations = new ArrayList<>();
     public List<SyncGetRequestLineModel> RequestItemLines = new ArrayList<>();
 
-    public List<GpsTrackingsViewModel> GpsTrackings = new ArrayList<>();
+  //  public List<GpsTrackingsViewModel> GpsTrackings = new ArrayList<>();
 }

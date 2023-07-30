@@ -78,6 +78,7 @@ import com.varanegar.vaslibrary.manager.questionnaire.QuestionnaireAnswerManager
 import com.varanegar.vaslibrary.manager.questionnaire.QuestionnaireCustomerViewManager;
 import com.varanegar.vaslibrary.manager.questionnaire.QuestionnaireLineManager;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
+import com.varanegar.vaslibrary.manager.sysconfigmanager.OwnerKeysWrapper;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateCall;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateManager;
@@ -160,6 +161,7 @@ import com.varanegar.vaslibrary.model.questionnaire.QuestionnaireLineOption;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.model.tour.TourModel;
 import com.varanegar.vaslibrary.model.tour.TourStatus;
+import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.print.SentTourInfoPrint.TourInfo;
 import com.varanegar.vaslibrary.sync.SyncService;
 import com.varanegar.vaslibrary.ui.fragment.TourReportFragment;
@@ -1656,9 +1658,7 @@ public class TourManager {
         SyncGetCustomerCallViewModel syncGetCustomerCallViewModel = populateCustomerCalls(customerModel);
         syncGetTourViewModel.CustomerCalls.add(syncGetCustomerCallViewModel);
 
-        GpsTrackingsViewModel gpsTrackingsViewModel=  populateGpsTrackingsViewModel(customerModel);
 
-        syncGetTourViewModel.GpsTrackings.add(gpsTrackingsViewModel);
         // Step 2 populate customer edition
         CustomerManager customerManager = new CustomerManager(context);
         SyncGetCustomerUpdateDataViewModel infoViewModel = customerManager.getCustomerUpdateDataViewModel(customerModel.UniqueId);
@@ -1673,21 +1673,12 @@ public class TourManager {
         }
     }
 
-    private GpsTrackingsViewModel  populateGpsTrackingsViewModel(CustomerModel customerModel){
-        LocationConfirmTrackingModel confirmTrackingModel=new LocationConfirmTrackingManager(context)
-                .getItem(customerModel.UniqueId);
-        TourModel tourModel = loadTour();
-        GpsTrackingsViewModel gpsTrackingsViewModel=new GpsTrackingsViewModel();
-        gpsTrackingsViewModel.TourId= Collections.singletonList(tourModel.UniqueId);
-        gpsTrackingsViewModel.Lat= Collections.singletonList(confirmTrackingModel.Lat);
-        gpsTrackingsViewModel.Long= Collections.singletonList(confirmTrackingModel.Long);
-        gpsTrackingsViewModel.StrCreateDate=confirmTrackingModel.StrCreateDate;
 
-        return gpsTrackingsViewModel;
-    }
     private SyncGetCustomerCallViewModel populateCustomerCalls(CustomerModel customerModel) {
         SyncGetCustomerCallViewModel syncGetCustomerCallViewModel = new SyncGetCustomerCallViewModel();
         CustomerActionTimeManager customerActionTimeManager = new CustomerActionTimeManager(context);
+        LocationConfirmTrackingModel confirmTrackingModel=new LocationConfirmTrackingManager(context)
+                .getItem(customerModel.UniqueId);
         VisitTemplatePathCustomerManager visitTemplatePathCustomerManager = new VisitTemplatePathCustomerManager(context);
         List<VisitTemplatePathCustomerModel> visitTemplatePathCustomerModels = visitTemplatePathCustomerManager.getCustomerPathUniqueId(customerModel.UniqueId);
         if (visitTemplatePathCustomerModels.size() > 0)
@@ -1750,6 +1741,10 @@ public class TourManager {
                 syncGetCustomerCallViewModel.NoSaleReasonUniqueId = UUID.fromString(lackOfOrder.ExtraField1);
             } else
                 throw new RuntimeException(context.getString(R.string.please_verify_following_customer) + "\n" + customerModel.CustomerName);
+
+            syncGetCustomerCallViewModel.Lat= confirmTrackingModel.Lat;
+            syncGetCustomerCallViewModel.Long= confirmTrackingModel.Long;
+
         }
         syncGetCustomerCallViewModel.Description = "";
         syncGetCustomerCallViewModel.Longitude = customerModel.Longitude;
