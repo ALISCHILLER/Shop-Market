@@ -1742,9 +1742,13 @@ public class TourManager {
             } else
                 throw new RuntimeException(context.getString(R.string.please_verify_following_customer) + "\n" + customerModel.CustomerName);
 
-            syncGetCustomerCallViewModel.Lat= confirmTrackingModel.Lat;
-            syncGetCustomerCallViewModel.Long= confirmTrackingModel.Long;
 
+
+            if (confirmTrackingModel!=null) {
+                syncGetCustomerCallViewModel.Lat = confirmTrackingModel.Lat;
+                syncGetCustomerCallViewModel.Long = confirmTrackingModel.Long;
+            }
+            
         }
         syncGetCustomerCallViewModel.Description = "";
         syncGetCustomerCallViewModel.Longitude = customerModel.Longitude;
