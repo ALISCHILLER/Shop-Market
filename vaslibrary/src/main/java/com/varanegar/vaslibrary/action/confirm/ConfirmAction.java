@@ -328,7 +328,7 @@ public class ConfirmAction extends CheckPathAction {
                             confirmTrackingModel.Long= String.valueOf(location.Longitude);
                             confirmTrackingModel.StrCreateDate=dateString;
                             LocationConfirmTrackingModelRepository repository=new LocationConfirmTrackingModelRepository();
-                            repository.insert(confirmTrackingModel);
+                            repository.insertOrUpdate(confirmTrackingModel);
                             confirm();
                         }
 
