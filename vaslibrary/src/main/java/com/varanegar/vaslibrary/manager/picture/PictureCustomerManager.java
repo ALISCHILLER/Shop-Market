@@ -62,6 +62,22 @@ public class PictureCustomerManager extends BaseManager<PictureCustomerModel> {
         final List<PictureCustomerModel> existingPictures = getCustomerSubjects(customerId);
 
         deleteSubjects(customerId);
+
+        CustomerCallManager customerCallManager = new CustomerCallManager(getContext());
+        // iterate over templates and insert(update) customer picture subjects
+        if (pictures == null && customerCalls.size()==1 && customerCallManager.isNeedImage(customerCalls)){
+            PictureCustomerModel   pictureCustomerModel = new PictureCustomerModel();
+            pictureCustomerModel.UniqueId = UUID.randomUUID();
+            pictureCustomerModel.CustomerId = customerId;
+            pictureCustomerModel.PictureSubjectId =  UUID.randomUUID();
+            pictureCustomerModel.DemandTypeUniqueId= UUID.fromString("ece7d3e4-acdd-4e92-bf85-207b79e703b2");
+            pictureCustomerModel.DemandType = PictureDemandType.Mandatory;
+
+            insertOrUpdate(pictureCustomerModel);
+            return;
+        }
+
+
         // iterate over templates and insert(update) customer picture subjects
         for (final PictureSubjectZarModel p :
                 pictures) {
@@ -86,7 +102,7 @@ public class PictureCustomerManager extends BaseManager<PictureCustomerModel> {
             else if (p.demandTypeUniqueId.equals(PictureDemandTypeId.Optional))
                 pictureCustomerModel.DemandType = PictureDemandType.Optional;
             else if (p.demandTypeUniqueId.equals(PictureDemandTypeId.NoSaleMandatory)) {
-                CustomerCallManager customerCallManager = new CustomerCallManager(getContext());
+
                 if(!VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
                     if (customerCallManager.isNeedImage(customerCalls))
                         pictureCustomerModel.DemandType = PictureDemandType.Mandatory;
@@ -109,6 +125,11 @@ public class PictureCustomerManager extends BaseManager<PictureCustomerModel> {
         final List<PictureCustomerModel> existingPictures = getCustomerSubjects(customerId);
         // delete all these pictures for the custoFmer
         deleteSubjects(customerId);
+
+
+
+
+
         // iterate over templates and insert(update) customer picture subjects
         for (final PictureTemplateDetailModel p :
                 pictures) {
@@ -128,13 +149,13 @@ public class PictureCustomerManager extends BaseManager<PictureCustomerModel> {
                 pictureCustomerModel.CustomerId = customerId;
                 pictureCustomerModel.PictureSubjectId = p.PictureSubjectUniqueId;
             }
+            CustomerCallManager customerCallManager = new CustomerCallManager(getContext());
             pictureCustomerModel.DemandTypeUniqueId = p.DemandTypeUniqueId;
             if (p.DemandTypeUniqueId.equals(PictureDemandTypeId.Mandatory) || p.DemandTypeUniqueId.equals(PictureDemandTypeId.JustOnce))
                 pictureCustomerModel.DemandType = PictureDemandType.Mandatory;
             else if (p.DemandTypeUniqueId.equals(PictureDemandTypeId.Optional))
                 pictureCustomerModel.DemandType = PictureDemandType.Optional;
             else if (p.DemandTypeUniqueId.equals(PictureDemandTypeId.NoSaleMandatory)) {
-                CustomerCallManager customerCallManager = new CustomerCallManager(getContext());
                 if(!VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
                     if (customerCallManager.isNeedImage(customerCalls))
                         pictureCustomerModel.DemandType = PictureDemandType.Mandatory;
