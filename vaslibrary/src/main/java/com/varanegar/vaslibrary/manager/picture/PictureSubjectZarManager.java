@@ -128,4 +128,25 @@ public class PictureSubjectZarManager extends BaseManager<PictureSubjectZarModel
             PictureCustomerManager pictureCustomerManager = new PictureCustomerManager(getContext());
             pictureCustomerManager.savePictureTemplatesZar(customerId, subjectZarModels, customerCalls);
     }
+
+    public void calculateCustomerPictures2(final UUID customerId, @Nullable List<CustomerCallModel> customerCalls) throws ValidationException, DbException {
+        // step 1: extract valid templates for the customer
+//        PictureTemplateHeaderManager headerManager = new PictureTemplateHeaderManager(context);
+//        List<PictureTemplateHeaderModel> headers = headerManager.getValidTemplatesForCustomer(customerId);
+//        if (headers.size() == 0) {
+//            Timber.i("No picture template has been calculated for customer id = " + customerId.toString());
+//            return;
+//        }
+//        // step 2: find corresponding subjects according to the picture templates that we found in the step 1
+//        PictureTemplateDetailManager detailManager = new PictureTemplateDetailManager(context);
+//        final List<PictureTemplateDetailModel> details = detailManager.getCorrespondingDetails(headers);
+//        if (details.size() == 0) {
+//            Timber.i(headers.size() + " picture templates has been calculated for customer id = " + customerId.toString() + " but no picture subject found for them");
+//            return;
+//        }
+        // step 3: Now save picture subjects for the customer. In camera fragment we use the corresponding view manager to find these items
+        PictureCustomerManager pictureCustomerManager = new PictureCustomerManager(getContext());
+        pictureCustomerManager.savePictureTemplatesZar(customerId, null, customerCalls);
+    }
+
 }

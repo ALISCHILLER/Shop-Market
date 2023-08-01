@@ -82,6 +82,7 @@ public class CameraAction extends CheckDistanceAction {
         PictureSubjectZarManager pictureSubjectZarManager=new PictureSubjectZarManager(getActivity());
         try {
          //   pictureTemplateManager.calculateCustomerPictures(getSelectedId(), getCalls());
+
             pictureSubjectZarManager.calculateCustomerPictures(getSelectedId(), getCalls());
 
             PictureCustomerManager pictureCustomerManager =

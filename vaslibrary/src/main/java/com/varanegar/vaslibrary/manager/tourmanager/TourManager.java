@@ -1786,7 +1786,7 @@ public class TourManager {
         if (!isLackOfVisit && !isDataSent)
             syncGetCustomerCallViewModel.CustomerCallQuestionnaires = populateCustomerQuestionnaires(customerModel.UniqueId);
         // populate customer pictures
-        if ((!isLackOfVisit || isLackOfVisitAndNeedImage) && !isDataSent)
+        if ((!isLackOfVisit || isLackOfOrderAndNeedImage) && !isDataSent)
             syncGetCustomerCallViewModel.CustomerCallPictures = populateCustomerPictures(customerModel.UniqueId, isLackOfOrderAndNeedImage, isLackOfVisitAndNeedImage);
         // populate customer stock level (Customer inventory)
         SysConfigManager sysConfigManager = new SysConfigManager(context);

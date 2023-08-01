@@ -176,4 +176,11 @@ public class NoSaleReasonManager extends BaseManager<NoSaleReasonModel> {
     }
 
 
+    @SubsystemType(id = SubsystemTypeId.PreSales)
+    public NoSaleReasonModel getItem(UUID id){
+        Query query = new Query();
+        query.from(NoSaleReason.NoSaleReasonTbl).whereAnd(Criteria.equals(NoSaleReason.UniqueId, id));
+        return getItem(query);
+    }
+
 }

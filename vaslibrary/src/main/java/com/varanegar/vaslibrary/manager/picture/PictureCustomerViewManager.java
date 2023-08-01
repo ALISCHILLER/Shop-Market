@@ -60,7 +60,7 @@ public class PictureCustomerViewManager extends BaseManager<PictureCustomerViewM
             return new Query().from(PictureCustomerView.PictureCustomerViewTbl)
                     .whereAnd(Criteria.equals(PictureCustomerView.CustomerId, customerId.toString()))
                     .whereAnd(Criteria.equals(PictureCustomerView.DemandTypeUniqueId,
-                            PictureDemandTypeId.NoSaleMandatory.toString()));
+                            PictureDemandTypeId.Mandatory.toString()));
 
 
         /*else if (isLackOfOrder)
@@ -91,20 +91,23 @@ public class PictureCustomerViewManager extends BaseManager<PictureCustomerViewM
         CustomerCallManager callManager = new CustomerCallManager(getContext());
         boolean lakOfVisit = callManager.isLackOfVisit(customerCalls);
         boolean isLackOfOrderAndNeedImage = false;
-        boolean isLackOfVisitAndNeedImage = false;
+
         if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
             isLackOfOrderAndNeedImage = callManager.isLackOfOrderAndNeedImage(customerCalls);
-            isLackOfVisitAndNeedImage = callManager.isLackOfVisitAndNeedImage(customerCalls);
+           // isLackOfVisitAndNeedImage = callManager.isLackOfVisitAndNeedImage(customerCalls);
         }
-        if (lakOfVisit && !isLackOfVisitAndNeedImage)
+        if (lakOfVisit && !isLackOfOrderAndNeedImage)
             return null;
         PictureSubjectZarManager pictureTemplateManager = new PictureSubjectZarManager(getContext());
         try {
-            pictureTemplateManager.calculateCustomerPictures(customerId, customerCalls);
+            if (isLackOfOrderAndNeedImage && customerCalls.size()==1)
+                pictureTemplateManager.calculateCustomerPictures2(customerId, customerCalls);
+            else
+                 pictureTemplateManager.calculateCustomerPictures(customerId, customerCalls);
             PictureCustomerViewManager pictureCustomerViewManager = new PictureCustomerViewManager(getContext());
             List<PictureCustomerViewModel> subjects = null;
 
-               subjects = pictureCustomerViewManager.getPictures(customerId, isLackOfOrderAndNeedImage, isLackOfVisitAndNeedImage);
+               subjects = pictureCustomerViewManager.getPictures(customerId, isLackOfOrderAndNeedImage, false);
 
             if (subjects.size() == 0)
                 return null;
