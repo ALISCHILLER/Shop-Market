@@ -100,7 +100,8 @@ public class PictureCustomerViewManager extends BaseManager<PictureCustomerViewM
             return null;
         PictureSubjectZarManager pictureTemplateManager = new PictureSubjectZarManager(getContext());
         try {
-            if (isLackOfOrderAndNeedImage && customerCalls.size()==1)
+
+            if (isLackOfOrderAndNeedImage)
                 pictureTemplateManager.calculateCustomerPictures2(customerId, customerCalls);
             else
                  pictureTemplateManager.calculateCustomerPictures(customerId, customerCalls);
