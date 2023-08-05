@@ -10,9 +10,11 @@ import com.varanegar.vaslibrary.webapi.BaseApi;
 import com.varanegar.vaslibrary.webapi.TokenType;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -29,7 +31,14 @@ public class ImageApi extends BaseApi {
 
     public Call<ResponseBody> postImage(ImageViewModel imageViewModel) {
         Retrofit.Builder builder = new Retrofit.Builder();
+
+        final OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .readTimeout(0, TimeUnit.SECONDS)
+                .connectTimeout(0, TimeUnit.SECONDS)
+                .build();
+
         Retrofit retrofit = builder.baseUrl(getBaseUrl())
+                .client(okHttpClient)
                 .build();
         SysConfigManager sysConfigManager = new SysConfigManager(getContext());
         OwnerKeysWrapper ownerKeysWrapper = sysConfigManager.readOwnerKeys();
