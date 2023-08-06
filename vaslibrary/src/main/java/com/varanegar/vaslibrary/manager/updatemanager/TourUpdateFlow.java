@@ -1777,7 +1777,7 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                 @Override
                 public void run(UpdateCall call) {
                     OnHandQtyManager onHandQtyManager = new OnHandQtyManager(getContext());
-                    onHandQtyManager.sync(call, false);
+                    onHandQtyManager.sync(call, false,null);
                 }
 
                 @Override

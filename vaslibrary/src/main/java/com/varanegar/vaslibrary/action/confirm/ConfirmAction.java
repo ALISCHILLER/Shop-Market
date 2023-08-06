@@ -461,6 +461,7 @@ public class ConfirmAction extends CheckPathAction {
             }).start();
         }
 
+
         if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
             RequestReportViewManager requestReportViewManager =
                     new RequestReportViewManager(getActivity());

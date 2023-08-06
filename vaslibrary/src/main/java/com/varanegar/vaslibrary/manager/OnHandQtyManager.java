@@ -113,7 +113,8 @@ public class OnHandQtyManager extends BaseManager<OnHandQtyModel> {
                     updateCall.failure(getContext().getString(R.string.network_error));
                 }
             });
-        } else if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+        }
+        else if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
             try {
                 SysConfigManager sysConfigManager = new SysConfigManager(getContext());
                 SysConfigModel sysConfigModel = sysConfigManager.read(ConfigKey.SettingsId, SysConfigManager.local);
@@ -121,8 +122,8 @@ public class OnHandQtyManager extends BaseManager<OnHandQtyModel> {
 //                if (backOfficeType == BackOfficeType.Varanegar) {
                 BatchOnHandQtyApi batchOnHandQtyApi = new BatchOnHandQtyApi(getContext());
                 batchOnHandQtyApi.runWebRequest(batchOnHandQtyApi.getAll(
-                        UserManager.readFromFile(getContext()).
-                                UniqueId.toString(), sysConfigModel.Value,customerCode), new WebCallBack<ProductBatchOnHandViewModel>() {
+                        UserManager.readFromFile(getContext())
+                                .UniqueId.toString(), sysConfigModel.Value,customerCode), new WebCallBack<ProductBatchOnHandViewModel>() {
                     @Override
                     protected void onFinish() {
 

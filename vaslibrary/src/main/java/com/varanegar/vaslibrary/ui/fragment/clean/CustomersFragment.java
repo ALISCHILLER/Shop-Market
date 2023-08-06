@@ -1125,7 +1125,7 @@ public abstract class CustomersFragment
                                 boolean onlyDiscount,
                                 final SysConfigManager sysConfigManager) {
         if (SysConfigManager.compare(firstTime, true)) {
-          //  updateCustomerOldInvoices(true, onlyDiscount);
+            updateCustomerOldInvoices(true, onlyDiscount);
         } else {
             UpdateManager updateManager = new UpdateManager(getContext());
             Date oldInvoiceDate = updateManager.getLog(UpdateKey.CustomerOldInvoice);

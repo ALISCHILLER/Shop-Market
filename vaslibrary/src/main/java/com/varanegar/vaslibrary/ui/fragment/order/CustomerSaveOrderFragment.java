@@ -1451,7 +1451,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
                 pingApi.refreshBaseServerUrl(context, new PingApi.PingCallback() {
                     @Override
                     public void done(String ipAddress) {
-                        ProductUpdateFlow productUpdateFlow = new ProductUpdateFlow(context);
+                        ProductUpdateFlow productUpdateFlow = new ProductUpdateFlow(context,customer.CustomerCode);
                         productUpdateFlow.syncProductsAndInitPromotionDb(new UpdateCall() {
                             @Override
                             protected void onSuccess() {
