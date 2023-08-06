@@ -128,4 +128,22 @@ public class PictureSubjectZarManager extends BaseManager<PictureSubjectZarModel
             PictureCustomerManager pictureCustomerManager = new PictureCustomerManager(getContext());
             pictureCustomerManager.savePictureTemplatesZar(customerId, subjectZarModels, customerCalls);
     }
+    public void calculateCustomerPictures2(final UUID customerId, @Nullable List<CustomerCallModel> customerCalls) throws ValidationException, DbException {
+//        CustomerModel customerModel = new
+//                CustomerManager(getContext()).getItem(customerId);
+//
+//        List<PictureSubjectZarModel> subjectZarModelsus = getPictureSubjectZarModelsUser(customerModel);
+//
+//        if (customerModel == null)
+//            throw new NullPointerException("CustomerId is not valid");
+//        List<PictureSubjectZarModel> subjectZarModels = getPictureSubjectZarModels(customerModel);
+//
+//
+//        if (subjectZarModels.size()==0){
+//            Timber.i("No picture template has been calculated for customer id = " + customerId.toString());
+//            return;
+//        }
+        PictureCustomerManager pictureCustomerManager = new PictureCustomerManager(getContext());
+        pictureCustomerManager.savePictureTemplatesZar(customerId, null, customerCalls);
+    }
 }

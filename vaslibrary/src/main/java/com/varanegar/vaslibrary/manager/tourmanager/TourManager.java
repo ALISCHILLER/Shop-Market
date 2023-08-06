@@ -131,6 +131,8 @@ import com.varanegar.vaslibrary.model.invoiceLineQty.InvoiceLineQty;
 import com.varanegar.vaslibrary.model.invoiceLineQty.InvoiceLineQtyModel;
 import com.varanegar.vaslibrary.model.invoiceinfo.InvoicePaymentInfoViewModel;
 import com.varanegar.vaslibrary.model.location.LocationModel;
+import com.varanegar.vaslibrary.model.newmodel.locationconfirmModel.LocationConfirmTrackingManager;
+import com.varanegar.vaslibrary.model.newmodel.locationconfirmModel.LocationConfirmTrackingModel;
 import com.varanegar.vaslibrary.model.onhandqty.OnHandQty;
 import com.varanegar.vaslibrary.model.orderLineQtyModel.OrderLineQty;
 import com.varanegar.vaslibrary.model.orderLineQtyModel.OrderLineQtyModel;
@@ -1669,6 +1671,8 @@ public class TourManager {
     private SyncGetCustomerCallViewModel populateCustomerCalls(CustomerModel customerModel) {
         SyncGetCustomerCallViewModel syncGetCustomerCallViewModel = new SyncGetCustomerCallViewModel();
         CustomerActionTimeManager customerActionTimeManager = new CustomerActionTimeManager(context);
+        LocationConfirmTrackingModel confirmTrackingModel=new LocationConfirmTrackingManager(context)
+                .getItem(customerModel.UniqueId);
         VisitTemplatePathCustomerManager visitTemplatePathCustomerManager = new VisitTemplatePathCustomerManager(context);
         List<VisitTemplatePathCustomerModel> visitTemplatePathCustomerModels = visitTemplatePathCustomerManager.getCustomerPathUniqueId(customerModel.UniqueId);
         if (visitTemplatePathCustomerModels.size() > 0)
@@ -1731,6 +1735,13 @@ public class TourManager {
                 syncGetCustomerCallViewModel.NoSaleReasonUniqueId = UUID.fromString(lackOfOrder.ExtraField1);
             } else
                 throw new RuntimeException(context.getString(R.string.please_verify_following_customer) + "\n" + customerModel.CustomerName);
+
+
+            if (confirmTrackingModel!=null) {
+                syncGetCustomerCallViewModel.Lat = confirmTrackingModel.Lat;
+                syncGetCustomerCallViewModel.Long = confirmTrackingModel.Long;
+            }
+
         }
         syncGetCustomerCallViewModel.Description = "";
         syncGetCustomerCallViewModel.Longitude = customerModel.Longitude;
@@ -1768,7 +1779,7 @@ public class TourManager {
         if (!isLackOfVisit && !isDataSent)
             syncGetCustomerCallViewModel.CustomerCallQuestionnaires = populateCustomerQuestionnaires(customerModel.UniqueId);
         // populate customer pictures
-        if ((!isLackOfVisit || isLackOfVisitAndNeedImage) && !isDataSent)
+        if ((!isLackOfVisit || isLackOfOrderAndNeedImage) && !isDataSent)
             syncGetCustomerCallViewModel.CustomerCallPictures = populateCustomerPictures(customerModel.UniqueId, isLackOfOrderAndNeedImage, isLackOfVisitAndNeedImage);
         // populate customer stock level (Customer inventory)
         SysConfigManager sysConfigManager = new SysConfigManager(context);

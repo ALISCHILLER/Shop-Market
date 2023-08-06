@@ -64,7 +64,7 @@ public class OnHandQtyManager extends BaseManager<OnHandQtyModel> {
         super(context, new OnHandQtyModelRepository());
     }
 
-    public void sync(@NonNull final UpdateCall updateCall, final boolean renew) {
+    public void sync(@NonNull final UpdateCall updateCall, final boolean renew, String customerCode) {
         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
             String tourId = new TourManager(getContext()).loadTour().UniqueId.toString();
             DistOnHandQtyApi distOnHandQtyApi = new DistOnHandQtyApi(getContext());
@@ -122,7 +122,7 @@ public class OnHandQtyManager extends BaseManager<OnHandQtyModel> {
                 BatchOnHandQtyApi batchOnHandQtyApi = new BatchOnHandQtyApi(getContext());
                 batchOnHandQtyApi.runWebRequest(batchOnHandQtyApi.getAll(
                         UserManager.readFromFile(getContext()).
-                                UniqueId.toString(), sysConfigModel.Value), new WebCallBack<ProductBatchOnHandViewModel>() {
+                                UniqueId.toString(), sysConfigModel.Value,customerCode), new WebCallBack<ProductBatchOnHandViewModel>() {
                     @Override
                     protected void onFinish() {
 

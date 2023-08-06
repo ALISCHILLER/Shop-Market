@@ -384,4 +384,8 @@ public class ProductManager extends BaseManager<ProductModel> {
                 .whereAnd(Criteria.equals(Product.IsForSale, true));
         return getItem(query);
     }
+
+    public ProductModel getItemProduct(UUID productId) {
+        return getItem(new Query().from(Product.ProductTbl).whereAnd(Criteria.equals(Product.UniqueId, productId)));
+    }
 }

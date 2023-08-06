@@ -36,6 +36,8 @@ public class SyncGetCustomerCallViewModel {
     public double Latitude;
     public boolean IsNewCustomer;
     public UUID VisitTemplatePathUniqueId;
+    public String Lat ;
+    public String Long ;
     public List<SyncGetCustomerCallOrderViewModel> CustomerCallOrders;
     public List<SyncGetCustomerCallPictureViewModel> CustomerCallPictures;
     public List<SyncGetCustomerCallStockLevelViewModel> CustomerCallStockLevels;

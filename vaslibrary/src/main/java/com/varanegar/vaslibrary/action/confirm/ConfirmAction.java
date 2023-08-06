@@ -20,6 +20,8 @@ import com.varanegar.framework.util.HelperMethods;
 import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
+import com.varanegar.framework.util.datetime.DateFormat;
+import com.varanegar.framework.util.datetime.DateHelper;
 import com.varanegar.framework.util.fragment.extendedlist.Action;
 import com.varanegar.framework.util.fragment.extendedlist.ActionsAdapter;
 import com.varanegar.framework.validation.ValidationException;
@@ -67,6 +69,8 @@ import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.model.customercall.CustomerCallType;
 import com.varanegar.vaslibrary.model.location.LocationModel;
 import com.varanegar.vaslibrary.model.newmodel.checkCustomerCredits.CheckCustomerCreditModel;
+import com.varanegar.vaslibrary.model.newmodel.locationconfirmModel.LocationConfirmTrackingModel;
+import com.varanegar.vaslibrary.model.newmodel.locationconfirmModel.LocationConfirmTrackingModelRepository;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
 import com.varanegar.vaslibrary.ui.fragment.new_fragment.product_comparison.Product_Comparison_Fragment;
@@ -76,7 +80,9 @@ import com.varanegar.vaslibrary.webapi.apiNew.ApiNew;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import okhttp3.Request;
@@ -279,8 +285,7 @@ public class ConfirmAction extends CheckPathAction {
             }
         }
 
-        if (SysConfigManager.hasTracking(getActivity()) &&
-                TrackingLicense.isValid(getActivity())) {
+        if (SysConfigManager.hasTracking(getActivity())) {
             android.location.LocationManager manager =
                     (android.location.LocationManager) getActivity()
                             .getSystemService(Context.LOCATION_SERVICE);
@@ -315,6 +320,15 @@ public class ConfirmAction extends CheckPathAction {
                     .getLocation(new LocationManager.OnLocationUpdated() {
                         @Override
                         public void onSucceeded(LocationModel location) {
+                            LocationConfirmTrackingModel confirmTrackingModel = new LocationConfirmTrackingModel();
+                            Date date=new Date();
+                            String dateString = DateHelper.toString(date, DateFormat.Complete, Locale.US);
+                            confirmTrackingModel.UniqueId=getSelectedId();
+                            confirmTrackingModel.Lat= String.valueOf(location.Latitude);
+                            confirmTrackingModel.Long= String.valueOf(location.Longitude);
+                            confirmTrackingModel.StrCreateDate=dateString;
+                            LocationConfirmTrackingModelRepository repository=new LocationConfirmTrackingModelRepository();
+                            repository.insertOrUpdate(confirmTrackingModel);
                             confirm();
                         }
 

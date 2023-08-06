@@ -20,8 +20,10 @@ public class BatchOnHandQtyApi extends BaseApi implements IBatchOnHandQtyApi {
     }
 
     @Override
-    public Call<ProductBatchOnHandViewModel> getAll(String dealerId , String deviceSettingNo) {
+    public Call<ProductBatchOnHandViewModel> getAll(String dealerId ,
+                                                    String deviceSettingNo,
+                                                    String customerCode) {
         IBatchOnHandQtyApi api = getRetrofitBuilder(TokenType.UserToken).build().create(IBatchOnHandQtyApi.class);
-        return api.getAll(dealerId , deviceSettingNo);
+        return api.getAll(dealerId , deviceSettingNo,customerCode);
     }
 }

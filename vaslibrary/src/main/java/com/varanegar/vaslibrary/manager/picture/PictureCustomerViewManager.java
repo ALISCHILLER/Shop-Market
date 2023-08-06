@@ -60,7 +60,7 @@ public class PictureCustomerViewManager extends BaseManager<PictureCustomerViewM
             return new Query().from(PictureCustomerView.PictureCustomerViewTbl)
                     .whereAnd(Criteria.equals(PictureCustomerView.CustomerId, customerId.toString()))
                     .whereAnd(Criteria.equals(PictureCustomerView.DemandTypeUniqueId,
-                            PictureDemandTypeId.NoSaleMandatory.toString()));
+                            PictureDemandTypeId.Mandatory.toString()));
 
 
         /*else if (isLackOfOrder)
@@ -96,11 +96,15 @@ public class PictureCustomerViewManager extends BaseManager<PictureCustomerViewM
             isLackOfOrderAndNeedImage = callManager.isLackOfOrderAndNeedImage(customerCalls);
             isLackOfVisitAndNeedImage = callManager.isLackOfVisitAndNeedImage(customerCalls);
         }
-        if (lakOfVisit && !isLackOfVisitAndNeedImage)
+        if (lakOfVisit && !isLackOfOrderAndNeedImage)
             return null;
         PictureSubjectZarManager pictureTemplateManager = new PictureSubjectZarManager(getContext());
         try {
-            pictureTemplateManager.calculateCustomerPictures(customerId, customerCalls);
+            if (isLackOfOrderAndNeedImage)
+                pictureTemplateManager.calculateCustomerPictures2(customerId, customerCalls);
+               else
+                   pictureTemplateManager.calculateCustomerPictures(customerId, customerCalls);
+
             PictureCustomerViewManager pictureCustomerViewManager = new PictureCustomerViewManager(getContext());
             List<PictureCustomerViewModel> subjects = null;
 
