@@ -10,13 +10,9 @@
     {
       "type": "SINGLE",
       "filters": [],
-      "versionCode": 30101191,
-      "versionName": "3.1.1.191",
-<<<<<<< HEAD
-      "outputFile": "varanegar.presale_V3.1.1.191_230621.apk"
-=======
-      "outputFile": "varanegar.presale_V3.1.1.191_230613.apk"
->>>>>>> origin/dev
+      "versionCode": 30101194,
+      "versionName": "3.1.1.194",
+      "outputFile": "varanegar.presale_V3.1.1.194_230805.apk"
     }
   ]
 }
