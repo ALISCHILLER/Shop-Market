@@ -39,6 +39,8 @@ public abstract class DeviceCardReader {
             return new TejaratElectronicParsianCardReader((VasActivity) context);
         if (Build.MODEL.equalsIgnoreCase("Sepehr A1"))
             return new SepehrCardReader((VasActivity) context);
+        if (Build.MODEL.equalsIgnoreCase("p3"))
+            return new SepehrCardReader((VasActivity) context);
         if (Build.MODEL.equals("N910"))
             return new N910CardReader((VasActivity) context);
         return null;

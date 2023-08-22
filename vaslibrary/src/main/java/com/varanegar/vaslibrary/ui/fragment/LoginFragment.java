@@ -143,10 +143,10 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
         String deviceIdSuper=getDeviceid();
         //Toast.makeText(getContext(),deviceIdSuper,Toast.LENGTH_LONG).show();
         // Checking permission for network monitor
-        Intent intent = VpnService.prepare(getContext());
-        if (intent != null) {
-            startActivityForResult(intent, 1);
-        }
+//        Intent intent = VpnService.prepare(getContext());
+//        if (intent != null) {
+//            startActivityForResult(intent, 1);
+//        }
         mapView = view.findViewById(R.id.map_view);
         mapView.onCreate(savedInstanceState);
         mapView.onResume(); // needed to getUnits the map to display immediately

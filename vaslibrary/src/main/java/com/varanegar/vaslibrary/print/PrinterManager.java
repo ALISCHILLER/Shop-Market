@@ -332,6 +332,8 @@ public class PrinterManager extends BaseManager<PrinterModel> {
             otherPrinters.add("TejaratElectronicParsian");
         } else if (Build.MODEL.equalsIgnoreCase("Sepehr A1")) {
             otherPrinters.add("sepehr");
+        } else if (Build.MODEL.equalsIgnoreCase("p3")) {
+            otherPrinters.add("sepehr");
         } else if (Build.MODEL.equals("N910"))
             otherPrinters.add("N910");
         return otherPrinters;

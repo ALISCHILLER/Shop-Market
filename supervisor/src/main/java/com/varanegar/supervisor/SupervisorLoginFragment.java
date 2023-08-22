@@ -120,10 +120,10 @@ public class SupervisorLoginFragment extends VaranegarFragment implements Valida
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_supervisor_login, container, false);
         // Checking permission for network monitor
-        Intent intent = VpnService.prepare(getContext());
-        if (intent != null) {
-            startActivityForResult(intent, 1);
-        }
+//        Intent intent = VpnService.prepare(getContext());
+//        if (intent != null) {
+//            startActivityForResult(intent, 1);
+//        }
         // region apk name and version
         try {
             String packageName = getContext().getApplicationInfo().packageName;

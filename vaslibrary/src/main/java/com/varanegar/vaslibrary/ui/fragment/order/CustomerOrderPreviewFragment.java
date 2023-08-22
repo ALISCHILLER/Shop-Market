@@ -696,7 +696,14 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                     imgType.setVisibility(View.INVISIBLE);
                 }
 
-                if (p.DiscountRef != 0) {
+
+                double d=HelperMethods.currencyToDouble(p.InvoiceAmount);
+                if (p.DiscountRef != 0 && d > 1){
+                    imgType.setVisibility(View.VISIBLE);
+                    imgType.setImageResource(R.drawable.ic_basket_24);
+                    itemView.setBackgroundColor(HelperMethods.getColor(getContext(), R.color.blue_pressed));
+
+                } else if (p.DiscountRef != 0) {
                     imgType.setVisibility(View.VISIBLE);
                     imgType.setImageResource(R.drawable.ic_prize);
                     itemView.setBackgroundColor(HelperMethods.getColor(getContext(), R.color.holo_green_light));
