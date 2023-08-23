@@ -770,7 +770,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
             searchBox.setOnItemSelectedListener((position, item) -> {
                 orderAdapter.refreshAsync(new CustomerCallOrderOrderViewManager(context)
                         .getLinesQuery(callOrderId,
-                        new OrderBy(item.getProjection(), OrderType.ASC)));
+                                new OrderBy(item.getProjection(), OrderType.ASC)));
                 SharedPreferences sharedPreferences = requireContext()
                         .getSharedPreferences("SortOrders", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -1004,39 +1004,39 @@ public class CustomerSaveOrderFragment extends VisitFragment
                 calendarImageView.setOnClickListener(view15 -> DateHelper.showDatePicker(
                         Objects.requireNonNull(getVaranegarActvity()),
                         VasHelperMethods.getSysConfigLocale(context), calendar -> {
-                    // SAP: We Can Edit DeliveryDate Just For 7 Days Later
-                    Calendar minDeadLineTimeForThirdParty = Calendar.getInstance();
-                    minDeadLineTimeForThirdParty.set(Calendar.HOUR_OF_DAY, 0);
-                    minDeadLineTimeForThirdParty.set(Calendar.MINUTE, 0);
-                    minDeadLineTimeForThirdParty.set(Calendar.SECOND, 0);
-                    minDeadLineTimeForThirdParty.set(Calendar.MILLISECOND, 0);
-                    Calendar maxDeadLineTimeForThirdParty = Calendar.getInstance();
-                    maxDeadLineTimeForThirdParty.set(Calendar.HOUR_OF_DAY, 23);
-                    maxDeadLineTimeForThirdParty.set(Calendar.MINUTE, 59);
-                    maxDeadLineTimeForThirdParty.set(Calendar.SECOND, 59);
-                    maxDeadLineTimeForThirdParty.set(Calendar.MILLISECOND, 999);
-                    maxDeadLineTimeForThirdParty.add(Calendar.DAY_OF_YEAR, 7);
-                    SysConfigManager sysConfigManager1 = new SysConfigManager(getContext());
-                    OwnerKeysWrapper ownerKeysWrapper = sysConfigManager1.readOwnerKeys();
-                    if (ownerKeysWrapper.isZarMakaron() && (calendar.getTime()
-                            .after(maxDeadLineTimeForThirdParty.getTime())
-                            || calendar.getTime().before(minDeadLineTimeForThirdParty.getTime()))) {
-                        CuteMessageDialog dialog = new CuteMessageDialog(requireActivity());
-                        dialog.setMessage("تاریخ مجاز نیست");
-                        dialog.setTitle(R.string.error);
-                        dialog.setIcon(Icon.Error);
-                        dialog.setPositiveButton(R.string.ok, null);
-                        dialog.show();
-                    } else {
-                        customerCallOrderModel.DeliveryDate = calendar.getTime();
-                        deliveryDateItem.setValue(DateHelper.toString(calendar, DateFormat.Date));
-                        try {
-                            updateCustomerCallOrder();
-                        } catch (Exception e) {
-                            showErrorMessage();
-                        }
-                    }
-                }));
+                            // SAP: We Can Edit DeliveryDate Just For 7 Days Later
+                            Calendar minDeadLineTimeForThirdParty = Calendar.getInstance();
+                            minDeadLineTimeForThirdParty.set(Calendar.HOUR_OF_DAY, 0);
+                            minDeadLineTimeForThirdParty.set(Calendar.MINUTE, 0);
+                            minDeadLineTimeForThirdParty.set(Calendar.SECOND, 0);
+                            minDeadLineTimeForThirdParty.set(Calendar.MILLISECOND, 0);
+                            Calendar maxDeadLineTimeForThirdParty = Calendar.getInstance();
+                            maxDeadLineTimeForThirdParty.set(Calendar.HOUR_OF_DAY, 23);
+                            maxDeadLineTimeForThirdParty.set(Calendar.MINUTE, 59);
+                            maxDeadLineTimeForThirdParty.set(Calendar.SECOND, 59);
+                            maxDeadLineTimeForThirdParty.set(Calendar.MILLISECOND, 999);
+                            maxDeadLineTimeForThirdParty.add(Calendar.DAY_OF_YEAR, 7);
+                            SysConfigManager sysConfigManager1 = new SysConfigManager(getContext());
+                            OwnerKeysWrapper ownerKeysWrapper = sysConfigManager1.readOwnerKeys();
+                            if (ownerKeysWrapper.isZarMakaron() && (calendar.getTime()
+                                    .after(maxDeadLineTimeForThirdParty.getTime())
+                                    || calendar.getTime().before(minDeadLineTimeForThirdParty.getTime()))) {
+                                CuteMessageDialog dialog = new CuteMessageDialog(requireActivity());
+                                dialog.setMessage("تاریخ مجاز نیست");
+                                dialog.setTitle(R.string.error);
+                                dialog.setIcon(Icon.Error);
+                                dialog.setPositiveButton(R.string.ok, null);
+                                dialog.show();
+                            } else {
+                                customerCallOrderModel.DeliveryDate = calendar.getTime();
+                                deliveryDateItem.setValue(DateHelper.toString(calendar, DateFormat.Date));
+                                try {
+                                    updateCustomerCallOrder();
+                                } catch (Exception e) {
+                                    showErrorMessage();
+                                }
+                            }
+                        }));
             }
 
             // Get ship Types and Show to User|
@@ -1211,9 +1211,9 @@ public class CustomerSaveOrderFragment extends VisitFragment
                 final SearchBox<DiscountTypeModel> searchBox = new SearchBox<>();
                 searchBox.setItems(discountTypeModels, (SearchBox.SearchMethod<DiscountTypeModel>)
                         (item, text) -> {
-                    text = text.toLowerCase();
-                    return item.toString().toLowerCase().contains(text);
-                });
+                            text = text.toLowerCase();
+                            return item.toString().toLowerCase().contains(text);
+                        });
                 searchBox.disableSearch();
                 searchBox.setOnItemSelectedListener((position, item) -> {
                     SharedPreferences discountTypeShP = requireContext()
@@ -1250,109 +1250,109 @@ public class CustomerSaveOrderFragment extends VisitFragment
         calcOnlineUsanceDay.setOnClickListener(view -> CalcPromotion.calcPromotionV3WithDialog(null,
                 null, getActivity(), callOrderId, customerId, EVCType.TOSELL, false,
                 false, true, new PromotionCallback() {
-            @Override
-            public void onSuccess(CustomerCallOrderPromotion data) {
-                try {
-                    UUID oldPaymentType = customerCallOrderModel.OrderPaymentTypeUniqueId;
-                    UUID newPaymentType = data.OrderPaymentTypeId;
-                    PaymentOrderTypeManager paymentOrderTypeManager = new
-                            PaymentOrderTypeManager(context);
-                    PaymentTypeOrderModel paymentTypeOrderModel = paymentOrderTypeManager
-                            .getItem(new Query().from(PaymentTypeOrder.PaymentTypeOrderTbl)
-                                    .whereAnd(Criteria.equals(PaymentTypeOrder.UniqueId,
-                                            data.OrderPaymentTypeId)));
-                    if (paymentTypeOrderModel != null) {
-                        for (CustomerPaymentTypesViewModel customerPaymentTypesViewModel
-                                : customerPaymentTypes) {
-                            if (Objects.requireNonNull(customerPaymentTypesViewModel.UniqueId)
-                                    .equals(paymentTypeOrderModel.UniqueId))
-                                selectedPaymentType = customerPaymentTypesViewModel;
-                        }
-                        if (customerCallOrderModel == null || data == null ||
-                                data.OrderPaymentTypeId == null) {
-                            CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(requireContext());
-                            cuteMessageDialog.setMessage(R.string.error_on_usance_day);
-                            cuteMessageDialog.setNeutralButton(R.string.ok, null);
-                            cuteMessageDialog.show();
-                            if (customerCallOrderModel == null)
-                                Timber.e("customerCallOrderModel == null");
-                            if (data == null)
-                                Timber.e("data == null");
-                            else if (data.OrderPaymentTypeId == null)
-                                Timber.e("data.OrderPaymentTypeId == null");
-                        } else {
-                            try {
-                                customerCallOrderModel.OrderPaymentTypeUniqueId =
-                                        data.OrderPaymentTypeId;
-                                CallOrderLineManager callOrderLineManager = new
-                                        CallOrderLineManager(getContext());
-                                List<CallOrderLineModel> customerCallOrderModels =
-                                        callOrderLineManager.getOrderLines(callOrderId);
-                                List<CallOrderLineModel> editedCustomerCallOrderModels = new ArrayList<>();
-                                for (CustomerCallOrderLinePromotion customerCallOrderLinePromotion :
-                                        data.LinesWithPromo) {
-                                    for (CallOrderLineModel callOrderLineModel :
-                                            customerCallOrderModels) {
+                    @Override
+                    public void onSuccess(CustomerCallOrderPromotion data) {
+                        try {
+                            UUID oldPaymentType = customerCallOrderModel.OrderPaymentTypeUniqueId;
+                            UUID newPaymentType = data.OrderPaymentTypeId;
+                            PaymentOrderTypeManager paymentOrderTypeManager = new
+                                    PaymentOrderTypeManager(context);
+                            PaymentTypeOrderModel paymentTypeOrderModel = paymentOrderTypeManager
+                                    .getItem(new Query().from(PaymentTypeOrder.PaymentTypeOrderTbl)
+                                            .whereAnd(Criteria.equals(PaymentTypeOrder.UniqueId,
+                                                    data.OrderPaymentTypeId)));
+                            if (paymentTypeOrderModel != null) {
+                                for (CustomerPaymentTypesViewModel customerPaymentTypesViewModel
+                                        : customerPaymentTypes) {
+                                    if (Objects.requireNonNull(customerPaymentTypesViewModel.UniqueId)
+                                            .equals(paymentTypeOrderModel.UniqueId))
+                                        selectedPaymentType = customerPaymentTypesViewModel;
+                                }
+                                if (customerCallOrderModel == null || data == null ||
+                                        data.OrderPaymentTypeId == null) {
+                                    CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(requireContext());
+                                    cuteMessageDialog.setMessage(R.string.error_on_usance_day);
+                                    cuteMessageDialog.setNeutralButton(R.string.ok, null);
+                                    cuteMessageDialog.show();
+                                    if (customerCallOrderModel == null)
+                                        Timber.e("customerCallOrderModel == null");
+                                    if (data == null)
+                                        Timber.e("data == null");
+                                    else if (data.OrderPaymentTypeId == null)
+                                        Timber.e("data.OrderPaymentTypeId == null");
+                                } else {
+                                    try {
+                                        customerCallOrderModel.OrderPaymentTypeUniqueId =
+                                                data.OrderPaymentTypeId;
+                                        CallOrderLineManager callOrderLineManager = new
+                                                CallOrderLineManager(getContext());
+                                        List<CallOrderLineModel> customerCallOrderModels =
+                                                callOrderLineManager.getOrderLines(callOrderId);
+                                        List<CallOrderLineModel> editedCustomerCallOrderModels = new ArrayList<>();
+                                        for (CustomerCallOrderLinePromotion customerCallOrderLinePromotion :
+                                                data.LinesWithPromo) {
+                                            for (CallOrderLineModel callOrderLineModel :
+                                                    customerCallOrderModels) {
 
-                                        if (Objects.equals(callOrderLineModel.UniqueId,
-                                                customerCallOrderLinePromotion.UniqueId)) {
+                                                if (Objects.equals(callOrderLineModel.UniqueId,
+                                                        customerCallOrderLinePromotion.UniqueId)) {
 
-                                            callOrderLineModel.PayDuration =
-                                                    customerCallOrderLinePromotion.PayDuration;
-                                            editedCustomerCallOrderModels.add(callOrderLineModel);
+                                                    callOrderLineModel.PayDuration =
+                                                            customerCallOrderLinePromotion.PayDuration;
+                                                    editedCustomerCallOrderModels.add(callOrderLineModel);
+                                                }
+                                            }
                                         }
+                                        callOrderLineManager.update(editedCustomerCallOrderModels);
+                                        updateCustomerCallOrder();
+                                        extractAndCalcCustomerPrice();
+                                        DiscountConditionManager discountConditionManager =
+                                                new DiscountConditionManager(context);
+                                        boolean existDiscountItemCountBaseOnPaymentType =
+                                                discountConditionManager.existDiscountBaseOnPaymentType(true);
+                                        boolean existDiscountBaseOnPaymentType = discountConditionManager
+                                                .existDiscountBaseOnPaymentType(false);
+                                        boolean paymentTypeChanged = !oldPaymentType.equals(newPaymentType);
+                                        refresh((paymentTypeChanged && existDiscountItemCountBaseOnPaymentType),
+                                                true, (paymentTypeChanged && existDiscountBaseOnPaymentType));
+                                    } catch (Exception e) {
+                                        showErrorMessage();
                                     }
                                 }
-                                callOrderLineManager.update(editedCustomerCallOrderModels);
-                                updateCustomerCallOrder();
-                                extractAndCalcCustomerPrice();
-                                DiscountConditionManager discountConditionManager =
-                                        new DiscountConditionManager(context);
-                                boolean existDiscountItemCountBaseOnPaymentType =
-                                        discountConditionManager.existDiscountBaseOnPaymentType(true);
-                                boolean existDiscountBaseOnPaymentType = discountConditionManager
-                                        .existDiscountBaseOnPaymentType(false);
-                                boolean paymentTypeChanged = !oldPaymentType.equals(newPaymentType);
-                                refresh((paymentTypeChanged && existDiscountItemCountBaseOnPaymentType),
-                                        true, (paymentTypeChanged && existDiscountBaseOnPaymentType));
-                            } catch (Exception e) {
-                                showErrorMessage();
+
+                            } else {
+                                CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(context);
+                                cuteMessageDialog.setIcon(Icon.Alert);
+                                cuteMessageDialog.setMessage(R.string.system_payment_not_exist);
+                                cuteMessageDialog.setNeutralButton(R.string.ok, view1 -> {
+                                    systemCheckBox.setChecked(false);
+                                    editor.putBoolean(callOrderId.toString() + customer.BackOfficeId + "CheckBoxChecked", false);
+                                    editor.apply();
+                                    paymentTypesSpinner.setVisibility(View.VISIBLE);
+                                    calcOnlineUsanceDay.setVisibility(View.GONE);
+                                });
+                                cuteMessageDialog.show();
                             }
+                        } catch (Exception e) {
+                            Timber.e(e);
                         }
 
-                    } else {
+                    }
+
+                    @Override
+                    public void onFailure(String error) {
                         CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(context);
-                        cuteMessageDialog.setIcon(Icon.Alert);
-                        cuteMessageDialog.setMessage(R.string.system_payment_not_exist);
-                        cuteMessageDialog.setNeutralButton(R.string.ok, view1 -> {
-                            systemCheckBox.setChecked(false);
-                            editor.putBoolean(callOrderId.toString() + customer.BackOfficeId + "CheckBoxChecked", false);
-                            editor.apply();
-                            paymentTypesSpinner.setVisibility(View.VISIBLE);
-                            calcOnlineUsanceDay.setVisibility(View.GONE);
-                        });
+                        cuteMessageDialog.setIcon(Icon.Error);
+                        cuteMessageDialog.setMessage(error);
+                        cuteMessageDialog.setNeutralButton(R.string.ok, null);
                         cuteMessageDialog.show();
                     }
-                } catch (Exception e) {
-                    Timber.e(e);
-                }
 
-            }
+                    @Override
+                    public void onProcess(String msg) {
 
-            @Override
-            public void onFailure(String error) {
-                CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(context);
-                cuteMessageDialog.setIcon(Icon.Error);
-                cuteMessageDialog.setMessage(error);
-                cuteMessageDialog.setNeutralButton(R.string.ok, null);
-                cuteMessageDialog.show();
-            }
-
-            @Override
-            public void onProcess(String msg) {
-
-            }
-        }));
+                    }
+                }));
     }
 
     private void discountCalculatorForContractor() {
@@ -1451,7 +1451,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
                 pingApi.refreshBaseServerUrl(context, new PingApi.PingCallback() {
                     @Override
                     public void done(String ipAddress) {
-                        ProductUpdateFlow productUpdateFlow = new ProductUpdateFlow(context,customer.CustomerCode);
+                        ProductUpdateFlow productUpdateFlow = new ProductUpdateFlow(context, customer.CustomerCode);
                         productUpdateFlow.syncProductsAndInitPromotionDb(new UpdateCall() {
                             @Override
                             protected void onSuccess() {
@@ -1472,11 +1472,11 @@ public class CustomerSaveOrderFragment extends VisitFragment
                                     dialog.setIcon(Icon.Error);
                                     dialog.setPositiveButton(R.string.ok,
                                             new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            CustomerLastBillView();
-                                        }
-                                    });
+                                                @Override
+                                                public void onClick(View v) {
+                                                    CustomerLastBillView();
+                                                }
+                                            });
                                     dialog.show();
                                 }
                             }
@@ -1501,17 +1501,15 @@ public class CustomerSaveOrderFragment extends VisitFragment
         }
 
 
-
-
     }
 
-    private void CustomerLastBillView(){
-        List<CustomerLastBillModel> customerLastBillModel=new
+    private void CustomerLastBillView() {
+        List<CustomerLastBillModel> customerLastBillModel = new
                 CustomerLastBillManager(context).getAll(customer.CustomerCode);
         if (customerLastBillModel.size() > 0) {
             Ml_dialog1 ml_dialog1 = new Ml_dialog1();
 
-            ml_dialog1.setValues(customerLastBillModel,customer.CustomerName);
+            ml_dialog1.setValues(customerLastBillModel, customer.CustomerName);
             ml_dialog1.show(getChildFragmentManager(), "Ml_dialog1");
             ml_dialog1.setOnResult(new InsertPinDialog.OnResult() {
                 @Override
@@ -1736,7 +1734,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
             productSearchBox.show(getVaranegarActvity().getSupportFragmentManager(), "ProductSearchBox");
             productSearchBox.setOnItemSelectedListener((position, productOrderViewModel) -> {
                 productSearchBox.dismiss();
-                productOrderViewModelVoice=productOrderViewModel;
+                productOrderViewModelVoice = productOrderViewModel;
                 showCalculator(productOrderViewModel);
             });
         });
@@ -1814,13 +1812,18 @@ public class CustomerSaveOrderFragment extends VisitFragment
 
         List<CuteButton> buttons = new ArrayList<>();
         buttons.add(reportsButton);
-
+        SysConfigManager sysConfigManagersearch = new SysConfigManager(getContext());
+        OwnerKeysWrapper ownerKeyssearch = sysConfigManagersearch.readOwnerKeys();
 
         if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
-            if (!VaranegarApplication.is(VaranegarApplication.AppId.Contractor))
+            if (!VaranegarApplication.is(VaranegarApplication.AppId.Contractor) &&
+                    !ownerKeyssearch.DataOwnerCenterKey.equals("acd73e3d-dda7-484a-a33f-075970e4069e"))
                 buttons.add(searchButton);
 
-            buttons.add(albumButton);
+            if (!ownerKeyssearch.DataOwnerCenterKey.equals("acd73e3d-dda7-484a-a33f-075970e4069e"))
+                buttons.add(albumButton);
+
+
             buttons.add(listButton);
 
         } else {
@@ -1964,11 +1967,11 @@ public class CustomerSaveOrderFragment extends VisitFragment
                     List<CustomerCallInvoicePreviewModel> invoiceModels = invoiceManager.getCustomerCallOrders(customerId);
                     if (invoiceModels.size() == 1) {
                         //buttons.add(cashButton);
-                     ///   buttons.add(poseButton);
+                        ///   buttons.add(poseButton);
                     }
                 } else {
-                  //  buttons.add(cashButton);
-                  //  buttons.add(poseButton);
+                    //  buttons.add(cashButton);
+                    //  buttons.add(poseButton);
                 }
             }
         }
@@ -1998,7 +2001,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
                 }
             });
             buttons.add(printButton);
-        } else if (!ownerKeys.DataOwnerCenterKey.equals("acd73e3d-dda7-484a-a33f-075970e4069e")){
+        } else if (!ownerKeys.DataOwnerCenterKey.equals("acd73e3d-dda7-484a-a33f-075970e4069e")) {
             buttons.add(previewButton);
         }
 
@@ -2055,7 +2058,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
         List<CustomerCallOrderOrderViewModel> items = orderAdapter.getItems();
         boolean codeNaghsh = true;
         for (CustomerCallOrderOrderViewModel item : items) {
-            String productCode = item.ProductCode.substring(0,2);
+            String productCode = item.ProductCode.substring(0, 2);
             if (!productCode.equals("34")) {
                 if (customer.CodeNaghsh == null || customer.CodeNaghsh.isEmpty())
                     codeNaghsh = false;
@@ -2067,13 +2070,12 @@ public class CustomerSaveOrderFragment extends VisitFragment
     //---------------------------------------------------------------------------------------------- checkPastaInorder
 
 
-
     //---------------------------------------------------------------------------------------------- checkConfectioneryInorder
     private boolean checkConfectioneryInorder() {
         List<CustomerCallOrderOrderViewModel> items = orderAdapter.getItems();
         boolean codeNaghsh = true;
         for (CustomerCallOrderOrderViewModel item : items) {
-            String productCode = item.ProductCode.substring(0,2);
+            String productCode = item.ProductCode.substring(0, 2);
             if (productCode.equals("34")) {
                 if (customer.CodeNaghsh == null || customer.CodeNaghsh.isEmpty())
                     codeNaghsh = false;
@@ -2123,7 +2125,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
                     return;
 
                 }
-            }else {
+            } else {
                 PaymentManager paymentManager = new PaymentManager(context);
                 SysConfigManager sysConfigManager = new SysConfigManager(context);
                 ConfigMap configMap = sysConfigManager.read(SysConfigManager.cloud);
@@ -2981,8 +2983,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
             List<EmphaticProductModel> emphaticAll = emphaticProductManager.getAll();
 
 
-
-            boolean is=false;
+            boolean is = false;
             //در اینجا چک میکنیم که کالای تاکیدی در الگوی کالا هست یا خیر
             List<EmphaticProductCountModel> temp = new EmphaticProductCountManager(getContext()).getAll();
             ProductManager productManager = new ProductManager(getContext());
@@ -2997,31 +2998,31 @@ public class CustomerSaveOrderFragment extends VisitFragment
 
             if (emphaticProductCountModels.size() == 0)
                 isInOrder = true;
-            EmphaticProductModel emphaticProductModel=null;
-            EmphaticProductModel emphaticProductCategory=null;
-            EmphaticProductModel emphaticProductLevel=null;
-            EmphaticProductModel emphaticProductActivity=null;
+            EmphaticProductModel emphaticProductModel = null;
+            EmphaticProductModel emphaticProductCategory = null;
+            EmphaticProductModel emphaticProductLevel = null;
+            EmphaticProductModel emphaticProductActivity = null;
             EmphaticProductModel notInOrder = null;
-            CustomerCallOrderOrderViewModel itemd=null;
+            CustomerCallOrderOrderViewModel itemd = null;
             for (EmphaticProductCountModel emphatic : emphaticProductCountModels) {
                 for (CustomerCallOrderOrderViewModel item : orderAdapter.getItems()) {
                     emphaticProductModel = emphaticProductManager.getItemByRoleId(emphatic.RuleId);
-                    if (emphaticProductModel !=null && emphaticProductModel.CustomerCategoryUniqueIds != null && emphaticProductModel.CustomerLevelUniqueIds != null
-                            && emphaticProductModel.CustomerActivityUniqueIds!=null) {
+                    if (emphaticProductModel != null && emphaticProductModel.CustomerCategoryUniqueIds != null && emphaticProductModel.CustomerLevelUniqueIds != null
+                            && emphaticProductModel.CustomerActivityUniqueIds != null) {
 
-                        emphaticProductCategory=emphaticProductManager.getCustomerCategory(String.valueOf(customer.CustomerCategoryId));
-                        emphaticProductLevel=emphaticProductManager.getCustomerLevel(String.valueOf(customer.CustomerLevelId));
-                        emphaticProductActivity=emphaticProductManager.getCustomerActivity(String.valueOf(customer.CustomerActivityId));
-                        if(emphaticProductCategory !=null && emphaticProductLevel !=null && emphaticProductActivity!=null){
-                            is=true;
-                        }else {
-                            is=false;
+                        emphaticProductCategory = emphaticProductManager.getCustomerCategory(String.valueOf(customer.CustomerCategoryId));
+                        emphaticProductLevel = emphaticProductManager.getCustomerLevel(String.valueOf(customer.CustomerLevelId));
+                        emphaticProductActivity = emphaticProductManager.getCustomerActivity(String.valueOf(customer.CustomerActivityId));
+                        if (emphaticProductCategory != null && emphaticProductLevel != null && emphaticProductActivity != null) {
+                            is = true;
+                        } else {
+                            is = false;
                         }
-                    }else{
-                        is=false;
+                    } else {
+                        is = false;
                     }
-                    if(is){
-                    if (emphatic.ProductId.equals(item.ProductId)) {
+                    if (is) {
+                        if (emphatic.ProductId.equals(item.ProductId)) {
 
 
                             if (!emphaticProductModel.IsEmphasis) {
@@ -3038,9 +3039,9 @@ public class CustomerSaveOrderFragment extends VisitFragment
                                 break;
                             }
 
-                    } else if (!emphaticProductModel.IsEmphasis)
-                        isInOrder = false;
-                    }else{
+                        } else if (!emphaticProductModel.IsEmphasis)
+                            isInOrder = false;
+                    } else {
                         isInOrder = true;
                     }
                 }
@@ -3051,14 +3052,14 @@ public class CustomerSaveOrderFragment extends VisitFragment
 
             if (notInOrder != null) {
                 if (notInOrder.EmphasisProductErrorTypeId.equals(EmphasisProductErrorTypeId.DETERRENT)) {
-                    showError("کالای مربوطه"+" "+itemd.ProductName+"در سفارش نباشد");
+                    showError("کالای مربوطه" + " " + itemd.ProductName + "در سفارش نباشد");
                     return;
-                } else if (notInOrder.EmphasisProductErrorTypeId.equals(EmphasisProductErrorTypeId.WARNING)){
-                    showError(" کالای مربوطه "+""+itemd.ProductName+"در سفارش نباشد",true,isInOrder);
-                } else if (notInOrder.EmphasisProductErrorTypeId.equals(EmphasisProductErrorTypeId.SUGGESTION)){
-                    showError(" کالای مربوطه "+""+itemd.ProductName+"در سفارش نباشد",true,isInOrder);
+                } else if (notInOrder.EmphasisProductErrorTypeId.equals(EmphasisProductErrorTypeId.WARNING)) {
+                    showError(" کالای مربوطه " + "" + itemd.ProductName + "در سفارش نباشد", true, isInOrder);
+                } else if (notInOrder.EmphasisProductErrorTypeId.equals(EmphasisProductErrorTypeId.SUGGESTION)) {
+                    showError(" کالای مربوطه " + "" + itemd.ProductName + "در سفارش نباشد", true, isInOrder);
                 }
-            }else{
+            } else {
                 show(isInOrder);
             }
 
@@ -3090,7 +3091,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
     }
 
 
-    public void show(boolean isInOrder){
+    public void show(boolean isInOrder) {
         if (!isInOrder && !SysConfigManager.compare(new SysConfigManager(getContext()).read(ConfigKey.SimplePresale, SysConfigManager.cloud), true)) {
             EmphaticProductDialog emphaticProductDialog = new EmphaticProductDialog();
             emphaticProductDialog.onOrderUpdate = () -> refresh(true, false, true);
@@ -3117,6 +3118,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
             }
         }
     }
+
     private void showEmphaticItems() {
         if (!VaranegarApplication.is(VaranegarApplication.AppId.Supervisor) && !hasCallOrder()) {
             SysConfigManager sysConfigManager = new SysConfigManager(getContext());
@@ -3149,7 +3151,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
                 }
                 if ((!isInOrder || result.getError() != null || result.getWarning() != null) &&
                         !SysConfigManager.compare(new SysConfigManager(getContext())
-                                .read(ConfigKey.SimplePresale, SysConfigManager.cloud), true)&&
+                                .read(ConfigKey.SimplePresale, SysConfigManager.cloud), true) &&
                         VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
 
                     FastOrderProductsDialog dialog = new FastOrderProductsDialog();
@@ -3693,7 +3695,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
         }
     }
 
-    private void showError(String error,boolean chack,boolean isInOrder) {
+    private void showError(String error, boolean chack, boolean isInOrder) {
         Context context = getContext();
         if (isResumed() && context != null) {
             CuteMessageDialog dialog = new CuteMessageDialog(context);
@@ -3721,81 +3723,82 @@ public class CustomerSaveOrderFragment extends VisitFragment
             dialog.show();
         }
     }
+
     private void showCalculator(ProductOrderViewModel productOrderViewModel) {
-        if (productOrderViewModel != null){
+        if (productOrderViewModel != null) {
             final CustomerCallOrderOrderViewModel customerCallOrderOrderViewModel =
                     Linq.findFirst(orderAdapter.getItems(),
                             item -> item.ProductId.equals(productOrderViewModel.UniqueId));
 
-        List<OrderLineQtyModel> orderLineQtyModels = new ArrayList<>();
-        OrderLineQtyManager orderLineQtyManager = new OrderLineQtyManager(context);
-        if (customerCallOrderOrderViewModel != null) {
-            orderLineQtyModels = orderLineQtyManager.getQtyLines(customerCallOrderOrderViewModel.UniqueId);
-        }
-        OrderCalculatorForm orderCalculatorForm = new OrderCalculatorForm();
-        try {
-            final CalculatorHelper calculatorHelper = new CalculatorHelper(context);
-            final OnHandQtyStock onHandQtyStock = new OnHandQtyStock();
-            ProductUnitsViewModel productUnitsViewModel = productUnitsHashMap.get(productOrderViewModel.UniqueId);
-            onHandQtyStock.ConvertFactors = Objects.requireNonNull(productUnitsViewModel).ConvertFactor;
-            onHandQtyStock.UnitNames = productUnitsViewModel.UnitName;
-            if (productOrderViewModel.OnHandQty == null)
-                productOrderViewModel.OnHandQty = BigDecimal.ZERO;
-            onHandQtyStock.OnHandQty = productOrderViewModel.OnHandQty;
-            if (productOrderViewModel.RemainedAfterReservedQty == null)
-                productOrderViewModel.RemainedAfterReservedQty = BigDecimal.ZERO;
-            onHandQtyStock.RemainedAfterReservedQty = productOrderViewModel.RemainedAfterReservedQty;
-            if (productOrderViewModel.OrderPoint == null)
-                productOrderViewModel.OrderPoint = BigDecimal.ZERO;
-            onHandQtyStock.OrderPoint = productOrderViewModel.OrderPoint;
-            if (productOrderViewModel.ProductTotalOrderedQty == null)
-                productOrderViewModel.ProductTotalOrderedQty = BigDecimal.ZERO;
-            onHandQtyStock.ProductTotalOrderedQty = productOrderViewModel.ProductTotalOrderedQty;
-            if (productOrderViewModel.RequestBulkQty == null)
-                onHandQtyStock.TotalQty = productOrderViewModel.TotalQty == null ? BigDecimal.ZERO : productOrderViewModel.TotalQty;
-            else
-                onHandQtyStock.TotalQty = productOrderViewModel.TotalQtyBulk == null ? BigDecimal.ZERO : productOrderViewModel.TotalQtyBulk;
-            onHandQtyStock.HasAllocation = productOrderViewModel.HasAllocation;
-            BaseUnit bulkUnit = calculatorHelper.getBulkQtyUnit(customerCallOrderOrderViewModel);
-            if (productOrderViewModel.ExpDate == null) {
-                orderCalculatorForm.setArguments(Objects
-                                .requireNonNull(productOrderViewModel.UniqueId),
-                        productOrderViewModel.ProductName, calculatorHelper
-                                .generateCalculatorUnits(productOrderViewModel.UniqueId,
-                                        orderLineQtyModels, bulkUnit, ProductType.isForSale),
-                        productOrderViewModel.Price, productOrderViewModel.UserPrice,
-                        onHandQtyStock, customerId, callOrderId,
-                        productOrderViewModel.PrizeComment);
-                if (voicetoText != null && !voicetoText.isEmpty()) {
-                    orderCalculatorForm.setArguments(voicetoText);
-                    voicetoText = "";
-                }
-            } else
-                orderCalculatorForm.setArguments(productOrderViewModel.UniqueId,
-                        productOrderViewModel.ProductName,
-                        CalculatorBatchUnits.generate(getContext(), productOrderViewModel,
-                                customerCallOrderOrderViewModel == null ? null :
-                                        customerCallOrderOrderViewModel.UniqueId,
-                                productOrderViewModel.Price, productOrderViewModel.PriceId,
-                                productOrderViewModel.UserPrice), productOrderViewModel.UserPrice,
-                        onHandQtyStock, customerId, callOrderId, productOrderViewModel.PrizeComment);
-            orderCalculatorForm.onCalcFinish = (discreteUnits, bulkUnit1, batchQtyList) ->
-                    onAddItem(productOrderViewModel, discreteUnits, bulkUnit1, batchQtyList);
-            orderCalculatorForm.show(getChildFragmentManager(), "2af40365-a4db-4afb-bb13-2a9896803d92");
-        } catch (ProductUnitViewManager.UnitNotFoundException e) {
-            MainVaranegarActivity activity = getVaranegarActvity();
-            if (activity != null && !activity.isFinishing() && isResumed()) {
-                activity.showSnackBar(R.string.no_unit_for_product, MainVaranegarActivity.Duration.Short);
+            List<OrderLineQtyModel> orderLineQtyModels = new ArrayList<>();
+            OrderLineQtyManager orderLineQtyManager = new OrderLineQtyManager(context);
+            if (customerCallOrderOrderViewModel != null) {
+                orderLineQtyModels = orderLineQtyManager.getQtyLines(customerCallOrderOrderViewModel.UniqueId);
             }
-            Timber.e(e);
-        }
+            OrderCalculatorForm orderCalculatorForm = new OrderCalculatorForm();
+            try {
+                final CalculatorHelper calculatorHelper = new CalculatorHelper(context);
+                final OnHandQtyStock onHandQtyStock = new OnHandQtyStock();
+                ProductUnitsViewModel productUnitsViewModel = productUnitsHashMap.get(productOrderViewModel.UniqueId);
+                onHandQtyStock.ConvertFactors = Objects.requireNonNull(productUnitsViewModel).ConvertFactor;
+                onHandQtyStock.UnitNames = productUnitsViewModel.UnitName;
+                if (productOrderViewModel.OnHandQty == null)
+                    productOrderViewModel.OnHandQty = BigDecimal.ZERO;
+                onHandQtyStock.OnHandQty = productOrderViewModel.OnHandQty;
+                if (productOrderViewModel.RemainedAfterReservedQty == null)
+                    productOrderViewModel.RemainedAfterReservedQty = BigDecimal.ZERO;
+                onHandQtyStock.RemainedAfterReservedQty = productOrderViewModel.RemainedAfterReservedQty;
+                if (productOrderViewModel.OrderPoint == null)
+                    productOrderViewModel.OrderPoint = BigDecimal.ZERO;
+                onHandQtyStock.OrderPoint = productOrderViewModel.OrderPoint;
+                if (productOrderViewModel.ProductTotalOrderedQty == null)
+                    productOrderViewModel.ProductTotalOrderedQty = BigDecimal.ZERO;
+                onHandQtyStock.ProductTotalOrderedQty = productOrderViewModel.ProductTotalOrderedQty;
+                if (productOrderViewModel.RequestBulkQty == null)
+                    onHandQtyStock.TotalQty = productOrderViewModel.TotalQty == null ? BigDecimal.ZERO : productOrderViewModel.TotalQty;
+                else
+                    onHandQtyStock.TotalQty = productOrderViewModel.TotalQtyBulk == null ? BigDecimal.ZERO : productOrderViewModel.TotalQtyBulk;
+                onHandQtyStock.HasAllocation = productOrderViewModel.HasAllocation;
+                BaseUnit bulkUnit = calculatorHelper.getBulkQtyUnit(customerCallOrderOrderViewModel);
+                if (productOrderViewModel.ExpDate == null) {
+                    orderCalculatorForm.setArguments(Objects
+                                    .requireNonNull(productOrderViewModel.UniqueId),
+                            productOrderViewModel.ProductName, calculatorHelper
+                                    .generateCalculatorUnits(productOrderViewModel.UniqueId,
+                                            orderLineQtyModels, bulkUnit, ProductType.isForSale),
+                            productOrderViewModel.Price, productOrderViewModel.UserPrice,
+                            onHandQtyStock, customerId, callOrderId,
+                            productOrderViewModel.PrizeComment);
+                    if (voicetoText != null && !voicetoText.isEmpty()) {
+                        orderCalculatorForm.setArguments(voicetoText);
+                        voicetoText = "";
+                    }
+                } else
+                    orderCalculatorForm.setArguments(productOrderViewModel.UniqueId,
+                            productOrderViewModel.ProductName,
+                            CalculatorBatchUnits.generate(getContext(), productOrderViewModel,
+                                    customerCallOrderOrderViewModel == null ? null :
+                                            customerCallOrderOrderViewModel.UniqueId,
+                                    productOrderViewModel.Price, productOrderViewModel.PriceId,
+                                    productOrderViewModel.UserPrice), productOrderViewModel.UserPrice,
+                            onHandQtyStock, customerId, callOrderId, productOrderViewModel.PrizeComment);
+                orderCalculatorForm.onCalcFinish = (discreteUnits, bulkUnit1, batchQtyList) ->
+                        onAddItem(productOrderViewModel, discreteUnits, bulkUnit1, batchQtyList);
+                orderCalculatorForm.show(getChildFragmentManager(), "2af40365-a4db-4afb-bb13-2a9896803d92");
+            } catch (ProductUnitViewManager.UnitNotFoundException e) {
+                MainVaranegarActivity activity = getVaranegarActvity();
+                if (activity != null && !activity.isFinishing() && isResumed()) {
+                    activity.showSnackBar(R.string.no_unit_for_product, MainVaranegarActivity.Duration.Short);
+                }
+                Timber.e(e);
+            }
         }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 4000){
+        if (requestCode == 4000) {
             if (requestCode != RESULT_OK && null != data) {
                 ArrayList<String> result =
                         data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);

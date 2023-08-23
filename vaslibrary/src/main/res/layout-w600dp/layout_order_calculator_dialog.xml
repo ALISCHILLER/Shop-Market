@@ -22,6 +22,15 @@
             android:textColor="@color/white" />
 
         <ImageView
+            android:id="@+id/imageBasket"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:padding="@dimen/padding_default"
+            android:src="@drawable/shopping_basket"
+            />
+
+        <ImageView
             android:id="@+id/close_image_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

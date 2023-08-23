@@ -62,10 +62,21 @@ public class ProductManager extends BaseManager<ProductModel> {
     public ProductManager(Context context) {
         super(context, new ProductModelRepository());
     }
+    public List<ProductModel> getProductBasket(String productCode){
+        Query query=new Query();
+        query.from(Product.ProductTbl).whereAnd(Criteria.contains(Product.Cart,productCode));
+        return getItems(query);
+    }
 
+    public List<ProductModel> getProductBasket(){
+        Query query=new Query();
+        query.from(Product.ProductTbl).whereAnd(Criteria.notIsNull(Product.Cart));
+        return getItems(query);
+    }
     public List<ProductModel> getAll() {
         return getItems(new Query().from(Product.ProductTbl));
     }
+
 
     public static Query getProduct(UUID productId) {
         return new Query().from(Product.ProductTbl).whereAnd(Criteria.equals(Product.UniqueId, productId));

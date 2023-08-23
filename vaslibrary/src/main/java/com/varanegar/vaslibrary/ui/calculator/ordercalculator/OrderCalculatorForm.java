@@ -10,12 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.database.querybuilder.Query;
@@ -32,6 +36,7 @@ import com.varanegar.framework.util.recycler.selectionlistadapter.BaseSelectionR
 import com.varanegar.java.util.Currency;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.manager.OnHandQtyManager;
+import com.varanegar.vaslibrary.manager.ProductManager;
 import com.varanegar.vaslibrary.manager.canvertType.ConvertFaNumType;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.customerpricemanager.CustomerPriceManager;
@@ -42,8 +47,10 @@ import com.varanegar.vaslibrary.manager.newmanager.commodity_rationing.Product_R
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.model.customer.CustomerModel;
+import com.varanegar.vaslibrary.model.image.Image;
 import com.varanegar.vaslibrary.model.newmodel.commodity_rationing.Product_RationingModel;
 import com.varanegar.vaslibrary.model.onhandqty.OnHandQtyStock;
+import com.varanegar.vaslibrary.model.product.ProductModel;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.ui.calculator.BaseUnit;
 import com.varanegar.vaslibrary.ui.calculator.Calculator;
@@ -84,6 +91,7 @@ public class OrderCalculatorForm extends CuteDialog {
     private UUID productId;
     private FloatingActionButton fabVoice;
     private String _voicetoText;
+
     public void setMaxValue(BigDecimal maxValue) {
         this.maxValue = maxValue;
     }
@@ -95,69 +103,69 @@ public class OrderCalculatorForm extends CuteDialog {
     }
 
 
-
-
-    public void setArguments(String voicetoText){
-        if (voicetoText!=null&&!voicetoText.isEmpty()){
-            if (voicetoText.contains("عدد")){
-                voicetoText= voicetoText.replace("عدد","");
-                voicetoText= ConvertFaNumType.convert(voicetoText);
+    public void setArguments(String voicetoText) {
+        if (voicetoText != null && !voicetoText.isEmpty()) {
+            if (voicetoText.contains("عدد")) {
+                voicetoText = voicetoText.replace("عدد", "");
+                voicetoText = ConvertFaNumType.convert(voicetoText);
                 if (voicetoText.contains("یک"))
-                    voicetoText="1";
+                    voicetoText = "1";
                 if (voicetoText.contains("دو"))
-                    voicetoText="2";
+                    voicetoText = "2";
                 if (voicetoText.contains("سه"))
-                    voicetoText="3";
+                    voicetoText = "3";
                 if (voicetoText.contains("چهار"))
-                    voicetoText="4";
+                    voicetoText = "4";
                 if (voicetoText.contains("پنج"))
-                    voicetoText="5";
+                    voicetoText = "5";
                 if (voicetoText.contains("شش"))
-                    voicetoText="6";
+                    voicetoText = "6";
                 if (voicetoText.contains("هفت"))
-                    voicetoText="7";
+                    voicetoText = "7";
                 if (voicetoText.contains("هشت"))
-                    voicetoText="8";
+                    voicetoText = "8";
                 if (voicetoText.contains("نه"))
-                    voicetoText="9";
+                    voicetoText = "9";
                 if (voicetoText.contains("ده"))
-                    voicetoText="10";
-                voicetoText= voicetoText.replaceAll("[^0-9]", "");
-                if (voicetoText!=null &&!voicetoText.isEmpty()) {
+                    voicetoText = "10";
+                voicetoText = voicetoText.replaceAll("[^0-9]", "");
+                if (voicetoText != null && !voicetoText.isEmpty()) {
                     calculatorUnits.getDiscreteUnits().get(1).value = Double.parseDouble(voicetoText);
                     this._voicetoText = ConvertFaNumType.convert(voicetoText);
                 }
-            } if (voicetoText.contains("کارتن")||voicetoText.contains("کارتون")||voicetoText.contains("کارت")){
-                voicetoText= voicetoText.replace("کارتون","");
-                voicetoText= ConvertFaNumType.convert(voicetoText);
+            }
+            if (voicetoText.contains("کارتن") || voicetoText.contains("کارتون") || voicetoText.contains("کارت")) {
+                voicetoText = voicetoText.replace("کارتون", "");
+                voicetoText = ConvertFaNumType.convert(voicetoText);
                 if (voicetoText.contains("یک"))
-                    voicetoText="1";
+                    voicetoText = "1";
                 if (voicetoText.contains("دو"))
-                    voicetoText="2";
+                    voicetoText = "2";
                 if (voicetoText.contains("سه"))
-                    voicetoText="3";
+                    voicetoText = "3";
                 if (voicetoText.contains("چهار"))
-                    voicetoText="4";
+                    voicetoText = "4";
                 if (voicetoText.contains("پنج"))
-                    voicetoText="5";
+                    voicetoText = "5";
                 if (voicetoText.contains("شش"))
-                    voicetoText="6";
+                    voicetoText = "6";
                 if (voicetoText.contains("هفت"))
-                    voicetoText="7";
+                    voicetoText = "7";
                 if (voicetoText.contains("هشت"))
-                    voicetoText="8";
+                    voicetoText = "8";
                 if (voicetoText.contains("نه"))
-                    voicetoText="9";
+                    voicetoText = "9";
                 if (voicetoText.contains("ده"))
-                    voicetoText="10";
-                voicetoText= voicetoText.replaceAll("[^0-9]", "");
-                if (voicetoText!=null &&!voicetoText.isEmpty()) {
+                    voicetoText = "10";
+                voicetoText = voicetoText.replaceAll("[^0-9]", "");
+                if (voicetoText != null && !voicetoText.isEmpty()) {
                     calculatorUnits.getDiscreteUnits().get(0).value = Double.parseDouble(voicetoText);
                     this._voicetoText = ConvertFaNumType.convert(voicetoText);
                 }
             }
         }
     }
+
     public void setArguments(@NonNull UUID productId, @NonNull String productName,
                              @NonNull CalculatorUnits calculatorUnits, @NonNull Currency unitPrice,
                              @NonNull Currency userPrice, @NonNull OnHandQtyStock onHandQtyStock,
@@ -171,8 +179,9 @@ public class OrderCalculatorForm extends CuteDialog {
         this.onHandQtyStock = onHandQtyStock;
         this.customerId = customerId;
         this.callOrderId = callOrderId;
-        this.PrizeComment=PrizeComment;
+        this.PrizeComment = PrizeComment;
     }
+
     public void setArguments(@NonNull UUID productId, @NonNull String productName,
                              @NonNull List<CalculatorBatchUnits> calculatorBatchUnits,
                              @NonNull Currency userPrice, @NonNull OnHandQtyStock onHandQtyStock,
@@ -203,7 +212,7 @@ public class OrderCalculatorForm extends CuteDialog {
         this.onHandQtyStock = onHandQtyStock;
         this.customerId = customerId;
         this.callOrderId = callOrderId;
-        this.PrizeComment=PrizeComment;
+        this.PrizeComment = PrizeComment;
         batchesAdapter = new BaseSelectionRecyclerAdapter<CalculatorBatchUnits>(getVaranegarActvity(), calculatorBatchUnits, false) {
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -232,13 +241,11 @@ public class OrderCalculatorForm extends CuteDialog {
     public OnCalcFinish onCalcFinish;
 
 
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         onActivityResult(requestCode, resultCode, data);
         setCancelable(false);
-         if (requestCode == 4000){
+        if (requestCode == 4000) {
             ArrayList<String> result =
                     data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
         }
@@ -253,14 +260,42 @@ public class OrderCalculatorForm extends CuteDialog {
                 dismiss();
             }
         });
-        fabVoice=view.findViewById(R.id.fabVoice);
+        fabVoice = view.findViewById(R.id.fabVoice);
+        ImageView imageBasket = view.findViewById(R.id.imageBasket);
+        ProductModel productModel = new ProductManager(getContext()).getItemProduct(productId);
 
+        List<ProductModel> productBasket = new ProductManager(getContext())
+                .getProductBasket(productModel.ProductCode);
+        List<String> productBasketName = new ArrayList<>();
+
+        StringBuilder text = new StringBuilder();
+        for (ProductModel model : productBasket
+        ) {
+            productBasketName.add(model.ProductName);
+            text.append(model.ProductName);
+            text.append('\n');
+        }
+        imageBasket.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (productBasket.size() > 0) {
+                    CuteMessageDialog dialog = new CuteMessageDialog(getContext());
+                    dialog.setIcon(Icon.Info);
+                    dialog.setCancelable(false);
+                    dialog.setTitle(com.varanegar.vaslibrary.R.string.product_basket_name);
+                    dialog.setMessage(text.toString());
+                    dialog.setPositiveButton(com.varanegar.vaslibrary.R.string.iUnderstood, view -> dialog.dismiss());
+                    dialog.show();
+                } else
+                    Toast.makeText(getContext(), "کالای موجود نیست", Toast.LENGTH_SHORT).show();
+            }
+        });
         LinearLayout linearLayoutParent = view.findViewById(R.id.linearLayoutParent);
 
-        if(VaranegarApplication.is(VaranegarApplication.AppId.Dist)){
+        if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
             linearLayoutParent.setVisibility(View.GONE);
         }
-       TextView promtion_qty_text_view=view.findViewById(R.id.promtion_qty_text_view);
+        TextView promtion_qty_text_view = view.findViewById(R.id.promtion_qty_text_view);
         if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
             if (PrizeComment != null && !PrizeComment.isEmpty()) {
                 linearLayoutParent.setBackgroundColor(getContext().getResources().getColor(R.color.yellow_li));
@@ -275,16 +310,16 @@ public class OrderCalculatorForm extends CuteDialog {
         setCancelable(false);
         fabVoice.setOnClickListener(v -> {
             String language = "fa-IR";
-            Intent intent=new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,language);
+            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, language);
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, language);
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, language);
             intent.putExtra(RecognizerIntent.EXTRA_ONLY_RETURN_LANGUAGE_PREFERENCE, language);
             try {
                 final Fragment callingFragment = getActivity().getFragmentManager()
                         .findFragmentById(R.id.li);
-                getParentFragment().startActivityForResult(intent,4000);
-            } catch (Exception e){
+                getParentFragment().startActivityForResult(intent, 4000);
+            } catch (Exception e) {
 
             }
         });
@@ -668,11 +703,11 @@ public class OrderCalculatorForm extends CuteDialog {
                         try {
                             checkMaxValue();
 
-                            if ( checkCommodityRationing()){
-                            dismiss();
-                            if (onCalcFinish != null)
-                                onCalcFinish.run(calculator.getUnits(), calculator.getBulkUnit(), null);
-                        }
+                            if (checkCommodityRationing()) {
+                                dismiss();
+                                if (onCalcFinish != null)
+                                    onCalcFinish.run(calculator.getUnits(), calculator.getBulkUnit(), null);
+                            }
                         } catch (Exception e) {
                             Timber.e(e);
                         }
@@ -684,25 +719,25 @@ public class OrderCalculatorForm extends CuteDialog {
 //            calculator.setvalue(_voicetoText);
     }
 
-    private Boolean  checkCommodityRationing(){
-        Product_RationingManager rationingManager=new Product_RationingManager(getContext());
-        Product_RationingViewModel productRationingViewModel=new Product_RationingViewModel();
-        productRationingViewModel= rationingManager.getProduct_Rationing(productId);
-        if (productRationingViewModel!=null){
-            CustomerModel customerModel=new CustomerManager(getContext()).getCustomer(customerId);
-            CommodityRationingViewModel viewModel=new
+    private Boolean checkCommodityRationing() {
+        Product_RationingManager rationingManager = new Product_RationingManager(getContext());
+        Product_RationingViewModel productRationingViewModel = new Product_RationingViewModel();
+        productRationingViewModel = rationingManager.getProduct_Rationing(productId);
+        if (productRationingViewModel != null) {
+            CustomerModel customerModel = new CustomerManager(getContext()).getCustomer(customerId);
+            CommodityRationingViewModel viewModel = new
                     CommodityRationingManager(getContext()).getCheckRationin(productRationingViewModel.quotasUniqueId,
-                    customerModel.CustomerLevelId,customerModel.CustomerActivityId,
+                    customerModel.CustomerLevelId, customerModel.CustomerActivityId,
                     customerModel.CustomerCategoryId);
 
-            if (viewModel!=null){
-               BigDecimal sum= calculator.getTotal();
-                int i= new Double(String.valueOf(sum)).intValue();
+            if (viewModel != null) {
+                BigDecimal sum = calculator.getTotal();
+                int i = new Double(String.valueOf(sum)).intValue();
                 if (productRationingViewModel.quantity < i) {
                     CuteMessageDialog dialog = new CuteMessageDialog(getContext());
                     dialog.setIcon(Icon.Error);
-                    dialog.setMessage("مقدار وارد شده بیش از حد مجاز است!"+
-                            "مقدار مجاز :"+productRationingViewModel.quantity);
+                    dialog.setMessage("مقدار وارد شده بیش از حد مجاز است!" +
+                            "مقدار مجاز :" + productRationingViewModel.quantity);
                     dialog.setTitle(R.string.error);
                     dialog.setPositiveButton(R.string.ok, null);
                     dialog.show();
@@ -718,6 +753,7 @@ public class OrderCalculatorForm extends CuteDialog {
         }
         return true;
     }
+
     private void checkMaxValue() throws Exception {
         if (maxValue != null) {
             BigDecimal total = calculator.getBulkUnit() == null ? calculator.getTotal() : calculator.getBulkUnit().getQty();

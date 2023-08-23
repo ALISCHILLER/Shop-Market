@@ -87,6 +87,8 @@ public class ProductModel extends BaseModel {
     public boolean IsActive;
     @Column
     public boolean IsCompetitor;
+    @Column
+    public String Cart;
 
     @Override
     public String toString() {

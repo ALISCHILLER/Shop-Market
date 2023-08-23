@@ -1538,6 +1538,7 @@
     <string name="not_download_apk">نسخه جدید موجود نمی باشد</string>
     <string name="tour_data_not_available">اطلاعات تور موجود نیست.</string>
     <string name="non_deliver_all">عدم تحویل همه</string>
+    <string name="product_basket_name">کالاهای زیر مجموعه</string>
 
 
     <string name="type_to_search">Type to Search</string>

@@ -64,6 +64,8 @@ import com.varanegar.vaslibrary.ui.qtyview.QtyView;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -78,8 +80,9 @@ import static varanegar.com.discountcalculatorlib.Global.orderPrize;
 /**
  * Created by A.Jafarzadeh on 6/28/2017.
  */
+
 /**
- *  صفحه پیش نمایش
+ * صفحه پیش نمایش
  */
 public class CustomerOrderPreviewFragment extends VisitFragment implements ChoicePrizesDialog.choicePrizeDialogListener {
     List<DiscountItemCountModel> allDiscountItemCounts;
@@ -154,9 +157,9 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
             TextView thirdPartyAdds = view.findViewById(R.id.third_party_adds_text_view);
             TextView thirdPartythirdPartyNetAmountLayout = view.findViewById(R.id.third_party_net_amount_text_view);
 
-            CustomerModel customerModel=new CustomerManager(getContext()).getItem(customerId);
-            CustomerCallOrderModel customerCallOrderModel=new CustomerCallOrderManager(getContext()).getItem(callOrderId);
-            titleTextView.setText(getString(R.string.order_preview) + " : " +customerModel.CustomerName +" "+ customerCallOrderModel.SaleNoSDS);
+            CustomerModel customerModel = new CustomerManager(getContext()).getItem(customerId);
+            CustomerCallOrderModel customerCallOrderModel = new CustomerCallOrderManager(getContext()).getItem(callOrderId);
+            titleTextView.setText(getString(R.string.order_preview) + " : " + customerModel.CustomerName + " " + customerCallOrderModel.SaleNoSDS);
 
             payableCashPairedItems = view.findViewById(R.id.payable_cash_paired_items);
             payableChequePairedItems = view.findViewById(R.id.payable_cheque_paired_items);
@@ -240,7 +243,6 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
         }
 
 
-
     }
 
     private void calc(Boolean first) {
@@ -250,7 +252,7 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
             @Override
             public void onSuccess(CustomerCallOrderPromotion data) {
                 customerCallOrderPromotion = data;
-              //  titleTextView.setText(getString(R.string.order_preview) + " : " + customerCallOrderPromotion.CustomerName + " (" + customerCallOrderPromotion.CustomerCode + ")");
+                //  titleTextView.setText(getString(R.string.order_preview) + " : " + customerCallOrderPromotion.CustomerName + " (" + customerCallOrderPromotion.CustomerCode + ")");
 
                 for (CustomerCallOrderLinePromotion lines : customerCallOrderPromotion.LinesWithPromo) {
                     if (lines.AdjustmentPrice != null) {
@@ -288,20 +290,67 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                 usanceDayPairedItems.setValue(String.valueOf(data.CashDuration));
                 usanceRefPairedItems.setValue(String.valueOf(data.CheckDuration));
 
-                final OrderPrizeManager orderPrizeManager = new OrderPrizeManager(getContext());
-                orderlineAdapter = new BaseRecyclerAdapter<CustomerCallOrderLinePromotion>(getVaranegarActvity(), customerCallOrderPromotion.LinesWithPromo) {
-                    @Override
-                    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_order_line_item, parent, false);
-                        return new ItemViewHolder(view, this, getContext());
-                    }
+                List<ProductModel> productBasket = new ProductManager(getContext())
+                        .getProductBasket();
+                List<ProductModel> productBasket2 = new ArrayList<>();
 
-                    @Nullable
-                    @Override
-                    protected ItemContextView onCreateContextView() {
-                        return new OrderPrizeContextView(this, getContext());
+                for (ProductModel model :
+                        productBasket) {
+                    if (!model.Cart.isEmpty())
+                        productBasket2.add(model);
+                }
+                List<CustomerCallOrderLinePromotion> orderLinePromotions = new ArrayList<>();
+                List<CustomerCallOrderLinePromotion> orderLinePromotions2 = new ArrayList<>(customerCallOrderPromotion.LinesWithPromo);
+                if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+                    if (productBasket2.size() > 0 && customerCallOrderPromotion.LinesWithPromo.size() > 0) {
+                        for (ProductModel model : productBasket2) {
+                            String[] arrOfStr = model.Cart.split(",");
+                            for (CustomerCallOrderLinePromotion orderPromotion :
+                                    customerCallOrderPromotion.LinesWithPromo) {
+                                String output = null;
+                                for (String s : arrOfStr) {
+                                    output = s.replaceFirst("^0+", "");
+                                    if (output.equals(orderPromotion.ProductCode))
+                                        orderLinePromotions2.remove(orderPromotion);
+                                }
+                            }
+                        }
                     }
-                };
+                    Collections.sort(orderLinePromotions2, new ProductCodeComparator());
+                    orderlineAdapter = new BaseRecyclerAdapter<CustomerCallOrderLinePromotion>(getVaranegarActvity(),
+                            orderLinePromotions2) {
+                        @Override
+                        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_order_line_item, parent, false);
+                            return new ItemViewHolder(view, this, getContext());
+                        }
+
+                        @Nullable
+                        @Override
+                        protected ItemContextView onCreateContextView() {
+                            return new OrderPrizeContextView(this, getContext());
+                        }
+                    };
+
+                } else {
+                    orderlineAdapter = new BaseRecyclerAdapter<CustomerCallOrderLinePromotion>(getVaranegarActvity(),
+                            customerCallOrderPromotion.LinesWithPromo) {
+                        @Override
+                        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_order_line_item, parent, false);
+                            return new ItemViewHolder(view, this, getContext());
+                        }
+
+                        @Nullable
+                        @Override
+                        protected ItemContextView onCreateContextView() {
+                            return new OrderPrizeContextView(this, getContext());
+                        }
+                    };
+                }
+
+
+                final OrderPrizeManager orderPrizeManager = new OrderPrizeManager(getContext());
                 final List<OrderPrizeModel> orderPrizeModels = orderPrizeManager.getItems(OrderPrizeManager.getCustomerDisRefOrderPrizes(customerId, callOrderId));
                 for (final OrderPrizeModel orderPrizeModel :
                         orderPrizeModels) {
@@ -474,7 +523,8 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
         protected LinearLayout thirdPartyGrossAmountLayout, thirdPartyAddAmountLayout, thirdPartyNetAmountLayout;
         protected TextView thirdPartyGrossAmountTextView, thirdPartyDiscountTextView, thirdPartyValueTextView, thirdPartyAddTextView, thirdPartyNetAmountTextView, thirdPartyValueTextViewLabel;
 
-        public ItemViewHolder(View view, BaseRecyclerAdapter<CustomerCallOrderLinePromotion> recyclerAdapter, Context context) {
+        public ItemViewHolder(View view, BaseRecyclerAdapter<CustomerCallOrderLinePromotion>
+                recyclerAdapter, Context context) {
             super(view, recyclerAdapter, context);
             this.txtvProductName = (TextView) view.findViewById(R.id.txtv_product_name);
             this.txtvProductCode = (TextView) view.findViewById(R.id.txtv_product_code);
@@ -513,7 +563,7 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                 final CustomerCallOrderLinePromotion p = recyclerAdapter.get(position);
 
                 if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
-                    if (!p.QtyCaption.contains(":")&&p.UnitName.equals("EA")) {
+                    if (!p.QtyCaption.contains(":") && p.UnitName.equals("EA")) {
                         ProductUnitViewManager productUnitViewManager = new ProductUnitViewManager(getContext());
                         try {
                             List<ProductUnitViewModel> unitViewModels = productUnitViewManager.getProductUnits(p.ProductId, ProductType.isForSale);
@@ -697,13 +747,15 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                 }
 
 
-                double d=HelperMethods.currencyToDouble(p.InvoiceAmount);
-                if (p.DiscountRef != 0 && d > 1){
-                    imgType.setVisibility(View.VISIBLE);
-                    imgType.setImageResource(R.drawable.ic_basket_24);
-                    itemView.setBackgroundColor(HelperMethods.getColor(getContext(), R.color.blue_pressed));
-
-                } else if (p.DiscountRef != 0) {
+                double d = HelperMethods.currencyToDouble(p.InvoiceAmount);
+//                if (p.DiscountRef != 0 && d > 0) {
+//                    imgType.setVisibility(View.VISIBLE);
+//                    //imgType.setImageResource(R.drawable.ic_basket_24);
+//                    imgType.setImageResource(R.drawable.shopping_basket);
+//                    itemView.setBackgroundColor(HelperMethods.getColor(getContext(), R.color.blue_pressed));
+//
+//                } else
+                if (p.DiscountRef != 0 && d <= 0) {
                     imgType.setVisibility(View.VISIBLE);
                     imgType.setImageResource(R.drawable.ic_prize);
                     itemView.setBackgroundColor(HelperMethods.getColor(getContext(), R.color.holo_green_light));
@@ -814,9 +866,8 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
     }
 
     /**
-     *
-     Discount = sum(Line.Dis1);
-     dis1 for zar
+     * Discount = sum(Line.Dis1);
+     * dis1 for zar
      */
     // todo
     // NGT-4226 - refresh discount after choice prize (we may choice a prize a with different price. it is not a good solution and it should be changed later)
@@ -901,3 +952,11 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
         }
     }
 }
+
+class ProductCodeComparator implements Comparator<CustomerCallOrderLinePromotion> {
+    @Override
+    public int compare(CustomerCallOrderLinePromotion p1, CustomerCallOrderLinePromotion p2) {
+        return p1.ProductCode.compareTo(p2.ProductCode);
+    }
+}
+
