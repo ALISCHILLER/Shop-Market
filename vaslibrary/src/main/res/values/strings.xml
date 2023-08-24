@@ -210,6 +210,7 @@
     <string name="are_you_sure">آیا اطمینان دارید ؟</string>
     <string name="customer_tel">تلفن</string>
     <string name="customer_store_name">نام فروشگاه</string>
+    <string name="purchase_status">وضعیت خرید</string>
     <string name="customer_national_code">کد ملی</string>
     <string name="customer_mobile">موبایل</string>
     <string name="customer_address">آدرس</string>

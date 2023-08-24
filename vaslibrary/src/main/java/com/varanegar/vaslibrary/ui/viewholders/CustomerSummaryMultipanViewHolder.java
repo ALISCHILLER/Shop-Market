@@ -56,6 +56,7 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
     private final TextView customerGroupTextView;
     private final TextView codenaghsh_text_view;
     private final TextView codenaghsh_text;
+    private final TextView txtPurchaseStatus;
     private final LinearLayout descriptionLayout;
     private final TextView descriptionTextView;
     private final BackOfficeType backOfficeType;
@@ -99,6 +100,8 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
         imageViewZarShop = itemView.findViewById(R.id.imageViewZarShop);
 
         simpleRatingBar =itemView.findViewById(R.id.simpleRatingBar); // initiate a rating bar
+        txtPurchaseStatus =itemView.findViewById(R.id.txtPurchaseStatus); // initiate a rating bar
+        txtPurchaseStatus.setSelected(true);
 
         this.backOfficeType = backOfficeType;
         this._activity=context;
