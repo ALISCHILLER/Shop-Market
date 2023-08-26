@@ -68,14 +68,15 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
     private final ImageView imageViewZarShop;
     RatingBar simpleRatingBar;
     //private ImageUrlViewDialog customerImageView;
-    private  MainVaranegarActivity _activity;
+    private MainVaranegarActivity _activity;
+
     //---------------------------------------------------------------------------------------------- CustomerSummaryMultipanViewHolder
     public CustomerSummaryMultipanViewHolder(View itemView,
                                              BaseRecyclerAdapter<CustomerPathViewModel>
                                                      recyclerAdapter,
                                              BackOfficeType backOfficeType,
                                              MainVaranegarActivity context
-                                             ) {
+    ) {
         super(itemView, recyclerAdapter, recyclerAdapter.getActivity());
         customerNameTextView = (TextView) itemView.findViewById(R.id.customer_name_text_view);
         customerAddressTextView = (TextView) itemView.findViewById(R.id.customer_address_text_view);
@@ -99,12 +100,12 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
         cardViewZarShop = itemView.findViewById(R.id.cardViewZarShop);
         imageViewZarShop = itemView.findViewById(R.id.imageViewZarShop);
 
-        simpleRatingBar =itemView.findViewById(R.id.simpleRatingBar); // initiate a rating bar
-        txtPurchaseStatus =itemView.findViewById(R.id.txtPurchaseStatus); // initiate a rating bar
+        simpleRatingBar = itemView.findViewById(R.id.simpleRatingBar); // initiate a rating bar
+        txtPurchaseStatus = itemView.findViewById(R.id.txtPurchaseStatus); // initiate a rating bar
         txtPurchaseStatus.setSelected(true);
 
         this.backOfficeType = backOfficeType;
-        this._activity=context;
+        this._activity = context;
     }
     //---------------------------------------------------------------------------------------------- CustomerSummaryMultipanViewHolder
 
@@ -126,7 +127,7 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
         customerTelTextView.setText(customerModel.Phone);
         storeNameTextView.setText(customerModel.StoreName);
         codeNagesh_Str = customerModel.CodeNaghsh;
-        if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)){
+        if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
 //            ratting_bar.setVisibility(View.VISIBLE);
 ////            ratting_bar.setRating(customerModel.DegreeStar);
 //            ratting_bar.setOnClickListener(new View.OnClickListener() {
@@ -137,6 +138,9 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
 //                    starDialog.show(_activity.getSupportFragmentManager(), "StarDialog");
 //                }
 //            });
+
+            if (customerModel.StrSaleStatus != null)
+                txtPurchaseStatus.setText(customerModel.StrSaleStatus);
             simpleRatingBar.setVisibility(View.VISIBLE);
             simpleRatingBar.setNumStars(3);
 
@@ -149,7 +153,7 @@ public class CustomerSummaryMultipanViewHolder extends BaseViewHolder<CustomerPa
                         starDialog.setValues(customerModel.DegreeStar, customerModel.CustomerName);
                         starDialog.show(_activity.getSupportFragmentManager(), "StarDialog");
                     }
-                    return  true;
+                    return true;
                 }
             });
         }

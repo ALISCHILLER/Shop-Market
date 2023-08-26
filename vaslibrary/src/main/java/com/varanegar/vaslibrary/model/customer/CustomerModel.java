@@ -200,6 +200,8 @@ public class CustomerModel extends BaseModel {
     public String IsZarShopCustomer;
     @Column
     public int DegreeStar;
+    @Column
+    public String StrSaleStatus;
     @Nullable
     public LocationModel getLocation() {
         if (Latitude == 0 && Longitude == 0)
