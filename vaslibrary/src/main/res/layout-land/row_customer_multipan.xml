@@ -137,7 +137,6 @@
                                 android:focusableInTouchMode="true"
                                 android:scrollHorizontally="true"
                                 android:ellipsize="marquee"
-                                android:text="sasdfghjkl;'\]ppoiuuyytrewqzxcvbnmm,,..///"
                                 android:marqueeRepeatLimit ="marquee_forever"
                                 tools:ignore="EllipsizeMaxLines" />
                         </LinearLayout>
