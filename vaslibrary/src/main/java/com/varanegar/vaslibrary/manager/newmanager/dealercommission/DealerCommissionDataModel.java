@@ -171,4 +171,11 @@ public class DealerCommissionDataModel extends BaseModel {
     @Column
     public float oilAchive_Corn ;
 
+    @Column
+    public int RewardOil;
+    @Column
+    public int RewardCon;
+    @Column
+    public int RewardPasta;
+
 }

@@ -51,7 +51,14 @@
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textColor="@color/colorPrimary" />
-
+        <TextView
+            android:id="@+id/txtReward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:text="پاداش :14000 "
+            android:textColor="@color/zarShopp" />
         <View
             android:layout_width="1dp"
             android:layout_height="wrap_content"

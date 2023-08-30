@@ -64,7 +64,7 @@ import java.util.List;
 public class DealerCommissionDataFragment extends VaranegarFragment {
     private TableView mTableView;
     private TextView  textViewDate,textViewDate_tabel,text_view_RankOnTeam
-            ,text_view_RankOnGlobal,textviewMonth;
+            ,text_view_RankOnGlobal,textviewMonth,txtReward;
     private LinearLayout layout_pie_chart,layout_idBarChart,header;
     private BarChart chart;
     private TabLayout reportsTabLayout;
@@ -116,6 +116,7 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
         layout_idBarChart = view.findViewById(R.id.layout_idBarChart);
         shareCommission = view.findViewById(R.id.shareCommission);
         textviewMonth = view.findViewById(R.id.textviewMonth);
+        txtReward = view.findViewById(R.id.txtReward);
         reportsTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -311,6 +312,9 @@ public class DealerCommissionDataFragment extends VaranegarFragment {
         chart.setVisibility(View.GONE);
         if (d != null) {
 
+            Currency c= new Currency(d.RewardPasta);
+
+                txtReward.setText("پاداش:"+c);
             if (d.LastUpdate != null) {
                 textViewDate.setText("");
                 textViewDate_tabel.setText("تاریخ آخرین بروزرسانی : " + d.LastUpdate);
