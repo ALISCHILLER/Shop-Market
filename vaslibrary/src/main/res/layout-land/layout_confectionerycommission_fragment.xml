@@ -57,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:textSize="20sp"
+            android:textSize="10sp"
             android:textColor="@color/zarShopp" />
         <View
             android:layout_width="1dp"

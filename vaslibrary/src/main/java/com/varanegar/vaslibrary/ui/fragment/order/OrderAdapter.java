@@ -102,7 +102,7 @@ public class OrderAdapter extends BaseRecyclerAdapter<CustomerCallOrderOrderView
                 @Override
                 public boolean isAvailable(int position) {
                     CustomerCallOrderOrderViewModel orderViewModel = get(position);
-                    return !orderViewModel.IsPromoLine;
+                    return !orderViewModel.IsPromoLine && orderViewModel.cart.isEmpty();
                 }
 
                 @Override
@@ -147,7 +147,7 @@ public class OrderAdapter extends BaseRecyclerAdapter<CustomerCallOrderOrderView
                             onHandQtyStock.TotalQty = customerCallOrderOrderViewModel.TotalQtyBulk == null ? BigDecimal.ZERO : customerCallOrderOrderViewModel.TotalQtyBulk;
                         onHandQtyStock.HasAllocation = customerCallOrderOrderViewModel.HasAllocation;
                         BaseUnit bulkUnit = calculatorHelper.getBulkQtyUnit(customerCallOrderOrderViewModel);
-                        if (customerCallOrderOrderViewModel.ExpDate == null)
+                        if (customerCallOrderOrderViewModel.ExpDate == null ||customerCallOrderOrderViewModel.iteM_CATEGORY.equals("ZTAP"))
                             orderCalculatorForm.setArguments(customerCallOrderOrderViewModel.ProductId,
                                     customerCallOrderOrderViewModel.ProductName,
                                     calculatorHelper.generateCalculatorUnits(customerCallOrderOrderViewModel.ProductId,

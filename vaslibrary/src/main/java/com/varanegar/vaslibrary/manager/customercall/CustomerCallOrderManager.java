@@ -369,7 +369,7 @@ public class CustomerCallOrderManager extends BaseManager<CustomerCallOrderModel
         boolean isAllLinesZero = true;
         for (CustomerCallOrderOrderViewModel line :
                 lines) {
-            if (line.TotalQty.compareTo(BigDecimal.ZERO) != 0 && !line.IsPromoLine)
+            if (line.TotalQty.compareTo(BigDecimal.ZERO) != 0 && !line.IsPromoLine && line.cart.isEmpty())
                 isAllLinesZero = false;
             if (line.TotalQty.compareTo(line.OriginalTotalQty) != 0) {
                 isPartiallyDelivered = true;

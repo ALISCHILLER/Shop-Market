@@ -686,7 +686,7 @@ public class CalcPromotion {
         ArrayList<CustomerCallOrderLinePromotion> promotionLines = new ArrayList<>();
 
         for (CustomerCallOrderOrderViewModel item : lines) {
-            if (!item.IsPromoLine) {
+            if (!item.IsPromoLine && item.cart.isEmpty()) {
                 CustomerCallOrderLinePromotion promotionitem = new CustomerCallOrderLinePromotion();
                 ProductModel productModel = new ProductManager(context).getItem(item.ProductId);
                 promotionitem.UniqueId = item.UniqueId;
@@ -869,7 +869,7 @@ public class CalcPromotion {
             disLine.orderLineId = item.UniqueId;
             disLine.productId = new ProductManager(context).getBackOfficeId(item.ProductId);
             disLine.invoiceTotalQty = item.OriginalTotalQty == null ? BigDecimal.ZERO : item.OriginalTotalQty;
-            if (item.IsPromoLine)
+            if (item.IsPromoLine || !item.cart.isEmpty())
                 disLine.isRequestPrizeItem = true;
             else
                 disLine.isRequestPrizeItem = false;

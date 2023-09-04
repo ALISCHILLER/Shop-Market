@@ -86,4 +86,13 @@ public class OrderLineBaseModel extends BaseModel {
     public int RuleNo;
     @Column
     public String Description;
+    @Column
+    public String saleS_ITEM ;
+    @Column
+    public String higheR_LEVEL;
+    @Column
+    public String cart ;
+    @Column
+    public String iteM_CATEGORY ;
+
 }

@@ -214,6 +214,9 @@ public class SimpleCustomerOrderLineViewHolder extends BaseViewHolder<CustomerCa
         } else if (product.IsPromoLine) {
             iconImageView.setVisibility(View.VISIBLE);
             iconImageView.setImageResource(R.drawable.ic_prize);
+        }else if (product.cart != null && !product.cart.isEmpty()){
+            iconImageView.setVisibility(View.VISIBLE);
+            iconImageView.setImageResource(R.drawable.shopping_basket);
         } else
             iconImageView.setVisibility(View.INVISIBLE);
 

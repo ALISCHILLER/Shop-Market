@@ -140,8 +140,11 @@ public class CalculatorBatchUnits {
             calculatorBatchUnits.Price = batchHashMap.get(batchRef) == null ? Currency.ZERO : batchHashMap.get(batchRef).Price;
             calculatorBatchUnits.UserPrice = batchHashMap.get(batchRef) == null ? Currency.ZERO : batchHashMap.get(batchRef).UserPrice;
             calculatorBatchUnits.PriceId = batchHashMap.get(batchRef) == null ? UUID.fromString("00000000-0000-0000-0000-000000000000") :batchHashMap.get(batchRef).PriceId;
-            if (calculatorBatchUnits.Price != null && calculatorBatchUnits.Price.compareTo(Currency.ZERO) == 0) {
+            if (calculatorBatchUnits.Price != null && calculatorBatchUnits.Price.compareTo(Currency.ZERO) == 0  ) {
                 calculatorBatchUnits.Price = price;
+                calculatorBatchUnits.PriceId = priceId;
+            }else {
+                calculatorBatchUnits.Price = Currency.ZERO;
                 calculatorBatchUnits.PriceId = priceId;
             }
             CalculatorHelper calculatorHelper = new CalculatorHelper(context);

@@ -91,7 +91,8 @@ public class CallOrderLineManager extends BaseManager<CallOrderLineModel> {
             public boolean run(CallOrderLineModel item) {
                 if (freeReasonId == null) {
                     return item.ProductUniqueId.equals(productId) && item.FreeReasonId == null;
-                } else {
+                }
+                else {
                     return item.ProductUniqueId.equals(productId) && item.FreeReasonId != null && item.FreeReasonId.equals(freeReasonId);
                 }
             }
@@ -428,7 +429,7 @@ public class CallOrderLineManager extends BaseManager<CallOrderLineModel> {
                         callOrderLineModel.DiscountId = lineBefore.DiscountId;
                         callOrderLineModel.RequestBulkQty = lineBefore.RequestBulkQty;
                         callOrderLineModel.RequestBulkQtyUnitUniqueId = lineBefore.RequestBulkQtyUnitUniqueId;
-                        if (callOrderLineModel.IsPromoLine) {
+                        if (callOrderLineModel.IsPromoLine || !callOrderLineModel.cart.isEmpty()) {
                             OrderLineQtyManager orderLineQtyManager = new OrderLineQtyManager(getContext());
                             orderLineQtyManager.delete(Criteria.equals(OrderLineQty.OrderLineUniqueId, callOrderLineModel.UniqueId));
                             InvoiceLineQtyManager invoiceLineQtyManager = new InvoiceLineQtyManager(getContext());
