@@ -94,7 +94,7 @@ public class DiscountCallOrderLineData {
     public String referenceNo;
     public UUID returnReasonId;
     public String orderDate;
-
+    public String saleS_ITEM ;
     public BigDecimal amountCash;
     public BigDecimal amountCheque;
     public BigDecimal amountNutCash;
@@ -102,6 +102,7 @@ public class DiscountCallOrderLineData {
     public BigDecimal amountImmediate;
     public BigDecimal amountNutImmediate;
 
+    public String cart ;
     public DiscountCallOrderLineData() {
     }
 
@@ -288,6 +289,7 @@ public class DiscountCallOrderLineData {
         onlineData.SaleNo = saleNo;
         onlineData.ReferenceNo = referenceNo;
         onlineData.ReturnReasonId = returnReasonId;
+        onlineData.saleSITEM = saleS_ITEM;
         onlineData.OrderDate = this.orderDate;
         onlineData.OrderLineId = this.orderLineId;
         onlineData.OrderId = this.orderUniqueId;
@@ -325,6 +327,7 @@ public class DiscountCallOrderLineData {
         this.TakhfifatKol= onlinedata.TakhfifatKol;
         this.totalInvoiceAdd1Amount = onlinedata.evcItemAdd1;
         this.totalInvoiceAdd2Amount = onlinedata.evcItemAdd2;
+        this.cart = onlinedata.cart;
 
         this.invoiceBigQty = onlinedata.unitQty;
 //        this.invoiceBigQtyId = onlinedata.unitRef;

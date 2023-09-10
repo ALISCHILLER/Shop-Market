@@ -393,7 +393,7 @@ public class CalcPromotion {
                         ProductModel productModel = productManager.getProductByBackOfficeId(item.productId);
                         productCode = productModel.ProductCode;
                     }
-                    if (linesMap.containsKey(item.orderLineId)) {
+                    if (linesMap.containsKey(item.orderLineId)&&item.cart.isEmpty()) {
                         exits = true;
                         if (item.invoiceTotalQty.compareTo(linesMap.get(item.orderLineId)) > 0)
                             errors.add(context.getString(R.string.product_code_label) + productCode + " - "
@@ -706,6 +706,7 @@ public class CalcPromotion {
                 promotionitem.FreeReasonName = item.FreeReasonName;
                 promotionitem.IsRequestFreeItem = item.IsRequestFreeItem;
                 promotionitem.PayDuration = item.PayDuration;
+                promotionitem.saleS_ITEM = item.saleS_ITEM;
                 promotionitem.RuleNo = item.RuleNo;
                 promotionitem.IsRequestPrizeItem = false;
                 promotionLines.add(promotionitem);

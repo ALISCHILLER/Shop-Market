@@ -185,8 +185,7 @@ public class CustomerOrderLineViewHolder extends BaseViewHolder<CustomerCallOrde
         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
             if (product.IsPromoLine && product.OriginalTotalQty == null)
                 valueTextView.setText("--");
-            else {
-
+            else{
                 double totalQty = product.TotalQty == null ? 0 : product.TotalQty.doubleValue();
                 double originalQty = product.OriginalTotalQty == null ? 0 : product.OriginalTotalQty.doubleValue();
                 valueTextView.setText(HelperMethods.doubleToString(originalQty - totalQty));

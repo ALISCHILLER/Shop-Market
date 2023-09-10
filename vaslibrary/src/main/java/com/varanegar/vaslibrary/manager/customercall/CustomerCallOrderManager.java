@@ -286,7 +286,7 @@ public class CustomerCallOrderManager extends BaseManager<CustomerCallOrderModel
                     orderLineModel.RequestDis3Amount = Currency.ZERO;
                     orderLineModel.RequestOtherDiscountAmount = Currency.ZERO;
                     orderLineModel.PromotionPrice = Currency.ZERO;
-                } else if (orderLineModel.IsPromoLine)
+                } else if (orderLineModel.IsPromoLine|| !orderLineModel.cart.isEmpty())
                     orderLineModel.PromotionPrice = line.RequestAmount;
                 CallOrderLineManager callOrderLineManager = new CallOrderLineManager(getContext());
                 callOrderLineManager.insertOrUpdate(orderLineModel);

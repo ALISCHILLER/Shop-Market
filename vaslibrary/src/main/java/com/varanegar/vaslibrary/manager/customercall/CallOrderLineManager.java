@@ -471,7 +471,7 @@ public class CallOrderLineManager extends BaseManager<CallOrderLineModel> {
                 List<CallOrderLineModel> removeLines = new ArrayList<>();
                 for (CallOrderLineModel callOrderLine :
                         lines) {
-                    if (callOrderLine.IsPromoLine)
+                    if (callOrderLine.IsPromoLine || !callOrderLine.cart.isEmpty())
                         promoLinesMap.put(callOrderLine.ProductUniqueId, callOrderLine);
                     else
                         linesMap.put(callOrderLine.UniqueId, callOrderLine);
