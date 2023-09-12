@@ -328,6 +328,7 @@ public class DiscountCallOrderLineData {
         this.totalInvoiceAdd1Amount = onlinedata.evcItemAdd1;
         this.totalInvoiceAdd2Amount = onlinedata.evcItemAdd2;
         this.cart = onlinedata.cart;
+        this.saleS_ITEM = onlinedata.saleS_ITEM;
 
         this.invoiceBigQty = onlinedata.unitQty;
 //        this.invoiceBigQtyId = onlinedata.unitRef;

@@ -22,6 +22,7 @@ import com.varanegar.vaslibrary.manager.CallOrderLineBatchQtyDetailManager;
 import com.varanegar.vaslibrary.manager.EVCItemStatuesCustomersManager;
 import com.varanegar.vaslibrary.manager.InvoiceLineQtyManager;
 import com.varanegar.vaslibrary.manager.OrderLineQtyManager;
+import com.varanegar.vaslibrary.manager.ProductManager;
 import com.varanegar.vaslibrary.manager.ProductType;
 import com.varanegar.vaslibrary.manager.ProductUnitViewManager;
 import com.varanegar.vaslibrary.manager.PromotionException;
@@ -38,6 +39,7 @@ import com.varanegar.vaslibrary.model.freeReason.FreeReasonModel;
 import com.varanegar.vaslibrary.model.invoiceLineQty.InvoiceLineQtyModel;
 import com.varanegar.vaslibrary.model.orderLineQtyModel.OrderLineQty;
 import com.varanegar.vaslibrary.model.orderLineQtyModel.OrderLineQtyModel;
+import com.varanegar.vaslibrary.model.product.ProductModel;
 import com.varanegar.vaslibrary.model.productUnitView.ProductUnitViewModel;
 import com.varanegar.vaslibrary.promotion.CustomerCallOrderLinePromotion;
 import com.varanegar.vaslibrary.promotion.CustomerCallOrderPromotion;
@@ -467,12 +469,17 @@ public class CallOrderLineManager extends BaseManager<CallOrderLineModel> {
                 VaranegarApplication.getInstance().getDbHandler().beginTransaction();
                 List<CallOrderLineModel> lines = getOrderLines(callOrderId);
                 HashMap<UUID, CallOrderLineModel> linesMap = new HashMap<>();
-                HashMap<UUID, CallOrderLineModel> promoLinesMap = new HashMap<>();
+                HashMap<String, CallOrderLineModel> promoLinesMap = new HashMap<>();
                 List<CallOrderLineModel> removeLines = new ArrayList<>();
                 for (CallOrderLineModel callOrderLine :
                         lines) {
+                    ProductModel productModel=new ProductManager(getContext()).getItemProduct(callOrderLine.ProductUniqueId);
+                    String key=productModel.ProductCode;
+                    if (!callOrderLine.cart.isEmpty())
+                        key=callOrderLine.cart+productModel.ProductCode;
+
                     if (callOrderLine.IsPromoLine || !callOrderLine.cart.isEmpty())
-                        promoLinesMap.put(callOrderLine.ProductUniqueId, callOrderLine);
+                        promoLinesMap.put(key, callOrderLine);
                     else
                         linesMap.put(callOrderLine.UniqueId, callOrderLine);
                 }
@@ -480,12 +487,17 @@ public class CallOrderLineManager extends BaseManager<CallOrderLineModel> {
                 if (customerCallOrderPromotion.LinesWithPromo != null && customerCallOrderPromotion.LinesWithPromo.size() > 0) {
                     for (CustomerCallOrderLinePromotion customerCallOrderLinePromotion :
                             customerCallOrderPromotion.LinesWithPromo) {
-                        if (linesMap.containsKey(customerCallOrderLinePromotion.UniqueId)) {
+                        String cartkey=customerCallOrderLinePromotion.ProductCode;
+                        if (!customerCallOrderLinePromotion.cart.isEmpty())
+                            cartkey=customerCallOrderLinePromotion.cart+customerCallOrderLinePromotion.ProductCode;
+
+                        if (linesMap.containsKey(customerCallOrderLinePromotion.UniqueId)
+                                &&customerCallOrderLinePromotion.cart.isEmpty()) {
                             updateLineWithPromotionForDist(linesMap.get(customerCallOrderLinePromotion.UniqueId), customerCallOrderLinePromotion, false);
                             linesMap.remove(customerCallOrderLinePromotion.UniqueId);
-                        } else if (promoLinesMap.containsKey(customerCallOrderLinePromotion.ProductId)) {
-                            updateLineWithPromotionForDist(promoLinesMap.get(customerCallOrderLinePromotion.ProductId), customerCallOrderLinePromotion, true);
-                            promoLinesMap.remove(customerCallOrderLinePromotion.ProductId);
+                        } else if (promoLinesMap.containsKey(cartkey)) {
+                            updateLineWithPromotionForDist(promoLinesMap.get(cartkey), customerCallOrderLinePromotion, true);
+                            promoLinesMap.remove(cartkey);
                         }
                     }
                     removeLines.addAll(linesMap.values());
