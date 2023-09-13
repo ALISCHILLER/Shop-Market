@@ -147,7 +147,7 @@ public class OrderAdapter extends BaseRecyclerAdapter<CustomerCallOrderOrderView
                             onHandQtyStock.TotalQty = customerCallOrderOrderViewModel.TotalQtyBulk == null ? BigDecimal.ZERO : customerCallOrderOrderViewModel.TotalQtyBulk;
                         onHandQtyStock.HasAllocation = customerCallOrderOrderViewModel.HasAllocation;
                         BaseUnit bulkUnit = calculatorHelper.getBulkQtyUnit(customerCallOrderOrderViewModel);
-                        if (customerCallOrderOrderViewModel.ExpDate == null ||customerCallOrderOrderViewModel.iteM_CATEGORY.equals("ZTAP"))
+                        if (customerCallOrderOrderViewModel.ExpDate == null)
                             orderCalculatorForm.setArguments(customerCallOrderOrderViewModel.ProductId,
                                     customerCallOrderOrderViewModel.ProductName,
                                     calculatorHelper.generateCalculatorUnits(customerCallOrderOrderViewModel.ProductId,
@@ -162,6 +162,8 @@ public class OrderAdapter extends BaseRecyclerAdapter<CustomerCallOrderOrderView
                                     callOrderId,
                                     customerCallOrderOrderViewModel.ProductId,
                                     false);
+
+
                             orderCalculatorForm.setArguments(customerCallOrderOrderViewModel.ProductId,
                                     customerCallOrderOrderViewModel.ProductName,
                                     CalculatorBatchUnits.generate(getActivity(),
