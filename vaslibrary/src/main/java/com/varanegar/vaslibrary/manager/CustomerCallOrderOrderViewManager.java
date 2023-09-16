@@ -103,6 +103,11 @@ public class CustomerCallOrderOrderViewManager extends BaseManager<CustomerCallO
         return getItems(query);
     }
 
+    public List<CustomerCallOrderOrderViewModel> getOrderLines(@NonNull UUID orderId) {
+        Query query = new Query().from(CustomerCallOrderOrderView.CustomerCallOrderOrderViewTbl)
+                .whereAnd(Criteria.equals(CustomerCallOrderOrderView.OrderUniqueId, orderId.toString()));
+        return getItems(query);
+    }
 
     public List<CustomerCallOrderOrderViewModel> getFreeOrderLines(@NonNull UUID orderId, @NonNull UUID productId) {
         Query query = new Query().from(CustomerCallOrderOrderView.CustomerCallOrderOrderViewTbl)

@@ -1,6 +1,8 @@
 package com.varanegar.vaslibrary.manager.customercall;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -19,6 +21,7 @@ import com.varanegar.vaslibrary.base.SubsystemTypeId;
 import com.varanegar.vaslibrary.base.SubsystemTypes;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
 import com.varanegar.vaslibrary.manager.CallOrderLineBatchQtyDetailManager;
+import com.varanegar.vaslibrary.manager.CustomerCallOrderOrderViewManager;
 import com.varanegar.vaslibrary.manager.EVCItemStatuesCustomersManager;
 import com.varanegar.vaslibrary.manager.InvoiceLineQtyManager;
 import com.varanegar.vaslibrary.manager.OrderLineQtyManager;
@@ -31,9 +34,11 @@ import com.varanegar.vaslibrary.model.call.CallInvoiceLineModel;
 import com.varanegar.vaslibrary.model.call.CallOrderLine;
 import com.varanegar.vaslibrary.model.call.CallOrderLineModel;
 import com.varanegar.vaslibrary.model.call.CallOrderLineModelRepository;
+import com.varanegar.vaslibrary.model.call.CustomerCallInvoiceModel;
 import com.varanegar.vaslibrary.model.call.temporder.CallOrderLinesQtyTempModel;
 import com.varanegar.vaslibrary.model.call.temporder.CallOrderLinesTemp;
 import com.varanegar.vaslibrary.model.call.temporder.CallOrderLinesTempModel;
+import com.varanegar.vaslibrary.model.customerCallOrderOrderView.CustomerCallOrderOrderViewModel;
 import com.varanegar.vaslibrary.model.evcitemstatuessdscustomers.EVCItemStatuesCustomersModel;
 import com.varanegar.vaslibrary.model.freeReason.FreeReasonModel;
 import com.varanegar.vaslibrary.model.invoiceLineQty.InvoiceLineQtyModel;
@@ -93,8 +98,7 @@ public class CallOrderLineManager extends BaseManager<CallOrderLineModel> {
             public boolean run(CallOrderLineModel item) {
                 if (freeReasonId == null) {
                     return item.ProductUniqueId.equals(productId) && item.FreeReasonId == null;
-                }
-                else {
+                } else {
                     return item.ProductUniqueId.equals(productId) && item.FreeReasonId != null && item.FreeReasonId.equals(freeReasonId);
                 }
             }
@@ -473,10 +477,10 @@ public class CallOrderLineManager extends BaseManager<CallOrderLineModel> {
                 List<CallOrderLineModel> removeLines = new ArrayList<>();
                 for (CallOrderLineModel callOrderLine :
                         lines) {
-                    ProductModel productModel=new ProductManager(getContext()).getItemProduct(callOrderLine.ProductUniqueId);
-                    String key=productModel.ProductCode;
+                    ProductModel productModel = new ProductManager(getContext()).getItemProduct(callOrderLine.ProductUniqueId);
+                    String key = productModel.ProductCode;
                     if (!callOrderLine.cart.isEmpty())
-                        key=callOrderLine.cart+productModel.ProductCode;
+                        key = callOrderLine.cart + productModel.ProductCode;
 
                     if (callOrderLine.IsPromoLine || !callOrderLine.cart.isEmpty())
                         promoLinesMap.put(key, callOrderLine);
@@ -487,12 +491,12 @@ public class CallOrderLineManager extends BaseManager<CallOrderLineModel> {
                 if (customerCallOrderPromotion.LinesWithPromo != null && customerCallOrderPromotion.LinesWithPromo.size() > 0) {
                     for (CustomerCallOrderLinePromotion customerCallOrderLinePromotion :
                             customerCallOrderPromotion.LinesWithPromo) {
-                        String cartkey=customerCallOrderLinePromotion.ProductCode;
+                        String cartkey = customerCallOrderLinePromotion.ProductCode;
                         if (!customerCallOrderLinePromotion.cart.isEmpty())
-                            cartkey=customerCallOrderLinePromotion.cart+customerCallOrderLinePromotion.ProductCode;
+                            cartkey = customerCallOrderLinePromotion.cart + customerCallOrderLinePromotion.ProductCode;
 
                         if (linesMap.containsKey(customerCallOrderLinePromotion.UniqueId)
-                                &&customerCallOrderLinePromotion.cart.isEmpty()) {
+                                && customerCallOrderLinePromotion.cart.isEmpty()) {
                             updateLineWithPromotionForDist(linesMap.get(customerCallOrderLinePromotion.UniqueId), customerCallOrderLinePromotion, false);
                             linesMap.remove(customerCallOrderLinePromotion.UniqueId);
                         } else if (promoLinesMap.containsKey(cartkey)) {
@@ -535,7 +539,7 @@ public class CallOrderLineManager extends BaseManager<CallOrderLineModel> {
                     EVCItemStatuesCustomersManager evcItemStatuesCustomersManager = new EVCItemStatuesCustomersManager(getContext());
                     CallOrderLineManager callOrderLineManager = new CallOrderLineManager(getContext());
                     List<CallOrderLineModel> callOrderLineModels = callOrderLineManager.getOrderLines(callOrderId);
-                    for (CallOrderLineModel item:
+                    for (CallOrderLineModel item :
                             callOrderLineModels) {
                         evcItemStatuesCustomersManager.deleteEVCItemStatus(customerId, item.UniqueId);
                     }
@@ -562,6 +566,29 @@ public class CallOrderLineManager extends BaseManager<CallOrderLineModel> {
             } finally {
                 VaranegarApplication.getInstance().getDbHandler().endTransaction();
             }
+            if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
+                List<CustomerCallOrderOrderViewModel> callOrderOrderViewModels =
+                        new CustomerCallOrderOrderViewManager(getContext()).getOrderLines(callOrderId);
+                int i = 0;
+                for (CustomerCallOrderOrderViewModel model :
+                        callOrderOrderViewModels) {
+                    if (!model.TotalQty.equals(model.OriginalTotalQty))
+                        i += 1;
+                }
+                SharedPreferences sharedPreferences = getContext()
+                        .getSharedPreferences("SalesStatus", Context.MODE_PRIVATE);
+                CustomerCallInvoiceModel model = new CustomerCallInvoiceManager(getContext())
+                        .getCustomerCallInvoice(callOrderId);
+                if (i == 0) {
+                    sharedPreferences.edit().putInt(String.valueOf(model.BackOfficeOrderId), i).apply();
+                } else {
+                    sharedPreferences.edit().putInt(String.valueOf(model.BackOfficeOrderId), i).apply();
+                }
+
+
+            }
+
+
         } else {
             try {
                 VaranegarApplication.getInstance().getDbHandler().beginTransaction();
@@ -585,7 +612,7 @@ public class CallOrderLineManager extends BaseManager<CallOrderLineModel> {
                     EVCItemStatuesCustomersManager evcItemStatuesCustomersManager = new EVCItemStatuesCustomersManager(getContext());
                     CallOrderLineManager callOrderLineManager = new CallOrderLineManager(getContext());
                     List<CallOrderLineModel> callOrderLineModels = callOrderLineManager.getOrderLines(callOrderId);
-                    for (CallOrderLineModel item:
+                    for (CallOrderLineModel item :
                             callOrderLineModels) {
                         evcItemStatuesCustomersManager.deleteEVCItemStatus(customerId, item.UniqueId);
                     }
@@ -614,6 +641,7 @@ public class CallOrderLineManager extends BaseManager<CallOrderLineModel> {
             }
         }
     }
+
     private void insertPromotionLineTemp(
             @NonNull final CustomerCallOrderLinePromotion customerCallOrderLinePromotion,
             @NonNull UUID callOrderId) throws
