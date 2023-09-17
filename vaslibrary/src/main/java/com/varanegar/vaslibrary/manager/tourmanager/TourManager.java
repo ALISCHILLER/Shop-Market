@@ -2079,7 +2079,7 @@ public class TourManager {
                 if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)){
                     SharedPreferences sharedPreferences = context
                             .getSharedPreferences("SalesStatus", Context.MODE_PRIVATE);
-                   int i= sharedPreferences.getInt(String.valueOf(customerCallOrderModel.BackOfficeOrderId), 0);
+                   int i= sharedPreferences.getInt(String.valueOf(customerCallOrderModel.BackOfficeOrderId), 1);
                    if (i==0)
                        syncGetCustomerCallOrderViewModel.SalesStatus=1;
                    else
@@ -2338,8 +2338,8 @@ public class TourManager {
                     syncGetCustomerCallOrderViewModel.BackOfficeOrderTypeId = customerCallOrderModel.BackOfficeOrderTypeId;
                     if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)){
                         SharedPreferences sharedPreferences = context
-                                .getSharedPreferences("BackOfficeOrderId", Context.MODE_PRIVATE);
-                        int i= sharedPreferences.getInt(String.valueOf(customerCallOrderModel.BackOfficeOrderId), 0);
+                                .getSharedPreferences("SalesStatus", Context.MODE_PRIVATE);
+                        int i= sharedPreferences.getInt(String.valueOf(customerCallOrderModel.BackOfficeOrderId), 1);
                         if (i==0)
                             syncGetCustomerCallOrderViewModel.SalesStatus=1;
                         else
