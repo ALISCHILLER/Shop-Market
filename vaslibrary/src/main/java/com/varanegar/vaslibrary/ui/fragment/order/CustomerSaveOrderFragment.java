@@ -2059,7 +2059,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
         boolean codeNaghsh = true;
         for (CustomerCallOrderOrderViewModel item : items) {
             String productCode = item.ProductCode.substring(0, 2);
-            if (!productCode.equals("34")||!productCode.equals("35")||!productCode.equals("50"))) {
+            if (!productCode.equals("34")||!productCode.equals("35")||!productCode.equals("50")) {
                 if (customer.CodeNaghsh == null || customer.CodeNaghsh.isEmpty())
                     codeNaghsh = false;
                 break;
@@ -2076,7 +2076,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
         boolean codeNaghsh = true;
         for (CustomerCallOrderOrderViewModel item : items) {
             String productCode = item.ProductCode.substring(0, 2);
-            if (productCode.equals("34")||productCode.equals("35")||productCode.equals("50"))) {
+            if (productCode.equals("34")||productCode.equals("35")||productCode.equals("50")) {
                 if (customer.CodeNaghsh == null || customer.CodeNaghsh.isEmpty())
                     codeNaghsh = false;
                 break;
