@@ -4,18 +4,17 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+
 import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.database.DbException;
 import com.varanegar.framework.network.Connectivity;
-import com.varanegar.framework.network.listeners.ApiError;
-import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.util.HelperMethods;
 import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
@@ -38,6 +37,7 @@ import com.varanegar.vaslibrary.manager.RequestReportViewManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.customeractiontimemanager.CustomerActionTimeManager;
 import com.varanegar.vaslibrary.manager.customeractiontimemanager.CustomerActions;
+import com.varanegar.vaslibrary.manager.customercall.CustomerCallInvoiceManager;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallOrderManager;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallOrderPreviewManager;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallReturnManager;
@@ -47,7 +47,6 @@ import com.varanegar.vaslibrary.manager.locationmanager.LocationManager;
 import com.varanegar.vaslibrary.manager.locationmanager.LogLevel;
 import com.varanegar.vaslibrary.manager.locationmanager.LogType;
 import com.varanegar.vaslibrary.manager.locationmanager.OnSaveLocation;
-import com.varanegar.vaslibrary.manager.locationmanager.TrackingLicense;
 import com.varanegar.vaslibrary.manager.locationmanager.TrackingLogManager;
 import com.varanegar.vaslibrary.manager.newmanager.checkCustomerCreditsManager.CheckCustomerCreditManager;
 import com.varanegar.vaslibrary.manager.paymentmanager.PaymentManager;
@@ -66,6 +65,7 @@ import com.varanegar.vaslibrary.model.call.CustomerCallOrderModel;
 import com.varanegar.vaslibrary.model.call.CustomerCallOrderPreviewModel;
 import com.varanegar.vaslibrary.model.call.CustomerCallReturnModel;
 import com.varanegar.vaslibrary.model.customer.CustomerModel;
+import com.varanegar.vaslibrary.model.customerCallOrderOrderView.CustomerCallOrderOrderViewModel;
 import com.varanegar.vaslibrary.model.customercall.CustomerCallType;
 import com.varanegar.vaslibrary.model.location.LocationModel;
 import com.varanegar.vaslibrary.model.newmodel.checkCustomerCredits.CheckCustomerCreditModel;
@@ -73,20 +73,14 @@ import com.varanegar.vaslibrary.model.newmodel.locationconfirmmodel.LocationConf
 import com.varanegar.vaslibrary.model.newmodel.locationconfirmmodel.LocationConfirmTrackingModelRepository;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
-import com.varanegar.vaslibrary.ui.fragment.new_fragment.product_comparison.Product_Comparison_Fragment;
 import com.varanegar.vaslibrary.ui.fragment.settlement.CustomerPayment;
-import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
-import com.varanegar.vaslibrary.webapi.apiNew.ApiNew;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-import okhttp3.Request;
-import retrofit2.Call;
 import timber.log.Timber;
 
 /**
@@ -96,6 +90,7 @@ import timber.log.Timber;
 
 public class ConfirmAction extends CheckPathAction {
     private static final String TAG = "ConfirmAction";
+
     @Nullable
     @Override
     public UUID getTaskUniqueId() {
@@ -256,17 +251,18 @@ public class ConfirmAction extends CheckPathAction {
             }
         }
     }
+
     private void tConfirm() {
 
-        List<CustomerCallOrderPreviewModel> callOrderPreviewModels =new
+        List<CustomerCallOrderPreviewModel> callOrderPreviewModels = new
                 CustomerCallOrderPreviewManager(getActivity()).getCustomerCallOrders(getSelectedId());
-        CheckCustomerCreditModel CustomerCreditLimit=
+        CheckCustomerCreditModel CustomerCreditLimit =
                 new CheckCustomerCreditManager(getActivity()).getItem(getCustomer().CustomerCode);
-        if (CustomerCreditLimit !=null&&
-                CustomerCreditLimit.CustomerCreditLimit !=null&&
+        if (CustomerCreditLimit != null &&
+                CustomerCreditLimit.CustomerCreditLimit != null &&
                 callOrderPreviewModels != null &&
                 callOrderPreviewModels.size() > 0 &&
-                callOrderPreviewModels.get(0).TotalPrice!=null) {
+                callOrderPreviewModels.get(0).TotalPrice != null) {
 
             Currency total = Currency.ZERO;
             if (callOrderPreviewModels.get(0).TotalPrice != null) {
@@ -321,13 +317,13 @@ public class ConfirmAction extends CheckPathAction {
                         @Override
                         public void onSucceeded(LocationModel location) {
                             LocationConfirmTrackingModel confirmTrackingModel = new LocationConfirmTrackingModel();
-                            Date date=new Date();
+                            Date date = new Date();
                             String dateString = DateHelper.toString(date, DateFormat.Complete, Locale.US);
-                            confirmTrackingModel.UniqueId=getSelectedId();
-                            confirmTrackingModel.Lat= String.valueOf(location.Latitude);
-                            confirmTrackingModel.Long= String.valueOf(location.Longitude);
-                            confirmTrackingModel.StrCreateDate=dateString;
-                            LocationConfirmTrackingModelRepository repository=new LocationConfirmTrackingModelRepository();
+                            confirmTrackingModel.UniqueId = getSelectedId();
+                            confirmTrackingModel.Lat = String.valueOf(location.Latitude);
+                            confirmTrackingModel.Long = String.valueOf(location.Longitude);
+                            confirmTrackingModel.StrCreateDate = dateString;
+                            LocationConfirmTrackingModelRepository repository = new LocationConfirmTrackingModelRepository();
                             repository.insertOrUpdate(confirmTrackingModel);
                             confirm();
                         }
@@ -344,8 +340,7 @@ public class ConfirmAction extends CheckPathAction {
                             showErrorMessage(error);
                         }
                     });
-        }
-        else confirm();
+        } else confirm();
     }
 
     private void confirm() {
@@ -388,8 +383,8 @@ public class ConfirmAction extends CheckPathAction {
             }
 
 
-            ArrayList<CustomerCallOrderModel> secondList=new ArrayList<>();
-            ArrayList<CustomerCallOrderModel> firstList=new ArrayList<>();
+            ArrayList<CustomerCallOrderModel> secondList = new ArrayList<>();
+            ArrayList<CustomerCallOrderModel> firstList = new ArrayList<>();
 
             if (callOrderModels.size() > 0 &&
                     confirmedCallOrders.size() != callOrderModels.size()) {
@@ -518,6 +513,29 @@ public class ConfirmAction extends CheckPathAction {
             List<CustomerCallOrderModel> customerCallOrderModels =
                     customerCallOrderManager
                             .getCustomerCallOrders(getCustomer().UniqueId);
+            for (CustomerCallOrderModel model :
+                    customerCallOrderModels) {
+                if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
+                    List<CustomerCallOrderOrderViewModel> callOrderOrderViewModels =
+                            new CustomerCallOrderOrderViewManager(getActivity()).getOrderLines(model.UniqueId);
+                    int i = 0;
+                    for (CustomerCallOrderOrderViewModel OrderOrder :
+                            callOrderOrderViewModels) {
+                        if (!OrderOrder.TotalQty.equals(OrderOrder.OriginalTotalQty))
+                            i += 1;
+                    }
+                    SharedPreferences sharedPreferences = getActivity()
+                            .getSharedPreferences("SalesStatus", Context.MODE_PRIVATE);
+                    if (i == 0) {
+                        sharedPreferences.edit().putInt(String.valueOf(model.BackOfficeOrderId), i).apply();
+                    } else {
+                        sharedPreferences.edit().putInt(String.valueOf(model.BackOfficeOrderId), i).apply();
+                    }
+
+
+                }
+
+            }
             try {
                 controlAndSavePayments(customerCallOrderModels);
             } catch (ControlPaymentException e) {
@@ -640,7 +658,7 @@ public class ConfirmAction extends CheckPathAction {
                                         .is(VaranegarApplication.AppId.PreSales) &&
                                         checkCloudConfig(ConfigKey.AutoSynch, true))
                                     sendCustomerCalls();
-                                else if(VaranegarApplication
+                                else if (VaranegarApplication
                                         .is(VaranegarApplication.AppId.Dist) &&
                                         checkCloudConfig(ConfigKey.DistAutoSync, true))
                                     sendCustomerCalls();

@@ -24,6 +24,7 @@ public class CallInvoiceLineModel extends OrderLineBaseModel {
     @Column
     public UUID PriceUniqueId;
 
+
     public CallOrderLineModel convertToCallOrderLine(){
         CallOrderLineModel callOrderLineModel = new CallOrderLineModel();
         callOrderLineModel.UniqueId = UniqueId;
@@ -51,6 +52,10 @@ public class CallInvoiceLineModel extends OrderLineBaseModel {
         callOrderLineModel.IsPromoLine = IsPromoLine;
         callOrderLineModel.PayDuration = PayDuration;
         callOrderLineModel.RuleNo = RuleNo;
+        callOrderLineModel.cart = cart;
+        callOrderLineModel.saleS_ITEM = saleS_ITEM;
+        callOrderLineModel.higheR_LEVEL = higheR_LEVEL;
+        callOrderLineModel.iteM_CATEGORY = iteM_CATEGORY;
 
         return callOrderLineModel;
 

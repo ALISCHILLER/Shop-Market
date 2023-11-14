@@ -873,7 +873,9 @@ public class SaveOrderUtility {
         List<String> products = new ArrayList<>();
         for (CustomerCallOrderOrderViewModel line :
                 lines) {
-            if (!line.IsPromoLine && !line.IsFreeItem && (line.RequestAmount == null || line.RequestAmount.compareTo(Currency.ZERO) == 0)) {
+            if (!line.IsPromoLine && !line.IsFreeItem && (line.RequestAmount == null
+                    || line.RequestAmount.compareTo(Currency.ZERO) == 0) && line.cart.isEmpty()&&
+                    !line.iteM_CATEGORY.equals("ZTAP")) {
                 if (VaranegarApplication.is(VaranegarApplication.AppId.Dist) && line.TotalQty != null && line.TotalQty.compareTo(BigDecimal.ZERO) > 0)
                     products.add(line.ProductName + "(" + line.ProductCode + ")");
                 else if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist))

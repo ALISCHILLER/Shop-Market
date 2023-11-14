@@ -106,7 +106,8 @@ public class CustomerCallOrderLinePromotion extends BaseModel {
     public Currency AmountImmediate;
     public Currency AmountNutImmediate;
 
-
+    public String saleS_ITEM ;
+    public String cart ;
     public Currency CashDiscount;
     public Currency ChequeDiscount;
     public CustomerCallOrderLinePromotion() {
@@ -126,6 +127,7 @@ public class CustomerCallOrderLinePromotion extends BaseModel {
         this.UniqueId = (lineData.orderLineId == null ? UUID.randomUUID() : lineData.orderLineId);
         this.EVCId = UUID.fromString(lineData.evcId);
         this.ProductCode = lineData.productCode;
+        this.cart = lineData.cart;
         this.ProductName = lineData.productName;
         this.PayDuration = lineData.PayDuration;
         this.RuleNo = lineData.RuleNo;
@@ -277,6 +279,7 @@ public class CustomerCallOrderLinePromotion extends BaseModel {
         dis.referenceNo = ReferenceNo;
         dis.orderDate = DateHelper.toString(this.OrderDate, DateFormat.Date, Locale.ENGLISH);
         dis.returnReasonId = ReturnReasonId;
+        dis.saleS_ITEM = saleS_ITEM;
         dis.orderLineId = this.UniqueId;
         dis.sortId = this.SortId;
         dis.productId = new ProductManager(context).getBackOfficeId(this.ProductId);

@@ -75,9 +75,11 @@ public class CustomerOrderLineViewHolder extends BaseViewHolder<CustomerCallOrde
             return;
         itemView.setOnClickListener(v -> {
             if (!product.IsPromoLine && !product.IsRequestFreeItem) {
-                itemView.setEnabled(false);
-                recyclerAdapter.showContextMenu(position);
-                new Handler().postDelayed(() -> itemView.setEnabled(true), 2000);
+                if (product.cart == null || product.cart.isEmpty()) {
+                    itemView.setEnabled(false);
+                    recyclerAdapter.showContextMenu(position);
+                    new Handler().postDelayed(() -> itemView.setEnabled(true), 2000);
+                }
             }
         });
         productNameTextView.setText(product.ProductName);
@@ -88,51 +90,51 @@ public class CustomerOrderLineViewHolder extends BaseViewHolder<CustomerCallOrde
         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
 
 
-                ProductUnitViewManager productUnitViewManager = new ProductUnitViewManager(getContext());
-                try {
-                    List<ProductUnitViewModel> unitViewModels = productUnitViewManager.getProductUnits(product.ProductId, ProductType.isForSale);
+            ProductUnitViewManager productUnitViewManager = new ProductUnitViewManager(getContext());
+            try {
+                List<ProductUnitViewModel> unitViewModels = productUnitViewManager.getProductUnits(product.ProductId, ProductType.isForSale);
 
 
-                    List<DiscreteUnit> units = VasHelperMethods.chopTotalQty(product.TotalQty, unitViewModels, false);
-                    String UnitNames = null;
-                    String ConvertFactors = null;
-                    String UnitIds = null;
-                    String qtys = null;
-                    for (DiscreteUnit discreteUnit :
-                            units) {
-                        if (discreteUnit.value > 0) {
-                            if (UnitNames!=null) {
-                                UnitNames = UnitNames + ":" + discreteUnit.Name;
-                            }else {
-                                UnitNames = discreteUnit.Name;
-                            }
-                            if (ConvertFactors!=null) {
-                                ConvertFactors = ConvertFactors + ":" + discreteUnit.ConvertFactor;
-                            }else {
-                                ConvertFactors = String.valueOf(discreteUnit.ConvertFactor);
-                            }
-                            if (UnitIds!=null) {
-                                UnitIds = UnitIds + ":" + discreteUnit.ProductUnitId;
-                            }else{
-                                UnitIds = String.valueOf(discreteUnit.ProductUnitId);
-                            }
-                            if (qtys!=null) {
-                                qtys = qtys + ":" + discreteUnit.value;
-                            }else {
-                                qtys = String.valueOf(discreteUnit.value);
-                            }
+                List<DiscreteUnit> units = VasHelperMethods.chopTotalQty(product.TotalQty, unitViewModels, false);
+                String UnitNames = null;
+                String ConvertFactors = null;
+                String UnitIds = null;
+                String qtys = null;
+                for (DiscreteUnit discreteUnit :
+                        units) {
+                    if (discreteUnit.value > 0) {
+                        if (UnitNames != null) {
+                            UnitNames = UnitNames + ":" + discreteUnit.Name;
+                        } else {
+                            UnitNames = discreteUnit.Name;
+                        }
+                        if (ConvertFactors != null) {
+                            ConvertFactors = ConvertFactors + ":" + discreteUnit.ConvertFactor;
+                        } else {
+                            ConvertFactors = String.valueOf(discreteUnit.ConvertFactor);
+                        }
+                        if (UnitIds != null) {
+                            UnitIds = UnitIds + ":" + discreteUnit.ProductUnitId;
+                        } else {
+                            UnitIds = String.valueOf(discreteUnit.ProductUnitId);
+                        }
+                        if (qtys != null) {
+                            qtys = qtys + ":" + discreteUnit.value;
+                        } else {
+                            qtys = String.valueOf(discreteUnit.value);
                         }
                     }
-
-
-                    product.UnitName = UnitNames;
-                    product.ConvertFactor = ConvertFactors;
-                    product.UnitId = UnitIds;
-                    product.Qty = qtys;
-
-                } catch (ProductUnitViewManager.UnitNotFoundException e) {
-                    e.printStackTrace();
                 }
+
+
+                product.UnitName = UnitNames;
+                product.ConvertFactor = ConvertFactors;
+                product.UnitId = UnitIds;
+                product.Qty = qtys;
+
+            } catch (ProductUnitViewManager.UnitNotFoundException e) {
+                e.printStackTrace();
+            }
 
         }
         if (product.OnHandQty == null)
@@ -176,21 +178,20 @@ public class CustomerOrderLineViewHolder extends BaseViewHolder<CustomerCallOrde
             priceTextView.setText(HelperMethods.currencyToString(product.PromotionUnitPrice));
         else
             priceTextView.setText(HelperMethods.currencyToString(product.UnitPrice));
-            totalOrderQtyTextView.setText(HelperMethods.bigDecimalToString(product.TotalQty));
+        totalOrderQtyTextView.setText(HelperMethods.bigDecimalToString(product.TotalQty));
 
         rowTextView.setText(String.valueOf(position + 1));
 
         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
             if (product.IsPromoLine && product.OriginalTotalQty == null)
                 valueTextView.setText("--");
-            else {
-
+            else{
                 double totalQty = product.TotalQty == null ? 0 : product.TotalQty.doubleValue();
                 double originalQty = product.OriginalTotalQty == null ? 0 : product.OriginalTotalQty.doubleValue();
                 valueTextView.setText(HelperMethods.doubleToString(originalQty - totalQty));
                 if (totalQty == 0) {
                     linear_order.setBackgroundColor(Color.parseColor("#F40000"));
-                }else {
+                } else {
                     linear_order.setBackgroundColor(Color.parseColor("#FFFFFF"));
                 }
             }
@@ -250,6 +251,9 @@ public class CustomerOrderLineViewHolder extends BaseViewHolder<CustomerCallOrde
         } else if (product.IsPromoLine) {
             iconImageView.setVisibility(View.VISIBLE);
             iconImageView.setImageResource(R.drawable.ic_prize);
+        } else if (product.cart != null && !product.cart.isEmpty()) {
+            iconImageView.setVisibility(View.VISIBLE);
+            iconImageView.setImageResource(R.drawable.shopping_basket);
         } else
             iconImageView.setVisibility(View.INVISIBLE);
     }

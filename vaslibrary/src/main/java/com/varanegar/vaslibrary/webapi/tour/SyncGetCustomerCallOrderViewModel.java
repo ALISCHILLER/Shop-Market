@@ -45,6 +45,7 @@ public class SyncGetCustomerCallOrderViewModel {
     public int DisType;
     public Date SaleDate;
     public int BackOfficeOrderId;
+    public int SalesStatus;
     public UUID BackOfficeOrderTypeId;
     public double RoundOrderOtherDiscount;
     public double RoundOrderDis1;

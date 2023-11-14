@@ -1,5 +1,7 @@
 package varanegar.com.discountcalculatorlib.viewmodel;
 
+import com.varanegar.processor.annotations.Column;
+
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -57,4 +59,9 @@ public class OutputOnlineDetails {
     public BigDecimal cashDiscount;
     public BigDecimal chequeDiscount;
     public BigDecimal TakhfifatKol;
+
+    public String saleS_ITEM ;
+
+    public String cart ;
+
 }

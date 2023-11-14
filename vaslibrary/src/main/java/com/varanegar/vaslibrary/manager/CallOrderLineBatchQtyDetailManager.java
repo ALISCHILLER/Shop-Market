@@ -94,9 +94,9 @@ public class CallOrderLineBatchQtyDetailManager extends BaseManager<CallOrderLin
                     }
                 }
             } else {
-//               Collections.sort(callInvoiceLineBatchQtyDetailModels, (o1, o2) -> {
-//                   return o2.Qty.compareTo(o1.Qty);
-//               });
+               Collections.sort(callInvoiceLineBatchQtyDetailModels, (o1, o2) -> {
+                   return o2.Qty.compareTo(o1.Qty);
+               });
 
                 
                 int postion = 0;

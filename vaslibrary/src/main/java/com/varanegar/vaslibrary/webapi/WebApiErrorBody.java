@@ -1,6 +1,8 @@
 package com.varanegar.vaslibrary.webapi;
 
 import android.content.Context;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
@@ -36,6 +38,7 @@ public class WebApiErrorBody {
             }
         } else if (error.getStatusCode() == 403){
             Timber.e(error.url() + " - " + error.getMessage() + " - " + error.getStatusCode() + " :\n " + error.errorBody());
+            Log.e("403 do_not_access", "403: "+context.getString(R.string.do_not_access)+error.getMessage()+error.getStatusCode());
             return context.getString(R.string.do_not_access);
         } else {
             Timber.e(error.url() + " - " + error.getMessage() + " - " + error.getStatusCode() + " :\n " + error.errorBody());

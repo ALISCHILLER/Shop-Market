@@ -562,7 +562,7 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                 BackOfficeType backOfficeType = sysConfigManager.getBackOfficeType();
                 final CustomerCallOrderLinePromotion p = recyclerAdapter.get(position);
 
-                if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
+                if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)&& p.UnitName !=null&&p.QtyCaption!=null) {
                     if (!p.QtyCaption.contains(":") && p.UnitName.equals("EA")) {
                         ProductUnitViewManager productUnitViewManager = new ProductUnitViewManager(getContext());
                         try {
@@ -676,6 +676,7 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                 }
 
                 txtvQty.setText(HelperMethods.bigDecimalToString(p.TotalRequestQty));
+
                 Currency totalPrice = p.UnitPrice == null ? Currency.ZERO : p.UnitPrice.multiply(p.TotalRequestQty);
                 if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales))
                     totalPrice = totalPrice

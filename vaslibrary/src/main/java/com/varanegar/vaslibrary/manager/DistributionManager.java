@@ -133,10 +133,14 @@ public class DistributionManager {
                                 Set<String> promotionPriceModelSet = new HashSet<>();
                                 for (final CallInvoiceLineModel line :
                                         result.DistributionCustomerCallOrderLines) {
+
+
+
+
                                     if (line.UnitPrice != null && line.UnitPrice.compareTo(Currency.ZERO) > 0) {
                                         CustomerCallInvoiceModel invoiceModel = Linq.findFirst(result.DistributionCustomerCallOrders, item -> item.UniqueId.equals(line.OrderUniqueId));
                                         String key = line.ProductUniqueId + "|" + invoiceModel.CustomerUniqueId + "|" + invoiceModel.UniqueId;
-                                        if (!line.IsPromoLine) {
+                                        if (!line.IsPromoLine && line.cart.isEmpty()) {
                                             if (!priceModelSet.contains(key)) {
                                                 DistributionCustomerPriceModel customerPriceModel = new DistributionCustomerPriceModel();
                                                 customerPriceModel.PriceId = line.CPriceUniqueId;

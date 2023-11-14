@@ -105,7 +105,7 @@ public class CalcPromotion {
                         DiscountCallOrderData disCallData;
                         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist))
                             disCallData = PromotionHandlerV3.distCalcPromotionOnlineSDS(null, callData.toDiscount(context), context,
-                                    null,null,null);
+                                    null, null, null, null);
                         else
                             disCallData = PromotionHandlerV3.calcPromotionOnlineSDS(null, callData.toDiscount(context), context);
 
@@ -148,31 +148,31 @@ public class CalcPromotion {
         progressDialog.show();
         calcPromotionV3(SelIds, orderPrizeList, activity, callOrderUniqueId, customerUniqueId, evcType, CalcDiscount,
                 CalcSaleRestriction, CalcPaymentType, new PromotionCallback() {
-            @Override
-            public void onSuccess(CustomerCallOrderPromotion data) {
-                if (progressDialog != null && progressDialog.isShowing()) {
-                    progressDialog.dismiss();
-                }
-                callback.onSuccess(data);
-            }
+                    @Override
+                    public void onSuccess(CustomerCallOrderPromotion data) {
+                        if (progressDialog != null && progressDialog.isShowing()) {
+                            progressDialog.dismiss();
+                        }
+                        callback.onSuccess(data);
+                    }
 
-            @Override
-            public void onFailure(String error) {
-                if (progressDialog != null && progressDialog.isShowing()) {
-                    progressDialog.dismiss();
-                }
-                if (error == null || error.isEmpty())
-                    callback.onFailure(activity.getString(R.string.error_calculating_discount));
-                else
-                    callback.onFailure(error);
-            }
+                    @Override
+                    public void onFailure(String error) {
+                        if (progressDialog != null && progressDialog.isShowing()) {
+                            progressDialog.dismiss();
+                        }
+                        if (error == null || error.isEmpty())
+                            callback.onFailure(activity.getString(R.string.error_calculating_discount));
+                        else
+                            callback.onFailure(error);
+                    }
 
-            @Override
-            public void onProcess(String msg) {
-                progressDialog.setMessage(msg);
-                callback.onProcess(msg);
-            }
-        });
+                    @Override
+                    public void onProcess(String msg) {
+                        progressDialog.setMessage(msg);
+                        callback.onProcess(msg);
+                    }
+                });
     }
 
     public static void calcPromotionV3(final List<Integer> SelIds, final List<DiscountOrderPrizeViewModel> orderPrizeList,
@@ -256,9 +256,9 @@ public class CalcPromotion {
                                         DiscountCallOrderData disCallData = null;
                                         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
                                             ArrayList<DiscountCallOrderLineData> orderProduct = populateOriginalData(context, callOrderUniqueId);
-                                            List<CustomerCallInvoiceModel> callInvoiceModel= new CustomerCallInvoiceManager(context)
+                                            List<CustomerCallInvoiceModel> callInvoiceModel = new CustomerCallInvoiceManager(context)
                                                     .getCustomerCallInvoices(callData.BackOfficeOrderId);
-                                            distDiscountCalc(orderPrizeList, context, callData, disCallData, evcType, orderProduct,  callInvoiceModel.get(0));
+                                            distDiscountCalc(orderPrizeList, context, callData, disCallData, evcType, orderProduct, callInvoiceModel.get(0));
                                             handler.post(() -> callback.onSuccess(callData));
 //                                                disCallData = DiscountCalculatorHandler.calcPromotion(callData.toDiscount(context), evcType.value(), context);
                                             //                                                disCallData = DiscountCalculatorHandler.calcPromotion(callData.toDiscount(context), evcType.value(), context);
@@ -301,7 +301,7 @@ public class CalcPromotion {
                             DiscountCallOrderData disCallData = null;
                             if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
                                 ArrayList<DiscountCallOrderLineData> orderProduct = populateOriginalData(context, callOrderUniqueId);
-                                distDiscountCalc(null, context, callData, disCallData, evcType, orderProduct,null);
+                                distDiscountCalc(null, context, callData, disCallData, evcType, orderProduct, null);
                                 handler.post(() -> callback.onSuccess(callData));
                             } else {
                                 disCallData = DiscountCalculatorHandler.calcPromotion(SelIds, callData.toDiscount(context), evcType.value(), context);
@@ -338,6 +338,7 @@ public class CalcPromotion {
 
     /**
      * تخفیف جوایز توزیع
+     *
      * @param orderPrizeList
      * @param context
      * @param callData
@@ -356,12 +357,15 @@ public class CalcPromotion {
     ) throws DiscountException, InterruptedException {
         //                                                if (true) {
         try {
-            String DocPDate=callInvoiceModel.DocPDate;
-            String SalePDate=callInvoiceModel.SalePDate;
-            String ZTERM=callInvoiceModel.zterm;
+            String DocPDate = callInvoiceModel.DocPDate;
+            String SalePDate = callInvoiceModel.SalePDate;
+            String ZTERM = callInvoiceModel.zterm;
+            String saleNoSDS = String.valueOf(callInvoiceModel.SaleNoSDS);
 
             if (GlobalVariables.isCalcOnline())
-                disCallData = PromotionHandlerV3.distCalcPromotionOnlineSDS(orderPrizeList, callData.toDiscount(context), context,SalePDate,DocPDate,ZTERM);
+                disCallData = PromotionHandlerV3.distCalcPromotionOnlineSDS(orderPrizeList,
+                        callData.toDiscount(context),
+                        context, SalePDate, DocPDate, ZTERM, saleNoSDS);
             else {
                 DiscountInitializeHandler disc = DiscountInitializeHandlerV3.getDiscountHandler(context);
                 //DiscountCalculatorHandler.init(disc, callData.BackOfficeOrderId, null);
@@ -373,11 +377,14 @@ public class CalcPromotion {
 
             if (disCallData.callLineItemDataWithPromo != null) {
                 HashMap<UUID, BigDecimal> linesMap = new HashMap<>();
-                HashMap<Integer, BigDecimal> promoLinesMap = new HashMap<>();
+                HashMap<String, BigDecimal> promoLinesMap = new HashMap<>();
                 for (DiscountCallOrderLineData callOrderLine :
                         orderProduct) {
+                    String key= String.valueOf(callOrderLine.productId);
+                    if (!callOrderLine.cart.isEmpty())
+                        key=callOrderLine.cart+callOrderLine.productId;
                     if (callOrderLine.isRequestPrizeItem)
-                        promoLinesMap.put(callOrderLine.productId, callOrderLine.invoiceTotalQty);
+                        promoLinesMap.put(key, callOrderLine.invoiceTotalQty);
                     else
                         linesMap.put(callOrderLine.orderLineId, callOrderLine.invoiceTotalQty);
                 }
@@ -390,15 +397,20 @@ public class CalcPromotion {
                         ProductModel productModel = productManager.getProductByBackOfficeId(item.productId);
                         productCode = productModel.ProductCode;
                     }
-                    if (linesMap.containsKey(item.orderLineId)) {
+
+                    String cartkey= String.valueOf(item.productId);
+                    if (!item.cart.isEmpty())
+                        cartkey=item.cart+item.productId;
+
+                    if (linesMap.containsKey(item.orderLineId) && item.cart.isEmpty()) {
                         exits = true;
                         if (item.invoiceTotalQty.compareTo(linesMap.get(item.orderLineId)) > 0)
                             errors.add(context.getString(R.string.product_code_label) + productCode + " - "
                                     + context.getString(R.string.current_count) + linesMap.get(item.orderLineId) + " - "
                                     + context.getString(R.string.law_count) + item.disRef + ": " + item.invoiceTotalQty);
-                    } else if (promoLinesMap.containsKey(item.productId)) {
+                    } else if (promoLinesMap.containsKey(cartkey)) {
                         exits = true;
-                        if (item.invoiceTotalQty.compareTo(promoLinesMap.get(item.productId)) > 0)
+                        if (item.invoiceTotalQty.compareTo(promoLinesMap.get(cartkey)) > 0)
                             errors.add(context.getString(R.string.prize_product_code) + productCode + " - "
                                     + context.getString(R.string.current_count) + promoLinesMap.get(item.productId) + " - "
                                     + context.getString(R.string.law_count) + item.disRef + ": " + item.invoiceTotalQty);
@@ -686,7 +698,7 @@ public class CalcPromotion {
         ArrayList<CustomerCallOrderLinePromotion> promotionLines = new ArrayList<>();
 
         for (CustomerCallOrderOrderViewModel item : lines) {
-            if (!item.IsPromoLine) {
+            if (!item.IsPromoLine && item.cart.isEmpty()) {
                 CustomerCallOrderLinePromotion promotionitem = new CustomerCallOrderLinePromotion();
                 ProductModel productModel = new ProductManager(context).getItem(item.ProductId);
                 promotionitem.UniqueId = item.UniqueId;
@@ -703,6 +715,7 @@ public class CalcPromotion {
                 promotionitem.FreeReasonName = item.FreeReasonName;
                 promotionitem.IsRequestFreeItem = item.IsRequestFreeItem;
                 promotionitem.PayDuration = item.PayDuration;
+                promotionitem.saleS_ITEM = item.saleS_ITEM;
                 promotionitem.RuleNo = item.RuleNo;
                 promotionitem.IsRequestPrizeItem = false;
                 promotionLines.add(promotionitem);
@@ -868,8 +881,10 @@ public class CalcPromotion {
             DiscountCallOrderLineData disLine = new DiscountCallOrderLineData();
             disLine.orderLineId = item.UniqueId;
             disLine.productId = new ProductManager(context).getBackOfficeId(item.ProductId);
+            disLine.cart=item.cart;
+            disLine.saleS_ITEM=item.saleS_ITEM;
             disLine.invoiceTotalQty = item.OriginalTotalQty == null ? BigDecimal.ZERO : item.OriginalTotalQty;
-            if (item.IsPromoLine)
+            if (item.IsPromoLine || !item.cart.isEmpty())
                 disLine.isRequestPrizeItem = true;
             else
                 disLine.isRequestPrizeItem = false;
@@ -1032,14 +1047,14 @@ public class CalcPromotion {
                     customerCallOrderLinePromotion.ConvertFactory = itemConvertFactor;
                 // todo
                 // NGT-4226 - change amount and discount manually!! when we choice a prize with a different price. it is not a good solution and it should be changed later
-                if ((promotion.InvoiceDis1 != null? promotion.InvoiceDis1: Currency.ZERO).compareTo(promotion.InvoiceAmount != null? promotion.InvoiceAmount: Currency.ZERO) == 0
-                        && ((promotion.InvoiceNetAmount != null? promotion.InvoiceNetAmount: Currency.ZERO).compareTo(Currency.ZERO)) == 0
-                        && ((promotion.InvoiceDis2 != null? promotion.InvoiceDis2: Currency.ZERO).compareTo(Currency.ZERO)) == 0
-                        && ((promotion.InvoiceDis3 != null? promotion.InvoiceDis3: Currency.ZERO).compareTo(Currency.ZERO)) == 0
-                        &&  ((promotion.InvoiceDisOther != null? promotion.InvoiceDisOther: Currency.ZERO).compareTo(Currency.ZERO)) == 0
-                        &&  ((promotion.InvoiceAdd1 != null? promotion.InvoiceAdd1: Currency.ZERO).compareTo(Currency.ZERO)) == 0
-                        &&  ((promotion.InvoiceAdd2 != null? promotion.InvoiceAdd2: Currency.ZERO).compareTo(Currency.ZERO)) == 0
-                        &&  ((promotion.InvoiceAddOther != null? promotion.InvoiceAddOther: Currency.ZERO).compareTo(Currency.ZERO)) == 0) {
+                if ((promotion.InvoiceDis1 != null ? promotion.InvoiceDis1 : Currency.ZERO).compareTo(promotion.InvoiceAmount != null ? promotion.InvoiceAmount : Currency.ZERO) == 0
+                        && ((promotion.InvoiceNetAmount != null ? promotion.InvoiceNetAmount : Currency.ZERO).compareTo(Currency.ZERO)) == 0
+                        && ((promotion.InvoiceDis2 != null ? promotion.InvoiceDis2 : Currency.ZERO).compareTo(Currency.ZERO)) == 0
+                        && ((promotion.InvoiceDis3 != null ? promotion.InvoiceDis3 : Currency.ZERO).compareTo(Currency.ZERO)) == 0
+                        && ((promotion.InvoiceDisOther != null ? promotion.InvoiceDisOther : Currency.ZERO).compareTo(Currency.ZERO)) == 0
+                        && ((promotion.InvoiceAdd1 != null ? promotion.InvoiceAdd1 : Currency.ZERO).compareTo(Currency.ZERO)) == 0
+                        && ((promotion.InvoiceAdd2 != null ? promotion.InvoiceAdd2 : Currency.ZERO).compareTo(Currency.ZERO)) == 0
+                        && ((promotion.InvoiceAddOther != null ? promotion.InvoiceAddOther : Currency.ZERO).compareTo(Currency.ZERO)) == 0) {
                     CustomerPriceModel newPrice = customerPriceManager.getProductPrice(customerId, callOrderId, prize.ProductId);
                     customerCallOrderLinePromotion.UnitPrice = newPrice.Price;
                     customerCallOrderLinePromotion.PriceId = newPrice.PriceId.toString();

@@ -990,7 +990,7 @@ public class InvoicePrintHelper extends BasePrintHelper {
                     orderLinePrintData.ConvertFactor = item.ConvertFactor;
                     orderLinePrintData.Qty = item.Qty;
                     orderLinePrintData.UnitPrice = item.UnitPrice;
-                    if (item.IsPromoLine)
+                    if (item.IsPromoLine ||!item.cart.isEmpty())
                         orderLinePrintData.RequestAmount = item.PromotionPrice == null ? Currency.ZERO : item.PromotionPrice;
                     else
                         orderLinePrintData.RequestAmount = item.RequestAmount;

@@ -180,7 +180,8 @@ public class PromotionHandlerV3 {
             final Context context,
             String SalePDate,
             String  DocPDate,
-            String  ZTERM
+            String  ZTERM,
+            String saleNoSDS
             ) throws InterruptedException {
         final String[] errorMessage = {null};
         final Thread thread = new Thread(new Runnable() {
@@ -215,6 +216,7 @@ public class PromotionHandlerV3 {
                     onlineData.SalePDate=SalePDate;
                     onlineData.DocPDate=DocPDate;
                     onlineData.ZTERM=ZTERM;
+                    onlineData.DELIVERYID=saleNoSDS;
 
                     Call<DiscountOutputOnline> call = calcPromotionAPI.getDistOnlinePromotion(onlineData,
                             GlobalVariables.getCalcDiscount(),
@@ -386,7 +388,9 @@ public class PromotionHandlerV3 {
         return discountCallOrderData;
     }
 
-    public static DiscountCallOrderData DoReCalcEVC(DiscountCallOrderData discountCallOrderData, String evcId, EVCType evcType, List<DiscountPrizeViewModel> discountPrizeViewModels) throws DiscountException {
+    public static DiscountCallOrderData DoReCalcEVC(DiscountCallOrderData discountCallOrderData,
+                                                    String evcId, EVCType evcType,
+                                                    List<DiscountPrizeViewModel> discountPrizeViewModels) throws DiscountException {
         DiscountDbHelper.getDb();
 
         EVCItemSDSDBAdapter.getInstance().DeletePrize(evcId);
@@ -404,7 +408,13 @@ public class PromotionHandlerV3 {
         PromotionFillEVCSDSV3.clearTempEVCData();
 
         DiscountEvcPrizeDBAdapter.getInstance().updateQtyUnit(evcId);
-        calcPromoIntral(evcId, discountCallOrderData.callUniqueId, discountCallOrderData.orderId, evcType.value(), discountCallOrderData.saleDate, discountCallOrderData.OrderType + "", discountCallOrderData.saleId, discountCallOrderData.orderNo, discountCallOrderData.DCRef);
+        calcPromoIntral(evcId, discountCallOrderData.callUniqueId,
+                discountCallOrderData.orderId, evcType.value(),
+                discountCallOrderData.saleDate,
+                discountCallOrderData.OrderType + "",
+                discountCallOrderData.saleId,
+                discountCallOrderData.orderNo,
+                discountCallOrderData.DCRef);
 
         discountCallOrderData = EVCHeaderSDSDBAdapter.getInstance().fillCallWithPromo(evcId, discountCallOrderData);
         Timber.d("DoReCalcEVC : getEvcItemStatuteDataToSend started ");

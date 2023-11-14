@@ -484,7 +484,7 @@ public class OrderCalculatorForm extends CuteDialog {
             }
         } else {
             calculator.setUnits(calculatorUnits);
-            if (benefitTextView != null)
+            if (benefitTextView != null&& unitPrice !=null && userPrice !=null )
                 benefitTextView.setText(userPrice.subtract(unitPrice).compareTo(Currency.valueOf(0)) >= 0 ? HelperMethods.currencyToString(userPrice.subtract(unitPrice)) : "-");
             priceTextView.setText(HelperMethods.currencyToString(unitPrice));
             if (userPriceTextView != null)

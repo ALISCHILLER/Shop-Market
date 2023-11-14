@@ -1999,7 +1999,8 @@ public class TourManager {
 
             for (final CustomerCallInvoiceModel customerCallInvoiceModel :
                     customerCallInvoiceModels) {
-                CustomerCallOrderModel customerCallOrderModel = Linq.findFirst(customerCallOrderModels, new Linq.Criteria<CustomerCallOrderModel>() {
+                CustomerCallOrderModel customerCallOrderModel = Linq.findFirst(customerCallOrderModels,
+                        new Linq.Criteria<CustomerCallOrderModel>() {
                     @Override
                     public boolean run(CustomerCallOrderModel item) {
                         return item.UniqueId.equals(customerCallInvoiceModel.UniqueId);
@@ -2075,6 +2076,15 @@ public class TourManager {
                 syncGetCustomerCallOrderViewModel.BackOfficeOrderId = customerCallOrderModel.BackOfficeOrderId;
                 syncGetCustomerCallOrderViewModel.BackOfficeOrderTypeId = customerCallOrderModel.BackOfficeOrderTypeId;
 
+                if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)){
+                    SharedPreferences sharedPreferences = context
+                            .getSharedPreferences("SalesStatus", Context.MODE_PRIVATE);
+                   int i= sharedPreferences.getInt(String.valueOf(customerCallOrderModel.BackOfficeOrderId), 1);
+                   if (i==0)
+                       syncGetCustomerCallOrderViewModel.SalesStatus=1;
+                   else
+                       syncGetCustomerCallOrderViewModel.SalesStatus=0;
+                }
                 syncGetCustomerCallOrderViewModel.RoundOrderOtherDiscount = HelperMethods.currencyToDouble(customerCallOrderModel.RoundOrderOtherDiscount);
                 syncGetCustomerCallOrderViewModel.RoundOrderDis1 = HelperMethods.currencyToDouble(customerCallOrderModel.RoundOrderDis1);
                 syncGetCustomerCallOrderViewModel.RoundOrderDis2 = HelperMethods.currencyToDouble(customerCallOrderModel.RoundOrderDis2);
@@ -2326,6 +2336,15 @@ public class TourManager {
                     syncGetCustomerCallOrderViewModel.DisType = customerCallOrderModel.DisType;
                     syncGetCustomerCallOrderViewModel.BackOfficeOrderId = customerCallOrderModel.BackOfficeOrderId;
                     syncGetCustomerCallOrderViewModel.BackOfficeOrderTypeId = customerCallOrderModel.BackOfficeOrderTypeId;
+                    if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)){
+                        SharedPreferences sharedPreferences = context
+                                .getSharedPreferences("SalesStatus", Context.MODE_PRIVATE);
+                        int i= sharedPreferences.getInt(String.valueOf(customerCallOrderModel.BackOfficeOrderId), 1);
+                        if (i==0)
+                            syncGetCustomerCallOrderViewModel.SalesStatus=1;
+                        else
+                            syncGetCustomerCallOrderViewModel.SalesStatus=0;
+                    }
                     if (VaranegarApplication.is(VaranegarApplication.AppId.Contractor))
                         syncGetCustomerCallOrderViewModel.OrderOtherRoundDiscount = HelperMethods.currencyToDouble(customerCallOrderModel.RoundOrderOtherDiscount);
                     else
