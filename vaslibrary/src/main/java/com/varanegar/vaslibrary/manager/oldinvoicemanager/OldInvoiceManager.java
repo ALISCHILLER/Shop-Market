@@ -415,7 +415,7 @@ public class OldInvoiceManager {
         }
     }
 
-    private void syncCustomerOldInvoices(@Nullable final UUID customerId, @Nullable final Date startDate, @Nullable Date endDate, @NonNull final UpdateCall call) {
+    public void syncCustomerOldInvoices(@Nullable final UUID customerId, @Nullable final Date startDate, @Nullable Date endDate, @NonNull final UpdateCall call) {
         final CustomerOldInvoiceHeaderApi customerOldInvoiceHeaderApi = new CustomerOldInvoiceHeaderApi(context);
         VaranegarApplication.getInstance().resetElapsedTime("resetting timer");
         VaranegarApplication.getInstance().printElapsedTime("Start old invoice");

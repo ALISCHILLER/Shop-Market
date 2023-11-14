@@ -33,7 +33,9 @@ import com.varanegar.framework.validation.annotations.validvalue.Operator;
 import com.varanegar.java.util.Currency;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.base.VasHelperMethods;
+import com.varanegar.vaslibrary.enums.ThirdPartyPaymentTypes;
 import com.varanegar.vaslibrary.manager.PaymentOrderTypeManager;
+import com.varanegar.vaslibrary.manager.ValidPayTypeManager;
 import com.varanegar.vaslibrary.manager.bank.BankManager;
 import com.varanegar.vaslibrary.manager.city.CityManager;
 import com.varanegar.vaslibrary.manager.customercall.CustomerCallOrderManager;
@@ -81,7 +83,7 @@ public class CheckDialog extends PaymentDialog {
     public PairedItemsEditable branchNumberPairedItemsEditable;
     public PairedItemsEditable branchNamePairedItemsEditable;
     private PairedItemsEditable accountNamePairedItemsEditable;
-
+    private List<CustomerCallOrderModel> customerCallOrderModels;
     SayadNumberCheckerViewModel viewModel;
     
     @Override
@@ -93,7 +95,17 @@ public class CheckDialog extends PaymentDialog {
     @Override
     protected void onCreateContentView(LayoutInflater inflater, ViewGroup viewGroup, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.check_dialog_fragment, viewGroup, true);
+
+        PaymentManager paymentManager = new PaymentManager(getContext());
+        Currency returnVa = paymentManager.calcCashAndCheckValidAmountreturn(getCustomerId());
+        CustomerCallOrderManager customerCallOrderManager = new CustomerCallOrderManager(getContext());
+        customerCallOrderModels = customerCallOrderManager.getCustomerCallOrders(getCustomerId());
+        Currency total = customerCallOrderModels.get(0).TotalAmountNutCash.subtract(returnVa);
+        if (total.compareTo(total)>=0)
+        setTitle(getString(R.string.insert_check_info) + " (" + getString(R.string.total_remained) + VasHelperMethods.currencyToString(total) + ")");
+        else
         setTitle(getString(R.string.insert_check_info) + " (" + getString(R.string.total_remained) + VasHelperMethods.currencyToString(getRemainedAmount()) + ")");
+
         validator = new FormValidator(getActivity());
         SysConfigManager sysConfigManager = new SysConfigManager(getContext());
         BackOfficeType backOfficeType = null;
@@ -273,7 +285,6 @@ public class CheckDialog extends PaymentDialog {
         });
 
         if (getPaymentId() != null) {
-            PaymentManager paymentManager = new PaymentManager(getContext());
             final PaymentModel paymentModel = paymentManager.getItem(getPaymentId());
             if (paymentModel != null) {
                 int cp = Linq.findFirstIndex(cities, new Linq.Criteria<CityModel>() {

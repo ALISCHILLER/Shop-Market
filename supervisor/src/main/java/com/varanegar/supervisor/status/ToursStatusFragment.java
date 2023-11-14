@@ -659,7 +659,6 @@ public class ToursStatusFragment extends IMainPageFragment {
 
    private void SendDataOrdor(){
        SupervisorApi api = new SupervisorApi(getContext());
-
        ChangeOrdersStatusmModel changeOrdersStatusmModel=new ChangeOrdersStatusmModel();
        changeOrdersStatusmModel.orderNumbers=ordernumberarr;
        changeOrdersStatusmModel.status="r2";

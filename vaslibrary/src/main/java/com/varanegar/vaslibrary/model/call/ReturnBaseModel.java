@@ -61,4 +61,7 @@ public class ReturnBaseModel extends BaseModel {
     public boolean IsFromRequest;
     @Column
     public boolean ReplacementRegistration;
+
+    @Column
+    public String zterm;
 }

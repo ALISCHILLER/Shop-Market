@@ -52,6 +52,7 @@ public class OutputOnlineDetails {
     public BigDecimal amountCash;
     public BigDecimal amountCheque;
     public BigDecimal amountNutCash;
+    public BigDecimal amountNutPT03;
     public BigDecimal amountNutCheque;
     public BigDecimal amountImmediate;
     public BigDecimal amountNutImmediate;
@@ -63,5 +64,8 @@ public class OutputOnlineDetails {
     public String saleS_ITEM ;
 
     public String cart ;
-
+    public BigDecimal takhfifatkol;
+    public BigDecimal fee;
+    public BigDecimal feeKol;
+    public String zterm;
 }

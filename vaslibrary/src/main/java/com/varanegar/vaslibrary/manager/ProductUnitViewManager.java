@@ -35,6 +35,15 @@ public class ProductUnitViewManager extends BaseManager<ProductUnitViewModel> {
         return query;
     }
 
+    public List<ProductUnitViewModel> getProductUnits(){
+        return getItems(getAll());
+    }
+
+    public List<ProductUnitViewModel> getProductUnitsId(UUID productId){
+        Query query = new Query();
+        query.from(ProductUnitView.ProductUnitViewTbl).whereAnd(Criteria.equals(ProductUnitView.ProductId, productId.toString()));
+        return getItems(query);
+    }
     @NonNull
     public List<ProductUnitViewModel> getProductUnits(@NonNull UUID productId, ProductType productType) throws UnitNotFoundException, IllegalArgumentException {
         Query query = new Query();

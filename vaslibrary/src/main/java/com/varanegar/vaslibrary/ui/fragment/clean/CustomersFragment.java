@@ -1191,8 +1191,9 @@ public abstract class CustomersFragment
             @Override
             public void done(String ipAddress) {
                 final OldInvoiceManager oldInvoiceManager = new OldInvoiceManager(activity);
-                oldInvoiceManager.sync(firstTime, onlyDiscount,
-                        null, null, null, new UpdateCall() {
+                oldInvoiceManager.syncCustomerOldInvoices(null, null,
+                        null
+                        ,new UpdateCall() {
                             @Override
                             protected void onFinish() {
                                 finishProgress();
@@ -1227,6 +1228,7 @@ public abstract class CustomersFragment
                                 handleDiscountError(error, onlyDiscount);
                             }
                         });
+
             }
 
             @Override

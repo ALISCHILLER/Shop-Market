@@ -132,8 +132,8 @@ import com.varanegar.vaslibrary.model.invoiceLineQty.InvoiceLineQty;
 import com.varanegar.vaslibrary.model.invoiceLineQty.InvoiceLineQtyModel;
 import com.varanegar.vaslibrary.model.invoiceinfo.InvoicePaymentInfoViewModel;
 import com.varanegar.vaslibrary.model.location.LocationModel;
-import com.varanegar.vaslibrary.model.newmodel.locationconfirmmodel.LocationConfirmTrackingManager;
-import com.varanegar.vaslibrary.model.newmodel.locationconfirmmodel.LocationConfirmTrackingModel;
+import com.varanegar.vaslibrary.model.newmodel.locationconfirmModel.LocationConfirmTrackingManager;
+import com.varanegar.vaslibrary.model.newmodel.locationconfirmModel.LocationConfirmTrackingModel;
 import com.varanegar.vaslibrary.model.onhandqty.OnHandQty;
 import com.varanegar.vaslibrary.model.orderLineQtyModel.OrderLineQty;
 import com.varanegar.vaslibrary.model.orderLineQtyModel.OrderLineQtyModel;
@@ -1748,7 +1748,7 @@ public class TourManager {
                 syncGetCustomerCallViewModel.Lat = confirmTrackingModel.Lat;
                 syncGetCustomerCallViewModel.Long = confirmTrackingModel.Long;
             }
-            
+
         }
         syncGetCustomerCallViewModel.Description = "";
         syncGetCustomerCallViewModel.Longitude = customerModel.Longitude;
@@ -2230,6 +2230,8 @@ public class TourManager {
 
                     List<SyncGetCustomerCallOrderLineBatchQtyDetailViewModel> syncGetCustomerCallOrderLineBatchQtyDetailViewModels = new ArrayList<>();
                     CallOrderLineBatchQtyDetailManager callOrderLineBatchQtyDetailManager = new CallOrderLineBatchQtyDetailManager(context);
+                    List<CallOrderLineBatchQtyDetailModel> callOrderLineBatchQtyDetailModelssA = callOrderLineBatchQtyDetailManager.getAll();
+                    List<CallOrderLineBatchQtyDetailModel> callOrderLineBatchQtyDetailModelss = callOrderLineBatchQtyDetailManager.getLineBatchQtyDetails(UUID.fromString("3a726872-5a9d-4ead-bbae-510b179733df"));
                     List<CallOrderLineBatchQtyDetailModel> callOrderLineBatchQtyDetailModels = callOrderLineBatchQtyDetailManager.getLineBatchQtyDetails(callInvoiceLineModel.UniqueId);
                     for (CallOrderLineBatchQtyDetailModel callOrderLineBatchQtyDetailModel : callOrderLineBatchQtyDetailModels) {
                         SyncGetCustomerCallOrderLineBatchQtyDetailViewModel syncGetCustomerCallOrderLineBatchQtyDetailViewModel = new SyncGetCustomerCallOrderLineBatchQtyDetailViewModel();

@@ -47,6 +47,7 @@ import com.varanegar.vaslibrary.manager.locationmanager.LocationManager;
 import com.varanegar.vaslibrary.manager.locationmanager.LogLevel;
 import com.varanegar.vaslibrary.manager.locationmanager.LogType;
 import com.varanegar.vaslibrary.manager.locationmanager.OnSaveLocation;
+import com.varanegar.vaslibrary.manager.locationmanager.TrackingLicense;
 import com.varanegar.vaslibrary.manager.locationmanager.TrackingLogManager;
 import com.varanegar.vaslibrary.manager.newmanager.checkCustomerCreditsManager.CheckCustomerCreditManager;
 import com.varanegar.vaslibrary.manager.paymentmanager.PaymentManager;
@@ -69,8 +70,9 @@ import com.varanegar.vaslibrary.model.customerCallOrderOrderView.CustomerCallOrd
 import com.varanegar.vaslibrary.model.customercall.CustomerCallType;
 import com.varanegar.vaslibrary.model.location.LocationModel;
 import com.varanegar.vaslibrary.model.newmodel.checkCustomerCredits.CheckCustomerCreditModel;
-import com.varanegar.vaslibrary.model.newmodel.locationconfirmmodel.LocationConfirmTrackingModel;
-import com.varanegar.vaslibrary.model.newmodel.locationconfirmmodel.LocationConfirmTrackingModelRepository;
+
+import com.varanegar.vaslibrary.model.newmodel.locationconfirmModel.LocationConfirmTrackingModel;
+import com.varanegar.vaslibrary.model.newmodel.locationconfirmModel.LocationConfirmTrackingModelRepository;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
 import com.varanegar.vaslibrary.ui.fragment.settlement.CustomerPayment;
@@ -90,7 +92,6 @@ import timber.log.Timber;
 
 public class ConfirmAction extends CheckPathAction {
     private static final String TAG = "ConfirmAction";
-
     @Nullable
     @Override
     public UUID getTaskUniqueId() {

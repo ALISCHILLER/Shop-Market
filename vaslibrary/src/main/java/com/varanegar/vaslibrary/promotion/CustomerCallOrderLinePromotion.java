@@ -41,7 +41,7 @@ public class CustomerCallOrderLinePromotion extends BaseModel {
     public String UnitName;
     public String QtyCaption;
     public int ConvertFactory;
-
+    public Currency amount;
     public Currency UnitPrice;
     public String PriceId;
     public int SortId;
@@ -68,11 +68,18 @@ public class CustomerCallOrderLinePromotion extends BaseModel {
     public Currency InvoiceAmount;
     public Currency InvoiceNetAmount;
     public Currency InvoiceDis1;
+    public Currency custPrice;
     public Currency InvoiceDis2;
     public Currency InvoiceDis3;
     public Currency InvoiceDisOther;
     public Currency InvoiceAdd1;
     public Currency TakhfifatKol;
+    public Currency evcItemAdd;
+    public Currency AmountNutPT03Add;
+    public Currency AmountNutPT03;
+    public Currency Fee;
+    public Currency FeeKol;
+    public String zterm;
     public Currency InvoiceAdd2;
     public Currency InvoiceAddOther;
     public Currency InvoiceTax;
@@ -132,6 +139,13 @@ public class CustomerCallOrderLinePromotion extends BaseModel {
         this.PayDuration = lineData.PayDuration;
         this.RuleNo = lineData.RuleNo;
         this.TakhfifatKol= new Currency(lineData.TakhfifatKol == null ? BigDecimal.ZERO : lineData.TakhfifatKol);
+        this.evcItemAdd= new Currency(lineData.evcItemAdd == null ? BigDecimal.ZERO : lineData.evcItemAdd);
+        this.AmountNutPT03= new Currency(lineData.AmountNutPT03 == null ? BigDecimal.ZERO : lineData.AmountNutPT03);
+        this.AmountNutPT03= new Currency(lineData.AmountNutPT03 == null ? BigDecimal.ZERO : lineData.AmountNutPT03);
+        this.custPrice= new Currency(lineData.custPrice == null ? BigDecimal.ZERO : lineData.custPrice);
+        this.Fee= new Currency(lineData.Fee == null ? BigDecimal.ZERO : lineData.Fee);
+        this.FeeKol= new Currency(lineData.FeeKol == null ? BigDecimal.ZERO : lineData.FeeKol);
+        this.zterm= lineData.zterm;
         this.InvoiceAmount = lineData.totalInvoiceAmount != null ? new Currency(lineData.totalInvoiceAmount) : new Currency(0);
         this.InvoiceNetAmount = new Currency(lineData.totalInvoiceNetAmount);
         this.InvoiceAdd1 = new Currency(
@@ -180,6 +194,7 @@ public class CustomerCallOrderLinePromotion extends BaseModel {
         else
             this.IsRequestFreeItem = false;
         this.UnitPrice = new Currency(lineData.unitPrice);
+        this.amount = new Currency(lineData.amount);
         UUID productId = UUID.fromString(new ProductManager(conext).getIdByBackofficeId(lineData.productId));
         this.ProductId = productId;
         this.ProductRef = lineData.productId;

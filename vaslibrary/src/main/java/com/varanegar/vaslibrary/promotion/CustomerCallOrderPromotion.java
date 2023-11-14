@@ -121,6 +121,10 @@ public class CustomerCallOrderPromotion {
     public OrderTypeEnum DocumentType;
     public Currency TotalAmountNutCash;
     public Currency TotalAmountNutCheque;
+    public Currency TotalDiscont;
+    public Currency evcItemAddFol;
+    public Currency Total;
+    public Currency AmountNutPT03Add;
     public Currency TotalAmountNutImmediate;
     public Currency TotalCashDiscount;
 
@@ -267,7 +271,9 @@ public class CustomerCallOrderPromotion {
         this.TotalAmountNutCheque = Currency.ZERO;
         this.TotalAmountNutImmediate = Currency.ZERO;
         this.TotalCashDiscount =Currency.ZERO;
-
+        this.TotalDiscont =Currency.ZERO;
+        this.evcItemAddFol =Currency.ZERO;
+        this.AmountNutPT03Add =Currency.ZERO;
         if (dis.callLineItemDataWithPromo == null)
             dis.callLineItemDataWithPromo = new ArrayList<>();
         for (DiscountCallOrderLineData item :dis.callLineItemDataWithPromo) {
@@ -287,10 +293,20 @@ public class CustomerCallOrderPromotion {
             }
             if (GlobalVariables.getIsThirdParty() && VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
                 this.TotalInvoiceAdd1 = this.TotalInvoiceAdd1.add((calitem.InvoiceAdd1).multiply(calitem.TotalRequestQty));
+                this.TotalAmountNutCash = this.TotalAmountNutCash.add(calitem.AmountNutCash);
+                this.TotalAmountNutCheque = this.TotalAmountNutCheque.add(calitem.AmountNutCheque);
+                this.TotalDiscont = this.TotalDiscont.add(calitem.TakhfifatKol);
+                this.evcItemAddFol = this.evcItemAddFol.add(calitem.evcItemAdd);
+                this.AmountNutPT03Add=this.AmountNutPT03Add.add(calitem.AmountNutPT03);
+                this.TotalAmountNutImmediate = this.TotalAmountNutImmediate.add(calitem.AmountNutImmediate);
+
             } else {
                 this.TotalInvoiceAdd1 = this.TotalInvoiceAdd1.add(calitem.InvoiceAdd1);
                 this.TotalAmountNutCash = this.TotalAmountNutCash.add(calitem.AmountNutCash);
                 this.TotalAmountNutCheque = this.TotalAmountNutCheque.add(calitem.AmountNutCheque);
+                this.TotalDiscont = this.TotalDiscont.add(calitem.TakhfifatKol);
+                this.AmountNutPT03Add=this.AmountNutPT03Add.add(calitem.AmountNutPT03);
+                this.evcItemAddFol = this.evcItemAddFol.add(calitem.evcItemAdd);
                 this.TotalAmountNutImmediate = this.TotalAmountNutImmediate.add(calitem.AmountNutImmediate);
                 this.TotalCashDiscount = this.TotalCashDiscount.add(calitem.CashDiscount);
             }
@@ -298,6 +314,7 @@ public class CustomerCallOrderPromotion {
             this.TotalInvoiceAddOther = this.TotalInvoiceAddOther.add(calitem.InvoiceAddOther);
             this.TotalPriceWithPromo = this.TotalPriceWithPromo.add(calitem.InvoiceAmount);
         }
+
 
         this.TotalInvoiceAdd = this.TotalInvoiceAdd1.add(this.TotalInvoiceAdd2)
                 .add(this.TotalInvoiceTax).add(this.TotalInvoiceCharge).add(TotalInvoiceAddOther);

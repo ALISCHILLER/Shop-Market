@@ -38,7 +38,7 @@ public class CustomerCallReturnRequestManager extends BaseManager<CustomerCallRe
 
     public CustomerCallReturnRequestModel getCustomerCallReturn(UUID uniqueId) {
         Query query = new Query();
-        query.from(CustomerCallReturnRequest.CustomerCallReturnRequestTbl).whereAnd(Criteria.equals(CustomerCallReturnRequest.UniqueId, uniqueId.toString()));
+        query.from(CustomerCallReturnRequest.CustomerCallReturnRequestTbl).whereAnd(Criteria.equals(CustomerCallReturnRequest.CustomerUniqueId, uniqueId.toString()));
         return getItem(query);
     }
 

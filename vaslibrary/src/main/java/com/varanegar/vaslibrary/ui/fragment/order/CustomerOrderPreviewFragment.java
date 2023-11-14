@@ -243,6 +243,7 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
         }
 
 
+
     }
 
     private void calc(Boolean first) {
@@ -674,10 +675,10 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                     txtvProductName.setText(p.ProductName);
                     txtvProductCode.setText(p.ProductCode);
                 }
-
+                Currency totalPrice=Currency.ZERO;
                 txtvQty.setText(HelperMethods.bigDecimalToString(p.TotalRequestQty));
-
-                Currency totalPrice = p.UnitPrice == null ? Currency.ZERO : p.UnitPrice.multiply(p.TotalRequestQty);
+                if (p.TotalRequestQty!=null)
+                  totalPrice = p.UnitPrice == null ? Currency.ZERO : p.UnitPrice.multiply(p.TotalRequestQty);
                 if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales))
                     totalPrice = totalPrice
                             .subtract((p.RequestDis1 == null ? new Currency(BigDecimal.ZERO) : p.RequestDis1))
@@ -697,9 +698,23 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                             .add((p.InvoiceAdd2 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceAdd2))
                             .add((p.InvoiceAddOther == null ? new Currency(BigDecimal.ZERO) : p.InvoiceAddOther));
 
+                Currency amuntFol = Currency.ZERO;
+                if (p.zterm!=null&&!p.zterm.isEmpty()) {
+                    if (p.zterm.toUpperCase().equals("PT01"))
+                        amuntFol = p.AmountNutImmediate;
+                    else if (p.zterm.toUpperCase().equals("PTCH"))
+                        amuntFol = p.AmountNutCheque;
+                    else if (p.zterm.toUpperCase().equals("PTCA"))
+                        amuntFol = p.AmountNutCash;
+                    else if (p.zterm.toUpperCase().equals("PT02"))
+                        amuntFol = p.AmountNutCheque;
+                    else if (p.zterm.toUpperCase().equals("PT03"))
+                        amuntFol = p.AmountNutPT03;
+                }
                 if (backOfficeType == BackOfficeType.ThirdParty && VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
                     if (p.DiscountRef == 0) {
-                        CustomerCallOrderLinePromotion baseLine = Linq.findFirst(customerCallOrderPromotion.Lines, new Linq.Criteria<CustomerCallOrderLinePromotion>() {
+                        CustomerCallOrderLinePromotion baseLine = Linq.findFirst(customerCallOrderPromotion.Lines,
+                                new Linq.Criteria<CustomerCallOrderLinePromotion>() {
                             @Override
                             public boolean run(CustomerCallOrderLinePromotion item) {
                                 if (item.UniqueId != null) {
@@ -711,32 +726,37 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                         if (p.IsRequestFreeItem)
                             txtvUnitPrice.setText(p.FreeReasonName);
                         else {
-                            txtvUnitPrice.setText(HelperMethods.currencyToString(baseLine.UnitPrice));
-                            thirdPartyDiscountTextView.setText(HelperMethods.currencyToString((baseLine.UnitPrice.multiply(p.TotalRequestQty).subtract(totalPrice))));
+                            txtvUnitPrice.setText(HelperMethods.currencyToString(p.Fee));
+                            String discount = HelperMethods.currencyToString(p.TakhfifatKol);
+                            thirdPartyDiscountTextView.setText(discount);
                         }
                     } else {
                         if (p.IsRequestFreeItem)
                             txtvUnitPrice.setText(p.FreeReasonName);
                         else
-                            txtvUnitPrice.setText(HelperMethods.currencyToString(p.UnitPrice));
+                            txtvUnitPrice.setText(HelperMethods.currencyToString(p.Fee));
                     }
                 } else {
                     if (p.IsRequestFreeItem)
                         txtvUnitPrice.setText(p.FreeReasonName);
                     else
-                        txtvUnitPrice.setText(HelperMethods.currencyToString(p.UnitPrice));
+                        txtvUnitPrice.setText(HelperMethods.currencyToString(p.Fee));
                 }
 
                 if (!backOfficeType.equals(BackOfficeType.ThirdParty)) {
-                    txtValue.setText(p.IsRequestFreeItem ? getString(R.string.multiplication_sign) : HelperMethods.currencyToString(totalPrice));
-                } else {
+                    txtValue.setText(p.IsRequestFreeItem ? getString(R.string.multiplication_sign) : HelperMethods.currencyToString(amuntFol));
+                } else if(p.TotalRequestQty!=null) {
                     Currency valueAmount = p.UnitPrice == null ? Currency.ZERO : p.UnitPrice.multiply(p.TotalRequestQty);
+
                     valueAmount = valueAmount
                             .subtract((p.InvoiceDis1 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis1))
                             .subtract((p.InvoiceDis2 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis2))
                             .subtract((p.InvoiceDis3 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis3))
                             .subtract((p.InvoiceDisOther == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDisOther));
-                    thirdPartyValueTextView.setText(HelperMethods.currencyToString(valueAmount));
+
+                    Currency custPrice = p.amount == null ? Currency.ZERO : p.amount;
+                  //  Currency custPrice = p.custPrice == null ? Currency.ZERO : p.custPrice;
+                    thirdPartyValueTextView.setText(HelperMethods.currencyToString(custPrice));
                 }
                 txtvRow.setText(position + 1 + "");
 
@@ -772,38 +792,46 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                     itemView.setBackgroundColor(HelperMethods.getColor(getContext(), R.color.white));
                 }
 
-
+                String[] unitNames;
                 List<BaseUnit> units = new ArrayList<>();
                 if (p.UnitName == null)
                     Timber.d("UnitName is null for ProductId = " + p.ProductId + " and DiscountRef = " + p.DiscountRef);
-                String[] unitNames = p.UnitName.split(":");
-                if (p.QtyCaption == null)
-                    Timber.d("QtyCaption is null for ProductId = " + p.ProductId + " and DiscountRef = " + p.DiscountRef);
-                String[] strUnits = p.QtyCaption.split(":");
-                for (int i = 0; i < strUnits.length; i++) {
-                    String strUnit = strUnits[i];
-                    BaseUnit unit = new BaseUnit();
-                    unit.value = Double.parseDouble(strUnit);
-                    unit.Name = unitNames[i];
-                    if (unit.value > 0)
-                        units.add(unit);
+                if (p.UnitName != null) {
+                    unitNames = p.UnitName.split(":");
+                    if (p.QtyCaption == null)
+                        Timber.d("QtyCaption is null for ProductId = " + p.ProductId + " and DiscountRef = " + p.DiscountRef);
+                    String[] strUnits = p.QtyCaption.split(":");
+                    for (int i = 0; i < strUnits.length; i++) {
+                        String strUnit = strUnits[i];
+                        BaseUnit unit = new BaseUnit();
+                        unit.value = Double.parseDouble(strUnit);
+                        unit.Name = unitNames[i];
+                        if (unit.value > 0)
+                            units.add(unit);
+                    }
                 }
                 new QtyView().build(llyorderQty, units);
 
                 if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
-                    String grossAmountValue = p.IsRequestFreeItem ? "0" : HelperMethods.currencyToString(p.UnitPrice == null ? Currency.ZERO : p.UnitPrice.multiply(p.TotalRequestQty));
-                    String discount = HelperMethods.currencyToString((p.InvoiceDis1 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis1)
-                            .add((p.InvoiceDis2 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis2))
-                            .add((p.InvoiceDis3 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis3))
-                            .add((p.InvoiceDisOther == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDisOther)));
-//                    String discount=HelperMethods.currencyToString(p.TakhfifatKol);
+                    String grossAmountValue = "";
+                    if (p.TotalRequestQty!=null)
+                     grossAmountValue = p.IsRequestFreeItem ? "0" :
+                            HelperMethods.currencyToString(p.UnitPrice == null
+                                    ? Currency.ZERO : p.UnitPrice.multiply(p.TotalRequestQty));
+
+                    String feeKol = HelperMethods.currencyToString(p.FeeKol);
+//                    String discount = HelperMethods.currencyToString((p.InvoiceDis1 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis1)
+//                            .add((p.InvoiceDis2 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis2))
+//                            .add((p.InvoiceDis3 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDis3))
+//                            .add((p.InvoiceDisOther == null ? new Currency(BigDecimal.ZERO) : p.InvoiceDisOther)));
+                    String discount = HelperMethods.currencyToString(p.TakhfifatKol);
                     String addValue = HelperMethods.currencyToString((p.InvoiceAdd1 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceAdd1)
                             .add((p.InvoiceAdd2 == null ? new Currency(BigDecimal.ZERO) : p.InvoiceAdd2)).add((p.InvoiceAddOther == null ? new Currency(BigDecimal.ZERO) : p.InvoiceAddOther)));
                     if (backOfficeType.equals(BackOfficeType.ThirdParty)) {
-                        thirdPartyGrossAmountTextView.setText(grossAmountValue);
+                        thirdPartyGrossAmountTextView.setText(feeKol);
                         thirdPartyDiscountTextView.setText(discount);
-                        thirdPartyAddTextView.setText(addValue);
-                        thirdPartyNetAmountTextView.setText(p.IsRequestFreeItem ? getString(R.string.multiplication_sign) : HelperMethods.currencyToString(totalPrice));
+                        thirdPartyAddTextView.setText(HelperMethods.currencyToString((p.evcItemAdd == null ? new Currency(BigDecimal.ZERO) : p.evcItemAdd)));
+                        thirdPartyNetAmountTextView.setText(p.IsRequestFreeItem ? getString(R.string.multiplication_sign) : HelperMethods.currencyToString(amuntFol));
                     } else {
                         txtOrderAmount.setText(grossAmountValue);
                         txtDiscount.setText(discount);
@@ -923,8 +951,17 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                     }
                     totalDiscount = totalDiscount.add(discount);
                 }
-                orderCostPairedItems.setValue(HelperMethods.currencyToString(total.add(customerCallOrderPromotion.TotalInvoiceAdd)));
-                discountAmountPairedItems.setValue(HelperMethods.currencyToString(totalDiscount));
+                orderCostPairedItems.setValue(customerCallOrderPromotion.TotalDiscont.toString());
+                //discountAmountPairedItems.setValue(HelperMethods.currencyToString(totalDiscount));
+
+
+                payableCashPairedItems.setValue(customerCallOrderPromotion.TotalAmountNutCash.toString());
+                payableChequePairedItems.setValue(customerCallOrderPromotion.TotalAmountNutCheque.toString());
+                payableImmediatePairedItems.setValue(customerCallOrderPromotion.TotalAmountNutImmediate.toString());
+                discountImmediatePairedItems.setValue(customerCallOrderPromotion.TotalAmountNutCheque
+                        .subtract(customerCallOrderPromotion.TotalAmountNutImmediate).toString());
+                orderCostPairedItems.setValue(customerCallOrderPromotion.TotalDiscont.toString());
+                discountAmountPairedItems.setValue(HelperMethods.currencyToString(customerCallOrderPromotion.TotalInvoiceDiscount));
             } else {
                 Currency totalPriceWithPromo = Currency.ZERO;
                 Currency totalInvoiceDiscount = Currency.ZERO;
@@ -942,11 +979,12 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                 payableChequePairedItems.setValue(customerCallOrderPromotion.TotalAmountNutCheque.toString());
                 payableImmediatePairedItems.setValue(customerCallOrderPromotion.TotalAmountNutImmediate.toString());
 
-                discountImmediatePairedItems.setValue(customerCallOrderPromotion.TotalAmountNutCheque.subtract(customerCallOrderPromotion.TotalAmountNutImmediate).toString());
-                orderCostPairedItems.setValue(customerCallOrderPromotion.TotalCashDiscount.toString());
+                discountImmediatePairedItems.setValue(customerCallOrderPromotion.TotalAmountNutCheque
+                        .subtract(customerCallOrderPromotion.TotalAmountNutImmediate).toString());
+                orderCostPairedItems.setValue(customerCallOrderPromotion.TotalDiscont.toString());
             }
 
-            addAmountPairedItems.setValue(HelperMethods.currencyToString(customerCallOrderPromotion.TotalInvoiceAdd));
+            addAmountPairedItems.setValue(HelperMethods.currencyToString(customerCallOrderPromotion.evcItemAddFol));
 
         } catch (UnknownBackOfficeException e) {
             Timber.e(e);

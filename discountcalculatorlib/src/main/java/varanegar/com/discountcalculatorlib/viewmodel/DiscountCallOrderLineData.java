@@ -1,5 +1,7 @@
 package varanegar.com.discountcalculatorlib.viewmodel;
 
+import android.annotation.SuppressLint;
+
 import com.varanegar.framework.base.VaranegarApplication;
 
 import java.math.BigDecimal;
@@ -41,10 +43,17 @@ public class DiscountCallOrderLineData {
     public BigDecimal weight;
     public long priceId;
     public BigDecimal unitPrice;
+
+    public BigDecimal amount;
+    public BigDecimal custPrice;
     public BigDecimal invoiceTotalQty;
     public BigDecimal invoiceBigQty;
-
     public BigDecimal TakhfifatKol;
+    public BigDecimal AmountNutPT03;
+    public BigDecimal Fee;
+    public BigDecimal FeeKol;
+    public BigDecimal totalQty;
+    public String zterm;
     public long invoiceBigQtyId;
     public String invoiceBigQtyName;
     public BigDecimal invoiceSmallQty;
@@ -52,6 +61,7 @@ public class DiscountCallOrderLineData {
     public String invoiceSmallQtyName;
     public BigDecimal totalInvoiceAmount;
     public BigDecimal totalInvoiceAdd1Amount;
+    public BigDecimal evcItemAdd;
     public BigDecimal totalInvoiceAdd2Amount;
     public BigDecimal totalInvoiceDiscount;
     public BigDecimal totalInvoiceTax;
@@ -296,6 +306,7 @@ public class DiscountCallOrderLineData {
         return onlineData;
     }
 
+    @SuppressLint("SuspiciousIndentation")
     public void SetFromOnline(OutputOnlineDetails onlinedata, ArrayList<DiscountCallOrderLineData> baseDatas) {
 
         this.evcId = UUID.randomUUID().toString();/*onlinedata.evcRef.toString();*/
@@ -324,8 +335,16 @@ public class DiscountCallOrderLineData {
         this.invoiceDis1 = onlinedata.evcItemDis1;
         this.invoiceDis2 = onlinedata.evcItemDis2;
         this.invoiceDis3 = onlinedata.evcItemDis3;
-        this.TakhfifatKol= onlinedata.TakhfifatKol;
+        this.TakhfifatKol= onlinedata.takhfifatkol;
+        this.evcItemAdd= onlinedata.evcItemAdd1;
+        this.AmountNutPT03= onlinedata.amountNutPT03;
+        this.Fee= onlinedata.fee;
+        this.FeeKol= onlinedata.feeKol;
+
+        this.totalQty= onlinedata.totalQty;
+        this.zterm= onlinedata.zterm;
         this.totalInvoiceAdd1Amount = onlinedata.evcItemAdd1;
+        this.evcItemAdd = onlinedata.evcItemAdd1;
         this.totalInvoiceAdd2Amount = onlinedata.evcItemAdd2;
         this.cart = onlinedata.cart;
         this.saleS_ITEM = onlinedata.saleS_ITEM;
@@ -355,8 +374,16 @@ public class DiscountCallOrderLineData {
         if (GlobalVariables.getIsThirdParty() && VaranegarApplication.is(VaranegarApplication.AppId.Dist) && (onlinedata.disRef == null || onlinedata.disRef == 0) && baseData != null) {
             this.unitPrice = baseData.unitPrice;
 
+            this.amount = onlinedata.amount;
+            this.custPrice= onlinedata.custPrice;
             this.totalInvoiceAmount = unitPrice.multiply(invoiceTotalQty);
-            this.totalInvoiceDiscount = (baseData.unitPrice.multiply(invoiceTotalQty)).subtract(onlinedata.amount);
+
+            if (amount!=null)
+                this.totalInvoiceDiscount = (baseData.unitPrice.multiply(invoiceTotalQty)).subtract(onlinedata.amount);
+//      this.totalInvoiceAmount = unitPrice.multiply(invoiceTotalQty);
+
+
+//            this.totalInvoiceDiscount = onlinedata.takhfifatkol;
         } else {
             this.unitPrice = onlinedata.custPrice;
             this.totalInvoiceAmount = onlinedata.amount;

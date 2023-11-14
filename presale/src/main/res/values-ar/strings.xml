@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Presales</string>
+    <string name="app_name">زرنگارپخش</string>
     <string name="product_unit_name">وحدة قياس</string>
     <string name="save_order_request">تسجيل طلب البيع</string>
     <string name="save_return_request">تسجيل طلب المرجوعات</string>

@@ -18,14 +18,16 @@ android {
 
     defaultConfig {
         applicationId "com.varanegar.supervisor"
-        minSdkVersion 19
+        minSdkVersion 20
         targetSdkVersion 30
         versionCode generateVersionCode()
         versionName generateVersionName()
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
-
+    lintOptions {
+        checkReleaseBuilds false
+    }
     signingConfigs {
         release {
             keyAlias 'supervisor'
