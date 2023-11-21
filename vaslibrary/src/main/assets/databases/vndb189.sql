@@ -12,11 +12,6 @@ alter table CustomerCallOrderLines add column higheR_LEVEL TEXT;
 alter table CustomerCallOrderLines add column cart  TEXT;
 alter table CustomerCallOrderLines add column iteM_CATEGORY TEXT;
 
----alter TABLE CustomerCallReturn
-alter table CustomerCallReturn add column zterm TEXT;
----alter TABLE CustomerCallReturnRequest 
-alter table CustomerCallReturnRequest add column zterm TEXT;
-
 
 
 
