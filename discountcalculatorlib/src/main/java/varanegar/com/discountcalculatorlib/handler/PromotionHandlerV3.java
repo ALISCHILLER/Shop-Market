@@ -382,8 +382,58 @@ public class PromotionHandlerV3 {
                     }
                 }
 
+
                 onlineData.SelIds = SelIds;
                 onlineData.OrderDate = DateHelper.toString(new Date(), DateFormat.Date, Locale.US);
+
+                if(onlineData.PaymentUsanceRef!=null && !onlineData.PaymentUsanceRef.isEmpty())
+                    onlineData.ZTERM = onlineData.PaymentUsanceRef;
+                else
+                    onlineData.ZTERM = "PT01";
+
+
+
+                if (productUnitModelData!=null)
+                    Collections.sort(productUnitModelData, new Comparator<ProductUnitModelData>() {
+                        @Override
+                        public int compare(ProductUnitModelData o1, ProductUnitModelData o2) {
+                            return Double.compare(o1.getConvertFactor(), o2.getConvertFactor());
+                        }
+                    });
+
+                double d;
+
+                if (productUnitModelData!=null)
+                    for (int i=0;i < onlineData.PreSaleEvcDetails.size();i++){
+                        String productCode= onlineData.PreSaleEvcDetails.get(i).GoodsRef
+                                .replaceAll("^0+", "");
+                        for (int j=0;j<productUnitModelData.size();j++){
+                            if (productCode.equals(productUnitModelData.get(j).ProductCode)){
+                                d = onlineData.
+                                        PreSaleEvcDetails.get(i).TotalQty
+                                        .divide(BigDecimal.valueOf(productUnitModelData.get(j).ConvertFactor),
+                                                RoundingMode.HALF_EVEN).doubleValue();
+
+                                if (d % 1 == 0) {
+                                    onlineData.PreSaleEvcDetails.get(i).TotalQty =
+                                            BigDecimal.valueOf(d);
+                                    onlineData.PreSaleEvcDetails.get(i).Unit =
+                                            productUnitModelData.get(j).UnitName;
+                                }
+                            }
+                        }
+                    }
+                else
+                    for (int i=0;i < onlineData.PreSaleEvcDetails.size();i++){
+                        onlineData.PreSaleEvcDetails.get(i).Unit ="EA";
+                    }
+
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd",Locale.ENGLISH);
+                String formattedDate = formatter.format(new Date());
+
+                System.out.println(formattedDate);
+                onlineData.DocPDate=formattedDate.replace("/", "");
+                onlineData.SalePDate=formattedDate.replace("/", "");
                 try {
                     Call<DiscountOutputOnline> call = calcPromotionAPI.getPromotion(onlineData,
                             GlobalVariables.getCalcDiscount(),
