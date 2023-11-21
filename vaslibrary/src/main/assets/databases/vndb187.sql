@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-
 
 ---CREATE TABLE LocationConfirmTracking
 alter table Product add column Cart  TEXT;
@@ -7,7 +5,6 @@ alter table Product add column Cart  TEXT;
 alter table Customer add column StrSaleStatus TEXT;
 
 
-=======
 ---CREATE TABLE LocationConfirmTracking
 CREATE TABLE "LocationConfirmTracking" (
 "uniqueId"  TEXT NOT NULL COLLATE NOCASE ,
@@ -15,4 +12,4 @@ CREATE TABLE "LocationConfirmTracking" (
 "Long"  TEXT  ,
 "StrCreateDate" TEXT,
 PRIMARY KEY ("uniqueId" ASC));
->>>>>>> simolate2
+

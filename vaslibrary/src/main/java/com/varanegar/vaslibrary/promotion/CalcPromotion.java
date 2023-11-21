@@ -800,7 +800,7 @@ public class CalcPromotion {
         ArrayList<CustomerCallOrderLinePromotion> promotionLines = new ArrayList<>();
 
         for (CustomerCallOrderOrderViewModel item : lines) {
-            if (!item.IsPromoLine && item.cart.isEmpty()) {
+            if (!item.IsPromoLine && (item.cart == null||item.cart.isEmpty())) {
                 CustomerCallOrderLinePromotion promotionitem = new CustomerCallOrderLinePromotion();
                 ProductModel productModel = new ProductManager(context).getItem(item.ProductId);
                 promotionitem.UniqueId = item.UniqueId;

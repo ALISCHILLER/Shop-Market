@@ -19,7 +19,7 @@ android {
 
         defaultConfig {
             applicationId "com.varanegar.presale"
-            minSdkVersion 19
+            minSdkVersion 20
             targetSdkVersion 30
         versionCode generateVersionCode()
         versionName generateVersionName()

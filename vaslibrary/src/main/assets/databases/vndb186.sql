@@ -1,5 +1,7 @@
-<<<<<<< HEAD
 
+alter table CustomerCallReturn add column zterm TEXT;
+
+alter table CustomerCallReturnRequest add column zterm TEXT;
 
 ---CREATE TABLE LocationConfirmTracking
 CREATE TABLE "LocationConfirmTracking" (
@@ -10,7 +12,7 @@ CREATE TABLE "LocationConfirmTracking" (
 PRIMARY KEY ("uniqueId" ASC));
 
 
-=======
+
 DROP TABLE IF EXISTS "main"."CustomerCallOrderLinesInvoiceQtyDetail";
 CREATE TABLE "CustomerCallOrderLinesInvoiceQtyDetail" (
 "UniqueId"  TEXT NOT NULL COLLATE NOCASE ,
@@ -24,6 +26,5 @@ CONSTRAINT "fkey1" FOREIGN KEY ("OrderLineUniqueId") REFERENCES "CustomerCallInv
 CONSTRAINT "fkey2" FOREIGN KEY ("ProductUnitId") REFERENCES "ProductUnit" ("UniqueId") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-alter table CustomerCallReturn add column zterm TEXT;
-alter table CustomerCallReturnRequest add column zterm TEXT;
->>>>>>> simolate2
+
+
