@@ -27,6 +27,13 @@ public class ReturnLinesRequestManager extends BaseManager<ReturnLinesRequestMod
         query.from(ReturnLinesRequest.ReturnLinesRequestTbl).whereAnd(Criteria.equals(ReturnLinesRequest.ReturnUniqueId, returnId.toString()));
         return getItems(query);
     }
-
+    public List<ReturnLinesRequestModel> getSalesItem(@NonNull UUID returnId,UUID productId) {
+        Query query = new Query();
+        query.from(ReturnLinesRequest.ReturnLinesRequestTbl)
+                .whereAnd(Criteria.equals(ReturnLinesRequest.ReturnUniqueId, returnId.toString())
+                ).whereAnd(Criteria.equals(ReturnLinesRequest.ProductUniqueId, productId.toString())
+                );
+        return getItems(query);
+    }
 
 }

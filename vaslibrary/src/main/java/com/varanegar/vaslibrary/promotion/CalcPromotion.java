@@ -99,7 +99,10 @@ import static varanegar.com.discountcalculatorlib.Global.totallyError;
  */
 public class CalcPromotion {
 
-    public static void calcReturnPromotion(final Context context, @NonNull final UUID customerUniqueId, boolean withRef, boolean isFromRequest, final PromotionCallback callback) {
+    public static void calcReturnPromotion(final Context context,
+                                           @NonNull final UUID customerUniqueId,
+                                           boolean withRef, boolean isFromRequest,
+                                           final PromotionCallback callback) {
         try {
             PingApi pingApi = new PingApi();
             pingApi.refreshBaseServerUrl(context, new PingApi.PingCallback() {
@@ -107,6 +110,7 @@ public class CalcPromotion {
                 public void done(String ipAddress) {
                     DiscountInitializeHandler disc = DiscountInitializeHandlerV3.getDiscountHandler(context);
                     final CustomerCallOrderPromotion callData = fillCustomerCallOrderPromotion(context, customerUniqueId, withRef, isFromRequest);
+
                     DiscountCalculatorHandler.init(disc, 0, null);
                     DiscountCalculatorHandler.setOnlineOptions(ipAddress, true, false, false);
                     try {
@@ -114,13 +118,13 @@ public class CalcPromotion {
                         if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
                             CustomerCallReturnRequestModel model = new
                                     CustomerCallReturnRequestManager(context).getCustomerCallReturn(callData.CustomerId);
+                            String saleNoSDS = String.valueOf(model.Comment).replaceFirst("^0+", "");
                             disCallData = PromotionHandlerV3.distCalcPromotionOnlineSDS(null, callData.toDiscount(context), context,
                                     null, null,
-                                    model.zterm, null, null, null,null);
+                                    model.zterm, saleNoSDS, null, null, null);
                         } else
                             disCallData = PromotionHandlerV3.
-                                    calcPromotionOnlineSDS(null, callData.toDiscount(context), context,null);
-
+                                    calcPromotionOnlineSDS(null, callData.toDiscount(context), context, null);
 
 
                         Timber.d("finished!");
@@ -316,7 +320,7 @@ public class CalcPromotion {
                                                     SelIds,
                                                     callData.toDiscount(context),
                                                     evcType.value(),
-                                                    context,productUnitModelData);
+                                                    context, productUnitModelData);
                                             Timber.d("finished!");
                                             callData.setFromDiscount(context, disCallData);
                                             if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist))
@@ -359,7 +363,7 @@ public class CalcPromotion {
                             } else {
                                 disCallData = DiscountCalculatorHandler.calcPromotion(SelIds,
                                         callData.toDiscount(context),
-                                        evcType.value(), context,null);
+                                        evcType.value(), context, null);
                                 Timber.d("finished!");
                                 callData.setFromDiscount(context, disCallData);
                                 fillOrderPrize(context, callData, callData.discountEvcPrize);
@@ -464,10 +468,10 @@ public class CalcPromotion {
 
 
             if (GlobalVariables.isCalcOnline()) {
-                    disCallData = PromotionHandlerV3.distCalcPromotionOnlineSDS(
-                            orderPrizeList,
-                            callData.toDiscount(context),
-                            context, SalePDate, DocPDate, ZTERM, saleNoSDS,orderProduct,invoiceLineQtyModelData,productUnitModelData);
+                disCallData = PromotionHandlerV3.distCalcPromotionOnlineSDS(
+                        orderPrizeList,
+                        callData.toDiscount(context),
+                        context, SalePDate, DocPDate, ZTERM, saleNoSDS, orderProduct, invoiceLineQtyModelData, productUnitModelData);
             } else {
                 DiscountInitializeHandler disc = DiscountInitializeHandlerV3.getDiscountHandler(context);
                 //DiscountCalculatorHandler.init(disc, callData.BackOfficeOrderId, null);
@@ -482,9 +486,9 @@ public class CalcPromotion {
                 HashMap<String, BigDecimal> promoLinesMap = new HashMap<>();
                 for (DiscountCallOrderLineData callOrderLine :
                         orderProduct) {
-                    String key= String.valueOf(callOrderLine.productId);
+                    String key = String.valueOf(callOrderLine.productId);
                     if (!callOrderLine.cart.isEmpty())
-                        key=callOrderLine.cart+callOrderLine.productId;
+                        key = callOrderLine.cart + callOrderLine.productId;
                     if (callOrderLine.isRequestPrizeItem)
                         promoLinesMap.put(key, callOrderLine.invoiceTotalQty);
                     else
@@ -500,9 +504,9 @@ public class CalcPromotion {
                         productCode = productModel.ProductCode;
                     }
 
-                    String cartkey= String.valueOf(item.productId);
+                    String cartkey = String.valueOf(item.productId);
                     if (!item.cart.isEmpty())
-                        cartkey=item.cart+item.productId;
+                        cartkey = item.cart + item.productId;
 
                     if (linesMap.containsKey(item.orderLineId) && item.cart.isEmpty()) {
                         exits = true;
@@ -729,6 +733,8 @@ public class CalcPromotion {
                     promotionitem.ReferenceNo = item.ReferenceNo;
                 }
                 promotionitem.ProductName = item.ProductName;
+                if (item.saleS_ITEM != null)
+                    promotionitem.saleS_ITEM = item.saleS_ITEM;
                 promotionitem.ProductCode = item.ProductCode;
                 promotionitem.ProductId = item.ProductId;
                 promotionitem.ProductRef = productModel.BackOfficeId;
@@ -800,7 +806,7 @@ public class CalcPromotion {
         ArrayList<CustomerCallOrderLinePromotion> promotionLines = new ArrayList<>();
 
         for (CustomerCallOrderOrderViewModel item : lines) {
-            if (!item.IsPromoLine && (item.cart == null||item.cart.isEmpty())) {
+            if (!item.IsPromoLine && (item.cart == null || item.cart.isEmpty())) {
                 CustomerCallOrderLinePromotion promotionitem = new CustomerCallOrderLinePromotion();
                 ProductModel productModel = new ProductManager(context).getItem(item.ProductId);
                 promotionitem.UniqueId = item.UniqueId;
@@ -983,8 +989,8 @@ public class CalcPromotion {
             DiscountCallOrderLineData disLine = new DiscountCallOrderLineData();
             disLine.orderLineId = item.UniqueId;
             disLine.productId = new ProductManager(context).getBackOfficeId(item.ProductId);
-            disLine.cart=item.cart;
-            disLine.saleS_ITEM=item.saleS_ITEM;
+            disLine.cart = item.cart;
+            disLine.saleS_ITEM = item.saleS_ITEM;
             disLine.invoiceTotalQty = item.OriginalTotalQty == null ? BigDecimal.ZERO : item.OriginalTotalQty;
             if (item.IsPromoLine || !item.cart.isEmpty())
                 disLine.isRequestPrizeItem = true;

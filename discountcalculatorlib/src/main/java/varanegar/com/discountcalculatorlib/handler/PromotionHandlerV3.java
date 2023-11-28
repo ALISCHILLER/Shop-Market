@@ -193,7 +193,7 @@ public class PromotionHandlerV3 {
      * @return
      * @throws InterruptedException
      */
-    public static DiscountCallOrderData distCalcPromotionOnlineSDS(
+    public static DiscountCallOrderData     distCalcPromotionOnlineSDS(
             final List<DiscountOrderPrizeViewModel> orderPrizeList,
             final DiscountCallOrderData discountCallOrderData,
             final Context context,

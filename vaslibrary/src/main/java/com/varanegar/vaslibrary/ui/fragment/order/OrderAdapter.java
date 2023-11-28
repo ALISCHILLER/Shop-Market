@@ -102,7 +102,7 @@ public class OrderAdapter extends BaseRecyclerAdapter<CustomerCallOrderOrderView
                 @Override
                 public boolean isAvailable(int position) {
                     CustomerCallOrderOrderViewModel orderViewModel = get(position);
-                    return !orderViewModel.IsPromoLine && orderViewModel.cart.isEmpty();
+                    return !orderViewModel.IsPromoLine &&(orderViewModel.cart ==null||orderViewModel.cart.isEmpty());
                 }
 
                 @Override

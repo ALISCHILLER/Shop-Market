@@ -66,4 +66,6 @@ public class ReturnLineBaseModel extends BaseModel {
     public String ReferenceNo;
     @Column
     public String ItemRef;
+    @Column
+    public String saleS_ITEM ;
 }

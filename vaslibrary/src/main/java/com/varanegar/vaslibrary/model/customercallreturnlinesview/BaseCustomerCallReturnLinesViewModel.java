@@ -91,4 +91,6 @@ public class BaseCustomerCallReturnLinesViewModel extends BaseModel {
     public UUID StockId;
     @Column
     public String ItemRef;
+    @Column
+    public String saleS_ITEM ;
 }
