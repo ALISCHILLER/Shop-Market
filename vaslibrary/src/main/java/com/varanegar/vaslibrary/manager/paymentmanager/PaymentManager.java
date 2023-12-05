@@ -575,7 +575,7 @@ public class PaymentManager extends BaseManager<PaymentModel> {
                                     getString(R.string.chash_payed) + " " + payedCashCheck.Check + "\n" +
                                     getString(R.string.remian_cash) + " " + total);
 
-                        if (payedCashCheck.Check.compareTo(total) > 0)
+                        if (payedCashCheck.Check.compareTo(total) > 1)
                             throw new ControlPaymentException("مبلغ وارده بیشتر :" + total);
                     }
                 }
