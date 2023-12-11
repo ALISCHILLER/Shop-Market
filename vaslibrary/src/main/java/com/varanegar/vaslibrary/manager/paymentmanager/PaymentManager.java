@@ -2,6 +2,7 @@ package com.varanegar.vaslibrary.manager.paymentmanager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.icu.math.BigDecimal;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -59,7 +60,6 @@ import com.varanegar.vaslibrary.model.paymentTypeOrder.PaymentTypeOrderModel;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.ui.fragment.settlement.CustomerPayment;
 
-import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -672,11 +672,6 @@ public class PaymentManager extends BaseManager<PaymentModel> {
             List<PaymentTypeOrderModel> paymentTypeOrderModels = new ValidPayTypeManager(getContext()).getPaymentTypeOrders(customerCallOrderModels, null);
             PaymentTypeOrderModel paymentTypeOrderModel = paymentTypeOrderModels.get(0);
 
-
-
-
-
-
             if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PT01.toString())){
                 CashCheckReceiptModel validCashCheck = calcCashAndCheckValidAmount(customerModel.UniqueId);
                 Currency returnVa=calcCashAndCheckValidAmountreturn(customerModel.UniqueId);
@@ -852,18 +847,18 @@ public class PaymentManager extends BaseManager<PaymentModel> {
                 Set<UUID> ids = validPayTypeManager.getValidPayTypes(customerCallOrderModel);
                 CustomerCallOrderOrderViewManager customerCallOrderOrderViewManager = new CustomerCallOrderOrderViewManager(getContext());
                 if ((ids.contains(PaymentType.Cash) || (ids.contains(PaymentType.Card))) && !ids.contains(PaymentType.Check) && !ids.contains(PaymentType.Recipt))
-                    cashCheckReceiptModel.Cash = cashCheckReceiptModel.Cash.add(customerCallOrderOrderViewManager.calculateTotalAmount(customerCallOrderModel.UniqueId).NetAmount);
+                    cashCheckReceiptModel.Cash = cashCheckReceiptModel.Cash.add(customerCallOrderOrderViewManager.calculateTotalAmount(customerCallOrderModel.UniqueId).NetAmount).setScale(2, BigDecimal.ROUND_HALF_DOWN);
                 if (ids.contains(PaymentType.Check) && !ids.contains(PaymentType.Recipt))
-                    cashCheckReceiptModel.Check = cashCheckReceiptModel.Check.add(customerCallOrderOrderViewManager.calculateTotalAmount(customerCallOrderModel.UniqueId).NetAmount);
+                    cashCheckReceiptModel.Check = cashCheckReceiptModel.Check.add(customerCallOrderOrderViewManager.calculateTotalAmount(customerCallOrderModel.UniqueId).NetAmount).setScale(2, BigDecimal.ROUND_HALF_DOWN);
             }
         }
         Currency returnAmount = new CustomerCallReturnLinesViewManager(getContext()).calculateTotalAmount(customerId, null).NetAmount;
         if (returnAmount.compareTo(cashCheckReceiptModel.Cash) == 1) {
-            cashCheckReceiptModel.Check = cashCheckReceiptModel.Check.subtract(returnAmount.subtract(cashCheckReceiptModel.Cash));
+            cashCheckReceiptModel.Check = cashCheckReceiptModel.Check.subtract(returnAmount.subtract(cashCheckReceiptModel.Cash)).setScale(2, BigDecimal.ROUND_HALF_DOWN);
             cashCheckReceiptModel.Cash = Currency.ZERO;
 
         } else {
-            cashCheckReceiptModel.Cash = cashCheckReceiptModel.Cash.subtract(returnAmount);
+            cashCheckReceiptModel.Cash = cashCheckReceiptModel.Cash.subtract(returnAmount).setScale(2, BigDecimal.ROUND_HALF_DOWN);
         }
         return cashCheckReceiptModel;
     }
