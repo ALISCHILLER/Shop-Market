@@ -742,18 +742,18 @@ public class PaymentManager extends BaseManager<PaymentModel> {
                 Set<UUID> ids = validPayTypeManager.getValidPayTypes(customerCallOrderModel);
                 CustomerCallOrderOrderViewManager customerCallOrderOrderViewManager = new CustomerCallOrderOrderViewManager(getContext());
                 if ((ids.contains(PaymentType.Cash) || (ids.contains(PaymentType.Card))) && !ids.contains(PaymentType.Check) && !ids.contains(PaymentType.Recipt))
-                    cashCheckReceiptModel.Cash = cashCheckReceiptModel.Cash.add(customerCallOrderOrderViewManager.calculateTotalAmount(customerCallOrderModel.UniqueId).NetAmount);
+                    cashCheckReceiptModel.Cash = cashCheckReceiptModel.Cash.add(customerCallOrderOrderViewManager.calculateTotalAmount(customerCallOrderModel.UniqueId).NetAmount).setScale(2,BigDecimal.ROUND_HALF_DOWN);
                 if (ids.contains(PaymentType.Check) && !ids.contains(PaymentType.Recipt))
-                    cashCheckReceiptModel.Check = cashCheckReceiptModel.Check.add(customerCallOrderOrderViewManager.calculateTotalAmount(customerCallOrderModel.UniqueId).NetAmount);
+                    cashCheckReceiptModel.Check = cashCheckReceiptModel.Check.add(customerCallOrderOrderViewManager.calculateTotalAmount(customerCallOrderModel.UniqueId).NetAmount).setScale(2,BigDecimal.ROUND_HALF_DOWN);
             }
         }
         Currency returnAmount = new CustomerCallReturnLinesViewManager(getContext()).calculateTotalAmount(customerId, null).NetAmount;
         if (returnAmount.compareTo(cashCheckReceiptModel.Cash) == 1) {
-            cashCheckReceiptModel.Check = cashCheckReceiptModel.Check.subtract(returnAmount.subtract(cashCheckReceiptModel.Cash));
+            cashCheckReceiptModel.Check = cashCheckReceiptModel.Check.subtract(returnAmount.subtract(cashCheckReceiptModel.Cash)).setScale(2,BigDecimal.ROUND_HALF_DOWN);
             cashCheckReceiptModel.Cash = Currency.ZERO;
 
         } else {
-            cashCheckReceiptModel.Cash = cashCheckReceiptModel.Cash.subtract(returnAmount);
+            cashCheckReceiptModel.Cash = cashCheckReceiptModel.Cash.subtract(returnAmount).setScale(2,BigDecimal.ROUND_HALF_DOWN);
         }
         return cashCheckReceiptModel;
     }
