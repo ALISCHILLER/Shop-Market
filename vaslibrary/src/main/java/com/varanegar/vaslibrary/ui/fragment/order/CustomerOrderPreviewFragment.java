@@ -236,6 +236,7 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
             allDiscountItemCounts = discountItemCountManager.getItems(DiscountItemCountManager.getAllDiscountItems());
             calc(true);
 
+            orderCostPairedItems.setVisibility(View.GONE);
             return view;
         } catch (UnknownBackOfficeException e) {
             Timber.e(e);
