@@ -899,17 +899,21 @@ public class PaymentManager extends BaseManager<PaymentModel> {
         if (cash != null)
             cashCheckReceiptModel.Cash = cash.Amount;
         if (discount != null)
-            cashCheckReceiptModel.Cash = cashCheckReceiptModel.Cash.add(discount.Amount);
+            cashCheckReceiptModel.Cash = cashCheckReceiptModel.Cash.add(discount.Amount)
+                    .setScale(2, BigDecimal.ROUND_HALF_DOWN);;
         if (credit != null)
-            cashCheckReceiptModel.Cash = cashCheckReceiptModel.Cash.add(credit.Amount);
+            cashCheckReceiptModel.Cash = cashCheckReceiptModel.Cash.add(credit.Amount)
+                    .setScale(2, BigDecimal.ROUND_HALF_DOWN);;
         List<PaymentModel> posModels = paymentManager.listPosPayments(customerId);
         for (PaymentModel paymentModel : posModels)
-            cashCheckReceiptModel.Cash = cashCheckReceiptModel.Cash.add(paymentModel.Amount);
+            cashCheckReceiptModel.Cash = cashCheckReceiptModel.Cash.add(paymentModel.Amount)
+                    .setScale(2, BigDecimal.ROUND_HALF_DOWN);;
 
         // calc check amounts
         List<PaymentModel> checkModels = paymentManager.listCheckPayments(customerId);
         for (PaymentModel paymentModel : checkModels)
-            cashCheckReceiptModel.Check = cashCheckReceiptModel.Check.add(paymentModel.Amount);
+            cashCheckReceiptModel.Check = cashCheckReceiptModel.Check.add(paymentModel.Amount)
+                    .setScale(2, BigDecimal.ROUND_HALF_DOWN);
         // calc receipt amount
         Currency receiptAmount = customerPayment.getTotalAmount(false).subtract(paymentManager.getTotalPaid(customerId));
         if (receiptAmount.compareTo(Currency.ZERO) == -1)
