@@ -555,7 +555,7 @@ public class PaymentManager extends BaseManager<PaymentModel> {
                        throw new ControlPaymentException(getString(R.string.min_valid_cash) + " " +
                                total + "\n" +
                                getString(R.string.chash_payed) + " " + payedCashCheck.Cash + "\n" +
-                               getString(R.string.remian_cash) + " " + total);
+                               getString(R.string.remian_cash) + " " +payedCashCheck.Cash.subtract(total));
 
                    if (payedCashCheck.Cash.compareTo(total) > 0)
                        throw new ControlPaymentException("مبلغ وارده بیشتر :" + total);
@@ -569,11 +569,13 @@ public class PaymentManager extends BaseManager<PaymentModel> {
                     if (customerCallOrderModels.get(0).TotalAmountNutCash != null) {
                         Currency returnVa = calcCashAndCheckValidAmountreturn(customerModel.UniqueId);
                         Currency total = customerCallOrderModels.get(0).TotalAmountNutCash.subtract(returnVa);
+                        if (payedCashCheck.Cash.compareTo(Currency.valueOf(0))>0)
+                            payedCashCheck.Check=payedCashCheck.Check.add(payedCashCheck.Cash);
                         if (payedCashCheck.Check.compareTo(total) < 0)
                             throw new ControlPaymentException(getString(R.string.min_valid_cash) + " " +
                                     total + "\n" +
                                     getString(R.string.chash_payed) + " " + payedCashCheck.Check + "\n" +
-                                    getString(R.string.remian_cash) + " " + total);
+                                    getString(R.string.remian_cash) + " " + payedCashCheck.Check.subtract(total));
 
                         if (payedCashCheck.Check.compareTo(total) > 1)
                             throw new ControlPaymentException("مبلغ وارده بیشتر :" + total);
@@ -586,11 +588,13 @@ public class PaymentManager extends BaseManager<PaymentModel> {
                     if (customerCallOrderModels.get(0).TotalAmountNutCheque != null) {
                         Currency returnVa = calcCashAndCheckValidAmountreturn(customerModel.UniqueId);
                         Currency total = customerCallOrderModels.get(0).TotalAmountNutCheque.subtract(returnVa);
+                        if (payedCashCheck.Cash.compareTo(Currency.valueOf(0))>0)
+                            payedCashCheck.Check=payedCashCheck.Check.add(payedCashCheck.Cash);
                         if (payedCashCheck.Check.compareTo(total) < 0)
                             throw new ControlPaymentException(getString(R.string.min_valid_cash) + " " +
                                     total + "\n" +
-                                    getString(R.string.chash_payed) + " " + payedCashCheck.Check + "\n" +
-                                    getString(R.string.remian_cash) + " " + total);
+                                    getString(R.string.max_valid_check) + " " + payedCashCheck.Check + "\n" +
+                                    getString(R.string.remain_cash_and_check) + " " + payedCashCheck.Check.subtract(total));
 
                         if (payedCashCheck.Check.compareTo(total) > 0)
                             throw new ControlPaymentException("مبلغ وارده بیشتر :" + total);
@@ -680,7 +684,7 @@ public class PaymentManager extends BaseManager<PaymentModel> {
                     throw new ControlPaymentException(getString(R.string.min_valid_cash) + " " +
                             total + "\n" +
                             getString(R.string.chash_payed) + " " + payedCashCheck.Cash + "\n" +
-                            getString(R.string.remian_cash) + " " + total);
+                            getString(R.string.remian_cash) + " " + payedCashCheck.Cash.subtract(total));
 
                 if (payedCashCheck.Cash.compareTo(total) > 0)
                     throw new ControlPaymentException("مبلغ وارده بیشتر :"+ total );
@@ -692,11 +696,13 @@ public class PaymentManager extends BaseManager<PaymentModel> {
                 CashCheckReceiptModel validCashCheck = calcCashAndCheckValidAmount(customerModel.UniqueId);
                 Currency returnVa=calcCashAndCheckValidAmountreturn(customerModel.UniqueId);
                 Currency total=customerCallOrderModels.get(0).TotalAmountNutCash.subtract(returnVa);
+                if (payedCashCheck.Cash.compareTo(Currency.valueOf(0))>0)
+                    payedCashCheck.Check=payedCashCheck.Check.add(payedCashCheck.Cash);
                 if (payedCashCheck.Check.compareTo(total) < 0)
                     throw new ControlPaymentException(getString(R.string.min_valid_cash) + " " +
                             total + "\n" +
                             getString(R.string.chash_payed) + " " + payedCashCheck.Check + "\n" +
-                            getString(R.string.remian_cash) + " " + total);
+                            getString(R.string.remian_cash) + " " + payedCashCheck.Check.subtract(total));
 
                 if (payedCashCheck.Check.compareTo(total) > 0)
                     throw new ControlPaymentException("مبلغ وارده بیشتر :"+total);
@@ -708,11 +714,13 @@ public class PaymentManager extends BaseManager<PaymentModel> {
                 CashCheckReceiptModel returnAmount = calcCashAndCheckValidAmount(customerModel.UniqueId);
                 Currency returnVa=calcCashAndCheckValidAmountreturn(customerModel.UniqueId);
                 Currency total=customerCallOrderModels.get(0).TotalAmountNutCheque.subtract(returnVa);
+                if (payedCashCheck.Cash.compareTo(Currency.valueOf(0))>0)
+                    payedCashCheck.Check=payedCashCheck.Check.add(payedCashCheck.Cash);
                 if (payedCashCheck.Check.compareTo(total) < 0)
                     throw new ControlPaymentException(getString(R.string.min_valid_cash) + " " +
                             total + "\n" +
                             getString(R.string.chash_payed) + " " + payedCashCheck.Check + "\n" +
-                            getString(R.string.remian_cash) + " " + total);
+                            getString(R.string.remian_cash) + " " + payedCashCheck.Check.subtract(total));
 
                 if (payedCashCheck.Check.compareTo(total) > 0)
                     throw new ControlPaymentException("مبلغ وارده بیشتر :"+total);
