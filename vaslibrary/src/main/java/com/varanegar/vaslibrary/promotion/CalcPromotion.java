@@ -486,7 +486,7 @@ public class CalcPromotion {
                 HashMap<String, BigDecimal> promoLinesMap = new HashMap<>();
                 for (DiscountCallOrderLineData callOrderLine :
                         orderProduct) {
-                    String key = String.valueOf(callOrderLine.productId);
+                    String key = String.valueOf(callOrderLine.productId+callOrderLine.saleS_ITEM);
                     if (!callOrderLine.cart.isEmpty())
                         key = callOrderLine.cart + callOrderLine.productId;
                     if (callOrderLine.isRequestPrizeItem)
@@ -504,7 +504,7 @@ public class CalcPromotion {
                         productCode = productModel.ProductCode;
                     }
 
-                    String cartkey = String.valueOf(item.productId);
+                    String cartkey = String.valueOf(item.productId+item.saleS_ITEM);
                     if (!item.cart.isEmpty())
                         cartkey = item.cart + item.productId;
 
