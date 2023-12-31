@@ -135,6 +135,9 @@ public class CustomerCallOrderLinePromotion extends BaseModel {
         this.EVCId = UUID.fromString(lineData.evcId);
         this.ProductCode = lineData.productCode;
         this.cart = lineData.cart;
+        String temp = "";
+        temp = lineData.saleS_ITEM;
+        this.saleS_ITEM = temp;
         this.ProductName = lineData.productName;
         this.PayDuration = lineData.PayDuration;
         this.RuleNo = lineData.RuleNo;
@@ -268,6 +271,7 @@ public class CustomerCallOrderLinePromotion extends BaseModel {
                         this.QtyCaption = baseLineData.QtyCaption;
                         this.UnitName = baseLineData.UnitName;
                         this.TotalRequestQty = baseLineData.TotalRequestQty;
+                        this.saleS_ITEM = baseLineData.saleS_ITEM;
 
                         break;
                     }

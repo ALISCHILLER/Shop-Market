@@ -76,7 +76,9 @@ public class CallOrderLineBatchQtyDetailManager extends BaseManager<CallOrderLin
     public void updatePromoLineBatchQty(@NonNull UUID callOrderLineId, BigDecimal newQty) throws ValidationException, DbException {
         CallInvoiceLineBatchQtyDetailManager callInvoiceLineBatchQtyDetailManager = new CallInvoiceLineBatchQtyDetailManager(getContext());
         List<CallInvoiceLineBatchQtyDetailModel> callInvoiceLineBatchQtyDetailModels =
-                callInvoiceLineBatchQtyDetailManager.getItems(new Query().from(CallInvoiceLineBatchQtyDetail.CallInvoiceLineBatchQtyDetailTbl).whereAnd(Criteria.equals(CallInvoiceLineBatchQtyDetail.CustomerCallOrderLineUniqueId, callOrderLineId.toString())));
+                callInvoiceLineBatchQtyDetailManager
+                        .getItems(new Query().from(CallInvoiceLineBatchQtyDetail.CallInvoiceLineBatchQtyDetailTbl)
+                                .whereAnd(Criteria.equals(CallInvoiceLineBatchQtyDetail.CustomerCallOrderLineUniqueId, callOrderLineId.toString())));
         if (callInvoiceLineBatchQtyDetailModels.size() > 0) {
             delete(Criteria.equals(CallOrderLineBatchQtyDetail.CustomerCallOrderLineUniqueId, callOrderLineId.toString()));
             BigDecimal oldQty = BigDecimal.ZERO;
