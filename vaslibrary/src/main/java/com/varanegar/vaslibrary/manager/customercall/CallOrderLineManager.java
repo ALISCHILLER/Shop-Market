@@ -478,7 +478,8 @@ public class CallOrderLineManager extends BaseManager<CallOrderLineModel> {
                 for (CallOrderLineModel callOrderLine :
                         lines) {
                     ProductModel productModel = new ProductManager(getContext()).getItemProduct(callOrderLine.ProductUniqueId);
-                    String key = productModel.ProductCode+callOrderLine.saleS_ITEM;
+                    //String key = productModel.ProductCode+callOrderLine.saleS_ITEM;
+                    String key = productModel.ProductCode;
                     if (!callOrderLine.cart.isEmpty())
                         key = callOrderLine.cart + productModel.ProductCode;
 
@@ -491,7 +492,8 @@ public class CallOrderLineManager extends BaseManager<CallOrderLineModel> {
                 if (customerCallOrderPromotion.LinesWithPromo != null && customerCallOrderPromotion.LinesWithPromo.size() > 0) {
                     for (CustomerCallOrderLinePromotion customerCallOrderLinePromotion :
                             customerCallOrderPromotion.LinesWithPromo) {
-                        String cartkey = customerCallOrderLinePromotion.ProductCode+customerCallOrderLinePromotion.saleS_ITEM;
+                       // String cartkey = customerCallOrderLinePromotion.ProductCode+customerCallOrderLinePromotion.saleS_ITEM;
+                        String cartkey = customerCallOrderLinePromotion.ProductCode;
                         if (!customerCallOrderLinePromotion.cart.isEmpty())
                             cartkey = customerCallOrderLinePromotion.cart + customerCallOrderLinePromotion.ProductCode;
 

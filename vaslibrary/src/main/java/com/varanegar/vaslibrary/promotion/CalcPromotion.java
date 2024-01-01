@@ -486,7 +486,8 @@ public class CalcPromotion {
                 HashMap<String, BigDecimal> promoLinesMap = new HashMap<>();
                 for (DiscountCallOrderLineData callOrderLine :
                         orderProduct) {
-                    String key = String.valueOf(callOrderLine.productId+callOrderLine.saleS_ITEM);
+                 //   String key = String.valueOf(callOrderLine.productId+callOrderLine.saleS_ITEM);
+                    String key = String.valueOf(callOrderLine.productId);
                     if (!callOrderLine.cart.isEmpty())
                         key = callOrderLine.cart + callOrderLine.productId;
                     if (callOrderLine.isRequestPrizeItem)
@@ -494,6 +495,9 @@ public class CalcPromotion {
                     else
                         linesMap.put(callOrderLine.orderLineId, callOrderLine.invoiceTotalQty);
                 }
+
+
+
                 ArrayList<String> errors = new ArrayList<>();
                 for (DiscountCallOrderLineData item : disCallData.callLineItemDataWithPromo) {
                     boolean exits = false;
@@ -504,7 +508,8 @@ public class CalcPromotion {
                         productCode = productModel.ProductCode;
                     }
 
-                    String cartkey = String.valueOf(item.productId+item.saleS_ITEM);
+                  //  String cartkey = String.valueOf(item.productId+item.saleS_ITEM);
+                    String cartkey = String.valueOf(item.productId);
                     if (!item.cart.isEmpty())
                         cartkey = item.cart + item.productId;
 
@@ -526,6 +531,11 @@ public class CalcPromotion {
                                 + context.getString(R.string.current_count) + "0" + " - "
                                 + context.getString(R.string.law_count) + item.disRef + ": " + item.invoiceTotalQty);
                 }
+                if (disCallData.callLineItemDataWithPromo.size()>orderProduct.size())
+                    errors.add(context.getString(R.string.error_size)+" "+context.getString(R.string.current_count)
+                            +orderProduct.size()
+                            +" "+context.getString(R.string.current_law)+
+                            disCallData.callLineItemDataWithPromo.size());
                 if (errors.size() > 0) {
                     String errorMsg = context.getString(R.string.has_discount_line_more_than_order);
                     for (String err :

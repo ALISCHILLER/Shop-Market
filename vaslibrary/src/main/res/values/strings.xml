@@ -1355,7 +1355,9 @@
     <string name="invoice_or_draft_not_found">هیچ حواله یا فاکتوری وجود ندارد</string>
     <string name="has_discount_line_more_than_order">سرجمع کالاهای جایزه از مقدار حواله بیشتر خواهد شد، امکان ثبت فاکتور وجود ندارد!\nمغایرت در موارد زیر:</string>
     <string name="prize_product_code">کد کالای جایزه:</string>
+    <string name="error_size">تعداد ردیف های کالای دریاقتی بیشتر از مجموعه ردیف کالاس</string>
     <string name="current_count">تعداد فعلی:</string>
+    <string name="current_law">تعداد تخصیص یافته:</string>
     <string name="law_count">تعداد تخصیص یافته طبق قانون </string>
     <string name="dist_no_label">شماره توزیع</string>
     <string name="payment_type_changed">تغییر نوع پرداخت</string>
