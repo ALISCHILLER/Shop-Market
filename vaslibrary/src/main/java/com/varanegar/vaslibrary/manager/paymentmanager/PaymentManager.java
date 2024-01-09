@@ -548,9 +548,23 @@ public class PaymentManager extends BaseManager<PaymentModel> {
 
                if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PT01.toString())) {
                    CashCheckReceiptModel validCashCheck = calcCashAndCheckValidAmount(customerModel.UniqueId);
+
+
                    if (customerCallOrderModels.get(0).TotalAmountNutImmediate != null){
+
                        Currency returnVa = calcCashAndCheckValidAmountreturn(customerModel.UniqueId);
-                   Currency total = customerCallOrderModels.get(0).TotalAmountNutImmediate.subtract(returnVa);
+                       Currency total = Currency.ZERO;
+                       if (customerCallOrderModels.size()>1){
+                           for (CustomerCallOrderModel item:
+                           customerCallOrderModels) {
+                                total = item.TotalAmountNutImmediate.add(total).subtract(returnVa);
+                           }
+                       }else {
+                           total = customerCallOrderModels.get(0).TotalAmountNutImmediate.subtract(returnVa);
+                       }
+
+
+
                    if (payedCashCheck.Cash.compareTo(total) < 0)
                        throw new ControlPaymentException(getString(R.string.min_valid_cash) + " " +
                                total + "\n" +
@@ -568,7 +582,19 @@ public class PaymentManager extends BaseManager<PaymentModel> {
                     CashCheckReceiptModel validCashCheck = calcCashAndCheckValidAmount(customerModel.UniqueId);
                     if (customerCallOrderModels.get(0).TotalAmountNutCash != null) {
                         Currency returnVa = calcCashAndCheckValidAmountreturn(customerModel.UniqueId);
-                        Currency total = customerCallOrderModels.get(0).TotalAmountNutCash.subtract(returnVa);
+
+                        Currency total = Currency.ZERO;
+                        if (customerCallOrderModels.size()>1){
+                            for (CustomerCallOrderModel item:
+                                    customerCallOrderModels) {
+                                total = item.TotalAmountNutCash.add(total).subtract(returnVa);
+                            }
+                        }else {
+                            total = customerCallOrderModels.get(0).TotalAmountNutCash.subtract(returnVa);
+                        }
+
+
+                        //Currency total = customerCallOrderModels.get(0).TotalAmountNutCash.subtract(returnVa);
                         if (payedCashCheck.Cash.compareTo(Currency.valueOf(0))>0)
                             payedCashCheck.Check=payedCashCheck.Check.add(payedCashCheck.Cash);
                         if (payedCashCheck.Check.compareTo(total) < 0)
@@ -587,7 +613,17 @@ public class PaymentManager extends BaseManager<PaymentModel> {
                     CashCheckReceiptModel returnAmount = calcCashAndCheckValidAmount(customerModel.UniqueId);
                     if (customerCallOrderModels.get(0).TotalAmountNutCheque != null) {
                         Currency returnVa = calcCashAndCheckValidAmountreturn(customerModel.UniqueId);
-                        Currency total = customerCallOrderModels.get(0).TotalAmountNutCheque.subtract(returnVa);
+                        Currency total = Currency.ZERO;
+                        if (customerCallOrderModels.size()>1){
+                            for (CustomerCallOrderModel item:
+                                    customerCallOrderModels) {
+                                total = item.TotalAmountNutCheque.add(total).subtract(returnVa);
+                            }
+                        }else {
+                            total = customerCallOrderModels.get(0).TotalAmountNutCheque.subtract(returnVa);
+                        }
+                        //Currency total = customerCallOrderModels.get(0).TotalAmountNutCheque.subtract(returnVa);
+
                         if (payedCashCheck.Cash.compareTo(Currency.valueOf(0))>0)
                             payedCashCheck.Check=payedCashCheck.Check.add(payedCashCheck.Cash);
                         if (payedCashCheck.Check.compareTo(total) < 0)
@@ -679,7 +715,17 @@ public class PaymentManager extends BaseManager<PaymentModel> {
             if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PT01.toString())){
                 CashCheckReceiptModel validCashCheck = calcCashAndCheckValidAmount(customerModel.UniqueId);
                 Currency returnVa=calcCashAndCheckValidAmountreturn(customerModel.UniqueId);
-                Currency total=customerCallOrderModels.get(0).TotalAmountNutImmediate.subtract(returnVa);
+                Currency total = Currency.ZERO;
+                if (customerCallOrderModels.size()>1){
+                    for (CustomerCallOrderModel item:
+                            customerCallOrderModels) {
+                        total = item.TotalAmountNutImmediate.add(total).subtract(returnVa);
+                    }
+                }else {
+                    total = customerCallOrderModels.get(0).TotalAmountNutImmediate.subtract(returnVa);
+                }
+
+               // Currency total=customerCallOrderModels.get(0).TotalAmountNutImmediate.subtract(returnVa);
                 if (payedCashCheck.Cash.compareTo(total) < 0)
                     throw new ControlPaymentException(getString(R.string.min_valid_cash) + " " +
                             total + "\n" +
@@ -695,7 +741,17 @@ public class PaymentManager extends BaseManager<PaymentModel> {
             if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PTCA.toString())){
                 CashCheckReceiptModel validCashCheck = calcCashAndCheckValidAmount(customerModel.UniqueId);
                 Currency returnVa=calcCashAndCheckValidAmountreturn(customerModel.UniqueId);
-                Currency total=customerCallOrderModels.get(0).TotalAmountNutCash.subtract(returnVa);
+                Currency total = Currency.ZERO;
+                if (customerCallOrderModels.size()>1){
+                    for (CustomerCallOrderModel item:
+                            customerCallOrderModels) {
+                        total = item.TotalAmountNutCash.add(total).subtract(returnVa);
+                    }
+                }else {
+                    total = customerCallOrderModels.get(0).TotalAmountNutCash.subtract(returnVa);
+                }
+
+             //   Currency total=customerCallOrderModels.get(0).TotalAmountNutCash.subtract(returnVa);
                 if (payedCashCheck.Cash.compareTo(Currency.valueOf(0))>0)
                     payedCashCheck.Check=payedCashCheck.Check.add(payedCashCheck.Cash);
                 if (payedCashCheck.Check.compareTo(total) < 0)
@@ -713,7 +769,17 @@ public class PaymentManager extends BaseManager<PaymentModel> {
             if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PTCH.toString())){
                 CashCheckReceiptModel returnAmount = calcCashAndCheckValidAmount(customerModel.UniqueId);
                 Currency returnVa=calcCashAndCheckValidAmountreturn(customerModel.UniqueId);
-                Currency total=customerCallOrderModels.get(0).TotalAmountNutCheque.subtract(returnVa);
+                Currency total = Currency.ZERO;
+                if (customerCallOrderModels.size()>1){
+                    for (CustomerCallOrderModel item:
+                            customerCallOrderModels) {
+                        total = item.TotalAmountNutCheque.add(total).subtract(returnVa);
+                    }
+                }else {
+                    total = customerCallOrderModels.get(0).TotalAmountNutCheque.subtract(returnVa);
+                }
+
+            //    Currency total=customerCallOrderModels.get(0).TotalAmountNutCheque.subtract(returnVa);
                 if (payedCashCheck.Cash.compareTo(Currency.valueOf(0))>0)
                     payedCashCheck.Check=payedCashCheck.Check.add(payedCashCheck.Cash);
                 if (payedCashCheck.Check.compareTo(total) < 0)
@@ -1000,7 +1066,17 @@ public class PaymentManager extends BaseManager<PaymentModel> {
         List<CustomerCallOrderModel> customerCallOrderModels = customerCallOrderManager.getCustomerCallOrders(customerId);
         if (customerCallOrderModels != null && customerCallOrderModels.size() > 0) {
             CustomerCallOrderModel customerCall = customerCallOrderModels.get(0);
-            return customerCall.TotalAmountNutCash;
+
+            Currency total = Currency.ZERO;
+            if (customerCallOrderModels.size()>1){
+                for (CustomerCallOrderModel item:
+                        customerCallOrderModels) {
+                    total = item.TotalAmountNutCash.add(total);
+                }
+            }else {
+                total = customerCallOrderModels.get(0).TotalAmountNutCash;
+            }
+            return total;
         }
         return null;
     }
@@ -1014,8 +1090,17 @@ public class PaymentManager extends BaseManager<PaymentModel> {
         CustomerCallOrderManager customerCallOrderManager = new CustomerCallOrderManager(getContext());
         List<CustomerCallOrderModel> customerCallOrderModels = customerCallOrderManager.getCustomerCallOrders(customerId);
         if (customerCallOrderModels != null && customerCallOrderModels.size() > 0) {
+            Currency total = Currency.ZERO;
+            if (customerCallOrderModels.size()>1){
+                for (CustomerCallOrderModel item:
+                        customerCallOrderModels) {
+                    total = item.TotalAmountNutImmediate.add(total);
+                }
+            }else {
+                total = customerCallOrderModels.get(0).TotalAmountNutImmediate;
+            }
             CustomerCallOrderModel customerCall = customerCallOrderModels.get(0);
-            return customerCall.TotalAmountNutImmediate;
+            return total;
         }
         return null;
     }
@@ -1025,7 +1110,17 @@ public class PaymentManager extends BaseManager<PaymentModel> {
         List<CustomerCallOrderModel> customerCallOrderModels = customerCallOrderManager.getCustomerCallOrders(customerId);
         if (customerCallOrderModels != null && customerCallOrderModels.size() > 0) {
             CustomerCallOrderModel customerCall = customerCallOrderModels.get(0);
-            return customerCall.TotalAmountNutCheque;
+            Currency total = Currency.ZERO;
+            if (customerCallOrderModels.size()>1){
+                for (CustomerCallOrderModel item:
+                        customerCallOrderModels) {
+                    total = item.TotalAmountNutCheque.add(total);
+                }
+            }else {
+                total = customerCallOrderModels.get(0).TotalAmountNutCheque;
+            }
+           // return customerCall.TotalAmountNutCheque;
+            return total;
         }
         return null;
     }

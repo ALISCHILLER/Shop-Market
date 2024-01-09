@@ -149,7 +149,17 @@ public class CashPaymentDialog extends PaymentDialog {
         CustomerCallOrderManager customerCallOrderManager = new CustomerCallOrderManager(getContext());
         customerCallOrderModels = customerCallOrderManager.getCustomerCallOrders(getCustomerId());
         Currency returnVa = paymentManager.calcCashAndCheckValidAmountreturn(getCustomerId());
-        Currency total = customerCallOrderModels.get(0).TotalAmountNutImmediate.subtract(returnVa);
+
+        Currency total = Currency.ZERO;
+        if (customerCallOrderModels.size()>1){
+            for (CustomerCallOrderModel item:
+                    customerCallOrderModels) {
+                total = item.TotalAmountNutImmediate.add(total).subtract(returnVa);
+            }
+        }else {
+            total = customerCallOrderModels.get(0).TotalAmountNutImmediate.subtract(returnVa);
+        }
+       // Currency total = customerCallOrderModels.get(0).TotalAmountNutImmediate.subtract(returnVa);
 
 
         if (getPaymentId() != null) {

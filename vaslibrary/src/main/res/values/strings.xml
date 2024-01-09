@@ -523,7 +523,7 @@
     <string name="total_price">قیمت کل :</string>
     <string name="product_group_label">گروه کالا :</string>
     <string name="searchProductGroup">جستجوی گروه کالا</string>
-    <string name="user_price_label">قیمت مصرف کننده </string>
+    <string name="user_price_label">قیمت: </string>
     <string name="total_ordered_qty_label">مجموع سفارش کالا :</string>
     <string name="store_inventory_label">موجودی انبار :</string>
     <string name="product_type_label">نوع کالا :</string>

@@ -226,10 +226,10 @@ public class CustomerOrderPreviewFragment extends VisitFragment implements Choic
                 orderTypePairedItems.setVisibility(View.VISIBLE);
 
 
-            if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)){
-                payableChequePairedItems.setVisibility(View.GONE);
-                payableImmediatePairedItems.setVisibility(View.GONE);
-            }
+//            if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)){
+//                payableChequePairedItems.setVisibility(View.GONE);
+//                payableImmediatePairedItems.setVisibility(View.GONE);
+//            }
 
             view.findViewById(R.id.back_image_view).setOnClickListener(new View.OnClickListener() {
                 @Override

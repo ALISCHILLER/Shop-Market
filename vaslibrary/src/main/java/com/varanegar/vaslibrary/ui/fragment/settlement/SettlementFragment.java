@@ -508,7 +508,8 @@ public class SettlementFragment extends VisitFragment {
             } else {
                 CheckDialog checkDialog = new CheckDialog();
                 Currency totalPayment = paymentManager.getTotalPaid(customerId);
-                checkDialog.setArguments(customerId, customerPayment.getTotalAmount(false), customerPayment.getTotalAmount(false).subtract(totalPayment), null, null);
+                checkDialog.setArguments(customerId, customerPayment.getTotalAmount(false),
+                        customerPayment.getTotalAmount(false).subtract(totalPayment), null, null);
                 checkDialog.setCallBack(() -> refreshSettlement());
                 checkDialog.show(getChildFragmentManager(), "CheckDialog");
             }
@@ -522,8 +523,12 @@ public class SettlementFragment extends VisitFragment {
             CardReaderDialog dialog = new CardReaderDialog();
 
             Currency returnVa = paymentManager.calcCashAndCheckValidAmountreturn(customerId);
-            Currency total = customerCallOrderModels.get(0).TotalAmountNutImmediate.subtract(returnVa);
+            Currency total=Currency.ZERO;
+            if ( customerCallOrderModels.size()>1){
 
+            }else {
+                total  = customerCallOrderModels.get(0).TotalAmountNutImmediate.subtract(returnVa);
+            }
             Currency totalPayment = paymentManager.getTotalPaid(customerId);
             dialog.setArguments(customerId, customerPayment.getTotalAmount(false),
                     customerPayment.getTotalAmount(false).subtract(totalPayment),
@@ -657,7 +662,16 @@ public class SettlementFragment extends VisitFragment {
             PaymentTypeOrderModel paymentTypeOrderModel = paymentTypeOrderModels.get(0);
             if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PT01.toString())) {
                 Currency returnVa = paymentManager.calcCashAndCheckValidAmountreturn(customerId);
-                Currency total = customerCallOrderModels.get(0).TotalAmountNutImmediate.subtract(returnVa);
+                Currency total = Currency.ZERO;
+                if (customerCallOrderModels.size()>1){
+                    for (CustomerCallOrderModel item:
+                    customerCallOrderModels) {
+                        total = item.TotalAmountNutImmediate.add(total).subtract(returnVa);
+                    }
+                }else {
+                    total = customerCallOrderModels.get(0).TotalAmountNutImmediate.subtract(returnVa);
+                }
+
                 oldRemainAfterPaymentItems.setValue(HelperMethods.currencyToString(customerRemain
                         .add(total
                                 .subtract(customerPayment.getOldInvoicesAmount())
@@ -668,7 +682,18 @@ public class SettlementFragment extends VisitFragment {
 
             if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PTCA.toString())) {
                 Currency returnVa = paymentManager.calcCashAndCheckValidAmountreturn(customerId);
-                Currency total = customerCallOrderModels.get(0).TotalAmountNutCash.subtract(returnVa);
+
+                Currency total = Currency.ZERO;
+                if (customerCallOrderModels.size()>1){
+                    for (CustomerCallOrderModel item:
+                            customerCallOrderModels) {
+                        total = item.TotalAmountNutCash.add(total).subtract(returnVa);
+                    }
+                }else {
+                    total = customerCallOrderModels.get(0).TotalAmountNutCash.subtract(returnVa);
+                }
+
+               // Currency total = customerCallOrderModels.get(0).TotalAmountNutCash.subtract(returnVa);
                 oldRemainAfterPaymentItems.setValue(HelperMethods.currencyToString(customerRemain
                         .add(total
                                 .subtract(customerPayment.getOldInvoicesAmount())
@@ -678,7 +703,17 @@ public class SettlementFragment extends VisitFragment {
 
             if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PTCH.toString())) {
                 Currency returnVa = paymentManager.calcCashAndCheckValidAmountreturn(customerId);
-                Currency total = customerCallOrderModels.get(0).TotalAmountNutCheque.subtract(returnVa);
+
+                Currency total = Currency.ZERO;
+                if (customerCallOrderModels.size()>1){
+                    for (CustomerCallOrderModel item:
+                            customerCallOrderModels) {
+                        total = item.TotalAmountNutCheque.add(total).subtract(returnVa);
+                    }
+                }else {
+                    total = customerCallOrderModels.get(0).TotalAmountNutCheque.subtract(returnVa);
+                }
+                //Currency total = customerCallOrderModels.get(0).TotalAmountNutCheque.subtract(returnVa);
                 oldRemainAfterPaymentItems.setValue(HelperMethods.currencyToString(customerRemain
                         .add(total
                                 .subtract(customerPayment.getOldInvoicesAmount())
@@ -886,18 +921,38 @@ public class SettlementFragment extends VisitFragment {
         CustomerCallOrderModel customerCallOrderModel = customerCallOrderModels.get(0);
         PaymentTypeOrderModel newPayType = new PaymentOrderTypeManager(getContext()).get(paymentType.toString());
         SaveOrderUtility saveOrderUtility = new SaveOrderUtility(getContext());
-        saveOrderUtility.setOldPaymentTypeId(customerCallOrderModel.OrderPaymentTypeUniqueId);
-        customerCallOrderModel.OrderPaymentTypeUniqueId = newPayType.UniqueId;
-        try {
-            new CustomerCallOrderManager(getContext()).update(customerCallOrderModel);
-            saveOrderUtility.setCallback(saveOrderCallBack(print, customerCallOrderModel, saveOrderUtility));
-            saveOrderUtility.saveOrderWithProgressDialog(customerCallOrderModel);
-        } catch (Exception ex) {
-            Timber.e(ex);
-            if (print)
-                printFailed(getContext(), getString(R.string.error_saving_request));
-            else
-                showErrorDialog();
+        if (customerCallOrderModels.size()>1){
+            for (CustomerCallOrderModel item:
+            customerCallOrderModels) {
+                saveOrderUtility.setOldPaymentTypeId(item.OrderPaymentTypeUniqueId);
+                item.OrderPaymentTypeUniqueId = newPayType.UniqueId;
+                try {
+                    new CustomerCallOrderManager(getContext()).update(item);
+                    saveOrderUtility.setCallback(saveOrderCallBack(print, item, saveOrderUtility));
+                    saveOrderUtility.saveOrderWithProgressDialog(item);
+                } catch (Exception ex) {
+                    Timber.e(ex);
+                    if (print)
+                        printFailed(getContext(), getString(R.string.error_saving_request));
+                    else
+                        showErrorDialog();
+                }
+            }
+        }else {
+
+            saveOrderUtility.setOldPaymentTypeId(customerCallOrderModel.OrderPaymentTypeUniqueId);
+            customerCallOrderModel.OrderPaymentTypeUniqueId = newPayType.UniqueId;
+            try {
+                new CustomerCallOrderManager(getContext()).update(customerCallOrderModel);
+                saveOrderUtility.setCallback(saveOrderCallBack(print, customerCallOrderModel, saveOrderUtility));
+                saveOrderUtility.saveOrderWithProgressDialog(customerCallOrderModel);
+            } catch (Exception ex) {
+                Timber.e(ex);
+                if (print)
+                    printFailed(getContext(), getString(R.string.error_saving_request));
+                else
+                    showErrorDialog();
+            }
         }
     }
 }

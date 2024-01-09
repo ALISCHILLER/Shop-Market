@@ -85,7 +85,7 @@ public class CheckDialog extends PaymentDialog {
     private PairedItemsEditable accountNamePairedItemsEditable;
     private List<CustomerCallOrderModel> customerCallOrderModels;
     SayadNumberCheckerViewModel viewModel;
-    
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,11 +100,34 @@ public class CheckDialog extends PaymentDialog {
         Currency returnVa = paymentManager.calcCashAndCheckValidAmountreturn(getCustomerId());
         CustomerCallOrderManager customerCallOrderManager = new CustomerCallOrderManager(getContext());
         customerCallOrderModels = customerCallOrderManager.getCustomerCallOrders(getCustomerId());
-        Currency total = customerCallOrderModels.get(0).TotalAmountNutCash.subtract(returnVa);
-        if (total.compareTo(total)>=0)
-        setTitle(getString(R.string.insert_check_info) + " (" + getString(R.string.total_remained) + VasHelperMethods.currencyToString(total) + ")");
+        List<PaymentTypeOrderModel> paymentTypeOrderModels = new ValidPayTypeManager(getContext())
+                .getPaymentTypeOrders(customerCallOrderModels, null);
+        PaymentTypeOrderModel paymentTypeOrderModel = paymentTypeOrderModels.get(0);
+
+        Currency total = Currency.ZERO;
+        if (customerCallOrderModels.size() > 1) {
+            for (CustomerCallOrderModel item :
+                    customerCallOrderModels) {
+                if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PTCA.toString()))
+                    total = item.TotalAmountNutCash.add(total).subtract(returnVa);
+                else
+                    total = item.TotalAmountNutCheque.add(total).subtract(returnVa);
+            }
+        } else {
+            if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PTCA.toString()))
+                total = customerCallOrderModels.get(0).TotalAmountNutCash.subtract(returnVa);
+            else
+                total = customerCallOrderModels.get(0).TotalAmountNutCheque.subtract(returnVa);
+
+
+        }
+
+
+        // Currency total = customerCallOrderModels.get(0).TotalAmountNutCash.subtract(returnVa);
+        if (total.compareTo(total) >= 0)
+            setTitle(getString(R.string.insert_check_info) + " (" + getString(R.string.total_remained) + VasHelperMethods.currencyToString(total) + ")");
         else
-        setTitle(getString(R.string.insert_check_info) + " (" + getString(R.string.total_remained) + VasHelperMethods.currencyToString(getRemainedAmount()) + ")");
+            setTitle(getString(R.string.insert_check_info) + " (" + getString(R.string.total_remained) + VasHelperMethods.currencyToString(getRemainedAmount()) + ")");
 
         validator = new FormValidator(getActivity());
         SysConfigManager sysConfigManager = new SysConfigManager(getContext());
@@ -326,8 +349,7 @@ public class CheckDialog extends PaymentDialog {
                         SayadNumberCheckerFragment fragment = new SayadNumberCheckerFragment();
                         fragment.setArguments(sayadNumberPairedItems.getValue());
                         fragment.show(requireFragmentManager(), "SayadNumberCheckerFragment");
-                    }
-                    else
+                    } else
                         sayadNumberPairedItems.setError(getString(R.string.enter_sayad_number));
                 }
             });
