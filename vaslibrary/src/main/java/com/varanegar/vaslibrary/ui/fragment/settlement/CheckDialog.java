@@ -109,9 +109,12 @@ public class CheckDialog extends PaymentDialog {
             for (CustomerCallOrderModel item :
                     customerCallOrderModels) {
                 if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PTCA.toString()))
+                    if (item.TotalAmountNutCash!=null)
                     total = item.TotalAmountNutCash.add(total).subtract(returnVa);
-                else
-                    total = item.TotalAmountNutCheque.add(total).subtract(returnVa);
+                else {
+                    if (item.TotalAmountNutCheque!=null)
+                        total = item.TotalAmountNutCheque.add(total).subtract(returnVa);
+                    }
             }
         } else {
             if (paymentTypeOrderModel.BackOfficeId.equalsIgnoreCase(ThirdPartyPaymentTypes.PTCA.toString()))

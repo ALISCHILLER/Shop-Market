@@ -98,6 +98,7 @@ public class CardReaderDialog extends PaymentDialog {
         if (customerCallOrderModels.size()>1){
             for (CustomerCallOrderModel item:
                     customerCallOrderModels) {
+                if (item.TotalAmountNutImmediate!=null)
                 total = item.TotalAmountNutImmediate.add(total).subtract(returnVa);
             }
         }else {

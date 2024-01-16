@@ -557,6 +557,7 @@ public class PaymentManager extends BaseManager<PaymentModel> {
                        if (customerCallOrderModels.size()>1){
                            for (CustomerCallOrderModel item:
                            customerCallOrderModels) {
+                               if (item.TotalAmountNutImmediate!=null)
                                 total = item.TotalAmountNutImmediate.add(total).subtract(returnVa);
                            }
                        }else {
@@ -587,6 +588,7 @@ public class PaymentManager extends BaseManager<PaymentModel> {
                         if (customerCallOrderModels.size()>1){
                             for (CustomerCallOrderModel item:
                                     customerCallOrderModels) {
+                                if (item.TotalAmountNutCash!=null)
                                 total = item.TotalAmountNutCash.add(total).subtract(returnVa);
                             }
                         }else {
@@ -617,6 +619,7 @@ public class PaymentManager extends BaseManager<PaymentModel> {
                         if (customerCallOrderModels.size()>1){
                             for (CustomerCallOrderModel item:
                                     customerCallOrderModels) {
+                                if (item.TotalAmountNutCheque!=null)
                                 total = item.TotalAmountNutCheque.add(total).subtract(returnVa);
                             }
                         }else {
@@ -719,6 +722,7 @@ public class PaymentManager extends BaseManager<PaymentModel> {
                 if (customerCallOrderModels.size()>1){
                     for (CustomerCallOrderModel item:
                             customerCallOrderModels) {
+                        if (item.TotalAmountNutImmediate!=null)
                         total = item.TotalAmountNutImmediate.add(total).subtract(returnVa);
                     }
                 }else {
@@ -745,6 +749,7 @@ public class PaymentManager extends BaseManager<PaymentModel> {
                 if (customerCallOrderModels.size()>1){
                     for (CustomerCallOrderModel item:
                             customerCallOrderModels) {
+                        if (item.TotalAmountNutCash !=null)
                         total = item.TotalAmountNutCash.add(total).subtract(returnVa);
                     }
                 }else {
@@ -773,6 +778,7 @@ public class PaymentManager extends BaseManager<PaymentModel> {
                 if (customerCallOrderModels.size()>1){
                     for (CustomerCallOrderModel item:
                             customerCallOrderModels) {
+                        if (item.TotalAmountNutCheque !=null)
                         total = item.TotalAmountNutCheque.add(total).subtract(returnVa);
                     }
                 }else {
@@ -1071,6 +1077,7 @@ public class PaymentManager extends BaseManager<PaymentModel> {
             if (customerCallOrderModels.size()>1){
                 for (CustomerCallOrderModel item:
                         customerCallOrderModels) {
+                    if (item.TotalAmountNutCash != null)
                     total = item.TotalAmountNutCash.add(total);
                 }
             }else {
@@ -1094,6 +1101,7 @@ public class PaymentManager extends BaseManager<PaymentModel> {
             if (customerCallOrderModels.size()>1){
                 for (CustomerCallOrderModel item:
                         customerCallOrderModels) {
+                    if (item.TotalAmountNutImmediate != null)
                     total = item.TotalAmountNutImmediate.add(total);
                 }
             }else {
@@ -1114,6 +1122,7 @@ public class PaymentManager extends BaseManager<PaymentModel> {
             if (customerCallOrderModels.size()>1){
                 for (CustomerCallOrderModel item:
                         customerCallOrderModels) {
+                    if (item.TotalAmountNutCheque != null)
                     total = item.TotalAmountNutCheque.add(total);
                 }
             }else {
