@@ -747,7 +747,7 @@
     <string name="tour_is_downloading_already">در حال حاضر تور در حال دانلود میباشد</string>
     <string name="error_downloading_the_tour">خطا در دریافت تور</string>
     <string name="connecting_to_the_server">در حال اتصال به سرور ...</string>
-    <string name="customer_price">قیمت م ک :</string>
+    <string name="customer_price">قیمت :</string>
     <string name="order_qty_label">تعداد سفارش:</string>
     <string name="error_parsing_data">خطا در پردازش داده های دریافتی</string>
     <string name="error_connecting_to_server">خطا در برقراری ارتباط با سرور</string>
