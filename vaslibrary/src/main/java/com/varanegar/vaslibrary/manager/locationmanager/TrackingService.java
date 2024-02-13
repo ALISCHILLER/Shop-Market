@@ -124,7 +124,7 @@ public class TrackingService extends IntentService{
             location.setTime(new Date().getTime());
         }
 
-        if (Math.abs(location.getTime() - new Date().getTime()) / 1000 > 1800) {
+        if (Math.abs(location.getTime() - new Date().getTime()) / 3000 > 2800) {
             TrackingLogManager.addLog(context, LogType.POINT_TIME, LogLevel.Error, "{" + location.getLatitude() + "  "
                     + location.getLongitude()
                     + "} Gps Time is different from Tablet time. Gps time = "
@@ -179,7 +179,7 @@ public class TrackingService extends IntentService{
     }
 
     private void start() {
-
+        Log.e("Tracking Service", "start: ");
         locationManager = new LocationManager(this);
         if (SysConfigManager.hasTracking(this)) {
             try {
@@ -309,7 +309,5 @@ public class TrackingService extends IntentService{
             return false;
         }
     }
-
-
 
 }

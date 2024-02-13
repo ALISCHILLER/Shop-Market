@@ -122,9 +122,9 @@ public class LocationManager extends BaseManager<LocationModel> implements Remot
        // int maxWaitTime = SysConfigManager.getIntValue(trackingMaxWaitTime, 300);
         int maxWaitTime;
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-             maxWaitTime = 40000;
+             maxWaitTime = 70000;
         }else {
-            maxWaitTime = 50000;
+            maxWaitTime = 80000;
         }
 
         int smallestDisplacement = SysConfigManager.getIntValue(trackingSmallestDisplacement, 20);
@@ -456,7 +456,7 @@ public class LocationManager extends BaseManager<LocationModel> implements Remot
                                             location.setTime(new Date().getTime());
                                         }
 
-                                        if (Math.abs(location.getTime() - new Date().getTime()) / 1000 > 1800) {
+                                        if (Math.abs(location.getTime() - new Date().getTime()) / 2000 > 2800) {
                                             TrackingLogManager.addLog(getContext(), LogType.POINT_TIME, LogLevel.Error, "{" + location.getLatitude() + "  "
                                                     + location.getLongitude()
                                                     + "} Gps Time is different from Tablet time. Gps time = "
@@ -737,6 +737,7 @@ public class LocationManager extends BaseManager<LocationModel> implements Remot
         if (new TourManager(getContext()).isTourAvailable()) {
 
             if (signalRListener==null) {
+                    Log.e("signalRListener", "signalRListener: ");
                 if (signalRListener != null)
                     signalRListener.stopConnection();
                 SharedPreferences sharedconditionCustomer = getContext().getSharedPreferences("Presale", Context.MODE_PRIVATE);
