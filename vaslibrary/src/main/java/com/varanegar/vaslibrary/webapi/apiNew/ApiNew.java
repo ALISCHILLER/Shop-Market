@@ -123,5 +123,12 @@ public class ApiNew extends BaseApi implements InApiNew {
         return api.CustomerSumMoneyAndWeightReport(customersCode);
     }
 
+    @Override
+    public Call<Boolean> CheckVisitor(String PersonelCode) {
+        InApiNew api = getRetrofitBuilder(TokenType.UserToken)
+                .build().create(InApiNew.class);
+        return api.CheckVisitor(PersonelCode);
+    }
+
 
 }

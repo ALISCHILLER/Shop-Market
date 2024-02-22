@@ -45,7 +45,7 @@ public class EvcStatuteTemplateManager extends BaseManager<EvcStatuteTemplateMod
     }
 
     public void sync(final UpdateCall call) {
-        try {
+                try {
             deleteAll();
             save(call);
         } catch (DbException e) {

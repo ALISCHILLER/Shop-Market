@@ -89,4 +89,14 @@ public interface InApiNew {
     Call<List<CustomerSumMoneyAndWeightReportModel>>CustomerSumMoneyAndWeightReport (
             @Body List<String> customersCode);
 
+
+
+    @GET("api/v2/ngt/user/CheckVisitor")
+    Call<Boolean>CheckVisitor(
+            @Query("PersonelCode") String PersonelCode
+    );
+
 }
+
+
+

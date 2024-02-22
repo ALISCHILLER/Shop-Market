@@ -15,6 +15,7 @@ import android.os.Looper;
 import android.speech.RecognizerIntent;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,8 @@ import com.varanegar.framework.database.model.BaseModel;
 import com.varanegar.framework.database.querybuilder.Query;
 import com.varanegar.framework.database.querybuilder.criteria.Criteria;
 import com.varanegar.framework.network.Connectivity;
+import com.varanegar.framework.network.listeners.ApiError;
+import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.util.HelperMethods;
 import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.util.component.PairedItems;
@@ -86,6 +89,7 @@ import com.varanegar.vaslibrary.manager.ProductManager;
 import com.varanegar.vaslibrary.manager.ProductType;
 import com.varanegar.vaslibrary.manager.ProductUnitViewManager;
 import com.varanegar.vaslibrary.manager.ProductUnitsViewManager;
+import com.varanegar.vaslibrary.manager.UserManager;
 import com.varanegar.vaslibrary.manager.ValidPayTypeManager;
 import com.varanegar.vaslibrary.manager.c_shipToparty.CustomerShipToPartyManager;
 import com.varanegar.vaslibrary.manager.c_shipToparty.CustomerShipToPartyModel;
@@ -121,6 +125,7 @@ import com.varanegar.vaslibrary.manager.newmanager.customerLastBill.CustomerLast
 import com.varanegar.vaslibrary.manager.newmanager.customerLastBill.CustomerLastBillModel;
 import com.varanegar.vaslibrary.manager.newmanager.customerXmounthsalereport.CustomerXMounthSaleReportManager;
 import com.varanegar.vaslibrary.manager.newmanager.customerXmounthsalereport.CustomerXMounthSaleReportModel;
+import com.varanegar.vaslibrary.manager.newmanager.visitorApi.VisitorApiManager;
 import com.varanegar.vaslibrary.manager.orderprizemanager.OrderPrizeManager;
 import com.varanegar.vaslibrary.manager.paymentmanager.PaymentManager;
 import com.varanegar.vaslibrary.manager.paymentmanager.paymenttypes.PaymentType;
@@ -170,6 +175,7 @@ import com.varanegar.vaslibrary.model.productorderview.ProductOrderViewModel;
 import com.varanegar.vaslibrary.model.productunitsview.ProductUnitsViewModel;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
 import com.varanegar.vaslibrary.model.tour.TourModel;
+import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.pricecalculator.PriceCalcCallback;
 import com.varanegar.vaslibrary.pricecalculator.PriceCalculator;
 import com.varanegar.vaslibrary.print.InvoicePrint.InvoicePrintHelper;
@@ -195,6 +201,8 @@ import com.varanegar.vaslibrary.ui.fragment.productgroup.ProductGroupFragment;
 import com.varanegar.vaslibrary.ui.fragment.settlement.CardReaderDialog;
 import com.varanegar.vaslibrary.ui.fragment.settlement.CashPaymentDialog;
 import com.varanegar.vaslibrary.ui.fragment.settlement.CustomerPayment;
+import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
+import com.varanegar.vaslibrary.webapi.apiNew.ApiNew;
 import com.varanegar.vaslibrary.webapi.apiNew.modelNew.customer_not_allowed_product.CustomerNotAllowProductManager;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
 
@@ -213,7 +221,11 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import okhttp3.Request;
+import retrofit2.Call;
 import timber.log.Timber;
 import varanegar.com.discountcalculatorlib.utility.enumerations.EVCType;
 import varanegar.com.discountcalculatorlib.viewmodel.DiscountOrderPrizeViewModel;
@@ -1444,43 +1456,90 @@ public class CustomerSaveOrderFragment extends VisitFragment
         SysConfigManager sysConfigManager = new SysConfigManager(getActivity());
         SysConfigModel updateOnHandQty = sysConfigManager.read(ConfigKey.OnlineRefreshStockLevel, SysConfigManager.cloud);
         if (SysConfigManager.compare(updateOnHandQty, true) && Connectivity.isConnected(context)) {
+
             Timber.d("OnlineRefreshStockLevel is true");
             if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales) && !hasCallOrder()) {
                 startProductStockLevelProgressDialog();
+
+
                 PingApi pingApi = new PingApi();
                 pingApi.refreshBaseServerUrl(context, new PingApi.PingCallback() {
                     @Override
                     public void done(String ipAddress) {
-                        ProductUpdateFlow productUpdateFlow = new ProductUpdateFlow(context, customer.CustomerCode);
-                        productUpdateFlow.syncProductsAndInitPromotionDb(new UpdateCall() {
-                            @Override
-                            protected void onSuccess() {
-                                prepareCalculations();
+                        UserModel userModel = UserManager.readFromFile(getContext());
+                        ApiNew apiNew = new ApiNew(context);
 
+                        StringBuilder digits = new StringBuilder();
+                        StringBuilder letters = new StringBuilder();
+
+                        for (int i = 0; i < userModel.UserName.length(); i++) {
+                            char ch = userModel.UserName.charAt(i);
+                            if (Character.isDigit(ch)) {
+                                digits.append(ch);
+                            } else if (Character.isLetter(ch) || Character.isWhitespace(ch)) {
+                                letters.append(ch);
+                            }
+                        }
+                        String numbersString = digits.toString();
+
+                        boolean cheak;
+                        Call<Boolean> call = apiNew
+                                .CheckVisitor(numbersString);
+                        apiNew.runWebRequest(call, new WebCallBack<Boolean>() {
+                            @Override
+                            protected void onFinish() {
                                 stopProductStockLevelProgressDialog();
-                                CustomerLastBillView();
                             }
 
                             @Override
-                            protected void onFailure(String error) {
-                                prepareCalculations();
-                                stopProductStockLevelProgressDialog();
-                                if (getVaranegarActvity() != null && !getVaranegarActvity().isFinishing()) {
-                                    CuteMessageDialog dialog = new CuteMessageDialog(context);
-                                    dialog.setMessage(error);
-                                    dialog.setTitle(R.string.error);
-                                    dialog.setIcon(Icon.Error);
-                                    dialog.setPositiveButton(R.string.ok,
-                                            new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View v) {
-                                                    CustomerLastBillView();
-                                                }
-                                            });
-                                    dialog.show();
+                            protected void onSuccess(Boolean result, Request request) {
+                                if (result) {
+                                    ProductUpdate();
+                                } else {
+                                    MainVaranegarActivity activity = getVaranegarActvity();
+                                    if (activity != null && !activity.isFinishing() && isResumed()) {
+                                        activity.showSnackBar("حساب شما بلاک می باشد", MainVaranegarActivity.Duration.Short);
+                                        stopProductStockLevelProgressDialog();
+                                        CuteMessageDialog dialog = new CuteMessageDialog(requireContext());
+                                        dialog.setIcon(Icon.Error);
+                                        dialog.setMessage("حساب شما بلاک می باشد");
+                                        dialog.setTitle(R.string.error);
+                                        dialog.setPositiveButton(R.string.ok, new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                UserManager.logout(getVaranegarActvity());
+                                                TourManager tourManager = new TourManager(getContext());
+                                                tourManager.deleteTourInfoFile();
+                                            }
+                                        });
+                                        dialog.show();
+                                    }
+                                }
+
+                            }
+
+                            @Override
+                            protected void onApiFailure(ApiError error, Request request) {
+                                String err = WebApiErrorBody.log(error, context);
+                                Log.e("err", String.valueOf(err));
+
+                                MainVaranegarActivity activity = getVaranegarActvity();
+                                if (activity != null && !activity.isFinishing() && isResumed()) {
+                                    activity.showSnackBar(err, MainVaranegarActivity.Duration.Short);
+                                    stopProductStockLevelProgressDialog();
+                                }
+                            }
+
+                            @Override
+                            protected void onNetworkFailure(Throwable t, Request request) {
+                                MainVaranegarActivity activity = getVaranegarActvity();
+                                if (activity != null && !activity.isFinishing() && isResumed()) {
+                                    activity.showSnackBar(R.string.error_connecting_to_server, MainVaranegarActivity.Duration.Short);
+                                    stopProductStockLevelProgressDialog();
                                 }
                             }
                         });
+                        ProductUpdate();
                     }
 
                     @Override
@@ -1501,6 +1560,40 @@ public class CustomerSaveOrderFragment extends VisitFragment
         }
 
 
+    }
+
+
+    private void ProductUpdate() {
+        ProductUpdateFlow productUpdateFlow = new ProductUpdateFlow(context, customer.CustomerCode);
+        productUpdateFlow.syncProductsAndInitPromotionDb(new UpdateCall() {
+            @Override
+            protected void onSuccess() {
+                prepareCalculations();
+
+                stopProductStockLevelProgressDialog();
+                CustomerLastBillView();
+            }
+
+            @Override
+            protected void onFailure(String error) {
+                prepareCalculations();
+                stopProductStockLevelProgressDialog();
+                if (getVaranegarActvity() != null && !getVaranegarActvity().isFinishing()) {
+                    CuteMessageDialog dialog = new CuteMessageDialog(context);
+                    dialog.setMessage(error);
+                    dialog.setTitle(R.string.error);
+                    dialog.setIcon(Icon.Error);
+                    dialog.setPositiveButton(R.string.ok,
+                            new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    CustomerLastBillView();
+                                }
+                            });
+                    dialog.show();
+                }
+            }
+        });
     }
 
     private void CustomerLastBillView() {
@@ -2059,7 +2152,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
         boolean codeNaghsh = true;
         for (CustomerCallOrderOrderViewModel item : items) {
             String productCode = item.ProductCode.substring(0, 2);
-            if (!productCode.equals("34")&&!productCode.equals("35")&&!productCode.equals("50")) {
+            if (!productCode.equals("34") && !productCode.equals("35") && !productCode.equals("50")) {
                 if (customer.CodeNaghsh == null || customer.CodeNaghsh.isEmpty())
                     codeNaghsh = false;
                 break;
@@ -2076,7 +2169,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
         boolean codeNaghsh = true;
         for (CustomerCallOrderOrderViewModel item : items) {
             String productCode = item.ProductCode.substring(0, 2);
-            if (productCode.equals("34")||productCode.equals("35")||productCode.equals("50")) {
+            if (productCode.equals("34") || productCode.equals("35") || productCode.equals("50")) {
                 if (customer.CodeNaghsh == null || customer.CodeNaghsh.isEmpty())
                     codeNaghsh = false;
                 break;

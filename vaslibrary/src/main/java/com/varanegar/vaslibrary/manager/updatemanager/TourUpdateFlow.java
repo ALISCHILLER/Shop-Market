@@ -68,6 +68,7 @@ import com.varanegar.vaslibrary.manager.newmanager.commodity_rationing.Commodity
 import com.varanegar.vaslibrary.manager.newmanager.customerGroupSimilarProductsalesReport.CustomerGroupSimilarProductsalesReportManager;
 import com.varanegar.vaslibrary.manager.newmanager.customerXmounthsalereport.CustomerXMounthSaleReportManager;
 import com.varanegar.vaslibrary.manager.newmanager.dealercommission.DealerCommissionDataManager;
+import com.varanegar.vaslibrary.manager.newmanager.visitorApi.VisitorApiManager;
 import com.varanegar.vaslibrary.manager.picture.PictureCustomerHistoryManager;
 
 import com.varanegar.vaslibrary.manager.picture.PictureSubjectZarManager;
@@ -149,6 +150,30 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     public void run(UpdateCall call) {
                         DealerManager dealerManager = new DealerManager(getContext());
                         dealerManager.sync(call);
+                    }
+
+                    @Override
+                    public String name() {
+                        return "Dealer";
+                    }
+
+                    @Override
+                    public int group() {
+                        return R.string.base_info;
+                    }
+
+                    @Override
+                    public int queueId() {
+                        return 0;
+                    }
+                });
+            }
+            if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+                tasks.add(new SimpleTourAsyncTask() {
+                    @Override
+                    public void run(UpdateCall call) {
+                        VisitorApiManager dealerManager = new VisitorApiManager(getContext());
+                        dealerManager.getCheckVisitor(call);
                     }
 
                     @Override

@@ -1,6 +1,9 @@
 package com.varanegar.vaslibrary.action;
 
+import static androidx.core.content.ContentProviderCompat.requireContext;
+
 import android.app.ProgressDialog;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -8,11 +11,14 @@ import com.varanegar.framework.base.MainVaranegarActivity;
 import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.database.DbException;
 import com.varanegar.framework.network.Connectivity;
+import com.varanegar.framework.network.listeners.ApiError;
+import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.util.Linq;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.framework.util.fragment.extendedlist.ActionsAdapter;
 import com.varanegar.vaslibrary.R;
+import com.varanegar.vaslibrary.manager.UserManager;
 import com.varanegar.vaslibrary.manager.customer.CustomerManager;
 import com.varanegar.vaslibrary.manager.customercallmanager.CustomerCallManager;
 import com.varanegar.vaslibrary.manager.locationmanager.LocationManager;
@@ -22,11 +28,16 @@ import com.varanegar.vaslibrary.manager.tourmanager.TourManager;
 import com.varanegar.vaslibrary.model.customer.CustomerModel;
 import com.varanegar.vaslibrary.model.customercall.CustomerCallType;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
+import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
+import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
+import com.varanegar.vaslibrary.webapi.apiNew.ApiNew;
 
 import java.util.List;
 import java.util.UUID;
 
+import okhttp3.Request;
+import retrofit2.Call;
 import timber.log.Timber;
 
 public class SendOperationAction extends CheckPathAction {
@@ -120,6 +131,62 @@ public class SendOperationAction extends CheckPathAction {
         }
 
         showProgressDialog();
+        UserModel userModel = UserManager.readFromFile(getActivity());
+        ApiNew apiNew=new ApiNew(getActivity());
+
+        StringBuilder digits = new StringBuilder();
+        StringBuilder letters = new StringBuilder();
+
+        for (int i = 0; i < userModel.UserName.length(); i++) {
+            char ch = userModel.UserName.charAt(i);
+            if (Character.isDigit(ch)) {
+                digits.append(ch);
+            } else if (Character.isLetter(ch) || Character.isWhitespace(ch)) {
+                letters.append(ch);
+            }
+        }
+        String numbersString = digits.toString();
+
+        boolean cheak ;
+        Call<Boolean> call = apiNew
+                .CheckVisitor(numbersString);
+        apiNew.runWebRequest(call, new WebCallBack<Boolean>() {
+            @Override
+            protected void onFinish() {
+                dismissProgressDialog();
+            }
+
+            @Override
+            protected void onSuccess(Boolean result, Request request) {
+                if (result){
+                    gettourManager();
+                }else{
+                    showErrorMessage("حساب شما بلاک می باشد");
+                }
+
+            }
+
+            @Override
+            protected void onApiFailure(ApiError error, Request request) {
+                String err = WebApiErrorBody.log(error, getActivity());
+                Log.e("err", String.valueOf(err));
+                dismissProgressDialog();
+                showErrorMessage(err);
+            }
+
+            @Override
+            protected void onNetworkFailure(Throwable t, Request request) {
+                    dismissProgressDialog();
+                     showErrorMessage(String.valueOf(R.string.error_connecting_to_server));
+
+            }
+        });
+
+
+    }
+
+
+    private void gettourManager(){
         TourManager tourManager = new TourManager(getActivity());
         tourManager.verifyData(new TourManager.VerifyCallBack() {
             @Override
@@ -184,7 +251,7 @@ public class SendOperationAction extends CheckPathAction {
                                             dialog.setPositiveButton(R.string.ok, null);
                                             dialog.show();
                                             runActionCallBack();
-                                          //  sendpoint();
+                                            //  sendpoint();
                                         });
                                     }
 
@@ -209,7 +276,6 @@ public class SendOperationAction extends CheckPathAction {
             }
         });
     }
-
     public void sendpoint(){
         LocationManager locationManager = new LocationManager(getActivity());
         locationManager.tryToSendAll(new LocationManager.SendLocationListener() {
