@@ -984,36 +984,36 @@ public abstract class TourUpdateFlow extends UpdateFlow {
                     }
                 });
             }
-            tasks.add(new TourAsyncTask() {
-                CustomerNotAllowProductManager notAllowProductManager = new
-                        CustomerNotAllowProductManager(getContext());
-
-                @Override
-                public void run(UpdateCall call) {
-                    notAllowProductManager.sync(call);
-                }
-
-                @Override
-                public String name() {
-                    return "ProductGroup";
-                }
-
-                @Override
-                public int group() {
-                    return R.string.product_info;
-                }
-
-                @Override
-                public int queueId() {
-                    return 2;
-                }
-
-                @Override
-                public void cancel() {
-                    if (notAllowProductManager != null)
-                        notAllowProductManager.cancelSync();
-                }
-            });
+//            tasks.add(new TourAsyncTask() {
+//                CustomerNotAllowProductManager notAllowProductManager = new
+//                        CustomerNotAllowProductManager(getContext());
+//
+//                @Override
+//                public void run(UpdateCall call) {
+//                    notAllowProductManager.sync(call);
+//                }
+//
+//                @Override
+//                public String name() {
+//                    return "ProductGroup";
+//                }
+//
+//                @Override
+//                public int group() {
+//                    return R.string.product_info;
+//                }
+//
+//                @Override
+//                public int queueId() {
+//                    return 2;
+//                }
+//
+//                @Override
+//                public void cancel() {
+//                    if (notAllowProductManager != null)
+//                        notAllowProductManager.cancelSync();
+//                }
+//            });
             if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)){
                 tasks.add(new TourAsyncTask() {
                     CustomerGroupLastSalesReportManager cancelSync = new
