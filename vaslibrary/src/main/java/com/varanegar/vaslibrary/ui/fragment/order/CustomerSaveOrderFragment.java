@@ -1498,11 +1498,11 @@ public class CustomerSaveOrderFragment extends VisitFragment
                                 } else {
                                     MainVaranegarActivity activity = getVaranegarActvity();
                                     if (activity != null && !activity.isFinishing() && isResumed()) {
-                                        activity.showSnackBar("حساب شما بلاک می باشد", MainVaranegarActivity.Duration.Short);
+                                        activity.showSnackBar("حساب کاربری شما بلاک می باشد. لطفا با شعبه در تماس باشید", MainVaranegarActivity.Duration.Short);
                                         stopProductStockLevelProgressDialog();
                                         CuteMessageDialog dialog = new CuteMessageDialog(requireContext());
                                         dialog.setIcon(Icon.Error);
-                                        dialog.setMessage("حساب شما بلاک می باشد");
+                                        dialog.setMessage("حساب کاربری شما بلاک می باشد. لطفا با شعبه در تماس باشید");
                                         dialog.setTitle(R.string.error);
                                         dialog.setPositiveButton(R.string.ok, new View.OnClickListener() {
                                             @Override

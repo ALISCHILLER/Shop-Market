@@ -45,13 +45,14 @@ public class EvcStatuteTemplateManager extends BaseManager<EvcStatuteTemplateMod
     }
 
     public void sync(final UpdateCall call) {
-                try {
-            deleteAll();
-            save(call);
-        } catch (DbException e) {
-            Timber.e(e);
-            call.failure(getContext().getString(R.string.error_deleting_old_data));
-        }
+        call.success();
+//                try {
+//            deleteAll();
+//            save(call);
+//        } catch (DbException e) {
+//            Timber.e(e);
+//            call.failure(getContext().getString(R.string.error_deleting_old_data));
+//        }
     }
 
     private void save(final UpdateCall call) {

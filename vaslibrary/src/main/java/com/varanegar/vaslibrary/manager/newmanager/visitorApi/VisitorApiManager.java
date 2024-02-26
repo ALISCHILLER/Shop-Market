@@ -68,7 +68,7 @@ public class VisitorApiManager {
                 if (result){
                     updateCall.success();
                 }else{
-                    updateCall.failure("حساب شما بلاک می باشد");
+                    updateCall.failure("حساب کاربری شما بلاک می باشد. لطفا با شعبه در تماس باشید!");
                 }
             }
 

@@ -161,7 +161,7 @@ public class SendOperationAction extends CheckPathAction {
                 if (result){
                     gettourManager();
                 }else{
-                    showErrorMessage("حساب شما بلاک می باشد");
+                    showErrorMessage("حساب کاربری شما بلاک می باشد. لطفا با شعبه در تماس باشید");
                 }
 
             }
