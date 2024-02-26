@@ -146,8 +146,12 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
         getButton = (ActionProcessButton) view.findViewById(R.id.getSettingsButton);
         getButton.setMode(ActionProcessButton.Mode.ENDLESS);
         firstExternalSpinner = view.findViewById(R.id.first_external_spinner);
+        firstExternalSpinner.setEnabled(false);
+
+
         secondExternalSpinner = view.findViewById(R.id.second_external_spinner);
         localSpinner = view.findViewById(R.id.local_spinner);
+        localSpinner.setEnabled(false);
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(getContext(),
                 R.layout.setting_dialog_spinner_item, new String[]{getString(R.string.http),
                 getString(R.string.https)}) {
