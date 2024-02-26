@@ -180,8 +180,11 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
                         @Override
                         public void done() {
                             pluss = 0;
+
                             firstExternalIpEditText.setEnabled(true);
                             localIpEditText.setEnabled(true);
+                            firstExternalIpEditText.setVisibility(View.VISIBLE);
+                            localIpEditText.setVisibility(View.VISIBLE);
 
                         }
 
@@ -213,6 +216,8 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
         sysConfigManager = new SysConfigManager(getContext());
         firstExternalIpEditText.setEnabled(false);
         localIpEditText.setEnabled(false);
+        firstExternalIpEditText.setVisibility(View.INVISIBLE);
+        localIpEditText.setVisibility(View.INVISIBLE);
         firstExternalIpEditText.setText("5.160.125.98:8080");
         localIpEditText.setText("5.160.125.98:8080");
 
