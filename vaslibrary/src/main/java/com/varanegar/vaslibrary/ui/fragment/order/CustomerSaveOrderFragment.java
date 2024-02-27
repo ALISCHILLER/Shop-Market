@@ -1539,7 +1539,6 @@ public class CustomerSaveOrderFragment extends VisitFragment
                                 }
                             }
                         });
-                        ProductUpdate();
                     }
 
                     @Override
@@ -1564,6 +1563,7 @@ public class CustomerSaveOrderFragment extends VisitFragment
 
 
     private void ProductUpdate() {
+        startProductStockLevelProgressDialog();
         ProductUpdateFlow productUpdateFlow = new ProductUpdateFlow(context, customer.CustomerCode);
         productUpdateFlow.syncProductsAndInitPromotionDb(new UpdateCall() {
             @Override
