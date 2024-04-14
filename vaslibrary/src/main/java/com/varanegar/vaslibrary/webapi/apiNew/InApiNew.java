@@ -11,6 +11,7 @@ import com.varanegar.vaslibrary.model.newmodel.checkCustomerCredits.CheckCustome
 import com.varanegar.vaslibrary.model.newmodel.commodity_rationing.CommodityRationingModel;
 import com.varanegar.vaslibrary.model.newmodel.customergrouplastsalesreport.CustomerGroupLastSalesReportModel;
 import com.varanegar.vaslibrary.model.product.ProductModel;
+import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.ui.fragment.news_fragment.model.NewsData_Model;
 import com.varanegar.vaslibrary.webapi.apiNew.modelNew.PinRequestViewModel;
 import com.varanegar.vaslibrary.webapi.apiNew.modelNew.RoleCodeCustomerRequestViewModel;
@@ -94,6 +95,12 @@ public interface InApiNew {
     @GET("api/v2/ngt/user/CheckVisitor")
     Call<Boolean>CheckVisitor(
             @Query("PersonelCode") String PersonelCode
+    );
+
+    @GET("api/v2/ngt/user/ByUserForSap")
+    Call<UserModel>getUserData(
+            @Query("UserName") String userName,
+            @Query("Password") String password
     );
 
 }

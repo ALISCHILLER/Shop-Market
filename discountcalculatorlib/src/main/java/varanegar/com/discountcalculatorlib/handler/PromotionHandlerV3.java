@@ -414,7 +414,7 @@ public class PromotionHandlerV3 {
                                         .divide(BigDecimal.valueOf(productUnitModelData.get(j).ConvertFactor),
                                                 RoundingMode.HALF_EVEN).doubleValue();
 
-                                if (d % 1 == 0) {
+                                if (p) {
                                     onlineData.PreSaleEvcDetails.get(i).TotalQty =
                                             BigDecimal.valueOf(d);
                                     onlineData.PreSaleEvcDetails.get(i).Unit =

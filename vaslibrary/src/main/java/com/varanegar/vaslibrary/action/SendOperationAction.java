@@ -129,8 +129,18 @@ public class SendOperationAction extends CheckPathAction {
             setRunning(false);
             return;
         }
-
         showProgressDialog();
+
+        if (VaranegarApplication.is(VaranegarApplication.AppId.PreSales)) {
+            checkvisitor();
+        }else {
+            gettourManager();
+        }
+
+    }
+
+    private void checkvisitor(){
+
         UserModel userModel = UserManager.readFromFile(getActivity());
         ApiNew apiNew=new ApiNew(getActivity());
 
@@ -176,16 +186,12 @@ public class SendOperationAction extends CheckPathAction {
 
             @Override
             protected void onNetworkFailure(Throwable t, Request request) {
-                    dismissProgressDialog();
-                     showErrorMessage(String.valueOf(R.string.error_connecting_to_server));
+                dismissProgressDialog();
+                showErrorMessage(String.valueOf(R.string.error_connecting_to_server));
 
             }
         });
-
-
     }
-
-
     private void gettourManager(){
         TourManager tourManager = new TourManager(getActivity());
         tourManager.verifyData(new TourManager.VerifyCallBack() {
