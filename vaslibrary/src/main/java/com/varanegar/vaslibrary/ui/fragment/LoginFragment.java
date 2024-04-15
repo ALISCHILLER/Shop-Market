@@ -10,6 +10,7 @@ import android.net.VpnService;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,8 @@ import com.varanegar.framework.base.account.OnTokenAcquired;
 import com.varanegar.framework.base.account.Token;
 import com.varanegar.framework.database.querybuilder.Query;
 import com.varanegar.framework.network.Connectivity;
+import com.varanegar.framework.network.listeners.ApiError;
+import com.varanegar.framework.network.listeners.WebCallBack;
 import com.varanegar.framework.util.HelperMethods;
 import com.varanegar.framework.util.LocaleHelper;
 import com.varanegar.framework.util.component.SearchBox;
@@ -70,6 +73,8 @@ import com.varanegar.vaslibrary.model.user.UserModelRepository;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
 import com.varanegar.vaslibrary.ui.dialog.ImportDialogFragment;
 import com.varanegar.vaslibrary.ui.fragment.new_fragment.helpfragment.Program_Help_fragment;
+import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
+import com.varanegar.vaslibrary.webapi.apiNew.ApiNew;
 import com.varanegar.vaslibrary.webapi.ping.PingApi;
 
 import java.util.Date;
@@ -77,6 +82,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import okhttp3.Request;
+import retrofit2.Call;
 import timber.log.Timber;
 
 /**
@@ -102,7 +109,7 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
 
     private String getDeviceid() {
         String deviceID = Settings.Secure.getString(getActivity()
-                .getContentResolver(),Settings.Secure.ANDROID_ID);
+                .getContentResolver(), Settings.Secure.ANDROID_ID);
         return deviceID;
     }
 
@@ -136,11 +143,12 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
     private Toast countToast;
     private MapView mapView;
     private GoogleMap googleMap;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
-        String deviceIdSuper=getDeviceid();
+        String deviceIdSuper = getDeviceid();
         //Toast.makeText(getContext(),deviceIdSuper,Toast.LENGTH_LONG).show();
         // Checking permission for network monitor
 //        Intent intent = VpnService.prepare(getContext());
@@ -163,7 +171,7 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
                 }
             }
         });
-        txt_education_media= (TextView) view.findViewById(R.id.txt_education_media);
+        txt_education_media = (TextView) view.findViewById(R.id.txt_education_media);
         txt_education_media.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -171,7 +179,7 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
 //                Bundle bundle = new Bundle();
 //                bundle.putString("urlPlayer", "http://5.160.125.98:8080/content/presale_full.mp4");
 //                fragment.setArguments(bundle);
-                Program_Help_fragment Program_Help_fragment=new Program_Help_fragment();
+                Program_Help_fragment Program_Help_fragment = new Program_Help_fragment();
 
                 final MainVaranegarActivity activity = getVaranegarActvity();
                 if (activity == null || activity.isFinishing())
@@ -365,24 +373,59 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
 
                 SharedPreferences sharedPreferences = getActivity()
                         .getSharedPreferences("Firebase_Token", Context.MODE_PRIVATE);
-                String token=sharedPreferences.getString("172F4321-16BB-4415-85D1-DD88FF04234C"
-                        ,"");
+                String token = sharedPreferences.getString("172F4321-16BB-4415-85D1-DD88FF04234C"
+                        , "");
 
-                SharedPreferences  sharedconditionCustomer = getActivity()
+                SharedPreferences sharedconditionCustomer = getActivity()
                         .getSharedPreferences("OpenVPN", Context.MODE_PRIVATE);
-                String usernameVpn=sharedconditionCustomer.getString("usernameVpn","");
+                String usernameVpn = sharedconditionCustomer.getString("usernameVpn", "");
 
                 final UserManager userManager = new UserManager(getContext());
                 final String username = userNameEditText.getText().toString().trim();
                 final UserModel user = userManager.getUsers(username);
-                String deviceId=getDeviceid();
+                String deviceId = getDeviceid();
                 final String password = HelperMethods.convertToEnglishNumbers(passwordEditText.getText().toString().trim());
-                if (user != null) {
-                    userManager.login(user.UserName, password,deviceId,token,usernameVpn
+                if (user == null) {
+                    userManager.login(username, password, deviceId, token, usernameVpn
                             , new OnTokenAcquired() {
                                 @Override
                                 public void run(Token token) {
-                                    gotoTourReportFragment(user, token);
+                                    ApiNew apiNew = new ApiNew(getContext());
+
+                                    Call<UserModel> call = apiNew
+                                            .getUserData(username, password);
+                                    apiNew.runWebRequest(call, new WebCallBack<UserModel>() {
+                                        @Override
+                                        protected void onFinish() {
+
+                                        }
+
+                                        @Override
+                                        protected void onSuccess(UserModel result, Request request) {
+                                            gotoTourReportFragment(result, token);
+                                        }
+
+                                        @Override
+                                        protected void onApiFailure(ApiError error, Request request) {
+                                            MainVaranegarActivity activity = getVaranegarActvity();
+                                            String err = WebApiErrorBody.log(error, getContext());
+                                            Log.e("err", String.valueOf(err));
+                                            if (activity != null && !activity.isFinishing() && isResumed())
+                                                activity.showSnackBar(err, MainVaranegarActivity.Duration.Short);
+                                            setEnabled(true);
+                                            loginButton.setProgress(0);
+                                        }
+
+                                        @Override
+                                        protected void onNetworkFailure(Throwable t, Request request) {
+                                            MainVaranegarActivity activity = getVaranegarActvity();
+                                            if (activity != null && !activity.isFinishing() && isResumed())
+                                                activity.showSnackBar(R.string.connection_to_server_failed, MainVaranegarActivity.Duration.Short);
+                                            setEnabled(true);
+                                            loginButton.setProgress(0);
+                                        }
+                                    });
+
                                         /*VasInstanceIdService.refreshToken(getContext(), new VasInstanceIdService.TokenRefreshCallBack() {
                                             @Override
                                             public void onSuccess(@NonNull String token) {
@@ -455,6 +498,10 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
             BackupManager.exportData(getContext(), true);
             AccountManager accountManager = new AccountManager();
             accountManager.writeToFile(token, getContext(), "user.token");
+            if (!VaranegarApplication.is(VaranegarApplication.AppId.PreSales))
+                user.IsSalesman = true;
+            else
+                user.IsDistributer = true;
             user.LoginDate = new Date();
             UserManager.writeToFile(user, getContext());
             VaranegarApplication.getInstance().getDbHandler()
@@ -481,7 +528,6 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
     //---------------------------------------------------------------------------------------------- gotoTourReportFragment
 
 
-
     private void getTrackingLicense() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M && Build.VERSION.SDK_INT < 29) {
             int phonePermission = getContext().checkSelfPermission(Manifest.permission_group.PHONE);
@@ -505,16 +551,16 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
                     new com.varanegar.vaslibrary.manager.locationmanager.LocationManager(getContext());
             locationManager.downloadTrackingLicense(deviceId, new
                     com.varanegar.vaslibrary.manager.locationmanager.LocationManager.DownloadCallBack() {
-                @Override
-                public void done() {
+                        @Override
+                        public void done() {
 
-                }
+                        }
 
-                @Override
-                public void failed(String error) {
+                        @Override
+                        public void failed(String error) {
 
-                }
-            });
+                        }
+                    });
         }
     }
 
