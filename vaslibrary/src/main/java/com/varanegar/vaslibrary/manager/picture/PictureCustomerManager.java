@@ -76,15 +76,17 @@ public class PictureCustomerManager extends BaseManager<PictureCustomerModel> {
                     NoSaleReasonModel model = new NoSaleReasonManager(getContext())
                             .getItem(UUID.fromString(callModel.ExtraField1));
 
-                    PictureCustomerModel pictureCustomerModel = new PictureCustomerModel();
-                    pictureCustomerModel.UniqueId = UUID.randomUUID();
-                    pictureCustomerModel.CustomerId = customerId;
-                    pictureCustomerModel.Title = model.NoSaleReasonName;
-                    pictureCustomerModel.PictureSubjectId = UUID.fromString("63CDD545-7256-4CE1-8465-DF86090E5DAA");
-                    pictureCustomerModel.DemandTypeUniqueId = UUID.fromString("ece7d3e4-acdd-4e92-bf85-207b79e703b2");
-                    pictureCustomerModel.DemandType = PictureDemandType.Mandatory;
+                    if (model != null) {
+                        PictureCustomerModel pictureCustomerModel = new PictureCustomerModel();
+                        pictureCustomerModel.UniqueId = UUID.randomUUID();
+                        pictureCustomerModel.CustomerId = customerId;
+                        pictureCustomerModel.Title = model.NoSaleReasonName;
+                        pictureCustomerModel.PictureSubjectId = UUID.fromString("63CDD545-7256-4CE1-8465-DF86090E5DAA");
+                        pictureCustomerModel.DemandTypeUniqueId = UUID.fromString("ece7d3e4-acdd-4e92-bf85-207b79e703b2");
+                        pictureCustomerModel.DemandType = PictureDemandType.Mandatory;
 
-                    insertOrUpdate(pictureCustomerModel);
+                        insertOrUpdate(pictureCustomerModel);
+                    }
 
                 }
 

@@ -253,10 +253,7 @@ public class CameraFragment extends VisitFragment {
      */
     private boolean isLackOfVisitAndNeedImage() {
         CustomerCallManager callManager = new CustomerCallManager(getContext());
-        if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist))
             return callManager.isLackOfVisitAndNeedImage(callManager.loadCalls(customerId));
-        else
-            return false;
     }
 
     private void dismissLoading() {

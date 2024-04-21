@@ -92,13 +92,14 @@ public class PictureCustomerViewManager extends BaseManager<PictureCustomerViewM
         boolean lakOfVisit = callManager.isLackOfVisit(customerCalls);
         boolean isLackOfOrderAndNeedImage = false;
 
-        if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
-            isLackOfOrderAndNeedImage = callManager.isLackOfOrderAndNeedImage(customerCalls);
-           // isLackOfVisitAndNeedImage = callManager.isLackOfVisitAndNeedImage(customerCalls);
-        }
+//        if (!VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
+//            isLackOfOrderAndNeedImage = callManager.isLackOfOrderAndNeedImage(customerCalls);
+//           // isLackOfVisitAndNeedImage = callManager.isLackOfVisitAndNeedImage(customerCalls);
+//        }
+        isLackOfOrderAndNeedImage = callManager.isLackOfOrderAndNeedImage(customerCalls);
         if (lakOfVisit && !isLackOfOrderAndNeedImage)
             return null;
-        PictureSubjectZarManager pictureTemplateManager = new PictureSubjectZarManager(getContext());
+            PictureSubjectZarManager pictureTemplateManager = new PictureSubjectZarManager(getContext());
         try {
 
             if (isLackOfOrderAndNeedImage)

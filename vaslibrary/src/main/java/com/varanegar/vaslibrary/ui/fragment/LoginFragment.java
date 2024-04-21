@@ -255,6 +255,7 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
         loginButton.setMode(ActionProcessButton.Mode.ENDLESS);
         usersImageView = (ImageView) view.findViewById(R.id.user_name_image_view);
         settingsImageView = (ImageView) view.findViewById(R.id.settings_image_view);
+        usersImageView.setVisibility(View.GONE);
         usersImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -386,14 +387,14 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
                 String deviceId = getDeviceid();
                 final String password = HelperMethods.convertToEnglishNumbers(passwordEditText.getText().toString().trim());
                 if (user == null) {
-                    userManager.login(username, password, deviceId, token, usernameVpn
-                            , new OnTokenAcquired() {
+                    userManager.login(username, password, deviceId, token, usernameVpn, new OnTokenAcquired() {
                                 @Override
                                 public void run(Token token) {
                                     ApiNew apiNew = new ApiNew(getContext());
 
                                     Call<UserModel> call = apiNew
                                             .getUserData(username, password);
+                                    gotoTourReportFragment(user, token);
                                     apiNew.runWebRequest(call, new WebCallBack<UserModel>() {
                                         @Override
                                         protected void onFinish() {
@@ -402,7 +403,10 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
 
                                         @Override
                                         protected void onSuccess(UserModel result, Request request) {
-                                            gotoTourReportFragment(result, token);
+                                            if (result != null)
+                                              gotoTourReportFragment(result, token);
+                                            else
+                                                activity.showSnackBar("کاربر یافت نشد ", MainVaranegarActivity.Duration.Short);
                                         }
 
                                         @Override

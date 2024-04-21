@@ -1,6 +1,7 @@
 package com.varanegar.vaslibrary.manager;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
 
 import com.varanegar.framework.base.VaranegarApplication;
@@ -16,6 +17,7 @@ import com.varanegar.framework.validation.ValidationException;
 import com.varanegar.vaslibrary.R;
 import com.varanegar.vaslibrary.base.SubsystemType;
 import com.varanegar.vaslibrary.base.SubsystemTypeId;
+import com.varanegar.vaslibrary.base.SubsystemTypes;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateCall;
 import com.varanegar.vaslibrary.manager.updatemanager.UpdateManager;
 import com.varanegar.vaslibrary.model.noSaleReason.NoSaleReason;
@@ -76,8 +78,18 @@ public class NoSaleReasonManager extends BaseManager<NoSaleReasonModel> {
                     deleteAll();
                     if (result.size() > 0) {
                         try {
-                            if (VaranegarApplication.is(VaranegarApplication.AppId.Dist))
+                            if (VaranegarApplication.is(VaranegarApplication.AppId.Dist)) {
                                 result.add(createPaymentTypeChangedReason());
+
+                                for (int i = 0; i < result.size(); i++) {
+                                    String s= String.valueOf(result.get(i).UniqueId);
+                                    if (s.equals("3ed6c077-e169-4638-952d-a4e7a330d51f"))
+                                         result.get(i).NeedImage = true;
+                                }
+
+                            }
+
+
                             insertOrUpdate(result);
                             Timber.i("Updating no sale reason completed");
                             updateCall.success();
@@ -176,15 +188,15 @@ public class NoSaleReasonManager extends BaseManager<NoSaleReasonModel> {
     }
 
 
-    @SubsystemType(id = SubsystemTypeId.PreSales)
-    public NoSaleReasonModel getItem(UUID id){
+    @SubsystemTypes(ids = {SubsystemTypeId.HotSales, SubsystemTypeId.PreSales, SubsystemTypeId.Dist})
+    public NoSaleReasonModel getItem(UUID id) {
         Query query = new Query();
         query.from(NoSaleReason.NoSaleReasonTbl).whereAnd(Criteria.equals(NoSaleReason.UniqueId, id));
         return getItem(query);
     }
 
     @SubsystemType(id = SubsystemTypeId.PreSales)
-    public NoSaleReasonModel getItemUniqueId(UUID id){
+    public NoSaleReasonModel getItemUniqueId(UUID id) {
         Query query = new Query();
         query.from(NoSaleReason.NoSaleReasonTbl).whereAnd(Criteria.equals(NoSaleReason.UniqueId, id));
         return getItem(query);

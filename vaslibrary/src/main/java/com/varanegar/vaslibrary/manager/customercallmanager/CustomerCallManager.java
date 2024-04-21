@@ -298,13 +298,15 @@ public class CustomerCallManager extends BaseManager<CustomerCallModel> {
      * @param calls
      * @return
      */
-    @SubsystemTypes(ids = {SubsystemTypeId.HotSales, SubsystemTypeId.PreSales})
+    @SubsystemTypes(ids = {SubsystemTypeId.HotSales, SubsystemTypeId.PreSales,SubsystemTypeId.Dist})
     public boolean isLackOfOrderAndNeedImage(List<CustomerCallModel> calls) {
         NoSaleReasonManager noSaleReasonManager = new NoSaleReasonManager(getContext());
         return Linq.exists(calls, new Linq.Criteria<CustomerCallModel>() {
             @Override
             public boolean run(CustomerCallModel item) {
-                if (item.CallType == CustomerCallType.LackOfOrder) {
+                if (item.CallType == CustomerCallType.LackOfOrder
+                        ||item.CallType == CustomerCallType.CompleteLackOfDelivery
+                ) {
                     NoSaleReasonModel noSaleReasonModel = noSaleReasonManager.getItem(UUID.fromString(item.ExtraField1));
                     return (noSaleReasonModel!=null && noSaleReasonModel.NeedImage);
                 }
@@ -313,7 +315,7 @@ public class CustomerCallManager extends BaseManager<CustomerCallModel> {
         });
     }
 
-    @SubsystemTypes(ids = {SubsystemTypeId.HotSales, SubsystemTypeId.PreSales})
+    @SubsystemTypes(ids = {SubsystemTypeId.HotSales, SubsystemTypeId.PreSales,SubsystemTypeId.Dist})
     public boolean isLackOfVisitAndNeedImage(List<CustomerCallModel> calls) {
         NoSaleReasonManager noSaleReasonManager = new NoSaleReasonManager(getContext());
         return Linq.exists(calls, new Linq.Criteria<CustomerCallModel>() {
@@ -328,13 +330,16 @@ public class CustomerCallManager extends BaseManager<CustomerCallModel> {
         });
     }
 
-    @SubsystemTypes(ids = {SubsystemTypeId.HotSales, SubsystemTypeId.PreSales})
+    @SubsystemTypes(ids = {SubsystemTypeId.HotSales, SubsystemTypeId.PreSales,SubsystemTypeId.Dist})
     public boolean isNeedImage(List<CustomerCallModel> calls) {
         NoSaleReasonManager noSaleReasonManager = new NoSaleReasonManager(getContext());
         return Linq.exists(calls, new Linq.Criteria<CustomerCallModel>() {
             @Override
             public boolean run(CustomerCallModel item) {
-                if (item.CallType == CustomerCallType.LackOfOrder || item.CallType == CustomerCallType.LackOfVisit) {
+                if (item.CallType == CustomerCallType.LackOfOrder ||
+                        item.CallType == CustomerCallType.LackOfVisit
+                        ||item.CallType == CustomerCallType.CompleteLackOfDelivery
+                ) {
                     NoSaleReasonModel noSaleReasonModel = noSaleReasonManager.getItem(UUID.fromString(item.ExtraField1));
                     return (noSaleReasonModel!=null && noSaleReasonModel.NeedImage);
                 }
