@@ -20,4 +20,8 @@ public class CenterSysConfigModel {
     public String Value;
 
     public String Title;
+
+    public String DateCulture;
+
+    public int DeviceSettingNo ;
 }

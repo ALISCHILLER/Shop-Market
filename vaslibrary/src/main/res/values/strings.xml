@@ -192,8 +192,8 @@
     <string name="sale_qty">تعداد</string>
     <string name="total_sales_qty">تعداد کل فروش</string>
     <string name="exit">خروج</string>
-    <string name="user_name">نام کاربری</string>
-    <string name="password">کلمه عبور</string>
+    <string name="user_name">نام کاربری فیوری</string>
+    <string name="password">رمز عبور فیوری</string>
     <string name="login">ورود</string>
     <string name="settings">تنظیمات</string>
     <string name="please_enter_user_name">لطفا نام کاربری را وارد نمایید</string>
@@ -784,6 +784,7 @@
     <string name="benefit">حاشیه سود :</string>
     <string name="backup_not_found">فایل پشتیان یافت نشد!</string>
     <string name="user_not_found">کاربر یافت نشد</string>
+    <string name="code_setting">شماره تنظیمات اختصاص بدهید</string>
     <string name="send_backup">ارسال فایل پشتیبان</string>
     <string name="backup_sent_successfully">فایل پشتیبان با موفقیت ارسال شد</string>
     <string name="sending_backup_failed">ارسال فایل پشتیبان با خطا مواجه شد!</string>

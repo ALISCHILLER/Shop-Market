@@ -1,7 +1,9 @@
 package com.varanegar.vaslibrary.webapi.sysconfig;
 
 import com.varanegar.vaslibrary.manager.sysconfigmanager.CenterSysConfigModel;
+import com.varanegar.vaslibrary.manager.sysconfigmanager.CenterSysConfigOnlyModel;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
+import com.varanegar.vaslibrary.model.user.UserModel;
 
 import java.util.List;
 
@@ -25,4 +27,10 @@ public interface ISysConfigApi {
 
     @GET("api/v2/ngt/supervisorsetting?code=0")
     Call<List<SysConfigModel>> getSupervisorConfigs();
+
+    @GET("api/v2/ngt/devicesetting/ownerkeyOnly")
+    Call<CenterSysConfigOnlyModel> ownerkeyOnly(
+            @Query("UserName") String userName,
+            @Query("Password") String password
+    );
 }

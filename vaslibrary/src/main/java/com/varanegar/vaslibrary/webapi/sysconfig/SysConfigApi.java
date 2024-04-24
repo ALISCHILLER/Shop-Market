@@ -7,9 +7,11 @@ import com.google.gson.GsonBuilder;
 import com.varanegar.framework.base.VaranegarApplication;
 import com.varanegar.framework.network.gson.VaranegarGsonBuilder;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.CenterSysConfigModel;
+import com.varanegar.vaslibrary.manager.sysconfigmanager.CenterSysConfigOnlyModel;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.OwnerKeysWrapper;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 import com.varanegar.vaslibrary.model.sysconfig.SysConfigModel;
+import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.webapi.BaseApi;
 import com.varanegar.vaslibrary.webapi.HeaderInterceptor;
 import com.varanegar.vaslibrary.webapi.TokenType;
@@ -60,6 +62,16 @@ public class SysConfigApi extends BaseApi implements ISysConfigApi {
     @Override
     public Call<List<SysConfigModel>> getSupervisorConfigs() {
         return getRetrofitBuilder(TokenType.UserToken).build().create(ISysConfigApi.class).getSupervisorConfigs();
+    }
+
+    @Override
+    public Call<CenterSysConfigOnlyModel> ownerkeyOnly(String userName, String password) {
+        GsonBuilder gsonBuilder = VaranegarGsonBuilder.build();
+        Retrofit retrofit= new Retrofit.Builder()
+                .baseUrl(getBaseUrl())
+                .addConverterFactory(GsonConverterFactory.create(gsonBuilder.create()))
+                .build();
+        return retrofit.create(ISysConfigApi.class).ownerkeyOnly(userName,password);
     }
 
     /**

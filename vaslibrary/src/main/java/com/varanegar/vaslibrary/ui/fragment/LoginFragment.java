@@ -10,6 +10,7 @@ import android.net.VpnService;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,7 @@ import com.varanegar.framework.base.account.AccountManager;
 import com.varanegar.framework.base.account.OnError;
 import com.varanegar.framework.base.account.OnTokenAcquired;
 import com.varanegar.framework.base.account.Token;
+import com.varanegar.framework.database.DbException;
 import com.varanegar.framework.database.querybuilder.Query;
 import com.varanegar.framework.network.Connectivity;
 import com.varanegar.framework.network.listeners.ApiError;
@@ -45,6 +47,7 @@ import com.varanegar.framework.util.component.SearchBox;
 import com.varanegar.framework.util.component.cutemessagedialog.CuteMessageDialog;
 import com.varanegar.framework.util.component.cutemessagedialog.Icon;
 import com.varanegar.framework.validation.ValidationError;
+import com.varanegar.framework.validation.ValidationException;
 import com.varanegar.framework.validation.ValidationListener;
 import com.varanegar.framework.validation.Validator;
 import com.varanegar.framework.validation.annotations.NotEmpty;
@@ -59,6 +62,7 @@ import com.varanegar.vaslibrary.manager.locationmanager.LogLevel;
 import com.varanegar.vaslibrary.manager.locationmanager.LogType;
 import com.varanegar.vaslibrary.manager.locationmanager.TrackingLicense;
 import com.varanegar.vaslibrary.manager.locationmanager.TrackingLogManager;
+import com.varanegar.vaslibrary.manager.sysconfigmanager.CenterSysConfigOnlyModel;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.ConfigKey;
 import com.varanegar.vaslibrary.manager.sysconfigmanager.SysConfigManager;
 
@@ -72,6 +76,7 @@ import com.varanegar.vaslibrary.model.user.UserModel;
 import com.varanegar.vaslibrary.model.user.UserModelRepository;
 import com.varanegar.vaslibrary.ui.dialog.ConnectionSettingDialog;
 import com.varanegar.vaslibrary.ui.dialog.ImportDialogFragment;
+import com.varanegar.vaslibrary.ui.dialog.InsertPinDialog;
 import com.varanegar.vaslibrary.ui.fragment.new_fragment.helpfragment.Program_Help_fragment;
 import com.varanegar.vaslibrary.webapi.WebApiErrorBody;
 import com.varanegar.vaslibrary.webapi.apiNew.ApiNew;
@@ -100,8 +105,11 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
     ActionProcessButton loginButton;
     ImageView settingsImageView;
     ImageView usersImageView;
+    ImageView show;
     TextView txt_education_media;
+    private int pluss;
 
+    private SysConfigManager sysConfigManager;
 
     @DrawableRes
     protected abstract int getAppIconId();
@@ -124,6 +132,8 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LocaleHelper.setPreferredLocal(getContext(), LocalModel.Persian.getLocal());
+        LocaleHelper.setLocale(getContext(), LocalModel.Persian.getLocal().getLanguage());
         validator = new Validator();
     }
 
@@ -143,7 +153,7 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
     private Toast countToast;
     private MapView mapView;
     private GoogleMap googleMap;
-
+    boolean showcheck = false;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -171,6 +181,20 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
                 }
             }
         });
+        sysConfigManager = new SysConfigManager(getContext());
+       // String externalIpAddressUrl = "http://10.252.37.75:80";
+        String externalIpAddressUrl = "http://5.160.125.98:8080";
+      //  String localIpAddressUrl = "http://10.252.37.75:80";
+        String localIpAddressUrl = "http://5.160.125.98:8080";
+
+        try {
+            sysConfigManager.save(ConfigKey.ValidServerAddress, externalIpAddressUrl, SysConfigManager.local);
+            sysConfigManager.save(ConfigKey.LocalServerAddress, localIpAddressUrl, SysConfigManager.local);
+        } catch (ValidationException e) {
+            throw new RuntimeException(e);
+        } catch (DbException e) {
+            throw new RuntimeException(e);
+        }
         txt_education_media = (TextView) view.findViewById(R.id.txt_education_media);
         txt_education_media.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,6 +211,8 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
                 activity.pushFragment(Program_Help_fragment);
             }
         });
+
+
         TextView localeTextView = (TextView) view.findViewById(R.id.language_text_view);
         final Locale locale = LocaleHelper.getPreferredLocal(getContext());
         if (locale != null)
@@ -254,8 +280,25 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
         loginButton = (ActionProcessButton) view.findViewById(R.id.ok_button);
         loginButton.setMode(ActionProcessButton.Mode.ENDLESS);
         usersImageView = (ImageView) view.findViewById(R.id.user_name_image_view);
+        show = (ImageView) view.findViewById(R.id.show);
         settingsImageView = (ImageView) view.findViewById(R.id.settings_image_view);
+
+
         usersImageView.setVisibility(View.GONE);
+
+
+        show.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (showcheck){
+                    passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    showcheck = false;
+                }else {
+                    passwordEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    showcheck = true;
+                }
+            }
+        });
         usersImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -291,19 +334,59 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
             }
         });
         settingsImageView.setOnClickListener(view1 -> {
-            SettingDialogFragment settingDialogFragment = new SettingDialogFragment();
-            settingDialogFragment.setCancelable(false);
-            settingDialogFragment.setConfigListener(new SettingDialogFragment.SettingsUpdateListener() {
-                @Override
-                public void onSettingsUpdated() {
-                    Locale locale1 = getLanguage(getContext());
-                    LocaleHelper.setLocale(getContext(), locale1.getLanguage());
-                    Intent intent = getVaranegarActvity().getIntent();
-                    getVaranegarActvity().finish();
-                    startActivity(intent);
-                }
-            });
-            settingDialogFragment.show(getChildFragmentManager(), "SettingDialogFragment");
+
+
+            pluss++;
+            if (pluss == 5) {
+
+                InsertPinDialog dialog = new InsertPinDialog();
+                dialog.setCancelable(false);
+                dialog.setClosable(false);
+                dialog.setValues("677267");
+                dialog.setOnResult(new InsertPinDialog.OnResult() {
+                    @Override
+                    public void done() {
+                        pluss = 0;
+
+                        SettingDialogFragment settingDialogFragment = new SettingDialogFragment();
+                        settingDialogFragment.setCancelable(false);
+
+
+                        settingDialogFragment.setConfigListener(new SettingDialogFragment.SettingsUpdateListener() {
+                            @Override
+                            public void onSettingsUpdated() {
+                                Locale locale1 = getLanguage(getContext());
+                                LocaleHelper.setLocale(getContext(), locale1.getLanguage());
+                                Intent intent = getVaranegarActvity().getIntent();
+                                getVaranegarActvity().finish();
+                                startActivity(intent);
+                            }
+                        });
+                        settingDialogFragment.show(getChildFragmentManager(), "SettingDialogFragment");
+
+                    }
+
+                    @Override
+                    public void failed(String error) {
+                        Timber.e(error);
+                        pluss = 0;
+                        if (error.equals(getActivity().getString(R.string.pin_code_in_not_correct))) {
+                            printFailed(getActivity(), error);
+                        } else {
+
+                        }
+                    }
+                });
+                dialog.show(requireActivity().getSupportFragmentManager(), "InsertPinDialog");
+
+
+//                    view.setEnabled(false);
+//                    ((ImageUrlViewDialog) view).setColorFilter(ContextCompat.getColor(getContext(), R.color.grey), android.graphics.PorterDuff.Mode.MULTIPLY);
+//                    secondExternalIpLayout.setVisibility(View.VISIBLE);
+
+            }
+
+
         });
         loginButton.setOnClickListener(view12 -> {
 //                Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -386,49 +469,64 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
                 final UserModel user = userManager.getUsers(username);
                 String deviceId = getDeviceid();
                 final String password = HelperMethods.convertToEnglishNumbers(passwordEditText.getText().toString().trim());
-                if (user == null) {
-                    userManager.login(username, password, deviceId, token, usernameVpn, new OnTokenAcquired() {
-                                @Override
-                                public void run(Token token) {
-                                    ApiNew apiNew = new ApiNew(getContext());
+                if (username != null) {
 
-                                    Call<UserModel> call = apiNew
-                                            .getUserData(username, password);
-                                    gotoTourReportFragment(user, token);
-                                    apiNew.runWebRequest(call, new WebCallBack<UserModel>() {
+
+                    //new code login
+
+                    sysConfigManager.ownerkeyOnly(username, password, new SysConfigManager.IOwnerKeyResponseOnly() {
+                        @Override
+                        public void onSuccess(CenterSysConfigOnlyModel ownerKeys) {
+                            try {
+
+
+                                if (ConfigKey.SettingsId != null) {
+                                    sysConfigManager.save(ConfigKey.SettingsId, String.valueOf(ownerKeys.DeviceSettingNo), SysConfigManager.local);
+
+                                    sysConfigManager.setOwnerKeysOnly(ownerKeys);
+                                    userManager.login(username, password, deviceId, token, usernameVpn, new OnTokenAcquired() {
                                         @Override
-                                        protected void onFinish() {
+                                        public void run(Token token) {
+                                            ApiNew apiNew = new ApiNew(getContext());
 
-                                        }
+                                            Call<UserModel> call = apiNew
+                                                    .getUserData(username, password);
 
-                                        @Override
-                                        protected void onSuccess(UserModel result, Request request) {
-                                            if (result != null)
-                                              gotoTourReportFragment(result, token);
-                                            else
-                                                activity.showSnackBar("کاربر یافت نشد ", MainVaranegarActivity.Duration.Short);
-                                        }
+                                            // gotoTourReportFragment(user, token);
+                                            apiNew.runWebRequest(call, new WebCallBack<UserModel>() {
+                                                @Override
+                                                protected void onFinish() {
 
-                                        @Override
-                                        protected void onApiFailure(ApiError error, Request request) {
-                                            MainVaranegarActivity activity = getVaranegarActvity();
-                                            String err = WebApiErrorBody.log(error, getContext());
-                                            Log.e("err", String.valueOf(err));
-                                            if (activity != null && !activity.isFinishing() && isResumed())
-                                                activity.showSnackBar(err, MainVaranegarActivity.Duration.Short);
-                                            setEnabled(true);
-                                            loginButton.setProgress(0);
-                                        }
+                                                }
 
-                                        @Override
-                                        protected void onNetworkFailure(Throwable t, Request request) {
-                                            MainVaranegarActivity activity = getVaranegarActvity();
-                                            if (activity != null && !activity.isFinishing() && isResumed())
-                                                activity.showSnackBar(R.string.connection_to_server_failed, MainVaranegarActivity.Duration.Short);
-                                            setEnabled(true);
-                                            loginButton.setProgress(0);
-                                        }
-                                    });
+                                                @Override
+                                                protected void onSuccess(UserModel result, Request request) {
+                                                    if (result != null)
+                                                        gotoTourReportFragment(result, token);
+                                                    else
+                                                        activity.showSnackBar("کاربر یافت نشد ", MainVaranegarActivity.Duration.Short);
+                                                }
+
+                                                @Override
+                                                protected void onApiFailure(ApiError error, Request request) {
+                                                    MainVaranegarActivity activity = getVaranegarActvity();
+                                                    String err = WebApiErrorBody.log(error, getContext());
+                                                    Log.e("err", String.valueOf(err));
+                                                    if (activity != null && !activity.isFinishing() && isResumed())
+                                                        activity.showSnackBar(err, MainVaranegarActivity.Duration.Short);
+                                                    setEnabled(true);
+                                                    loginButton.setProgress(0);
+                                                }
+
+                                                @Override
+                                                protected void onNetworkFailure(Throwable t, Request request) {
+                                                    MainVaranegarActivity activity = getVaranegarActvity();
+                                                    if (activity != null && !activity.isFinishing() && isResumed())
+                                                        activity.showSnackBar(R.string.connection_to_server_failed, MainVaranegarActivity.Duration.Short);
+                                                    setEnabled(true);
+                                                    loginButton.setProgress(0);
+                                                }
+                                            });
 
                                         /*VasInstanceIdService.refreshToken(getContext(), new VasInstanceIdService.TokenRefreshCallBack() {
                                             @Override
@@ -441,26 +539,101 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
                                                 Timber.d("Token update failed. Error=" + error + "  Token=" + token);
                                             }
                                         });*/
-                                }
-                            }, new OnError() {
-                                @Override
-                                public void onAuthenticationFailure(String error, String description) {
+                                        }
+                                    }, new OnError() {
+                                        @Override
+                                        public void onAuthenticationFailure(String error, String description) {
+                                            MainVaranegarActivity activity = getVaranegarActvity();
+                                            if (activity != null && !activity.isFinishing() && isResumed())
+                                                activity.showSnackBar(description, MainVaranegarActivity.Duration.Short);
+                                            setEnabled(true);
+                                            loginButton.setProgress(0);
+                                        }
+
+                                        @Override
+                                        public void onNetworkFailure(Throwable t) {
+                                            MainVaranegarActivity activity = getVaranegarActvity();
+                                            if (activity != null && !activity.isFinishing() && isResumed())
+                                                activity.showSnackBar(R.string.connection_to_server_failed, MainVaranegarActivity.Duration.Short);
+                                            setEnabled(true);
+                                            loginButton.setProgress(0);
+                                        }
+                                    });
+
+                                } else {
                                     MainVaranegarActivity activity = getVaranegarActvity();
                                     if (activity != null && !activity.isFinishing() && isResumed())
-                                        activity.showSnackBar(description, MainVaranegarActivity.Duration.Short);
+                                        activity.showSnackBar(R.string.code_setting, MainVaranegarActivity.Duration.Short);
                                     setEnabled(true);
                                     loginButton.setProgress(0);
                                 }
 
-                                @Override
-                                public void onNetworkFailure(Throwable t) {
-                                    MainVaranegarActivity activity = getVaranegarActvity();
-                                    if (activity != null && !activity.isFinishing() && isResumed())
-                                        activity.showSnackBar(R.string.connection_to_server_failed, MainVaranegarActivity.Duration.Short);
-                                    setEnabled(true);
-                                    loginButton.setProgress(0);
-                                }
-                            });
+
+                            } catch (ValidationException e) {
+                                throw new RuntimeException(e);
+                            } catch (DbException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(String error) {
+                            Timber.e("Ip address not found");
+                            MainVaranegarActivity activity = getVaranegarActvity();
+                            if (activity != null && !activity.isFinishing() && isResumed())
+                                activity.showSnackBar(R.string.user_not_found, MainVaranegarActivity.Duration.Short);
+                            setEnabled(true);
+                            loginButton.setProgress(0);
+                            Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+
+
+                    /* Old Code Login
+
+//                    userManager.login(user.UserName, password, deviceId, token, usernameVpn, new OnTokenAcquired() {
+//                        @Override
+//                        public void run(Token token) {
+//                            ApiNew apiNew = new ApiNew(getContext());
+//
+//                            Call<UserModel> call = apiNew
+//                                    .getUserData(username, password);
+//
+//                             gotoTourReportFragment(user, token);
+//
+//                                        /*VasInstanceIdService.refreshToken(getContext(), new VasInstanceIdService.TokenRefreshCallBack() {
+//                                            @Override
+//                                            public void onSuccess(@NonNull String token) {
+//                                                Timber.d("Token update succeeded. Token = " + token);
+//                                            }
+//
+//                                            @Override
+//                                            public void onFailure(@Nullable String token, String error) {
+//                                                Timber.d("Token update failed. Error=" + error + "  Token=" + token);
+//                                            }
+//                                        });*/
+//                        }
+//                    }, new OnError() {
+//                        @Override
+//                        public void onAuthenticationFailure(String error, String description) {
+//                            MainVaranegarActivity activity = getVaranegarActvity();
+//                            if (activity != null && !activity.isFinishing() && isResumed())
+//                                activity.showSnackBar(description, MainVaranegarActivity.Duration.Short);
+//                            setEnabled(true);
+//                            loginButton.setProgress(0);
+//                        }
+//
+//                        @Override
+//                        public void onNetworkFailure(Throwable t) {
+//                            MainVaranegarActivity activity = getVaranegarActvity();
+//                            if (activity != null && !activity.isFinishing() && isResumed())
+//                                activity.showSnackBar(R.string.connection_to_server_failed, MainVaranegarActivity.Duration.Short);
+//                            setEnabled(true);
+//                            loginButton.setProgress(0);
+//                        }
+//                    });
+
                 } else {
                     MainVaranegarActivity activity = getVaranegarActvity();
                     if (activity != null && !activity.isFinishing() && isResumed())
@@ -584,6 +757,20 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
                 } else
                     activity.showSnackBar(errorMessage, MainVaranegarActivity.Duration.Short);
             }
+        }
+    }
+
+
+    private void printFailed(Context context, String error) {
+        try {
+            CuteMessageDialog dialog = new CuteMessageDialog(context);
+            dialog.setIcon(Icon.Warning);
+            dialog.setTitle(R.string.DeliveryReasons);
+            dialog.setMessage(error);
+            dialog.setPositiveButton(R.string.ok, null);
+            dialog.show();
+        } catch (Exception e1) {
+            Timber.e(e1);
         }
     }
 

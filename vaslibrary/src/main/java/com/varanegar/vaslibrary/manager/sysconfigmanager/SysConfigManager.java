@@ -572,6 +572,39 @@ public class SysConfigManager extends BaseManager<SysConfigModel> {
         });
     }
 
+
+    public void ownerkeyOnly(String userName, String password,@NonNull final IOwnerKeyResponseOnly response) {
+        final SysConfigApi sysConfigApi = new SysConfigApi(getContext());
+        sysConfigApi.runWebRequest(sysConfigApi.ownerkeyOnly(userName, password), new WebCallBack<CenterSysConfigOnlyModel>() {
+            @Override
+            protected void onFinish() {
+
+            }
+
+            @Override
+            protected void onSuccess(CenterSysConfigOnlyModel result, Request request) {
+                if (result != null ) {
+                    response.onSuccess(result);
+                } else {
+                    Timber.e("owner keys not found");
+                    response.onFailure("owner keys not found");
+                }
+            }
+
+            @Override
+            protected void onApiFailure(ApiError error, Request request) {
+                String err = WebApiErrorBody.log(error, getContext());
+                response.onFailure(err);
+            }
+
+            @Override
+            protected void onNetworkFailure(Throwable t, Request request) {
+                Timber.e("network error on getownerkeys");
+                response.onFailure(getContext().getString(R.string.network_error));
+            }
+        });
+    }
+
     public static boolean hasTracking(Context context) {
         SysConfigManager manager = new SysConfigManager(context);
         if (VaranegarApplication.is(VaranegarApplication.AppId.Supervisor)) {
@@ -600,8 +633,25 @@ public class SysConfigManager extends BaseManager<SysConfigModel> {
         insertOrUpdate(sysConfigModel);
     }
 
+
+    public void setOwnerKeysOnly(CenterSysConfigOnlyModel centerSysConfigModel) throws ValidationException, DbException {
+        delete(Criteria.equals(SysConfig.Name, "OwnerKeys"));
+        cache.clear();
+        SysConfigModel sysConfigModel = new SysConfigModel();
+        sysConfigModel.UniqueId = centerSysConfigModel.UniqueId;
+        sysConfigModel.Name = "OwnerKeys";
+        sysConfigModel.Value = centerSysConfigModel.Value;
+        sysConfigModel.Scope = centerSysConfigModel.Scope;
+        insertOrUpdate(sysConfigModel);
+    }
     public interface IOwnerKeyResponse {
         void onSuccess(List<CenterSysConfigModel> ownerKeys);
+
+        void onFailure(String error);
+    }
+
+    public interface IOwnerKeyResponseOnly{
+        void onSuccess(CenterSysConfigOnlyModel ownerKeys);
 
         void onFailure(String error);
     }

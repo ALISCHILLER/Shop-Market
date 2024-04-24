@@ -60,16 +60,19 @@
 
             <include layout="@layout/fragment_login_user_name_layout" />
 
-            <EditText
-                android:id="@+id/password_edit_text"
-                style="@style/EditText.Inverse"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:hint="@string/password"
-                android:imeOptions="actionDone"
-                android:inputType="textPassword"
-                android:maxLines="1" />
+
+
+            <include layout="@layout/fragment_login_password_layout" />
+<!--            <EditText-->
+<!--                android:id="@+id/password_edit_text"-->
+<!--                style="@style/EditText.Inverse"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:gravity="start"-->
+<!--                android:hint="@string/password"-->
+<!--                android:imeOptions="actionDone"-->
+<!--                android:inputType="textPassword"-->
+<!--                android:maxLines="1" />-->
 
             <com.dd.processbutton.iml.ActionProcessButton
                 android:id="@+id/ok_button"
