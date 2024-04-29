@@ -222,8 +222,8 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
         localIpEditText.setEnabled(false);
         firstExternalIpEditText.setVisibility(View.INVISIBLE);
         localIpEditText.setVisibility(View.INVISIBLE);
-        firstExternalIpEditText.setText("5.160.125.98:8080");
-        localIpEditText.setText("5.160.125.98:8080");
+//        firstExternalIpEditText.setText("5.160.125.98:8080");
+//        localIpEditText.setText("5.160.125.98:8080");
 
         sharedconditionCustomer = getActivity().getSharedPreferences("OpenVPN", Context.MODE_PRIVATE);
         vpn_profile=view.findViewById(R.id.vpn_profile);
@@ -285,12 +285,12 @@ public class SettingDialogFragment extends CuteDialogWithToolbar {
                 secondExternalIpLayout.setVisibility(View.VISIBLE);
                 secondExternalIpEditText.setText(removeHttp(ips[1]));
             }
-//            firstExternalIpEditText.setText(removeHttp(ips[0]));
+            firstExternalIpEditText.setText(removeHttp(ips[0]));
         }
         SysConfigModel localServerAddress = sysConfigManager.read(ConfigKey.LocalServerAddress, SysConfigManager.local);
-/*        if (localServerAddress != null) {
+        if (localServerAddress != null) {
             localIpEditText.setText(removeHttp(localServerAddress.Value));
-        }*/
+        }
         SysConfigModel settingsId = sysConfigManager.read(ConfigKey.SettingsId, SysConfigManager.local);
         if (settingsId != null) {
             idPairedItemsEditable.setValue(settingsId.Value);

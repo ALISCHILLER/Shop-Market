@@ -182,14 +182,21 @@ public abstract class LoginFragment extends PopupFragment implements ValidationL
             }
         });
         sysConfigManager = new SysConfigManager(getContext());
-       // String externalIpAddressUrl = "http://10.252.37.75:80";
+//        String externalIpAddressUrl = "http://10.252.37.91:8080";
+//        String localIpAddressUrl =    "http://10.252.37.91:8080";
         String externalIpAddressUrl = "http://5.160.125.98:8080";
-      //  String localIpAddressUrl = "http://10.252.37.75:80";
         String localIpAddressUrl = "http://5.160.125.98:8080";
 
         try {
-            sysConfigManager.save(ConfigKey.ValidServerAddress, externalIpAddressUrl, SysConfigManager.local);
-            sysConfigManager.save(ConfigKey.LocalServerAddress, localIpAddressUrl, SysConfigManager.local);
+            SysConfigModel localServerAddressConfig = sysConfigManager.read(ConfigKey.LocalServerAddress, SysConfigManager.local);
+            SysConfigModel validServerAddressConfig = sysConfigManager.read(ConfigKey.ValidServerAddress, SysConfigManager.local);
+            if (localServerAddressConfig == null)
+                sysConfigManager.save(ConfigKey.LocalServerAddress, localIpAddressUrl, SysConfigManager.local);
+            if (validServerAddressConfig == null)
+                sysConfigManager.save(ConfigKey.ValidServerAddress, externalIpAddressUrl, SysConfigManager.local);
+
+
+
         } catch (ValidationException e) {
             throw new RuntimeException(e);
         } catch (DbException e) {
