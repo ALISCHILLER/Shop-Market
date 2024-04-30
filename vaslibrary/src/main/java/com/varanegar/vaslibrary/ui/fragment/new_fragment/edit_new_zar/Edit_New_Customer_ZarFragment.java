@@ -126,6 +126,8 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment implements 
     private ZarCustomerInfoViewModel customerInfo;
     private Call<ZarCustomerInfoViewModel> call;
     private boolean isEnabled;
+
+    private boolean checkSrart;
     private FormValidator validator;
     private SyncZarGetNewCustomerViewModel syncGetNewCustomerViewModel;
     private List<RoleCodeViewModel> roleCodeViewModels;
@@ -173,7 +175,14 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment implements 
         super.onStart();
         if (customer.CustomerCode != null) {
             prepareFields();
-            enableForm(true);
+            if (customer.CodeNaghsh == null && customer.CodeNaghsh.isEmpty()) {
+                enableForm(true);
+                checkSrart = true;
+            } else {
+                enableForm(false);
+                checkSrart = false;
+            }
+
         }
     }
 
@@ -237,7 +246,7 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment implements 
         nationalCardPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              //    dispatchTakePictureIntent();
+                //    dispatchTakePictureIntent();
                 main_layout.setVisibility(View.VISIBLE);
                 header_linear_layout.setVisibility(View.GONE);
             }
@@ -250,7 +259,7 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment implements 
                 CameraUtils.decodeBitmap(picture, new CameraUtils.BitmapCallback() {
                     @Override
                     public void onBitmapReady(Bitmap bitmap) {
-                        persistImage(bitmap,"fh");
+                        persistImage(bitmap, "fh");
                         nationalCardPic.setImageBitmap(bitmap);
                         if (onAttachment != null)
                             onAttachment.onDone();
@@ -422,7 +431,7 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment implements 
         DataForRegisterModel group2 = customerGroup2Spinner.getSelectedItem();
         DataForRegisterModel degree = customerDegreeSpinner.getSelectedItem();
 
-        if (file == null && !customer.HasNationalCodeImage) {
+        if (file == null && !customer.HasNationalCodeImage && checkSrart) {
             CuteMessageDialog dialog = new CuteMessageDialog(getContext());
             dialog.setIcon(Icon.Error);
             dialog.setTitle(R.string.error);
@@ -432,63 +441,81 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment implements 
             return;
         }
 
-        if (postcode != null && !postcode.equals("") && !postcode.isEmpty()
-                && !codenaghsh.isEmpty() && codenaghsh != null && !codenaghsh.equals("")) {
-            if (addressPairedItem != null && personNamePairedItem != null && group1 != null && group2 != null) {
+        if (checkSrart) {
+            if (postcode != null && !postcode.equals("") && !postcode.isEmpty()
+                    && !codenaghsh.isEmpty() && codenaghsh != null && !codenaghsh.equals("")) {
+                if (addressPairedItem != null && personNamePairedItem != null && group1 != null && group2 != null) {
 
-                syncGetNewCustomerViewModel = new SyncZarGetNewCustomerViewModel();
-                syncGetNewCustomerViewModel.CustomerCode = customer.CustomerCode;
-                syncGetNewCustomerViewModel.PersonName = personNamePairedItem.getValue();
-                syncGetNewCustomerViewModel.StoreName = tabloNamePairedItem.getValue();
-                syncGetNewCustomerViewModel.Street = addressPairedItem.getValue();
-                syncGetNewCustomerViewModel.Street2 = street2PairedItem.getValue();
-                syncGetNewCustomerViewModel.Street3 = street3PairedItem.getValue();
-                syncGetNewCustomerViewModel.Street4 = street4PairedItem.getValue();
-                syncGetNewCustomerViewModel.Street5 = street5PairedItem.getValue();
-                String convertPostalCode = ConvertFaNumType.convert(postalCodePairedItem.getValue());
-                syncGetNewCustomerViewModel.PostalCode = convertPostalCode;
+                    createSyncSetData();
+                } else {
+                    showErrorDialog("نام مشتری ,آدرس مشتری ,گروه مشتری1 , گروه مشتری 2و درجه مشتری  را ثیت کنید ");
+                }
+            } else {
+                showErrorDialog("کد پستی و کدنقش مشتری را ثبت کنید ");
+            }
+        } else {
+            createSyncSetData();
+        }
+    }
 
-                syncGetNewCustomerViewModel.Tel = telPairedItem.getValue();
-                syncGetNewCustomerViewModel.Mobile = mobilePairedItem.getValue();
-                syncGetNewCustomerViewModel.CodeNaghsh = code_naghsh_paired_item.getValue();
-                syncGetNewCustomerViewModel.EconomicCode = economicCodePairedItem.getValue();
-                syncGetNewCustomerViewModel.NationalCode = nationalCodePairedItem.getValue();
+    /**
+     * ست کردن داده براس ارسال
+     */
+    private void createSyncSetData() {
+
+        String postcode = postalCodePairedItem.getValue();
+        String codenaghsh = code_naghsh_paired_item.getValue();
+        DataForRegisterModel group1 = customerGroup1Spinner.getSelectedItem();
+        DataForRegisterModel group2 = customerGroup2Spinner.getSelectedItem();
+        DataForRegisterModel degree = customerDegreeSpinner.getSelectedItem();
+
+        syncGetNewCustomerViewModel = new SyncZarGetNewCustomerViewModel();
+        syncGetNewCustomerViewModel.CustomerCode = customer.CustomerCode;
+        syncGetNewCustomerViewModel.PersonName = personNamePairedItem.getValue();
+        syncGetNewCustomerViewModel.StoreName = tabloNamePairedItem.getValue();
+        syncGetNewCustomerViewModel.Street = addressPairedItem.getValue();
+        syncGetNewCustomerViewModel.Street2 = street2PairedItem.getValue();
+        syncGetNewCustomerViewModel.Street3 = street3PairedItem.getValue();
+        syncGetNewCustomerViewModel.Street4 = street4PairedItem.getValue();
+        syncGetNewCustomerViewModel.Street5 = street5PairedItem.getValue();
+        String convertPostalCode = ConvertFaNumType.convert(postalCodePairedItem.getValue());
+        syncGetNewCustomerViewModel.PostalCode = convertPostalCode;
+
+        syncGetNewCustomerViewModel.Tel = telPairedItem.getValue();
+        syncGetNewCustomerViewModel.Mobile = mobilePairedItem.getValue();
+        syncGetNewCustomerViewModel.CodeNaghsh = code_naghsh_paired_item.getValue();
+        syncGetNewCustomerViewModel.EconomicCode = economicCodePairedItem.getValue();
+        syncGetNewCustomerViewModel.NationalCode = nationalCodePairedItem.getValue();
 //        CityModel city = citySpinner.getSelectedItem();
 //        if (city != null)
 //            syncGetNewCustomerViewModel.CityId = city.UniqueId;
 
-                DataForRegisterModel zone = deliveryZoneSpinner.getSelectedItem();
-                if (zone != null)
-                    syncGetNewCustomerViewModel.TRANSPZONE = zone.FieldKey;
+        DataForRegisterModel zone = deliveryZoneSpinner.getSelectedItem();
+        if (zone != null)
+            syncGetNewCustomerViewModel.TRANSPZONE = zone.FieldKey;
 
 
-                if (degree != null)
-                    syncGetNewCustomerViewModel.KUKLA = degree.FieldKey;
+        if (degree != null)
+            syncGetNewCustomerViewModel.KUKLA = degree.FieldKey;
 
-                DataForRegisterModel sale = saleZonesSpinner.getSelectedItem();
-                if (sale != null)
-                    syncGetNewCustomerViewModel.BZIRK = sale.FieldKey;
+        DataForRegisterModel sale = saleZonesSpinner.getSelectedItem();
+        if (sale != null)
+            syncGetNewCustomerViewModel.BZIRK = sale.FieldKey;
 
 //        DataForRegisterModel group = customerGroupSpinner.getSelectedItem();
 //        if (group != null)
 //            syncGetNewCustomerViewModel.KDGRP = group.FieldKey;
 
 
-                if (group1 != null) {
-                    syncGetNewCustomerViewModel.KVGR1 = group1.FieldKey;
-                    syncGetNewCustomerViewModel.KDGRP = group1.FieldKey;
-                }
-
-                if (group2 != null)
-                    syncGetNewCustomerViewModel.KVGR2 = group2.FieldKey;
-
-                validator.validate(this);
-            } else {
-                showErrorDialog("نام مشتری ,آدرس مشتری ,گروه مشتری1 , گروه مشتری 2و درجه مشتری  را ثیت کنید ");
-            }
-        } else {
-            showErrorDialog("کد پستی و کدنقش مشتری را ثبت کنید ");
+        if (group1 != null) {
+            syncGetNewCustomerViewModel.KVGR1 = group1.FieldKey;
+            syncGetNewCustomerViewModel.KDGRP = group1.FieldKey;
         }
+
+        if (group2 != null)
+            syncGetNewCustomerViewModel.KVGR2 = group2.FieldKey;
+
+        validator.validate(this);
     }
 
     /**
@@ -510,66 +537,66 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment implements 
         if (economicCode != null && !economicCode.equals("") && economicCode.length() == 11 ||
                 nationalCode != null && !nationalCode.equals("") && nationalCode.length() == 10) {
             startProgressDialog();
-         PingApi ping=new PingApi();
-         ping.refreshBaseServerUrl(getContext(), new PingApi.PingCallback() {
-             @Override
-             public void done(String ipAddress) {
-                 ApiNew apiNew = new ApiNew(getContext());
-                 Call<List<RoleCodeViewModel>> calll = apiNew.getCodeNaghsh(roleCodeCustomerViewModel);
+            PingApi ping = new PingApi();
+            ping.refreshBaseServerUrl(getContext(), new PingApi.PingCallback() {
+                @Override
+                public void done(String ipAddress) {
+                    ApiNew apiNew = new ApiNew(getContext());
+                    Call<List<RoleCodeViewModel>> calll = apiNew.getCodeNaghsh(roleCodeCustomerViewModel);
 
 
-                 apiNew.runWebRequest(calll, new WebCallBack<List<RoleCodeViewModel>>() {
-                     @Override
-                     protected void onFinish() {
-                         stopProgressDialog();
-                     }
+                    apiNew.runWebRequest(calll, new WebCallBack<List<RoleCodeViewModel>>() {
+                        @Override
+                        protected void onFinish() {
+                            stopProgressDialog();
+                        }
 
-                     @Override
-                     protected void onSuccess(List<RoleCodeViewModel> result, Request request) {
+                        @Override
+                        protected void onSuccess(List<RoleCodeViewModel> result, Request request) {
 
-                         if (result.size() > 0) {
+                            if (result.size() > 0) {
 
-                             dialogShow(result);
+                                dialogShow(result);
 
-                         } else {
-                             showErrorDialog("یرای این کد ملی کد نقش ثبت نشده است ");
-                         }
-                     }
+                            } else {
+                                showErrorDialog("یرای این کد ملی کد نقش ثبت نشده است ");
+                            }
+                        }
 
-                     @Override
-                     protected void onApiFailure(ApiError error, Request request) {
-                         String err = WebApiErrorBody.log(error, getContext());
-                         if (isResumed()) {
-                             showErrorDialog(err);
+                        @Override
+                        protected void onApiFailure(ApiError error, Request request) {
+                            String err = WebApiErrorBody.log(error, getContext());
+                            if (isResumed()) {
+                                showErrorDialog(err);
 
-                         }
-                     }
+                            }
+                        }
 
-                     @Override
-                     protected void onNetworkFailure(Throwable t, Request request) {
-                         if (isResumed()) {
-                             showErrorDialog(getString(R.string.network_error));
+                        @Override
+                        protected void onNetworkFailure(Throwable t, Request request) {
+                            if (isResumed()) {
+                                showErrorDialog(getString(R.string.network_error));
 
-                         }
-                     }
-                 });
-             }
+                            }
+                        }
+                    });
+                }
 
-             @Override
-             public void failed() {
-                 MainVaranegarActivity activity = getVaranegarActvity();
-                 if (activity != null && !activity.isFinishing()) {
-                     stopProgressDialog();
-                     CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(activity);
-                     cuteMessageDialog.setIcon(Icon.Error);
-                     cuteMessageDialog.setTitle(R.string.error);
-                     cuteMessageDialog.setMessage(R.string.network_error);
-                     cuteMessageDialog.setNeutralButton(R.string.ok, null);
-                     cuteMessageDialog.show();
+                @Override
+                public void failed() {
+                    MainVaranegarActivity activity = getVaranegarActvity();
+                    if (activity != null && !activity.isFinishing()) {
+                        stopProgressDialog();
+                        CuteMessageDialog cuteMessageDialog = new CuteMessageDialog(activity);
+                        cuteMessageDialog.setIcon(Icon.Error);
+                        cuteMessageDialog.setTitle(R.string.error);
+                        cuteMessageDialog.setMessage(R.string.network_error);
+                        cuteMessageDialog.setNeutralButton(R.string.ok, null);
+                        cuteMessageDialog.show();
 
-                 }
-             }
-         });
+                    }
+                }
+            });
 
         } else {
             showErrorDialog("کد ملی و کداقتصادی مشتری را ثبت کنید ");
@@ -863,7 +890,7 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment implements 
      * ارسال داده
      */
     public void submit() {
-        PingApi pingApi=new PingApi();
+        PingApi pingApi = new PingApi();
 
         pingApi.refreshBaseServerUrl(getContext(), new PingApi.PingCallback() {
             @Override
@@ -1066,9 +1093,14 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment implements 
         street4PairedItem.setEnabled(enabled);
         street5PairedItem.setEnabled(enabled);
         postalCodePairedItem.setEnabled(enabled);
-        telPairedItem.setEnabled(enabled);
-        mobilePairedItem.setEnabled(enabled);
 
+        if (enabled) {
+            mobilePairedItem.setEnabled(enabled);
+            telPairedItem.setEnabled(enabled);
+        } else {
+            mobilePairedItem.setEnabled(true);
+            telPairedItem.setEnabled(true);
+        }
 //        citySpinner.setEnabled(enabled);
         deliveryZoneSpinner.setEnabled(false);
         saleZonesSpinner.setEnabled(false);
@@ -1100,7 +1132,7 @@ public class Edit_New_Customer_ZarFragment extends VaranegarFragment implements 
             dialog.setMessage(err);
             dialog.setPositiveButton(R.string.ok, null);
             dialog.show();
-          //  setSharedPer();
+            //  setSharedPer();
             onBackPressed();
 //            CustomersContentFragment contentFragment = new CustomersContentFragment();
 //            contentFragment.addArgument("a129ef75-77ce-432a-8982-6bcab0bf7b51", customer.UniqueId.toString());

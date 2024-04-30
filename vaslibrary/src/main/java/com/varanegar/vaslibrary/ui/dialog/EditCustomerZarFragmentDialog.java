@@ -116,6 +116,7 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
     private ZarCustomerInfoViewModel customerInfo;
     private Call<ZarCustomerInfoViewModel> call;
     private boolean isEnabled;
+
     private FormValidator validator;
     private SyncZarGetNewCustomerViewModel syncGetNewCustomerViewModel;
     private List<RoleCodeViewModel> roleCodeViewModels;
@@ -707,7 +708,7 @@ public class EditCustomerZarFragmentDialog extends CuteAlertDialog implements Va
         DataForRegisterModel group2 = customerGroup2Spinner.getSelectedItem();
         DataForRegisterModel degree = customerDegreeSpinner.getSelectedItem();
 
-        if (file == null) {
+        if (file == null && customer.CodeNaghsh == null) {
             CuteMessageDialog dialog = new CuteMessageDialog(getContext());
             dialog.setIcon(Icon.Error);
             dialog.setTitle(R.string.error);
