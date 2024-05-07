@@ -120,6 +120,10 @@ public abstract class CheckDistanceAction extends CheckBarcodeAction {
                 return getActivity().getString(R.string.distance_is_larger_than_limit);
             } else
                 return null;
+        }
+        else if (checkCloudConfig(ConfigKey.LocationCheckRadiusOffTrack, false)
+                && !(((VasActionsAdapter)getAdapter()).isCustomerIsInVisitDayPath())){
+            return null;
         } else {
             if (distance > maxDistance) {
                 UUID taskId = getTaskUniqueId() == null ? UUID.randomUUID() : getTaskUniqueId();
@@ -130,4 +134,5 @@ public abstract class CheckDistanceAction extends CheckBarcodeAction {
                 return null;
         }
     }
+
 }

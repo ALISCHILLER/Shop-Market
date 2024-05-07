@@ -1,5 +1,7 @@
 package com.varanegar.vaslibrary.action;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -169,6 +171,20 @@ public class DeleteAction extends CheckPathAction {
             locationViewModel.eventData.Description = "خذف عملیات مشتری " + getCustomer().CustomerCode + " (" + getCustomer().CustomerName + ")";
             TrackingLogManager.addLog(getActivity(), LogType.WIFI_OFF, LogLevel.Info);
             final LocationManager locationManager = new LocationManager(getActivity());
+
+            if (VaranegarApplication
+                    .is(VaranegarApplication.AppId.PreSales)&&
+                    checkCloudConfig(ConfigKey.VisitCustomersNotInPath, true)
+                    && !(((VasActionsAdapter) getAdapter()).isCustomerIsInVisitDayPath())){
+
+                SharedPreferences sharedPreferences = getActivity()
+                        .getSharedPreferences("CountVisitCustomersNotIn", Context.MODE_PRIVATE);
+                int countVisitCustomersNotInInt = sharedPreferences.getInt("1a1b45d8-b331-45db-ab18-15cc665ecfb3", 0);
+                countVisitCustomersNotInInt -=1;
+                sharedPreferences.edit()
+                        .putInt("1a1b45d8-b331-45db-ab18-15cc665ecfb3", countVisitCustomersNotInInt)
+                        .apply();
+            }
             locationManager.addTrackingPoint(locationViewModel, new OnSaveLocation() {
                 @Override
                 public void onSaved(LocationModel location) {

@@ -538,6 +538,8 @@ public class ConfirmAction extends CheckPathAction {
 
             }
             try {
+              //  if (!(((VasActionsAdapter)getAdapter()).isCustomerIsInVisitDayPath()))
+
                 controlAndSavePayments(customerCallOrderModels);
             } catch (ControlPaymentException e) {
                 showErrorMessage(e.getMessage());
@@ -600,6 +602,19 @@ public class ConfirmAction extends CheckPathAction {
                     cancelInvoiceManager.addCancelInvoice(getSelectedId());
                     customerPrintCountManager.resetCount(getSelectedId());
                 }
+                if (VaranegarApplication
+                        .is(VaranegarApplication.AppId.PreSales)&&
+                        checkCloudConfig(ConfigKey.VisitCustomersNotInPath, true)
+                        && !(((VasActionsAdapter) getAdapter()).isCustomerIsInVisitDayPath())){
+
+                    SharedPreferences sharedPreferences = getActivity()
+                            .getSharedPreferences("CountVisitCustomersNotIn", Context.MODE_PRIVATE);
+                    int countVisitCustomersNotInInt = sharedPreferences.getInt("1a1b45d8-b331-45db-ab18-15cc665ecfb3", 0);
+                    countVisitCustomersNotInInt -=1;
+                    sharedPreferences.edit()
+                            .putInt("1a1b45d8-b331-45db-ab18-15cc665ecfb3", countVisitCustomersNotInInt)
+                            .apply();
+                }
                 runActionCallBack();
             } catch (Exception ex) {
                 showErrorMessage(R.string.un_confirm_failed);
@@ -636,6 +651,20 @@ public class ConfirmAction extends CheckPathAction {
     private void saveAndSendConfirm() {
         try {
             if (getCustomer().UniqueId == null) return;
+
+            if (VaranegarApplication
+                    .is(VaranegarApplication.AppId.PreSales)&&
+                    checkCloudConfig(ConfigKey.VisitCustomersNotInPath, true)
+                    && !(((VasActionsAdapter) getAdapter()).isCustomerIsInVisitDayPath())){
+
+                SharedPreferences sharedPreferences = getActivity()
+                        .getSharedPreferences("CountVisitCustomersNotIn", Context.MODE_PRIVATE);
+                int countVisitCustomersNotInInt = sharedPreferences.getInt("1a1b45d8-b331-45db-ab18-15cc665ecfb3", 0);
+                countVisitCustomersNotInInt +=1;
+                sharedPreferences.edit()
+                        .putInt("1a1b45d8-b331-45db-ab18-15cc665ecfb3", countVisitCustomersNotInInt)
+                        .apply();
+            }
             CustomerActionTimeManager customerActionTimeManager =
                     new CustomerActionTimeManager(getActivity());
             customerActionTimeManager.save(getCustomer().UniqueId,

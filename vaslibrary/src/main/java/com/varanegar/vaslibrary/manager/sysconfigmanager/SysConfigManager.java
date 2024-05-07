@@ -45,6 +45,7 @@ import timber.log.Timber;
  * Created by atp on 12/18/2016.
  */
 public class SysConfigManager extends BaseManager<SysConfigModel> {
+
     public static UUID cloud = UUID.fromString("6e134a3e-57f4-4d21-8417-58287589fad3");
     public static UUID local = UUID.fromString("f0eeaf18-4a85-4250-bf91-c278def9e8ff");
     public static UUID base = UUID.fromString("80D0CBB4-17E7-4662-B559-37409C1387DF");

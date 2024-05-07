@@ -238,6 +238,9 @@ public class ConfigKey {
 
     public static ConfigKey OprationCodeNaghsh = new ConfigKey("oprationCodeNaghsh");
 
+    public static ConfigKey CountVisitCustomersNotIn  = new ConfigKey("CountVisitCustomersNotIn");
+    public static ConfigKey LocationCheckRadiusOffTrack   = new ConfigKey("LocationCheckRadiusOffTrack");
+
 
 
 
