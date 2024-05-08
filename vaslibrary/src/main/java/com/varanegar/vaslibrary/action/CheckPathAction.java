@@ -60,10 +60,8 @@ public abstract class CheckPathAction extends BaseAction {
                 && !(((VasActionsAdapter) getAdapter()).isCustomerIsInVisitDayPath())
                 && countVisitCustomersNotInInt >= countVisitInt
                 && countVisitInt != 0
-                &&!isConfirmed()
-        )
-            return getActivity().getString(R.string.can_not_do_for_other_pathes);
-
+                &&!isConfirmed())
+            return getActivity().getString(R.string.countVisitInt_error,String.valueOf(countVisitInt));
         else if (checkCloudConfig(ConfigKey.VisitCustomersNotInPath, false)
                 && !(((VasActionsAdapter) getAdapter()).isCustomerIsInVisitDayPath()))
             return getActivity().getString(R.string.can_not_do_for_other_pathes);

@@ -1332,6 +1332,7 @@
     <string name="package_ephatic_items_error">شما باید مجموعا %1$s عدد از %2$s سفارش دهید اما %3$s عدد سفارش داده اید</string>
     <string name="package_">پکیج</string>
     <string name="emphatic_product_error">تعداد %1$s باید حداقل %2$s باشد. شما %3$s عدد سفارش داده اید</string>
+    <string name="countVisitInt_error">تعداد مجاز ویزیت خارج ازمسیرشما %1$s می باشد</string>
     <string name="without_ref_replacement_registration">تعویضی بدون مبنا</string>
     <string name="with_ref_replacement_registration">تعویضی با مبنا</string>
     <string name="dealer_label">فروشنده</string>
