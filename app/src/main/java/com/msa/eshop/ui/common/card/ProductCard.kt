@@ -1,0 +1,159 @@
+package com.msa.eshop.ui.common.card
+
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddShoppingCart
+import androidx.compose.material.icons.filled.ArrowForwardIos
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
+import com.msa.eshop.R
+import com.msa.eshop.ui.theme.*
+
+@Composable
+fun ProductCard(
+    modifier: Modifier = Modifier,
+) {
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+        Column(
+            modifier = Modifier
+                .padding(10.dp)
+        ) {
+
+            Surface(
+                shape = RoundedCornerShape(18.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(1.dp),
+                color = Color.White
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.padding(8.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .background(
+                                color = PlatinumSilver,
+                                shape = RoundedCornerShape(18.dp)
+                            )
+                            .aspectRatio(1f)
+                            .size(120.dp) // تعیین ارتفاع و عرض ثابت
+                    ) {
+
+//                    AsyncImage(
+//                        model = productModelEntity.productImage,
+//                        contentDescription = "productImage",
+//                        modifier = Modifier.fillMaxSize(),
+//                        error = painterResource(id = R.drawable.nourl)
+//                    )
+                        Image(
+                            painter = painterResource(R.drawable.product),
+                            contentDescription = stringResource(R.string.image_product),
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+
+
+                    Text(
+                        text = "پودر کیک کاکائویی",
+                        modifier = Modifier
+                            .padding(vertical = 8.dp),
+                        maxLines = 1,
+                        style = Typography.bodyLarge
+
+                        )
+
+
+
+                    Column(modifier = Modifier.padding(5.dp)) {
+                        Row(
+                            modifier = Modifier
+                                .padding(vertical = 3.dp)
+                                .fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+
+
+                            Text(
+                                text = "94.000.000 تومان",
+                                style = Typography.labelLarge,
+                            )
+                            Text(
+                                text = "120.000.000 ",
+                                style = TextStyle(textDecoration = TextDecoration.LineThrough),
+                                fontFamily = EShopFontFamily
+                            )
+
+
+                        }
+
+                        Button(
+                            onClick = {
+
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
+                            shape= RoundedCornerShape(6.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.AddShoppingCart,
+                                contentDescription = "iconbutton"
+                            )
+                            Spacer(modifier = Modifier.width(DIMENS_8dp))
+                            Text(
+                                stringResource(id = R.string.add_to_cart),
+                                style = Typography.labelSmall,
+                            )
+                        }
+                    }
+
+
+                }
+            }
+        }
+    }
+
+}
+
+@Preview
+@Composable
+private fun ProductCardPreciew() {
+    ProductCard()
+}
