@@ -1,11 +1,14 @@
 package com.msa.eshop.ui.screen.login
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -39,102 +42,115 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.msa.eshop.R
+import com.msa.eshop.ui.component.button.ButtonBorderAnmation
+import com.msa.eshop.ui.component.dialog.CustomDialog
+import com.msa.eshop.ui.component.dialog.ErrorDialog
+import com.msa.eshop.ui.component.dialog.ErrorWarning
 import com.msa.eshop.ui.component.weightC.RoundedIconTextField
+import com.msa.eshop.ui.theme.DIMENS_14dp
+import com.msa.eshop.ui.theme.DIMENS_8dp
+import com.msa.eshop.ui.theme.PlatinumSilver
+import com.msa.eshop.ui.theme.RoyalPurple
+import com.msa.eshop.ui.theme.RoyalRed
+import com.msa.eshop.ui.theme.Typography
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier) {
-   val viewModel: LoginViewModel = hiltViewModel()
-
-    val currentSample = rememberSaveable { mutableStateOf<Boolean?>(null) }
-
-    // بازیابی نام کاربری و رمز عبور از SharedPreferences
+fun LoginScreen(
+    modifier: Modifier = Modifier,
+    viewModel: LoginViewModel = hiltViewModel()
+) {
     val savedUsername = viewModel.getSavedUsername()
     val savedPassword = viewModel.getSavedPassword()
-
+    var username by remember { mutableStateOf(savedUsername) }
+    var password by remember { mutableStateOf(savedPassword) }
     val state by viewModel.state.collectAsState()
-    val onReset = { currentSample.value = state.isLoading }
-    if (state.isLoading) {
-
+    var showDialog by remember {
+        mutableStateOf(true)
     }
     state.error?.let {
-
+        CustomDialog(
+            showDialog = true,
+            onDismissRequest = {
+                viewModel.clearState()
+            }
+        ) {
+//            ErrorWarning(
+//                onDismissRequest = {  viewModel.clearState()},
+//                title = "خطا",
+//                message = it
+//            )
+            ErrorDialog(it, {viewModel.clearState()}, false)
+        }
     }
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
 
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = modifier
+                .fillMaxSize()
+                .background(color = PlatinumSilver),
         ) {
 
-            state.error?.let {
-
-            }
             Column(
-                modifier = Modifier
+                modifier = modifier
+                    .padding(10.dp)
                     .fillMaxSize()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                var username by remember { mutableStateOf(savedUsername) }
-                var password by remember { mutableStateOf(savedPassword) }
+                    .align(Alignment.Center)
+                ,
+                horizontalAlignment = Alignment.CenterHorizontally,
 
-                Card(
-                    modifier = Modifier
-                        .width(328.dp)
-                        .padding(16.dp),
-                    shape = RoundedCornerShape(10.dp)
                 ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.logozar),
-                            contentDescription = "logo",
-                            modifier = Modifier
-                                .size(110.dp, 82.dp)
-                                .layoutId("logo")
-                        )
+                Spacer(modifier = Modifier.height(DIMENS_14dp))
+                Image(
+                    painter = painterResource(id = R.drawable.logo),
+                    contentDescription = "logo",
+                    modifier = Modifier
+                        .size(150.dp, 150.dp)
+                        .layoutId("logo")
+                )
+                Spacer(modifier = Modifier.height(DIMENS_14dp))
+                RoundedIconTextField(
+                    value = username,
+                    onValueChange = { username = it },
+                    label = "کد ملی",
+                    icon = Icons.Default.Person
+                )
+                Spacer(modifier = Modifier.height(DIMENS_14dp))
+                RoundedIconTextField(
+                    value = password,
+                    onValueChange = { password = it },
+                    label = "رمز عبور",
+                    icon = Icons.Default.Lock,
+                    isPassword = true
+                )
+                Spacer(modifier = Modifier.height(DIMENS_14dp))
+                Text(
+                    text = "رمز عبور خود را فراموش کرده اید؟",
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(DIMENS_14dp))
+//                Button(
+//                    onClick = {
+//                    viewModel.getToken(username, password)
+//                    },
+//                    modifier = Modifier.fillMaxWidth(),
+//                    colors = ButtonDefaults.buttonColors(containerColor = RoyalRed),
+//                    shape = RoundedCornerShape(6.dp)
+//                ) {
+//                    Text(
+//                        "ورود",
+//                        style = Typography.labelLarge
+//                    )
+//                }
 
-                        RoundedIconTextField(
-                            value = username,
-                            onValueChange = { username = it },
-                            label = "کد ملی",
-                            icon = Icons.Default.Person
-                        )
-
-                        RoundedIconTextField(
-                            value = password,
-                            onValueChange = { password = it },
-                            label = "رمز عبور",
-                            icon = Icons.Default.Lock,
-                            isPassword = true
-                        )
-
-                        Text(
-                            text = "رمز عبور خود را فراموش کرده اید؟",
-                            modifier = Modifier.padding(8.dp)
-                        )
-
-                        Button(
-                            onClick = {
-                                viewModel.getToken(username, password)
-                                // اینجا می‌توانید عملیات ورود را انجام دهید
-                                // مثلا می‌توانید اطلاعات را به سرور ارسال کرده و ورود کاربر را بررسی کنید
-                            },
-                            modifier = Modifier.fillMaxWidth(),
-                            colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
-                        ) {
-                            Text("بریم که خرید رو شروع کنیم")
-                            Icon(
-                                imageVector = Icons.Default.ArrowBackIosNew,
-                                contentDescription = "iconbutton"
-                            )
-
-                        }
+                ButtonBorderAnmation(
+                    modifier =  Modifier.fillMaxWidth(),
+                    "ورود",
+                    true,
+                    state.isLoading,
+                    {
+                        viewModel.getToken(username, password)
                     }
-                }
+                )
             }
         }
     }
@@ -143,6 +159,5 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 private fun LoginScreenPreview() {
-
     LoginScreen()
 }

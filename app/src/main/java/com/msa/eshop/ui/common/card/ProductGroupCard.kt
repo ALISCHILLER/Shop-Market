@@ -40,7 +40,7 @@ fun ProductGroupCard(
 
     val iconTint = if (isSelected) Color.White else Color.Red
     val textBackground = if (isSelected) Color.Red else Color.White
-    val icon = when(productGroupEntity.productGroupCode){
+    val icon = when(productGroupEntity.productCategoryCode){
         0 -> {
             if (!isSelected)
                 painterResource(id = R.drawable.allred)
@@ -104,9 +104,10 @@ fun ProductGroupCard(
                     icon = icon as Painter,
                     tint = iconTint)
                 Text(
-                    text = productGroupEntity.productGroup,
+                    text = productGroupEntity.productCategoryName,
                     color = iconTint
                 )
+
             }
         }
     }
@@ -129,7 +130,8 @@ private fun ItemProductGroupScreenPreview() {
     ProductGroupCard(
         ProductGroupEntity(
             1,
-            "آرد"
+            "آرد",
+            ""
         ),
         onClick = { /* Do something on click */ },
         false

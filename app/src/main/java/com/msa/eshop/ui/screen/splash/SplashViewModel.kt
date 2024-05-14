@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavOptions
 import com.msa.eshop.ui.navigation.NavInfo
 import com.msa.eshop.ui.navigation.NavManager
+import com.msa.eshop.ui.navigation.Route
 import com.msa.eshop.utils.CompanionValues
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -32,21 +33,21 @@ class SplashViewModel @Inject constructor(
 
 
     fun navigateToHome() {
-//        navManager.navigate(
-//            NavInfo(id = Route.HomeScreen.route,
-//                navOption = NavOptions.Builder().setPopUpTo(
-//                    Route.SplashScreen.route,
-//                    inclusive = true).build())
-//        )
+        navManager.navigate(
+            NavInfo(id = Route.HomeScreen.route,
+                navOption = NavOptions.Builder().setPopUpTo(
+                    Route.SplashScreen.route,
+                    inclusive = true).build())
+        )
     }
 
     fun navigateToLogin() {
-//        navManager.navigate(
-//            NavInfo(id = Route.LoginScreen.route,
-//                navOption = NavOptions.Builder().setPopUpTo(
-//                    Route.SplashScreen.route,
-//                    inclusive = true).build())
-//        )
+        navManager.navigate(
+            NavInfo(id = Route.LoginScreen.route,
+                navOption = NavOptions.Builder().setPopUpTo(
+                    Route.SplashScreen.route,
+                    inclusive = true).build())
+        )
     }
 
 }

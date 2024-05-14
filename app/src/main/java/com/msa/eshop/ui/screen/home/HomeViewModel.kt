@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.msa.eshop.data.Model.GeneralStateModel
 import com.msa.eshop.data.local.entity.ProductGroupEntity
 import com.msa.eshop.data.local.entity.ProductModelEntity
+import com.msa.eshop.data.local.entity.UserModelEntity
 import com.msa.eshop.data.remote.utills.Resource
 import com.msa.eshop.data.repository.HomeRepository
 import com.msa.eshop.ui.navigation.NavManager
@@ -14,6 +15,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -28,15 +30,31 @@ class HomeViewModel @Inject constructor(
     private val _state: MutableStateFlow<GeneralStateModel> = MutableStateFlow(GeneralStateModel())
     val state: StateFlow<GeneralStateModel> = _state
 
+    private val _allTasks =
+        MutableStateFlow<List<ProductModelEntity>>(emptyList())
+    val allTasks: StateFlow<List<ProductModelEntity>> = _allTasks
+
+
     private val _allProductGroup =
         MutableStateFlow<List<ProductGroupEntity>>(emptyList())
     val allProductGroup: StateFlow<List<ProductGroupEntity>> = _allProductGroup
 
-    private val _allPreoduct =
-        MutableStateFlow<List<ProductModelEntity>>(emptyList())
-    val allProduct: StateFlow<List<ProductModelEntity>> = _allPreoduct
 
+    init {
+        getUser()
+    }
+    private val _user = MutableStateFlow<UserModelEntity?>(null)
+    val user: StateFlow<UserModelEntity?> = _user
 
+    fun productCheck(){
+        val productCount = homeRepository.getProductCount()
+        if (productCount==0) {
+            ProductRequest()
+            ProductGroupRequest()
+        }else{
+            getAllProductGroup()
+        }
+    }
     fun ProductRequest() {
         viewModelScope.launch {
             homeRepository.productRequest().onEach { response ->
@@ -47,7 +65,8 @@ class HomeViewModel @Inject constructor(
                         val responseData = response.data
                         responseData?.let { data ->
                             if (!data.hasError) {
-
+                                homeRepository.insertProduct(data.data)
+                                getAllProduct()
                             } else
                                 updateStateError(data.message)
                         }
@@ -62,10 +81,21 @@ class HomeViewModel @Inject constructor(
                         Timber.tag("HomeViewModel").e("ProductRequest ERROR: ${response.error}")
                         updateStateError(response.error?.message)
                     }
+
                 }
+            }.collect()
+        }
+    }
+    private fun getAllProduct() {
+        viewModelScope.launch {
+            homeRepository.getAllProduct.collect {
+                updateStateLoading(false)
+                _allTasks.value = it
             }
         }
     }
+
+
     fun ProductGroupRequest() {
         viewModelScope.launch {
 
@@ -97,15 +127,31 @@ class HomeViewModel @Inject constructor(
                     }
 
                 }
-            }
+            }.collect()
         }
     }
 
-    private fun getAllProduct() {
+
+
+    fun getProduct(productGroup: ProductGroupEntity) {
         viewModelScope.launch {
-            homeRepository.getAllProduct.collect {
-                updateStateLoading(false)
-                _allPreoduct.value = it
+            if (productGroup.productCategoryCode != 0)
+                homeRepository.getProduct(productGroup.productCategoryCode).collect {
+                    _allTasks.value = it
+                }
+            else
+                homeRepository.getAllProduct.collect {
+                    updateStateLoading(false)
+                    _allTasks.value = it
+                }
+        }
+    }
+
+
+    fun getUser() {
+        viewModelScope.launch {
+            homeRepository.getuser.collect {
+                _user.value = it
             }
         }
     }
@@ -120,7 +166,6 @@ class HomeViewModel @Inject constructor(
     }
 
 
-
     private fun updateStateLoading() {
         _state.value = _state.value.copy(isLoading = true, error = null)
     }
@@ -131,6 +176,14 @@ class HomeViewModel @Inject constructor(
 
     private fun updateStateError(errorMessage: String?) {
         _state.value = _state.value.copy(isLoading = false, error = errorMessage)
+    }
+
+    fun searchProduct(search:String){
+        viewModelScope.launch {
+            homeRepository.searchProduct(search).collect{
+                _allTasks.value = it
+            }
+        }
     }
 }
 

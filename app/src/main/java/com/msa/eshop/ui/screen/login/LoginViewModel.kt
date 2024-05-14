@@ -1,22 +1,33 @@
 package com.msa.eshop.ui.screen.login
 
+import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.SharedPreferences
-import androidx.compose.ui.res.stringResource
+import android.provider.Settings.Global.putString
+import android.system.Os.remove
+import android.util.Log
 import androidx.core.content.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavOptions
 import com.msa.eshop.R
 import com.msa.eshop.data.Model.GeneralStateModel
 import com.msa.eshop.data.remote.utills.Resource
 import com.msa.eshop.data.repository.LoginRepository
 import com.msa.eshop.data.request.TokenRequest
+import com.msa.eshop.ui.navigation.NavInfo
 import com.msa.eshop.ui.navigation.NavManager
+import com.msa.eshop.ui.navigation.Route
 import com.msa.eshop.utils.CompanionValues
+
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -24,6 +35,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val navManager: NavManager,
     private val loginRepository: LoginRepository
 ): ViewModel(){
@@ -33,13 +45,15 @@ class LoginViewModel @Inject constructor(
 
     @Inject
     lateinit var sharedPreferences: SharedPreferences
-
+    fun clearState() {
+        _state.value = GeneralStateModel()
+    }
     fun getToken(
         username:String,
         password:String
     ){
         if (username.isBlank() || password.isBlank()) {
-            updateStateError(R.string.username_and_password_are_required.toString())
+            updateStateError(context.getString(R.string.username_and_password_are_required))
             return
         }
         viewModelScope.launch {
@@ -70,7 +84,7 @@ class LoginViewModel @Inject constructor(
                     }
 
                 }
-            }
+            }.collect()
         }
     }
 
@@ -86,6 +100,7 @@ class LoginViewModel @Inject constructor(
                         responseData?.let {data->
                             if (!data.hasError){
                                 loginRepository.insertUser(data.data.get(0))
+                                navigateToHome()
                             }else
                                 updateStateError(response.error?.message)
                         }
@@ -103,11 +118,11 @@ class LoginViewModel @Inject constructor(
                     }
 
                 }
-            }
+            }.collect()
         }
     }
     private fun updateStateLoading() {
-        _state.value = _state.value.copy(isLoading = true, error = null)
+        _state.update { it.copy(isLoading = true) }
     }
 
     private fun updateStateLoading(isLoading: Boolean) {
@@ -115,7 +130,7 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun updateStateError(errorMessage: String?) {
-        _state.value = _state.value.copy(isLoading = false, error = errorMessage)
+        _state.update { it.copy(isLoading = false, error = errorMessage) }
     }
     fun getSavedUsername(): String {
         return sharedPreferences.getString(CompanionValues.USERNAME, "") ?: ""
@@ -145,7 +160,13 @@ class LoginViewModel @Inject constructor(
     }
 
 
-
+    fun navigateToHome() {
+        navManager.navigate(
+            NavInfo(id = Route.HomeScreen.route,
+                navOption = NavOptions.Builder().setPopUpTo(Route.LoginScreen.route,
+                    inclusive = true).build())
+        )
+    }
 
 }
 

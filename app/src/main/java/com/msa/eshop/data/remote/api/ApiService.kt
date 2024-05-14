@@ -12,16 +12,20 @@ import retrofit2.http.POST
 
 interface ApiService {
 
+    companion object {
 
-    @POST("")
+        const val version = "v1"
+
+    }
+    @POST("/api/v1/User/loginUser")
     suspend fun getToken(
         @Body tokenRequest: TokenRequest
     ): Response<TokenModel?>
 
-    @GET("")
+    @GET("/api/$version/User/CustomerProfile")
     suspend fun getUserData(): Response<UserModel?>
 
-    @GET("")
+    @GET("/api/$version/Product/GetListKala")
     suspend fun getProductData(): Response<ProductModel?>
 
     @GET("")

@@ -4,8 +4,10 @@ import com.msa.eshop.data.Model.ProductGroupModel
 import com.msa.eshop.data.Model.ProductModel
 import com.msa.eshop.data.local.dao.ProductDao
 import com.msa.eshop.data.local.dao.ProductGroupDao
+import com.msa.eshop.data.local.dao.UserDao
 import com.msa.eshop.data.local.entity.ProductGroupEntity
 import com.msa.eshop.data.local.entity.ProductModelEntity
+import com.msa.eshop.data.local.entity.UserModelEntity
 import com.msa.eshop.data.remote.api.ApiService
 import com.msa.eshop.data.remote.utills.MakeSafeApiCall
 import com.msa.eshop.data.remote.utills.Resource
@@ -19,17 +21,18 @@ class HomeRepository @Inject constructor(
     private val apiManager: MakeSafeApiCall,
     private val  productDao: ProductDao,
     private val productGroupDao: ProductGroupDao,
-){
+    private val userDao: UserDao,
 
+    )  {
+
+    val getAllProduct: Flow<List<ProductModelEntity>> = productDao.getAll()
+    val getuser: Flow<UserModelEntity> = userDao.getUserLogin()
 
 
     fun getProduct(code: Int): Flow<List<ProductModelEntity>> {
         return productDao.getProduct(code)
     }
-
-    val getAllProduct: Flow<List<ProductModelEntity>> = productDao.getAll()
     val getAllProductGroup: Flow<List<ProductGroupEntity>> = productGroupDao.getAll()
-
     suspend fun productRequest(
     ): Flow<Resource<ProductModel?>> {
         return apiManager.makeSafeApiCall {
@@ -39,6 +42,10 @@ class HomeRepository @Inject constructor(
         } as Flow<Resource<ProductModel?>>
     }
 
+
+    suspend fun insertProduct(productModelEntity: List<ProductModelEntity>){
+        productDao.insert(productModelEntity)
+    }
 
     suspend fun productGroupRequest(
     ): Flow<Resource<ProductGroupModel?>> {
@@ -50,9 +57,20 @@ class HomeRepository @Inject constructor(
     }
 
 
-
     suspend fun insertProductGroup(productGroupEntity: List<ProductGroupEntity>){
         productGroupDao.insertZeroItem()
         productGroupDao.insert(productGroupEntity)
+    }
+
+
+
+    fun getProductCount(): Int {
+        return productDao.getProductCount()
+    }
+
+
+
+    fun searchProduct(search:String): Flow<List<ProductModelEntity>>{
+        return productDao.searchProducts(search)
     }
 }

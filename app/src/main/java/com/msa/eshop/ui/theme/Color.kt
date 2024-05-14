@@ -20,3 +20,4 @@ val lightcoral = Color(0xfff3b8bb)
 
 val LightPurple = Color(0xFFBCA1E7)
 val RoyalPurple = Color(0xEB700C24)
+val RoyalRed = Color(0xFFEB091E)
