@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.ModalBottomSheetDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -19,17 +20,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-
 fun BottomSheetExample(
     modifier: Modifier = Modifier,
-    content: @Composable ColumnScope.() -> Unit
+    onDismissRequest: () -> Unit,
+    content: @Composable ColumnScope.() -> Unit,
+
 ) {
     val modalBottomSheetState = rememberModalBottomSheetState()
 
     ModalBottomSheet(
-        onDismissRequest = {  },
+        onDismissRequest = { onDismissRequest()},
         sheetState = modalBottomSheetState,
-        dragHandle = { BottomSheetDefaults.DragHandle() },
+//        dragHandle = { BottomSheetDefaults.DragHandle() },
     ) {
         content()
     }
@@ -72,7 +74,9 @@ fun CountryList() {
 @Preview
 @Composable
 private fun BottomSheetExamplePreview() {
-    BottomSheetExample(){
+    BottomSheetExample(
+    onDismissRequest = {}
+    ){
         CountryList()
     }
 }

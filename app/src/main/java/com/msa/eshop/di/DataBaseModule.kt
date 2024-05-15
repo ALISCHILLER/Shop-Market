@@ -3,6 +3,7 @@ package com.msa.eshop.di
 import android.content.Context
 import androidx.room.Room
 import com.msa.eshop.data.local.AppDatabase
+import com.msa.eshop.data.local.dao.OrderDao
 import com.msa.eshop.data.local.dao.ProductDao
 import com.msa.eshop.data.local.dao.ProductGroupDao
 import com.msa.eshop.data.local.dao.UserDao
@@ -39,7 +40,11 @@ class DataBaseModule {
         return appDatabase.productGroupDao()
     }
 
-
+    @Provides
+    @Singleton
+    fun providerOrderDao(appDatabase: AppDatabase) : OrderDao {
+        return appDatabase.orderDao()
+    }
     @Provides
     @Singleton
     fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {

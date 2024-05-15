@@ -11,11 +11,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.msa.eshop.ui.component.DockedSearch
 
 @Composable
 @Preview
 fun TopBarSearch(modifier: Modifier = Modifier) {
+    val viewModel: HomeViewModel = hiltViewModel()
     Column(
         modifier = Modifier
             .padding(top = 7.dp)
@@ -27,6 +29,8 @@ fun TopBarSearch(modifier: Modifier = Modifier) {
             text = "Zar Market",
            color = Color.Red
         )
-        DockedSearch()
+        DockedSearch(
+            {viewModel.searchProduct(it)}
+        )
     }
 }

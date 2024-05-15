@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 
 package com.msa.eshop.ui.component
 
@@ -30,7 +30,15 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 @Preview
-fun DockedSearch() {
+fun DockedSearchPreview(){
+    DockedSearch(
+        {}
+    )
+}
+@Composable
+fun DockedSearch(
+    onQueryChange: (String) -> Unit,
+) {
     var text by rememberSaveable { mutableStateOf("") }
     var active by rememberSaveable { mutableStateOf(false) }
     DockedSearchBar(
@@ -42,6 +50,7 @@ fun DockedSearch() {
         query = text,
         onQueryChange = {
             text = it
+            onQueryChange(it)
             // Call search function here with the current query
         },
         onSearch = { newQuery ->

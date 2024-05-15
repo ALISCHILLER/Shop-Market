@@ -103,10 +103,12 @@ fun ProductGroupCard(
                 ProductGroupIcon(
                     icon = icon as Painter,
                     tint = iconTint)
-                Text(
-                    text = productGroupEntity.productCategoryName,
-                    color = iconTint
-                )
+                productGroupEntity.productCategoryName?.let {
+                    Text(
+                        text = it,
+                        color = iconTint
+                    )
+                }
 
             }
         }

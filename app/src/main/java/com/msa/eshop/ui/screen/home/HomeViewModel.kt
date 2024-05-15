@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.msa.eshop.data.Model.GeneralStateModel
+import com.msa.eshop.data.local.entity.OrderEntity
 import com.msa.eshop.data.local.entity.ProductGroupEntity
 import com.msa.eshop.data.local.entity.ProductModelEntity
 import com.msa.eshop.data.local.entity.UserModelEntity
@@ -30,9 +31,11 @@ class HomeViewModel @Inject constructor(
     private val _state: MutableStateFlow<GeneralStateModel> = MutableStateFlow(GeneralStateModel())
     val state: StateFlow<GeneralStateModel> = _state
 
-    private val _allTasks =
+    private val _allProduct =
         MutableStateFlow<List<ProductModelEntity>>(emptyList())
-    val allTasks: StateFlow<List<ProductModelEntity>> = _allTasks
+    val allProduct: StateFlow<List<ProductModelEntity>> = _allProduct
+
+
 
 
     private val _allProductGroup =
@@ -40,9 +43,11 @@ class HomeViewModel @Inject constructor(
     val allProductGroup: StateFlow<List<ProductGroupEntity>> = _allProductGroup
 
 
-    init {
-        getUser()
-    }
+    private val _allOrder =
+        MutableStateFlow<List<OrderEntity>>(emptyList())
+    val allOrder: StateFlow<List<OrderEntity>> = _allOrder
+
+
     private val _user = MutableStateFlow<UserModelEntity?>(null)
     val user: StateFlow<UserModelEntity?> = _user
 
@@ -52,9 +57,12 @@ class HomeViewModel @Inject constructor(
             ProductRequest()
             ProductGroupRequest()
         }else{
+            getAllOrder()
             getAllProductGroup()
         }
     }
+
+
     fun ProductRequest() {
         viewModelScope.launch {
             homeRepository.productRequest().onEach { response ->
@@ -86,11 +94,12 @@ class HomeViewModel @Inject constructor(
             }.collect()
         }
     }
+
     private fun getAllProduct() {
         viewModelScope.launch {
             homeRepository.getAllProduct.collect {
                 updateStateLoading(false)
-                _allTasks.value = it
+                _allProduct.value = it
             }
         }
     }
@@ -131,40 +140,40 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-
-
-    fun getProduct(productGroup: ProductGroupEntity) {
-        viewModelScope.launch {
-            if (productGroup.productCategoryCode != 0)
-                homeRepository.getProduct(productGroup.productCategoryCode).collect {
-                    _allTasks.value = it
-                }
-            else
-                homeRepository.getAllProduct.collect {
-                    updateStateLoading(false)
-                    _allTasks.value = it
-                }
-        }
-    }
-
-
-    fun getUser() {
-        viewModelScope.launch {
-            homeRepository.getuser.collect {
-                _user.value = it
-            }
-        }
-    }
     private fun getAllProductGroup() {
         viewModelScope.launch {
             homeRepository.getAllProductGroup.collect {
-                Log.e("TAG", "getAllProductGroup: $it", )
+                Log.e("TAG", "getAllProductGroup: $it")
                 updateStateLoading(false)
                 _allProductGroup.value = it
             }
         }
     }
 
+
+    fun getProduct(productGroup: ProductGroupEntity) {
+        viewModelScope.launch {
+            if (productGroup.productCategoryCode != 0)
+                homeRepository.getProduct(productGroup.productCategoryCode).collect {
+                    _allProduct.value = it
+                }
+            else
+                homeRepository.getAllProduct.collect {
+                    updateStateLoading(false)
+                    _allProduct.value = it
+                }
+        }
+    }
+
+
+
+    private fun getAllOrder() {
+        viewModelScope.launch {
+            homeRepository.getAllOrder.collect {
+                _allOrder.value = it
+            }
+        }
+    }
 
     private fun updateStateLoading() {
         _state.value = _state.value.copy(isLoading = true, error = null)
@@ -178,13 +187,53 @@ class HomeViewModel @Inject constructor(
         _state.value = _state.value.copy(isLoading = false, error = errorMessage)
     }
 
-    fun searchProduct(search:String){
+    fun searchProduct(search: String) {
         viewModelScope.launch {
-            homeRepository.searchProduct(search).collect{
-                _allTasks.value = it
+            homeRepository.searchProduct(search).collect {
+                _allProduct.value = it
             }
         }
     }
+
+
+    fun calculateTotalPriceAndHandleOrder(
+        value1: Int,
+        value2: Int,
+        productModelEntity: ProductModelEntity
+    ): Float {
+        val totalValue = calculateTotalValue(value1, value2, productModelEntity)
+        updateOrderInDatabase(productModelEntity, totalValue, value1, value2)
+        return calculateSalePrice(totalValue, productModelEntity)
+    }
+
+
+    private fun updateOrderInDatabase(
+        productModelEntity: ProductModelEntity,
+        totalValue: Int,
+        value1: Int,
+        value2: Int
+    ) {
+        viewModelScope.launch {
+            if (totalValue > 0) {
+                insertOrder(productModelEntity, totalValue, value1, value2)
+            } else {
+                homeRepository.deleteOrder(productModelEntity.id)
+            }
+        }
+    }
+
+    private suspend fun insertOrder(
+        productModelEntity: ProductModelEntity,
+        totalValue: Int,
+        value1: Int,
+        value2: Int
+    ) {
+        homeRepository.insertOrder(
+            createOrderEntity(productModelEntity, totalValue, value1, value2)
+        )
+    }
+
+
 }
 
 

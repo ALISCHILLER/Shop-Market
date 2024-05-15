@@ -17,7 +17,7 @@ interface ApiService {
         const val version = "v1"
 
     }
-    @POST("/api/v1/User/loginUser")
+    @POST("/api/$version/User/loginUser")
     suspend fun getToken(
         @Body tokenRequest: TokenRequest
     ): Response<TokenModel?>
@@ -28,6 +28,6 @@ interface ApiService {
     @GET("/api/$version/Product/GetListKala")
     suspend fun getProductData(): Response<ProductModel?>
 
-    @GET("")
+    @GET("/api/$version/Product/GetProductCategory")
     suspend fun getProductGroupData(): Response<ProductGroupModel?>
 }

@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 data class ProductGroupEntity(
     @PrimaryKey
     val productCategoryCode: Int,
-    val productCategoryName: String,
-    val productCategoryImage: String,
+    val productCategoryName: String?,
+    val productCategoryImage: String?,
 
 )

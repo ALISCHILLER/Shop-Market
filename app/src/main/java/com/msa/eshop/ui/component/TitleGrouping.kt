@@ -32,7 +32,8 @@ fun TitleGrouping(
 
         Row {
             Text(
-                text = "مشاهده همه"
+                text = "مشاهده همه",
+                style = Typography.titleSmall
             )
 
             Image(imageVector = Icons.Default.ArrowBackIosNew, contentDescription ="" )
