@@ -69,13 +69,13 @@ fun HomeScreen(
                         .padding(vertical = 8.dp),
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
-                    items(allProductGroup) { productGroup ->
-                        ProductGroupCard(
-                            productGroup,
-                            onClick = { selectedProductGroup = it },
-                            isSelected = selectedProductGroup == productGroup
-                        )
-                    }
+//                    items(allProductGroup) { productGroup ->
+//                        ProductGroupCard(
+//                            productGroup,
+//                            onClick = { selectedProductGroup = it },
+//                            isSelected = selectedProductGroup == productGroup
+//                        )
+//                    }
                 }
 
                 LazyVerticalGrid(

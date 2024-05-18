@@ -4,7 +4,6 @@ package com.msa.eshop.ui.common.card
 
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,12 +18,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddShoppingCart
-import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,11 +43,8 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.msa.eshop.R
-import com.msa.eshop.data.local.entity.OrderEntity
 import com.msa.eshop.data.local.entity.ProductModelEntity
 import com.msa.eshop.ui.component.bottomSheetC.BottomSheetExample
-import com.msa.eshop.ui.component.bottomSheetC.CountryList
-import com.msa.eshop.ui.component.dialog.AddProduct
 import com.msa.eshop.ui.theme.*
 import com.msa.eshop.utils.Currency
 
@@ -120,7 +114,7 @@ fun ProductCard(
                                 horizontalArrangement = Arrangement.SpaceAround
                             ){
                                 Text(
-                                    text = Currency(product.salePrice)
+                                    text = Currency(product.price)
                                         .toFormattedString(),
                                     color = Color.White,
                                     style = Typography.titleLarge
@@ -163,7 +157,7 @@ fun ProductCard(
 
                             Row() {
                                 Text(
-                                    text = Currency(product.salePrice).toFormattedString(),
+                                    text = Currency(product.price).toFormattedString(),
                                     style = Typography.labelLarge,
                                 )
                                 Spacer(modifier = Modifier.padding(5.dp))
@@ -175,7 +169,7 @@ fun ProductCard(
 
 
                             Text(
-                                text = Currency(product.salePrice).toFormattedString(),
+                                text = Currency(product.priceByDiscountPercent).toFormattedString(),
                                 style = TextStyle(textDecoration = TextDecoration.LineThrough),
                                 fontFamily = EShopFontFamily
                             )
@@ -229,7 +223,9 @@ private fun ProductCardPreciew() {
             unit2 = "Carton",
             unitid1 = "54654",
             unitid2 = "4565",
-            salePrice = 98563,
+            price = 98563,
+            discountPercent = 98563,
+            priceByDiscountPercent = 98563,
             productImage = ""
         ),
         onClick = {}

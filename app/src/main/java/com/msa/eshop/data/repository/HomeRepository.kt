@@ -63,7 +63,6 @@ class HomeRepository @Inject constructor(
 
 
     suspend fun insertProductGroup(productGroupEntity: List<ProductGroupEntity>){
-        productGroupDao.insertZeroItem()
         productGroupDao.insert(productGroupEntity)
     }
 

@@ -63,13 +63,14 @@ fun SliderBanner(
         }
     }
 
-    Column(modifier=modifier.padding(top=10.dp)){
+    Column(){
         HorizontalPager(
             count = imageSlider.size,
             state = pagerState,
             contentPadding = PaddingValues(horizontal = DIMENS_16dp),
             modifier = modifier
                 .fillMaxWidth()
+                .height(200.dp)
         ) { page ->
             Card(
                 shape = RoundedCornerShape(DIMENS_12dp),

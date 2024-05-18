@@ -9,5 +9,7 @@ data class ProductGroupEntity(
     val productCategoryCode: Int,
     val productCategoryName: String?,
     val productCategoryImage: String?,
+    val productCategoryImageUnselect: String?,
+
 
 )

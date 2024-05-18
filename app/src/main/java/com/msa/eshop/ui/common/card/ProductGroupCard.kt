@@ -133,6 +133,7 @@ private fun ItemProductGroupScreenPreview() {
         ProductGroupEntity(
             1,
             "آرد",
+            "",
             ""
         ),
         onClick = { /* Do something on click */ },

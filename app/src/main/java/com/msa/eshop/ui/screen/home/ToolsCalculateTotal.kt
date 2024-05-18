@@ -6,17 +6,17 @@ import com.msa.eshop.data.local.entity.ProductModelEntity
 fun calculateTotalValue(
     value1: Int,
     value2: Int,
-    productModelEntity: ProductModelEntity
+    productModelEntity: ProductModelEntity?
 ): Int {
-    val valueNumber = (value2 * productModelEntity.convertFactor2) + value1
+    val valueNumber = (value2 * (productModelEntity?.convertFactor2 ?: 0)) + value1
     return valueNumber.coerceAtLeast(0)
 }
 
 fun calculateSalePrice(
     totalValue: Int,
-    productModelEntity: ProductModelEntity
+    productModelEntity: ProductModelEntity?
 ): Float {
-    return totalValue * productModelEntity.salePrice.toFloat()
+    return totalValue * productModelEntity?.price!!.toFloat()
 }
 
 fun createOrderEntity(
@@ -39,7 +39,7 @@ fun createOrderEntity(
             unit2 = unit2,
             unitid1 = unitid1,
             unitid2 = unitid2,
-            salePrice = salePrice,
+            salePrice = price,
             productImage = productImage,
             numberOrder = totalValue,
             numberOrder1 = value1,

@@ -24,7 +24,7 @@ sealed class Route(
     object DetailsProductScreen : Route(route = "detailsProductScreen")
 
     //Basket
-    object ShoppingListScreen : Route(route = "shopppingListScreen")
+    object BasketScreen : Route(route = "BasketScreen")
     object InvoicePreviewScreen : Route(route = "invoicePreviewScreen")
     object OrderAddressRegistrationScreen : Route(route = "orderAddressRegistrationScreen")
 

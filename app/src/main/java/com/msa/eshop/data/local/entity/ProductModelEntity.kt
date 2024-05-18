@@ -18,7 +18,9 @@ data class ProductModelEntity(
     val convertFactor2: Int,
     val unitid2: String?,
     val productGroupCode: Int,
-    val salePrice: Int,
+    val price: Int,
+    val discountPercent: Int,
+    val priceByDiscountPercent: Int,
     val productImage: String?,
 
 )

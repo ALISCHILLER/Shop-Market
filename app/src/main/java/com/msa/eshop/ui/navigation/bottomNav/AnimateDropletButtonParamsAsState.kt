@@ -182,7 +182,7 @@ fun BottomNavaghtion(
                                     Route.HomeScreen.route
                                 )
                             2 ->onClick(
-                                Route.ShoppingListScreen.route
+                                Route.BasketScreen.route
                             )
                             3->onClick(
                                 Route.ProfileCustomerScreen.route

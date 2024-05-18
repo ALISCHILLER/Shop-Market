@@ -21,6 +21,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.msa.eshop.MainActivity
 import com.msa.eshop.ui.navigation.bottomNav.BottomNavaghtion
+import com.msa.eshop.ui.screen.basket.BasketScreen
 import com.msa.eshop.ui.screen.home.HomeScreen
 import com.msa.eshop.ui.screen.login.LoginScreen
 import com.msa.eshop.ui.screen.splash.SplashScreen
@@ -90,6 +91,7 @@ fun MainActivity.SetupNavigator() {
             composable(route = Route.HomeScreen.route) { HomeScreen() }
 
             //basket
+            composable(route = Route.BasketScreen.route) { BasketScreen() }
 
 
             //profile
