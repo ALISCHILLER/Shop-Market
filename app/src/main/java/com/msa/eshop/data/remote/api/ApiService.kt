@@ -1,9 +1,13 @@
 package com.msa.eshop.data.remote.api
 
-import com.msa.eshop.data.Model.ProductGroupModel
-import com.msa.eshop.data.Model.ProductModel
-import com.msa.eshop.data.Model.TokenModel
-import com.msa.eshop.data.Model.UserModel
+
+import com.msa.eshop.data.Model.BannerResponse
+import com.msa.eshop.data.Model.ProductGroupResponse
+import com.msa.eshop.data.Model.ProductResponse
+import com.msa.eshop.data.Model.SimulateResultModel
+import com.msa.eshop.data.Model.TokenResponse
+import com.msa.eshop.data.Model.UserResponse
+import com.msa.eshop.data.request.SimulateModelRequest
 import com.msa.eshop.data.request.TokenRequest
 import retrofit2.Response
 import retrofit2.http.Body
@@ -20,14 +24,24 @@ interface ApiService {
     @POST("/api/$version/User/loginUser")
     suspend fun getToken(
         @Body tokenRequest: TokenRequest
-    ): Response<TokenModel?>
+    ): Response<TokenResponse?>
 
     @GET("/api/$version/User/CustomerProfile")
-    suspend fun getUserData(): Response<UserModel?>
+    suspend fun getUserData(): Response<UserResponse?>
 
     @GET("/api/$version/Product/GetListKala")
-    suspend fun getProductData(): Response<ProductModel?>
+    suspend fun getProductData(): Response<ProductResponse?>
 
     @GET("/api/$version/Product/GetProductCategory")
-    suspend fun getProductGroupData(): Response<ProductGroupModel?>
+    suspend fun getProductGroupData(): Response<ProductGroupResponse?>
+
+    @GET("/api/$version/Banner/GetBanner")
+    suspend fun getBanner():Response<BannerResponse?>
+
+
+    @POST("")
+    suspend fun requestSimulate(
+        @Body simulateModelRequest: List<SimulateModelRequest>
+    ):Response<SimulateResultModel?>
+
 }

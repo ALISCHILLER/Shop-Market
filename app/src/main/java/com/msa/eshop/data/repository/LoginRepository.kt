@@ -1,7 +1,8 @@
 package com.msa.eshop.data.repository
 
-import com.msa.eshop.data.Model.TokenModel
-import com.msa.eshop.data.Model.UserModel
+
+import com.msa.eshop.data.Model.TokenResponse
+import com.msa.eshop.data.Model.UserResponse
 import com.msa.eshop.data.local.dao.UserDao
 import com.msa.eshop.data.local.entity.UserModelEntity
 import com.msa.eshop.data.remote.api.ApiService
@@ -21,23 +22,23 @@ class LoginRepository @Inject constructor(
 
     suspend fun loginToken(
         tokenRequest: TokenRequest
-    ): Flow<Resource<TokenModel?>> {
+    ): Flow<Resource<TokenResponse?>> {
         return apiManager.makeSafeApiCall {
             withContext(Dispatchers.IO) {
                 apiService.getToken(
                     tokenRequest
                 )
             }
-        } as Flow<Resource<TokenModel?>>
+        } as Flow<Resource<TokenResponse?>>
     }
     suspend fun getUserData(
-    ): Flow<Resource<UserModel?>> {
+    ): Flow<Resource<UserResponse?>> {
         return apiManager.makeSafeApiCall {
             withContext(Dispatchers.IO) {
                 apiService.getUserData()
 
             }
-        } as Flow<Resource<UserModel?>>
+        } as Flow<Resource<UserResponse?>>
     }
 
 

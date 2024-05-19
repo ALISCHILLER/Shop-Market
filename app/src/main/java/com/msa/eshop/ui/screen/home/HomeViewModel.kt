@@ -3,6 +3,7 @@ package com.msa.eshop.ui.screen.home
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.msa.eshop.data.Model.BannerModel
 import com.msa.eshop.data.Model.GeneralStateModel
 import com.msa.eshop.data.local.entity.OrderEntity
 import com.msa.eshop.data.local.entity.ProductGroupEntity
@@ -11,6 +12,7 @@ import com.msa.eshop.data.local.entity.UserModelEntity
 import com.msa.eshop.data.remote.utills.Resource
 import com.msa.eshop.data.repository.HomeRepository
 import com.msa.eshop.ui.navigation.NavManager
+import com.msa.eshop.utils.makeRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,14 +30,13 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
 
+
     private val _state: MutableStateFlow<GeneralStateModel> = MutableStateFlow(GeneralStateModel())
     val state: StateFlow<GeneralStateModel> = _state
 
     private val _allProduct =
         MutableStateFlow<List<ProductModelEntity>>(emptyList())
     val allProduct: StateFlow<List<ProductModelEntity>> = _allProduct
-
-
 
 
     private val _allProductGroup =
@@ -51,103 +52,84 @@ class HomeViewModel @Inject constructor(
     private val _user = MutableStateFlow<UserModelEntity?>(null)
     val user: StateFlow<UserModelEntity?> = _user
 
-    fun productCheck(){
+    private val _banner = MutableStateFlow<List<BannerModel>>(emptyList())
+    val banner: StateFlow<List<BannerModel>> = _banner
+
+    fun productCheck() {
         val productCount = homeRepository.getProductCount()
-        if (productCount==0) {
-            ProductRequest()
-            ProductGroupRequest()
-        }else{
+        if (productCount == 0) {
+            productRequest()
+            productGroupRequest()
+        } else {
             getAllOrder()
+            getAllProduct()
             getAllProductGroup()
         }
     }
 
 
-    fun ProductRequest() {
-        viewModelScope.launch {
-            homeRepository.productRequest().onEach { response ->
-                Timber.d(response.data.toString())
-                when (response.status) {
-                    Resource.Status.SUCCESS -> {
-                        Timber.tag("HomeViewModel").d("getToken SUCCESS: ${response.data}  ")
-                        val responseData = response.data
-                        responseData?.let { data ->
-                            if (!data.hasError) {
-                                homeRepository.insertProduct(data.data)
-                                getAllProduct()
-                            } else
-                                updateStateError(data.message)
-                        }
+    fun productRequest() {
+        makeRequest(
+            scope = viewModelScope,
+            request = { homeRepository.productRequest() },
+            onSuccess = { response ->
+                viewModelScope.launch {
+                    response?.data?.let {
+                        homeRepository.insertProduct(it)
+                        delay(1000)
+                        getAllProduct()
                     }
-
-                    Resource.Status.LOADING -> {
-                        Timber.tag("HomeViewModel").e("ProductRequest LOADING: ")
-                        updateStateLoading()
-                    }
-
-                    Resource.Status.ERROR -> {
-                        Timber.tag("HomeViewModel").e("ProductRequest ERROR: ${response.error}")
-                        updateStateError(response.error?.message)
-                    }
-
                 }
-            }.collect()
-        }
-    }
 
-    private fun getAllProduct() {
-        viewModelScope.launch {
-            homeRepository.getAllProduct.collect {
-                updateStateLoading(false)
-                _allProduct.value = it
-            }
-        }
+            },
+            updateStateLoading = { isLoading -> updateStateLoading(isLoading) },
+            updateStateError = { errorMessage -> updateStateError(errorMessage) }
+        )
     }
 
 
-    fun ProductGroupRequest() {
-        viewModelScope.launch {
-
-            homeRepository.productGroupRequest().onEach { response ->
-                Timber.d(response.data.toString())
-                when (response.status) {
-                    Resource.Status.SUCCESS -> {
-                        Timber.tag("HomeViewModel").d("getToken SUCCESS: ${response.data}  ")
-                        val responseData = response.data
-                        responseData?.let { data ->
-                            if (!data.hasError) {
-                                homeRepository.insertProductGroup(data.data)
-                                delay(1000)
-                                getAllProductGroup()
-                            } else
-                                updateStateError(data.message)
-                        }
-                    }
-
-                    Resource.Status.LOADING -> {
-                        Timber.tag("HomeViewModel").e("ProductRequest LOADING: ")
-                        updateStateLoading()
-                    }
-
-                    Resource.Status.ERROR -> {
-                        Timber.tag("HomeViewModel").e("ProductRequest ERROR: ${response.error}")
-                        updateStateError(response.error?.message)
-
-                    }
-
+    fun productGroupRequest() {
+        makeRequest(
+            scope = viewModelScope,
+            request = { homeRepository.productGroupRequest() },
+            onSuccess = { response ->
+                viewModelScope.launch {
+                    response?.data?.let { homeRepository.insertProductGroup(it) }
+                    delay(100)
+                    getAllProductGroup()
                 }
-            }.collect()
-        }
+
+
+            },
+            updateStateLoading = { isLoading -> updateStateLoading(isLoading) },
+            updateStateError = { errorMessage -> updateStateError(errorMessage) }
+        )
     }
 
-    private fun getAllProductGroup() {
-        viewModelScope.launch {
-            homeRepository.getAllProductGroup.collect {
-                Log.e("TAG", "getAllProductGroup: $it")
-                updateStateLoading(false)
-                _allProductGroup.value = it
-            }
-        }
+
+    fun Bannerrequest() {
+        makeRequest(
+            scope = viewModelScope,
+            request = { homeRepository.requestBanner() },
+            onSuccess = { response ->
+                response?.data?.let {
+                    Timber.tag("HomeViewModel").d("Bannerrequest SUCCESS: ${it}  ")
+                    _banner.value = it
+                }
+            },
+            updateStateLoading = { isLoading -> updateStateLoading(isLoading) },
+            updateStateError = { errorMessage -> updateStateError(errorMessage) }
+        )
+    }
+
+
+
+    private fun updateStateLoading(isLoading: Boolean) {
+        _state.value = _state.value.copy(isLoading = isLoading, error = null)
+    }
+
+    private fun updateStateError(errorMessage: String?) {
+        _state.value = _state.value.copy(isLoading = false, error = errorMessage)
     }
 
 
@@ -165,7 +147,24 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private fun getAllProductGroup() {
+        viewModelScope.launch {
+            homeRepository.getAllProductGroup.collect {
+                Log.e("TAG", "getAllProductGroup: $it")
+                updateStateLoading(false)
+                _allProductGroup.value = it
+            }
+        }
+    }
 
+    private fun getAllProduct() {
+        viewModelScope.launch {
+            homeRepository.getAllProduct.collect {
+                updateStateLoading(false)
+                _allProduct.value = it
+            }
+        }
+    }
 
     private fun getAllOrder() {
         viewModelScope.launch {
@@ -175,17 +174,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun updateStateLoading() {
-        _state.value = _state.value.copy(isLoading = true, error = null)
-    }
-
-    private fun updateStateLoading(isLoading: Boolean) {
-        _state.value = _state.value.copy(isLoading = isLoading, error = null)
-    }
-
-    private fun updateStateError(errorMessage: String?) {
-        _state.value = _state.value.copy(isLoading = false, error = errorMessage)
-    }
 
     fun searchProduct(search: String) {
         viewModelScope.launch {

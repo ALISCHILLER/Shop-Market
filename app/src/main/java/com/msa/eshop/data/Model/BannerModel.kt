@@ -5,3 +5,4 @@ data class BannerModel(
     val bannerName: String,
     val id: String
 )
+

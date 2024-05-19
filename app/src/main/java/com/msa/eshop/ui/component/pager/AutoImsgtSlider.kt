@@ -33,6 +33,7 @@ import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.pager.rememberPagerState
 import com.msa.eshop.R
+import com.msa.eshop.data.Model.BannerModel
 import com.msa.eshop.ui.theme.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.yield
@@ -45,13 +46,12 @@ fun AutoImsgtSlider(modifier: Modifier = Modifier) {
 @ExperimentalPagerApi
 @Composable
 fun SliderBanner(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    banner: List<BannerModel> = emptyList(),
+
 ) {
     val pagerState = rememberPagerState(initialPage = 0)
-    val imageSlider = listOf(
-        "https://imgv3.fotor.com/images/slider-image/Female-portrait-picture-enhanced-with-better-clarity-and-higher-quality-using-Fotors-free-online-AI-photo-enhancer.jpg",
-        "https://imgv3.fotor.com/images/slider-image/A-blurry-close-up-photo-of-a-woman.jpg",
-    )
+
 
     LaunchedEffect(Unit) {
         while (true) {
@@ -65,7 +65,7 @@ fun SliderBanner(
 
     Column(){
         HorizontalPager(
-            count = imageSlider.size,
+            count = banner.size,
             state = pagerState,
             contentPadding = PaddingValues(horizontal = DIMENS_16dp),
             modifier = modifier
@@ -94,12 +94,13 @@ fun SliderBanner(
                         )
                     }
             ) {
-                Image(
-                    modifier = modifier
-                        .fillMaxWidth(),
-                    painter = painterResource(id = R.drawable.banner),
-                    contentDescription = "",
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(banner[page].bannerImage)
+                        .build(),
+                    contentDescription = null,
                     contentScale = ContentScale.Crop,
+                    modifier = Modifier.height(200.dp)
                 )
 
             }
@@ -118,5 +119,11 @@ fun SliderBanner(
 @Preview
 @Composable
 fun SliderBannerPreview() {
-    SliderBanner()
+    val imageSlider = listOf(
+        "https://imgv3.fotor.com/images/slider-image/Female-portrait-picture-enhanced-with-better-clarity-and-higher-quality-using-Fotors-free-online-AI-photo-enhancer.jpg",
+        "https://imgv3.fotor.com/images/slider-image/A-blurry-close-up-photo-of-a-woman.jpg",
+    )
+//    SliderBanner(
+//        banner = null
+//    )
 }

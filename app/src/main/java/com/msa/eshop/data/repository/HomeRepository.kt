@@ -1,7 +1,9 @@
 package com.msa.eshop.data.repository
 
-import com.msa.eshop.data.Model.ProductGroupModel
-import com.msa.eshop.data.Model.ProductModel
+
+import com.msa.eshop.data.Model.BannerResponse
+import com.msa.eshop.data.Model.ProductGroupResponse
+import com.msa.eshop.data.Model.ProductResponse
 import com.msa.eshop.data.local.dao.OrderDao
 import com.msa.eshop.data.local.dao.ProductDao
 import com.msa.eshop.data.local.dao.ProductGroupDao
@@ -27,46 +29,54 @@ class HomeRepository @Inject constructor(
     )  {
 
     val getAllProduct: Flow<List<ProductModelEntity>> = productDao.getAll()
-
-   
     val getAllProductGroup: Flow<List<ProductGroupEntity>> = productGroupDao.getAll()
     val getAllOrder: Flow<List<OrderEntity>> = orderDao.getAll()
 
+
+    // Product
     suspend fun productRequest(
-    ): Flow<Resource<ProductModel?>> {
+    ): Flow<Resource<ProductResponse?>> {
         return apiManager.makeSafeApiCall {
             withContext(Dispatchers.IO) {
                 apiService.getProductData()
             }
-        } as Flow<Resource<ProductModel?>>
+        } as Flow<Resource<ProductResponse?>>
     }
 
+    // Product Group
+    suspend fun productGroupRequest(
+    ): Flow<Resource<ProductGroupResponse?>> {
+        return apiManager.makeSafeApiCall {
+            withContext(Dispatchers.IO) {
+                apiService.getProductGroupData()
+            }
+        } as Flow<Resource<ProductGroupResponse?>>
+    }
+
+    suspend fun requestBanner():Flow<Resource<BannerResponse>>{
+        return apiManager.makeSafeApiCall {
+            apiService.getBanner()
+        } as Flow<Resource<BannerResponse>>
+    }
 
     fun getProductCount(): Int {
         return productDao.getProductCount()
     }
 
-    suspend fun insertProduct(productModelEntity: List<ProductModelEntity>){
-        productDao.insert(productModelEntity)
-    }
+
     fun getProduct(code: Int): Flow<List<ProductModelEntity>> {
         return productDao.getProduct(code)
     }
-    suspend fun productGroupRequest(
-    ): Flow<Resource<ProductGroupModel?>> {
-        return apiManager.makeSafeApiCall {
-            withContext(Dispatchers.IO) {
-                apiService.getProductGroupData()
-            }
-        } as Flow<Resource<ProductGroupModel?>>
-    }
 
 
-    suspend fun insertProductGroup(productGroupEntity: List<ProductGroupEntity>){
+
+     fun insertProductGroup(productGroupEntity: List<ProductGroupEntity>){
         productGroupDao.insert(productGroupEntity)
     }
 
-
+    fun insertProduct(productModelEntity: List<ProductModelEntity>){
+        productDao.insert(productModelEntity)
+    }
 
 
 

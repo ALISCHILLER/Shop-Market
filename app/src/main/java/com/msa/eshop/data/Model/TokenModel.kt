@@ -1,7 +1,10 @@
 package com.msa.eshop.data.Model
 
-data class TokenModel(
-    override val hasError: Boolean,
-    override val message: String,
-    val data: String?
-) : BaseResponseAbstractModel()
+import com.msa.eshop.data.local.entity.UserModelEntity
+
+
+
+
+data class TokenResponse(
+    val token: String?
+) : BaseResponse<String?>(token, false, null)

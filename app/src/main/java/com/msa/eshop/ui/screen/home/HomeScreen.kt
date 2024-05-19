@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalPagerApi::class, ExperimentalPagerApi::class)
+@file:OptIn(ExperimentalPagerApi::class, ExperimentalPagerApi::class, ExperimentalPagerApi::class)
 
 package com.msa.eshop.ui.screen.home
 
@@ -45,8 +45,9 @@ fun HomeScreen(
     LaunchedEffect(Unit){
         viewModel.productCheck()
     }
-    viewModel.ProductRequest()
+    viewModel.Bannerrequest()
     val products by viewModel.allProduct.collectAsState()
+    val banner by viewModel.banner.collectAsState()
     val allProductGroup by viewModel.allProductGroup.collectAsState()
     var selectedProductGroup by remember { mutableStateOf<ProductGroupEntity?>(null) }
 
@@ -60,7 +61,7 @@ fun HomeScreen(
                 modifier = Modifier
                     .padding(innerPadding)
             ) {
-                SliderBanner()
+                SliderBanner(banner = banner)
                 TitleGrouping(titleText = "خرید براساس دسته بندی")
 
                 LazyRow(

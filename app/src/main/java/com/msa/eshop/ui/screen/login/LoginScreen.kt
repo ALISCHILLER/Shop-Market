@@ -148,7 +148,7 @@ fun LoginScreen(
                     true,
                     state.isLoading,
                     {
-                        viewModel.getToken(username, password)
+                        viewModel.tokenRequest(username, password)
                     }
                 )
             }
