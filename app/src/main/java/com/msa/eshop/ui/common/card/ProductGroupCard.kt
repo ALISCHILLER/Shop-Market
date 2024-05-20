@@ -41,7 +41,7 @@ fun ProductGroupCard(
     val iconTint = if (isSelected) Color.White else Color.Red
     val textBackground = if (isSelected) Color.Red else Color.White
     val icon = when(productGroupEntity.productCategoryCode){
-        0 -> {
+        99 -> {
             if (!isSelected)
                 painterResource(id = R.drawable.allred)
             else painterResource(id = R.drawable.allwhite)

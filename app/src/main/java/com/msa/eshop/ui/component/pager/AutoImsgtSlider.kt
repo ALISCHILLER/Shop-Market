@@ -3,6 +3,7 @@
 package com.msa.eshop.ui.component.pager
 
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.ui.util.lerp
@@ -57,9 +58,17 @@ fun SliderBanner(
         while (true) {
             yield()
             delay(2600)
-            pagerState.animateScrollToPage(
-                page = (pagerState.currentPage + 1) % (pagerState.pageCount)
-            )
+            if (pagerState.pageCount > 0) {
+                try {
+                    pagerState.animateScrollToPage(
+                        page = (pagerState.currentPage + 1) % (pagerState.pageCount)
+                    )
+                } catch (e: Exception) {
+                    Log.e("AutoImsgtSlider", "Error during page scroll: ${e.message}")
+                }
+            } else {
+                Log.e("AutoImsgtSlider", "pageCount is zero, cannot scroll pages")
+            }
         }
     }
 

@@ -44,8 +44,9 @@ fun HomeScreen(
 
     LaunchedEffect(Unit){
         viewModel.productCheck()
+        viewModel.Bannerrequest()
     }
-    viewModel.Bannerrequest()
+
     val products by viewModel.allProduct.collectAsState()
     val banner by viewModel.banner.collectAsState()
     val allProductGroup by viewModel.allProductGroup.collectAsState()
@@ -70,13 +71,13 @@ fun HomeScreen(
                         .padding(vertical = 8.dp),
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
-//                    items(allProductGroup) { productGroup ->
-//                        ProductGroupCard(
-//                            productGroup,
-//                            onClick = { selectedProductGroup = it },
-//                            isSelected = selectedProductGroup == productGroup
-//                        )
-//                    }
+                    items(allProductGroup) { productGroup ->
+                        ProductGroupCard(
+                            productGroup,
+                            onClick = { selectedProductGroup = it },
+                            isSelected = selectedProductGroup == productGroup
+                        )
+                    }
                 }
 
                 LazyVerticalGrid(

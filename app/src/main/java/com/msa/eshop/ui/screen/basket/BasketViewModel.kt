@@ -6,9 +6,9 @@ import com.msa.eshop.data.local.entity.OrderEntity
 import com.msa.eshop.data.local.entity.ProductModelEntity
 import com.msa.eshop.data.repository.HomeRepository
 import com.msa.eshop.ui.navigation.NavManager
-import com.msa.eshop.ui.screen.home.calculateSalePrice
-import com.msa.eshop.ui.screen.home.calculateTotalValue
-import com.msa.eshop.ui.screen.home.createOrderEntity
+import com.msa.eshop.utils.calculateSalePrice
+import com.msa.eshop.utils.calculateTotalValue
+import com.msa.eshop.utils.createOrderEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

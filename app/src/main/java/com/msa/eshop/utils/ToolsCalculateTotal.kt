@@ -1,4 +1,4 @@
-package com.msa.eshop.ui.screen.home
+package com.msa.eshop.utils
 
 import com.msa.eshop.data.local.entity.OrderEntity
 import com.msa.eshop.data.local.entity.ProductModelEntity
