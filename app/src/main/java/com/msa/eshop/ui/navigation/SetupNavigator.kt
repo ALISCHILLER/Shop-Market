@@ -1,6 +1,9 @@
+@file:OptIn(ExperimentalAnimationApi::class)
+
 package com.msa.eshop.ui.navigation
 
 import android.os.Bundle
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -20,6 +23,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.msa.eshop.MainActivity
+import com.msa.eshop.ui.navigation.bottomNav.BottomNavNoAnimation
 import com.msa.eshop.ui.navigation.bottomNav.BottomNavaghtion
 import com.msa.eshop.ui.screen.basket.BasketScreen
 import com.msa.eshop.ui.screen.home.HomeScreen
@@ -62,7 +66,7 @@ fun MainActivity.SetupNavigator() {
                         .value?.destination?.route
                 )
             ) {
-                BottomNavaghtion(onClick = {
+                BottomNavNoAnimation(onClick = {
                     navigateToTab(
                         navController = navController,
                         route = it

@@ -39,13 +39,15 @@ import com.msa.eshop.ui.theme.Typography
 import kotlinx.coroutines.delay
 
 @Composable
-fun BasketScreen(modifier: Modifier = Modifier) {
+fun BasketScreen(
+    modifier: Modifier = Modifier,
+    viewModel: BasketViewModel = hiltViewModel()
+) {
 
-    val viewModel: BasketViewModel = hiltViewModel()
+
     val orders = rememberSaveable { mutableStateOf<List<OrderEntity>>(emptyList()) }
     val counter = remember { mutableStateOf(0) }
     LaunchedEffect(counter.value) {
-
         orders.value = viewModel.allOrder.value
     }
 
@@ -75,13 +77,15 @@ fun BasketScreen(modifier: Modifier = Modifier) {
                         .fillMaxWidth()
                         .weight(1.0f), // پر کردن عرض موجود در طول
                 ) {
-                    items(orders.value) {
+                    items(orders.value) { order ->
+
                         BasketCard(
-                            orderEntity = it,
+                            orderEntity = order,
                             onClick = {
                                 counter.value++
-                            }
-                        )
+                            },
+
+                            )
                     }
                 }
                 Button(
@@ -89,6 +93,7 @@ fun BasketScreen(modifier: Modifier = Modifier) {
 
                     },
                     modifier = Modifier
+                        .padding(5.dp)
                         .fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
                     shape = RoundedCornerShape(6.dp)
@@ -98,8 +103,9 @@ fun BasketScreen(modifier: Modifier = Modifier) {
                         style = Typography.titleSmall,
                     )
                 }
-
             }
+
+
         }
     }
 }

@@ -3,6 +3,7 @@
 package com.msa.eshop.ui.common.card
 
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,6 +27,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -41,12 +44,14 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import coil.Coil
 import coil.compose.AsyncImage
 import com.msa.eshop.R
 import com.msa.eshop.data.local.entity.ProductModelEntity
 import com.msa.eshop.ui.component.bottomSheetC.BottomSheetExample
 import com.msa.eshop.ui.theme.*
 import com.msa.eshop.utils.Currency
+import timber.log.Timber
 
 @Composable
 fun ProductCard(
@@ -55,6 +60,8 @@ fun ProductCard(
     onClick: (ProductModelEntity) -> Unit
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }
+
+
 
     if (showBottomSheet) {
         BottomSheetExample(
@@ -98,30 +105,37 @@ fun ProductCard(
                             model = product.productImage,
                             contentDescription = "productImage",
                             modifier = Modifier.fillMaxSize(),
-                            error = painterResource(id = R.drawable.not_load_image)
+                            error = painterResource(id = R.drawable.not_load_image),
+                            onError = {
+                                Timber.tag("Image Loading Error")
+                                    .e("Failed to load image: " + it +
+                                            "productImage=  ${product.productImage}" )
+                            }
                         )
 
                         Box(
                             modifier = Modifier
                                 .align(Alignment.TopEnd)
-                                .padding(8.dp)
+                                .padding(4.dp)
                                 .background(Color.Red, shape = RoundedCornerShape(12.dp)),
                             contentAlignment = Alignment.Center
 
                         ) {
                             Row(
-
-                                horizontalArrangement = Arrangement.SpaceAround
+                                modifier = Modifier
+                                    .align(Alignment.TopEnd)
+                                    .padding(4.dp),
+                                horizontalArrangement = Arrangement.SpaceEvenly
                             ){
                                 Text(
-                                    text = Currency(product.price)
+                                    text = Currency(product.discountPercent)
                                         .toFormattedString(),
                                     color = Color.White,
                                     style = Typography.titleLarge
                                 )
                                 Spacer(modifier = Modifier.padding(5.dp))
                                 Text(
-                                    text = "ریال ",
+                                    text = "%",
                                     color = Color.White,
                                     style = Typography.titleLarge
                                 )
@@ -168,8 +182,11 @@ fun ProductCard(
                             }
 
 
+                            
                             Text(
-                                text = Currency(product.priceByDiscountPercent).toFormattedString(),
+                                text = if(product.discountPercent > 0)
+                                    Currency(product.priceByDiscountPercent).toFormattedString() else
+                                    Currency(product.discountPercent).toFormattedString(),
                                 style = TextStyle(textDecoration = TextDecoration.LineThrough),
                                 fontFamily = EShopFontFamily
                             )

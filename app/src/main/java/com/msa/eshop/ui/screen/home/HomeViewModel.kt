@@ -135,15 +135,12 @@ class HomeViewModel @Inject constructor(
 
     fun getProduct(productGroup: ProductGroupEntity) {
         viewModelScope.launch {
-            if (productGroup.productCategoryCode != 0)
+            if (productGroup.productCategoryCode != 99)
                 homeRepository.getProduct(productGroup.productCategoryCode).collect {
                     _allProduct.value = it
                 }
             else
-                homeRepository.getAllProduct.collect {
-                    updateStateLoading(false)
-                    _allProduct.value = it
-                }
+                getAllProduct()
         }
     }
 
@@ -189,9 +186,9 @@ class HomeViewModel @Inject constructor(
         value2: Int,
         productModelEntity: ProductModelEntity
     ): Float {
-        val totalValue = calculateTotalValue(value1, value2, productModelEntity)
+        val totalValue = calculateTotalValue(value1, value2, productModelEntity.convertFactor2)
         updateOrderInDatabase(productModelEntity, totalValue, value1, value2)
-        return calculateSalePrice(totalValue, productModelEntity)
+        return calculateSalePrice(totalValue, productModelEntity.price)
     }
 
 

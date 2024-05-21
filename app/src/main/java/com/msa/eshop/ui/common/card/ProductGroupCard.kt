@@ -27,57 +27,29 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import com.msa.eshop.R
 import com.msa.eshop.data.local.entity.ProductGroupEntity
+import com.msa.eshop.ui.screen.home.HomeViewModel
 
 @Composable
 fun ProductGroupCard(
     productGroupEntity: ProductGroupEntity,
     onClick: (ProductGroupEntity) -> Unit,
     isSelected: Boolean,
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
+
+
     var isSelectedState by remember { mutableStateOf(isSelected) }
 
     val iconTint = if (isSelected) Color.White else Color.Red
     val textBackground = if (isSelected) Color.Red else Color.White
-    val icon = when(productGroupEntity.productCategoryCode){
-        99 -> {
-            if (!isSelected)
-                painterResource(id = R.drawable.allred)
-            else painterResource(id = R.drawable.allwhite)
-        }
-        1 -> {
-            if (!isSelected)
-                painterResource(id = R.drawable.passtared)
-            else
-                painterResource(id = R.drawable.passwhite)
-        }
-        2 -> {
-            if (!isSelected)
-                painterResource(id = R.drawable.confred)
-            else
-                painterResource(id = R.drawable.confwhite)
-        }
-        3 -> {
-            if (!isSelected)
-                painterResource(id = R.drawable.cackred)
-            else
-                painterResource(id = R.drawable.cackwhite)
-        }
-        4 -> {
-            if (!isSelected)
-                painterResource(id = R.drawable.ardered)
-            else
-                painterResource(id = R.drawable.cackwhite)
-        }
-        5 -> {
-            if (!isSelected)
-                painterResource(id = R.drawable.oilred)
-            else
-                painterResource(id = R.drawable.oilwhite)
-        }
-        else -> {}
-    }
+    val iconUrl = if (!isSelected)
+         productGroupEntity.productCategoryImage
+    else
+        productGroupEntity.productCategoryImageUnselect
+
 
     Row(
         modifier = Modifier
@@ -86,6 +58,7 @@ fun ProductGroupCard(
             .height(80.dp)
             .clickable {
                 onClick(productGroupEntity)
+                viewModel.getProduct(productGroupEntity)
             }
     ) {
         Surface(
@@ -100,9 +73,12 @@ fun ProductGroupCard(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.fillMaxSize()
             ) {
-                ProductGroupIcon(
-                    icon = icon as Painter,
-                    tint = iconTint)
+                iconUrl?.let {
+                    ProductGroupIcon(
+                        iconUrl = it,
+                        tint = iconTint
+                    )
+                }
                 productGroupEntity.productCategoryName?.let {
                     Text(
                         text = it,
@@ -116,13 +92,14 @@ fun ProductGroupCard(
 }
 
 @Composable
-fun ProductGroupIcon(icon: Painter, tint: Color) {
-    Image(
+fun ProductGroupIcon(iconUrl:String, tint: Color) {
+
+    AsyncImage(
+        model = iconUrl,
+        contentDescription = "Icon Product Group",
         modifier = Modifier
-            .size(50.dp,50.dp),
-        painter = icon,
-        contentDescription = "icon Group",
-        // تغییر رنگ آیکون به رنگ مورد نظر
+            .size(50.dp, 50.dp),
+        error = painterResource(id = R.drawable.not_load_image)
     )
 }
 

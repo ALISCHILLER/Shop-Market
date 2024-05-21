@@ -23,7 +23,6 @@ class BasketViewModel @Inject constructor(
 
     init {
         getAllOrder()
-        getAllProduct()
     }
 
     private val _allOrder =
@@ -60,40 +59,40 @@ class BasketViewModel @Inject constructor(
     fun calculateTotalPriceAndHandleOrder(
         value1: Int,
         value2: Int,
-        productModelEntity: ProductModelEntity?
-    ): Float {
-        val totalValue = calculateTotalValue(value1, value2, productModelEntity)
-        updateOrderInDatabase(productModelEntity, totalValue, value1, value2)
-        return calculateSalePrice(totalValue, productModelEntity)
+        orderEntity: OrderEntity,
+    ): Float{
+        val totalValue = calculateTotalValue(value1, value2, orderEntity.convertFactor2 ?: 0)
+        updateOrderInDatabase(orderEntity, totalValue, value1, value2)
+        return orderEntity.let { calculateSalePrice(totalValue, it.price) }
     }
 
 
     private fun updateOrderInDatabase(
-        productModelEntity: ProductModelEntity?,
+        orderEntity: OrderEntity,
         totalValue: Int,
         value1: Int,
         value2: Int
     ) {
         viewModelScope.launch {
             if (totalValue > 0) {
-                insertOrder(productModelEntity, totalValue, value1, value2)
+                insertOrder(orderEntity, totalValue, value1, value2)
             } else {
-                productModelEntity?.let { homeRepository.deleteOrder(it.id) }
+                homeRepository.deleteOrder(orderEntity.id)
             }
         }
     }
 
     private suspend fun insertOrder(
-        productModelEntity: ProductModelEntity?,
+        orderEntity: OrderEntity,
         totalValue: Int,
         value1: Int,
         value2: Int
     ) {
-        productModelEntity?.let { createOrderEntity(it, totalValue, value1, value2) }?.let {
-            homeRepository.insertOrder(
-                it
-            )
-        }
+        orderEntity.numberOrder = totalValue
+        orderEntity.numberOrder1 = value1
+        orderEntity.numberOrder2 = value2
+        homeRepository.insertOrder(orderEntity) // اضافه کردن خط ذخیره سازی
     }
+
 
 }
