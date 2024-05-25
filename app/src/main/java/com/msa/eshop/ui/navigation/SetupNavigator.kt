@@ -3,7 +3,11 @@
 package com.msa.eshop.ui.navigation
 
 import android.os.Bundle
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -85,10 +89,19 @@ fun MainActivity.SetupNavigator() {
             startDestination = Route.SplashScreen.route,
             modifier = Modifier.padding(bottom = bottomPadding)
         ) {
-            composable(route = Route.SplashScreen.route) { SplashScreen() }
 
+            //Splash
+            composable(route = Route.SplashScreen.route) {
+                val visible = backStackState == null || navInfo.id == Route.SplashScreen.route
+                    SplashScreen()
+            }
             //Login
-            composable(route = Route.LoginScreen.route) { LoginScreen() }
+            composable(route = Route.LoginScreen.route) {
+                val visible = navInfo.id == Route.LoginScreen.route
+
+                    LoginScreen()
+
+            }
 
 
             //product

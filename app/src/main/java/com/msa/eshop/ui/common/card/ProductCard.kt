@@ -5,6 +5,7 @@ package com.msa.eshop.ui.common.card
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddShoppingCart
+import androidx.compose.material.icons.outlined.AttachMoney
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -34,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -57,22 +60,37 @@ import timber.log.Timber
 fun ProductCard(
     modifier: Modifier = Modifier,
     product: ProductModelEntity,
-    onClick: (ProductModelEntity) -> Unit
-) {
+    onClick: (ProductModelEntity) -> Unit,
+
+    ) {
     var showBottomSheet by remember { mutableStateOf(false) }
+    var showBottomSheetDiscounts by remember { mutableStateOf(false) }
 
 
 
     if (showBottomSheet) {
         BottomSheetExample(
-            onDismissRequest = {showBottomSheet = false}
+            onDismissRequest = { showBottomSheet = false }
         ) {
             AddProduct(
                 product = product,
-                onDismissRequest = {showBottomSheet = false}
+                onDismissRequest = { showBottomSheet = false }
             )
         }
     }
+
+    if (showBottomSheetDiscounts) {
+        BottomSheetExample(
+            onDismissRequest = { showBottomSheetDiscounts = false }
+        ) {
+            DiscountsProductCard(
+                product = product,
+                onDismissRequest = { showBottomSheetDiscounts = false }
+            )
+        }
+    }
+
+
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Column(
             modifier = Modifier
@@ -108,36 +126,38 @@ fun ProductCard(
                             error = painterResource(id = R.drawable.not_load_image),
                             onError = {
                                 Timber.tag("Image Loading Error")
-                                    .e("Failed to load image: " + it +
-                                            "productImage=  ${product.productImage}" )
+                                    .e(
+                                        "Failed to load image: " + it +
+                                                "productImage=  ${product.productImage}"
+                                    )
                             }
                         )
+
 
                         Box(
                             modifier = Modifier
                                 .align(Alignment.TopEnd)
                                 .padding(4.dp)
-                                .background(Color.Red, shape = RoundedCornerShape(12.dp)),
+                                .alpha(if (product.isDiscounts) 100f else 0f)
+                                .background(Color.Red, shape = RoundedCornerShape(12.dp))
+                                .clickable {
+                                    if (product.isDiscounts)
+                                        showBottomSheetDiscounts = true
+                                },
                             contentAlignment = Alignment.Center
-
                         ) {
                             Row(
                                 modifier = Modifier
                                     .align(Alignment.TopEnd)
                                     .padding(4.dp),
                                 horizontalArrangement = Arrangement.SpaceEvenly
-                            ){
-                                Text(
-                                    text = Currency(product.discountPercent)
-                                        .toFormattedString(),
-                                    color = Color.White,
-                                    style = Typography.titleLarge
-                                )
-                                Spacer(modifier = Modifier.padding(5.dp))
-                                Text(
-                                    text = "%",
-                                    color = Color.White,
-                                    style = Typography.titleLarge
+                            ) {
+                                Icon(
+                                    modifier = modifier
+                                        .size(50.dp),
+                                    imageVector = Icons.Outlined.AttachMoney,
+                                    contentDescription = "",
+                                    tint = Color.White
                                 )
                             }
 
@@ -182,14 +202,13 @@ fun ProductCard(
                             }
 
 
-                            
-                            Text(
-                                text = if(product.discountPercent > 0)
-                                    Currency(product.priceByDiscountPercent).toFormattedString() else
-                                    Currency(product.discountPercent).toFormattedString(),
-                                style = TextStyle(textDecoration = TextDecoration.LineThrough),
-                                fontFamily = EShopFontFamily
-                            )
+//                            Text(
+//                                text = if(product.discountPercent > 0)
+//                                    Currency(product.priceByDiscountPercent).toFormattedString() else
+//                                    Currency(product.discountPercent).toFormattedString(),
+//                                style = TextStyle(textDecoration = TextDecoration.LineThrough),
+//                                fontFamily = EShopFontFamily
+//                            )
 
 
                         }
@@ -241,8 +260,7 @@ private fun ProductCardPreciew() {
             unitid1 = "54654",
             unitid2 = "4565",
             price = 98563,
-            discountPercent = 98563,
-            priceByDiscountPercent = 98563,
+            isDiscounts = true,
             productImage = ""
         ),
         onClick = {}

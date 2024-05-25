@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">EShop</string>
     <string name="horiz_pager_with_transition_title">Horizontal Pager: Transition</string>
+    <string name="login">ورود</string>
     <string name="image_product">Image Product</string>
     <string name="add_to_cart">افزودن به سبد خرید</string>
     <string name="save_Order">ثبت سفارش</string>
+    <string name="pre_invoice_registration">ثبت پیش فاکتور</string>
     <string name="username_and_password_are_required">نام کاربری و رمز عبور الزامی است</string>
 </resources>

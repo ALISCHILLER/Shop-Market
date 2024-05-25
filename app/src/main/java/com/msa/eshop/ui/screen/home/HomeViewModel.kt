@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.msa.eshop.data.Model.BannerModel
+import com.msa.eshop.data.Model.DiscountResultModel
 import com.msa.eshop.data.Model.GeneralStateModel
 import com.msa.eshop.data.local.entity.OrderEntity
 import com.msa.eshop.data.local.entity.ProductGroupEntity
@@ -30,7 +31,6 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-
     private val _state: MutableStateFlow<GeneralStateModel> = MutableStateFlow(GeneralStateModel())
     val state: StateFlow<GeneralStateModel> = _state
 
@@ -54,6 +54,9 @@ class HomeViewModel @Inject constructor(
 
     private val _banner = MutableStateFlow<List<BannerModel>>(emptyList())
     val banner: StateFlow<List<BannerModel>> = _banner
+
+    private val _discount = MutableStateFlow<List<DiscountResultModel>>(emptyList())
+    val discount: StateFlow<List<DiscountResultModel>> = _discount
 
     fun productCheck() {
         val productCount = homeRepository.getProductCount()
@@ -122,6 +125,21 @@ class HomeViewModel @Inject constructor(
         )
     }
 
+    fun discountRequest(productCode: String) {
+        makeRequest(
+            scope = viewModelScope,
+            request = { homeRepository.requestDiscount(productCode) },
+            onSuccess = { response ->
+                response.data?.let {
+                    Timber.tag("HomeViewModel").d("discountRequest SUCCESS: ${it}  ")
+                    _discount.value = it
+                }
+
+            },
+            updateStateLoading = { isLoading -> updateStateLoading(isLoading) },
+            updateStateError = { errorMessage -> updateStateError(errorMessage) },
+        )
+    }
 
 
     private fun updateStateLoading(isLoading: Boolean) {

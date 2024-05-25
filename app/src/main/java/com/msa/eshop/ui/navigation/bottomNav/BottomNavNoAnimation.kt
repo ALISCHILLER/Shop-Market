@@ -176,6 +176,7 @@ private fun BottomNavItem(
                     text = item.title,
                     modifier = Modifier.padding(start = 8.dp, end = 10.dp),
                     maxLines = 1,
+                    color = Color.White
                 )
             }
         }
@@ -206,7 +207,7 @@ fun FlipIcon(
         Icon(
             rememberVectorPainter(image = if (animationRotation > 90f) activeIcon else inactiveIcon),
             contentDescription = contentDescription,
-//            tint = if (isActive) Color.White else TODO()
+            tint = if (isActive) Color.White else Color.Unspecified
         )
     }
 }

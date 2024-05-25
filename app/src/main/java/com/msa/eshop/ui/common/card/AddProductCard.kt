@@ -246,8 +246,7 @@ fun AddProductPreview() {
             unitid1 = "54654",
             unitid2 = "4565",
             price = 98563,
-            discountPercent = 98563,
-            priceByDiscountPercent = 98563,
+             isDiscounts = true,
             productImage = ""
         ),
         onDismissRequest = {}

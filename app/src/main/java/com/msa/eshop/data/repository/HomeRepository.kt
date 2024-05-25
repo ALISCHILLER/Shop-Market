@@ -2,6 +2,7 @@ package com.msa.eshop.data.repository
 
 
 import com.msa.eshop.data.Model.BannerResponse
+import com.msa.eshop.data.Model.DiscountResponse
 import com.msa.eshop.data.Model.ProductGroupResponse
 import com.msa.eshop.data.Model.ProductResponse
 import com.msa.eshop.data.local.dao.OrderDao
@@ -57,6 +58,12 @@ class HomeRepository @Inject constructor(
         return apiManager.makeSafeApiCall {
             apiService.getBanner()
         } as Flow<Resource<BannerResponse>>
+    }
+
+    suspend fun requestDiscount(productCode:String):Flow<Resource<DiscountResponse>>{
+        return apiManager.makeSafeApiCall {
+            apiService.getListDiscounts(productCode)
+        }as Flow<Resource<DiscountResponse>>
     }
 
     fun getProductCount(): Int {

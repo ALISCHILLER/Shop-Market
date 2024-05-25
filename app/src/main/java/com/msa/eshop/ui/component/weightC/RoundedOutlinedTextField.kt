@@ -41,7 +41,8 @@ fun RoundedIconTextField(
     icon: ImageVector,
     isPassword: Boolean = false,
     modifier: Modifier = Modifier,
-    typeEnabled:Boolean=false
+    typeEnabled:Boolean=false,
+    corner:RoundedCornerShape=RoundedCornerShape(26.dp)
 ) {
     var passwordVisibility by remember { mutableStateOf(!isPassword) }
 
@@ -72,7 +73,7 @@ fun RoundedIconTextField(
             ),
             keyboardActions = KeyboardActions(onDone = { /* Handle Done action */ }),
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(26.dp),
+            shape = corner,
             readOnly  = typeEnabled
         )
     }

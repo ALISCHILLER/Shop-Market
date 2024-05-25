@@ -30,14 +30,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewFontScale
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -46,6 +55,8 @@ import com.msa.eshop.ui.component.button.ButtonBorderAnmation
 import com.msa.eshop.ui.component.dialog.CustomDialog
 import com.msa.eshop.ui.component.dialog.ErrorDialog
 import com.msa.eshop.ui.component.dialog.ErrorWarning
+import com.msa.eshop.ui.component.drawLineC.BezierCurve
+import com.msa.eshop.ui.component.drawLineC.BezierCurveStyle
 import com.msa.eshop.ui.component.weightC.RoundedIconTextField
 import com.msa.eshop.ui.theme.DIMENS_14dp
 import com.msa.eshop.ui.theme.DIMENS_8dp
@@ -74,16 +85,16 @@ fun LoginScreen(
                 viewModel.clearState()
             }
         ) {
-//            ErrorWarning(
-//                onDismissRequest = {  viewModel.clearState()},
-//                title = "خطا",
-//                message = it
-//            )
+            ErrorWarning(
+                onDismissRequest = {  viewModel.clearState()},
+                title = "خطا",
+                message = it
+            )
             ErrorDialog(it, {viewModel.clearState()}, false)
         }
     }
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-
+        val stroke1Dp = with(LocalDensity.current) { 1.dp.toPx() }
         Box(
             modifier = modifier
                 .fillMaxSize()
@@ -92,71 +103,118 @@ fun LoginScreen(
 
             Column(
                 modifier = modifier
-                    .padding(10.dp)
                     .fillMaxSize()
-                    .align(Alignment.Center)
-                ,
+                    .align(Alignment.Center),
                 horizontalAlignment = Alignment.CenterHorizontally,
-
-                ) {
-                Spacer(modifier = Modifier.height(DIMENS_14dp))
-                Image(
-                    painter = painterResource(id = R.drawable.logo),
-                    contentDescription = "logo",
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                BezierCurve(
                     modifier = Modifier
-                        .size(150.dp, 150.dp)
-                        .layoutId("logo")
+                        .fillMaxWidth()
+                        .rotate(180f)
+                        .height(100.dp),
+                    points = listOf(30F, 60F, 40f, 100F, 50F),
+                    minPoint = 0F,
+                    maxPoint = 100F,
+                    style = BezierCurveStyle.StrokeAndFill(
+                        strokeBrush = Brush.horizontalGradient(listOf(Color.Red, Color.Red)),
+                        fillBrush = Brush.verticalGradient(
+                            listOf(
+                                Color(0xFFB9081F),
+                                Color(0xFFE3152F)
+                            )
+                        ),
+                        stroke = Stroke(width = stroke1Dp)
+                    ),
                 )
-                Spacer(modifier = Modifier.height(DIMENS_14dp))
-                RoundedIconTextField(
-                    value = username,
-                    onValueChange = { username = it },
-                    label = "کد ملی",
-                    icon = Icons.Default.Person
-                )
-                Spacer(modifier = Modifier.height(DIMENS_14dp))
-                RoundedIconTextField(
-                    value = password,
-                    onValueChange = { password = it },
-                    label = "رمز عبور",
-                    icon = Icons.Default.Lock,
-                    isPassword = true
-                )
-                Spacer(modifier = Modifier.height(DIMENS_14dp))
-                Text(
-                    text = "رمز عبور خود را فراموش کرده اید؟",
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(modifier = Modifier.height(DIMENS_14dp))
-//                Button(
-//                    onClick = {
-//                    viewModel.getToken(username, password)
-//                    },
-//                    modifier = Modifier.fillMaxWidth(),
-//                    colors = ButtonDefaults.buttonColors(containerColor = RoyalRed),
-//                    shape = RoundedCornerShape(6.dp)
-//                ) {
-//                    Text(
-//                        "ورود",
-//                        style = Typography.labelLarge
-//                    )
-//                }
-
-                ButtonBorderAnmation(
-                    modifier =  Modifier.fillMaxWidth(),
-                    "ورود",
-                    true,
-                    state.isLoading,
-                    {
-                        viewModel.tokenRequest(username, password)
+                Column(
+                    modifier = modifier
+                        .padding(10.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Spacer(modifier = Modifier.height(DIMENS_14dp))
+                    Image(
+                        painter = painterResource(id = R.drawable.logo),
+                        contentDescription = "logo",
+                        modifier = Modifier
+                            .size(150.dp, 150.dp)
+                            .layoutId("logo")
+                    )
+                    Spacer(modifier = Modifier.height(DIMENS_14dp))
+                    RoundedIconTextField(
+                        modifier = modifier,
+                        value = username,
+                        onValueChange = {
+                        username = it
+                        },
+                        label = "کد ملی",
+                        icon = Icons.Default.Person,
+                        corner = RoundedCornerShape(10.dp)
+                    )
+                    Spacer(modifier = Modifier.height(DIMENS_14dp))
+                    RoundedIconTextField(
+                        value = password,
+                        onValueChange = {
+                        password = it
+                        },
+                        label = "رمز عبور",
+                        icon = Icons.Default.Lock,
+                        isPassword = true,
+                        corner = RoundedCornerShape(10.dp)
+                    )
+                    Spacer(modifier = Modifier.height(DIMENS_14dp))
+                    Text(
+                        text = "رمز عبور خود را فراموش کرده اید؟",
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Button(
+                        onClick = {
+                            viewModel.tokenRequest(username, password)
+                        },
+                        modifier = Modifier
+                            .padding(5.dp)
+                            .fillMaxWidth(),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
+                        shape = RoundedCornerShape(6.dp)
+                    ) {
+                        Text(
+                            stringResource(id = R.string.login),
+                            style = Typography.titleSmall,
+                        )
                     }
+                }
+
+
+                BezierCurve(
+                    modifier = Modifier
+                        .width(200.dp)
+                        .rotate(90f)
+                        .align(Alignment.End)
+                        .height(200.dp),
+                    points = listOf(0f,40f, 30F, 80f),
+                    minPoint = 0F,
+                    maxPoint = 100F,
+                    style = BezierCurveStyle.StrokeAndFill(
+                        strokeBrush = Brush.horizontalGradient(listOf(Color.Red, Color.Red)),
+                        fillBrush = Brush.verticalGradient(
+                            listOf(
+                                Color(0xFFB9081F),
+                                Color(0xFFE3152F)
+                            )
+                        ),
+                        stroke = Stroke(width = stroke1Dp)
+                    ),
                 )
             }
+
         }
     }
 }
 
 @Preview
+@PreviewScreenSizes
+@PreviewFontScale
 @Composable
 private fun LoginScreenPreview() {
     LoginScreen()

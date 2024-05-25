@@ -19,8 +19,7 @@ data class ProductModelEntity(
     val unitid2: String?,
     val productGroupCode: Int,
     val price: Int,
-    val discountPercent: Int,
-    val priceByDiscountPercent: Int,
+    val isDiscounts: Boolean,
     val productImage: String?,
 
 )

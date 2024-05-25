@@ -99,7 +99,7 @@ fun BasketScreen(
                     shape = RoundedCornerShape(6.dp)
                 ) {
                     Text(
-                        stringResource(id = R.string.save_Order),
+                        stringResource(id = R.string.pre_invoice_registration),
                         style = Typography.titleSmall,
                     )
                 }
