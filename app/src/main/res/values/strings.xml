@@ -7,4 +7,5 @@
     <string name="save_Order">ثبت سفارش</string>
     <string name="pre_invoice_registration">ثبت پیش فاکتور</string>
     <string name="username_and_password_are_required">نام کاربری و رمز عبور الزامی است</string>
+    <string name="discounts_list_data">خرید %s تا %s عدد : %s  تخفیف</string>
 </resources>

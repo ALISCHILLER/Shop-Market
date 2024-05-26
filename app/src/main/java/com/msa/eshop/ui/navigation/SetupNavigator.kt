@@ -9,6 +9,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,6 +33,7 @@ import com.msa.eshop.ui.navigation.bottomNav.BottomNavaghtion
 import com.msa.eshop.ui.screen.basket.BasketScreen
 import com.msa.eshop.ui.screen.home.HomeScreen
 import com.msa.eshop.ui.screen.login.LoginScreen
+import com.msa.eshop.ui.screen.simulate.SimulateScreen
 import com.msa.eshop.ui.screen.splash.SplashScreen
 import timber.log.Timber
 
@@ -82,39 +84,43 @@ fun MainActivity.SetupNavigator() {
         }
     ) {
 
-        Timber.tag("SetupNavigator").e("SetupNavigator SetupNavigator: ")
-        val bottomPadding = it.calculateBottomPadding()
-        NavHost(
-            navController = navController,
-            startDestination = Route.SplashScreen.route,
-            modifier = Modifier.padding(bottom = bottomPadding)
-        ) {
+        Box(  modifier = Modifier
+            .padding(bottom = it.calculateBottomPadding())){
 
-            //Splash
-            composable(route = Route.SplashScreen.route) {
-                val visible = backStackState == null || navInfo.id == Route.SplashScreen.route
+            Timber.tag("SetupNavigator").e("SetupNavigator SetupNavigator: ")
+            val bottomPadding = it.calculateBottomPadding()
+            NavHost(
+                navController = navController,
+                startDestination = Route.SplashScreen.route,
+
+            ) {
+
+                //Splash
+                composable(route = Route.SplashScreen.route) {
+                    val visible = backStackState == null || navInfo.id == Route.SplashScreen.route
                     SplashScreen()
-            }
-            //Login
-            composable(route = Route.LoginScreen.route) {
-                val visible = navInfo.id == Route.LoginScreen.route
+                }
+                //Login
+                composable(route = Route.LoginScreen.route) {
+                    val visible = navInfo.id == Route.LoginScreen.route
 
                     LoginScreen()
 
+                }
+                //product
+                composable(route = Route.HomeScreen.route) { HomeScreen() }
+
+                //basket
+                composable(route = Route.BasketScreen.route) { BasketScreen() }
+                composable(route = Route.SimulateScreen.route) { SimulateScreen() }
+
+
+                //profile
+
+
             }
-
-
-            //product
-            composable(route = Route.HomeScreen.route) { HomeScreen() }
-
-            //basket
-            composable(route = Route.BasketScreen.route) { BasketScreen() }
-
-
-            //profile
-
-
         }
+
 
 
     }

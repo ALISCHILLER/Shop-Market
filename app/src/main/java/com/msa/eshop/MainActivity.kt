@@ -31,16 +31,11 @@ class MainActivity : ComponentActivity() {
     lateinit var navManager: NavManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
             EShopTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
                     SetupNavigator()
                 }
-            }
+
         }
     }
 }

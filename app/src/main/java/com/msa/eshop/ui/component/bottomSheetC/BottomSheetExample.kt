@@ -29,9 +29,10 @@ fun BottomSheetExample(
     val modalBottomSheetState = rememberModalBottomSheetState()
 
     ModalBottomSheet(
+        modifier = modifier,
         onDismissRequest = { onDismissRequest()},
         sheetState = modalBottomSheetState,
-//        dragHandle = { BottomSheetDefaults.DragHandle() },
+        dragHandle = { BottomSheetDefaults.DragHandle() },
     ) {
         content()
     }

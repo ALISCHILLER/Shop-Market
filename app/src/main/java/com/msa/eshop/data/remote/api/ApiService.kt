@@ -46,7 +46,7 @@ interface ApiService {
         @Query("ProductID") prodouctCode : String
     ):Response<DiscountResponse?>
 
-    @POST("")
+    @POST("/api/$version/Cart/GetCartSimulateRsult")
     suspend fun requestSimulate(
         @Body simulateModelRequest: List<SimulateModelRequest>
     ):Response<SimulateResultModel?>

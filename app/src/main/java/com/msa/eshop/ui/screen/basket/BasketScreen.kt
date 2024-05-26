@@ -90,7 +90,7 @@ fun BasketScreen(
                 }
                 Button(
                     onClick = {
-
+                              viewModel.navigateToSimulate()
                     },
                     modifier = Modifier
                         .padding(5.dp)

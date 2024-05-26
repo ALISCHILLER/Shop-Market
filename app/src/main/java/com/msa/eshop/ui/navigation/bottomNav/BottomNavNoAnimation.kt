@@ -13,6 +13,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -48,7 +49,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.msa.eshop.ui.navigation.Route
 
 
-
 @Preview
 @Composable
 fun BottomNavNoAnimationPreview(
@@ -59,7 +59,17 @@ fun BottomNavNoAnimationPreview(
             BottomNavNoAnimation(onClick = {})
         }
     ) {
-        val p= it
+        val p = it
+        Column(
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize()
+                .background(Color.Red)
+
+
+        ) {
+
+        }
     }
 
 }
@@ -78,12 +88,11 @@ fun BottomNavNoAnimation(
     var selectedScreen by remember { mutableStateOf(0) }
     Box(
         Modifier
-            .padding(vertical = 24.dp, horizontal = 15.dp)
+            .padding(bottom = 5.dp)
             .shadow(5.dp)
             .background(color = colors.surface)
             .height(64.dp)
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
     ) {
         Row(
             Modifier
@@ -106,7 +115,7 @@ fun BottomNavNoAnimation(
                         ) {
                             selectedScreen = screens.indexOf(screen)
                             onClick(
-                              screen.route
+                                screen.route
                             )
                         },
                         item = screen,
@@ -117,7 +126,6 @@ fun BottomNavNoAnimation(
         }
     }
 }
-
 
 
 @ExperimentalAnimationApi
@@ -140,7 +148,6 @@ private fun BottomNavItem(
 
     Box(
         modifier = modifier
-
             .fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
@@ -152,7 +159,7 @@ private fun BottomNavItem(
                     shape = RoundedCornerShape(20.dp)
                 )
                 .background(
-                    color =  if (isSelected) Color.Red else colors.surface ,
+                    color = if (isSelected) Color.Red else colors.surface,
                     shape = RoundedCornerShape(20.dp)
                 ),
             verticalAlignment = Alignment.CenterVertically,
@@ -211,15 +218,25 @@ fun FlipIcon(
         )
     }
 }
+
 sealed class Screen(
     val title: String,
     val activeIcon: ImageVector,
     val inactiveIcon: ImageVector,
     val route: String,
 
-) {
-    object Home: Screen("Home", Icons.Filled.Home, Icons.Outlined.Home, Route.HomeScreen.route)
-    object Create: Screen("Create", Icons.Filled.Create, Icons.Outlined.Create, Route.HomeScreen.route)
-    object Profile: Screen("Profile", Icons.Filled.Person, Icons.Outlined.Person, Route.BasketScreen.route)
-    object Settings: Screen("Settings", Icons.Filled.Settings, Icons.Outlined.Settings, Route.ProfileCustomerScreen.route)
+    ) {
+    object Home : Screen("Home", Icons.Filled.Home, Icons.Outlined.Home, Route.HomeScreen.route)
+    object Create :
+        Screen("Create", Icons.Filled.Create, Icons.Outlined.Create, Route.HomeScreen.route)
+
+    object Profile :
+        Screen("Profile", Icons.Filled.Person, Icons.Outlined.Person, Route.BasketScreen.route)
+
+    object Settings : Screen(
+        "Settings",
+        Icons.Filled.Settings,
+        Icons.Outlined.Settings,
+        Route.ProfileCustomerScreen.route
+    )
 }

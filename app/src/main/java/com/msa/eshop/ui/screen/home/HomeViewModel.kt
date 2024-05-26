@@ -59,15 +59,19 @@ class HomeViewModel @Inject constructor(
     val discount: StateFlow<List<DiscountResultModel>> = _discount
 
     fun productCheck() {
-        val productCount = homeRepository.getProductCount()
-        if (productCount == 0) {
-            productRequest()
-            productGroupRequest()
-        } else {
-            getAllOrder()
-            getAllProduct()
-            getAllProductGroup()
-        }
+//        val productCount = homeRepository.getProductCount()
+//        if (productCount == 0) {
+//            productRequest()
+//            productGroupRequest()
+//        } else {
+//            getAllOrder()
+//            getAllProduct()
+//            getAllProductGroup()
+//        }
+
+        productRequest()
+        productGroupRequest()
+        getAllOrder()
     }
 
 

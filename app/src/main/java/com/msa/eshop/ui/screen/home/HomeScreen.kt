@@ -3,14 +3,20 @@
 package com.msa.eshop.ui.screen.home
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -61,14 +67,15 @@ fun HomeScreen(
             Column(
                 modifier = Modifier
                     .padding(innerPadding)
+
             ) {
                 SliderBanner(banner = banner)
-                TitleGrouping(titleText = "خرید براساس دسته بندی")
+//                TitleGrouping(titleText = "خرید براساس دسته بندی")
 
                 LazyRow(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 8.dp),
+                        .padding(vertical = 2.dp),
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
                     items(allProductGroup) { productGroup ->
@@ -98,6 +105,58 @@ fun HomeScreen(
                 }
 
             }
+            
+
+
+//            LazyColumn(
+//                modifier = Modifier
+//                    .padding(innerPadding)
+//                    .fillMaxSize()
+//            ) {
+//                item {
+//                    SliderBanner(banner = banner)
+//                }
+//
+//                item {
+//                    LazyRow(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(vertical = 8.dp),
+//                        horizontalArrangement = Arrangement.SpaceAround
+//                    ) {
+//                        items(allProductGroup) { productGroup ->
+//                            ProductGroupCard(
+//                                productGroup,
+//                                onClick = { selectedProductGroup = it },
+//                                isSelected = selectedProductGroup == productGroup
+//                            )
+//                        }
+//                    }
+//                }
+//
+//                item {
+//                    BoxWithConstraints(
+//                        modifier = Modifier.fillMaxSize()
+//                    ) {
+//                        val maxHeight = maxHeight
+//                        LazyVerticalGrid(
+//                            columns = GridCells.Fixed(2),
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .height(maxHeight) // تنظیم ارتفاع برای Grid
+//                        ) {
+//                            items(products) { product ->
+//                                ProductCard(
+//                                    product = product,
+//                                    onClick = {
+//                                        // عملیات مورد نظر
+//                                    }
+//                                )
+//                            }
+//                        }
+//                    }
+//                }
+//            }
         }
     }
 }

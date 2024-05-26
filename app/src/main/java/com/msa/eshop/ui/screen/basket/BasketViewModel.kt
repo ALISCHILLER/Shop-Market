@@ -2,10 +2,13 @@ package com.msa.eshop.ui.screen.basket
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavOptions
 import com.msa.eshop.data.local.entity.OrderEntity
 import com.msa.eshop.data.local.entity.ProductModelEntity
 import com.msa.eshop.data.repository.HomeRepository
+import com.msa.eshop.ui.navigation.NavInfo
 import com.msa.eshop.ui.navigation.NavManager
+import com.msa.eshop.ui.navigation.Route
 import com.msa.eshop.utils.calculateSalePrice
 import com.msa.eshop.utils.calculateTotalValue
 import com.msa.eshop.utils.createOrderEntity
@@ -92,6 +95,16 @@ class BasketViewModel @Inject constructor(
         orderEntity.numberOrder1 = value1
         orderEntity.numberOrder2 = value2
         homeRepository.insertOrder(orderEntity) // اضافه کردن خط ذخیره سازی
+    }
+
+
+    fun navigateToSimulate() {
+        navManager.navigate(
+            NavInfo(id = Route.SimulateScreen.route,
+                navOption = NavOptions.Builder().setPopUpTo(
+                    Route.BasketScreen.route,
+                    inclusive = true).build())
+        )
     }
 
 

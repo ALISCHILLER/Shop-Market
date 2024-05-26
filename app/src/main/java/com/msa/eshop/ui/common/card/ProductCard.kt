@@ -70,6 +70,7 @@ fun ProductCard(
 
     if (showBottomSheet) {
         BottomSheetExample(
+            modifier = modifier.fillMaxWidth(),
             onDismissRequest = { showBottomSheet = false }
         ) {
             AddProduct(
@@ -152,12 +153,17 @@ fun ProductCard(
                                     .padding(4.dp),
                                 horizontalArrangement = Arrangement.SpaceEvenly
                             ) {
-                                Icon(
-                                    modifier = modifier
-                                        .size(50.dp),
-                                    imageVector = Icons.Outlined.AttachMoney,
-                                    contentDescription = "",
-                                    tint = Color.White
+//                                Icon(
+//                                    modifier = modifier
+//                                        .size(50.dp),
+//                                    imageVector = Icons.Outlined.AttachMoney,
+//                                    contentDescription = "",
+//                                    tint = Color.White
+//                                )
+                                Text(
+                                    text = "جزئیات تخفیف",
+                                    style = Typography.labelSmall,
+                                    color = Color.White
                                 )
                             }
 
@@ -173,7 +179,7 @@ fun ProductCard(
                             modifier = Modifier
                                 .padding(vertical = 8.dp),
                             maxLines = 1,
-                            style = Typography.bodyLarge
+                            style = Typography.labelSmall
 
                         )
                     }
@@ -192,12 +198,12 @@ fun ProductCard(
                             Row() {
                                 Text(
                                     text = Currency(product.price).toFormattedString(),
-                                    style = Typography.labelLarge,
+                                    style = Typography.labelSmall,
                                 )
                                 Spacer(modifier = Modifier.padding(5.dp))
                                 Text(
                                     text = "ریال ",
-                                    style = Typography.titleLarge
+                                    style = Typography.labelSmall
                                 )
                             }
 
@@ -226,10 +232,11 @@ fun ProductCard(
                                 imageVector = Icons.Default.AddShoppingCart,
                                 contentDescription = "iconbutton"
                             )
-                            Spacer(modifier = Modifier.width(DIMENS_8dp))
+                            Spacer(modifier = Modifier.width(DIMENS_2dp))
                             Text(
                                 stringResource(id = R.string.add_to_cart),
                                 style = Typography.labelSmall,
+                                maxLines = 1,
                             )
                         }
                     }

@@ -84,11 +84,12 @@ fun SliderBanner(
             contentPadding = PaddingValues(horizontal = DIMENS_16dp),
             modifier = modifier
                 .fillMaxWidth()
-                .height(200.dp)
+                .height(150.dp)
         ) { page ->
             Card(
                 shape = RoundedCornerShape(DIMENS_12dp),
                 modifier = Modifier
+                    .fillMaxWidth()
                     .graphicsLayer {
                         val pageOffset = calculateCurrentOffsetForPage(page).absoluteValue
 
@@ -114,7 +115,9 @@ fun SliderBanner(
                         .build(),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier.height(200.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(150.dp)
                 )
 
             }
@@ -124,7 +127,7 @@ fun SliderBanner(
             pagerState = pagerState,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(DIMENS_16dp)
+                .padding(DIMENS_8dp)
         )
     }
 }

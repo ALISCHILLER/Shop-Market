@@ -60,7 +60,7 @@ fun SplashScreen(
 
             ){
             Image(
-                painter = painterResource(id = R.drawable.logozar),
+                painter = painterResource(id = R.drawable.zar_market),
                 contentDescription = "logo",
                 modifier = Modifier
                     .size(110.dp, 82.dp)

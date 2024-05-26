@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -53,10 +54,6 @@ fun BasketCard(
     onClick: (Boolean) -> Unit,
     viewModel: BasketViewModel = hiltViewModel()
 ) {
-
-
-
-
 
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Card(
@@ -148,17 +145,17 @@ fun BasketCard(
                                 Spacer(modifier = Modifier.padding(5.dp))
                                 Text(
                                     text = "فی:",
-                                    style = Typography.titleLarge
+                                    style = Typography.titleSmall
                                 )
                                 Spacer(modifier = Modifier.padding(5.dp))
                                 Text(
                                     text = Currency(orderEntity.price).toFormattedString(),
-                                    style = Typography.labelLarge,
+                                    style = Typography.titleSmall,
                                 )
                                 Spacer(modifier = Modifier.padding(5.dp))
                                 Text(
                                     text = "ریال ",
-                                    style = Typography.titleLarge
+                                    style = Typography.titleSmall
                                 )
                             }
 
@@ -172,7 +169,7 @@ fun BasketCard(
                             contentDescription = "",
                             modifier = Modifier
                                 .padding(5.dp)
-                                .size(30.dp, 30.dp)
+                                .size(50.dp, 50.dp)
                                 .clickable {
                                     chack = true
                                 }
@@ -191,7 +188,7 @@ fun BasketCard(
                     orderEntity.fullNameKala1?.let {
                         Text(
                             text = "$it :",
-                            style = Typography.labelLarge
+                            style = Typography.titleSmall
                         )
                     }
                     Spacer(modifier = modifier.width(10.dp))
@@ -220,7 +217,7 @@ fun BasketCard(
                     orderEntity.fullNameKala2?.let {
                         Text(
                             text = "$it :",
-                            style = Typography.labelLarge
+                            style = Typography.titleSmall
                         )
                     }
                     Spacer(modifier = modifier.width(10.dp))
@@ -238,6 +235,7 @@ fun BasketCard(
                             })
                     }
                 }
+                HorizontalDivider(color = Color.Gray, thickness = 2.dp)
                 Row(
                     modifier = Modifier
                         .padding(7.dp)
@@ -248,17 +246,17 @@ fun BasketCard(
 
                     Text(
                         text = "مبلغ ناخالص:",
-                        style = Typography.titleLarge,
+                        style = Typography.titleSmall,
                     )
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(
                         text = Currency(totalPrice.toString()).toFormattedString(),
-                        style = Typography.labelLarge,
+                        style = Typography.titleSmall,
                     )
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(
                         text = "ریال ",
-                        style = Typography.titleLarge
+                        style = Typography.titleSmall
                     )
                 }
 
