@@ -13,6 +13,7 @@ data class SimulateModel(
     val price: Int,
     val priceByDiscountPercent: Int,
     val priceByDiscountPercentAndTax: Int,
+    val priceByDiscountTax: Int,
     val priceDiscount: Int,
     val quantity: Int,
     val productCode: Int,
@@ -22,5 +23,5 @@ data class SimulateModel(
     val unit1: String,
     val unit2: String,
     val unitid1: String,
-    val unitid2: String
+    val unitid2: String,
 )

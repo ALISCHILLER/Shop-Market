@@ -99,7 +99,7 @@ fun SimulateScreen(
                                 style = Typography.titleSmall,
                             )
                         }
-                        val totalPrice = simulate.sumOf { it.price }
+                        val totalPrice = simulate.sumOf { it.priceByDiscountPercentAndTax }
                         Text(
                             text = "${Currency(totalPrice).toFormattedString()} ریال ",
                             style = Typography.labelLarge

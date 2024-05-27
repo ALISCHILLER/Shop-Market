@@ -53,7 +53,7 @@ fun ProductGroupCard(
         productGroupEntity.productCategoryImage
     else
         productGroupEntity.productCategoryImageUnselect
-    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
 
         Row(
             modifier = Modifier

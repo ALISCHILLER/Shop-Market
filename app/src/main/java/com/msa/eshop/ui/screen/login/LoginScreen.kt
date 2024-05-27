@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -34,10 +35,12 @@ import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.BlurEffect
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalDensity
@@ -50,6 +53,8 @@ import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.msa.componentcompose.ui.component.lottiefile.AnimatedPreloader
+import com.msa.componentcompose.ui.component.lottiefile.LoadingAnimate
 import com.msa.eshop.R
 import com.msa.eshop.ui.component.button.ButtonBorderAnmation
 import com.msa.eshop.ui.component.dialog.CustomDialog
@@ -57,8 +62,10 @@ import com.msa.eshop.ui.component.dialog.ErrorDialog
 import com.msa.eshop.ui.component.dialog.ErrorWarning
 import com.msa.eshop.ui.component.drawLineC.BezierCurve
 import com.msa.eshop.ui.component.drawLineC.BezierCurveStyle
+import com.msa.eshop.ui.component.loading.LoadingAnimation
 import com.msa.eshop.ui.component.weightC.RoundedIconTextField
 import com.msa.eshop.ui.theme.DIMENS_14dp
+import com.msa.eshop.ui.theme.DIMENS_6dp
 import com.msa.eshop.ui.theme.DIMENS_8dp
 import com.msa.eshop.ui.theme.PlatinumSilver
 import com.msa.eshop.ui.theme.RoyalPurple
@@ -78,6 +85,8 @@ fun LoginScreen(
     var showDialog by remember {
         mutableStateOf(true)
     }
+
+
     state.error?.let {
         CustomDialog(
             showDialog = true,
@@ -86,11 +95,11 @@ fun LoginScreen(
             }
         ) {
             ErrorWarning(
-                onDismissRequest = {  viewModel.clearState()},
+                onDismissRequest = { viewModel.clearState() },
                 title = "خطا",
                 message = it
             )
-            ErrorDialog(it, {viewModel.clearState()}, false)
+            ErrorDialog(it, { viewModel.clearState() }, false)
         }
     }
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
@@ -133,12 +142,12 @@ fun LoginScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Spacer(modifier = Modifier.height(DIMENS_14dp))
+                    Spacer(modifier = Modifier.height(DIMENS_6dp))
                     Image(
                         painter = painterResource(id = R.drawable.logo),
                         contentDescription = "logo",
                         modifier = Modifier
-                            .size(150.dp, 150.dp)
+                            .size(170.dp, 170.dp)
                             .layoutId("logo")
                     )
                     Spacer(modifier = Modifier.height(DIMENS_14dp))
@@ -146,9 +155,9 @@ fun LoginScreen(
                         modifier = modifier,
                         value = username,
                         onValueChange = {
-                        username = it
+                            username = it
                         },
-                        label = "کد ملی",
+                        label = "کد مشتزی",
                         icon = Icons.Default.Person,
                         corner = RoundedCornerShape(10.dp)
                     )
@@ -156,7 +165,7 @@ fun LoginScreen(
                     RoundedIconTextField(
                         value = password,
                         onValueChange = {
-                        password = it
+                            password = it
                         },
                         label = "رمز عبور",
                         icon = Icons.Default.Lock,
@@ -192,7 +201,7 @@ fun LoginScreen(
                         .rotate(90f)
                         .align(Alignment.End)
                         .height(200.dp),
-                    points = listOf(0f,40f, 30F, 80f),
+                    points = listOf(0f, 40f, 30F, 80f),
                     minPoint = 0F,
                     maxPoint = 100F,
                     style = BezierCurveStyle.StrokeAndFill(
@@ -206,6 +215,11 @@ fun LoginScreen(
                         stroke = Stroke(width = stroke1Dp)
                     ),
                 )
+            }
+
+            if (state.isLoading) {
+                LoadingAnimate()
+                // Blurred background
             }
 
         }

@@ -37,7 +37,7 @@ fun DiscountsProductCard(
 
     val viewModel: HomeViewModel = hiltViewModel()
     LaunchedEffect(Unit){
-        viewModel.discountRequest(product.productCode.toString())
+        viewModel.discountRequest(product.id.toString())
     }
 
     val discount by viewModel.discount.collectAsState()

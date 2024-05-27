@@ -39,14 +39,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.BlendMode.Companion.Screen
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.msa.eshop.R
 import com.msa.eshop.ui.navigation.Route
+import com.msa.eshop.ui.theme.barcolor
+import com.msa.eshop.ui.theme.barcolorDark
 
 
 @Preview
@@ -59,7 +64,7 @@ fun BottomNavNoAnimationPreview(
             BottomNavNoAnimation(onClick = {})
         }
     ) {
-        val p = it
+        it
         Column(
             modifier = Modifier
                 .padding(it)
@@ -80,16 +85,37 @@ fun BottomNavNoAnimation(
     onClick: (String) -> Unit
 ) {
     val screens = listOf(
-        Screen.Home,
-        Screen.Create,
-        Screen.Profile,
-        Screen.Settings
+        Screen(
+            "صفحه اصلی",
+            Icons.Filled.Home,
+            Icons.Outlined.Home,
+            Route.HomeScreen.route
+        ),
+        Screen(
+            "گزارش خرید",
+            ImageVector.vectorResource(R.drawable.ic_invoice),
+            ImageVector.vectorResource(R.drawable.ic_invoice),
+            Route.HomeScreen.route
+        ),
+        Screen(
+            "سبد",
+            ImageVector.vectorResource(R.drawable.ic_basket),
+            ImageVector.vectorResource(R.drawable.ic_basket),
+            Route.BasketScreen.route
+        ),
+        Screen(
+            "پروفایل",
+            ImageVector.vectorResource(R.drawable.ic_profile),
+            ImageVector.vectorResource(R.drawable.ic_profile),
+            Route.BasketScreen.route
+        )
+
     )
     var selectedScreen by remember { mutableStateOf(0) }
     Box(
         Modifier
-            .padding(bottom = 5.dp)
-            .shadow(5.dp)
+            .padding(horizontal = 8.dp, vertical = 5.dp)
+            .shadow(5.dp, shape = RoundedCornerShape(10.dp))
             .background(color = colors.surface)
             .height(64.dp)
             .fillMaxWidth()
@@ -168,7 +194,7 @@ private fun BottomNavItem(
             FlipIcon(
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
-                    .padding(5.dp)
+                    .padding(2.dp)
                     .fillMaxHeight()
                     .alpha(animatedAlpha)  // <-------
                     .size(animatedIconSize),  // <-------
@@ -181,7 +207,7 @@ private fun BottomNavItem(
             AnimatedVisibility(visible = isSelected) {
                 Text(
                     text = item.title,
-                    modifier = Modifier.padding(start = 8.dp, end = 10.dp),
+                    modifier = Modifier.padding(start = 2.dp, end = 2.dp),
                     maxLines = 1,
                     color = Color.White
                 )
@@ -214,29 +240,16 @@ fun FlipIcon(
         Icon(
             rememberVectorPainter(image = if (animationRotation > 90f) activeIcon else inactiveIcon),
             contentDescription = contentDescription,
-            tint = if (isActive) Color.White else Color.Unspecified
+            tint = if (isActive) Color.White else barcolorDark
         )
     }
 }
 
-sealed class Screen(
+data class Screen(
     val title: String,
     val activeIcon: ImageVector,
     val inactiveIcon: ImageVector,
     val route: String,
 
     ) {
-    object Home : Screen("Home", Icons.Filled.Home, Icons.Outlined.Home, Route.HomeScreen.route)
-    object Create :
-        Screen("Create", Icons.Filled.Create, Icons.Outlined.Create, Route.HomeScreen.route)
-
-    object Profile :
-        Screen("Profile", Icons.Filled.Person, Icons.Outlined.Person, Route.BasketScreen.route)
-
-    object Settings : Screen(
-        "Settings",
-        Icons.Filled.Settings,
-        Icons.Outlined.Settings,
-        Route.ProfileCustomerScreen.route
-    )
 }

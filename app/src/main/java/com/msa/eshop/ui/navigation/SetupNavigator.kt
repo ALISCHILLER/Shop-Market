@@ -3,9 +3,11 @@
 package com.msa.eshop.ui.navigation
 
 import android.os.Bundle
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -36,6 +38,8 @@ import com.msa.eshop.ui.screen.login.LoginScreen
 import com.msa.eshop.ui.screen.simulate.SimulateScreen
 import com.msa.eshop.ui.screen.splash.SplashScreen
 import timber.log.Timber
+import androidx.compose.animation.fadeOut
+import kotlinx.coroutines.delay
 
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
@@ -84,28 +88,51 @@ fun MainActivity.SetupNavigator() {
         }
     ) {
 
-        Box(  modifier = Modifier
-            .padding(bottom = it.calculateBottomPadding())){
+        Box(
+            modifier = Modifier
+                .padding(bottom = it.calculateBottomPadding())
+        ) {
 
             Timber.tag("SetupNavigator").e("SetupNavigator SetupNavigator: ")
             val bottomPadding = it.calculateBottomPadding()
             NavHost(
                 navController = navController,
                 startDestination = Route.SplashScreen.route,
-
-            ) {
+                ) {
 
                 //Splash
-                composable(route = Route.SplashScreen.route) {
-                    val visible = backStackState == null || navInfo.id == Route.SplashScreen.route
+                composable(
+                    route = Route.SplashScreen.route,
+                    exitTransition = {
+                        slideOutVertically(
+                            targetOffsetY = { -it },
+                            animationSpec = tween(durationMillis = 2000) // مدت زمان انیمیشن افزایش یافته
+                        )
+                    }
+
+                ) {
                     SplashScreen()
+
                 }
+
+
                 //Login
-                composable(route = Route.LoginScreen.route) {
-                    val visible = navInfo.id == Route.LoginScreen.route
-
+                composable(
+                    route = Route.LoginScreen.route,
+                    enterTransition = {
+                        slideInVertically(
+                            initialOffsetY = { it },
+                            animationSpec = tween(durationMillis = 2000)
+                        )
+                    },
+                    exitTransition = {
+                        slideOutOfContainer(
+                            AnimatedContentTransitionScope.SlideDirection.Right,
+                            animationSpec = tween(700)
+                        )
+                    }
+                ) {
                     LoginScreen()
-
                 }
                 //product
                 composable(route = Route.HomeScreen.route) { HomeScreen() }
@@ -120,7 +147,6 @@ fun MainActivity.SetupNavigator() {
 
             }
         }
-
 
 
     }

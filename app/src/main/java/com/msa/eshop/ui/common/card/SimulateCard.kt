@@ -48,8 +48,8 @@ private fun preview() {
         convertFactor1 = 1,
         convertFactor2 = 2,
         discountPercent = 10,
-        finalPrice = 1000,
-        finalPriceDiscount = 900,
+        finalPrice = 102200,
+        finalPriceDiscount = 92200,
         fullNameKala1 = "کالای اول",
         fullNameKala2 = "کالای دوم",
         id = "1",
@@ -57,23 +57,25 @@ private fun preview() {
         price = 1100,
         priceByDiscountPercent = 1000,
         priceByDiscountPercentAndTax = 1180,
-        priceDiscount = 100,
-        productCode = 101,
-        quantity = 10,
+        priceDiscount = 105250,
+        productCode = 102251,
+        quantity = 1220,
         productGroupCode = 201,
         productImage = "image1.png",
         productName = "محصول اول",
         unit1 = "واحد اول",
         unit2 = "واحد دوم",
         unitid1 = "u1",
-        unitid2 = "u2"
+        unitid2 = "u2",
+        priceByDiscountTax = 13
     )
-    SimulateCard(simulate =simulateModel1)
+    SimulateCard(simulate = simulateModel1)
 }
+
 @Composable
 fun SimulateCard(
     modifier: Modifier = Modifier,
-    simulate : SimulateModel
+    simulate: SimulateModel
 ) {
 
 
@@ -89,13 +91,13 @@ fun SimulateCard(
             Column(
                 modifier = modifier
                     .background(Color.White)
-                    .padding(17.dp)
+                    .padding(horizontal = 15.dp, vertical = 5.dp)
             ) {
 
                 Row(
                     modifier = modifier
                         .fillMaxWidth()
-                        .padding(top = 10.dp),
+                        .padding(top = 5.dp),
 
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -103,7 +105,7 @@ fun SimulateCard(
                     Box(
                         modifier = Modifier
                             .padding(5.dp)
-                            .size(100.dp, 75.dp)
+                            .size(90.dp, 65.dp)
                             .background(
                                 color = PlatinumSilver, shape = RoundedCornerShape(18.dp)
                             )
@@ -124,15 +126,16 @@ fun SimulateCard(
                     }
 
                     Column(
-                        modifier = modifier.background(Color.White)
+                        modifier = modifier
+                            .background(Color.White)
                     ) {
 
-                            Text(
-                                modifier = Modifier
-                                    .padding(8.dp),
-                                text = simulate.productName,
-                                style = Typography.labelLarge
-                            )
+                        Text(
+                            modifier = Modifier
+                                .padding(8.dp),
+                            text = simulate.productName,
+                            style = Typography.titleSmall
+                        )
 
                         Row(
                             modifier = Modifier
@@ -142,47 +145,54 @@ fun SimulateCard(
                             Spacer(modifier = Modifier.padding(5.dp))
                             Text(
                                 text = "فی:",
-                                style = Typography.titleLarge
+                                style = Typography.titleSmall
                             )
                             Spacer(modifier = Modifier.padding(5.dp))
                             Text(
-                                text = simulate.price.toString(),
-                                style = Typography.labelLarge,
+                                text = Currency(simulate.price).toFormattedString(),
+                                style = Typography.titleSmall,
                             )
                             Spacer(modifier = Modifier.padding(5.dp))
                             Text(
                                 text = "ریال ",
-                                style = Typography.titleLarge
+                                style = Typography.titleSmall
                             )
                         }
 
                     }
                 }
+                Column(
+                    modifier = modifier
+                        .padding(5.dp)
+                        .background(Color.White)
+                ) {
 
-                RowText(
-                    title = "کدکالا:",
-                    message = simulate.productCode.toString()
-                )
-                RowText(
-                    title = "تعداد سفارش",
-                    message = "123 کارتن و 7 عدد"
-                )
 
-                RowText(
-                    title = "تخفیفات",
-                    message = Currency(simulate.priceDiscount).toFormattedString()
-                )
+                    RowText(
+                        title = "کدکالا:",
+                        message = simulate.productCode.toString()
+                    )
+                    RowText(
+                        title = "تعداد سفارش",
+                        message = "123 کارتن و 7 عدد"
+                    )
 
-                RowText(
-                    title = "مالیات",
-                    message = Currency(simulate.priceByDiscountPercentAndTax).toFormattedString()
-                )
-                HorizontalDivider(color = Color.Gray, thickness = 2.dp)
+                    RowText(
+                        title = "تخفیفات",
+                        message = Currency(simulate.finalPriceDiscount).toFormattedString()
+                    )
 
-                RowText(
-                    title = "مبلغ قابل پرداخت",
-                    message = Currency(simulate.finalPrice).toFormattedString()
-                )
+                    RowText(
+                        title = "مالیات",
+                        message = Currency(simulate.priceByDiscountTax).toFormattedString()
+                    )
+                    HorizontalDivider(color = Color.Gray, thickness = 2.dp)
+
+                    RowText(
+                        title = "مبلغ قابل پرداخت",
+                        message = Currency(simulate.priceByDiscountPercentAndTax).toFormattedString()
+                    )
+                }
             }
         }
     }
@@ -193,18 +203,18 @@ fun SimulateCard(
 @Composable
 fun RowText(
     modifier: Modifier = Modifier,
-    title:String,
-    message:String
+    title: String,
+    message: String
 ) {
-    Row(verticalAlignment = Alignment.CenterVertically){
+    Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
             text = "${title} :",
-            style = Typography.titleLarge
+            style = Typography.titleSmall
         )
         Spacer(modifier = modifier.width(8.dp))
         Text(
             text = message,
-            style = Typography.labelSmall
+            style = Typography.titleSmall
         )
     }
 }

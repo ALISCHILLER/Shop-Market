@@ -52,9 +52,9 @@ fun DockedSearch(
             containerColor = Color.White
         ),
         modifier = Modifier
-            .padding(8.dp)
+            .padding(horizontal = 12.dp, vertical = 8.dp)
             .fillMaxWidth()
-            .border(width = 1.dp, color = barcolorlight, shape =RoundedCornerShape(5.dp) )
+            .border(width = 1.dp, color = barcolorlow, shape =RoundedCornerShape(5.dp) )
             .semantics { traversalIndex = -1f },
         shape =RoundedCornerShape(5.dp) ,
         query = text,
@@ -70,14 +70,14 @@ fun DockedSearch(
         placeholder = {
             Text(
                 text = "جست و جوی محصول موردنظر",
-                color = barcolor
+                color = barcolorlow
             )
         },
         leadingIcon = {
             Icon(
                 imageVector = Icons.Filled.Search,
                 contentDescription = "Search",
-                tint = barcolor
+                tint = barcolorlow
             )
         },
         trailingIcon = {
@@ -86,7 +86,7 @@ fun DockedSearch(
                     Icon(
                         imageVector = Icons.Default.Mic,
                         contentDescription = "Mic",
-                        tint = barcolor
+                        tint = barcolorlow
                     )
                 }
                 if (active) {
@@ -96,7 +96,7 @@ fun DockedSearch(
                         Icon(
                             imageVector = Icons.Filled.Close,
                             contentDescription = "Close",
-                            tint = barcolor
+                            tint = barcolorlow
                         )
                     }
                 }

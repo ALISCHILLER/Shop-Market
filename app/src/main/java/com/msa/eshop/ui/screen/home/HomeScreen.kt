@@ -1,10 +1,17 @@
-@file:OptIn(ExperimentalPagerApi::class, ExperimentalPagerApi::class, ExperimentalPagerApi::class)
+@file:OptIn(
+    ExperimentalPagerApi::class, ExperimentalPagerApi::class, ExperimentalPagerApi::class,
+    ExperimentalFoundationApi::class, ExperimentalFoundationApi::class
+)
 
 package com.msa.eshop.ui.screen.home
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,6 +23,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -27,18 +35,24 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.msa.componentcompose.ui.component.lottiefile.LoadingAnimate
 import com.msa.eshop.data.local.entity.ProductGroupEntity
 import com.msa.eshop.ui.common.card.ProductCard
 import com.msa.eshop.ui.common.card.ProductGroupCard
 import com.msa.eshop.ui.component.TitleGrouping
+import com.msa.eshop.ui.component.graidC.NonlazyGrid
 import com.msa.eshop.ui.component.pager.SliderBanner
+import com.msa.eshop.ui.theme.PlatinumSilver
 
 @ExperimentalMaterial3Api
 @Composable
@@ -48,115 +62,90 @@ fun HomeScreen(
 ) {
     val viewModel: HomeViewModel = hiltViewModel()
 
-    LaunchedEffect(Unit){
+    LaunchedEffect(Unit) {
         viewModel.productCheck()
-        viewModel.Bannerrequest()
     }
-
+    val state by viewModel.state.collectAsState()
     val products by viewModel.allProduct.collectAsState()
     val banner by viewModel.banner.collectAsState()
     val allProductGroup by viewModel.allProductGroup.collectAsState()
     var selectedProductGroup by remember { mutableStateOf<ProductGroupEntity?>(null) }
 
     Scaffold(
+        modifier = Modifier.background(color = PlatinumSilver),
         topBar = {
             TopBarSearch()
         }
     ) { innerPadding ->
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-            Column(
+
+            val lazyListState = rememberLazyListState()
+            var scrolledY = 0f
+            var previousOffset = 0
+            LazyColumn(
                 modifier = Modifier
                     .padding(innerPadding)
-
+                    .fillMaxSize()
+                    .background(color = Color.White),
+                lazyListState,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                SliderBanner(banner = banner)
-//                TitleGrouping(titleText = "خرید براساس دسته بندی")
+                item {
+                    SliderBanner(
+                        banner = banner,
+                        modifier = Modifier
+                            .graphicsLayer {
+                                scrolledY += lazyListState.firstVisibleItemScrollOffset - previousOffset
+                                translationY = scrolledY * 0.5f
+                                scaleX = 1 / ((scrolledY * 0.01f) + 1f)
+                                scaleY = 1 / ((scrolledY * 0.01f) + 1f)
+                                previousOffset = lazyListState.firstVisibleItemScrollOffset
+                            }
+                    )
+                }
 
-                LazyRow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 2.dp),
-                    horizontalArrangement = Arrangement.SpaceAround
-                ) {
-                    items(allProductGroup) { productGroup ->
-                        ProductGroupCard(
-                            productGroup,
-                            onClick = { selectedProductGroup = it },
-                            isSelected = selectedProductGroup == productGroup
-                        )
+
+                stickyHeader {
+                    LazyRow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color.White)
+                            .padding(vertical = 8.dp),
+                        horizontalArrangement = Arrangement.SpaceAround
+                    ) {
+                        items(allProductGroup) { productGroup ->
+                            ProductGroupCard(
+                                productGroup,
+                                onClick = { selectedProductGroup = it },
+                                isSelected = selectedProductGroup == productGroup
+                            )
+                        }
                     }
                 }
 
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1.0f),
-                ) {
-                    items(products){product ->
-
+                items(1) {
+                    NonlazyGrid(
+                        columns = 2,
+                        itemCount = products.size,
+                    ) {
                         ProductCard(
-                            product = product,
+                            product = products[it],
                             onClick = {
-
+                                // عملیات مورد نظر
                             }
                         )
                     }
                 }
+            }
+
+            if (state.isLoading) {
+                Box(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    LoadingAnimate()
+                }
 
             }
-            
-
-
-//            LazyColumn(
-//                modifier = Modifier
-//                    .padding(innerPadding)
-//                    .fillMaxSize()
-//            ) {
-//                item {
-//                    SliderBanner(banner = banner)
-//                }
-//
-//                item {
-//                    LazyRow(
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .padding(vertical = 8.dp),
-//                        horizontalArrangement = Arrangement.SpaceAround
-//                    ) {
-//                        items(allProductGroup) { productGroup ->
-//                            ProductGroupCard(
-//                                productGroup,
-//                                onClick = { selectedProductGroup = it },
-//                                isSelected = selectedProductGroup == productGroup
-//                            )
-//                        }
-//                    }
-//                }
-//
-//                item {
-//                    BoxWithConstraints(
-//                        modifier = Modifier.fillMaxSize()
-//                    ) {
-//                        val maxHeight = maxHeight
-//                        LazyVerticalGrid(
-//                            columns = GridCells.Fixed(2),
-//                            modifier = Modifier
-//                                .fillMaxWidth()
-//                                .height(maxHeight) // تنظیم ارتفاع برای Grid
-//                        ) {
-//                            items(products) { product ->
-//                                ProductCard(
-//                                    product = product,
-//                                    onClick = {
-//                                        // عملیات مورد نظر
-//                                    }
-//                                )
-//                            }
-//                        }
-//                    }
-//                }
-//            }
         }
     }
 }

@@ -16,6 +16,8 @@ val GrayBorderStroke = Color(0xFFE2E2E2)
 val PlatinumSilver = Color(0xFFF8F8F8)
 
 val barcolor = Color(0xffbfbfc0)
+val barcolorDark = Color(0xFF2E2E2E)
+val barcolorlow = Color(0xFF525252)
 val barcolorlight = Color(0xFFEEEEEE)
 val lightcoral = Color(0xfff3b8bb)
 

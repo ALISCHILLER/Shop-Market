@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 import okhttp3.Interceptor
 
-private const val BASE_URL = "http://10.252.37.207:8282"
+private const val BASE_URL = "http://192.168.50.152:8080"
 
 private const val READ_TIMEOUT = 60L
 private const val CONNECT_TIMEOUT = 60L

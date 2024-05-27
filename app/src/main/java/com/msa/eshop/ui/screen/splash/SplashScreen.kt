@@ -43,9 +43,13 @@ fun SplashScreen(
     LaunchedEffect(Unit) {
         while (true) {
             visible = !visible
-            viewModel.splashCheck()
-            delay(2000) // مدت زمان بین انیمیشن‌ها
+            delay(2000)
+        // مدت زمان بین انیمیشن‌ها
         }
+
+    }
+    LaunchedEffect(Unit) {
+        viewModel.splashCheck()
     }
     Box(
         modifier = Modifier
@@ -63,7 +67,7 @@ fun SplashScreen(
                 painter = painterResource(id = R.drawable.zar_market),
                 contentDescription = "logo",
                 modifier = Modifier
-                    .size(110.dp, 82.dp)
+                    .size(170.dp, 170.dp)
                     .align(Alignment.Center) // قرار دادن تصویر در وسط
             )
         }

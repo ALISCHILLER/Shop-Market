@@ -72,6 +72,7 @@ class HomeViewModel @Inject constructor(
         productRequest()
         productGroupRequest()
         getAllOrder()
+        Bannerrequest()
     }
 
 
@@ -89,7 +90,10 @@ class HomeViewModel @Inject constructor(
                 }
 
             },
-            updateStateLoading = { isLoading -> updateStateLoading(isLoading) },
+            updateStateLoading = { isLoading ->
+                if(isLoading)
+                updateStateLoading(isLoading)
+                                 },
             updateStateError = { errorMessage -> updateStateError(errorMessage) }
         )
     }
@@ -108,7 +112,10 @@ class HomeViewModel @Inject constructor(
 
 
             },
-            updateStateLoading = { isLoading -> updateStateLoading(isLoading) },
+            updateStateLoading = { isLoading ->
+                if(isLoading)
+                updateStateLoading(isLoading)
+                                 },
             updateStateError = { errorMessage -> updateStateError(errorMessage) }
         )
     }

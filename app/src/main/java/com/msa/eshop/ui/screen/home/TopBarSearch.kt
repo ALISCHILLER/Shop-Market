@@ -1,6 +1,7 @@
 package com.msa.eshop.ui.screen.home
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,7 +27,9 @@ fun TopBarSearch(modifier: Modifier = Modifier) {
     Column(
         modifier = Modifier
             .padding(top = 20.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .background(Color.White)
+        ,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ){

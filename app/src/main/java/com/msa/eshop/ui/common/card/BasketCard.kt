@@ -102,7 +102,7 @@ fun BasketCard(
                 Row(
                     modifier = modifier
                         .fillMaxWidth()
-                        .padding(top = 10.dp),
+                        .padding(top = 5.dp),
 
                     horizontalArrangement = Arrangement.SpaceBetween
                     ) {
@@ -112,7 +112,7 @@ fun BasketCard(
                         Box(
                             modifier = Modifier
                                 .padding(5.dp)
-                                .size(100.dp, 75.dp)
+                                .size(90.dp, 65.dp)
                                 .background(
                                     color = PlatinumSilver, shape = RoundedCornerShape(18.dp)
                                 )
@@ -169,7 +169,7 @@ fun BasketCard(
                             contentDescription = "",
                             modifier = Modifier
                                 .padding(5.dp)
-                                .size(50.dp, 50.dp)
+                                .size(70.dp, 70.dp)
                                 .clickable {
                                     chack = true
                                 }
