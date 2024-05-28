@@ -52,7 +52,7 @@ fun AddProduct(
 ) {
     val viewModel: HomeViewModel = hiltViewModel()
     LaunchedEffect(Unit){
-        viewModel.productCheck()
+        viewModel.getAllOrder()
     }
 
     val allOrder by viewModel.allOrder.collectAsState()

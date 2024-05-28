@@ -68,6 +68,7 @@ import com.msa.eshop.ui.theme.DIMENS_14dp
 import com.msa.eshop.ui.theme.DIMENS_6dp
 import com.msa.eshop.ui.theme.DIMENS_8dp
 import com.msa.eshop.ui.theme.PlatinumSilver
+import com.msa.eshop.ui.theme.RedMain
 import com.msa.eshop.ui.theme.RoyalPurple
 import com.msa.eshop.ui.theme.RoyalRed
 import com.msa.eshop.ui.theme.Typography
@@ -184,7 +185,7 @@ fun LoginScreen(
                         modifier = Modifier
                             .padding(5.dp)
                             .fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
+                        colors = ButtonDefaults.buttonColors(containerColor = RedMain),
                         shape = RoundedCornerShape(6.dp)
                     ) {
                         Text(

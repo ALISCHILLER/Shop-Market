@@ -126,5 +126,8 @@ dependencies {
     implementation (dependency.accompanist.pager)
     implementation (dependency.accompanist.pager.indicators)
 
+    // lottie
     implementation (dependency.lottie.compose)
+    implementation ("com.google.accompanist:accompanist-swiperefresh:0.35.1-alpha")
+
 }

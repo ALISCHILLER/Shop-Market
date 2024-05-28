@@ -59,22 +59,25 @@ class HomeViewModel @Inject constructor(
     val discount: StateFlow<List<DiscountResultModel>> = _discount
 
     fun productCheck() {
-//        val productCount = homeRepository.getProductCount()
-//        if (productCount == 0) {
-//            productRequest()
-//            productGroupRequest()
-//        } else {
-//            getAllOrder()
-//            getAllProduct()
-//            getAllProductGroup()
-//        }
+        val productCount = homeRepository.getProductCount()
+        if (productCount == 0) {
+            productRequest()
+            productGroupRequest()
+            Bannerrequest()
+        } else {
+            getAllOrder()
+            getAllProduct()
+            getAllProductGroup()
+            Bannerrequest()
+        }
 
+
+    }
+    fun refresh() {
         productRequest()
         productGroupRequest()
-        getAllOrder()
         Bannerrequest()
     }
-
 
     fun productRequest() {
         makeRequest(
@@ -129,6 +132,7 @@ class HomeViewModel @Inject constructor(
                 response?.data?.let {
                     Timber.tag("HomeViewModel").d("Bannerrequest SUCCESS: ${it}  ")
                     _banner.value = it
+                    updateStateLoading(false)
                 }
             },
             updateStateLoading = { isLoading -> updateStateLoading(isLoading) },
@@ -144,6 +148,7 @@ class HomeViewModel @Inject constructor(
                 response.data?.let {
                     Timber.tag("HomeViewModel").d("discountRequest SUCCESS: ${it}  ")
                     _discount.value = it
+                    updateStateLoading(false)
                 }
 
             },
@@ -162,10 +167,10 @@ class HomeViewModel @Inject constructor(
     }
 
 
-    fun getProduct(productGroup: ProductGroupEntity) {
+    fun getProduct(productCategoryCode: Int) {
         viewModelScope.launch {
-            if (productGroup.productCategoryCode != 99)
-                homeRepository.getProduct(productGroup.productCategoryCode).collect {
+            if (productCategoryCode != 99)
+                homeRepository.getProduct(productCategoryCode).collect {
                     _allProduct.value = it
                 }
             else
@@ -192,7 +197,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getAllOrder() {
+     fun getAllOrder() {
         viewModelScope.launch {
             homeRepository.getAllOrder.collect {
                 _allOrder.value = it

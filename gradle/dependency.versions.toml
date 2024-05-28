@@ -2,10 +2,10 @@
 
 materialIconsExtendedAndroid = "1.6.7"
 navigationCompose = "2.7.7"
-hiltAndroid = "2.50"
-hiltAndroidCompiler = "2.50"
+hiltAndroid = "2.51.1"
+hiltAndroidCompiler = "2.51.1"
 hiltNavigationCompose = "1.2.0"
-retrofit = "2.9.0"
+retrofit = "2.11.0"
 converterGson = "2.9.0"
 converterMoshi = "2.9.0"
 moshiKotlin = "1.12.0"

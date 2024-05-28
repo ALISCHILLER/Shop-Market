@@ -45,6 +45,8 @@ fun ProductGroupCard(
 ) {
 
 
+
+
     var isSelectedState by remember { mutableStateOf(isSelected) }
 
     val iconTint = if (isSelected) Color.White else Color.Red
@@ -53,7 +55,7 @@ fun ProductGroupCard(
         productGroupEntity.productCategoryImage
     else
         productGroupEntity.productCategoryImageUnselect
-    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
 
         Row(
             modifier = Modifier
@@ -62,7 +64,7 @@ fun ProductGroupCard(
                 .height(50.dp)
                 .clickable {
                     onClick(productGroupEntity)
-                    viewModel.getProduct(productGroupEntity)
+                    viewModel.getProduct(productGroupEntity.productCategoryCode)
                 }
         ) {
             Surface(

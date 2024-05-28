@@ -50,9 +50,12 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import coil.Coil
 import coil.compose.AsyncImage
+import coil.request.CachePolicy
+import coil.request.ImageRequest
 import com.msa.eshop.R
 import com.msa.eshop.data.local.entity.ProductModelEntity
 import com.msa.eshop.ui.component.bottomSheetC.BottomSheetExample
+import com.msa.eshop.ui.component.imageloader.CachedImage
 import com.msa.eshop.ui.theme.*
 import com.msa.eshop.utils.Currency
 import timber.log.Timber
@@ -121,21 +124,21 @@ fun ProductCard(
                             .aspectRatio(1f)
                             .size(120.dp) // تعیین ارتفاع و عرض ثابت
                     ) {
+                        val context = LocalContext.current
 
                         AsyncImage(
                             model = product.productImage,
                             contentDescription = "productImage",
                             modifier = Modifier.fillMaxSize(),
                             error = painterResource(id = R.drawable.not_load_image),
-                            onError = {
-                                Timber.tag("Image Loading Error")
-                                    .e(
-                                        "Failed to load image: " + it +
-                                                "productImage=  ${product.productImage}"
-                                    )
-                            }
                         )
-
+//                        product.productImage?.let {
+//                            CachedImage(
+//                                imageUrl= it,
+//                                contentDescription ="productImage",
+//                                modifier = Modifier.fillMaxSize(),
+//                            )
+//                        }
 
                         Box(
                             modifier = Modifier
@@ -227,7 +230,7 @@ fun ProductCard(
                             },
                             modifier = Modifier
                                 .fillMaxWidth(),
-                            colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
+                            colors = ButtonDefaults.buttonColors(containerColor = RedMain),
                             shape = RoundedCornerShape(6.dp)
                         ) {
                             Icon(
