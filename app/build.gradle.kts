@@ -130,4 +130,6 @@ dependencies {
     implementation (dependency.lottie.compose)
     implementation ("com.google.accompanist:accompanist-swiperefresh:0.35.1-alpha")
 
+    //biometric
+    implementation("androidx.biometric:biometric:1.2.0-alpha05")
 }

@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.fragment.app.FragmentActivity
 import com.msa.eshop.ui.navigation.NavManager
 import com.msa.eshop.ui.navigation.SetupNavigator
 import com.msa.eshop.ui.theme.EShopTheme
@@ -27,7 +28,7 @@ import javax.inject.Inject
 
 @ExperimentalFoundationApi
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : FragmentActivity() {
     @Inject
     lateinit var navManager: NavManager
     override fun onCreate(savedInstanceState: Bundle?) {

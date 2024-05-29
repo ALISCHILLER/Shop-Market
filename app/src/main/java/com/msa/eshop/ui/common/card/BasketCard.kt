@@ -29,9 +29,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -42,9 +44,11 @@ import com.msa.eshop.data.local.entity.OrderEntity
 import com.msa.eshop.data.local.entity.ProductModelEntity
 import com.msa.eshop.ui.component.dialog.AlertDialogExample
 import com.msa.eshop.ui.component.weightC.CounterButton
+import com.msa.eshop.ui.component.weightC.CounterButtonNew
 import com.msa.eshop.ui.screen.basket.BasketViewModel
 import com.msa.eshop.ui.theme.PlatinumSilver
 import com.msa.eshop.ui.theme.Typography
+import com.msa.eshop.ui.theme.barcolorlight2
 import com.msa.eshop.utils.Currency
 
 @Composable
@@ -54,23 +58,12 @@ fun BasketCard(
     onClick: (Boolean) -> Unit,
     viewModel: BasketViewModel = hiltViewModel()
 ) {
+    var value1 by remember { mutableStateOf(orderEntity.numberOrder1) }
+    var value2 by remember { mutableStateOf(orderEntity.numberOrder2) }
 
-    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = Color.White
-            )
-        ) {
+    var chack by remember { mutableStateOf(false) }
 
-            var value1 by remember { mutableStateOf(orderEntity.numberOrder1) }
-            var value2 by remember { mutableStateOf(orderEntity.numberOrder2) }
-
-            var chack by remember { mutableStateOf(false) }
-
-            // تابع برای محاسبه قیمت به‌روز شده
+    // تابع برای محاسبه قیمت به‌روز شده
             val totalPrice by remember(value1, value2, orderEntity) {
                 mutableStateOf(
                     viewModel.calculateTotalPriceAndHandleOrder(
@@ -94,18 +87,30 @@ fun BasketCard(
                     },
                     onDismissRequest = { chack = false }
                 )
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .shadow(10.dp, RoundedCornerShape(18.dp))
+                .padding(horizontal = 10.dp, vertical = 5.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = Color.White
+            )
+        ) {
+
+
             Column(
                 modifier = modifier
                     .background(Color.White)
-                    .padding(17.dp)
+                    .padding(5.dp)
             ) {
                 Row(
                     modifier = modifier
-                        .fillMaxWidth()
-                        .padding(top = 5.dp),
+                        .padding(top = 5.dp)
+                        .fillMaxWidth(),
 
                     horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
+                ) {
                     Row {
 
 
@@ -133,13 +138,14 @@ fun BasketCard(
                             orderEntity.productName?.let {
                                 Text(
                                     modifier = Modifier
-                                        .padding(8.dp),
-                                    text = it
+                                        .padding(3.dp),
+                                    text = it,
+                                    style = Typography.labelSmall
                                 )
                             }
                             Row(
                                 modifier = Modifier
-                                    .padding(8.dp),
+                                    .padding(3.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Spacer(modifier = Modifier.padding(5.dp))
@@ -151,11 +157,13 @@ fun BasketCard(
                                 Text(
                                     text = Currency(orderEntity.price).toFormattedString(),
                                     style = Typography.titleSmall,
+                                    color = barcolorlight2
                                 )
                                 Spacer(modifier = Modifier.padding(5.dp))
                                 Text(
                                     text = "ریال ",
-                                    style = Typography.titleSmall
+                                    style = Typography.titleSmall,
+                                    color = barcolorlight2
                                 )
                             }
 
@@ -169,7 +177,7 @@ fun BasketCard(
                             contentDescription = "",
                             modifier = Modifier
                                 .padding(5.dp)
-                                .size(70.dp, 70.dp)
+                                .size(50.dp, 50.dp)
                                 .clickable {
                                     chack = true
                                 }
@@ -180,67 +188,89 @@ fun BasketCard(
                 }
                 Row(
                     modifier = Modifier
-                        .padding(7.dp)
-                        .fillMaxWidth(),
+                        .align(alignment = Alignment.CenterHorizontally),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceAround
+                    horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     orderEntity.fullNameKala1?.let {
-                        Text(
-                            text = "$it :",
-                            style = Typography.titleSmall
-                        )
+                        Box(
+                            modifier = Modifier
+                                .weight(1f),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "$it :",
+                                style = Typography.titleSmall
+                            )
+                        }
                     }
-                    Spacer(modifier = modifier.width(10.dp))
                     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                        CounterButton(
-                            value = value1.toString(),
-                            onValueIncreaseClick = {
-                                value1 += 1
-                            },
-                            onValueDecreaseClick = {
-                                value1 = maxOf(value1 - 1, 0)
-                            },
-                            onValueClearClick = {
-                                value1 = 0
-                            })
+                        Box(
+                            modifier = Modifier.weight(1f),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CounterButtonNew(
+                                value = value1.toString(),
+                                onValueIncreaseClick = {
+                                    // value1 += 1
+                                },
+                                onValueDecreaseClick = {
+                                    // value1 = maxOf(value1 - 1, 0)
+                                },
+                                onValueClearClick = {
+                                    value1 = 0
+                                },
+                                onValue = { value1 = it.toInt() }
+                            )
+                        }
                     }
                 }
 
                 Row(
                     modifier = Modifier
-                        .padding(7.dp)
-                        .fillMaxWidth(),
+                        .align(alignment = Alignment.CenterHorizontally),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceAround
+                    horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     orderEntity.fullNameKala2?.let {
-                        Text(
-                            text = "$it :",
-                            style = Typography.titleSmall
-                        )
+                        Box(
+                            modifier = Modifier
+                                .weight(1f),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "$it :",
+                                style = Typography.titleSmall,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
                     }
-                    Spacer(modifier = modifier.width(10.dp))
                     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                        CounterButton(
-                            value = value2.toString(),
-                            onValueIncreaseClick = {
-                                value2 += 1
-                            },
-                            onValueDecreaseClick = {
-                                value2 = maxOf(value2 - 1, 0)
-                            },
-                            onValueClearClick = {
-                                value2 = 0
-                            })
+                        Box(
+                            modifier = Modifier.weight(1f),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CounterButtonNew(
+                                value = value2.toString(),
+                                onValueIncreaseClick = {
+                                    // value2 += 1
+                                },
+                                onValueDecreaseClick = {
+                                     value2 = maxOf(value2 - 1, 0)
+                                },
+                                onValueClearClick = {
+                                     value2 = 0
+                                },
+                                onValue = { value2 = it.toInt() }
+                            )
+                        }
                     }
                 }
-                HorizontalDivider(color = Color.Gray, thickness = 2.dp)
                 Row(
                     modifier = Modifier
-                        .padding(7.dp)
+                        .padding(horizontal = 3.dp, vertical = 4.dp)
                         .fillMaxWidth(),
-
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
@@ -250,7 +280,7 @@ fun BasketCard(
                     )
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(
-                        text = Currency(totalPrice.toString()).toFormattedString(),
+                        text = Currency(totalPrice).toFormattedString(),
                         style = Typography.titleSmall,
                     )
                     Spacer(modifier = Modifier.width(5.dp))
@@ -268,24 +298,33 @@ fun BasketCard(
 @Composable
 @Preview
 fun BasketCardPreview() {
-//    BasketCard(
-//        product = ProductModelEntity(
-//            "11",
-//            convertFactor1 = 1,
-//            convertFactor2 = 12,
-//            fullNameKala1 = "biscuit (1)",
-//            fullNameKala2 = "biscuit (2)",
-//            productCode = 659985,
-//            productGroupCode = 54544,
-//            productName = "biscuit",
-//            unit1 = "shelf",
-//            unit2 = "Carton",
-//            unitid1 = "54654",
-//            unitid2 = "4565",
-//            salePrice = 98563,
-//            productImage = ""
-//        ),
-//        orderEntity = null,
-//        onDismissRequest = {}
-//    )
+    Column(
+        modifier = Modifier
+            .background(Color.White)
+    ) {
+        BasketCard(
+            orderEntity = OrderEntity(
+                "11",
+                convertFactor1 = 1,
+                convertFactor2 = 12,
+                fullNameKala1 = "عدد(1)",
+                fullNameKala2 = "کارتن(30)",
+                productCode = 659985,
+                productGroupCode = 54544,
+                productName = "biscuit",
+                unit1 = "shelf",
+                unit2 = "Carton",
+                unitid1 = "54654",
+                unitid2 = "4565",
+                price = 98563,
+                productImage = "",
+                numberOrder1 = 44,
+                unitOrder = "",
+                numberOrder2 = 55,
+                numberOrder = 632552
+            ),
+            onClick = {}
+        )
+    }
+
 }

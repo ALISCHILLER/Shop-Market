@@ -25,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,6 +44,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
@@ -52,6 +54,7 @@ import androidx.compose.ui.tooling.preview.PreviewFontScale
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.msa.componentcompose.ui.component.lottiefile.AnimatedPreloader
 import com.msa.componentcompose.ui.component.lottiefile.LoadingAnimate
@@ -72,11 +75,14 @@ import com.msa.eshop.ui.theme.RedMain
 import com.msa.eshop.ui.theme.RoyalPurple
 import com.msa.eshop.ui.theme.RoyalRed
 import com.msa.eshop.ui.theme.Typography
+import com.msa.eshop.utils.BiometricTools
+import com.msa.eshop.utils.Convert_Number
 
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = hiltViewModel()
+
 ) {
     val savedUsername = viewModel.getSavedUsername()
     val savedPassword = viewModel.getSavedPassword()
@@ -87,6 +93,10 @@ fun LoginScreen(
         mutableStateOf(true)
     }
 
+    val fragmentActivity = LocalContext.current as FragmentActivity
+    LaunchedEffect(Unit){
+        viewModel.biometricDialog(fragmentActivity)
+    }
 
     state.error?.let {
         CustomDialog(
@@ -105,6 +115,7 @@ fun LoginScreen(
     }
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         val stroke1Dp = with(LocalDensity.current) { 1.dp.toPx() }
+
         Box(
             modifier = modifier
                 .fillMaxSize()
@@ -158,7 +169,7 @@ fun LoginScreen(
                         onValueChange = {
                             username = it
                         },
-                        label = "کد مشتزی",
+                        label = "کد مشتری",
                         icon = Icons.Default.Person,
                         corner = RoundedCornerShape(10.dp)
                     )
@@ -180,7 +191,11 @@ fun LoginScreen(
                     )
                     Button(
                         onClick = {
-                            viewModel.tokenRequest(username, password)
+                            val converter = Convert_Number()
+                            viewModel.tokenRequest(
+                                converter.PersianToEnglish(username),
+                                converter.PersianToEnglish(password)
+                            )
                         },
                         modifier = Modifier
                             .padding(5.dp)

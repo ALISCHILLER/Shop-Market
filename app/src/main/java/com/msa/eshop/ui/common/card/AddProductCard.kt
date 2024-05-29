@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -38,6 +39,7 @@ import coil.compose.AsyncImage
 import com.msa.eshop.R
 import com.msa.eshop.data.local.entity.ProductModelEntity
 import com.msa.eshop.ui.component.weightC.CounterButton
+import com.msa.eshop.ui.component.weightC.CounterButtonNew
 import com.msa.eshop.ui.screen.home.HomeViewModel
 import com.msa.eshop.ui.theme.PlatinumSilver
 import com.msa.eshop.ui.theme.Typography
@@ -51,7 +53,7 @@ fun AddProduct(
     onDismissRequest: () -> Unit,
 ) {
     val viewModel: HomeViewModel = hiltViewModel()
-    LaunchedEffect(Unit){
+    LaunchedEffect(Unit) {
         viewModel.getAllOrder()
     }
 
@@ -114,17 +116,17 @@ fun AddProduct(
                         Spacer(modifier = Modifier.padding(5.dp))
                         Text(
                             text = "فی:",
-                            style = Typography.titleLarge
+                            style = Typography.titleSmall
                         )
                         Spacer(modifier = Modifier.padding(5.dp))
                         Text(
                             text = Currency(product.price).toFormattedString(),
-                            style = Typography.labelLarge,
+                            style = Typography.titleLarge,
                         )
                         Spacer(modifier = Modifier.padding(5.dp))
                         Text(
                             text = "ریال ",
-                            style = Typography.titleLarge
+                            style = Typography.titleSmall
                         )
                     }
 
@@ -144,17 +146,19 @@ fun AddProduct(
                 }
 
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                    CounterButton(
+                    CounterButtonNew(
                         value = value1.toString(),
                         onValueIncreaseClick = {
-                            value1 += 1
+                           // value1 += 1
                         },
                         onValueDecreaseClick = {
-                            value1 = maxOf(value1 - 1, 0)
+                           // value1 = maxOf(value1 - 1, 0)
                         },
                         onValueClearClick = {
                             value1 = 0
-                        })
+                        },
+                        onValue = {value1 =it.toInt()}
+                    )
                 }
             }
 
@@ -172,19 +176,22 @@ fun AddProduct(
                 }
 
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                    CounterButton(
+                    CounterButtonNew(
                         value = value2.toString(),
                         onValueIncreaseClick = {
-                            value2 += 1
+                           // value2 += 1
                         },
                         onValueDecreaseClick = {
-                            value2 = maxOf(value2 - 1, 0)
+                           // value2 = maxOf(value2 - 1, 0)
                         },
                         onValueClearClick = {
-                            value2 = 0
-                        })
+                           // value2 = 0
+                        },
+                        onValue = {value2 = it.toInt()}
+                    )
                 }
             }
+            HorizontalDivider(color = Color.Gray, thickness = 2.dp)
             Row(
                 modifier = Modifier
                     .padding(7.dp)
@@ -195,23 +202,23 @@ fun AddProduct(
 
                 Text(
                     text = "مبلغ ناخالص:",
-                    style = Typography.titleLarge,
+                    style = Typography.titleSmall,
                 )
                 Spacer(modifier = Modifier.width(5.dp))
                 Text(
                     text = Currency(totalPrice.toString()).toFormattedString(),
-                    style = Typography.labelLarge,
+                    style = Typography.titleLarge,
                 )
                 Spacer(modifier = Modifier.width(5.dp))
                 Text(
                     text = "ریال ",
-                    style = Typography.titleLarge
+                    style = Typography.titleSmall
                 )
             }
 
             Button(
                 onClick = {
-                          onDismissRequest()
+                    onDismissRequest()
                 },
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -246,7 +253,7 @@ fun AddProductPreview() {
             unitid1 = "54654",
             unitid2 = "4565",
             price = 98563,
-             isDiscounts = true,
+            isDiscounts = true,
             productImage = ""
         ),
         onDismissRequest = {}

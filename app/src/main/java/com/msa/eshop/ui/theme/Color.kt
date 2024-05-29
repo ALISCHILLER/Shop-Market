@@ -19,6 +19,7 @@ val barcolor = Color(0xffbfbfc0)
 val barcolorDark = Color(0xFF2E2E2E)
 val barcolorlow = Color(0xFF525252)
 val barcolorlight = Color(0xFFEEEEEE)
+val barcolorlight2 = Color(0xFF8D8D8D)
 val lightcoral = Color(0xfff3b8bb)
 
 val LightPurple = Color(0xFFBCA1E7)

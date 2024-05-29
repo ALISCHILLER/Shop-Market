@@ -5,11 +5,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.msa.eshop.R
 
 // Set of Material typography styles to start with
-val iranianSansFont = Font(R.font.mitra_light)
+val iranianSansFont = Font(R.font.iransans_medium)
 
 //val GilroyFontFamily = FontFamily(
 //    Font(R.font.gilroy_black, FontWeight.Black),
@@ -20,7 +21,7 @@ val iranianSansFont = Font(R.font.mitra_light)
 //    Font(R.font.gilroy_regular, FontWeight.W400),
 //)
 val EShopFontFamily = FontFamily(
-    Font(R.font.mitra_light, FontWeight.Black)
+    Font(R.font.iransans_medium, FontWeight.Black)
 )
 
 val Typography = Typography(
@@ -34,7 +35,7 @@ val Typography = Typography(
     titleSmall = TextStyle(
         fontFamily =  FontFamily(iranianSansFont),
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
+        fontSize = 14.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.sp
 
@@ -42,7 +43,7 @@ val Typography = Typography(
     titleLarge = TextStyle(
         fontFamily =  FontFamily(iranianSansFont),
         fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
+        fontSize = 19.sp,
         lineHeight = 28.sp,
         letterSpacing = 0.sp
     ),
@@ -56,8 +57,8 @@ val Typography = Typography(
     labelSmall = TextStyle(
         fontFamily =  FontFamily(iranianSansFont),
         fontWeight = FontWeight.Medium,
-        fontSize = 14.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
+        fontSize = 12.sp,
+        lineHeight = 19.sp,
+        letterSpacing = 0.5.sp,
     ),
 )

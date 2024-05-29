@@ -4,6 +4,7 @@ package com.msa.eshop.ui.common.card
 
 
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -145,7 +146,6 @@ fun ProductCard(
                                 .align(Alignment.TopEnd)
                                 .padding(4.dp)
                                 .alpha(if (product.isDiscounts) 100f else 0f)
-                                .background(Color.Red, shape = RoundedCornerShape(12.dp))
                                 .clickable {
                                     if (product.isDiscounts)
                                         showBottomSheetDiscounts = true
@@ -158,19 +158,14 @@ fun ProductCard(
                                     .padding(4.dp),
                                 horizontalArrangement = Arrangement.SpaceEvenly
                             ) {
-//                                Icon(
-//                                    modifier = modifier
-//                                        .size(50.dp),
-//                                    imageVector = Icons.Outlined.AttachMoney,
-//                                    contentDescription = "",
-//                                    tint = Color.White
-//                                )
-                                Text(
-                                    text = "جزئیات تخفیف",
-                                    style = Typography.labelSmall,
-                                    color = Color.White
-                                )
+                                Image( modifier = modifier
+                                    .size(40.dp),
+                                    painter = painterResource(id = R.drawable.ic_discount),
+                                    contentDescription = "icon discount",
+                                    )
+
                             }
+
 
 
                         }
@@ -205,7 +200,7 @@ fun ProductCard(
                                     text = Currency(product.price).toFormattedString(),
                                     style = Typography.labelSmall,
                                 )
-                                Spacer(modifier = Modifier.padding(5.dp))
+                                Spacer(modifier = Modifier.padding(2.dp))
                                 Text(
                                     text = "ریال ",
                                     style = Typography.labelSmall

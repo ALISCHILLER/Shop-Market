@@ -1,6 +1,7 @@
 @file:OptIn(
     ExperimentalPagerApi::class, ExperimentalPagerApi::class, ExperimentalPagerApi::class,
-    ExperimentalFoundationApi::class, ExperimentalFoundationApi::class
+    ExperimentalFoundationApi::class, ExperimentalFoundationApi::class,
+    ExperimentalFoundationApi::class
 )
 
 package com.msa.eshop.ui.screen.home

@@ -7,6 +7,7 @@ import android.provider.Settings.Global.putString
 import android.system.Os.remove
 import android.util.Log
 import androidx.core.content.edit
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavOptions
@@ -18,7 +19,9 @@ import com.msa.eshop.data.request.TokenRequest
 import com.msa.eshop.ui.navigation.NavInfo
 import com.msa.eshop.ui.navigation.NavManager
 import com.msa.eshop.ui.navigation.Route
+import com.msa.eshop.utils.BiometricTools
 import com.msa.eshop.utils.CompanionValues
+import com.msa.eshop.utils.Convert_Number
 import com.msa.eshop.utils.makeRequest
 
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -38,7 +41,8 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val navManager: NavManager,
-    private val loginRepository: LoginRepository
+    private val loginRepository: LoginRepository,
+    private val biometricTools: BiometricTools
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<GeneralStateModel> = MutableStateFlow(GeneralStateModel())
@@ -52,9 +56,12 @@ class LoginViewModel @Inject constructor(
 
 
     fun tokenRequest(
-        username: String,
-        password: String
+      username: String,
+       password: String
     ) {
+        if (username.isNullOrEmpty() || password.isNullOrEmpty())
+            updateStateError("لطفا نام کاربری و رمز عبور را وارد کنید")
+        else
         makeRequest(
             scope = viewModelScope,
             request = {
@@ -131,6 +138,17 @@ class LoginViewModel @Inject constructor(
                 ).build()
             )
         )
+    }
+
+    fun biometricDialog(fragmentActivity: FragmentActivity){
+        viewModelScope.launch {
+            val message = biometricTools.showBiometricDialog(
+                fragmentActivity,
+                {},
+                {},
+                {}
+            )
+        }
     }
 
 }

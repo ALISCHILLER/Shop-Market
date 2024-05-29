@@ -24,6 +24,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
@@ -39,6 +40,8 @@ import com.msa.eshop.data.Model.SimulateResultModel
 import com.msa.eshop.ui.screen.simulate.SimulateViewModel
 import com.msa.eshop.ui.theme.PlatinumSilver
 import com.msa.eshop.ui.theme.Typography
+import com.msa.eshop.ui.theme.*
+import com.msa.eshop.ui.theme.*
 import com.msa.eshop.utils.Currency
 
 @Preview
@@ -83,6 +86,7 @@ fun SimulateCard(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
+                .shadow(10.dp, RoundedCornerShape(18.dp))
                 .padding(8.dp),
             colors = CardDefaults.cardColors(
                 containerColor = Color.White
@@ -97,15 +101,14 @@ fun SimulateCard(
                 Row(
                     modifier = modifier
                         .fillMaxWidth()
-                        .padding(top = 5.dp),
-
+                        .padding(top = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
                     Box(
                         modifier = Modifier
                             .padding(5.dp)
-                            .size(90.dp, 65.dp)
+                            .size(90.dp, 60.dp)
                             .background(
                                 color = PlatinumSilver, shape = RoundedCornerShape(18.dp)
                             )
@@ -139,7 +142,7 @@ fun SimulateCard(
 
                         Row(
                             modifier = Modifier
-                                .padding(8.dp),
+                                .padding(2.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Spacer(modifier = Modifier.padding(5.dp))
@@ -147,15 +150,17 @@ fun SimulateCard(
                                 text = "فی:",
                                 style = Typography.titleSmall
                             )
-                            Spacer(modifier = Modifier.padding(5.dp))
+                            Spacer(modifier = Modifier.padding(2.dp))
                             Text(
                                 text = Currency(simulate.price).toFormattedString(),
                                 style = Typography.titleSmall,
+                                color = barcolorlight2
                             )
-                            Spacer(modifier = Modifier.padding(5.dp))
+                            Spacer(modifier = Modifier.padding(2.dp))
                             Text(
                                 text = "ریال ",
-                                style = Typography.titleSmall
+                                style = Typography.titleSmall,
+                                color = barcolorlight2
                             )
                         }
 
@@ -169,7 +174,7 @@ fun SimulateCard(
 
 
                     RowText(
-                        title = "کدکالا:",
+                        title = "کدکالا",
                         message = simulate.productCode.toString()
                     )
                     RowText(
@@ -186,7 +191,7 @@ fun SimulateCard(
                         title = "مالیات",
                         message = Currency(simulate.priceByDiscountTax).toFormattedString()
                     )
-                    HorizontalDivider(color = Color.Gray, thickness = 2.dp)
+                    HorizontalDivider( color = barcolorlight, thickness = 2.dp)
 
                     RowText(
                         title = "مبلغ قابل پرداخت",
@@ -206,7 +211,11 @@ fun RowText(
     title: String,
     message: String
 ) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        modifier = modifier.padding(vertical = 3.dp),
+        verticalAlignment = Alignment.CenterVertically
+    )
+    {
         Text(
             text = "${title} :",
             style = Typography.titleSmall
@@ -214,7 +223,8 @@ fun RowText(
         Spacer(modifier = modifier.width(8.dp))
         Text(
             text = message,
-            style = Typography.titleSmall
+            style = Typography.titleSmall,
+            color = barcolorlight2
         )
     }
 }
