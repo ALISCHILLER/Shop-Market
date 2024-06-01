@@ -24,11 +24,11 @@ class BiometricTools @Inject constructor(
             }
 
             BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> {
-                context.getString(R.string.login)
+                context.getString(R.string.ERROR_NO_HARDWARE)
             }
 
             BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
-                context.getString(R.string.login)
+                context.getString(R.string.ERROR_NONE_ENROLLED)
             }
 
             else -> {

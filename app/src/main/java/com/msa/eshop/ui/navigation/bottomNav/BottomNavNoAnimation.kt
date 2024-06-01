@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.msa.eshop.R
 import com.msa.eshop.ui.navigation.Route
+import com.msa.eshop.ui.theme.Typography
 import com.msa.eshop.ui.theme.barcolor
 import com.msa.eshop.ui.theme.barcolorDark
 
@@ -209,7 +210,8 @@ private fun BottomNavItem(
                     text = item.title,
                     modifier = Modifier.padding(start = 2.dp, end = 2.dp),
                     maxLines = 1,
-                    color = Color.White
+                    color = Color.White,
+                    style = Typography.labelSmall
                 )
             }
         }

@@ -3,6 +3,9 @@ package com.msa.eshop.data.remote.api
 
 import com.msa.eshop.data.Model.BannerResponse
 import com.msa.eshop.data.Model.DiscountResponse
+import com.msa.eshop.data.Model.InsertCartModelRequest
+import com.msa.eshop.data.Model.InsertCartModelResponse
+import com.msa.eshop.data.Model.OrderAddressResultModel
 import com.msa.eshop.data.Model.ProductGroupResponse
 import com.msa.eshop.data.Model.ProductResponse
 import com.msa.eshop.data.Model.SimulateResultModel
@@ -50,5 +53,13 @@ interface ApiService {
     suspend fun requestSimulate(
         @Body simulateModelRequest: List<SimulateModelRequest>
     ):Response<SimulateResultModel?>
+
+    @GET("/api/$version/User/GetCustomerAddress")
+    suspend fun GetCustomerAddress():Response<OrderAddressResultModel?>
+
+    @POST("/api/$version/Cart/InsertCart")
+    suspend fun requestInsertCart(
+        @Body InsertCartModelRequest: List<InsertCartModelRequest>
+    ):Response<InsertCartModelResponse?>
 
 }

@@ -26,7 +26,7 @@ sealed class Route(
     //Basket
     object BasketScreen : Route(route = "BasketScreen")
     object SimulateScreen : Route(route = "simulateScreen")
-    object OrderAddressRegistrationScreen : Route(route = "orderAddressRegistrationScreen")
+    object OrderAddressScreen : Route(route = "OrderAddressScreen")
 
     //Profile Customer
     object ProfileCustomerScreen : Route(route = "profileCustomerScreen")

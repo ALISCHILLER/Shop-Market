@@ -174,12 +174,8 @@ fun SimulateCard(
 
 
                     RowText(
-                        title = "کدکالا",
-                        message = simulate.productCode.toString()
-                    )
-                    RowText(
                         title = "تعداد سفارش",
-                        message = "123 کارتن و 7 عدد"
+                        message = "${simulate.quantity} ${simulate.fullNameKala1}"
                     )
 
                     RowText(

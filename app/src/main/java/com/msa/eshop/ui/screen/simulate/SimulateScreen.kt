@@ -42,7 +42,7 @@ import com.msa.eshop.utils.Currency
 @Composable
 fun SimulateScreen(
     modifier: Modifier = Modifier,
-    viewModel :SimulateViewModel = hiltViewModel()
+    viewModel: SimulateViewModel = hiltViewModel()
 ) {
 
     val simulate by viewModel.simulat.collectAsState()
@@ -67,7 +67,7 @@ fun SimulateScreen(
                         .fillMaxWidth()
                         .weight(1.0f), // پر کردن عرض موجود در طول
                 ) {
-                    items(simulate){
+                    items(simulate) {
                         SimulateCard(simulate = it)
                     }
                 }
@@ -88,6 +88,7 @@ fun SimulateScreen(
                     ) {
                         Button(
                             onClick = {
+                                viewModel.navigateToOrderAddress()
                             },
                             modifier = Modifier
                                 .padding(5.dp),
@@ -95,7 +96,7 @@ fun SimulateScreen(
                             shape = RoundedCornerShape(6.dp)
                         ) {
                             Text(
-                                stringResource(id = R.string.pre_invoice_registration),
+                                stringResource(id = R.string.choess_address),
                                 style = Typography.titleSmall,
                             )
                         }

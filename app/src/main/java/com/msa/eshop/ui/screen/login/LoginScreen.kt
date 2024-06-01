@@ -2,6 +2,7 @@ package com.msa.eshop.ui.screen.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -88,30 +89,20 @@ fun LoginScreen(
     val savedPassword = viewModel.getSavedPassword()
     var username by remember { mutableStateOf(savedUsername) }
     var password by remember { mutableStateOf(savedPassword) }
+
+
     val state by viewModel.state.collectAsState()
+    val biometric by viewModel.biometric.collectAsState()
+
+
     var showDialog by remember {
         mutableStateOf(true)
     }
-
     val fragmentActivity = LocalContext.current as FragmentActivity
-    LaunchedEffect(Unit){
-        viewModel.biometricDialog(fragmentActivity)
-    }
+
 
     state.error?.let {
-        CustomDialog(
-            showDialog = true,
-            onDismissRequest = {
-                viewModel.clearState()
-            }
-        ) {
-            ErrorWarning(
-                onDismissRequest = { viewModel.clearState() },
-                title = "خطا",
-                message = it
-            )
-            ErrorDialog(it, { viewModel.clearState() }, false)
-        }
+        ErrorDialog(it, {viewModel.clearState()}, false)
     }
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         val stroke1Dp = with(LocalDensity.current) { 1.dp.toPx() }
@@ -208,6 +199,16 @@ fun LoginScreen(
                             style = Typography.titleSmall,
                         )
                     }
+
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_fingerprint),
+                        contentDescription = "finger icon",
+                        modifier = modifier
+                            .clickable {
+                                viewModel.biometricDialog(fragmentActivity)
+                            }
+                        )
+
                 }
 
 

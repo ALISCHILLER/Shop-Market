@@ -49,6 +49,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.msa.eshop.ui.theme.RedMain
+import com.msa.eshop.ui.theme.Typography
 
 @Composable
 fun ErrorDialog(message: String, onDismiss: (Boolean) -> Unit, hide:Boolean) {
@@ -88,7 +90,7 @@ fun ErrorDialog(message: String, onDismiss: (Boolean) -> Unit, hide:Boolean) {
                         )
                         Text(
                             text = "خطا", // Error text
-                            color = Color.Red,
+                            color = RedMain,
                             fontSize = 20.sp,
                             fontFamily = FontFamily.Cursive,
                             fontStyle = FontStyle.Italic
@@ -101,11 +103,15 @@ fun ErrorDialog(message: String, onDismiss: (Boolean) -> Unit, hide:Boolean) {
                         )
                         OutlinedButton(
                             onClick = { onDismiss(true) },
-                            border = BorderStroke(1.dp, Color.Red),
+                            border = BorderStroke(1.dp, RedMain),
                             shape = RoundedCornerShape(50),
                             colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.Red)
                         ) {
-                            Text(text = "بستن") // Close button text
+                            Text(
+                                text = "بستن",
+                                color = Color.White,
+                                style = Typography.titleSmall
+                            ) // Close button text
                         }
                     }
                 }

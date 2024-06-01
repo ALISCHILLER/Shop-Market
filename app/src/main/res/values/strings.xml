@@ -2,11 +2,16 @@
     <string name="app_name">EShop</string>
     <string name="horiz_pager_with_transition_title">Horizontal Pager: Transition</string>
     <string name="login">ورود</string>
+    <string name="ERROR_NO_HARDWARE">دستگاه شما فاقد اثر انگشت است</string>
+    <string name="ERROR_NONE_ENROLLED">اثر انگشت شناسائی نشد</string>
     <string name="image_product">Image Product</string>
     <string name="add_to_cart">افزودن به سبد خرید</string>
     <string name="save_Order">ثبت سفارش</string>
-    <string name="pre_invoice_registration">ثبت پیش فاکتور</string>
+    <string name="pre_invoice_registration">نمایش پیش فاکتور</string>
+    <string name="choess_address">انتخاب آدرس</string>
+    <string name="the_payment">پرداخت</string>
+    <string name="new_address"> آدرس جدید</string>
     <string name="username_and_password_are_required">نام کاربری و رمز عبور الزامی است</string>
-    <string name="discounts_list_data">خرید %s تا %s عدد : %s  تخفیف</string>
+    <string name="discounts_list_data">خرید %s تا %s عدد :</string>
     <string name="title_search">جست و جوی محصول موردنظر</string>
 </resources>

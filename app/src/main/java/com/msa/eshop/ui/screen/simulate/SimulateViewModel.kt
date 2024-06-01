@@ -2,6 +2,7 @@ package com.msa.eshop.ui.screen.simulate
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavOptions
 import com.msa.eshop.data.Model.GeneralStateModel
 import com.msa.eshop.data.Model.SimulateModel
 import com.msa.eshop.data.Model.SimulateResultModel
@@ -10,7 +11,9 @@ import com.msa.eshop.data.local.entity.ProductModelEntity
 import com.msa.eshop.data.repository.HomeRepository
 import com.msa.eshop.data.repository.SimulateRepository
 import com.msa.eshop.data.request.SimulateModelRequest
+import com.msa.eshop.ui.navigation.NavInfo
 import com.msa.eshop.ui.navigation.NavManager
+import com.msa.eshop.ui.navigation.Route
 import com.msa.eshop.utils.makeRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -81,6 +84,18 @@ class SimulateViewModel @Inject constructor(
         return SimulateModelRequest(
             productCode = this.productCode,
             quantity = this.numberOrder
+        )
+    }
+
+    fun navigateToOrderAddress() {
+        navManager.navigate(
+            NavInfo(
+                id = Route.OrderAddressScreen.route,
+                navOption = NavOptions.Builder().setPopUpTo(
+                    Route.SimulateScreen.route,
+                    inclusive = true
+                ).build()
+            )
         )
     }
 }

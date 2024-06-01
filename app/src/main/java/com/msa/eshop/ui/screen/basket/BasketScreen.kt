@@ -58,7 +58,7 @@ fun BasketScreen(
     }
     Scaffold(
         modifier = Modifier
-            .background(color = PlatinumSilver),
+            .background(color = Color.White),
         topBar = {
             TopBarDetails("لیست خرید های شما")
         },

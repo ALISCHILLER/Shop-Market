@@ -35,7 +35,7 @@ fun TopBarDetails(
             modifier = Modifier
                 .padding(5.dp)
                 .fillMaxWidth()
-                .background(color = PlatinumSilver)
+                .background(color = Color.White)
                 .padding(8.dp)
             ,
             verticalAlignment = Alignment.CenterVertically,

@@ -48,6 +48,9 @@ class LoginViewModel @Inject constructor(
     private val _state: MutableStateFlow<GeneralStateModel> = MutableStateFlow(GeneralStateModel())
     val state: StateFlow<GeneralStateModel> = _state
 
+    private val _biometric: MutableStateFlow<String> = MutableStateFlow("")
+    val biometric: StateFlow<String> get() = _biometric
+
     @Inject
     lateinit var sharedPreferences: SharedPreferences
     fun clearState() {
@@ -144,9 +147,9 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             val message = biometricTools.showBiometricDialog(
                 fragmentActivity,
-                {},
-                {},
-                {}
+                onAuthenticationFailed = {},
+                onAuthenticationError = {},
+               onAuthenticationSucceeded =  {}
             )
         }
     }

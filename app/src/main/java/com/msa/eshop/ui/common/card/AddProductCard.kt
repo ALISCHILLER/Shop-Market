@@ -43,6 +43,7 @@ import com.msa.eshop.ui.component.weightC.CounterButtonNew
 import com.msa.eshop.ui.screen.home.HomeViewModel
 import com.msa.eshop.ui.theme.PlatinumSilver
 import com.msa.eshop.ui.theme.Typography
+import com.msa.eshop.ui.theme.barcolorlight2
 import com.msa.eshop.utils.Currency
 
 
@@ -121,12 +122,14 @@ fun AddProduct(
                         Spacer(modifier = Modifier.padding(5.dp))
                         Text(
                             text = Currency(product.price).toFormattedString(),
-                            style = Typography.titleLarge,
+                            style = Typography.titleSmall,
+                            color = barcolorlight2
                         )
                         Spacer(modifier = Modifier.padding(5.dp))
                         Text(
                             text = "ریال ",
-                            style = Typography.titleSmall
+                            style = Typography.titleSmall,
+                            color = barcolorlight2
                         )
                     }
 

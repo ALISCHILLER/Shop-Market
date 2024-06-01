@@ -196,7 +196,6 @@ fun BasketCard(
                         Box(
                             modifier = Modifier
                                 .weight(1f),
-                            contentAlignment = Alignment.Center
                         ) {
                             Text(
                                 text = "$it :",
@@ -207,7 +206,6 @@ fun BasketCard(
                     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                         Box(
                             modifier = Modifier.weight(1f),
-                            contentAlignment = Alignment.Center
                         ) {
                             CounterButtonNew(
                                 value = value1.toString(),
@@ -236,7 +234,6 @@ fun BasketCard(
                         Box(
                             modifier = Modifier
                                 .weight(1f),
-                            contentAlignment = Alignment.Center
                         ) {
                             Text(
                                 text = "$it :",
@@ -249,7 +246,6 @@ fun BasketCard(
                     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                         Box(
                             modifier = Modifier.weight(1f),
-                            contentAlignment = Alignment.Center
                         ) {
                             CounterButtonNew(
                                 value = value2.toString(),
