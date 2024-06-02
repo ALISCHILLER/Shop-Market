@@ -96,7 +96,7 @@ fun BottomNavNoAnimation(
             "گزارش خرید",
             ImageVector.vectorResource(R.drawable.ic_invoice),
             ImageVector.vectorResource(R.drawable.ic_invoice),
-            Route.HomeScreen.route
+            Route.OrderStatusReportScreen.route
         ),
         Screen(
             "سبد",

@@ -1,4 +1,4 @@
-package com.msa.eshop.utils
+package com.msa.eshop.utils.result
 
 
 

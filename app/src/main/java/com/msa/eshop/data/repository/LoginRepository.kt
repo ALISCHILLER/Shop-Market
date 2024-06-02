@@ -8,7 +8,7 @@ import com.msa.eshop.data.local.entity.UserModelEntity
 import com.msa.eshop.data.remote.api.ApiService
 import com.msa.eshop.data.remote.utills.MakeSafeApiCall
 import com.msa.eshop.data.remote.utills.Resource
-import com.msa.eshop.data.request.TokenRequest
+import com.msa.eshop.data.Model.request.TokenRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext

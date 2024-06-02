@@ -1,4 +1,4 @@
-package com.msa.eshop.data.request
+package com.msa.eshop.data.Model.request
 
 data class SimulateModelRequest(
         val productCode:Int,

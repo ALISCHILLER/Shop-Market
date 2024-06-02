@@ -144,7 +144,7 @@ fun AddProduct(
             ) {
                 product.fullNameKala1?.let {
                     Text(
-                        text = "$it :", style = Typography.labelSmall
+                        text = "$it :", style = Typography.titleSmall
                     )
                 }
 
@@ -174,7 +174,7 @@ fun AddProduct(
             ) {
                 product.fullNameKala2?.let {
                     Text(
-                        text = "$it :", style = Typography.labelSmall
+                        text = "$it :", style = Typography.titleSmall
                     )
                 }
 

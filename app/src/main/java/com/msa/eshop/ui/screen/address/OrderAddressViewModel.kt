@@ -3,20 +3,15 @@ package com.msa.eshop.ui.screen.address
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavOptions
-import com.msa.eshop.data.Model.GeneralStateModel
-import com.msa.eshop.data.Model.InsertCartModelRequest
-import com.msa.eshop.data.Model.InsertCartModelResponse
-import com.msa.eshop.data.Model.OrderAddressModel
-import com.msa.eshop.data.Model.OrderAddressResultModel
+import com.msa.eshop.utils.result.GeneralStateModel
+import com.msa.eshop.data.Model.request.InsertCartModelRequest
+import com.msa.eshop.data.Model.response.OrderAddressModel
 import com.msa.eshop.data.local.entity.OrderEntity
-import com.msa.eshop.data.local.entity.ProductModelEntity
-import com.msa.eshop.data.repository.LoginRepository
 import com.msa.eshop.data.repository.OrderAddressRepository
-import com.msa.eshop.data.request.SimulateModelRequest
 import com.msa.eshop.ui.navigation.NavInfo
 import com.msa.eshop.ui.navigation.NavManager
 import com.msa.eshop.ui.navigation.Route
-import com.msa.eshop.utils.makeRequest
+import com.msa.eshop.utils.result.makeRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -64,9 +59,10 @@ class OrderAddressViewModel @Inject constructor(
     }
 
     fun getOrderToInsertCart(address:String){
-        if (address.isNullOrEmpty())
+        if (address.isNullOrEmpty()) {
+            Timber.tag("OrderAddressViewModel").d("لطفا آدرس را انتخاب کنید ")
             updateStateError("لطفا آدرس را انتخاب کنید")
-        else
+        } else
         viewModelScope.launch {
             orderAddressRepository.getAllOrder.collect {
                 val insertCartModelRequest: List<InsertCartModelRequest> = it.map { it.toInsertCartModelRequest(address) }

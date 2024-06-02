@@ -1,6 +1,6 @@
 package com.msa.eshop.data.Model
 
-import com.msa.eshop.data.local.entity.ProductGroupEntity
+import com.msa.eshop.data.Model.response.DiscountResultModel
 
 
 data class DiscountResponse(

@@ -3,9 +3,9 @@ package com.msa.eshop.ui.screen.home
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.msa.eshop.data.Model.BannerModel
-import com.msa.eshop.data.Model.DiscountResultModel
-import com.msa.eshop.data.Model.GeneralStateModel
+import com.msa.eshop.data.Model.response.BannerModel
+import com.msa.eshop.data.Model.response.DiscountResultModel
+import com.msa.eshop.utils.result.GeneralStateModel
 import com.msa.eshop.data.local.entity.OrderEntity
 import com.msa.eshop.data.local.entity.ProductGroupEntity
 import com.msa.eshop.data.local.entity.ProductModelEntity
@@ -15,7 +15,7 @@ import com.msa.eshop.ui.navigation.NavManager
 import com.msa.eshop.utils.calculateSalePrice
 import com.msa.eshop.utils.calculateTotalValue
 import com.msa.eshop.utils.createOrderEntity
-import com.msa.eshop.utils.makeRequest
+import com.msa.eshop.utils.result.makeRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow

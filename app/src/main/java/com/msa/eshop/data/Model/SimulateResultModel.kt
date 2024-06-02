@@ -1,7 +1,6 @@
 package com.msa.eshop.data.Model
 
-import com.msa.eshop.data.local.entity.ProductModelEntity
-import com.msa.eshop.data.local.entity.UserModelEntity
+import com.msa.eshop.data.Model.response.SimulateModel
 
 data class SimulateResultModel(
     val simulateModel: List<SimulateModel>

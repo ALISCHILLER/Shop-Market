@@ -1,6 +1,6 @@
 package com.msa.eshop.data.Model
 
-import com.msa.eshop.data.local.entity.ProductModelEntity
+import com.msa.eshop.data.Model.response.OrderAddressModel
 
 data class OrderAddressResultModel   (
     val orderaddress: List<OrderAddressModel>

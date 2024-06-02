@@ -5,11 +5,9 @@ package com.msa.eshop.ui.component.pager
 
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.ui.util.lerp
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,8 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.Coil
@@ -34,8 +30,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.calculateCurrentOffsetForPage
 import com.google.accompanist.pager.rememberPagerState
-import com.msa.eshop.R
-import com.msa.eshop.data.Model.BannerModel
+import com.msa.eshop.data.Model.response.BannerModel
 import com.msa.eshop.ui.theme.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.yield
@@ -51,7 +46,7 @@ fun SliderBanner(
     modifier: Modifier = Modifier,
     banner: List<BannerModel> = emptyList(),
 
-) {
+    ) {
     val pagerState = rememberPagerState(initialPage = 0)
     val context = LocalContext.current
     LaunchedEffect(Unit) {

@@ -1,4 +1,4 @@
-package com.msa.eshop.data.Model
+package com.msa.eshop.data.Model.response
 
 data class SimulateModel(
     val convertFactor1: Int,

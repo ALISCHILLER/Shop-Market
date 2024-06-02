@@ -3,16 +3,18 @@ package com.msa.eshop.data.remote.api
 
 import com.msa.eshop.data.Model.BannerResponse
 import com.msa.eshop.data.Model.DiscountResponse
-import com.msa.eshop.data.Model.InsertCartModelRequest
+import com.msa.eshop.data.Model.request.InsertCartModelRequest
 import com.msa.eshop.data.Model.InsertCartModelResponse
 import com.msa.eshop.data.Model.OrderAddressResultModel
 import com.msa.eshop.data.Model.ProductGroupResponse
 import com.msa.eshop.data.Model.ProductResponse
+import com.msa.eshop.data.Model.ReportHistoryCustomerResponse
 import com.msa.eshop.data.Model.SimulateResultModel
 import com.msa.eshop.data.Model.TokenResponse
 import com.msa.eshop.data.Model.UserResponse
-import com.msa.eshop.data.request.SimulateModelRequest
-import com.msa.eshop.data.request.TokenRequest
+import com.msa.eshop.data.Model.request.ReportHistoryCustomerModelRequest
+import com.msa.eshop.data.Model.request.SimulateModelRequest
+import com.msa.eshop.data.Model.request.TokenRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -61,5 +63,12 @@ interface ApiService {
     suspend fun requestInsertCart(
         @Body InsertCartModelRequest: List<InsertCartModelRequest>
     ):Response<InsertCartModelResponse?>
+
+
+
+    @POST("/api/$version/Cart/ReportHistoryCustomer")
+    suspend fun reportHistoryCustomer(
+        @Body reportHistoryOrder:ReportHistoryCustomerModelRequest
+    ):Response<ReportHistoryCustomerResponse?>
 
 }

@@ -34,4 +34,7 @@ sealed class Route(
     object ProfileRestPasswordScreen : Route(route = "profileRestPasswordScreen")
     object AccountInformationScreen : Route(route = "accountInformationScreen")
 
+    //Report
+    object OrderStatusReportScreen : Route(route = "orderStatusReportScreen")
+
 }

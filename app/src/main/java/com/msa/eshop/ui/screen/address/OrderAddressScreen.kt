@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
@@ -42,14 +41,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.msa.componentcompose.ui.component.lottiefile.LoadingAnimate
 import com.msa.eshop.R
-import com.msa.eshop.data.Model.OrderAddressModel
-import com.msa.eshop.data.local.entity.ProductGroupEntity
+import com.msa.eshop.data.Model.response.OrderAddressModel
 import com.msa.eshop.ui.common.card.AddressCard
-import com.msa.eshop.ui.common.card.BasketCard
 import com.msa.eshop.ui.common.topBar.TopBarDetails
-import com.msa.eshop.ui.component.dialog.CustomDialog
 import com.msa.eshop.ui.component.dialog.ErrorDialog
-import com.msa.eshop.ui.screen.home.HomeViewModel
 import com.msa.eshop.ui.theme.Typography
 import com.msa.eshop.ui.theme.barcolorlight2
 

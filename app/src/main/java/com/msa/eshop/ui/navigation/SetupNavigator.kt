@@ -40,6 +40,7 @@ import com.msa.eshop.ui.screen.splash.SplashScreen
 import timber.log.Timber
 import androidx.compose.animation.fadeOut
 import com.msa.eshop.ui.screen.address.OrderAddressScreen
+import com.msa.eshop.ui.screen.orderStatusReport.OrderStatusReportScreen
 import kotlinx.coroutines.delay
 
 @ExperimentalFoundationApi
@@ -143,8 +144,11 @@ fun MainActivity.SetupNavigator() {
                 composable(route = Route.SimulateScreen.route) { SimulateScreen() }
                 composable(route = Route.OrderAddressScreen.route) { OrderAddressScreen() }
 
+                //report
+                composable(route = Route.OrderStatusReportScreen.route) { OrderStatusReportScreen() }
 
                 //profile
+
 
 
             }
