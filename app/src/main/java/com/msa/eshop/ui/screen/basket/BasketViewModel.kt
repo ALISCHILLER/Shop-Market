@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavOptions
 import com.msa.eshop.data.local.entity.OrderEntity
 import com.msa.eshop.data.local.entity.ProductModelEntity
+import com.msa.eshop.data.repository.BasketRepository
 import com.msa.eshop.data.repository.HomeRepository
 import com.msa.eshop.ui.navigation.NavInfo
 import com.msa.eshop.ui.navigation.NavManager
@@ -21,41 +22,33 @@ import javax.inject.Inject
 @HiltViewModel
 class BasketViewModel @Inject constructor(
     private val navManager: NavManager,
-    private val homeRepository: HomeRepository
+    private val basketRepository: BasketRepository,
 ):ViewModel(){
 
-    init {
-        getAllOrder()
-    }
 
     private val _allOrder =
         MutableStateFlow<List<OrderEntity>>(emptyList())
     val allOrder: StateFlow<List<OrderEntity>> = _allOrder
+    init {
+        getAllOrder()
+    }
 
-    private val _allProduct =
-        MutableStateFlow<List<ProductModelEntity>>(emptyList())
-    val allProduct: StateFlow<List<ProductModelEntity>> = _allProduct
+
+
+
 
     fun getAllOrder() {
         viewModelScope.launch {
-            homeRepository.getAllOrder.collect {
+            basketRepository.getAllOrder.collect {
                 _allOrder.value = it
             }
         }
     }
 
 
-
-    private fun getAllProduct() {
-        viewModelScope.launch {
-            homeRepository.getAllProduct.collect {
-                _allProduct.value = it
-            }
-        }
-    }
     fun deleteOrder(orderId: String){
         viewModelScope.launch {
-            homeRepository.deleteOrder(orderId)
+            basketRepository.deleteOrder(orderId)
         }
     }
 
@@ -80,7 +73,7 @@ class BasketViewModel @Inject constructor(
             if (totalValue > 0) {
                 insertOrder(orderEntity, totalValue, value1, value2)
             } else {
-                homeRepository.deleteOrder(orderEntity.id)
+                basketRepository.deleteOrder(orderEntity.id)
             }
         }
     }
@@ -94,7 +87,7 @@ class BasketViewModel @Inject constructor(
         orderEntity.numberOrder = totalValue
         orderEntity.numberOrder1 = value1
         orderEntity.numberOrder2 = value2
-        homeRepository.insertOrder(orderEntity) // اضافه کردن خط ذخیره سازی
+        basketRepository.insertOrder(orderEntity) // اضافه کردن خط ذخیره سازی
     }
 
 

@@ -1,6 +1,8 @@
 package com.msa.eshop.utils
 
+import android.content.ContentValues.TAG
 import android.content.Context
+import android.util.Log
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricPrompt
@@ -24,6 +26,7 @@ class BiometricTools @Inject constructor(
             }
 
             BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> {
+                Log.d(TAG, "checkDeviceHasBiometric: ${context.getString(R.string.ERROR_NO_HARDWARE)}")
                 context.getString(R.string.ERROR_NO_HARDWARE)
             }
 

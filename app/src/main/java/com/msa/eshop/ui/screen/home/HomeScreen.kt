@@ -94,7 +94,7 @@ fun HomeScreen(
         }
     ) { innerPadding ->
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-
+            SliderBanner()
             SwipeRefresh(
                 modifier = Modifier
                     .padding(innerPadding),

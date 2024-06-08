@@ -22,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,10 +31,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.msa.eshop.R
 import com.msa.eshop.data.local.entity.OrderEntity
 import com.msa.eshop.ui.common.card.BasketCard
 import com.msa.eshop.ui.common.topBar.TopBarDetails
+import com.msa.eshop.ui.component.radioC.RadioGroup
 import com.msa.eshop.ui.screen.home.HomeViewModel
 import com.msa.eshop.ui.theme.PlatinumSilver
 import com.msa.eshop.ui.theme.Typography
@@ -46,8 +49,13 @@ fun BasketScreen(
 ) {
 
 
-    val orders = rememberSaveable { mutableStateOf<List<OrderEntity>>(emptyList()) }
+
     val counter = remember { mutableStateOf(0) }
+
+   // val orders by viewModel.allOrder.collectAsState(emptyList())
+
+
+    val orders = rememberSaveable { mutableStateOf<List<OrderEntity>>(emptyList()) }
     LaunchedEffect(counter.value) {
         orders.value = viewModel.allOrder.value
     }
@@ -56,6 +64,7 @@ fun BasketScreen(
         delay(1000)
         orders.value = viewModel.allOrder.value
     }
+
     Scaffold(
         modifier = Modifier
             .background(color = Color.White),
@@ -63,6 +72,7 @@ fun BasketScreen(
             TopBarDetails("لیست خرید های شما")
         },
     ) {
+
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
             Column(
                 modifier = Modifier
@@ -79,16 +89,18 @@ fun BasketScreen(
                         .weight(1.0f), // پر کردن عرض موجود در طول
                 ) {
                     items(orders.value) { order ->
-
                         BasketCard(
                             orderEntity = order,
-                            onClick = {
-                                counter.value++
+                            onClick = { deleted ->
+                                if (deleted) {
+                                    counter.value++
+                                }
                             },
-
-                            )
+                            viewModel = viewModel
+                        )
                     }
                 }
+
                 Button(
                     onClick = {
                               viewModel.navigateToSimulate()

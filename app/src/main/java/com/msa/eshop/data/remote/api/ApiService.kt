@@ -6,6 +6,7 @@ import com.msa.eshop.data.Model.DiscountResponse
 import com.msa.eshop.data.Model.request.InsertCartModelRequest
 import com.msa.eshop.data.Model.InsertCartModelResponse
 import com.msa.eshop.data.Model.OrderAddressResultModel
+import com.msa.eshop.data.Model.PaymentTermResponse
 import com.msa.eshop.data.Model.ProductGroupResponse
 import com.msa.eshop.data.Model.ProductResponse
 import com.msa.eshop.data.Model.ReportHistoryCustomerResponse
@@ -58,6 +59,9 @@ interface ApiService {
 
     @GET("/api/$version/User/GetCustomerAddress")
     suspend fun GetCustomerAddress():Response<OrderAddressResultModel?>
+
+    @GET("/api/$version/Cart/GetPaymentTerm")
+    suspend fun GetPaymentTerm():Response<PaymentTermResponse?>
 
     @POST("/api/$version/Cart/InsertCart")
     suspend fun requestInsertCart(

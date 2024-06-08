@@ -26,3 +26,9 @@ val LightPurple = Color(0xFFBCA1E7)
 val RoyalPurple = Color(0xEB700C24)
 val RedMain = Color(0xFFEB091E)
 val RoyalRed = Color(0xFFEB091E)
+
+
+
+val OrangeStatus = Color(0xFFFFAB00)
+
+
