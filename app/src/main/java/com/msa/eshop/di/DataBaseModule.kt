@@ -3,7 +3,9 @@ package com.msa.eshop.di
 import android.content.Context
 import androidx.room.Room
 import com.msa.eshop.data.local.AppDatabase
+import com.msa.eshop.data.local.dao.OrderAddressDao
 import com.msa.eshop.data.local.dao.OrderDao
+import com.msa.eshop.data.local.dao.PaymentMethodDao
 import com.msa.eshop.data.local.dao.ProductDao
 import com.msa.eshop.data.local.dao.ProductGroupDao
 import com.msa.eshop.data.local.dao.UserDao
@@ -44,6 +46,18 @@ class DataBaseModule {
     @Singleton
     fun providerOrderDao(appDatabase: AppDatabase) : OrderDao {
         return appDatabase.orderDao()
+    }
+
+    @Provides
+    @Singleton
+    fun providerPaymentMethodDao(appDatabase: AppDatabase) : PaymentMethodDao {
+        return appDatabase.paymentMethodDao()
+    }
+
+    @Provides
+    @Singleton
+    fun providerOrderAddressDao(appDatabase: AppDatabase) : OrderAddressDao {
+        return appDatabase.orderAddressDao()
     }
     @Provides
     @Singleton

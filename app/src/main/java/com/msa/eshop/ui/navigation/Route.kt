@@ -27,6 +27,7 @@ sealed class Route(
     object BasketScreen : Route(route = "BasketScreen")
     object SimulateScreen : Route(route = "simulateScreen")
     object OrderAddressScreen : Route(route = "OrderAddressScreen")
+    object PaymentMethodScreen : Route(route = "paymentMethodScreen")
 
     //Profile Customer
     object ProfileCustomerScreen : Route(route = "profileCustomerScreen")
@@ -36,5 +37,6 @@ sealed class Route(
 
     //Report
     object OrderStatusReportScreen : Route(route = "orderStatusReportScreen")
+    object OrderDetailsReportScreen : Route(route = "orderDetailsReportScreen")
 
 }

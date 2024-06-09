@@ -8,6 +8,7 @@ import com.msa.eshop.data.Model.response.SimulateModel
 import com.msa.eshop.data.local.entity.OrderEntity
 import com.msa.eshop.data.repository.SimulateRepository
 import com.msa.eshop.data.Model.request.SimulateModelRequest
+import com.msa.eshop.data.local.entity.PaymentMethodEntity
 import com.msa.eshop.ui.navigation.NavInfo
 import com.msa.eshop.ui.navigation.NavManager
 import com.msa.eshop.ui.navigation.Route
@@ -82,6 +83,11 @@ class SimulateViewModel @Inject constructor(
         )
     }
 
+
+    fun savePayment(pyment: PaymentMethodEntity){
+        simulateRepository.insertTopayment(pyment)
+        navigateToOrderAddress()
+    }
     fun navigateToOrderAddress() {
         navManager.navigate(
             NavInfo(

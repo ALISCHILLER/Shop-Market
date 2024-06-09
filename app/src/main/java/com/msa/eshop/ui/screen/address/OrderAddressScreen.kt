@@ -120,7 +120,11 @@ fun OrderAddressScreen(modifier: Modifier = Modifier) {
                         ) {
                             Button(
                                 onClick = {
-                                    viewModel.getOrderToInsertCart(selectAddress)
+                                    orderAddress?.let { it1 ->
+                                        viewModel.getOrderToInsertCart(selectAddress,
+                                            it1
+                                        )
+                                    }
                                 },
                                 modifier = Modifier
                                     .padding(5.dp)
@@ -129,7 +133,7 @@ fun OrderAddressScreen(modifier: Modifier = Modifier) {
                                 shape = RoundedCornerShape(8.dp)
                             ) {
                                 Text(
-                                    stringResource(id = R.string.the_payment),
+                                    stringResource(id = R.string.payment_method),
                                     style = Typography.titleSmall,
                                 )
                             }

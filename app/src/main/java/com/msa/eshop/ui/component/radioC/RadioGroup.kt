@@ -13,9 +13,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.msa.eshop.ui.theme.Typography
 
 @Composable
-fun RadioGroup(
+fun RadioGroupRow(
     options: List<String>,
     selectedOption: String,
     onOptionSelected: (String) -> Unit
@@ -40,6 +41,39 @@ fun RadioGroup(
                     text = option,
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.padding(start = 8.dp)
+                )
+            }
+        }
+    }
+}
+
+
+
+@Composable
+fun RadioGroupColumn(
+    options: List<String>,
+    selectedOption: String,
+    onOptionSelected: (String) -> Unit
+) {
+    Column {
+        val radioColors = RadioButtonDefaults.colors( // بک‌گراند برای غیرانتخاب شده‌ها شفاف است
+            selectedColor = Color.Red // رنگ برای دایره انتخاب شده
+        )
+        options.forEach { option ->
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+
+
+                RadioButton(
+                    selected = option == selectedOption,
+                    onClick = { onOptionSelected(option) },
+                    colors = radioColors
+                )
+                Text(
+                    text = option,
+                    style = Typography.titleSmall,
+                    modifier = Modifier.padding(start = 5.dp)
                 )
             }
         }

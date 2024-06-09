@@ -1,10 +1,15 @@
 package com.msa.eshop.ui.screen.orderStatusReport
 
+import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavOptions
 import com.msa.eshop.data.Model.request.ReportHistoryCustomerModelRequest
 import com.msa.eshop.data.Model.response.ReportHistoryCustomerModel
 import com.msa.eshop.data.repository.OrderStatusReportRepository
+import com.msa.eshop.ui.navigation.NavInfo
+import com.msa.eshop.ui.navigation.NavManager
+import com.msa.eshop.ui.navigation.Route
 import com.msa.eshop.utils.result.GeneralStateModel
 import com.msa.eshop.utils.result.makeRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +21,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OrderStatusReportViewModel @Inject constructor(
-    private val orderStatusReportRepository: OrderStatusReportRepository
+    private val navManager: NavManager,
+    private val orderStatusReportRepository: OrderStatusReportRepository,
 ):ViewModel(){
 
 
@@ -55,7 +61,7 @@ class OrderStatusReportViewModel @Inject constructor(
             onSuccess = { response ->
                 viewModelScope.launch {
                     response?.data?.let {
-                        Timber.tag("SimulateViewModel").d("reportHistoryOrderRequest SUCCESS: ${it}  ")
+                        Timber.tag("OrderStatusReportViewModel").d("reportHistoryOrderRequest SUCCESS: ${it}  ")
                         _orderStatusReport.value = it
                     }
                 }
@@ -74,6 +80,22 @@ class OrderStatusReportViewModel @Inject constructor(
 
     private fun updateStateError(errorMessage: String?) {
         _state.value = _state.value.copy(isLoading = false, error = errorMessage)
+    }
+
+    fun navigateOrderDetailsReport(card:Int) {
+        val bundle = Bundle().apply {
+            putInt("card", card)
+        }
+        navManager.navigate(
+            NavInfo(
+                id = "${Route.OrderDetailsReportScreen.route}/${card}",
+                navOption = NavOptions.Builder().setPopUpTo(
+                    Route.OrderStatusReportScreen.route,
+                    inclusive = true
+                ).build()
+            )
+        )
+
     }
 
 }

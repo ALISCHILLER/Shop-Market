@@ -39,29 +39,38 @@ import com.msa.eshop.utils.Currency
 @Composable
 private fun preview() {
     val simulateModel1 = SimulateModel(
-        convertFactor1 = 1,
-        convertFactor2 = 2,
-        discountPercent = 10,
-        finalPrice = 102200,
-        finalPriceDiscount = 92200,
-        fullNameKala1 = "کالای اول",
-        fullNameKala2 = "کالای دوم",
+        convertFactor1 = 10,
+        convertFactor2 = 20,
+        discountPercent = 5,
+        discount_Percent_PaymentTerm_Receipt = 3,
+        discount_Percent_PaymentTerm_Receipt_Tax = 2,
+        discount_Percent_PaymentTerm_cheque = 4,
+        discount_Percent_PaymentTerm_cheque_Tax = 1,
+        discount_Percent_PaymentTerm_immediate = 6,
+        discount_Percent_PaymentTerm_immediate_Tax = 2,
+        finalPrice = 1000,
+        finalPriceDiscount = 950,
+        fullNameKala1 = "عدد",
+        fullNameKala2 = "Product Full Name 2",
         id = "1",
         isTax = true,
+        paymentTermId = "123",
         price = 1100,
-        priceByDiscountPercent = 1000,
-        priceByDiscountPercentAndTax = 1180,
-        priceDiscount = 105250,
-        productCode = 102251,
-        quantity = 1220,
-        productGroupCode = 201,
-        productImage = "image1.png",
-        productName = "محصول اول",
-        unit1 = "واحد اول",
-        unit2 = "واحد دوم",
-        unitid1 = "u1",
-        unitid2 = "u2",
-        priceByDiscountTax = 13
+        priceByDiscountPercent = 1050,
+        priceByDiscountPercentAndTax = 1075,
+        priceByDiscountPercentAndTax_Receipt = 1030,
+        priceByDiscountPercentAndTax_cheque = 1045,
+        priceByDiscountPercentAndTax_immediate = 1025,
+        priceDiscount = 50,
+        productCode = 1001,
+        productGroupCode = 2001,
+        productImage = "http://example.com/product1.jpg",
+        productName = "Product 1",
+        quantity = 10,
+        unit1 = "Piece",
+        unit2 = "Box",
+        unitid1 = "U001",
+        unitid2 = "U002"
     )
     SimulateCard(simulate = simulateModel1)
 }
@@ -171,18 +180,18 @@ fun SimulateCard(
 
                     RowText(
                         title = "تخفیفات",
-                        message = Currency(simulate.finalPriceDiscount).toFormattedString()
+                        message = Currency(simulate.discount_Percent_PaymentTerm_immediate).toFormattedString()
                     )
 
                     RowText(
                         title = "مالیات",
-                        message = Currency(simulate.priceByDiscountTax).toFormattedString()
+                        message = Currency(simulate.discount_Percent_PaymentTerm_immediate_Tax).toFormattedString()
                     )
                     HorizontalDivider( color = barcolorlight, thickness = 2.dp)
 
                     RowText(
                         title = "مبلغ قابل پرداخت",
-                        message = Currency(simulate.priceByDiscountPercentAndTax).toFormattedString()
+                        message = Currency(simulate.priceByDiscountPercentAndTax_immediate).toFormattedString()
                     )
                 }
             }

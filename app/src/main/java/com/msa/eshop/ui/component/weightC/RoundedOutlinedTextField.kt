@@ -28,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,7 +43,8 @@ fun RoundedIconTextField(
     isPassword: Boolean = false,
     modifier: Modifier = Modifier,
     typeEnabled:Boolean=false,
-    corner:RoundedCornerShape=RoundedCornerShape(26.dp)
+    corner:RoundedCornerShape=RoundedCornerShape(26.dp),
+    keyboardType: KeyboardType = KeyboardType.Text
 ) {
     var passwordVisibility by remember { mutableStateOf(!isPassword) }
 
@@ -69,7 +71,8 @@ fun RoundedIconTextField(
             },
             visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Done
+                imeAction = ImeAction.Done,
+                keyboardType =keyboardType
             ),
             keyboardActions = KeyboardActions(onDone = { /* Handle Done action */ }),
             modifier = Modifier.fillMaxWidth(),

@@ -58,7 +58,35 @@ fun BasketCard(
     onClick: (Boolean) -> Unit,
     viewModel: BasketViewModel = hiltViewModel()
 ) {
+    var value1 by remember { mutableStateOf(orderEntity.numberOrder1) }
+    var value2 by remember { mutableStateOf(orderEntity.numberOrder2) }
+    var chack by remember { mutableStateOf(false) }
+    // تابع برای محاسبه قیمت به‌روز شده
 
+    val totalPrice by remember(value1, value2, orderEntity) {
+        mutableStateOf(
+            viewModel.calculateTotalPriceAndHandleOrder(
+                value1, value2,
+                orderEntity
+            )
+        )
+    }
+
+
+
+    if (chack)
+        AlertDialogExample(
+            onConfirmation = {
+                viewModel.deleteOrder(orderEntity.id)
+                viewModel.getAllOrder()
+                onClick(true)
+                chack = false
+            },
+            onDismissRequest = { chack = false }
+        )
+    if (totalPrice < 1) {
+        onClick(true)
+    }
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         Card(
             modifier = Modifier
@@ -69,35 +97,6 @@ fun BasketCard(
                 containerColor = Color.White
             )
         ) {
-            var value1 by remember { mutableStateOf(orderEntity.numberOrder1) }
-            var value2 by remember { mutableStateOf(orderEntity.numberOrder2) }
-            var chack by remember { mutableStateOf(false) }
-            // تابع برای محاسبه قیمت به‌روز شده
-
-            val totalPrice by remember(value1, value2, orderEntity) {
-                mutableStateOf(
-                    viewModel.calculateTotalPriceAndHandleOrder(
-                        value1, value2,
-                        orderEntity
-                    )
-                )
-            }
-
-
-
-            if (chack)
-                AlertDialogExample(
-                    onConfirmation = {
-                        viewModel.deleteOrder(orderEntity.id)
-                        viewModel.getAllOrder()
-                        onClick(true)
-                        chack = false
-                    },
-                    onDismissRequest = { chack = false }
-                )
-            if (totalPrice < 1) {
-                onClick(true)
-            }
 
             Column(
                 modifier = modifier

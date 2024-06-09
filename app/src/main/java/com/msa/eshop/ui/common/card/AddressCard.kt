@@ -178,7 +178,8 @@ private fun AddressCardPreview() {
             .background(Color.White)
     ) {
         AddressCard(
-         orderAddressModel =   OrderAddressModel(
+         orderAddressModel =
+         OrderAddressModel(
                 customerAddress = "کرج، گوهردشت، میدان مادر، سنبل شمالی، پلاک 90، ویلایی",
                 customerPhone = "09335385974",
                 centerName = "تهران",

@@ -32,8 +32,11 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.msa.eshop.R
+import com.msa.eshop.data.local.entity.PaymentMethodEntity
+import com.msa.eshop.ui.common.card.RowText
 import com.msa.eshop.ui.common.card.SimulateCard
 import com.msa.eshop.ui.common.topBar.TopBarDetails
+
 import com.msa.eshop.ui.theme.PlatinumSilver
 import com.msa.eshop.ui.theme.Typography
 import com.msa.eshop.utils.Currency
@@ -77,35 +80,65 @@ fun SimulateScreen(
                         .padding(vertical = 5.dp, horizontal = 5.dp)
                         .shadow(5.dp)
                         .background(color = MaterialTheme.colors.surface)
-                        .height(64.dp)
                         .fillMaxWidth()
                         .padding(horizontal = 5.dp)
                 ) {
-                    Row(
-                        modifier = modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceAround
-                    ) {
-                        Button(
-                            onClick = {
-                                viewModel.navigateToOrderAddress()
-                            },
-                            modifier = Modifier
-                                .padding(5.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
-                            shape = RoundedCornerShape(6.dp)
-                        ) {
-                            Text(
-                                stringResource(id = R.string.choess_address),
-                                style = Typography.titleSmall,
-                            )
-                        }
-                        val totalPrice = simulate.sumOf { it.priceByDiscountPercentAndTax }
-                        Text(
-                            text = "${Currency(totalPrice).toFormattedString()} ریال ",
-                            style = Typography.labelLarge
+                    Column(
+                        modifier = modifier
+                            .fillMaxWidth(),
+                    ){
+                        val cashprice = simulate.sumOf { it.priceByDiscountPercentAndTax_immediate }
+                        RowText(
+                            title = "قیمت نقدی",
+                            message ="${Currency(cashprice).toFormattedString()} ریال"
                         )
+
+                        val checkprice = simulate.sumOf { it.priceByDiscountPercentAndTax_cheque }
+                        RowText(
+                            title = "قیمت چک",
+                            message ="${Currency(checkprice).toFormattedString()} ریال"
+                        )
+
+                        val receiptprice = simulate.sumOf { it.priceByDiscountPercentAndTax_Receipt }
+                        RowText(
+                            title = "قیمت عرفی",
+                            message ="${Currency(receiptprice).toFormattedString()} ریال"
+                        )
+                        Row(
+                            modifier = modifier
+                                .fillMaxWidth(),
+                        ){
+                            Button(
+                                onClick = {
+
+                                    val paymentMethod = PaymentMethodEntity(
+                                        cashprice = cashprice.toString(),
+                                        checkprice = checkprice.toString(),
+                                        receiptprice = receiptprice.toString()
+                                    )
+
+                                    viewModel.savePayment(paymentMethod)
+                                },
+                                modifier = Modifier
+                                    .padding(5.dp)
+                                    .fillMaxWidth()
+                                ,
+                                colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
+                                shape = RoundedCornerShape(6.dp)
+                            ) {
+                                Text(
+                                    stringResource(id = R.string.choess_address),
+                                    style = Typography.titleSmall,
+                                )
+                            }
+//                        val totalPrice = simulate.sumOf { it.priceByDiscountPercentAndTax }
+//                        Text(
+//                            text = "${Currency(totalPrice).toFormattedString()} ریال ",
+//                            style = Typography.labelLarge
+//                        )
+                        }
                     }
+
                 }
 
             }

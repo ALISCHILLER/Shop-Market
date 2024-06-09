@@ -50,6 +50,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewFontScale
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
@@ -162,7 +163,8 @@ fun LoginScreen(
                         },
                         label = "کد مشتری",
                         icon = Icons.Default.Person,
-                        corner = RoundedCornerShape(10.dp)
+                        corner = RoundedCornerShape(10.dp),
+                        keyboardType = KeyboardType.Number
                     )
                     Spacer(modifier = Modifier.height(DIMENS_14dp))
                     RoundedIconTextField(

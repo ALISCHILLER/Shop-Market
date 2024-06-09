@@ -10,6 +10,7 @@
     <string name="pre_invoice_registration">نمایش پیش فاکتور</string>
     <string name="choess_address">انتخاب آدرس</string>
     <string name="the_payment">پرداخت</string>
+    <string name="payment_method">روش پرداخت</string>
     <string name="new_address"> آدرس جدید</string>
     <string name="username_and_password_are_required">نام کاربری و رمز عبور الزامی است</string>
     <string name="discounts_list_data">خرید %s تا %s عدد :</string>

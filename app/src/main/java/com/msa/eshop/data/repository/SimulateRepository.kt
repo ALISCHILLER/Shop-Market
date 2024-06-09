@@ -7,6 +7,8 @@ import com.msa.eshop.data.remote.api.ApiService
 import com.msa.eshop.data.remote.utills.MakeSafeApiCall
 import com.msa.eshop.data.remote.utills.Resource
 import com.msa.eshop.data.Model.request.SimulateModelRequest
+import com.msa.eshop.data.local.dao.PaymentMethodDao
+import com.msa.eshop.data.local.entity.PaymentMethodEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -16,6 +18,7 @@ class SimulateRepository @Inject constructor(
     private val apiService: ApiService,
     private val apiManager: MakeSafeApiCall,
     private val orderDao: OrderDao,
+    private val paymentMethodDao: PaymentMethodDao
 
 ) {
     val getAllOrder: Flow<List<OrderEntity>> = orderDao.getAll()
@@ -27,6 +30,12 @@ class SimulateRepository @Inject constructor(
                 apiService.requestSimulate(simulateModel)
             }
         }as Flow<Resource<SimulateResultModel?>>
+    }
+
+
+    fun insertTopayment(pyment: PaymentMethodEntity){
+        paymentMethodDao.delete()
+        paymentMethodDao.insert(pyment)
     }
 
 

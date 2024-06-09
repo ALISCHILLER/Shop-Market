@@ -6,6 +6,7 @@ import androidx.navigation.NavOptions
 import com.msa.eshop.utils.result.GeneralStateModel
 import com.msa.eshop.data.Model.request.InsertCartModelRequest
 import com.msa.eshop.data.Model.response.OrderAddressModel
+import com.msa.eshop.data.local.entity.OrderAddressEntity
 import com.msa.eshop.data.local.entity.OrderEntity
 import com.msa.eshop.data.repository.OrderAddressRepository
 import com.msa.eshop.ui.navigation.NavInfo
@@ -24,7 +25,7 @@ import javax.inject.Inject
 class OrderAddressViewModel @Inject constructor(
     private val orderAddressRepository: OrderAddressRepository,
     private val navManager: NavManager,
-):ViewModel(){
+) : ViewModel() {
 
 
     private val _state: MutableStateFlow<GeneralStateModel> = MutableStateFlow(GeneralStateModel())
@@ -38,9 +39,11 @@ class OrderAddressViewModel @Inject constructor(
     fun clearState() {
         _state.value = GeneralStateModel()
     }
+
     init {
         OrderAddressRequest()
     }
+
     fun OrderAddressRequest() {
         makeRequest(
             scope = viewModelScope,
@@ -48,8 +51,9 @@ class OrderAddressViewModel @Inject constructor(
             onSuccess = { response ->
 
                 response?.let {
-                    Timber.tag("OrderAddressViewModel").d("OrderAddressRequest SUCCESS: ${it.data} ")
-                    it.data?.let { it1 ->  _orderAddress.value = it1}
+                    Timber.tag("OrderAddressViewModel")
+                        .d("OrderAddressRequest SUCCESS: ${it.data} ")
+                    it.data?.let { it1 -> _orderAddress.value = it1 }
                     updateStateLoading(false)
                 }
             },
@@ -58,41 +62,58 @@ class OrderAddressViewModel @Inject constructor(
         )
     }
 
-    fun getOrderToInsertCart(address:String){
+    fun getOrderToInsertCart(address: String, orderAddress: OrderAddressModel) {
         if (address.isNullOrEmpty()) {
             Timber.tag("OrderAddressViewModel").d("لطفا آدرس را انتخاب کنید ")
             updateStateError("لطفا آدرس را انتخاب کنید")
         } else
-        viewModelScope.launch {
-            orderAddressRepository.getAllOrder.collect {
-                val insertCartModelRequest: List<InsertCartModelRequest> = it.map { it.toInsertCartModelRequest(address) }
-                InsertCartRequest(insertCartModelRequest)
+            viewModelScope.launch {
+                orderAddressRepository.insertOrderAddress(
+                    OrderAddressEntity(
+                        customerAddress = orderAddress.customerAddress,
+                        customerPhone = orderAddress.customerPhone,
+                        centerName = orderAddress.centerName,
+                        customerMobile = orderAddress.customerMobile,
+                        id = orderAddress.id,
+                    )
+                )
+                navigateToPaymentMethodScreen()
             }
-        }
     }
 
-     private  fun InsertCartRequest(insertCartModelRequest: List<InsertCartModelRequest> ){
-         makeRequest(
-             scope = viewModelScope,
-             request = {orderAddressRepository.requestInsertCart(insertCartModelRequest) },
-             onSuccess = { response ->
-                 viewModelScope.launch {
-                     response?.data?.let {
-                         Timber.tag("OrderAddressViewModel").d("InsertCartRequest SUCCESS: ${it}  ")
-                         orderAddressRepository.deleatOrder()
-                         updateStateLoading(false)
-                         navigateToHome()
-
-                     }
-                 }
-
-             },
-             updateStateLoading = { isLoading -> updateStateLoading(isLoading) },
-             updateStateError = { errorMessage -> updateStateError(errorMessage) }
-         )
+    fun navigateToPaymentMethodScreen() {
+        navManager.navigate(
+            NavInfo(
+                id = Route.PaymentMethodScreen.route,
+                navOption = NavOptions.Builder().setPopUpTo(
+                    Route.OrderAddressScreen.route,
+                    inclusive = true
+                ).build()
+            )
+        )
     }
 
 
+    private fun InsertCartRequest(insertCartModelRequest: List<InsertCartModelRequest>) {
+        makeRequest(
+            scope = viewModelScope,
+            request = { orderAddressRepository.requestInsertCart(insertCartModelRequest) },
+            onSuccess = { response ->
+                viewModelScope.launch {
+                    response?.data?.let {
+                        Timber.tag("OrderAddressViewModel").d("InsertCartRequest SUCCESS: ${it}  ")
+                        orderAddressRepository.deleatOrder()
+                        updateStateLoading(false)
+                        navigateToHome()
+
+                    }
+                }
+
+            },
+            updateStateLoading = { isLoading -> updateStateLoading(isLoading) },
+            updateStateError = { errorMessage -> updateStateError(errorMessage) }
+        )
+    }
 
 
     fun navigateToHome() {
@@ -108,13 +129,7 @@ class OrderAddressViewModel @Inject constructor(
     }
 
 
-    fun OrderEntity.toInsertCartModelRequest(address:String): InsertCartModelRequest {
-        return InsertCartModelRequest(
-            productCode = this.productCode,
-            quantity = this.numberOrder,
-            customerAddressId = address
-        )
-    }
+
 
     private fun updateStateLoading(isLoading: Boolean) {
         _state.value = _state.value.copy(isLoading = isLoading, error = null)

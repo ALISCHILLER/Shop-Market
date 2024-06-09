@@ -2,6 +2,7 @@
 
 package com.msa.eshop.ui.navigation
 
+import android.os.Bundle
 import androidx.navigation.NavOptions
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,4 +24,8 @@ class NavManager @Inject constructor() {
 }
 
 
-data class NavInfo(val id:String?=null, val navOption: NavOptions? = null)
+data class NavInfo(
+    val id:String?=null,
+    val args: Bundle? = null, // اضافه کردن args برای پشتیبانی از Bundle
+    val navOption: NavOptions? = null
+)

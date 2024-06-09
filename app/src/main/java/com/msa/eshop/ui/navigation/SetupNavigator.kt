@@ -39,8 +39,12 @@ import com.msa.eshop.ui.screen.simulate.SimulateScreen
 import com.msa.eshop.ui.screen.splash.SplashScreen
 import timber.log.Timber
 import androidx.compose.animation.fadeOut
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.msa.eshop.ui.screen.address.OrderAddressScreen
+import com.msa.eshop.ui.screen.orderDetailsReport.OrderDetailsReportScreen
 import com.msa.eshop.ui.screen.orderStatusReport.OrderStatusReportScreen
+import com.msa.eshop.ui.screen.paymentMethod.PaymentMethodScreen
 import kotlinx.coroutines.delay
 
 @ExperimentalFoundationApi
@@ -141,11 +145,28 @@ fun MainActivity.SetupNavigator() {
 
                 //basket
                 composable(route = Route.BasketScreen.route) { BasketScreen() }
+
                 composable(route = Route.SimulateScreen.route) { SimulateScreen() }
+
                 composable(route = Route.OrderAddressScreen.route) { OrderAddressScreen() }
 
+                composable(route = Route.PaymentMethodScreen.route) { PaymentMethodScreen() }
+
                 //report
-                composable(route = Route.OrderStatusReportScreen.route) { OrderStatusReportScreen() }
+                composable(
+                    route = Route.OrderStatusReportScreen.route
+                ) {
+                    OrderStatusReportScreen()
+                }
+                composable(
+                    route = "${Route.OrderDetailsReportScreen.route}/{card}",
+                    arguments = listOf(
+                        navArgument("card") { type = NavType.IntType }
+                    )
+                ) {backStackEntry ->
+                    val card = backStackEntry.arguments?.getInt("card", 0)
+                    OrderDetailsReportScreen(card=card)
+                }
 
                 //profile
 
