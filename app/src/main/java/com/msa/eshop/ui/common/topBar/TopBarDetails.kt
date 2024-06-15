@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.msa.eshop.ui.theme.PlatinumSilver
+import com.msa.eshop.ui.theme.Typography
 
 
 @Composable
@@ -43,7 +44,10 @@ fun TopBarDetails(
         ) {
 
             Row {
-                Text(text = name)
+                Text(
+                    text = name,
+                    style = Typography.titleSmall
+                )
                 if (details.isNotEmpty())
                     Text(
                         text = details,
