@@ -30,10 +30,10 @@ sealed class Route(
     object PaymentMethodScreen : Route(route = "paymentMethodScreen")
 
     //Profile Customer
-    object ProfileCustomerScreen : Route(route = "profileCustomerScreen")
-    object ProfileAddressesScreen : Route(route = "profileAddressesScreen")
-    object ProfileRestPasswordScreen : Route(route = "profileRestPasswordScreen")
-    object AccountInformationScreen : Route(route = "accountInformationScreen")
+    object ProileScreen : Route(route = "proileScreen")
+    object AddressRegistrationScreen : Route(route = "addressRegistrationScreen")
+    object LocationRegistrationScreen : Route(route = "locationRegistrationScreen")
+
 
     //Report
     object OrderStatusReportScreen : Route(route = "orderStatusReportScreen")

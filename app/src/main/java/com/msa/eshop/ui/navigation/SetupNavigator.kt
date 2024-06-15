@@ -42,9 +42,12 @@ import androidx.compose.animation.fadeOut
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.msa.eshop.ui.screen.address.OrderAddressScreen
+import com.msa.eshop.ui.screen.addressRegistration.AddressRegistrationScreen
+import com.msa.eshop.ui.screen.addressRegistration.LocationRegistrationScreen
 import com.msa.eshop.ui.screen.orderDetailsReport.OrderDetailsReportScreen
 import com.msa.eshop.ui.screen.orderStatusReport.OrderStatusReportScreen
 import com.msa.eshop.ui.screen.paymentMethod.PaymentMethodScreen
+import com.msa.eshop.ui.screen.profile.ProileScreen
 import kotlinx.coroutines.delay
 
 @ExperimentalFoundationApi
@@ -169,7 +172,9 @@ fun MainActivity.SetupNavigator() {
                 }
 
                 //profile
-
+                composable(route = Route.ProileScreen.route) { ProileScreen() }
+                composable(route = Route.AddressRegistrationScreen.route) { AddressRegistrationScreen() }
+                composable(route = Route.LocationRegistrationScreen.route) { LocationRegistrationScreen() }
 
 
             }

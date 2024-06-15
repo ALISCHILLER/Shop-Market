@@ -12,6 +12,8 @@
     <string name="the_payment">پرداخت</string>
     <string name="payment_method">روش پرداخت</string>
     <string name="new_address"> آدرس جدید</string>
+    <string name="map"> نقشه </string>
+    <string name="address_registration"> ثبت آدرس</string>
     <string name="username_and_password_are_required">نام کاربری و رمز عبور الزامی است</string>
     <string name="discounts_list_data">خرید %s تا %s عدد :</string>
     <string name="title_search">جست و جوی محصول موردنظر</string>

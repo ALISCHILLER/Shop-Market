@@ -1,19 +1,15 @@
 @file:OptIn(ExperimentalMaterialApi::class)
 
-package com.msa.eshop.ui.component.expandable
+package com.msa.eshop.ui.common.card
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.ContentAlpha
@@ -25,10 +21,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -44,20 +36,16 @@ import androidx.compose.ui.unit.dp
 import com.msa.eshop.R
 
 @Composable
-fun ExpandableCard(
+fun ProfileCard(
     modifier: Modifier = Modifier,
     title: String,
     titleFontSize: TextUnit = MaterialTheme.typography.h6.fontSize,
     titleFontWeight: FontWeight = FontWeight.Bold,
     padding: Dp = 12.dp,
     painter: Painter = painterResource(id = R.drawable.not_load_image),
-    content: @Composable ColumnScope.() -> Unit,
+    onClick: () -> Unit,
 ) {
 
-    var expandedState by remember { mutableStateOf(false) }
-    val rotationState by animateFloatAsState(
-        targetValue = if (expandedState) 180f else 0f
-    )
 
     Card(
         modifier = Modifier
@@ -71,7 +59,7 @@ fun ExpandableCard(
                 )
             ),
         onClick = {
-            expandedState = !expandedState
+            onClick()
         }
     ) {
         Column(
@@ -83,7 +71,6 @@ fun ExpandableCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(painter = painter, contentDescription = "logo")
-                Spacer(modifier = modifier.width(3.dp))
                 Text(
                     modifier = Modifier
                         .weight(6f),
@@ -97,18 +84,15 @@ fun ExpandableCard(
                     modifier = Modifier
                         .weight(1f)
                         .alpha(ContentAlpha.medium)
-                        .rotate(rotationState),
+                        ,
                     onClick = {
-                        expandedState = !expandedState
+                       onClick()
                     }) {
                     Icon(
                         imageVector = Icons.Default.ArrowDropDown,
                         contentDescription = "Drop-Down Arrow"
                     )
                 }
-            }
-            if (expandedState) {
-                content()
             }
         }
     }

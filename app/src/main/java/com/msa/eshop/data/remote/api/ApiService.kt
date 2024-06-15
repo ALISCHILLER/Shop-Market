@@ -82,4 +82,9 @@ interface ApiService {
         @Query("CartCode") cartCode : Int
     ):Response<ReportCartDetailsResponse?>
 
+    @POST("/api/$version/User/changepassword")
+    suspend fun changepassword(
+        @Body reportHistoryOrder:ReportHistoryCustomerModelRequest
+    ):Response<ReportHistoryCustomerResponse?>
+
 }

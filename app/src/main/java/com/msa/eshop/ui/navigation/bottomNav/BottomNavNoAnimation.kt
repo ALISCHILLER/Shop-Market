@@ -108,7 +108,7 @@ fun BottomNavNoAnimation(
             "پروفایل",
             ImageVector.vectorResource(R.drawable.ic_profile),
             ImageVector.vectorResource(R.drawable.ic_profile),
-            Route.BasketScreen.route
+            Route.ProileScreen.route
         )
 
     )
@@ -195,7 +195,7 @@ private fun BottomNavItem(
             FlipIcon(
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
-                    .padding(2.dp)
+                    .padding(horizontal = 3.dp, vertical = 2.dp)
                     .fillMaxHeight()
                     .alpha(animatedAlpha)  // <-------
                     .size(animatedIconSize),  // <-------
@@ -208,7 +208,8 @@ private fun BottomNavItem(
             AnimatedVisibility(visible = isSelected) {
                 Text(
                     text = item.title,
-                    modifier = Modifier.padding(start = 2.dp, end = 2.dp),
+                    modifier = Modifier
+                        .padding(start = 2.dp, end = 2.dp),
                     maxLines = 1,
                     color = Color.White,
                     style = Typography.labelSmall

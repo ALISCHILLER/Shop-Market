@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,16 +25,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.msa.eshop.R
+import com.msa.eshop.ui.common.card.ProfileCard
 import com.msa.eshop.ui.common.topBar.TopBarDetails
 import com.msa.eshop.ui.component.expandable.ExpandableCard
+import com.msa.eshop.ui.screen.accountInformation.AccountInformationScreen
+import com.msa.eshop.ui.screen.profileRestPassword.ProfileRestPasswordScreen
 import com.msa.eshop.ui.theme.Typography
 import com.msa.eshop.ui.theme.barcolorlight2
 
 @Composable
 fun ProileScreen(modifier: Modifier = Modifier) {
 
-
+   val viewModel: ProfileViewModel = hiltViewModel()
     Scaffold(
         modifier = modifier
             .background(color = Color.White),
@@ -45,6 +51,7 @@ fun ProileScreen(modifier: Modifier = Modifier) {
                 modifier = modifier
                     .padding(it)
                     .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically
@@ -72,10 +79,32 @@ fun ProileScreen(modifier: Modifier = Modifier) {
 
                 Column {
                     ExpandableCard(
-                        title = "اطلاعات حساب کاربری"
+                        title = "اطلاعات حساب کاربری",
+                        painter = painterResource(id = R.drawable.ic_profile)
                     ) {
-
+                        AccountInformationScreen()
                     }
+                    ExpandableCard(
+                        title = "تغییر رمز عبور",
+                        painter = painterResource(id = R.drawable.ic_key)
+                    ) {
+                        ProfileRestPasswordScreen()
+                    }
+                    ProfileCard(
+                        title = "آدرس ها",
+                        painter = painterResource(id = R.drawable.ic_location),
+                        onClick = {
+                            viewModel.navigateToAddressRegistration()
+
+                        }
+                    )
+
+                    ProfileCard(
+                        title = "خزوج از حساب کاربری",
+                        painter = painterResource(id = R.drawable.ic_exite),
+                        onClick = {}
+                    )
+
                 }
 
             }

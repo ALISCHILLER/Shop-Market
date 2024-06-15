@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
+    kotlin("plugin.parcelize")
 }
 
 android {
@@ -132,4 +133,10 @@ dependencies {
 
     //biometric
     implementation("androidx.biometric:biometric:1.2.0-alpha05")
+
+    //Richeditor
+    implementation("com.mohamedrejeb.richeditor:richeditor-compose:1.0.0-rc05")
+
+    //map
+    implementation ("org.osmdroid:osmdroid-android:6.1.16")
 }

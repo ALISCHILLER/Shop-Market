@@ -185,7 +185,7 @@ fun BottomNavaghtion(
                                 Route.BasketScreen.route
                             )
                             3->onClick(
-                                Route.ProfileCustomerScreen.route
+                                Route.ProileScreen.route
                             )
                             else -> {}
                         }
