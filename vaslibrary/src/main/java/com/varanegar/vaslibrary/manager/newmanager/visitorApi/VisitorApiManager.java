@@ -1,6 +1,7 @@
 package com.varanegar.vaslibrary.manager.newmanager.visitorApi;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -37,7 +38,9 @@ public class VisitorApiManager {
     public static void getCheckVisitor(
             final UpdateCall updateCall
     ) {
-
+        SharedPreferences sharedPreferences = context
+                .getSharedPreferences("CountVisitCustomersNotIn", Context.MODE_PRIVATE);
+        sharedPreferences.edit().clear();
         UserModel userModel = UserManager.readFromFile(context);
         ApiNew apiNew=new ApiNew(context);
 
