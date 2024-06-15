@@ -40,7 +40,7 @@ public class VisitorApiManager {
     ) {
         SharedPreferences sharedPreferences = context
                 .getSharedPreferences("CountVisitCustomersNotIn", Context.MODE_PRIVATE);
-        sharedPreferences.edit().clear();
+        sharedPreferences.edit().clear().apply();
         UserModel userModel = UserManager.readFromFile(context);
         ApiNew apiNew=new ApiNew(context);
 
