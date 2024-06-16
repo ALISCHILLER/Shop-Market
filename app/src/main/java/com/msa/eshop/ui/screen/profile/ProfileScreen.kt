@@ -15,6 +15,10 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,6 +33,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.msa.eshop.R
 import com.msa.eshop.ui.common.card.ProfileCard
 import com.msa.eshop.ui.common.topBar.TopBarDetails
+import com.msa.eshop.ui.component.dialog.AlertDialogConfirm
 import com.msa.eshop.ui.component.expandable.ExpandableCard
 import com.msa.eshop.ui.screen.accountInformation.AccountInformationScreen
 import com.msa.eshop.ui.screen.profileRestPassword.ProfileRestPasswordScreen
@@ -38,7 +43,19 @@ import com.msa.eshop.ui.theme.barcolorlight2
 @Composable
 fun ProileScreen(modifier: Modifier = Modifier) {
 
-   val viewModel: ProfileViewModel = hiltViewModel()
+    val viewModel: ProfileViewModel = hiltViewModel()
+
+    var chack by remember { mutableStateOf(false) }
+    if (chack)
+        AlertDialogConfirm(
+            onConfirmation = {
+                chack=false
+            },
+            onDismissRequest = {
+                chack=false
+            },
+            message = "آیا می‌خواهید از برنامه خارج شوید؟"
+        )
     Scaffold(
         modifier = modifier
             .background(color = Color.White),
@@ -102,7 +119,9 @@ fun ProileScreen(modifier: Modifier = Modifier) {
                     ProfileCard(
                         title = "خزوج از حساب کاربری",
                         painter = painterResource(id = R.drawable.ic_exite),
-                        onClick = {}
+                        onClick = {
+                            chack=true
+                        }
                     )
 
                 }

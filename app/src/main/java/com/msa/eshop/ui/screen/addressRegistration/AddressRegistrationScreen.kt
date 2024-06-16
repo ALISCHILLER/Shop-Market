@@ -50,6 +50,7 @@ import com.msa.eshop.ui.theme.RedMain
 import com.msa.eshop.ui.theme.Typography
 import com.msa.eshop.ui.theme.barcolorlight
 import com.msa.eshop.ui.theme.barcolorlight2
+import com.msa.eshop.utils.map.location.RequestLocationPermission
 
 @SuppressLint("ResourceType")
 @Preview
@@ -58,6 +59,9 @@ fun AddressRegistrationScreen(
     modifier: Modifier = Modifier,
     viewModel: RegistrationViewModel = hiltViewModel()
 ) {
+
+
+    RequestLocationPermission { granted ->}
 
     val state = rememberRichTextState()
     Scaffold(

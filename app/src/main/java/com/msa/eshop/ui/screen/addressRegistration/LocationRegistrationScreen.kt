@@ -42,6 +42,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
@@ -49,8 +51,11 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.msa.eshop.ui.theme.Typography
 import com.msa.eshop.ui.theme.barcolorlight2
+import com.msa.eshop.utils.map.location.RequestLocationPermission
+import com.msa.eshop.utils.map.location.getCurrentLocation
 
 import com.utsman.osmapp.Coordinates
+import org.osmdroid.util.GeoPoint
 
 @Composable
 @Preview
@@ -60,20 +65,40 @@ fun LocationRegistrationScreen(
 ) {
     val context = LocalContext.current
 
-    val cameraState = rememberCameraState {
-        geoPoint = Coordinates.depok
-        zoom = 12.0
+    val locationState = remember { mutableStateOf("Unknown") }
+    val permissionGranted = remember { mutableStateOf(false) }
+    val state by viewModel.state.collectAsState()
+
+
+
+    LaunchedEffect(state) {
+        viewModel.startLocationUpdates()
     }
 
-    val depokMarkerState = rememberMarkerState(
-        geoPoint = Coordinates.depok,
+    val location by viewModel.location.collectAsState()
+
+
+    RequestLocationPermission { granted ->
+        permissionGranted.value = granted
+    }
+
+
+      getCurrentLocation(context) { location -> locationState.value = location }
+
+    val cameraState = rememberCameraState {
+        geoPoint = Coordinates.iran
+        zoom = 6.0
+    }
+    val markerLocation = rememberMarkerState(
+        geoPoint = Coordinates.iran,
         rotation = 90f
     )
 
-    val jakartaMarkerState = rememberMarkerState(
-        geoPoint = Coordinates.jakarta,
-        rotation = 90f
-    )
+    location?.let {
+        cameraState.geoPoint = GeoPoint(it.latitude, it.longitude)
+        cameraState. zoom = 15.0
+        markerLocation.geoPoint = GeoPoint(it.latitude, it.longitude)
+    }
 
     val depokIcon: Drawable? by remember {
         mutableStateOf(context.getDrawable(R.drawable.round_eject_24))
@@ -96,6 +121,9 @@ fun LocationRegistrationScreen(
             TopBarDetails("ثبت لوکیشن")
         },
     ) {
+
+
+
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
             Column(
                 modifier = modifier
@@ -117,10 +145,13 @@ fun LocationRegistrationScreen(
                         modifier = Modifier
                             .padding(it)
                             .fillMaxSize(),
+                        onMapClick = {
+                            markerLocation.geoPoint= it
+                        },
                         cameraState = cameraState
                     ) {
                         Marker(
-                            state = depokMarkerState,
+                            state = markerLocation,
                             icon = depokIcon,
                             title = "Depok",
                             snippet = "Jawa barat"
@@ -141,28 +172,6 @@ fun LocationRegistrationScreen(
                             }
                         }
 
-                        MarkerLabeled(
-                            state = jakartaMarkerState,
-                            icon = depokIcon,
-                            title = "Jakarta",
-                            snippet = "DKI Jakarta",
-                            label = "Jakarta",
-                            labelProperties = jakartaLabelProperties.value
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .size(100.dp)
-                                    .background(
-                                        color = Color.Gray,
-                                        shape = RoundedCornerShape(7.dp)
-                                    ),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Text(text = it.title)
-                                Text(text = it.snippet, fontSize = 10.sp)
-                            }
-                        }
                     }
                 }
 
@@ -236,7 +245,6 @@ fun LocationRegistrationScreen(
                 }
             }
         }
-
 
 
     }

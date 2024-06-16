@@ -2,6 +2,7 @@ package com.msa.eshop.data.remote.api
 
 
 import com.msa.eshop.data.Model.BannerResponse
+import com.msa.eshop.data.Model.ChangePasswordResponse
 import com.msa.eshop.data.Model.DiscountResponse
 import com.msa.eshop.data.Model.request.InsertCartModelRequest
 import com.msa.eshop.data.Model.InsertCartModelResponse
@@ -14,6 +15,7 @@ import com.msa.eshop.data.Model.ReportHistoryCustomerResponse
 import com.msa.eshop.data.Model.SimulateResultModel
 import com.msa.eshop.data.Model.TokenResponse
 import com.msa.eshop.data.Model.UserResponse
+import com.msa.eshop.data.Model.request.ChangePasswordRequest
 import com.msa.eshop.data.Model.request.ReportHistoryCustomerModelRequest
 import com.msa.eshop.data.Model.request.SimulateModelRequest
 import com.msa.eshop.data.Model.request.TokenRequest
@@ -84,7 +86,7 @@ interface ApiService {
 
     @POST("/api/$version/User/changepassword")
     suspend fun changepassword(
-        @Body reportHistoryOrder:ReportHistoryCustomerModelRequest
-    ):Response<ReportHistoryCustomerResponse?>
+        @Body changePasswordRequest: ChangePasswordRequest
+    ):Response<ChangePasswordResponse?>
 
 }

@@ -17,4 +17,8 @@
     <string name="username_and_password_are_required">نام کاربری و رمز عبور الزامی است</string>
     <string name="discounts_list_data">خرید %s تا %s عدد :</string>
     <string name="title_search">جست و جوی محصول موردنظر</string>
+
+
+    <string name="missing_location_permission">مجوز مکان وجود ندارد</string>
+    <string name="network_or_gps_is_not_available">شبکه یا GPS در دسترس نیست</string>
 </resources>

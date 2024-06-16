@@ -1,10 +1,12 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3Api::class
+@file:OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class
 )
 
 package com.msa.eshop.ui.component
 
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -32,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -40,25 +43,37 @@ import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import com.msa.eshop.MainActivity
 import com.msa.eshop.R
 import com.msa.eshop.ui.theme.*
 
 
 @Composable
 @Preview
-fun DockedSearchPreview(){
+fun DockedSearchPreview() {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
         DockedSearch(
             {}
         )
     }
 }
+
 @Composable
 fun DockedSearch(
     onQueryChange: (String) -> Unit,
 ) {
+    val context = LocalContext.current
+    val speechContext = context as MainActivity
     var text by rememberSaveable { mutableStateOf("") }
     var active by rememberSaveable { mutableStateOf(false) }
+
+    if (speechContext.speechInput.value.isNotEmpty()) {
+        onQueryChange(speechContext.speechInput.value)
+        text= speechContext.speechInput.value
+        active= true
+        speechContext.speechInput.value = ""
+    }
+
     DockedSearchBar(
         colors = SearchBarDefaults.colors(
             containerColor = Color.White
@@ -68,7 +83,7 @@ fun DockedSearch(
             .fillMaxWidth()
             .border(width = 1.dp, color = barcolor, shape = RoundedCornerShape(10.dp))
             .semantics { traversalIndex = -1f },
-        shape =RoundedCornerShape(10.dp) ,
+        shape = RoundedCornerShape(10.dp),
         query = text,
         onQueryChange = {
             text = it
@@ -96,10 +111,14 @@ fun DockedSearch(
             Row(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
-            ){
-                VerticalDivider(modifier = Modifier.padding(vertical = 7.dp),
-                    color = barcolor, thickness = 2.dp)
-                IconButton(onClick = { /* open mic dialog */ }) {
+            ) {
+                VerticalDivider(
+                    modifier = Modifier.padding(vertical = 7.dp),
+                    color = barcolor, thickness = 2.dp
+                )
+                IconButton(onClick = {
+                    speechContext.askSpeechInput(context)
+                }) {
                     Icon(
                         modifier = Modifier.size(25.dp),
                         painter = painterResource(id = R.drawable.ic_microphone),
@@ -109,7 +128,13 @@ fun DockedSearch(
                 }
                 if (active) {
                     IconButton(
-                        onClick = { if (text.isNotEmpty()) text = "" else active = false }
+                        onClick =
+                        { if (text.isNotEmpty()) {
+                            text = ""
+                            onQueryChange("")
+                        } else
+                            active = false
+                        }
                     ) {
                         Icon(
                             imageVector = Icons.Filled.Close,

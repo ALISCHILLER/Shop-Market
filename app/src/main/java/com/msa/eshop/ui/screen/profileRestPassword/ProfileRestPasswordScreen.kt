@@ -27,17 +27,28 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.msa.componentcompose.ui.component.lottiefile.LoadingAnimate
+import com.msa.eshop.ui.component.dialog.ErrorDialog
+import com.msa.eshop.ui.component.dialog.InfoDialog
 import com.msa.eshop.ui.component.weightC.RoundedIconTextField
 
 @Composable
 fun ProfileRestPasswordScreen(
     modifier: Modifier = Modifier,
-    viewModel: RestPasswordViewModel = hiltViewModel()
 ) {
+
+    val viewModel: RestPasswordViewModel = hiltViewModel()
     val state by viewModel.state.collectAsState()
     var password by remember { mutableStateOf("") }
     var newPassword by remember { mutableStateOf("") }
     var repeatNewPassword by remember { mutableStateOf("") }
+
+    state.error?.let {
+        ErrorDialog(it, {viewModel.clearState()}, false)
+    }
+    state.message?.let {
+        InfoDialog(it, {viewModel.clearState()}, false)
+    }
+
     Box {
         Column(
             modifier = Modifier
