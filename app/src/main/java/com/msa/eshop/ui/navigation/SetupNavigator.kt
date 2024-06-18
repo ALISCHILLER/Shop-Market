@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalAnimationApi::class)
+@file:OptIn(ExperimentalAnimationApi::class, ExperimentalAnimationApi::class)
 
 package com.msa.eshop.ui.navigation
 
@@ -39,6 +39,10 @@ import com.msa.eshop.ui.screen.simulate.SimulateScreen
 import com.msa.eshop.ui.screen.splash.SplashScreen
 import timber.log.Timber
 import androidx.compose.animation.fadeOut
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.msa.eshop.ui.screen.address.OrderAddressScreen
@@ -47,85 +51,63 @@ import com.msa.eshop.ui.screen.addressRegistration.LocationRegistrationScreen
 import com.msa.eshop.ui.screen.orderDetailsReport.OrderDetailsReportScreen
 import com.msa.eshop.ui.screen.orderStatusReport.OrderStatusReportScreen
 import com.msa.eshop.ui.screen.paymentMethod.PaymentMethodScreen
-import com.msa.eshop.ui.screen.profile.ProileScreen
-import kotlinx.coroutines.delay
+import com.msa.eshop.ui.screen.profile.ProfileScreen
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api
 @Composable
 fun MainActivity.SetupNavigator() {
     val navController = rememberNavController()
-    val backStackState = navController.currentBackStackEntryAsState().value
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
 
     val navInfo by navManager.routeInfo.collectAsState()
     LaunchedEffect(key1 = navInfo) {
         navInfo.id?.let {
             if (it == Route.BACK.route) {
-                // firebaseAnalytics.logEvent("Click_Back",null)
-
-                navController.navigateUp()
+                navController.popBackStack()
                 navManager.navigate(null)
                 return@let
-            }
-            var bundle = Bundle()
-            bundle.putString("link", it)
-            // firebaseAnalytics.logEvent("Click_Navigate",bundle)
+            } else if (it == Route.LoginScreen.route) {
 
+            }
+            val bundle = Bundle()
+            bundle.putString("link", it)
             navController.navigate(it, navOptions = navInfo.navOption)
             navManager.navigate(null)
         }
-
     }
 
     Scaffold(
         bottomBar = {
-            if (shouldShowBottomBar(
-                    navController.currentBackStackEntryAsState()
-                        .value?.destination?.route
+            if (shouldShowBottomBar(currentRoute)) {
+                BottomNavNoAnimation(
+                    currentRoute,
+                    onClick = { navigateToTab(navController, it) }
                 )
-            ) {
-                BottomNavNoAnimation(onClick = {
-                    navigateToTab(
-                        navController = navController,
-                        route = it
-                    )
-                })
-
             }
-
         }
     ) {
-
-        Box(
-            modifier = Modifier
-                .padding(bottom = it.calculateBottomPadding())
-        ) {
-
-            Timber.tag("SetupNavigator").e("SetupNavigator SetupNavigator: ")
-            val bottomPadding = it.calculateBottomPadding()
+        Box(modifier = Modifier.padding(bottom = it.calculateBottomPadding())) {
             NavHost(
                 navController = navController,
                 startDestination = Route.SplashScreen.route,
-                ) {
-
-                //Splash
+            ) {
+                // Splash
                 composable(
                     route = Route.SplashScreen.route,
                     exitTransition = {
                         slideOutVertically(
                             targetOffsetY = { -it },
-                            animationSpec = tween(durationMillis = 2000) // مدت زمان انیمیشن افزایش یافته
+                            animationSpec = tween(durationMillis = 2000)
                         )
                     }
+                ) { SplashScreen() }
 
-                ) {
-                    SplashScreen()
-
-                }
-
-
-                //Login
+                // Login
                 composable(
                     route = Route.LoginScreen.route,
                     enterTransition = {
@@ -135,52 +117,46 @@ fun MainActivity.SetupNavigator() {
                         )
                     },
                     exitTransition = {
-                        slideOutOfContainer(
-                            AnimatedContentTransitionScope.SlideDirection.Right,
-                            animationSpec = tween(700)
+                        slideOutVertically(
+                            targetOffsetY = { -it },
+                            animationSpec = tween(durationMillis = 700)
                         )
                     }
-                ) {
-                    LoginScreen()
-                }
-                //product
+                ) { LoginScreen() }
+
+                // Home
                 composable(route = Route.HomeScreen.route) { HomeScreen() }
 
-                //basket
+                // Basket
                 composable(route = Route.BasketScreen.route) { BasketScreen() }
 
+                // Simulate
                 composable(route = Route.SimulateScreen.route) { SimulateScreen() }
 
+                // Order Address
                 composable(route = Route.OrderAddressScreen.route) { OrderAddressScreen() }
 
+                // Payment Method
                 composable(route = Route.PaymentMethodScreen.route) { PaymentMethodScreen() }
 
-                //report
-                composable(
-                    route = Route.OrderStatusReportScreen.route
-                ) {
-                    OrderStatusReportScreen()
-                }
+                // Order Status Report
+                composable(route = Route.OrderStatusReportScreen.route) { OrderStatusReportScreen() }
+
+                // Order Details Report
                 composable(
                     route = "${Route.OrderDetailsReportScreen.route}/{card}",
-                    arguments = listOf(
-                        navArgument("card") { type = NavType.IntType }
-                    )
-                ) {backStackEntry ->
+                    arguments = listOf(navArgument("card") { type = NavType.IntType })
+                ) { backStackEntry ->
                     val card = backStackEntry.arguments?.getInt("card", 0)
-                    OrderDetailsReportScreen(card=card)
+                    OrderDetailsReportScreen(card = card)
                 }
 
-                //profile
-                composable(route = Route.ProileScreen.route) { ProileScreen() }
+                // Profile
+                composable(route = Route.ProfileScreen.route) { ProfileScreen() }
                 composable(route = Route.AddressRegistrationScreen.route) { AddressRegistrationScreen() }
                 composable(route = Route.LocationRegistrationScreen.route) { LocationRegistrationScreen() }
-
-
             }
         }
-
-
     }
 }
 
@@ -191,12 +167,14 @@ fun shouldShowBottomBar(currentRoute: String?): Boolean {
 
 private fun navigateToTab(navController: NavController, route: String) {
     navController.navigate(route) {
-        navController.graph.startDestinationRoute?.let { screen_route ->
-            popUpTo(screen_route) {
-                saveState = true
+        navController.graph.startDestinationRoute?.let { screenRoute ->
+            popUpTo(screenRoute) {
+                inclusive = true
             }
         }
         launchSingleTop = true
         restoreState = true
     }
 }
+
+

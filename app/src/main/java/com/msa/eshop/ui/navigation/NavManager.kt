@@ -3,6 +3,7 @@
 package com.msa.eshop.ui.navigation
 
 import android.os.Bundle
+import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,7 +21,10 @@ class NavManager @Inject constructor() {
         //Clear previous error, when navigating
 
         _routeInfo.update { routeInfo ?: NavInfo() }
+
     }
+
+
 }
 
 

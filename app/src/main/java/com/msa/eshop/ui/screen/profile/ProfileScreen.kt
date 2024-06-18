@@ -41,7 +41,7 @@ import com.msa.eshop.ui.theme.Typography
 import com.msa.eshop.ui.theme.barcolorlight2
 
 @Composable
-fun ProileScreen(modifier: Modifier = Modifier) {
+fun ProfileScreen(modifier: Modifier = Modifier) {
 
     val viewModel: ProfileViewModel = hiltViewModel()
 
@@ -50,6 +50,7 @@ fun ProileScreen(modifier: Modifier = Modifier) {
         AlertDialogConfirm(
             onConfirmation = {
                 chack=false
+                viewModel.navigateToLogin()
             },
             onDismissRequest = {
                 chack=false
@@ -121,6 +122,8 @@ fun ProileScreen(modifier: Modifier = Modifier) {
                         painter = painterResource(id = R.drawable.ic_exite),
                         onClick = {
                             chack=true
+
+
                         }
                     )
 
@@ -136,5 +139,5 @@ fun ProileScreen(modifier: Modifier = Modifier) {
 @PreviewScreenSizes
 @Composable
 private fun ProfilePreview() {
-    ProileScreen()
+    ProfileScreen()
 }

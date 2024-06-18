@@ -66,7 +66,7 @@ class RegistrationViewModel @Inject constructor(
                 id = Route.LocationRegistrationScreen.route,
                 navOption = NavOptions.Builder().setPopUpTo(
                     Route.AddressRegistrationScreen.route,
-                    inclusive = true
+                    inclusive = false
                 ).build()
             )
         )
@@ -78,7 +78,7 @@ class RegistrationViewModel @Inject constructor(
                 id = Route.AddressRegistrationScreen.route,
                 navOption = NavOptions.Builder().setPopUpTo(
                     Route.LocationRegistrationScreen.route,
-                    inclusive = true
+                    inclusive = false
                 ).build()
             )
         )

@@ -47,29 +47,29 @@ class LoginViewModel @Inject constructor(
 
 
     fun tokenRequest(
-      username: String,
-       password: String
+        username: String,
+        password: String
     ) {
         if (username.isNullOrEmpty() || password.isNullOrEmpty())
             updateStateError("لطفا نام کاربری و رمز عبور را وارد کنید")
         else
-        makeRequest(
-            scope = viewModelScope,
-            request = {
-                loginRepository.loginToken(
-                    TokenRequest(username, password)
-                )
-            },
-            onSuccess = { response ->
-                response?.let {
-                    Timber.tag("LoginViewModel").d("getToken SUCCESS: ${it.data}  ")
-                    saveUserNameAndPassword(it.data, username, password)
+            makeRequest(
+                scope = viewModelScope,
+                request = {
+                    loginRepository.loginToken(
+                        TokenRequest(username, password)
+                    )
+                },
+                onSuccess = { response ->
+                    response?.let {
+                        Timber.tag("LoginViewModel").d("getToken SUCCESS: ${it.data}  ")
+                        saveUserNameAndPassword(it.data, username, password)
 
-                }
-            },
-            updateStateLoading = { isLoading -> updateStateLoading(isLoading) },
-            updateStateError = { errorMessage -> updateStateError(errorMessage) }
-        )
+                    }
+                },
+                updateStateLoading = { isLoading -> updateStateLoading(isLoading) },
+                updateStateError = { errorMessage -> updateStateError(errorMessage) }
+            )
     }
 
     fun UserRequest() {
@@ -131,13 +131,20 @@ class LoginViewModel @Inject constructor(
         )
     }
 
-    fun biometricDialog(fragmentActivity: FragmentActivity){
+    fun biometricDialog(fragmentActivity: FragmentActivity) {
         viewModelScope.launch {
+            val savedUsername = getSavedUsername()
+            val savedPassword = getSavedPassword()
+
+
             val message = biometricTools.showBiometricDialog(
                 fragmentActivity,
                 onAuthenticationFailed = {},
                 onAuthenticationError = {},
-               onAuthenticationSucceeded =  {}
+                onAuthenticationSucceeded = {
+                    if(savedPassword.isNotEmpty()&& savedUsername.isNotEmpty())
+                        tokenRequest(savedUsername,savedPassword)
+                }
             )
         }
     }

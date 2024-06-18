@@ -27,7 +27,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.FragmentActivity
+import com.msa.eshop.ui.navigation.NavInfo
 import com.msa.eshop.ui.navigation.NavManager
+import com.msa.eshop.ui.navigation.Route
 import com.msa.eshop.ui.navigation.SetupNavigator
 import com.msa.eshop.ui.theme.EShopTheme
 import com.msa.eshop.utils.map.location.PiLocationManager
@@ -79,6 +81,15 @@ class MainActivity : FragmentActivity() {
             speechInput.value = result?.get(0).toString()
         }
     }
+
+    // Override onBackPressed to handle back button press
+//    override fun onBackPressed() {
+//        super.onBackPressed()
+//        // Custom logic for handling back button press
+//        // For example, you can navigate back in your navigation stack
+//        // or perform other actions as needed
+//        navManager.navigate(NavInfo(id = Route.BACK.route))
+//    }
 
 }
 

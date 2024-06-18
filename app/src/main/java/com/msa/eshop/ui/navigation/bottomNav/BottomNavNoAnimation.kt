@@ -62,7 +62,10 @@ fun BottomNavNoAnimationPreview(
     Scaffold(
 
         bottomBar = {
-            BottomNavNoAnimation(onClick = {})
+            BottomNavNoAnimation(
+                "",
+                onClick = {}
+            )
         }
     ) {
         it
@@ -83,6 +86,7 @@ fun BottomNavNoAnimationPreview(
 @ExperimentalAnimationApi
 @Composable
 fun BottomNavNoAnimation(
+    currentRoute: String?,
     onClick: (String) -> Unit
 ) {
     val screens = listOf(
@@ -108,7 +112,7 @@ fun BottomNavNoAnimation(
             "پروفایل",
             ImageVector.vectorResource(R.drawable.ic_profile),
             ImageVector.vectorResource(R.drawable.ic_profile),
-            Route.ProileScreen.route
+            Route.ProfileScreen.route
         )
 
     )
@@ -127,7 +131,7 @@ fun BottomNavNoAnimation(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             for (screen in screens) {
-                val isSelected = screen == screens[selectedScreen]
+                val isSelected = screen ==  screens.find { it.route == currentRoute}
                 val animatedWeight by animateFloatAsState(targetValue = if (isSelected) 1.5f else 1f)
                 Box(
                     modifier = Modifier

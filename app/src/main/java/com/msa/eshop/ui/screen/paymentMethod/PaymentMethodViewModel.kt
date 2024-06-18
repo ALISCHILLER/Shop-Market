@@ -105,7 +105,7 @@ class PaymentMethodViewModel @Inject constructor(
                 id = Route.HomeScreen.route,
                 navOption = NavOptions.Builder().setPopUpTo(
                     Route.PaymentMethodScreen.route,
-                    inclusive = true
+                    inclusive = false
                 ).build()
             )
         )

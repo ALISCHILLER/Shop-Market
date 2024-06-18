@@ -94,7 +94,7 @@ class SimulateViewModel @Inject constructor(
                 id = Route.OrderAddressScreen.route,
                 navOption = NavOptions.Builder().setPopUpTo(
                     Route.SimulateScreen.route,
-                    inclusive = true
+                    inclusive = false
                 ).build()
             )
         )

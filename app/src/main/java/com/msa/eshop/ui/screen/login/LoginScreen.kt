@@ -1,5 +1,7 @@
 package com.msa.eshop.ui.screen.login
 
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,6 +28,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -48,6 +51,7 @@ import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -58,6 +62,10 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.msa.componentcompose.ui.component.lottiefile.AnimatedPreloader
 import com.msa.componentcompose.ui.component.lottiefile.LoadingAnimate
 import com.msa.eshop.R
@@ -69,6 +77,7 @@ import com.msa.eshop.ui.component.drawLineC.BezierCurve
 import com.msa.eshop.ui.component.drawLineC.BezierCurveStyle
 import com.msa.eshop.ui.component.loading.LoadingAnimation
 import com.msa.eshop.ui.component.weightC.RoundedIconTextField
+import com.msa.eshop.ui.navigation.Route
 import com.msa.eshop.ui.theme.DIMENS_14dp
 import com.msa.eshop.ui.theme.DIMENS_6dp
 import com.msa.eshop.ui.theme.DIMENS_8dp
@@ -91,6 +100,42 @@ fun LoginScreen(
     var username by remember { mutableStateOf(savedUsername) }
     var password by remember { mutableStateOf(savedPassword) }
 
+
+   val  navController: NavController = rememberNavController()
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val dispatcherOwner = LocalOnBackPressedDispatcherOwner.current
+    val onBackPressedCallback = remember {
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // Handle back button press here
+                // Example: Navigate to login screen and clear back stack
+                navigateToLogin(navController)
+            }
+        }
+    }
+
+    // Add back button callback to lifecycle
+    DisposableEffect(key1 = navController) {
+        val dispatcher = dispatcherOwner?.onBackPressedDispatcher
+        dispatcher?.addCallback(onBackPressedCallback)
+
+        val lifecycleObserver = LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_DESTROY -> {
+                    // Remove the callback when the composable is destroyed
+                    onBackPressedCallback.remove()
+                }
+                else -> {}
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(lifecycleObserver)
+
+        // Clean up when the effect leaves the composition
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(lifecycleObserver)
+        }
+    }
 
     val state by viewModel.state.collectAsState()
     val biometric by viewModel.biometric.collectAsState()
@@ -251,4 +296,14 @@ fun LoginScreen(
 @Composable
 private fun LoginScreenPreview() {
     LoginScreen()
+}
+
+fun navigateToLogin(navController: NavController) {
+    navController.navigate(Route.LoginScreen.route) {
+        popUpTo(navController.graph.startDestinationId) {
+            inclusive = true
+        }
+        launchSingleTop = true
+        restoreState = true
+    }
 }

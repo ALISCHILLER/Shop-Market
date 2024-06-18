@@ -91,7 +91,7 @@ class OrderStatusReportViewModel @Inject constructor(
                 id = "${Route.OrderDetailsReportScreen.route}/${card}",
                 navOption = NavOptions.Builder().setPopUpTo(
                     Route.OrderStatusReportScreen.route,
-                    inclusive = true
+                    inclusive = false
                 ).build()
             )
         )

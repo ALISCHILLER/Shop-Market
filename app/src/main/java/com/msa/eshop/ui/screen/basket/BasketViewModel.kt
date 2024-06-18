@@ -96,7 +96,8 @@ class BasketViewModel @Inject constructor(
             NavInfo(id = Route.SimulateScreen.route,
                 navOption = NavOptions.Builder().setPopUpTo(
                     Route.BasketScreen.route,
-                    inclusive = true).build())
+                    inclusive = false
+                ).build())
         )
     }
 
