@@ -3,46 +3,32 @@
 package com.msa.eshop.ui.navigation
 
 import android.os.Bundle
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.msa.eshop.MainActivity
+import com.msa.eshop.ui.acticity.MainActivity
 import com.msa.eshop.ui.navigation.bottomNav.BottomNavNoAnimation
-import com.msa.eshop.ui.navigation.bottomNav.BottomNavaghtion
 import com.msa.eshop.ui.screen.basket.BasketScreen
 import com.msa.eshop.ui.screen.home.HomeScreen
 import com.msa.eshop.ui.screen.login.LoginScreen
 import com.msa.eshop.ui.screen.simulate.SimulateScreen
 import com.msa.eshop.ui.screen.splash.SplashScreen
-import timber.log.Timber
-import androidx.compose.animation.fadeOut
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshotFlow
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.msa.eshop.ui.screen.address.OrderAddressScreen
@@ -52,8 +38,6 @@ import com.msa.eshop.ui.screen.orderDetailsReport.OrderDetailsReportScreen
 import com.msa.eshop.ui.screen.orderStatusReport.OrderStatusReportScreen
 import com.msa.eshop.ui.screen.paymentMethod.PaymentMethodScreen
 import com.msa.eshop.ui.screen.profile.ProfileScreen
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
 
 @ExperimentalFoundationApi
 @ExperimentalMaterial3Api

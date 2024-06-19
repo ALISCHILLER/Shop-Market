@@ -1,7 +1,7 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
 
-package com.msa.eshop
+package com.msa.eshop.ui.acticity
 
 import android.app.Activity
 import android.content.Context
@@ -10,31 +10,19 @@ import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.FragmentActivity
-import com.msa.eshop.ui.navigation.NavInfo
 import com.msa.eshop.ui.navigation.NavManager
-import com.msa.eshop.ui.navigation.Route
 import com.msa.eshop.ui.navigation.SetupNavigator
 import com.msa.eshop.ui.theme.EShopTheme
 import com.msa.eshop.utils.map.location.PiLocationManager
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Locale
 import javax.inject.Inject
 
 @ExperimentalFoundationApi
