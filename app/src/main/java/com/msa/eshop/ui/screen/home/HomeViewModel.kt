@@ -12,6 +12,7 @@ import com.msa.eshop.data.local.entity.ProductModelEntity
 import com.msa.eshop.data.local.entity.UserModelEntity
 import com.msa.eshop.data.repository.HomeRepository
 import com.msa.eshop.ui.navigation.NavManager
+import com.msa.eshop.utils.Convert_Number
 import com.msa.eshop.utils.calculateSalePrice
 import com.msa.eshop.utils.calculateTotalValue
 import com.msa.eshop.utils.createOrderEntity
@@ -207,8 +208,9 @@ class HomeViewModel @Inject constructor(
 
 
     fun searchProduct(search: String) {
+        val converter = Convert_Number()
         viewModelScope.launch {
-            homeRepository.searchProduct(search).collect {
+            homeRepository.searchProduct(converter.PersianToEnglish(search)).collect {
                 _allProduct.value = it
             }
         }
