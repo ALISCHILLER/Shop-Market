@@ -118,7 +118,7 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
                     )
 
                     ProfileCard(
-                        title = "خزوج از حساب کاربری",
+                        title = "خروج از حساب کاربری",
                         painter = painterResource(id = R.drawable.ic_exite),
                         onClick = {
                             chack=true

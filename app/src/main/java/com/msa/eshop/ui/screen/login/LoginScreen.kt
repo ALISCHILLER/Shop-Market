@@ -8,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,6 +25,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -69,6 +71,7 @@ import androidx.navigation.compose.rememberNavController
 import com.msa.componentcompose.ui.component.lottiefile.AnimatedPreloader
 import com.msa.componentcompose.ui.component.lottiefile.LoadingAnimate
 import com.msa.eshop.R
+import com.msa.eshop.ui.common.componentui.LabeledCheckbox
 import com.msa.eshop.ui.component.button.ButtonBorderAnmation
 import com.msa.eshop.ui.component.dialog.CustomDialog
 import com.msa.eshop.ui.component.dialog.ErrorDialog
@@ -99,7 +102,7 @@ fun LoginScreen(
     val savedPassword = viewModel.getSavedPassword()
     var username by remember { mutableStateOf(savedUsername) }
     var password by remember { mutableStateOf(savedPassword) }
-
+    var rememberme by remember { mutableStateOf(savedUsername.isNotEmpty()) }
 
    val  navController: NavController = rememberNavController()
     val context = LocalContext.current
@@ -227,12 +230,21 @@ fun LoginScreen(
                         text = "رمز عبور خود را فراموش کرده اید؟",
                         modifier = Modifier.fillMaxWidth()
                     )
+
+                    Spacer(modifier = Modifier.height(DIMENS_14dp))
+
+                    LabeledCheckbox(
+                        label = "مرا به خاطر بسپار",
+                        onCheckChanged = { rememberme = it},
+                        isChecked = rememberme
+                    )
                     Button(
                         onClick = {
                             val converter = Convert_Number()
                             viewModel.tokenRequest(
                                 converter.PersianToEnglish(username),
-                                converter.PersianToEnglish(password)
+                                converter.PersianToEnglish(password),
+                                rememberme
                             )
                         },
                         modifier = Modifier

@@ -61,6 +61,7 @@ import com.msa.eshop.ui.common.card.ProductGroupCard
 import com.msa.eshop.ui.component.TitleGrouping
 import com.msa.eshop.ui.component.graidC.NonlazyGrid
 import com.msa.eshop.ui.component.pager.SliderBanner
+import com.msa.eshop.ui.component.verticalSlider.VerticalSlider
 import com.msa.eshop.ui.theme.PlatinumSilver
 
 @ExperimentalMaterial3Api
@@ -94,7 +95,6 @@ fun HomeScreen(
         }
     ) { innerPadding ->
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-            SliderBanner()
             SwipeRefresh(
                 modifier = Modifier
                     .padding(innerPadding),
@@ -110,8 +110,8 @@ fun HomeScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     item {
-                        SliderBanner(
-                            banner = banner,
+                        VerticalSlider(
+                            imageUrl = banner,
                             modifier = Modifier
                                 .graphicsLayer {
                                     scrolledY += lazyListState.firstVisibleItemScrollOffset - previousOffset
@@ -120,6 +120,8 @@ fun HomeScreen(
                                     scaleY = 1 / ((scrolledY * 0.01f) + 1f)
                                     previousOffset = lazyListState.firstVisibleItemScrollOffset
                                 }
+                                .fillMaxWidth()
+                                .height(200.dp)
                         )
                     }
 

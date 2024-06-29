@@ -48,7 +48,8 @@ class LoginViewModel @Inject constructor(
 
     fun tokenRequest(
         username: String,
-        password: String
+        password: String,
+        rememberme:Boolean
     ) {
         if (username.isNullOrEmpty() || password.isNullOrEmpty())
             updateStateError("لطفا نام کاربری و رمز عبور را وارد کنید")
@@ -63,7 +64,8 @@ class LoginViewModel @Inject constructor(
                 onSuccess = { response ->
                     response?.let {
                         Timber.tag("LoginViewModel").d("getToken SUCCESS: ${it.data}  ")
-                        saveUserNameAndPassword(it.data, username, password)
+
+                        saveUserNameAndPassword(it.data, username, password,rememberme)
 
                     }
                 },
@@ -98,13 +100,22 @@ class LoginViewModel @Inject constructor(
         _state.update { it.copy(isLoading = false, error = errorMessage) }
     }
 
-    private fun saveUserNameAndPassword(token: String?, username: String, password: String) {
+    private fun saveUserNameAndPassword(
+        token: String?,
+        username: String,
+        password: String,
+        rememberme: Boolean,
+    ) {
         viewModelScope.launch {
             sharedPreferences.edit().apply {
-                remove(CompanionValues.TOKEN)
+                if (rememberme) {
+                    putString(CompanionValues.USERNAME, username)
+                    putString(CompanionValues.PASSWORD, password)
+                } else {
+                    remove(CompanionValues.USERNAME)
+                    remove(CompanionValues.PASSWORD)
+                }
                 putString(CompanionValues.TOKEN, token)
-                putString(CompanionValues.USERNAME, username)
-                putString(CompanionValues.PASSWORD, password)
             }.apply()
             UserRequest()
         }
@@ -136,14 +147,13 @@ class LoginViewModel @Inject constructor(
             val savedUsername = getSavedUsername()
             val savedPassword = getSavedPassword()
 
-
             val message = biometricTools.showBiometricDialog(
                 fragmentActivity,
                 onAuthenticationFailed = {},
                 onAuthenticationError = {},
                 onAuthenticationSucceeded = {
                     if(savedPassword.isNotEmpty()&& savedUsername.isNotEmpty())
-                        tokenRequest(savedUsername,savedPassword)
+                        tokenRequest(savedUsername,savedPassword,true)
                 }
             )
         }

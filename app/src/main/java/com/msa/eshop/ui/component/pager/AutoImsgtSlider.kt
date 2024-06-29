@@ -45,7 +45,6 @@ fun AutoImsgtSlider(modifier: Modifier = Modifier) {
 fun SliderBanner(
     modifier: Modifier = Modifier,
     banner: List<BannerModel> = emptyList(),
-
     ) {
     val pagerState = rememberPagerState(initialPage = 0)
     val context = LocalContext.current
