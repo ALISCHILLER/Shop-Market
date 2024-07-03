@@ -20,6 +20,8 @@ interface OrderDao {
     // حذف یک سفارش با استفاده از شناسه
     @Query("DELETE FROM `order` WHERE id = :orderId")
     fun deleteOrder(orderId: String)
+
+
     @Query("SELECT * FROM `order`")
     fun getAll(): Flow<List<OrderEntity>>
 

@@ -4,10 +4,15 @@ package com.msa.eshop.ui.navigation.bottomNav
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -21,6 +26,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.icons.Icons
@@ -31,6 +37,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,8 +54,11 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.msa.eshop.R
+import com.msa.eshop.ui.acticity.MainViewModel
 import com.msa.eshop.ui.navigation.Route
 import com.msa.eshop.ui.theme.Typography
 import com.msa.eshop.ui.theme.barcolor
@@ -87,7 +97,8 @@ fun BottomNavNoAnimationPreview(
 @Composable
 fun BottomNavNoAnimation(
     currentRoute: String?,
-    onClick: (String) -> Unit
+    onClick: (String) -> Unit,
+
 ) {
     val screens = listOf(
         Screen(
@@ -116,6 +127,8 @@ fun BottomNavNoAnimation(
         )
 
     )
+
+
     var selectedScreen by remember { mutableStateOf(0) }
     Box(
         Modifier
@@ -131,7 +144,7 @@ fun BottomNavNoAnimation(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             for (screen in screens) {
-                val isSelected = screen ==  screens.find { it.route == currentRoute}
+                val isSelected = screen == screens.find { it.route == currentRoute }
                 val animatedWeight by animateFloatAsState(targetValue = if (isSelected) 1.5f else 1f)
                 Box(
                     modifier = Modifier
@@ -150,7 +163,7 @@ fun BottomNavNoAnimation(
                             )
                         },
                         item = screen,
-                        isSelected = isSelected
+                        isSelected = isSelected,
                     )
                 }
             }
@@ -165,6 +178,7 @@ private fun BottomNavItem(
     modifier: Modifier = Modifier,
     item: Screen,
     isSelected: Boolean,
+    viewModel : MainViewModel = hiltViewModel()
 ) {
     val animatedHeight by animateDpAsState(targetValue = if (isSelected) 36.dp else 26.dp)
     val animatedElevation by animateDpAsState(targetValue = if (isSelected) 15.dp else 0.dp)
@@ -177,48 +191,87 @@ private fun BottomNavItem(
         )
     )
 
+    viewModel.getAllOrder()
+    val allOrder by viewModel.allOrder.collectAsState()
+
+
     Box(
         modifier = modifier
             .fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
-        Row(
+
+
+        Box(
             modifier = Modifier
-                .height(animatedHeight)  // <-------
+                .height(animatedHeight)
                 .shadow(
-                    elevation = animatedElevation,  // <-------
+                    elevation = animatedElevation,
                     shape = RoundedCornerShape(20.dp)
                 )
                 .background(
                     color = if (isSelected) Color.Red else colors.surface,
-                    shape = RoundedCornerShape(20.dp)
-                ),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-        ) {
-            FlipIcon(
-                modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .padding(horizontal = 3.dp, vertical = 2.dp)
-                    .fillMaxHeight()
-                    .alpha(animatedAlpha)  // <-------
-                    .size(animatedIconSize),  // <-------
-                isActive = isSelected,
-                activeIcon = item.activeIcon,
-                inactiveIcon = item.inactiveIcon,
-                ""
-            )
-
-            AnimatedVisibility(visible = isSelected) {
-                Text(
-                    text = item.title,
-                    modifier = Modifier
-                        .padding(start = 2.dp, end = 2.dp),
-                    maxLines = 1,
-                    color = Color.White,
-                    style = Typography.labelSmall
+                    shape = RoundedCornerShape(22.dp)
                 )
+                .padding(top = 1.dp) // Adjust as needed to fit the number inside the circle
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxSize(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                FlipIcon(
+                    modifier = Modifier
+                        .align(Alignment.CenterVertically)
+                        .padding(horizontal = 1.dp, vertical = 1.dp)
+                        .fillMaxHeight()
+                        .alpha(animatedAlpha)  // <-------
+                        .size(animatedIconSize),  // <-------
+                    isActive = isSelected,
+                    activeIcon = item.activeIcon,
+                    inactiveIcon = item.inactiveIcon,
+                    ""
+                )
+
+                AnimatedVisibility(visible = isSelected) {
+                    Text(
+                        text = item.title,
+                        modifier = Modifier
+                            .padding(start = 1.dp, end = 1.dp),
+                        maxLines = 1,
+                        color = Color.White,
+                        style = Typography.labelSmall
+                    )
+                }
             }
+
+            val infiniteTransition = rememberInfiniteTransition()
+            val textSize by infiniteTransition.animateFloat(
+                initialValue = 10f,
+                targetValue = 16f,
+                animationSpec = infiniteRepeatable(
+                    animation = tween(durationMillis = 2000),
+                    repeatMode = RepeatMode.Reverse
+                )
+            )
+            // Number "2" positioned at the top center inside the circle
+            if (item.route == Route.BasketScreen.route && allOrder.size >0)
+            Text(
+                text = allOrder.size.toString(),
+                fontSize = textSize.sp,
+                modifier = Modifier
+                    .padding(horizontal = 5.dp)
+                    .align(Alignment.TopStart)
+                    .background(
+                        color = Color.Red,
+                        shape = CircleShape
+                    )
+                    .padding(horizontal = 5.dp)
+                ,
+                color = Color.White,
+                style = Typography.labelSmall
+            )
         }
     }
 }

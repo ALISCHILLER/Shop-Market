@@ -40,6 +40,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -50,6 +51,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.msa.eshop.ui.common.card.BottomBoxLocationReqistrarion
+import com.msa.eshop.ui.theme.RedMain
 import com.msa.eshop.ui.theme.Typography
 import com.msa.eshop.ui.theme.barcolorlight2
 import com.msa.eshop.utils.map.location.RequestLocationPermission
@@ -115,39 +117,27 @@ fun LocationRegistrationScreen(
             )
         )
     }
-    Scaffold(
-        modifier = modifier
-            .background(color = Color.White),
-        topBar = {
-            TopBarDetails("ثبت لوکیشن")
-        },
-    ) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
 
-
-
-        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-            Column(
-                modifier = modifier
-                    .padding(it)
-                    .fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+        ) {
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                 Column(
-                    Modifier
+                    modifier = Modifier
+                        .weight(1f)
                         .padding(vertical = 5.dp, horizontal = 5.dp)
                         .shadow(5.dp)
                         .background(color = MaterialTheme.colors.surface)
-                        .weight(1.0f)
                         .fillMaxSize()
                         .padding(horizontal = 5.dp)
                 ) {
-
                     OpenStreetMap(
                         modifier = Modifier
-                            .padding(it)
                             .fillMaxSize(),
                         onMapClick = {
-                            markerLocation.geoPoint= it
+                            markerLocation.geoPoint = it
                         },
                         cameraState = cameraState
                     ) {
@@ -157,7 +147,6 @@ fun LocationRegistrationScreen(
                             title = "Depok",
                             snippet = "Jawa barat"
                         ) {
-
                             Column(
                                 modifier = Modifier
                                     .size(100.dp)
@@ -172,20 +161,33 @@ fun LocationRegistrationScreen(
                                 Text(text = it.snippet, fontSize = 10.sp)
                             }
                         }
-
                     }
                 }
-
                 BottomBoxLocationReqistrarion(
                     onClickNavigateToAddress = {
                         viewModel.navigateToAddressRegistration()
                     }
                 )
-
             }
         }
 
-
+        FloatingActionButton(
+            onClick = {
+                getCurrentLocation(context) { newLocation ->
+                    viewModel.startLocationUpdates()
+                }
+            },
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(16.dp),
+            containerColor = RedMain
+        ) {
+            Icon(
+                Icons.Filled.LocationOn,
+                contentDescription = "Get Current Location",
+                tint = Color.White
+            )
+        }
     }
 }
 
